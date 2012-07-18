@@ -1,0 +1,40 @@
+<div id="content" class="large">
+	{if !empty({$note})}{$note}{/if}
+	<table class="liste sorted" cellpadding="0" cellspacing="0">
+		<colgroup>
+			<col style="width: 5%;" />
+			<col style="width: 35%;" />
+			<col style="width: 20%;" />
+			<col style="width: 15%;" />
+			<col style="width: 15%;" />
+			<col style="width: 10%;" />
+		</colgroup>
+		<tr>
+			<th class="sort {$id_class}"><a href="/admin/page/id-{$id_sort}/">#</a></th>
+			<th class="sort {$title_class}"><a href="/admin/page/title-{$title_sort}/">Titre</a></th>
+			<th class="sort {$author_class}"><a href="/admin/page/author-{$author_sort}/">Auteur</a></th>
+			<th class="sort {$creation_time_class}"><a href="/admin/page/creation_time-{$creation_time_sort}/">Date de création</a></th>
+			<th class="sort {$edit_time_class}"><a href="/admin/page/edit_time-{$edit_time_sort}/">Dernière édition</a></th>
+			<th>Actions</th>
+		</tr>
+		{block name="pages"}
+			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
+				<td>{$pages.id}</td>
+				<td><strong>{$pages.title}</strong></td>
+				<td>{$pages.author}</td>
+				<td>{$pages.creation_time}</td>
+				<td>{$pages.edit_time}</td>
+				<td>
+					<a href="/admin/page/edit/{$pages.id}-{$pages.url}/" title="Editer"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
+					<a href="/admin/page/del/{$pages.id}-{$pages.url}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
+				</td>
+			</tr>
+		{/block}
+		{if {$count} == 0}
+			<tr>
+				<td colspan="6" class="tcenter">Aucune page n'a été ajoutée.</td>
+			</tr>
+		{/if}
+	</table>
+</div>
+<div class="clear"></div>

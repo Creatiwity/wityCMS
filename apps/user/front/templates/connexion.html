@@ -1,0 +1,35 @@
+<div class="box-center fleft">
+	<h1><span>Connexion</span></h1>
+	{if !empty({$note})}{$note}{/if}
+	<form action="/user/" method="post">
+		<table class="users">
+			<tr>
+				<td class="tright"><label for="nickname">Identifiant :</label></td>
+				<td><input id="nickname" type="text" name="nick" /></td>
+			</tr>
+			<tr>
+				<td class="tright"><label for="password">Mot de passe :</label></td>
+				<td><input id="password" type="password" name="pass" /></td>
+			</tr>
+			<tr>
+				<td class="tright"><label for="minutes">Rester connecté pendant :</label></td>
+				<td><input id="minutes" type="text" name="time" value="60" size="3" /> <em>minutes</em></td>
+			</tr>
+			<tr>
+				<td class="tright"><label for="always">Toujours rester connecté :</label></td>
+				<td><input id="always" type="checkbox" name="remember" 
+					onclick="document.getElementById('minutes').disabled = document.getElementById('minutes').disabled == true ? false : true;" /></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="tcenter">
+					<input type="hidden" name="redirect" value="{$redirect}" />
+					<input type="submit" value="Connexion" />
+				</td>
+			</tr>
+			<!--<tr>
+				<td colspan="2" class="centre"><a href="">Mot de passe perdu ?</a></td>
+			</tr>-->
+		</table>
+	</form>
+</div>
+<div class="spacer"></div>

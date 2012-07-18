@@ -1,0 +1,21 @@
+
+#nTitle {
+	width: 100%;
+	font-size: 1.7em;
+}
+
+#nTitle.empty {
+	color: #c7c7c7;
+}
+
+.hide {
+	display: none;
+}
+
+#permalienInnerShow {
+	font-weight: bold;
+}
+
+#permalien, #permalienInnerInput, #modifCommands {
+	display: none;
+}

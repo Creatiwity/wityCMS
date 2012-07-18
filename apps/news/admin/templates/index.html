@@ -1,0 +1,39 @@
+<div id="content" class="large">
+	{if !empty({$note})}{$note}{/if}
+	<table class="liste sorted" cellpadding="0" cellspacing="0">
+		<colgroup>
+			<col style="width: 35%;" />
+			<col style="width: 15%;" />
+			<col style="width: 15%;" />
+			<col style="width: 15%;" />
+			<col />
+		</colgroup>
+		<tr>
+			<th class="sort {$title_class}"><a href="/admin/news/title-{$title_sort}/">Titre</a></th>
+			<th class="sort {$author_class}"><a href="/admin/news/author-{$author_sort}/">Auteur</a></th>
+			<th class="sort {$cat_class}"><a href="/admin/news/cat-{$cat_sort}/">Catégorie</a></th>
+			<th class="sort {$date_class}"><a href="/admin/news/date-{$date_sort}/">Date</a></th>
+			<th class="sort {$views_class}"><a href="/admin/news/views-{$views_sort}/">Vues</a></th>
+			<th>Actions</th>
+		</tr>
+		{block name="news"}
+			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
+				<td><strong>{$news.title}</strong></td>
+				<td>{$news.author}</td>
+				<td></td>
+				<td>{$news.date}</td>
+				<td>{$news.views} lectures</td>
+				<td>
+					<a href="/admin/news/edit/{$news.id}-{$news.url}/" title="Editer"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
+					<a href="/admin/news/del/{$news.id}-{$news.url}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
+				</td>
+			</tr>
+		{/block}
+		{if {$count} == 0}
+			<tr>
+				<td colspan="6" class="tcenter">Aucune news trouvée dans la base de données.</td>
+			</tr>
+		{/if}
+	</table>
+</div>
+<div class="clear"></div>

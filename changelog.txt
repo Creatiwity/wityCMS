@@ -1,0 +1,24 @@
+##################
+# Wity Changelog #
+##################
+
+v1.0.2
+------
+
+WTemplate
+- Moteur de template recodé (réglage de nombreux bugs)
+- Gestion des short tags (<?xml)
+- Correction d'un bug avec les chemins de compilation qui contiennent des caractères "."
+
+WMain
+- Template configuration déplacée directement dans WView
+
+WRoute
+- Correction d'un bug de routage lorsque wity se trouve à la racine
+
+WView
+- Special theme "null" added
+- New method "findTplFile" from WController
+
+Apps
+- User : correction du bug de redirection à la connexion

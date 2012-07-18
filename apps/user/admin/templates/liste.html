@@ -1,0 +1,73 @@
+<div id="blocks">
+	<div id="search" class="block">
+		<div class="top"></div>
+		<h2>Rechercher</h2>
+		<form action="/admin/user/liste/" method="get">
+			<label for="nickname"><strong>Pseudo :</strong></label>
+			<input id="nickname" type="text" name="nickname" value="{$nickname}" /><br />
+			<label for="email">Email :</label>
+			<input id="email" type="text" name="email" value="{$email}" /><br />
+			<label for="firstname">Prénom :</label>
+			<input id="firstname" type="text" name="firstname" value="{$firstname}" /><br />
+			<label for="lastname">Nom :</label>
+			<input id="lastname" type="text" name="lastname" value="{$lastname}" /><br />
+			<label for="groupe">Groupe :</label>
+			<select id="groupe" name="groupe">
+				<option value=""></option>
+				{block name="groups"}
+				<option value="{$groups.id}"{if {$groupe} == {$groups.id}} selected="selected"{/if}>{$groups.name}</option>
+				{/block}
+			</select><br />
+			<div class="tcenter"><input type="submit" value="Filtrer" /></div>
+		</form>
+	</div>
+	<div class="block">
+		<div class="top"></div>
+		<h2>Statistiques</h2>
+		<ul>
+			<li>{$total} utilisateurs trouvés</li>
+		</ul>
+	</div>
+</div>
+<div id="content">
+	{if !empty({$note})}{$note}{/if}
+	{$pagination}
+	<table id="liste" class="liste sorted" cellpadding="0" cellspacing="0">
+		<colgroup>
+			<col width="5%" />
+			<col width="30%" />
+			<col width="20%" />
+			<col width="20%" />
+			<col width="20%" />
+			<col width="5%" />
+		</colgroup>
+		<tr>
+			<th class="sort {$id_class}"><a href="/admin/user/id-{$id_sort}/{$subURL}">#</a></th>
+			<th class="sort {$nickname_class}"><a href="/admin/user/nickname-{$nickname_sort}/{$subURL}">Pseudonyme</a></th>
+			<th class="sort {$groupe_class}"><a href="/admin/user/groupe-{$groupe_sort}/{$subURL}">Groupe</a></th>
+			<th class="sort {$date_class}"><a href="/admin/user/date-{$date_sort}/{$subURL}">Date d'inscription</a></th>
+			<th class="sort {$last_activity_class}"><a href="/admin/user/last_activity-{$last_activity_sort}/{$subURL}">Dernière connexion</a></th>
+			<th>Actions</th>
+		</tr>
+		{block name="users"}
+			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
+				<td>{$users.id}</td>
+				<td><strong>{$users.nickname}</strong></td>
+				<td>{$users.groupe}</td>
+				<td>{$users.fdate}</td>
+				<td>{$users.factivity}</td>
+				<td>
+					<a href="/admin/user/edit/{$users.id}/" title="Editer"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
+					<a href="/admin/user/del/{$users.id}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
+				</td>
+			</tr>
+		{/block}
+		{if {$count} == 0}
+			<tr>
+				<td colspan="6" class="tcenter">Aucun utilisateur trouvé</td>
+			</tr>
+		{/if}
+	</table>
+	{$pagination}
+</div>
+<div class="clear"></div>

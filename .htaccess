@@ -1,0 +1,23 @@
+# Config OVH
+SetEnv PHP_VER 5
+SetEnv REGISTER_GLOBALS 0
+
+# Activation du module rewriting
+RewriteEngine on
+
+# Rules
+#RewriteCond %{HTTP_HOST} ^site.com$
+#RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^[a-z]+(.*)?$ index.php [L]
+
+# Erreurs
+#ErrorDocument 500 /Error/500 # Internal Server Error
+#ErrorDocument 408 /Error/408 # Serveur surchargé
+#ErrorDocument 405 /Error/405 # Method Not Allowed
+#ErrorDocument 404 /Error/404 # Page not found
+#ErrorDocument 403 /Error/403 # Forbidden
+#ErrorDocument 401 /Error/401 # Unauthorized
+#ErrorDocument 400 /Error/400 # Bad request

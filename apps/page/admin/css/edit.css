@@ -1,0 +1,13 @@
+
+#titre {
+	font-size: 1.5em;
+}
+
+#permalienInnerShow {
+	font-weight: bold;
+}
+
+#permalienInnerInput, #modifCommands {
+	display: none;
+}
+

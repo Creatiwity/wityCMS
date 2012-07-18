@@ -1,0 +1,16 @@
+
+#edition {
+	display: none;
+}
+
+ul#access, ul#accessEdit {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#search label {
+	display: block;
+	float: left;
+	width: 80px;
+}

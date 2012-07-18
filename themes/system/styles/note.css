@@ -1,0 +1,61 @@
+/* Note */
+
+.note {
+	border: 1px solid #e5e5e5;
+	margin: 1em;
+	padding: 1em;
+	background-color: #f7f7f7;
+	text-align: left;
+}
+
+.note dt {
+	font-size: 1.5em;
+	border-bottom: 1px solid #e5e5e5;
+	margin: 0 0 0.7em 0;
+	padding: 0 0 0 1.5em;
+	background: no-repeat center left;
+}
+
+.note dd {
+	margin: 0 2em 0 2em;
+	padding: 0;
+}
+
+.note dd.centre {
+	margin-top: 0.5em;
+}
+
+.note a {
+	color: gray;
+}
+
+	/* error display */
+.error dt, .note.warning dt {
+	color: #f3227b;
+	background-image: url('../images/icones/error.png');
+}
+
+.error dd, .note.warning dd {
+	color: #6a6a6a;
+}
+
+	/* successs display */
+.success dt {
+	color: #208a1b;
+	background-image: url('../images/icones/accept.png');
+}
+
+.success dd {
+	color: #6a6a6a;
+	margin: 0 2em 0 2em;
+	padding: 0;
+}
+
+	/* info display */
+.info dt {
+	background-image: url('../images/icones/info.png');
+}
+
+.info dd {
+	color: #6a6a6a;
+}

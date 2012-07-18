@@ -1,0 +1,47 @@
+<form action="" method="post" enctype="multipart/form-data" onsubmit="if (!checkForm()) return false;">
+	<div id="blocks">
+		<div id="to" class="block">
+			<div class="top"></div>
+			<h2>Destinataires</h2>
+			<select id="selectTo" name="destinataires">
+				<option value="">Choisir...</option>
+				<option value="all">Tous</option>
+				<option value="registered">Entreprises inscrites</option>
+				<option value="stand">Entreprises inscrites sans stand</option>
+				<option value="brochure">Entreprises inscrites sans brochure</option>
+			</select>
+			<div id="toList"></div><br />
+			<label for="more">Envoyer une copie à :</label><br />
+			<input id="more" type="text" name="more" /><br />
+			<!--<label for="cc">Cc :</label>
+			<input id="cc" type="text" name="cc" />-->
+		</div>
+	</div>
+	<div id="content">
+		<div class="item">
+			{if !empty({$note})}{$note}{/if}
+			
+			<label for="de">De :</label>
+			<input id="de" type="text" name="de" size="40" value="{$de}" /><br />
+			
+			<label for="objet" class="hidden">Objet :</label>
+			<input id="objet" class="empty" type="text" name="objet" size="40" value="{$objet}" /><br />
+			
+			<label for="message" class="hidden">Corps du message :</label><br />
+			<textarea id="message" name="message" rows="15" cols="80">{$message}</textarea><br />
+			<script type="text/javascript">
+				var editor = CKEDITOR.replace('message');
+				CKFinder.setupCKEditor(editor, '{$baseDir}helpers/ckfinder/') ;
+			</script>
+			
+			<label>Pièces jointes<br />
+			<input type="file" name="attachment" /></label>
+			
+			<div class="tcenter">
+				<input type="submit" value="Envoyer" class="button-submit" />
+				<input type="button" value="Annuler" onclick="history.back();" class="button-submit" />
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</form>

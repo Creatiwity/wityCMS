@@ -1,0 +1,37 @@
+/* Pagination */
+
+div.pages {
+	color: #999999;
+	font-weight: bold;
+	margin: 1em;
+	text-align: center;
+	word-spacing: 0.3em;
+}
+
+div.pages strong {
+	color: #28b8f7;
+	background: #f7f7f7;
+	padding: 3px;
+	border: 1px solid #28b8f7;
+}
+
+div.pages a {
+	color: #999999;
+	font-weight: bold;
+	border: 1px solid #999999;
+	padding: 2px 4px 2px 4px;
+}
+
+div.pages a:hover {
+	color: white;
+	background: #28b8f7;
+	border-color: #28b8f7;
+}
+
+div.pages span.current {
+	color: white;
+	padding: 5px;
+	background: #6a6a6a;
+	border: 1px solid #6a6a6a;
+	padding: 2px 4px 2px 4px;
+}

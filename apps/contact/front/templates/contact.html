@@ -1,0 +1,71 @@
+<h1 class="hidden">Contactez le Forum Est-Horizon</h1>
+<script type="text/javascript" src="/apps/contact/front/js/contact_mail.js"></script>
+<div id="coordonnees" class="box-left">
+	<h2><span>Coordonnées</span></h2>
+	
+	<h3>Adresse postale :</h3>
+	<p>Forum Est-Horizon<br/>
+	Parc de Saurupt<br/>
+	54042 NANCY CEDEX</p>
+	
+	<h3>Téléphone :</h3>
+	<p>03 83 58 41 28</p>
+	
+	<h3>Fax :</h3>
+	<p>03 83 58 43 60</p>
+	
+	<h3>E-Mail :</h3>
+	<p><a href="mailto:forum@mines.inpl-nancy.fr">forum@mines.inpl-nancy.fr</a></p>
+</div>
+<div id="contact_mail" class="box-center">
+	<h2><span>Contactez-nous</span></h2>
+	
+	{if !empty({$note})}{$note}{/if}
+	
+	<form method="post" id="mail_form" action="/contact/">
+		<table>
+			<tr>
+				<td><label for="name">Nom et prénom* :</label></td>
+				<td><input id="name" name="name" value="{$name}"/></td>
+			</tr>
+			<tr>
+				<td id="error-name" class="form-error-indic" colspan="2"></td>
+			</tr>
+			<tr>
+				<td><label for="organisme">Organisme :</label></td>
+				<td><input id="organisme" name="organisme" value="{$organisme}"/></td>
+			</tr>
+			<tr>
+				<td id="error-organisme" class="form-error-indic" colspan="2"></td>
+			</tr>
+			<tr>
+				<td><label for="email">Votre e-mail* :</label></td>
+				<td><input id="email" name="email" value="{$email}" /></td>
+			</tr>
+			<tr>
+				<td id="error-email" class="form-error-indic" colspan="2"></td>
+			</tr>
+			<tr>
+				<td><label for="objet">Objet* :</label></td>
+				<td><input id="objet" name="objet" size="30" value="{$objet}" /></td>
+			</tr>
+			<tr>
+				<td id="error-objet" class="form-error-indic" colspan="2"></td>
+			</tr>
+			<tr>
+				<td><label for="message">Message* :</label></td>
+				<td><textarea id="message" name="message" rows="8" cols="40">{$message}</textarea></td>
+			</tr>
+			<tr>
+				<td id="error-message" class="form-error-indic" colspan="2"></td>
+			</tr>
+			<tr>
+				<td class="tcenter" colspan="2">
+					{$captcha}
+					<input id="email-button" disabled="disabled" type="submit" value="Envoyer" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div class="spacer"></div>

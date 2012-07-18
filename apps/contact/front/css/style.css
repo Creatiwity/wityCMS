@@ -1,0 +1,57 @@
+#coordonnees {
+	text-align: justify;
+	float: left;
+}
+
+#coordonnees p {
+	margin-top: 0;
+	text-align: center;
+	font-size: 1.2em;
+}
+
+#contact_mail {
+	text-align: center;
+	float: left;
+}
+
+#mail_form {
+	padding: 30px 15px 30px 15px;
+}
+
+#mail_form table {
+	border: 0;
+	margin: 0 auto;
+	text-align: left;
+}
+
+#mail_form label {
+	font-family: Bebas, Arial, sans-serif;
+	font-size: 1.5em;
+}
+
+#mail_form tr {
+	padding-top: 10px;
+}
+
+.form-error-inputs {
+	border-color: red;
+	background-color: #ffbebe;
+}
+
+.form-error-indic {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	color: #cd2424;
+}
+
+#email-button {
+	margin-top: 30px;
+	font-family: Bebas, Verdana, Geneva, Helvetica, sans-serif;
+	font-size: 1.5em;
+	padding: 10px 20px;
+}
+
+.ui-widget {
+	font-family: Bebas, Verdana, Geneva, Helvetica, sans-serif;
+}
