@@ -1,8 +1,8 @@
 <?php
-// Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+// Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 // For licensing, see LICENSE.html or http://ckfinder.com/license
 
-//  Defines the object, for the Chinese (Taiwan) language. This is the base file for all translations.
+//  Defines the object for the Chinese (Taiwan) language.
 
 $GLOBALS['CKFLang'] = array (
 	'ErrorUnknown' => '無法連接到伺服器 ! (錯誤代碼 %1)',
@@ -20,13 +20,13 @@ $GLOBALS['CKFLang'] = array (
 		'116' => '找不到目錄 ! 請先重新整理 , 然後再試一次 !',
 		'117' => '找不到檔案 ! 請先重新整理 , 然後再試一次 !',
 		'118' => 'Source and target paths are equal.',
-		'201' => '伺服器上已有相同的檔案名稱 ! 您上傳的檔案名稱將會自動更改為 "%1"',
+		'201' => '伺服器上已有相同的檔案名稱 ! 您上傳的檔案名稱將會自動更改為 "%1".',
 		'202' => '不合法的檔案 !',
 		'203' => '不合法的檔案 ! 檔案大小超過預設值 !',
 		'204' => '您上傳的檔案已經損毀 !',
 		'205' => '伺服器上沒有預設的暫存目錄 !',
 		'206' => '檔案上傳程序因為安全因素已被系統自動取消 ! 可能是上傳的檔案內容包含 HTML 碼 !',
-		'207' => '您上傳的檔案名稱將會自動更改為 "%1"',
+		'207' => '您上傳的檔案名稱將會自動更改為 "%1".',
 		'300' => 'Moving file(s) failed.',
 		'301' => 'Copying file(s) failed.',
 		'500' => '因為安全因素 , 檔案瀏覽器已被停用 ! 請聯絡您的系統管理者並檢查 CKFinder 的設定檔 config.php !',

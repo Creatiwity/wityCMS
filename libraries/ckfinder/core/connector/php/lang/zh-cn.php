@@ -1,8 +1,8 @@
 <?php
-// Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+// Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 // For licensing, see LICENSE.html or http://ckfinder.com/license
 
-//  Defines the object, for the Chinese-Simplified language. This is the base file for all translations.
+//  Defines the object for the Chinese-Simplified language.
 
 $GLOBALS['CKFLang'] = array (
 	'ErrorUnknown' => '请求的操作未能完成. (错误 %1)',
@@ -20,13 +20,13 @@ $GLOBALS['CKFLang'] = array (
 		'116' => '文件夹不存在. 请刷新后再试.',
 		'117' => '文件不存在. 请刷新列表后再试.',
 		'118' => '目标位置与当前位置相同.',
-		'201' => '文件与现有的重名. 新上传的文件改名为 "%1"',
-		'202' => '无效的文件',
+		'201' => '文件与现有的重名. 新上传的文件改名为 "%1".',
+		'202' => '无效的文件.',
 		'203' => '无效的文件. 文件尺寸太大.',
 		'204' => '上传文件已损失.',
 		'205' => '服务器中的上传临时文件夹无效.',
 		'206' => '因为安全原因，上传中断. 上传文件包含不能 HTML 类型数据.',
-		'207' => '新上传的文件改名为 "%1"',
+		'207' => '新上传的文件改名为 "%1".',
 		'300' => '移动文件失败.',
 		'301' => '复制文件失败.',
 		'500' => '因为安全原因，文件不可浏览. 请联系系统管理员并检查CKFinder配置文件.',

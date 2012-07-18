@@ -2,49 +2,51 @@
  * CKFinder
  * ========
  * http://ckfinder.com
- * Copyright (C) 2007-2011, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (C) 2007-2012, CKSource - Frederico Knabben. All rights reserved.
  *
- * The software, this file and its contents are subject to the CKFinder
+ * The software, this file, and its contents are subject to the CKFinder
  * License. Please read the license.txt file before using, installing, copying,
- * modifying or distribute this file or part of its contents. The contents of
+ * modifying, or distributing this file or part of its contents. The contents of
  * this file is part of the Source Code of CKFinder.
  *
  */
 
 /**
-* @fileOverview
-*/
+ * @fileOverview Defines the {@link CKFinder.lang} object for the Czech
+ *		language.
+ */
 
 /**
- * Constains the dictionary of language entries.
+ * Contains the dictionary of language entries.
  * @namespace
  */
 CKFinder.lang['cs'] =
 {
-	appTitle : 'CKFinder', // MISSING
+	appTitle : 'CKFinder',
 
 	// Common messages and labels.
 	common :
 	{
 		// Put the voice-only part of the label in the span.
-		unavailable		: '%1<span class="cke_accessibility">, unavailable</span>', // MISSING
-		confirmCancel	: 'Some of the options have been changed. Are you sure to close the dialog?', // MISSING
-		ok				: 'OK', // MISSING
-		cancel			: 'Cancel', // MISSING
-		confirmationTitle	: 'Confirmation', // MISSING
-		messageTitle	: 'Information', // MISSING
-		inputTitle		: 'Question', // MISSING
-		undo			: 'Undo', // MISSING
-		redo			: 'Redo', // MISSING
-		skip			: 'Skip', // MISSING
-		skipAll			: 'Skip all', // MISSING
-		makeDecision	: 'What action should be taken?', // MISSING
-		rememberDecision: 'Remember my decision' // MISSING
+		unavailable		: '%1<span class="cke_accessibility">, nedostupné</span>',
+		confirmCancel	: 'Některá z nastavení byla změněna. Skutečně chcete dialogové okno zavřít?',
+		ok				: 'OK',
+		cancel			: 'Zrušit',
+		confirmationTitle	: 'Potvrzení',
+		messageTitle	: 'Informace',
+		inputTitle		: 'Otázka',
+		undo			: 'Zpět',
+		redo			: 'Znovu',
+		skip			: 'Přeskočit',
+		skipAll			: 'Přeskočit vše',
+		makeDecision	: 'Co by se mělo provést?',
+		rememberDecision: 'Zapamatovat si mé rozhodnutí'
 	},
 
 
-	dir : 'ltr', // MISSING
-	HelpLang : 'en',
+	// Language direction, 'ltr' or 'rtl'.
+	dir : 'ltr',
+	HelpLang : 'cs',
 	LangCode : 'cs',
 
 	// Date Format
@@ -62,50 +64,50 @@ CKFinder.lang['cs'] =
 	//		MM   : Minute (padding zero)
 	//		a    : Firt char of AM/PM
 	//		aa   : AM/PM
-	DateTime : 'm/d/yyyy h:MM aa',
+	DateTime : 'd/m/yyyy H:MM',
 	DateAmPm : ['AM', 'PM'],
 
 	// Folders
 	FoldersTitle	: 'Složky',
 	FolderLoading	: 'Načítání...',
-	FolderNew		: 'Zadejte jméno nové složky: ',
-	FolderRename	: 'Zadejte nové jméno složky: ',
-	FolderDelete	: 'Opravdu chcete smazat složku "%1" ?',
-	FolderRenaming	: ' (Přejmenovávám...)',
-	FolderDeleting	: ' (Mažu...)',
+	FolderNew		: 'Zadejte název nové složky: ',
+	FolderRename	: 'Zadejte nový název složky: ',
+	FolderDelete	: 'Opravdu chcete složku "%1" smazat?',
+	FolderRenaming	: ' (Přejmenovávání...)',
+	FolderDeleting	: ' (Mazání...)',
 
 	// Files
-	FileRename		: 'Zadejte jméno novéhho souboru: ',
-	FileRenameExt	: 'Opravdu chcete změnit příponu souboru, může se stát nečitelným',
-	FileRenaming	: 'Přejmenovávám...',
+	FileRename		: 'Zadejte nový název souboru: ',
+	FileRenameExt	: 'Opravdu chcete změnit příponu souboru? Soubor se může stát nepoužitelným.',
+	FileRenaming	: 'Přejmenovávání...',
 	FileDelete		: 'Opravdu chcete smazat soubor "%1"?',
-	FilesLoading	: 'Loading...', // MISSING
-	FilesEmpty		: 'Empty folder', // MISSING
-	FilesMoved		: 'File %1 moved into %2:%3', // MISSING
-	FilesCopied		: 'File %1 copied into %2:%3', // MISSING
+	FilesLoading	: 'Načítání...',
+	FilesEmpty		: 'Prázdná složka.',
+	FilesMoved		: 'Soubor %1 přesunut do %2:%3.',
+	FilesCopied		: 'Soubor %1 zkopírován do %2:%3.',
 
 	// Basket
-	BasketFolder		: 'Basket', // MISSING
-	BasketClear			: 'Clear Basket', // MISSING
-	BasketRemove		: 'Remove from basket', // MISSING
-	BasketOpenFolder	: 'Open parent folder', // MISSING
-	BasketTruncateConfirm : 'Do you really want to remove all files from the basket?', // MISSING
-	BasketRemoveConfirm	: 'Do you really want to remove the file "%1" from the basket?', // MISSING
-	BasketEmpty			: 'No files in the basket, drag\'n\'drop some.', // MISSING
-	BasketCopyFilesHere	: 'Copy Files from Basket', // MISSING
-	BasketMoveFilesHere	: 'Move Files from Basket', // MISSING
+	BasketFolder		: 'Košík',
+	BasketClear			: 'Vyčistit Košík',
+	BasketRemove		: 'Odstranit z Košíku',
+	BasketOpenFolder	: 'Otevřít nadřazenou složku',
+	BasketTruncateConfirm : 'Opravdu chcete z Košíku odstranit všechny soubory?',
+	BasketRemoveConfirm	: 'Opravdu chcete odstranit soubor "%1" z Košíku?',
+	BasketEmpty			: 'V Košíku nejsou žádné soubory, tak sem některé přetáhněte.',
+	BasketCopyFilesHere	: 'Kopírovat soubory z Košíku',
+	BasketMoveFilesHere	: 'Přesunout soubory z Košíku',
 
-	BasketPasteErrorOther	: 'File %s error: %e', // MISSING
-	BasketPasteMoveSuccess	: 'The following files were moved: %s', // MISSING
-	BasketPasteCopySuccess	: 'The following files were copied: %s', // MISSING
+	BasketPasteErrorOther	: 'Soubor %s chyba: %e',
+	BasketPasteMoveSuccess	: 'Následující soubory byly přesunuty: %s',
+	BasketPasteCopySuccess	: 'Následující soubory byly zkopírovány: %s',
 
 	// Toolbar Buttons (some used elsewhere)
 	Upload		: 'Nahrát',
 	UploadTip	: 'Nahrát nový soubor',
-	Refresh		: 'Načíst znova',
+	Refresh		: 'Znovu načíst',
 	Settings	: 'Nastavení',
-	Help		: 'Pomoc',
-	HelpTip		: 'Pomoc',
+	Help		: 'Nápověda',
+	HelpTip		: 'Nápověda',
 
 	// Context Menus
 	Select			: 'Vybrat',
@@ -117,17 +119,17 @@ CKFinder.lang['cs'] =
 	Rename			: 'Přejmenovat',
 	Delete			: 'Smazat',
 
-	CopyDragDrop	: 'Copy file here', // MISSING
-	MoveDragDrop	: 'Move file here', // MISSING
+	CopyDragDrop	: 'Soubor zkopírovat sem',
+	MoveDragDrop	: 'Soubor přesunout sem',
 
 	// Dialogs
-	RenameDlgTitle		: 'Rename', // MISSING
-	NewNameDlgTitle		: 'New name', // MISSING
-	FileExistsDlgTitle	: 'File already exists', // MISSING
-	SysErrorDlgTitle : 'System error', // MISSING
+	RenameDlgTitle		: 'Přejmenovat',
+	NewNameDlgTitle		: 'Nový název',
+	FileExistsDlgTitle	: 'Soubor již existuje',
+	SysErrorDlgTitle : 'Chyba systému',
 
-	FileOverwrite	: 'Overwrite', // MISSING
-	FileAutorename	: 'Auto-rename', // MISSING
+	FileOverwrite	: 'Přepsat',
+	FileAutorename	: 'Automaticky přejmenovat',
 
 	// Generic
 	OkBtn		: 'OK',
@@ -137,111 +139,143 @@ CKFinder.lang['cs'] =
 	// Upload Panel
 	UploadTitle			: 'Nahrát nový soubor',
 	UploadSelectLbl		: 'Zvolit soubor k nahrání',
-	UploadProgressLbl	: '(Nahrávám, čekejte...)',
+	UploadProgressLbl	: '(Probíhá nahrávání, čekejte...)',
 	UploadBtn			: 'Nahrát zvolený soubor',
-	UploadBtnCancel		: 'Cancel', // MISSING
+	UploadBtnCancel		: 'Zrušit',
 
-	UploadNoFileMsg		: 'Vyberte prosím soubor',
-	UploadNoFolder		: 'Please select folder before uploading.', // MISSING
-	UploadNoPerms		: 'File upload not allowed.', // MISSING
-	UploadUnknError		: 'Error sending the file.', // MISSING
-	UploadExtIncorrect	: 'File extension not allowed in this folder.', // MISSING
+	UploadNoFileMsg		: 'Vyberte prosím soubor z Vašeho počítače.',
+	UploadNoFolder		: 'Před nahráváním vyberte složku prosím.',
+	UploadNoPerms		: 'Nahrávání souborů není povoleno.',
+	UploadUnknError		: 'Chyba při posílání souboru.',
+	UploadExtIncorrect	: 'Přípona souboru není v této složce povolena.',
+
+	// Flash Uploads
+	UploadLabel			: 'Soubory k nahrání',
+	UploadTotalFiles	: 'Celkem souborů:',
+	UploadTotalSize		: 'Celková velikost:',
+	UploadSend			: 'Nahrát',
+	UploadAddFiles		: 'Přidat soubory',
+	UploadClearFiles	: 'Vyčistit soubory',
+	UploadCancel		: 'Zrušit nahrávání',
+	UploadRemove		: 'Odstranit',
+	UploadRemoveTip		: 'Odstranit !f',
+	UploadUploaded		: 'Nahráno !n%',
+	UploadProcessing	: 'Zpracovávání...',
 
 	// Settings Panel
 	SetTitle		: 'Nastavení',
 	SetView			: 'Zobrazení:',
-	SetViewThumb	: 'Náhledy',
+	SetViewThumb	: 'Náhled',
 	SetViewList		: 'Seznam',
-	SetDisplay		: 'Informace:',
+	SetDisplay		: 'Zobrazit:',
 	SetDisplayName	: 'Název',
 	SetDisplayDate	: 'Datum',
 	SetDisplaySize	: 'Velikost',
 	SetSort			: 'Seřazení:',
-	SetSortName		: 'Podle jména',
+	SetSortName		: 'Podle názvu',
 	SetSortDate		: 'Podle data',
 	SetSortSize		: 'Podle velikosti',
+	SetSortExtension		: 'Podle přípony',
 
 	// Status Bar
 	FilesCountEmpty : '<Prázdná složka>',
 	FilesCountOne	: '1 soubor',
-	FilesCountMany	: '%1 soubor',
+	FilesCountMany	: '%1 souborů',
 
 	// Size and Speed
-	Kb				: '%1 kB',
-	KbPerSecond		: '%1 kB/s',
+	Kb				: '%1 KB',
+	Mb				: '%1 MB',
+	Gb				: '%1 GB',
+	SizePerSecond	: '%1/s',
 
 	// Connector Error Messages.
-	ErrorUnknown	: 'Nebylo možno dokončit příkaz. (Error %1)',
+	ErrorUnknown	: 'Příkaz nebylo možné dokončit. (Chyba %1)',
 	Errors :
 	{
 	 10 : 'Neplatný příkaz.',
-	 11 : 'Požadovaný typ prostředku nebyl specifikován v dotazu.',
-	 12 : 'Požadovaný typ prostředku není validní.',
-	102 : 'Šatné jméno souboru, nebo složky.',
-	103 : 'Nebylo možné dokončit příkaz kvůli autorizačním omezením.',
-	104 : 'Nebylo možné dokončit příkaz kvůli omezeným přístupovým právům k souborům.',
-	105 : 'Špatná přípona souboru.',
-	109 : 'Neplatný příkaz.',
+	 11 : 'Typ zdroje nebyl v požadavku určen.',
+	 12 : 'Požadovaný typ zdroje není platný.',
+	102 : 'Špatné název souboru, nebo složky.',
+	103 : 'Nebylo možné příkaz dokončit kvůli omezení oprávnění.',
+	104 : 'Nebylo možné příkaz dokončit kvůli omezení oprávnění souborového systému.',
+	105 : 'Neplatná přípona souboru.',
+	109 : 'Neplatný požadavek.',
 	110 : 'Neznámá chyba.',
-	115 : 'Již existuje soubor nebo složka se stejným jménem.',
-	116 : 'Složka nenalezena, prosím obnovte stránku.',
-	117 : 'Soubor nenalezen, prosím obnovte stránku.',
-	118 : 'Source and target paths are equal.', // MISSING
-	201 : 'Již existoval soubor se stejným jménem, nahraný soubor byl přejmenován na "%1"',
-	202 : 'Špatný soubor',
-	203 : 'Špatný soubor. Příliš velký.',
+	115 : 'Soubor nebo složka se stejným názvem již existuje.',
+	116 : 'Složka nenalezena, prosím obnovte a zkuste znovu.',
+	117 : 'Soubor nenalezen, prosím obnovte seznam souborů a zkuste znovu.',
+	118 : 'Cesty zdroje a cíle jsou stejné.',
+	201 : 'Soubor se stejným názvem je již dostupný, nahraný soubor byl přejmenován na "%1".',
+	202 : 'Neplatný soubor.',
+	203 : 'Neplatný soubor. Velikost souboru je příliš velká.',
 	204 : 'Nahraný soubor je poškozen.',
-	205 : 'Na serveru není dostupná dočasná složka.',
+	205 : 'Na serveru není dostupná dočasná složka pro nahrávání.',
 	206 : 'Nahrávání zrušeno z bezpečnostních důvodů. Soubor obsahuje data podobná HTML.',
-	207 : 'Nahraný soubor byl přejmenován na "%1"',
-	300 : 'Moving file(s) failed.', // MISSING
-	301 : 'Copying file(s) failed.', // MISSING
-	500 : 'Nahrávání zrušeno z bezpečnostních důvodů. Zdělte to prosím administrátorovi a zkontrolujte nastavení CKFinderu.',
-	501 : 'Podpora náhledů je vypnuta.'
+	207 : 'Nahraný soubor byl přejmenován na "%1".',
+	300 : 'Přesunování souboru(ů) selhalo.',
+	301 : 'Kopírování souboru(ů) selhalo.',
+	500 : 'Průzkumník souborů je z bezpečnostních důvodů zakázán. Zdělte to prosím správci systému a zkontrolujte soubor nastavení CKFinder.',
+	501 : 'Podpora náhledů je zakázána.'
 	},
 
 	// Other Error Messages.
 	ErrorMsg :
 	{
-		FileEmpty		: 'Název souboru nemůže být prázdný',
-		FileExists		: 'File %s already exists', // MISSING
-		FolderEmpty		: 'Název složky nemůže být prázdný',
+		FileEmpty		: 'Název souboru nemůže být prázdný.',
+		FileExists		: 'Soubor %s již existuje.',
+		FolderEmpty		: 'Název složky nemůže být prázdný.',
 
 		FileInvChar		: 'Název souboru nesmí obsahovat následující znaky: \n\\ / : * ? " < > |',
 		FolderInvChar	: 'Název složky nesmí obsahovat následující znaky: \n\\ / : * ? " < > |',
 
-		PopupBlockView	: 'Nebylo možné otevřít soubor do nového okna. Prosím nastavte si prohlížeč aby neblokoval vyskakovací okna.'
+		PopupBlockView	: 'Soubor nebylo možné otevřít do nového okna. Prosím nastavte si Váš prohlížeč a zakažte veškeré blokování vyskakovacích oken.',
+		XmlError		: 'Nebylo možné správně načíst XML odpověď z internetového serveru.',
+		XmlEmpty		: 'Nebylo možné načíst XML odpověď z internetového serveru. Server vrátil prázdnou odpověď.',
+		XmlRawResponse	: 'Čistá odpověď od serveru: %s'
 	},
 
 	// Imageresize plugin
 	Imageresize :
 	{
-		dialogTitle		: 'Resize %s', // MISSING
-		sizeTooBig		: 'Cannot set image height or width to a value bigger than the original size (%size).', // MISSING
-		resizeSuccess	: 'Image resized successfully.', // MISSING
-		thumbnailNew	: 'Create new thumbnail', // MISSING
-		thumbnailSmall	: 'Small (%s)', // MISSING
-		thumbnailMedium	: 'Medium (%s)', // MISSING
-		thumbnailLarge	: 'Large (%s)', // MISSING
-		newSize			: 'Set new size', // MISSING
-		width			: 'Width', // MISSING
-		height			: 'Height', // MISSING
-		invalidHeight	: 'Invalid height.', // MISSING
-		invalidWidth	: 'Invalid width.', // MISSING
-		invalidName		: 'Invalid file name.', // MISSING
-		newImage		: 'Create new image', // MISSING
-		noExtensionChange : 'The file extension cannot be changed.', // MISSING
-		imageSmall		: 'Source image is too small', // MISSING
-		contextMenuName	: 'Resize' // MISSING
+		dialogTitle		: 'Změnit velikost %s',
+		sizeTooBig		: 'Nelze nastavit šířku či výšku obrázku na hodnotu vyšší než původní velikost (%size).',
+		resizeSuccess	: 'Úspěšně změněna velikost obrázku.',
+		thumbnailNew	: 'Vytvořit nový náhled',
+		thumbnailSmall	: 'Malý (%s)',
+		thumbnailMedium	: 'Střední (%s)',
+		thumbnailLarge	: 'Velký (%s)',
+		newSize			: 'Nastavit novou velikost',
+		width			: 'Šířka',
+		height			: 'Výška',
+		invalidHeight	: 'Neplatná výška.',
+		invalidWidth	: 'Neplatná šířka.',
+		invalidName		: 'Neplatný název souboru.',
+		newImage		: 'Vytvořit nový obrázek',
+		noExtensionChange : 'Příponu souboru nelze změnit.',
+		imageSmall		: 'Zdrojový obrázek je příliš malý.',
+		contextMenuName	: 'Změnit velikost',
+		lockRatio		: 'Uzamknout poměr',
+		resetSize		: 'Původní velikost'
 	},
 
 	// Fileeditor plugin
 	Fileeditor :
 	{
-		save			: 'Save', // MISSING
-		fileOpenError	: 'Unable to open file.', // MISSING
-		fileSaveSuccess	: 'File saved successfully.', // MISSING
-		contextMenuName	: 'Edit', // MISSING
-		loadingFile		: 'Loading file, please wait...' // MISSING
+		save			: 'Uložit',
+		fileOpenError	: 'Soubor nelze otevřít.',
+		fileSaveSuccess	: 'Soubor úspěšně uložen.',
+		contextMenuName	: 'Upravit',
+		loadingFile		: 'Načítání souboru, čekejte prosím...'
+	},
+
+	Maximize :
+	{
+		maximize : 'Maximalizovat',
+		minimize : 'Minimalizovat'
+	},
+
+	Gallery :
+	{
+		current : 'Obrázek {current} z {total}'
 	}
 };

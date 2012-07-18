@@ -1,8 +1,8 @@
 <?php
-// Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+// Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 // For licensing, see LICENSE.html or http://ckfinder.com/license
 
-//  Defines the object, for the German language. This is the base file for all translations.
+//  Defines the object for the German language.
 
 $GLOBALS['CKFLang'] = array (
 	'ErrorUnknown' => 'Ihre Anfrage konnte nicht bearbeitet werden. (Fehler %1)',
@@ -19,16 +19,16 @@ $GLOBALS['CKFLang'] = array (
 		'115' => 'Es existiert bereits eine Datei oder ein Ordner mit dem gleichen Namen.',
 		'116' => 'Verzeichnis nicht gefunden. Bitte aktualisieren Sie die Anzeige und versuchen es noch einmal.',
 		'117' => 'Datei nicht gefunden. Bitte aktualisieren Sie die Dateiliste und versuchen es noch einmal.',
-		'118' => 'Source and target paths are equal.',
+		'118' => 'Quell- und Zielpfad sind gleich.',
 		'201' => 'Es existiert bereits eine Datei unter gleichem Namen. Die hochgeladene Datei wurde unter "%1" gespeichert.',
-		'202' => 'Ungültige Datei',
+		'202' => 'Ungültige Datei.',
 		'203' => 'ungültige Datei. Die Dateigröße ist zu groß.',
 		'204' => 'Die hochgeladene Datei ist korrupt.',
 		'205' => 'Es existiert kein temp. Ordner für das Hochladen auf den Server.',
 		'206' => 'Das Hochladen wurde aus Sicherheitsgründen abgebrochen. Die Datei enthält HTML-Daten.',
 		'207' => 'Die hochgeladene Datei wurde unter "%1" gespeichert.',
-		'300' => 'Moving file(s) failed.',
-		'301' => 'Copying file(s) failed.',
+		'300' => 'Verschieben der Dateien fehlgeschlagen.',
+		'301' => 'Kopieren der Dateien fehlgeschlagen.',
 		'500' => 'Der Dateibrowser wurde aus Sicherheitsgründen deaktiviert. Bitte benachrichtigen Sie Ihren Systemadministrator und prüfen Sie die Konfigurationsdatei.',
 		'501' => 'Die Miniaturansicht wurde deaktivert.',
 	)

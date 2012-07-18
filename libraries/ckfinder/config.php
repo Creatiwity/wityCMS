@@ -18,8 +18,6 @@
  *
  * @return boolean
  */
- session_name('wsid');
- session_start();
 function CheckAuthentication()
 {
 	// WARNING : DO NOT simply return "true". By doing so, you are allowing
@@ -31,7 +29,8 @@ function CheckAuthentication()
 	// ... where $_SESSION['IsAuthorized'] is set to "true" as soon as the
 	// user logs in your system. To be able to use session variables don't
 	// forget to add session_start() at the top of this file.
-	return !empty($_SESSION['access']);
+
+	return false;
 }
 
 // LicenseKey : Paste your license key here. If left blank, CKFinder will be
@@ -61,7 +60,7 @@ Examples:
 
 ATTENTION: The trailing slash is required.
 */
-$baseUrl = '/upload/ckeditor/';
+$baseUrl = '/ckfinder/userfiles/';
 
 /*
 $baseDir : the path to the local directory (in the server) which points to the
@@ -81,7 +80,6 @@ Examples:
 ATTENTION: The trailing slash is required.
 */
 $baseDir = resolveUrl($baseUrl);
-// $baseDir = "C:/Program Files (x86)/WampServer/www/wity/upload/";
 
 /*
  * ### Advanced Settings
@@ -200,8 +198,8 @@ $config['ResourceType'][] = Array(
 		'name' => 'Images',
 		'url' => $baseUrl . 'images',
 		'directory' => $baseDir . 'images',
-		'maxSize' => "16M",
-		'allowedExtensions' => 'bmp,gif,jpeg,jpg,png,avi,iso,mp3',
+		'maxSize' => 0,
+		'allowedExtensions' => 'bmp,gif,jpeg,jpg,png',
 		'deniedExtensions' => '');
 
 $config['ResourceType'][] = Array(
@@ -233,6 +231,13 @@ checked, not only the last part. In this way, uploading foo.php.rar would be
 denied, because "php" is on the denied extensions list.
 */
 $config['CheckDoubleExtension'] = true;
+
+/*
+Increases the security on an IIS web server.
+If enabled, CKFinder will disallow creating folders and uploading files whose names contain characters
+that are not safe under an IIS web server.
+*/
+$config['DisallowUnsafeCharacters'] = false;
 
 /*
 If you have iconv enabled (visit http://php.net/iconv for more information),

@@ -1,35 +1,35 @@
 <?php
-// Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+// Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 // For licensing, see LICENSE.html or http://ckfinder.com/license
 
-//  Defines the object, for the English language. This is the base file for all translations.
+//  Defines the object for the Hebrew language.
 
 $GLOBALS['CKFLang'] = array (
-	'ErrorUnknown' => 'בקשה נכשלה. שגיאה. (Error %1)',
+	'ErrorUnknown' => 'לא היה ניתן להשלים את הבקשה. (שגיאה %1)',
 	'Errors' => array (
-		'10' => 'Invalid command.',
-		'11' => 'The resource type was not specified in the request.',
-		'12' => 'The requested resource type is not valid.',
-		'102' => 'Invalid file or folder name.',
-		'103' => 'It was not possible to complete the request due to authorization restrictions.',
-		'104' => 'It was not possible to complete the request due to file system permission restrictions.',
-		'105' => 'Invalid file extension.',
-		'109' => 'Invalid request.',
-		'110' => 'Unknown error.',
-		'115' => 'A file or folder with the same name already exists.',
-		'116' => 'Folder not found. Please refresh and try again.',
-		'117' => 'File not found. Please refresh the files list and try again.',
-		'118' => 'Source and target paths are equal.',
-		'201' => 'A file with the same name is already available. The uploaded file has been renamed to "%1"',
-		'202' => 'Invalid file',
-		'203' => 'Invalid file. The file size is too big.',
-		'204' => 'The uploaded file is corrupt.',
-		'205' => 'No temporary folder is available for upload in the server.',
-		'206' => 'Upload cancelled for security reasons. The file contains HTML like data.',
-		'207' => 'The uploaded file has been renamed to "%1"',
-		'300' => 'Moving file(s) failed.',
-		'301' => 'Copying file(s) failed.',
-		'500' => 'The file browser is disabled for security reasons. Please contact your system administrator and check the CKFinder configuration file.',
-		'501' => 'The thumbnails support is disabled.',
+		'10' => 'הוראה לא תקינה.',
+		'11' => 'סוג המשאב לא צויין בבקשה לשרת.',
+		'12' => 'סוג המשאב המצויין לא תקין.',
+		'102' => 'שם הקובץ או התיקיה לא תקין.',
+		'103' => 'לא היה ניתן להשלים את הבקשה בשל הרשאות מוגבלות.',
+		'104' => 'לא היה ניתן להשלים את הבקשה בשל הרשאות מערכת קבצים מוגבלות.',
+		'105' => 'סיומת הקובץ לא תקינה.',
+		'109' => 'בקשה לא תקינה.',
+		'110' => 'שגיאה לא ידועה.',
+		'115' => 'כבר קיים/ת קובץ או תיקיה באותו השם.',
+		'116' => 'התיקיה לא נמצאה. נא לרענן ולנסות שוב.',
+		'117' => 'הקובץ לא נמצא. נא לרענן ולנסות שוב.',
+		'118' => 'כתובות המקור והיעד זהות.',
+		'201' => 'קובץ עם אותו השם כבר קיים. שם הקובץ שהועלה שונה ל "%1"',
+		'202' => 'הקובץ לא תקין.',
+		'203' => 'הקובץ לא תקין. גודל הקובץ גדול מדי.',
+		'204' => 'הקובץ המועלה לא תקין',
+		'205' => 'לא קיימת בשרת תיקיה זמנית להעלאת קבצים.',
+		'206' => 'ההעלאה בוטלה מסיבות אבטחה. הקובץ מכיל תוכן שדומה ל-HTML.',
+		'207' => 'שם הקובץ שהועלה שונה ל "%1"',
+		'300' => 'העברת הקבצים נכשלה.',
+		'301' => 'העתקת הקבצים נכשלה.',
+		'500' => 'דפדפן הקבצים מנוטרל מסיבות אבטחה. יש לפנות למנהל המערכת ולבדוק את קובץ התצורה של CKFinder.',
+		'501' => 'התמיכה בתמונות מוקטנות מבוטלת.',
 	)
 );

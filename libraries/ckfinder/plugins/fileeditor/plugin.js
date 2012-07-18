@@ -1,4 +1,14 @@
-﻿CKFinder.addPlugin( 'fileeditor', function( api ) {
+﻿/*
+ * Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.html or http://CKFINDER.com/license
+ *
+ * The software, this file and its contents are subject to the CKFinder
+ * License. Please read the license.txt file before using, installing, copying,
+ * modifying or distribute this file or part of its contents. The contents of
+ * this file is part of the Source Code of CKFinder.
+ */
+
+CKFinder.addPlugin( 'fileeditor', function( api ) {
 
 	var regexExt = /^(.*)\.([^\.]+)$/,
 		regexTextExt = /^(txt|css|html|htm|js|asp|cfm|cfc|ascx|php|inc|xml|xslt|xsl)$/i,
@@ -84,8 +94,6 @@
 
 		return {
 			title : api.getSelectedFile().name,
-			// TODO CKFINDER.DIALOG_RESIZE_BOTH
-			// resizable : CKFINDER.DIALOG_RESIZE_BOTH,
 			minWidth : parseInt( width, 10 ) * 0.6,
 			minHeight : parseInt( height, 10 ) * 0.7,
 			onHide : function() {

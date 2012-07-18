@@ -1,8 +1,8 @@
 <?php
-// Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+// Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 // For licensing, see LICENSE.html or http://ckfinder.com/license
 
-//  Defines the object, for the English language. This is the base file for all translations.
+//  Defines the object for the Japanese language.
 
 $GLOBALS['CKFLang'] = array (
 	'ErrorUnknown' => 'リクエストの処理に失敗しました。 (Error %1)',

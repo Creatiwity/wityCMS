@@ -1,8 +1,8 @@
 <?php
-// Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
+// Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
 // For licensing, see LICENSE.html or http://ckfinder.com/license
 
-//  Defines the object, for the Latvian language. This is the base file for all translations.
+//  Defines the object for the Latvian language.
 
 $GLOBALS['CKFLang'] = array (
 	'ErrorUnknown' => 'Nebija iespējams pabeigt pieprasījumu. (Kļūda %1)',
@@ -20,13 +20,13 @@ $GLOBALS['CKFLang'] = array (
 		'116' => 'Mape nav atrasta. Lūdzu pārlādējiet šo logu un mēģiniet vēlreiz.',
 		'117' => 'Fails nav atrasts. Lūdzu pārlādējiet failu sarakstu un mēģiniet vēlreiz.',
 		'118' => 'Source and target paths are equal.',
-		'201' => 'Fails ar šādu nosaukumu jau eksistē. Augšupielādētais fails tika pārsaukts par "%1"',
-		'202' => 'Nederīgs fails',
+		'201' => 'Fails ar šādu nosaukumu jau eksistē. Augšupielādētais fails tika pārsaukts par "%1".',
+		'202' => 'Nederīgs fails.',
 		'203' => 'Nederīgs fails. Faila izmērs pārsniedz pieļaujamo.',
 		'204' => 'Augšupielādētais fails ir bojāts.',
 		'205' => 'Neviena pagaidu mape nav pieejama priekš augšupielādēšanas uz servera.',
 		'206' => 'Augšupielāde atcelta drošības apsvērumu dēļ. Fails satur HTML veida datus.',
-		'207' => 'Augšupielādētais fails tika pārsaukts par "%1"',
+		'207' => 'Augšupielādētais fails tika pārsaukts par "%1".',
 		'300' => 'Moving file(s) failed.',
 		'301' => 'Copying file(s) failed.',
 		'500' => 'Failu pārlūks ir atslēgts drošības apsvērumu dēļ. Lūdzu sazinieties ar šīs sistēmas tehnisko administratoru vai pārbaudiet CKFinder konfigurācijas failu.',
