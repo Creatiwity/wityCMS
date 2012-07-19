@@ -40,8 +40,8 @@ class WView {
 	 * Must a be an existing directory in /themes/
 	 */
 	public function setTheme($theme) {
-		if ($theme == 'null') {
-			$this->themeName = 'null';
+		if ($theme == '_blank') {
+			$this->themeName = '_blank';
 		} else if (is_dir(THEMES_DIR.$theme)) {
 			$this->themeName = $theme;
 		} else {
@@ -174,7 +174,7 @@ class WView {
 		// Assign variables
 		$this->tpl->assign($this->vars);
 		
-		if ($this->themeName == 'null') {
+		if ($this->themeName == '_blank') {
 			$themeMainFile = $this->tplFile;
 		} else {
 			// Define {$include} tpl's var

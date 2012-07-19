@@ -26,11 +26,11 @@ class WNote {
 	 * @param  string $message Message de la note
 	 * @return $note
 	 */
-	public static function raise($level, $title, $message, $handler) {
+	public static function raise($level, $code, $message, $handler) {
 		// Création d'une nouvelle note
 		$note = array(
 			'level'   => $level,
-			'title'   => $title,
+			'code'    => $code,
 			'message' => $message
 		);
 		
@@ -39,8 +39,7 @@ class WNote {
 			// Execution du handler
 			self::$func($note);
 			return $note;
-		}
-		else {
+		} else {
 			// On évite de laisser l'écran vide
 			die("WNote::raise() : Unfound handler <strong>\"".$handler."\"</strong><br />Triggering note : ".$message);
 		}
@@ -49,32 +48,32 @@ class WNote {
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function system($title, $message, $handler = 'die') {
-		$note = self::raise(self::ERROR, $title, $message, $handler);
+	public static function system($code, $message, $handler = 'die') {
+		$note = self::raise(self::ERROR, $code, $message, $handler);
 		return $note;
 	}
 	
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function error($title, $message, $handler = 'session') {
-		$note = self::raise(self::ERROR, $title, $message, $handler);
+	public static function error($code, $message, $handler = 'session') {
+		$note = self::raise(self::ERROR, $code, $message, $handler);
 		return $note;
 	}
 	
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function info($title, $message, $handler = 'session') {
-		$note = self::raise(self::INFO, $title, $message, $handler);
+	public static function info($code, $message, $handler = 'session') {
+		$note = self::raise(self::INFO, $code, $message, $handler);
 		return $note;
 	}
 	
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function success($title, $message, $handler = 'session') {
-		$note = self::raise(self::SUCCESS, $title, $message, $handler);
+	public static function success($code, $message, $handler = 'session') {
+		$note = self::raise(self::SUCCESS, $code, $message, $handler);
 		return $note;
 	}
 	
@@ -86,7 +85,7 @@ class WNote {
 	 * Affichage de la note par un die
 	 */
 	public static function handle_die($note) {
-		die("<br /><strong>".$note['title'].":</strong> ".$note['message']."<br />\n");
+		die("<br /><strong>".$note['code'].":</strong> ".$note['message']."<br />\n");
 	}
 	
 	/**
@@ -99,12 +98,12 @@ class WNote {
 		$tpl = WSystem::getTemplate();
 		$tpl->assign(array(
 			'note_level'   => $note['level'],
-			'note_code'    => $note['title'],
+			'note_code'    => $note['code'],
 			'note_message' => $note['message'],
 			'css'          => $tpl->getVar('css').'<link href="/themes/system/styles/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n"
 		));
 		$html = $tpl->parse('themes/system/templates/note.html');
-		$tpl->clear(array('note_level', 'note_title', 'note_message'));
+		$tpl->clear(array('note_level', 'note_code', 'note_message'));
 		// Assign html result as a string in the view
 		$tpl->assign('note', $tpl->getVar('note').$html);
 	}
@@ -117,9 +116,9 @@ class WNote {
 	 */
 	public static function handle_assign_block($note) {
 		$tpl = WSystem::getTemplate();
-		$tpl->assignBlockVars('errors', array(
+		$tpl->assignBlockVars('note', array(
 			'level'   => $note['level'],
-			'code'    => $note['title'],
+			'code'    => $note['code'],
 			'message' => $note['message'],
 		));
 	}
@@ -141,15 +140,16 @@ class WNote {
 	 * @return object Note
 	 */
 	public static function handle_display($note) {
+		$view = new WView();
+		$view->assign(array(
+			'note_level'   => $note['level'],
+			'note_code'    => $note['code'],
+			'note_message' => $note['message'],
+			'css'          => '/themes/system/styles/note.css'
+		));
+		$view->setTplFile('themes/system/templates/note.html');
+		
 		try {
-			$view = new WView();
-			$view->assign(array(
-				'note_level'   => $note['level'],
-				'note_code'    => $note['title'],
-				'note_message' => $note['message'],
-				'css'          => '/themes/system/styles/note.css'
-			));
-			$view->setTplFile('themes/system/templates/note.html');
 			$view->render();
 		} catch (Exception $e) {
 			// Failure case : stock it into session
@@ -159,17 +159,16 @@ class WNote {
 	
 	// A faire : affichage d'une page personnalisée pour la note (mise hors circuit du template)
 	public static function handle_display_custom($note) {
-		echo 'todo handle_display_custom';
-		/*$view = new WView();
-		
+		$view = new WView();
+		$view->setTheme('_blank');
 		$view->assign(array(
-			'note_level' => $note['level'],
-			'note_code'  => $note['title'],
-			'note_msg'   => $note['message'],
-			'css'        => '/themes/system/styles/note.css'
+			'note_level'   => $note['level'],
+			'note_code'    => $note['code'],
+			'note_message' => $note['message'],
+			'css'          => '/themes/system/styles/note.css'
 		));
-		$view->setTplFile('themes/system/templates/note.html');
-		$view->render();*/
+		$view->setTplFile('themes/system/templates/note_display_custom.html');
+		$view->render();
 	}
 	
 	/**
@@ -194,7 +193,7 @@ class WNote {
 	public static function treatNoteSession($def_handler = 'assign') {
 		if (!empty($_SESSION['note_queue'])) {
 			foreach ($_SESSION['note_queue'] as $note) {
-				self::raise($note['level'], $note['title'], $note['message'], $def_handler);
+				self::raise($note['level'], $note['code'], $note['message'], $def_handler);
 			}
 			
 			// Nettoyage de la pile
