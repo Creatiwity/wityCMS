@@ -6,14 +6,12 @@
 		
 		<title>{$pageTitle}</title>
 		
-		<link href="/themes/system/css/note.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="/themes/system/styles/note.css" rel="stylesheet" type="text/css" media="screen" />
 	</head>
-	<body>
+	<body id="full_note">
 		<div id="note">
-			<dl class="note {$note_level}">
-				<dt>{$note_code}</dt>
-				<dd>{$note_message}</dd>
-			</dl>
+			<h1>{$note_code}</h1>
+			<p>{$note_message}</p>
 		</div>
 	</body>
 </html>

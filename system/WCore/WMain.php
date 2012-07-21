@@ -44,7 +44,7 @@ class WMain {
 			$controller->init($this);
 			$controller->launch();
 		} else {
-			WNote::info("Application introuvable", "L'application ".$appName." n'existe pas.", 'display');
+			WNote::info("Application introuvable", "L'application \"".$appName."\" n'existe pas.", 'display');
 		}
 	}
 	

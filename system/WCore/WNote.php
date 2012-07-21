@@ -4,11 +4,9 @@
  * Système de gestion de contenu pour tous.
  *
  * @author  Fofif
- * @version	$Id: WNote/WNote.php 0003 09-04-2010 Fofif $
+ * @version	$Id: WCore/WNote.php 0004 21-07-2012 Fofif $
  * @desc	Affichage de messages
  */
-
-include 'WException.php';
 
 class WNote {
 	// Les niveaux de note
@@ -19,7 +17,6 @@ class WNote {
 	
 	/**
 	 * Crée une nouvelle note
-	 *
 	 * @static
 	 * @param  string $level   Niveau de la note
 	 * @param  string $code    Intitulé de la note
@@ -83,6 +80,7 @@ class WNote {
 	
 	/**
 	 * Affichage de la note par un die
+	 * @param array $note
 	 */
 	public static function handle_die($note) {
 		die("<br /><strong>".$note['code'].":</strong> ".$note['message']."<br />\n");
@@ -90,9 +88,7 @@ class WNote {
 	
 	/**
 	 * Assignation de la note parsée dans le tpl
-	 * 
-	 * @param  object $note  Note à traiter
-	 * @return object Note
+	 * @param array $note
 	 */
 	public static function handle_assign($note) {
 		$tpl = WSystem::getTemplate();
@@ -110,9 +106,7 @@ class WNote {
 	
 	/**
 	 * Assignation de la note parsée dans le tpl en tant que variable block
-	 * 
-	 * @param  object $note  Note à traiter
-	 * @return object Note
+	 * @param array $note
 	 */
 	public static function handle_assign_block($note) {
 		$tpl = WSystem::getTemplate();
@@ -134,10 +128,8 @@ class WNote {
 	}
 	
 	/**
-	 * Affichage d'une page avec la note en tant que sortie d'app
-	 * 
-	 * @param  object $note  Note à traiter
-	 * @return object Note
+	 * Affichage d'une page avec la note en tant que réponse HTML
+	 * @param array $note
 	 */
 	public static function handle_display($note) {
 		$view = new WView();
@@ -147,17 +139,24 @@ class WNote {
 			'note_message' => $note['message'],
 			'css'          => '/themes/system/styles/note.css'
 		));
-		$view->setTplFile('themes/system/templates/note.html');
-		
 		try {
+			$view->setResponse('themes/system/templates/note.html');
 			$view->render();
 		} catch (Exception $e) {
-			// Failure case : stock it into session
-			WNote::handle_display_custom($note);
+			self::raise(
+				self::ERROR, 
+				"WView error", 
+				nl2br(sprintf("%s\n\nTriggering note :\nLevel: %s\nCode: %s\nMessage: %s", $e->getMessage(), $note['level'], $note['code'], $note['message'])),
+				'display_custom'
+			);
 		}
 	}
 	
-	// A faire : affichage d'une page personnalisée pour la note (mise hors circuit du template)
+	/**
+	 * Affichage d'une page personnalisée pour la note
+	 * Le thème est désactivé par ce handler
+	 * @param array $note
+	 */
 	public static function handle_display_custom($note) {
 		$view = new WView();
 		$view->setTheme('_blank');
@@ -167,15 +166,13 @@ class WNote {
 			'note_message' => $note['message'],
 			'css'          => '/themes/system/styles/note.css'
 		));
-		$view->setTplFile('themes/system/templates/note_display_custom.html');
+		$view->setResponse('themes/system/templates/note_display_custom.html');
 		$view->render();
 	}
 	
 	/**
 	 * Assignation de la note parsée en session
-	 * 
-	 * @param  object $note  Note à traiter
-	 * @return object Note
+	 * @param array $note
 	 */
 	public static function handle_session($note) {
 		if (!isset($_SESSION['note_queue'])) {

@@ -18,7 +18,13 @@ WRoute
 
 WView
 - Special theme "null" added
-- New method "findTplFile" from WController
+- Method "setTpl" renamed into "setResponse"
+- New method "findResponse" from WController::findTpl()
 
 Apps
 - User : correction du bug de redirection à la connexion
+
+WNote
+- Class moved to %SYS_DIR%/WCore/
+- WException removed
+- New handler "handle_display_custom" (full custom page for notes)

@@ -32,7 +32,7 @@ class WTemplate {
 		if (is_dir($baseDir)) {
 			$this->baseDir = $baseDir;
 		} else {
-			throw new Exception("Le répertoire ".$baseDir." n'existe pas.");
+			throw new Exception("WTemplate::__construct(): Directory \"".$baseDir."\" does not exist.");
 		}
 		
 		// Valeur par défaut

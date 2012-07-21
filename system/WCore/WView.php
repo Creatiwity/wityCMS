@@ -4,17 +4,18 @@
  * Système de gestion de contenu pour tous.
  *
  * @desc Classe responsable de l'affichage final
- * @version $Id: WCore/WView.php 0001 11-07-2012 Fofif $
+ * @version $Id: WCore/WView.php 0002 21-07-2012 Fofif $
  */
 
 class WView {
 	public $tpl;
 	
 	// Theme to be loaded
-	private $themeName;
+	private $themeName = '';
+	private $themeDir = '';
 	
-	// Template file to execute
-	private $tplFile;
+	// Template response file to display as output
+	private $responseFile = '';
 	
 	// Variables with a special treatment
 	private $specialVars = array('css', 'js');
@@ -28,7 +29,7 @@ class WView {
 		// Default page name = siteName
 		$this->assign('pageTitle', WConfig::get('config.siteName'));
 		
-		// Détection du thème à charger
+		// Find theme to load
 		$theme = WConfig::get('config.theme');
 		if (!empty($theme)) {
 			$this->setTheme($theme);
@@ -44,8 +45,9 @@ class WView {
 			$this->themeName = '_blank';
 		} else if (is_dir(THEMES_DIR.$theme)) {
 			$this->themeName = $theme;
+			$this->themeDir = THEMES_DIR.$theme.DS;
 		} else {
-			throw new Exception("WView::setTheme() : Theme '".$theme."' does not exist.");
+			throw new Exception("WView::setTheme(): The theme \"".$theme."\" does not exist.");
 		}
 	}
 	
@@ -54,7 +56,7 @@ class WView {
 	}
 	
 	public function assignOne($name, $value) {
-		// $name is a Special var
+		// Is $name a Special var?
 		if (in_array($name, $this->specialVars)) {
 			if (!isset($this->vars[$name])) {
 				$this->vars[$name] = array($value);
@@ -117,11 +119,11 @@ class WView {
 		}
 	}
 	
-	public function setTplFile($file) {
+	public function setResponse($file) {
 		if (file_exists($file)) {
-			$this->tplFile = $file;
+			$this->responseFile = $file;
 		} else {
-			throw new Exception("WView::setTpl() : le fichier '".$file."' est introuvable.");
+			throw new Exception("WView::setResponse(): The file \"".$file."\" does not exist.");
 		}
 	}
 	
@@ -130,20 +132,17 @@ class WView {
 	 * Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli
 	 * @return string adresse du fichier
 	 */
-	public function findTplFile($appName, $action, $admin) {
-		$tplHref = THEMES_DIR.$this->getTheme().DS.'templates'.DS.$appName.DS.$action.'.html';
-		if (!$admin && file_exists($tplHref)) {
-			$this->setTplFile($tplHref);
-			return true;
+	public function findResponse($appName, $action, $adminLoaded) {
+		if ($adminLoaded) {
+			$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
 		} else {
-			$endDir = $admin ? 'admin' : 'front';
-			$tplHref = $appView = APPS_DIR.$appName.DS.$endDir.DS.'templates'.DS.$action.'.html';
-			if (file_exists($tplHref)) {
-				$this->setTplFile($tplHref);
-				return true;
+			$themeTplHref = $this->themeDir.'templates'.DS.$appName.DS.$action.'.html';
+			if (file_exists($themeTplHref)) {
+				$this->setResponse($themeTpleHref);
+			} else {
+				$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
 			}
 		}
-		return false;
 	}
 	
 	public function getTpl() {
@@ -154,12 +153,12 @@ class WView {
 	 * Render the view
 	 */
 	public function render() {
-		if (empty($this->tplFile)) {
-			throw new Exception("WView::render() : No template file given.");
+		if (empty($this->responseFile)) {
+			throw new Exception("WView::render(): No response file given.");
 		}
 		
 		if (empty($this->themeName)) {
-			throw new Exception("WView::render() : No theme given or it was not found.");
+			throw new Exception("WView::render(): No theme given or it was not found.");
 		}
 		
 		// Treat "special vars"
@@ -175,12 +174,12 @@ class WView {
 		$this->tpl->assign($this->vars);
 		
 		if ($this->themeName == '_blank') {
-			$themeMainFile = $this->tplFile;
+			$themeMainFile = $this->responseFile;
 		} else {
 			// Define {$include} tpl's var
-			$this->tpl->assign('include', $this->tplFile);
+			$this->tpl->assign('include', $this->responseFile);
 			
-			$themeMainFile = THEMES_DIR.$this->themeName.DS.'templates'.DS.'index.html';
+			$themeMainFile = $this->themeDir.DS.'templates'.DS.'index.html';
 		}
 		
 		$base = WRoute::getDir();

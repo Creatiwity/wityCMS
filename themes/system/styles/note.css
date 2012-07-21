@@ -1,5 +1,11 @@
-/* Note */
+/**
+ * Feuille de style des Notes
+ */
 
+
+/************************
+ * Note classique <dt>
+ ************************/
 .note {
 	border: 1px solid #e5e5e5;
 	margin: 1em;
@@ -29,13 +35,12 @@
 	color: gray;
 }
 
-	/* error display */
-.error dt, .note.warning dt {
-	color: #f3227b;
-	background-image: url('../images/icones/error.png');
+	/* info display */
+.info dt {
+	background-image: url('../images/icones/info.png');
 }
 
-.error dd, .note.warning dd {
+.info dd {
 	color: #6a6a6a;
 }
 
@@ -51,11 +56,28 @@
 	padding: 0;
 }
 
-	/* info display */
-.info dt {
-	background-image: url('../images/icones/info.png');
+	/* error display */
+.error dt, .note.warning dt {
+	color: #f3227b;
+	background-image: url('../images/icones/error.png');
 }
 
-.info dd {
+.error dd, .note.warning dd {
 	color: #6a6a6a;
+}
+
+/************************
+ * Note display custom
+ ************************/
+#full_note {
+	width: 100%;
+	font-family: Arial, Helvetica, FreeSans, sans-serif;
+	background: #dfdfdf;
+	margin: 0;
+	padding: 0;
+}
+
+#full_note #note {
+	width: 500px;
+	margin: auto;
 }

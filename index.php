@@ -21,7 +21,7 @@ require SYS_DIR.'WCore'.DS.'WSystem.php';
 require SYS_DIR.'WCore'.DS.'WRoute.php';
 require SYS_DIR.'WCore'.DS.'WConfig.php';
 require SYS_DIR.'WCore'.DS.'WRequest.php';
-require SYS_DIR.'WNote'.DS.'WNote.php';
+require SYS_DIR.'WCore'.DS.'WNote.php';
 require SYS_DIR.'WCore'.DS.'WMain.php';
 
 // Execution du main script

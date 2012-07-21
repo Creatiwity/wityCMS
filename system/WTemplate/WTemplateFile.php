@@ -33,7 +33,7 @@ class WTemplateFile {
 	public function __construct($href, $baseDir, $compDir) {
 		// Vérification de l'existance du fichier
 		if (!file_exists($href)) {
-			throw new Exception("Le fichier '".$href."' est introuvable");
+			throw new Exception("WTemplateFile::__construct(): File \"".$href."\" does not exist.");
 		}
 		
 		$this->href = $href;
@@ -99,7 +99,7 @@ class WTemplateFile {
 			
 			// Ouverture du fichier
 			if (!($handler = fopen($this->href, 'r'))) {
-				throw new Exception("WTemplateFile::compile() : Impossible d'ouvrir le fichier ".$this->href);
+				throw new Exception("WTemplateFile::compile() : Unable top open file \"".$this->href."\".");
 			}
 			
 			$code = "";
@@ -174,7 +174,7 @@ class WTemplateFile {
 		// Ouverture
 		$handle = fopen($this->compilationHref, 'w');
 		if (!$handle) {
-			throw new Exception("Impossible d'ouvrir le fichier cache : ".$this->compilationHref);
+			throw new Exception("WTemplateFile::saveFile(): Unable to open cache file \"".$this->compilationHref."\".");
 		}
 		
 		// Ecriture
