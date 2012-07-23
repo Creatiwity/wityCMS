@@ -6,12 +6,22 @@
 		
 		<title>{$pageTitle}</title>
 		
-		<link href="/themes/system/styles/note.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />
 	</head>
 	<body id="full_note">
-		<div id="note">
+		<div id="box">
 			<h1>{$note_code}</h1>
 			<p>{$note_message}</p>
+			{if !empty({$triggeringNote})}
+			<figcaption>Triggering note</figcaption>
+			<blockquote>
+				<ul>
+					<li>Level: {$triggeringNote.level}</li>
+					<li>Code: <strong>{$triggeringNote.code}</strong></li>
+					<li>Message: {$triggeringNote.message}</li>
+				</ul>
+			</blockquote>
+			{/if}
 		</div>
 	</body>
 </html>

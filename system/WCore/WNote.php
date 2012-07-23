@@ -31,10 +31,10 @@ class WNote {
 			'message' => $message
 		);
 		
-		$func = 'handle_'.$handler;
-		if (is_callable(array('WNote', $func))) {
+		$function = 'handle_'.$handler;
+		if (is_callable(array('WNote', $function))) {
 			// Execution du handler
-			self::$func($note);
+			self::$function($note);
 			return $note;
 		} else {
 			// On évite de laisser l'écran vide
@@ -91,15 +91,19 @@ class WNote {
 	 * @param array $note
 	 */
 	public static function handle_assign($note) {
+		static $cssLoaded = false;
 		$tpl = WSystem::getTemplate();
 		$tpl->assign(array(
 			'note_level'   => $note['level'],
 			'note_code'    => $note['code'],
-			'note_message' => $note['message'],
-			'css'          => $tpl->getVar('css').'<link href="/themes/system/styles/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n"
+			'note_message' => $note['message']
 		));
-		$html = $tpl->parse('themes/system/templates/note.html');
+		if (!$cssLoaded) {
+			$tpl->assign('css', $tpl->getVar('css').'<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n");
+		}
+		$html = $tpl->parse('themes/system/note/note.html');
 		$tpl->clear(array('note_level', 'note_code', 'note_message'));
+		
 		// Assign html result as a string in the view
 		$tpl->assign('note', $tpl->getVar('note').$html);
 	}
@@ -137,18 +141,15 @@ class WNote {
 			'note_level'   => $note['level'],
 			'note_code'    => $note['code'],
 			'note_message' => $note['message'],
-			'css'          => '/themes/system/styles/note.css'
+			'css'          => '/themes/system/note/note.css'
 		));
 		try {
-			$view->setResponse('themes/system/templates/note.html');
+			$view->setResponse('themes/system/note/note.html');
 			$view->render();
 		} catch (Exception $e) {
-			self::raise(
-				self::ERROR, 
-				"WView error", 
-				nl2br(sprintf("%s\n\nTriggering note :\nLevel: %s\nCode: %s\nMessage: %s", $e->getMessage(), $note['level'], $note['code'], $note['message'])),
-				'display_custom'
-			);
+			$tpl = WSystem::getTemplate();
+			$tpl->assign('triggeringNote', $note);
+			self::raise(self::ERROR, "WView error", $e->getMessage(), 'display_custom');
 		}
 	}
 	
@@ -159,14 +160,14 @@ class WNote {
 	 */
 	public static function handle_display_custom($note) {
 		$view = new WView();
-		$view->setTheme('_blank');
 		$view->assign(array(
+			'pageTitle'    => $note['code']." - ".WConfig::get('config.siteName'),
 			'note_level'   => $note['level'],
 			'note_code'    => $note['code'],
 			'note_message' => $note['message'],
-			'css'          => '/themes/system/styles/note.css'
 		));
-		$view->setResponse('themes/system/templates/note_display_custom.html');
+		$view->setTheme('_blank');
+		$view->setResponse('themes/system/note/note_display_custom.html');
 		$view->render();
 	}
 	
