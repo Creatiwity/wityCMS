@@ -9,6 +9,7 @@ WTemplate
 - Moteur de template recodé (réglage de nombreux bugs)
 - Gestion des short tags (<?xml)
 - Correction d'un bug avec les chemins de compilation qui contiennent des caractères "."
+- Fixed a bug when a tag {} was present at the begining of a file
 
 WMain
 - Template configuration déplacée directement dans WView
@@ -27,4 +28,4 @@ Apps
 WNote
 - Class moved to %SYS_DIR%/WCore/
 - WException removed
-- New handler "handle_display_custom" (full custom page for notes)
+- Removed handler session: all notes are saved into session and are automaticly treated by WView

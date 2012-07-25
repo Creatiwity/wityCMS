@@ -27,6 +27,15 @@ abstract class WController {
 		// Initialize view if the app's constructor did not dot it
 		if (is_null($this->view)) {
 			$this->view = new WView();
+			
+			// Config theme
+			$theme = WConfig::get('config.theme');
+			if (!empty($theme)) {
+				$this->view->setTheme($theme);
+			}
+			
+			// Default page name = siteName
+			$this->view->assign('pageTitle', WConfig::get('config.site_name'));
 		}
 	}
 	
@@ -131,8 +140,7 @@ abstract class WController {
 		
 		// Affichage de la vue
 		$action = str_replace(array('.html', '.tpl'), '', $action);
-		$this->view->findTplFile($this->getAppName(), $action, $this->adminLoaded());
-		
+		$this->view->findResponse($this->getAppName(), $action, $this->adminLoaded());
 		$this->view->render();
 	}
 }

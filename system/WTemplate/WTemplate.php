@@ -63,17 +63,6 @@ class WTemplate {
 	}
 	
 	/**
-	 * Assignation des variables de block
-	 */
-	public function assignBlockVars($blockName, $value) {
-		if (!isset($this->tpl_vars[$blockName.'_block'])) {
-			$this->tpl_vars[$blockName.'_block'] = array($value);
-		} else {
-			$this->tpl_vars[$blockName.'_block'][] = $value;
-		}
-	}
-	
-	/**
 	 * Ajoute des élèments à la suite d'une variable
 	 * (la transforme en array le cas échéant)
 	 */

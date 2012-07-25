@@ -12,7 +12,6 @@
 html {
 	font-size: 100%;
 }
-
 body {
 	font: normal 0.7em Arial, serif;
 	color: #6f6f6f;
@@ -21,31 +20,39 @@ body {
 	padding: 0;
 }
 
+/* Titres */
+h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 .5em 0;
+  line-height: 1.2;
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Liens */
 a {
 	text-decoration: none;
 	color: #28b8f7;
 }
-
 a:hover {
 	color: #1b93c8;
 }
 
-img {
+a img {
 	border: none;
 }
 
-.preload {
-	display: none;
+/* Formulaires */
+legend {
+	font-weight: bold;
 }
-
-.tcenter { text-align: center; }
-.tleft { text-align: left; }
-.tright { text-align: right; }
-.fleft { float: left; }
-.fright { float: right; }
-.clear { clear: both; }
-
-	/* formulaires */
+form, fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+input, button, select {
+	vertical-align: middle;
+}
 label {
 	cursor: pointer;
 }
@@ -70,17 +77,15 @@ label {
 	padding: 3px 10px 3px 10px;
 }
 
-legend {
-	font-weight: bold;
-}
+.hidden { display: none; }
 
-fieldset {
-	margin-bottom: 1em;
-}
+.tcenter { text-align: center; }
+.tleft { text-align: left; }
+.tright { text-align: right; }
 
-input, textarea {
-	font-family: Arial, serif;
-}
+.fleft { float: left; }
+.fright { float: right; }
+.clear { clear: both; }
 
 /*****************************************************************
   STRUCTURE

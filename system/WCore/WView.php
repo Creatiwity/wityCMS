@@ -25,15 +25,6 @@ class WView {
 	
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
-		
-		// Default page name = siteName
-		$this->assign('pageTitle', WConfig::get('config.siteName'));
-		
-		// Find theme to load
-		$theme = WConfig::get('config.theme');
-		if (!empty($theme)) {
-			$this->setTheme($theme);
-		}
 	}
 	
 	/**
@@ -43,16 +34,44 @@ class WView {
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
 			$this->themeName = '_blank';
+			return true;
 		} else if (is_dir(THEMES_DIR.$theme)) {
 			$this->themeName = $theme;
 			$this->themeDir = THEMES_DIR.$theme.DS;
+			return true;
 		} else {
-			throw new Exception("WView::setTheme(): The theme \"".$theme."\" does not exist.");
+			WNote::error('view_error_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.");
 		}
 	}
 	
 	public function getTheme() {
 		return $this->themeName;
+	}
+	
+	public function setResponse($file) {
+		if (file_exists($file)) {
+			$this->responseFile = $file;
+		} else {
+			WView::error('view_error_response', "WView::setResponse(): The file \"".$file."\" does not exist.");
+		}
+	}
+	
+	/**
+	 * Recherche un fichier template en fonction du nom de l'appli et de l'action
+	 * Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli
+	 * @return string adresse du fichier
+	 */
+	public function findResponse($appName, $action, $adminLoaded) {
+		if ($adminLoaded) {
+			$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
+		} else {
+			$themeTplHref = $this->themeDir.'templates'.DS.$appName.DS.$action.'.html';
+			if (file_exists($themeTplHref)) {
+				$this->setResponse($themeTpleHref);
+			} else {
+				$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
+			}
+		}
 	}
 	
 	public function assignOne($name, $value) {
@@ -75,6 +94,14 @@ class WView {
 			foreach ($a as $key => $value) {
 				$this->assignOne($key, $value);
 			}
+		}
+	}
+	
+	public function assignBlock($blockName, $value) {
+		if (!isset($this->vars[$blockName.'_block'])) {
+			$this->vars[$blockName.'_block'] = array($value);
+		} else {
+			$this->vars[$blockName.'_block'][] = $value;
 		}
 	}
 	
@@ -119,46 +146,30 @@ class WView {
 		}
 	}
 	
-	public function setResponse($file) {
-		if (file_exists($file)) {
-			$this->responseFile = $file;
-		} else {
-			throw new Exception("WView::setResponse(): The file \"".$file."\" does not exist.");
-		}
-	}
-	
-	/**
-	 * Recherche un fichier template en fonction du nom de l'appli et de l'action
-	 * Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli
-	 * @return string adresse du fichier
-	 */
-	public function findResponse($appName, $action, $adminLoaded) {
-		if ($adminLoaded) {
-			$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
-		} else {
-			$themeTplHref = $this->themeDir.'templates'.DS.$appName.DS.$action.'.html';
-			if (file_exists($themeTplHref)) {
-				$this->setResponse($themeTpleHref);
-			} else {
-				$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
-			}
-		}
-	}
-	
-	public function getTpl() {
-		return $this->tplFile;
-	}
-	
 	/**
 	 * Render the view
 	 */
 	public function render() {
-		if (empty($this->responseFile)) {
-			throw new Exception("WView::render(): No response file given.");
+		if (empty($this->responseFile) && WNote::count('view_error_response') == 0) {
+			WNote::error('view_error_response', "WView::render(): No response file given.");
 		}
 		
-		if (empty($this->themeName)) {
-			throw new Exception("WView::render(): No theme given or it was not found.");
+		if (empty($this->themeName) && WNote::count('view_error_theme') == 0) {
+			WNote::error('view_error_theme', "WView::render(): No theme given or it was not found.");
+		}
+		
+		$viewErrors = WNote::get('view_error*');
+		if (!empty($viewErrors)) {
+			$this->setTheme('_blank');
+			$this->setResponse('themes/system/note/note_full_view.html');
+			foreach ($viewErrors as $note) {
+				$this->assignBlock('notes', $note);
+			}
+		} else {
+			$notes = WNote::get('*');
+			foreach ($notes as $note) {
+				$this->assignBlock('notes', $note);
+			}
 		}
 		
 		// Treat "special vars"

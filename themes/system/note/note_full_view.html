@@ -4,24 +4,19 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
 		
-		<title>{$pageTitle}</title>
+		<title></title>
 		
 		<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />
 	</head>
 	<body id="full_note">
 		<div id="box">
-			<h1>{$note_code}</h1>
-			<p>{$note_message}</p>
-			{if !empty({$triggeringNote})}
-			<figcaption>Triggering note</figcaption>
-			<blockquote>
-				<ul>
-					<li>Level: {$triggeringNote.level}</li>
-					<li>Code: <strong>{$triggeringNote.code}</strong></li>
-					<li>Message: {$triggeringNote.message}</li>
-				</ul>
-			</blockquote>
-			{/if}
+			<h1>Wity Error Page</h1>
+			{block name="notes"}
+				<div class="note {$notes.level}">
+					<strong>{$notes.code}</strong>
+					<p>{$notes.message}</p>
+				</div>
+			{/block}
 		</div>
 	</body>
 </html>

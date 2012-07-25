@@ -49,7 +49,7 @@ class WTemplateFile {
 	private function createCompilationHref() {
 		return $this->compilationDir
 			.str_replace(array('/', '\\'), '-', trim(str_replace($this->baseDir, '', dirname($this->href)), DS))
-			.'-'.str_replace('.tpl', '.tpl.php', basename($this->href));
+			.'-'.str_replace(array('.html', '.tpl'), '.php', basename($this->href));
 	}
 	
 	public function getCompilationHref() {
@@ -118,18 +118,18 @@ class WTemplateFile {
 						}
 						
 						// On vérifie que l'accolade n'a pas été commentée
-						if (strlen($code) > 0 && $code[strlen($code)-1] != '\\') {
+						if (strlen($code) == 0 || $code[strlen($code)-1] != '\\') {
 							$level++;
 						}
 						break;
 					
 					case '}':
 						// On vérifie que l'accolade n'a pas été commentée
-						if (strlen($code) > 0 && $code[strlen($code)-1] != '\\') {
+						if (strlen($code) == 0 || $code[strlen($code)-1] != '\\') {
 							$level--;
 							// On a atteint le fermeture de la première accolade, on compile la chaîne trouvée
 							if ($level == 0) {
-								$code .= $compiler->compileTplCode($tmp);
+								$code .= $compiler->compileTplCode($tmp, array('filename' => $this->href));
 								$tmp = "";
 							}
 						}

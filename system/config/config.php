@@ -2,8 +2,8 @@
 
 $config = array(
     'base' => 'localhost/Wity-Lite/',
-	'siteName' => 'Wity Lite',
-	'theme' => '',
+	'site_name' => 'Wity Lite',
+	'theme' => '_blank',
 	'lang' => 'fr-FR',
 );
 

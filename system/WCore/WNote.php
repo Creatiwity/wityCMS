@@ -10,7 +10,6 @@
 
 class WNote {
 	// Les niveaux de note
-	const SYSTEM  = 'system';
 	const ERROR   = 'error';
 	const INFO    = 'info';
 	const SUCCESS = 'success';
@@ -28,7 +27,7 @@ class WNote {
 		$note = array(
 			'level'   => $level,
 			'code'    => $code,
-			'message' => $message
+			'message' => nl2br($message)
 		);
 		
 		$function = 'handle_'.$handler;
@@ -38,14 +37,14 @@ class WNote {
 			return $note;
 		} else {
 			// On évite de laisser l'écran vide
-			die("WNote::raise() : Unfound handler <strong>\"".$handler."\"</strong><br />Triggering note : ".$message);
+			die("WNote::raise() : Unfound handler <strong>\"".$handler."\"</strong><br />Triggering note : Level: ".$level."<br />Code: ".$code."<br />Message: ".$message);
 		}
 	}
 	
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function system($code, $message, $handler = 'die') {
+	public static function error($code, $message, $handler = 'assign') {
 		$note = self::raise(self::ERROR, $code, $message, $handler);
 		return $note;
 	}
@@ -53,15 +52,7 @@ class WNote {
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function error($code, $message, $handler = 'session') {
-		$note = self::raise(self::ERROR, $code, $message, $handler);
-		return $note;
-	}
-	
-	/**
-	 * Dérivée de self::raise : passe un niveau précis en argument
-	 */
-	public static function info($code, $message, $handler = 'session') {
+	public static function info($code, $message, $handler = 'assign') {
 		$note = self::raise(self::INFO, $code, $message, $handler);
 		return $note;
 	}
@@ -69,7 +60,7 @@ class WNote {
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
-	public static function success($code, $message, $handler = 'session') {
+	public static function success($code, $message, $handler = 'assign') {
 		$note = self::raise(self::SUCCESS, $code, $message, $handler);
 		return $note;
 	}
@@ -91,44 +82,7 @@ class WNote {
 	 * @param array $note
 	 */
 	public static function handle_assign($note) {
-		static $cssLoaded = false;
-		$tpl = WSystem::getTemplate();
-		$tpl->assign(array(
-			'note_level'   => $note['level'],
-			'note_code'    => $note['code'],
-			'note_message' => $note['message']
-		));
-		if (!$cssLoaded) {
-			$tpl->assign('css', $tpl->getVar('css').'<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n");
-		}
-		$html = $tpl->parse('themes/system/note/note.html');
-		$tpl->clear(array('note_level', 'note_code', 'note_message'));
-		
-		// Assign html result as a string in the view
-		$tpl->assign('note', $tpl->getVar('note').$html);
-	}
-	
-	/**
-	 * Assignation de la note parsée dans le tpl en tant que variable block
-	 * @param array $note
-	 */
-	public static function handle_assign_block($note) {
-		$tpl = WSystem::getTemplate();
-		$tpl->assignBlockVars('note', array(
-			'level'   => $note['level'],
-			'code'    => $note['code'],
-			'message' => $note['message'],
-		));
-	}
-	
-	/**
-	 * Récupère les erreurs stockées dans le moteur de template
-	 * 
-	 * @return array voir handle_assign_block
-	 */
-	public static function get_assigned_errors() {
-		$tpl = WSystem::getTemplate();
-		return $tpl->getVar('errors_block');
+		$_SESSION['notes'][] = $note;
 	}
 	
 	/**
@@ -136,6 +90,9 @@ class WNote {
 	 * @param array $note
 	 */
 	public static function handle_display($note) {
+		//self::handle_assign($note);
+		
+		// own view
 		$view = new WView();
 		$view->assign(array(
 			'note_level'   => $note['level'],
@@ -143,67 +100,31 @@ class WNote {
 			'note_message' => $note['message'],
 			'css'          => '/themes/system/note/note.css'
 		));
-		try {
-			$view->setResponse('themes/system/note/note.html');
-			$view->render();
-		} catch (Exception $e) {
-			$tpl = WSystem::getTemplate();
-			$tpl->assign('triggeringNote', $note);
-			self::raise(self::ERROR, "WView error", $e->getMessage(), 'display_custom');
-		}
-	}
-	
-	/**
-	 * Affichage d'une page personnalisée pour la note
-	 * Le thème est désactivé par ce handler
-	 * @param array $note
-	 */
-	public static function handle_display_custom($note) {
-		$view = new WView();
-		$view->assign(array(
-			'pageTitle'    => $note['code']." - ".WConfig::get('config.siteName'),
-			'note_level'   => $note['level'],
-			'note_code'    => $note['code'],
-			'note_message' => $note['message'],
-		));
-		$view->setTheme('_blank');
-		$view->setResponse('themes/system/note/note_display_custom.html');
+		$view->setTheme(WConfig::get('config.theme'));
+		$view->setResponse('themes/system/note/note_view.html');
 		$view->render();
 	}
 	
-	/**
-	 * Assignation de la note parsée en session
-	 * @param array $note
-	 */
-	public static function handle_session($note) {
-		if (!isset($_SESSION['note_queue'])) {
-			$_SESSION['note_queue'] = array($note);
-		} else {
-			array_push($_SESSION['note_queue'], $note);
-		}
-	}
-	
-	/**
-	 * Traite la file d'attente des notes stockées en session
-	 * 
-	 * @param string $def_handler Handler par défaut à utiliser lors du traitement
-	 */
-	public static function treatNoteSession($def_handler = 'assign') {
-		if (!empty($_SESSION['note_queue'])) {
-			foreach ($_SESSION['note_queue'] as $note) {
-				self::raise($note['level'], $note['code'], $note['message'], $def_handler);
+	public static function get($code = '*') {
+		$result = array();
+		foreach ($_SESSION['notes'] as $key => $note) {
+			if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
+				$result[] = $note;
+				// remove the note
+				unset($_SESSION['notes'][$key]);
 			}
-			
-			// Nettoyage de la pile
-			self::cleanSession();
 		}
+		return $result;
 	}
 	
-	/**
-	 * Fonction de nettoyage de la file d'attente
-	 */
-	public static function cleanSession() {
-		unset($_SESSION['note_queue']);
+	public static function count($code = '*') {
+		$count = 0;
+		foreach ($_SESSION['notes'] as $key => $note) {
+			if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
+				$count++;
+			}
+		}
+		return $count;
 	}
 }
 

@@ -12,17 +12,17 @@ class WTemplateCompiler {
 	/**
 	 * Compilation d'un élément bien précis
 	 */
-	public function compileTplCode($tpl_code) {
+	public function compileTplCode($tpl_code, $data = array()) {
 		// Affichage d'une variable
 		if ($tpl_code[0] == '$') {
-			$output = $this->compile_var("name=".$tpl_code);
+			$output = $this->compile_var("name=".$tpl_code, $data);
 		}
 		// Fermeture d'une balise
 		else if ($tpl_code[0] == '/') {
 			$handler = 'compile_'.trim($tpl_code, '/').'_close';
 			if (method_exists('WTemplateCompiler', $handler)) {
 				// Appel de la fonction
-				$output = $this->$handler();
+				$output = $this->$handler($data);
 			} else {
 				$output = '';
 			}
@@ -37,7 +37,7 @@ class WTemplateCompiler {
 			
 			if (method_exists('WTemplateCompiler', $handler)) {
 				// Appel de la fonction
-				$output = $this->$handler($args);
+				$output = $this->$handler($args, $data);
 			} else {
 				$output = '';
 			}
@@ -171,7 +171,7 @@ class WTemplateCompiler {
 	}
 	
 	// Schéma d'une variable : $var.sub_array(.sub2...)|functions
-	public function compile_var($args) {
+	public function compile_var($args, array $data) {
 		$attr = $this->getAttributes($args);
 		
 		if (isset($attr['name'])) {
@@ -199,11 +199,18 @@ class WTemplateCompiler {
 	 * 
 	 * @param string $file Le fichier à inclure
 	 */
-	public function compile_include($args) {
+	public function compile_include($args, array $data) {
 		$attr = $this->getAttributes($args);
 		
 		if (isset($attr['file'])) {
-			$file = $this->parseVars(str_replace(array('{', '}'), array('".{', '}."'), $attr['file']));
+			// {$var} are replaced by ".{$var}." so that they can concat with other strings
+			$file = str_replace(array('{', '}'), array('".{', '}."'), $attr['file']);
+			$file = $this->parseVars($file);
+			
+			if (isset($data['filename'])) {
+				$file = str_replace('./', dirname($data['filename']).'/', $file);
+				$file = str_replace('../', dirname(dirname($data['filename'])).'/', $file);
+			}
 			
 			return '<?php $this->display("'.$file.'"); ?>';
 		} else {
@@ -211,7 +218,7 @@ class WTemplateCompiler {
 		}
 	}
 	
-	public function compile_if($args) {
+	public function compile_if($args, array $data) {
 		$cond = trim($args);
 		
 		// Traitement des variables de la condition
@@ -220,19 +227,19 @@ class WTemplateCompiler {
 		return '<?php if ('.$cond.'): ?>';
 	}
 	
-	public function compile_else($args) {
+	public function compile_else($args, array $data) {
 		return '<?php else: ?>';
 	}
 	
-	public function compile_elseif($args) {
+	public function compile_elseif($args, array $data) {
 		return str_replace('<?php if', '<?php elseif', $this->compile_if($args));
 	}
 	
-	public function compile_if_close() {
+	public function compile_if_close(array $data) {
 		return '<?php endif; ?>';
 	}
 	
-	public function compile_block($args) {
+	public function compile_block($args, array $data) {
 		$attr = $this->getAttributes($args);
 		
 		if (isset($attr['name'])) {
@@ -245,7 +252,7 @@ class WTemplateCompiler {
 		}
 	}
 	
-	public function compile_block_close() {
+	public function compile_block_close(array $data) {
 		return '<?php $this->tpl_vars[\'count\']++; endforeach; endif; ?>';
 	}
 	
@@ -265,15 +272,15 @@ class WTemplateCompiler {
 		}
 	}
 	
-	public function compile_foreach_close() {
+	public function compile_foreach_close(array $data) {
 		return '<?php endforeach; ?>';
 	}
 	
-	public function compile_while($args) {
+	public function compile_while($args, array $data) {
 		
 	}
 	
-	public function compile_for($args) {
+	public function compile_for($args, array $data) {
 		
 	}
 }
