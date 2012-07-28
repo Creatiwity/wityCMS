@@ -1,0 +1,251 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » \WSession</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Setup des sessions"><span class="description">Setup des sessions</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#check_flood" title="check_flood :: Système général d'antiflood
+Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, redondant"><span class="description">Système général d'antiflood
+Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, redondant</span><pre>check_flood()</pre></a></li>
+<li class="method public "><a href="#destroy" title="destroy :: Destruction de la session php"><span class="description">Destruction de la session php</span><pre>destroy()</pre></a></li>
+<li class="method public "><a href="#generate_hash" title="generate_hash :: "><span class="description">generate_hash()
+        </span><pre>generate_hash()</pre></a></li>
+<li class="method public "><a href="#isLoaded" title="isLoaded :: "><span class="description">isLoaded()
+        </span><pre>isLoaded()</pre></a></li>
+<li class="method public "><a href="#loadUser" title="loadUser :: Chargement en session des données d'un utilisateur"><span class="description">Chargement en session des données d'un utilisateur</span><pre>loadUser()</pre></a></li>
+<li class="method public "><a href="#logout" title="logout :: Fonction de déconnexion de l'utilisateur"><span class="description">Fonction de déconnexion de l'utilisateur</span><pre>logout()</pre></a></li>
+<li class="method public "><a href="#upgrade_flood" title="upgrade_flood :: Fonction de mise à jour du temps de flood"><span class="description">Fonction de mise à jour du temps de flood</span><pre>upgrade_flood()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#reloadSession" title="reloadSession :: Chargement d'un utilisateur"><span class="description">Chargement d'un utilisateur</span><pre>reloadSession()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  "><a href="#ACTIVITY" title="ACTIVITY :: "><span class="description">ACTIVITY</span><pre>ACTIVITY</pre></a></li>
+<li class="constant  "><a href="#FLOOD_TIME" title="FLOOD_TIME :: "><span class="description">FLOOD_TIME</span><pre>FLOOD_TIME</pre></a></li>
+<li class="constant  "><a href="#USER_TABLE" title="USER_TABLE :: "><span class="description">USER_TABLE</span><pre>USER_TABLE</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CWSession" id="\WSession"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/WSession.html">WSession</a>
+</li>
+</ul>
+<div href="../classes/WSession.html" class="element class">
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details">
+<p class="long_description"><p>Gestion de sessions</p></p>
+<table class="table table-bordered">
+<tr>
+<th>auteur</th>
+<td>Fofif</td>
+</tr>
+<tr>
+<th>version</th>
+<td>$Id: WCore/WSession.php 0003 02-08-2011 Fofif $</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Setup des sessions</h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="check_flood" id="check_flood"></a><div class="element clickable method public check_flood" data-toggle="collapse" data-target=".check_flood .collapse">
+<h2>Système général d'antiflood
+Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, redondant</h2>
+<pre>check_flood() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>flood dans la page</div>
+</div></div>
+</div>
+<a name="destroy" id="destroy"></a><div class="element clickable method public destroy" data-toggle="collapse" data-target=".destroy .collapse">
+<h2>Destruction de la session php</h2>
+<pre>destroy() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="generate_hash" id="generate_hash"></a><div class="element clickable method public generate_hash" data-toggle="collapse" data-target=".generate_hash .collapse">
+<h2>generate_hash()
+        </h2>
+<pre>generate_hash($nick, $pass, $environment) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$nick</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$pass</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$environment</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="isLoaded" id="isLoaded"></a><div class="element clickable method public isLoaded" data-toggle="collapse" data-target=".isLoaded .collapse">
+<h2>isLoaded()
+        </h2>
+<pre>isLoaded() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>l'utilisateur est-il connecté ?</div>
+</div></div>
+</div>
+<a name="loadUser" id="loadUser"></a><div class="element clickable method public loadUser" data-toggle="collapse" data-target=".loadUser .collapse">
+<h2>Chargement en session des données d'un utilisateur</h2>
+<pre>loadUser(string $userid, $data) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$userid</h4>
+<code>string</code><p>id de l'utilisateur</p>
+</div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="logout" id="logout"></a><div class="element clickable method public logout" data-toggle="collapse" data-target=".logout .collapse">
+<h2>Fonction de déconnexion de l'utilisateur</h2>
+<pre>logout() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="upgrade_flood" id="upgrade_flood"></a><div class="element clickable method public upgrade_flood" data-toggle="collapse" data-target=".upgrade_flood .collapse">
+<h2>Fonction de mise à jour du temps de flood</h2>
+<pre>upgrade_flood(int $limit) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$limit</h4>
+<code>int</code><p>timestamp limite</p></div>
+</div></div>
+</div>
+<a name="reloadSession" id="reloadSession"></a><div class="element clickable method private reloadSession" data-toggle="collapse" data-target=".reloadSession .collapse">
+<h2>Chargement d'un utilisateur</h2>
+<pre>reloadSession(string $userid, string $cookie_hash) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$userid</h4>
+<code>string</code><p>id de l'utilisateur</p>
+</div>
+<div class="subelement argument">
+<h4>$cookie_hash</h4>
+<code>string</code><p>hash de connexion pour la vérification</p>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a name="ACTIVITY" id="ACTIVITY"> </a><div class="element clickable constant  ACTIVITY" data-toggle="collapse" data-target=".ACTIVITY .collapse">
+<h2>ACTIVITY</h2>
+<pre>ACTIVITY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="FLOOD_TIME" id="FLOOD_TIME"> </a><div class="element clickable constant  FLOOD_TIME" data-toggle="collapse" data-target=".FLOOD_TIME .collapse">
+<h2>FLOOD_TIME</h2>
+<pre>FLOOD_TIME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="USER_TABLE" id="USER_TABLE"> </a><div class="element clickable constant  USER_TABLE" data-toggle="collapse" data-target=".USER_TABLE .collapse">
+<h2>USER_TABLE</h2>
+<pre>USER_TABLE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:25+02:00.<br></footer></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » \CKFinder_Connector_Utils_Misc</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#booleanValue" title='booleanValue :: Convert any value to boolean, strings like "false", "FalSE" and "off" are also considered as false'><span class="description">Convert any value to boolean, strings like "false", "FalSE" and "off" are also considered as false</span><pre>booleanValue()</pre></a></li>
+<li class="method public "><a href="#encodeURIComponent" title="encodeURIComponent :: Simulate the encodeURIComponent() function available in JavaScript"><span class="description">Simulate the encodeURIComponent() function available in JavaScript</span><pre>encodeURIComponent()</pre></a></li>
+<li class="method public "><a href="#fastImageCopyResampled" title="fastImageCopyResampled :: "><span class="description">fastImageCopyResampled()
+        </span><pre>fastImageCopyResampled()</pre></a></li>
+<li class="method public "><a href="#getErrorMessage" title="getErrorMessage :: "><span class="description">getErrorMessage()
+        </span><pre>getErrorMessage()</pre></a></li>
+<li class="method public "><a href="#imageCreateFromBmp" title="imageCreateFromBmp :: Source: http://pl.php.net/imagecreate
+(optimized for speed and memory usage, but yet not very efficient)"><span class="description">Source: http://pl.php.net/imagecreate
+(optimized for speed and memory usage, but yet not very efficient)</span><pre>imageCreateFromBmp()</pre></a></li>
+<li class="method public "><a href="#inArrayCaseInsensitive" title="inArrayCaseInsensitive :: Checks if a value exists in an array (case insensitive)"><span class="description">Checks if a value exists in an array (case insensitive)</span><pre>inArrayCaseInsensitive()</pre></a></li>
+<li class="method public "><a href="#isValidUTF8" title="isValidUTF8 :: Checks whether the string is valid UTF8"><span class="description">Checks whether the string is valid UTF8</span><pre>isValidUTF8()</pre></a></li>
+<li class="method public "><a href="#mbBasename" title="mbBasename :: UTF-8 compatible version of basename()"><span class="description">UTF-8 compatible version of basename()</span><pre>mbBasename()</pre></a></li>
+<li class="method public "><a href="#returnBytes" title="returnBytes :: convert shorthand php.ini notation into bytes, much like how the PHP source does it"><span class="description">convert shorthand php.ini notation into bytes, much like how the PHP source does it</span><pre>returnBytes()</pre></a></li>
+<li class="method public "><a href="#setMemoryForImage" title="setMemoryForImage :: "><span class="description">setMemoryForImage()
+        </span><pre>setMemoryForImage()</pre></a></li>
+</ul>
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#booleanValue" title='booleanValue :: Convert any value to boolean, strings like "false", "FalSE" and "off" are also considered as false'><span class="description">Convert any value to boolean, strings like "false", "FalSE" and "off" are also considered as false</span><pre>booleanValue()</pre></a></li>
+<li class="method public "><a href="#encodeURIComponent" title="encodeURIComponent :: Simulate the encodeURIComponent() function available in JavaScript"><span class="description">Simulate the encodeURIComponent() function available in JavaScript</span><pre>encodeURIComponent()</pre></a></li>
+<li class="method public "><a href="#fastImageCopyResampled" title="fastImageCopyResampled :: "><span class="description">fastImageCopyResampled()
+        </span><pre>fastImageCopyResampled()</pre></a></li>
+<li class="method public "><a href="#getErrorMessage" title="getErrorMessage :: "><span class="description">getErrorMessage()
+        </span><pre>getErrorMessage()</pre></a></li>
+<li class="method public "><a href="#imageCreateFromBmp" title="imageCreateFromBmp :: Source: http://pl.php.net/imagecreate
+(optimized for speed and memory usage, but yet not very efficient)"><span class="description">Source: http://pl.php.net/imagecreate
+(optimized for speed and memory usage, but yet not very efficient)</span><pre>imageCreateFromBmp()</pre></a></li>
+<li class="method public "><a href="#inArrayCaseInsensitive" title="inArrayCaseInsensitive :: Checks if a value exists in an array (case insensitive)"><span class="description">Checks if a value exists in an array (case insensitive)</span><pre>inArrayCaseInsensitive()</pre></a></li>
+<li class="method public "><a href="#isValidUTF8" title="isValidUTF8 :: Checks whether the string is valid UTF8"><span class="description">Checks whether the string is valid UTF8</span><pre>isValidUTF8()</pre></a></li>
+<li class="method public "><a href="#mbBasename" title="mbBasename :: UTF-8 compatible version of basename()"><span class="description">UTF-8 compatible version of basename()</span><pre>mbBasename()</pre></a></li>
+<li class="method public "><a href="#returnBytes" title="returnBytes :: convert shorthand php.ini notation into bytes, much like how the PHP source does it"><span class="description">convert shorthand php.ini notation into bytes, much like how the PHP source does it</span><pre>returnBytes()</pre></a></li>
+<li class="method public "><a href="#setMemoryForImage" title="setMemoryForImage :: "><span class="description">setMemoryForImage()
+        </span><pre>setMemoryForImage()</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCKFinder_Connector_Utils_Misc" id="\CKFinder_Connector_Utils_Misc"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CKFinder_Connector_Utils_Misc.html">CKFinder_Connector_Utils_Misc</a>
+</li>
+</ul>
+<div href="../classes/CKFinder_Connector_Utils_Misc.html" class="element class">
+<p class="short_description"></p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CKFinder.Utils.html">CKFinder</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Utils</td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>CKSource - Frederico Knabben</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="booleanValue" id="booleanValue"></a><div class="element clickable method public booleanValue" data-toggle="collapse" data-target=".booleanValue .collapse">
+<h2>Convert any value to boolean, strings like "false", "FalSE" and "off" are also considered as false</h2>
+<pre>booleanValue(mixed $value) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>mixed</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="encodeURIComponent" id="encodeURIComponent"></a><div class="element clickable method public encodeURIComponent" data-toggle="collapse" data-target=".encodeURIComponent .collapse">
+<h2>Simulate the encodeURIComponent() function available in JavaScript</h2>
+<pre>encodeURIComponent(string $str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fastImageCopyResampled" id="fastImageCopyResampled"></a><div class="element clickable method public fastImageCopyResampled" data-toggle="collapse" data-target=".fastImageCopyResampled .collapse">
+<h2>fastImageCopyResampled()
+        </h2>
+<pre>fastImageCopyResampled(string $dst_image, string $src_image, int $dst_x, int $dst_y, int $src_x, int $src_y, int $dst_w, int $dst_h, int $src_w, int $src_h, int $quality) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://pl.php.net/manual/en/function.imagecopyresampled.php%0D%0Areplacement">to imagecopyresampled that will deliver results that are almost identical except MUCH faster (very typically 30 times faster)</a></td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$dst_image</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$src_image</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_x</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_y</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_x</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_y</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_w</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_h</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_w</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_h</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$quality</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="getErrorMessage" id="getErrorMessage"></a><div class="element clickable method public getErrorMessage" data-toggle="collapse" data-target=".getErrorMessage .collapse">
+<h2>getErrorMessage()
+        </h2>
+<pre>getErrorMessage($number, $arg) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$number</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$arg</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="imageCreateFromBmp" id="imageCreateFromBmp"></a><div class="element clickable method public imageCreateFromBmp" data-toggle="collapse" data-target=".imageCreateFromBmp .collapse">
+<h2>Source: http://pl.php.net/imagecreate
+(optimized for speed and memory usage, but yet not very efficient)</h2>
+<pre>imageCreateFromBmp(string $filename) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>resource</code></div>
+</div></div>
+</div>
+<a name="inArrayCaseInsensitive" id="inArrayCaseInsensitive"></a><div class="element clickable method public inArrayCaseInsensitive" data-toggle="collapse" data-target=".inArrayCaseInsensitive .collapse">
+<h2>Checks if a value exists in an array (case insensitive)</h2>
+<pre>inArrayCaseInsensitive(string $needle, array $haystack) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$needle</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$haystack</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="isValidUTF8" id="isValidUTF8"></a><div class="element clickable method public isValidUTF8" data-toggle="collapse" data-target=".isValidUTF8 .collapse">
+<h2>Checks whether the string is valid UTF8</h2>
+<pre>isValidUTF8(string $string) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="mbBasename" id="mbBasename"></a><div class="element clickable method public mbBasename" data-toggle="collapse" data-target=".mbBasename .collapse">
+<h2>UTF-8 compatible version of basename()</h2>
+<pre>mbBasename(string $file) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="returnBytes" id="returnBytes"></a><div class="element clickable method public returnBytes" data-toggle="collapse" data-target=".returnBytes .collapse">
+<h2>convert shorthand php.ini notation into bytes, much like how the PHP source does it</h2>
+<pre>returnBytes(string $val) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://pl.php.net/manual/en/function.ini-get.php">http://pl.php.net/manual/en/function.ini-get.php</a></td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a name="setMemoryForImage" id="setMemoryForImage"></a><div class="element clickable method public setMemoryForImage" data-toggle="collapse" data-target=".setMemoryForImage .collapse">
+<h2>setMemoryForImage()
+        </h2>
+<pre>setMemoryForImage($imageWidth, $imageHeight, $imageBits, $imageChannels) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://pl.php.net/manual/pl/function.imagecreatefromjpeg.php%0D%0Afunction">posted by e dot a dot schultz at gmail dot com</a></td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$imageWidth</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$imageHeight</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$imageBits</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$imageChannels</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+</div>
+</div>
+<a name="%5CCKFinder_Connector_Utils_Misc" id="\CKFinder_Connector_Utils_Misc"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CKFinder_Connector_Utils_Misc.html">CKFinder_Connector_Utils_Misc</a>
+</li>
+</ul>
+<div href="../classes/CKFinder_Connector_Utils_Misc.html" class="element class">
+<p class="short_description"></p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CKFinder.Utils.html">CKFinder</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Utils</td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>CKSource - Frederico Knabben</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="booleanValue" id="booleanValue"></a><div class="element clickable method public booleanValue" data-toggle="collapse" data-target=".booleanValue .collapse">
+<h2>Convert any value to boolean, strings like "false", "FalSE" and "off" are also considered as false</h2>
+<pre>booleanValue(mixed $value) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>mixed</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="encodeURIComponent" id="encodeURIComponent"></a><div class="element clickable method public encodeURIComponent" data-toggle="collapse" data-target=".encodeURIComponent .collapse">
+<h2>Simulate the encodeURIComponent() function available in JavaScript</h2>
+<pre>encodeURIComponent(string $str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fastImageCopyResampled" id="fastImageCopyResampled"></a><div class="element clickable method public fastImageCopyResampled" data-toggle="collapse" data-target=".fastImageCopyResampled .collapse">
+<h2>fastImageCopyResampled()
+        </h2>
+<pre>fastImageCopyResampled(string $dst_image, string $src_image, int $dst_x, int $dst_y, int $src_x, int $src_y, int $dst_w, int $dst_h, int $src_w, int $src_h, int $quality) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://pl.php.net/manual/en/function.imagecopyresampled.php%0D%0Areplacement">to imagecopyresampled that will deliver results that are almost identical except MUCH faster (very typically 30 times faster)</a></td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$dst_image</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$src_image</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_x</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_y</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_x</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_y</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_w</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$dst_h</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_w</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$src_h</h4>
+<code>int</code>
+</div>
+<div class="subelement argument">
+<h4>$quality</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="getErrorMessage" id="getErrorMessage"></a><div class="element clickable method public getErrorMessage" data-toggle="collapse" data-target=".getErrorMessage .collapse">
+<h2>getErrorMessage()
+        </h2>
+<pre>getErrorMessage($number, $arg) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$number</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$arg</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="imageCreateFromBmp" id="imageCreateFromBmp"></a><div class="element clickable method public imageCreateFromBmp" data-toggle="collapse" data-target=".imageCreateFromBmp .collapse">
+<h2>Source: http://pl.php.net/imagecreate
+(optimized for speed and memory usage, but yet not very efficient)</h2>
+<pre>imageCreateFromBmp(string $filename) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>resource</code></div>
+</div></div>
+</div>
+<a name="inArrayCaseInsensitive" id="inArrayCaseInsensitive"></a><div class="element clickable method public inArrayCaseInsensitive" data-toggle="collapse" data-target=".inArrayCaseInsensitive .collapse">
+<h2>Checks if a value exists in an array (case insensitive)</h2>
+<pre>inArrayCaseInsensitive(string $needle, array $haystack) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$needle</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$haystack</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="isValidUTF8" id="isValidUTF8"></a><div class="element clickable method public isValidUTF8" data-toggle="collapse" data-target=".isValidUTF8 .collapse">
+<h2>Checks whether the string is valid UTF8</h2>
+<pre>isValidUTF8(string $string) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="mbBasename" id="mbBasename"></a><div class="element clickable method public mbBasename" data-toggle="collapse" data-target=".mbBasename .collapse">
+<h2>UTF-8 compatible version of basename()</h2>
+<pre>mbBasename(string $file) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="returnBytes" id="returnBytes"></a><div class="element clickable method public returnBytes" data-toggle="collapse" data-target=".returnBytes .collapse">
+<h2>convert shorthand php.ini notation into bytes, much like how the PHP source does it</h2>
+<pre>returnBytes(string $val) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://pl.php.net/manual/en/function.ini-get.php">http://pl.php.net/manual/en/function.ini-get.php</a></td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a name="setMemoryForImage" id="setMemoryForImage"></a><div class="element clickable method public setMemoryForImage" data-toggle="collapse" data-target=".setMemoryForImage .collapse">
+<h2>setMemoryForImage()
+        </h2>
+<pre>setMemoryForImage($imageWidth, $imageHeight, $imageBits, $imageChannels) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://pl.php.net/manual/pl/function.imagecreatefromjpeg.php%0D%0Afunction">posted by e dot a dot schultz at gmail dot com</a></td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$imageWidth</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$imageHeight</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$imageBits</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$imageChannels</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:24+02:00.<br></footer></div>
+</div>
+</body>
+</html>

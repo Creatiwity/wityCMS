@@ -1,0 +1,1162 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » Default</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<a href="../packages/Default.html" title="Default"><i class="icon-folder-open"></i>Default</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#CheckAuthentication" title="CheckAuthentication :: This function must check the user session to be sure that he/she is
+authorized to upload and access files in the File Browser."><span class="description">This function must check the user session to be sure that he/she is
+authorized to upload and access files in the File Browser.</span><pre>CheckAuthentication</pre></a></li>
+<li class="function  "><a href="#Error" title="Error :: "><span class="description">Error()
+        </span><pre>Error</pre></a></li>
+<li class="function  "><a href="#GetInfoFromTrueType" title="GetInfoFromTrueType :: "><span class="description">GetInfoFromTrueType()
+        </span><pre>GetInfoFromTrueType</pre></a></li>
+<li class="function  "><a href="#GetInfoFromType1" title="GetInfoFromType1 :: "><span class="description">GetInfoFromType1()
+        </span><pre>GetInfoFromType1</pre></a></li>
+<li class="function  "><a href="#LoadMap" title="LoadMap :: "><span class="description">LoadMap()
+        </span><pre>LoadMap</pre></a></li>
+<li class="function  "><a href="#MakeDefinitionFile" title="MakeDefinitionFile :: "><span class="description">MakeDefinitionFile()
+        </span><pre>MakeDefinitionFile</pre></a></li>
+<li class="function  "><a href="#MakeFont" title="MakeFont :: "><span class="description">MakeFont()
+        </span><pre>MakeFont</pre></a></li>
+<li class="function  "><a href="#MakeFontDescriptor" title="MakeFontDescriptor :: "><span class="description">MakeFontDescriptor()
+        </span><pre>MakeFontDescriptor</pre></a></li>
+<li class="function  "><a href="#MakeFontEncoding" title="MakeFontEncoding :: "><span class="description">MakeFontEncoding()
+        </span><pre>MakeFontEncoding</pre></a></li>
+<li class="function  "><a href="#MakeWidthArray" title="MakeWidthArray :: "><span class="description">MakeWidthArray()
+        </span><pre>MakeWidthArray</pre></a></li>
+<li class="function  "><a href="#Message" title="Message :: "><span class="description">Message()
+        </span><pre>Message</pre></a></li>
+<li class="function  "><a href="#Notice" title="Notice :: "><span class="description">Notice()
+        </span><pre>Notice</pre></a></li>
+<li class="function  "><a href="#SaveToFile" title="SaveToFile :: "><span class="description">SaveToFile()
+        </span><pre>SaveToFile</pre></a></li>
+<li class="function  "><a href="#Warning" title="Warning :: "><span class="description">Warning()
+        </span><pre>Warning</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-class"></i> Classes</li>
+<li><a href="#AdminController" title="Wity CMS
+Système de gestion de contenu pour tous.">AdminController</a></li>
+<li><a href="#AdminModel" title="Wity CMS
+Système de gestion de contenu pour tous.">AdminModel</a></li>
+<li><a href="#ContactController" title="Wity CMS
+Système de gestion de contenu pour tous.">ContactController</a></li>
+<li><a href="#ContactModel" title="Wity CMS
+Système de gestion de contenu pour tous.">ContactModel</a></li>
+<li><a href="#ContactView" title="Wity CMS
+Système de gestion de contenu pour tous.">ContactView</a></li>
+<li><a href="#NewsAdminController" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsAdminController</a></li>
+<li><a href="#NewsAdminModel" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsAdminModel</a></li>
+<li><a href="#NewsAdminView" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsAdminView</a></li>
+<li><a href="#NewsController" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsController</a></li>
+<li><a href="#NewsModel" title="">NewsModel</a></li>
+<li><a href="#NewsView" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsView</a></li>
+<li><a href="#NewsletterAdminController" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsletterAdminController</a></li>
+<li><a href="#NewsletterAdminModel" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsletterAdminModel</a></li>
+<li><a href="#NewsletterAdminView" title="Wity CMS
+Système de gestion de contenu pour tous.">NewsletterAdminView</a></li>
+<li><a href="#PageAdminController" title="Wity CMS
+Système de gestion de contenu pour tous.">PageAdminController</a></li>
+<li><a href="#PageAdminModel" title="Wity CMS
+Système de gestion de contenu pour tous.">PageAdminModel</a></li>
+<li><a href="#PageAdminView" title="Wity CMS
+Système de gestion de contenu pour tous.">PageAdminView</a></li>
+<li><a href="#PageController" title="Wity CMS
+Système de gestion de contenu pour tous.">PageController</a></li>
+<li><a href="#PageModel" title="Wity CMS
+Système de gestion de contenu pour tous.">PageModel</a></li>
+<li><a href="#PageView" title="Wity CMS
+Système de gestion de contenu pour tous.">PageView</a></li>
+<li><a href="#UserAdminController" title="Wity CMS
+Système de gestion de contenu pour tous.">UserAdminController</a></li>
+<li><a href="#UserAdminModel" title="Wity CMS
+Système de gestion de contenu pour tous.">UserAdminModel</a></li>
+<li><a href="#UserAdminView" title="Wity CMS
+Système de gestion de contenu pour tous.">UserAdminView</a></li>
+<li><a href="#UserController" title="Wity CMS
+Système de gestion de contenu pour tous.">UserController</a></li>
+<li><a href="#UserModel" title="Wity CMS
+Système de gestion de contenu pour tous.">UserModel</a></li>
+<li><a href="#UserView" title="Wity CMS
+Système de gestion de contenu pour tous.">UserView</a></li>
+<li><a href="#Pagination" title="Wity CMS
+Système de gestion de contenu pour tous.">Pagination</a></li>
+<li><a href="#SortingHelper" title="">SortingHelper</a></li>
+<li><a href="#CKEditor" title="\brief CKEditor class that can be used to create editor
+instances in PHP pages on server side.">CKEditor</a></li>
+<li><a href="#CKEditor" title="\brief CKEditor class that can be used to create editor
+instances in PHP pages on server side.">CKEditor</a></li>
+<li><a href="#CKFinder" title="">CKFinder</a></li>
+<li><a href="#CKFinder" title="">CKFinder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_FileEditor" title="Base XML commands handler">CKFinder_Connector_CommandHandler_FileEditor</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_ImageResize" title="Base XML commands handler">CKFinder_Connector_CommandHandler_ImageResize</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_ImageResizeInfo" title="Base XML commands handler">CKFinder_Connector_CommandHandler_ImageResizeInfo</a></li>
+<li><a href="#Watermark" title="">Watermark</a></li>
+<li><a href="#FPDF" title="">FPDF</a></li>
+<li><a href="#TTFParser" title="">TTFParser</a></li>
+<li><a href="#PDF" title="">PDF</a></li>
+<li><a href="#PDF" title="">PDF</a></li>
+<li><a href="#PDF" title="">PDF</a></li>
+<li><a href="#PDF" title="">PDF</a></li>
+<li><a href="#PDF" title="">PDF</a></li>
+<li><a href="#SimpleImage" title="">SimpleImage</a></li>
+<li><a href="#WConfig" title="Wity CMS
+Système de gestion de contenu pour tous.">WConfig</a></li>
+<li><a href="#WController" title="Wity CMS
+Système de gestion de contenu pour tous.">WController</a></li>
+<li><a href="#WMain" title="">WMain</a></li>
+<li><a href="#WNote" title="Wity CMS
+Système de gestion de contenu pour tous.">WNote</a></li>
+<li><a href="#WRequest" title="Wity CMS
+Système de gestion de contenu pour tous.">WRequest</a></li>
+<li><a href="#WRoute" title="Wity CMS
+Système de gestion de contenu pour tous.">WRoute</a></li>
+<li><a href="#WSession" title="Wity CMS
+Système de gestion de contenu pour tous.">WSession</a></li>
+<li><a href="#WSystem" title="Wity CMS
+Système de gestion de contenu pour tous.">WSystem</a></li>
+<li><a href="#WView" title="Wity CMS
+Système de gestion de contenu pour tous.">WView</a></li>
+<li><a href="#wtFile" title="">wtFile</a></li>
+<li><a href="#wtJSON" title="">wtJSON</a></li>
+<li><a href="#wtXml" title="">wtXml</a></li>
+<li><a href="#WTemplate" title="">WTemplate</a></li>
+<li><a href="#WTemplateCompiler" title="Wity CMS
+Système de gestion de contenu pour tous.">WTemplateCompiler</a></li>
+<li><a href="#WTemplateFile" title="Wity CMS
+Système de gestion de contenu pour tous.">WTemplateFile</a></li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  "><a href="#APPS_DIR" title="APPS_DIR :: Emplacement des Applications"><span class="description">Emplacement des Applications</span><pre>APPS_DIR</pre></a></li>
+<li class="constant  "><a href="#CACHE_DIR" title="CACHE_DIR :: Emplacement des Fichiers de cache"><span class="description">Emplacement des Fichiers de cache</span><pre>CACHE_DIR</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_DELETE" title="CKFINDER_CONNECTOR_ACL_FILE_DELETE :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_DELETE</span><pre>CKFINDER_CONNECTOR_ACL_FILE_DELETE</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_DELETE" title="CKFINDER_CONNECTOR_ACL_FILE_DELETE :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_DELETE</span><pre>CKFINDER_CONNECTOR_ACL_FILE_DELETE</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_RENAME" title="CKFINDER_CONNECTOR_ACL_FILE_RENAME :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_RENAME</span><pre>CKFINDER_CONNECTOR_ACL_FILE_RENAME</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_RENAME" title="CKFINDER_CONNECTOR_ACL_FILE_RENAME :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_RENAME</span><pre>CKFINDER_CONNECTOR_ACL_FILE_RENAME</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_UPLOAD" title="CKFINDER_CONNECTOR_ACL_FILE_UPLOAD :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_UPLOAD</span><pre>CKFINDER_CONNECTOR_ACL_FILE_UPLOAD</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_UPLOAD" title="CKFINDER_CONNECTOR_ACL_FILE_UPLOAD :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_UPLOAD</span><pre>CKFINDER_CONNECTOR_ACL_FILE_UPLOAD</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_VIEW" title="CKFINDER_CONNECTOR_ACL_FILE_VIEW :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_VIEW</span><pre>CKFINDER_CONNECTOR_ACL_FILE_VIEW</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FILE_VIEW" title="CKFINDER_CONNECTOR_ACL_FILE_VIEW :: "><span class="description">CKFINDER_CONNECTOR_ACL_FILE_VIEW</span><pre>CKFINDER_CONNECTOR_ACL_FILE_VIEW</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_CREATE" title="CKFINDER_CONNECTOR_ACL_FOLDER_CREATE :: "><span class="description">CKFINDER_CONNECTOR_ACL_FOLDER_CREATE</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_CREATE</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_CREATE" title="CKFINDER_CONNECTOR_ACL_FOLDER_CREATE :: "><span class="description">CKFINDER_CONNECTOR_ACL_FOLDER_CREATE</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_CREATE</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_DELETE" title="CKFINDER_CONNECTOR_ACL_FOLDER_DELETE :: "><span class="description">CKFINDER_CONNECTOR_ACL_FOLDER_DELETE</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_DELETE</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_DELETE" title="CKFINDER_CONNECTOR_ACL_FOLDER_DELETE :: "><span class="description">CKFINDER_CONNECTOR_ACL_FOLDER_DELETE</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_DELETE</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_RENAME" title="CKFINDER_CONNECTOR_ACL_FOLDER_RENAME :: "><span class="description">CKFINDER_CONNECTOR_ACL_FOLDER_RENAME</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_RENAME</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_RENAME" title="CKFINDER_CONNECTOR_ACL_FOLDER_RENAME :: "><span class="description">CKFINDER_CONNECTOR_ACL_FOLDER_RENAME</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_RENAME</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_VIEW" title="CKFINDER_CONNECTOR_ACL_FOLDER_VIEW :: Folder view mask"><span class="description">Folder view mask</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_VIEW</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_CONNECTOR_ACL_FOLDER_VIEW" title="CKFINDER_CONNECTOR_ACL_FOLDER_VIEW :: Folder view mask"><span class="description">Folder view mask</span><pre>CKFINDER_CONNECTOR_ACL_FOLDER_VIEW</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_DEFAULT_BASEPATH" title="CKFINDER_DEFAULT_BASEPATH :: "><span class="description">CKFINDER_DEFAULT_BASEPATH</span><pre>CKFINDER_DEFAULT_BASEPATH</pre></a></li>
+<li class="constant  "><a href="#CKFINDER_DEFAULT_BASEPATH" title="CKFINDER_DEFAULT_BASEPATH :: "><span class="description">CKFINDER_DEFAULT_BASEPATH</span><pre>CKFINDER_DEFAULT_BASEPATH</pre></a></li>
+<li class="constant  "><a href="#DS" title="DS :: Séparateur de dossiers"><span class="description">Séparateur de dossiers</span><pre>DS</pre></a></li>
+<li class="constant  "><a href="#DS" title="DS :: "><span class="description">DS</span><pre>DS</pre></a></li>
+<li class="constant  "><a href="#FPDF_FONTPATH" title="FPDF_FONTPATH :: "><span class="description">FPDF_FONTPATH</span><pre>FPDF_FONTPATH</pre></a></li>
+<li class="constant  "><a href="#FPDF_VERSION" title="FPDF_VERSION :: "><span class="description">FPDF_VERSION</span><pre>FPDF_VERSION</pre></a></li>
+<li class="constant  "><a href="#HELPERS_DIR" title="HELPERS_DIR :: Emplacement des Helpers"><span class="description">Emplacement des Helpers</span><pre>HELPERS_DIR</pre></a></li>
+<li class="constant  "><a href="#IN_WITY" title="IN_WITY :: Wity CMS
+Système de gestion de contenu pour tous."><span class="description">Wity CMS
+Système de gestion de contenu pour tous.</span><pre>IN_WITY</pre></a></li>
+<li class="constant  "><a href="#LIBS_DIR" title="LIBS_DIR :: Emplacement des Librairies"><span class="description">Emplacement des Librairies</span><pre>LIBS_DIR</pre></a></li>
+<li class="constant  "><a href="#LOGS_DIR" title="LOGS_DIR :: Emplacement des Logs"><span class="description">Emplacement des Logs</span><pre>LOGS_DIR</pre></a></li>
+<li class="constant  "><a href="#SYS_DIR" title="SYS_DIR :: Emplacement du Système"><span class="description">Emplacement du Système</span><pre>SYS_DIR</pre></a></li>
+<li class="constant  "><a href="#THEMES_DIR" title="THEMES_DIR :: Emplacement des Thèmes"><span class="description">Emplacement des Thèmes</span><pre>THEMES_DIR</pre></a></li>
+<li class="constant  "><a href="#WITY_PATH" title="WITY_PATH :: Racine du CMS"><span class="description">Racine du CMS</span><pre>WITY_PATH</pre></a></li>
+<li class="constant  "><a href="#WITY_VERSION" title="WITY_VERSION :: "><span class="description">WITY_VERSION</span><pre>WITY_VERSION</pre></a></li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
+</li>
+<li class="active"><a href="../packages/Default.html">Default</a></li>
+</ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-function"></i> Functions</h3>
+<a name="CheckAuthentication" id="CheckAuthentication"></a><div class="element clickable function  CheckAuthentication" data-toggle="collapse" data-target=".CheckAuthentication .collapse">
+<h2>This function must check the user session to be sure that he/she is
+authorized to upload and access files in the File Browser.</h2>
+<pre>CheckAuthentication() : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="Error" id="Error"></a><div class="element clickable function  Error" data-toggle="collapse" data-target=".Error .collapse">
+<h2>Error()
+        </h2>
+<pre>Error($txt) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$txt</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="GetInfoFromTrueType" id="GetInfoFromTrueType"></a><div class="element clickable function  GetInfoFromTrueType" data-toggle="collapse" data-target=".GetInfoFromTrueType .collapse">
+<h2>GetInfoFromTrueType()
+        </h2>
+<pre>GetInfoFromTrueType($file, $embed, $map) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$embed</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$map</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="GetInfoFromType1" id="GetInfoFromType1"></a><div class="element clickable function  GetInfoFromType1" data-toggle="collapse" data-target=".GetInfoFromType1 .collapse">
+<h2>GetInfoFromType1()
+        </h2>
+<pre>GetInfoFromType1($file, $embed, $map) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$embed</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$map</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="LoadMap" id="LoadMap"></a><div class="element clickable function  LoadMap" data-toggle="collapse" data-target=".LoadMap .collapse">
+<h2>LoadMap()
+        </h2>
+<pre>LoadMap($enc) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$enc</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="MakeDefinitionFile" id="MakeDefinitionFile"></a><div class="element clickable function  MakeDefinitionFile" data-toggle="collapse" data-target=".MakeDefinitionFile .collapse">
+<h2>MakeDefinitionFile()
+        </h2>
+<pre>MakeDefinitionFile($file, $type, $enc, $embed, $map, $info) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$enc</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$embed</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$map</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$info</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="MakeFont" id="MakeFont"></a><div class="element clickable function  MakeFont" data-toggle="collapse" data-target=".MakeFont .collapse">
+<h2>MakeFont()
+        </h2>
+<pre>MakeFont($fontfile, $enc, $embed) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$fontfile</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$enc</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$embed</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="MakeFontDescriptor" id="MakeFontDescriptor"></a><div class="element clickable function  MakeFontDescriptor" data-toggle="collapse" data-target=".MakeFontDescriptor .collapse">
+<h2>MakeFontDescriptor()
+        </h2>
+<pre>MakeFontDescriptor($info) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$info</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="MakeFontEncoding" id="MakeFontEncoding"></a><div class="element clickable function  MakeFontEncoding" data-toggle="collapse" data-target=".MakeFontEncoding .collapse">
+<h2>MakeFontEncoding()
+        </h2>
+<pre>MakeFontEncoding($map) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$map</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="MakeWidthArray" id="MakeWidthArray"></a><div class="element clickable function  MakeWidthArray" data-toggle="collapse" data-target=".MakeWidthArray .collapse">
+<h2>MakeWidthArray()
+        </h2>
+<pre>MakeWidthArray($widths) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$widths</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="Message" id="Message"></a><div class="element clickable function  Message" data-toggle="collapse" data-target=".Message .collapse">
+<h2>Message()
+        </h2>
+<pre>Message($txt, $severity) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$txt</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$severity</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="Notice" id="Notice"></a><div class="element clickable function  Notice" data-toggle="collapse" data-target=".Notice .collapse">
+<h2>Notice()
+        </h2>
+<pre>Notice($txt) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$txt</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="SaveToFile" id="SaveToFile"></a><div class="element clickable function  SaveToFile" data-toggle="collapse" data-target=".SaveToFile .collapse">
+<h2>SaveToFile()
+        </h2>
+<pre>SaveToFile($file, $s, $mode) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$s</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="Warning" id="Warning"></a><div class="element clickable function  Warning" data-toggle="collapse" data-target=".Warning .collapse">
+<h2>Warning()
+        </h2>
+<pre>Warning($txt) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$txt</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="AdminController" id="AdminController"></a><div class="element ajax clickable class" href="../classes/AdminController.html">
+<h1>AdminController<a href="../classes/AdminController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/AdminController.html" class="more">« More »</a>
+</div>
+<a name="AdminModel" id="AdminModel"></a><div class="element ajax clickable class" href="../classes/AdminModel.html">
+<h1>AdminModel<a href="../classes/AdminModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/AdminModel.html" class="more">« More »</a>
+</div>
+<a name="CKEditor" id="CKEditor"></a><div class="element ajax clickable class" href="../classes/CKEditor.html">
+<h1>CKEditor<a href="../classes/CKEditor.html">¶</a>
+</h1>
+<p class="short_description">\brief CKEditor class that can be used to create editor
+instances in PHP pages on server side.</p>
+<div class="details collapse"></div>
+<a href="../classes/CKEditor.html" class="more">« More »</a>
+</div>
+<a name="CKEditor" id="CKEditor"></a><div class="element ajax clickable class" href="../classes/CKEditor.html">
+<h1>CKEditor<a href="../classes/CKEditor.html">¶</a>
+</h1>
+<p class="short_description">\brief CKEditor class that can be used to create editor
+instances in PHP pages on server side.</p>
+<div class="details collapse"></div>
+<a href="../classes/CKEditor.html" class="more">« More »</a>
+</div>
+<a name="CKFinder" id="CKFinder"></a><div class="element ajax clickable class" href="../classes/CKFinder.html">
+<h1>CKFinder<a href="../classes/CKFinder.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder" id="CKFinder"></a><div class="element ajax clickable class" href="../classes/CKFinder.html">
+<h1>CKFinder<a href="../classes/CKFinder.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_FileEditor" id="CKFinder_Connector_CommandHandler_FileEditor"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_FileEditor.html">
+<h1>CKFinder_Connector_CommandHandler_FileEditor<a href="../classes/CKFinder_Connector_CommandHandler_FileEditor.html">¶</a>
+</h1>
+<p class="short_description">Base XML commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_FileEditor.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_ImageResize" id="CKFinder_Connector_CommandHandler_ImageResize"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_ImageResize.html">
+<h1>CKFinder_Connector_CommandHandler_ImageResize<a href="../classes/CKFinder_Connector_CommandHandler_ImageResize.html">¶</a>
+</h1>
+<p class="short_description">Base XML commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_ImageResize.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_ImageResizeInfo" id="CKFinder_Connector_CommandHandler_ImageResizeInfo"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_ImageResizeInfo.html">
+<h1>CKFinder_Connector_CommandHandler_ImageResizeInfo<a href="../classes/CKFinder_Connector_CommandHandler_ImageResizeInfo.html">¶</a>
+</h1>
+<p class="short_description">Base XML commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_ImageResizeInfo.html" class="more">« More »</a>
+</div>
+<a name="ContactController" id="ContactController"></a><div class="element ajax clickable class" href="../classes/ContactController.html">
+<h1>ContactController<a href="../classes/ContactController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/ContactController.html" class="more">« More »</a>
+</div>
+<a name="ContactModel" id="ContactModel"></a><div class="element ajax clickable class" href="../classes/ContactModel.html">
+<h1>ContactModel<a href="../classes/ContactModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/ContactModel.html" class="more">« More »</a>
+</div>
+<a name="ContactView" id="ContactView"></a><div class="element ajax clickable class" href="../classes/ContactView.html">
+<h1>ContactView<a href="../classes/ContactView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/ContactView.html" class="more">« More »</a>
+</div>
+<a name="FPDF" id="FPDF"></a><div class="element ajax clickable class" href="../classes/FPDF.html">
+<h1>FPDF<a href="../classes/FPDF.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/FPDF.html" class="more">« More »</a>
+</div>
+<a name="NewsAdminController" id="NewsAdminController"></a><div class="element ajax clickable class" href="../classes/NewsAdminController.html">
+<h1>NewsAdminController<a href="../classes/NewsAdminController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsAdminController.html" class="more">« More »</a>
+</div>
+<a name="NewsAdminModel" id="NewsAdminModel"></a><div class="element ajax clickable class" href="../classes/NewsAdminModel.html">
+<h1>NewsAdminModel<a href="../classes/NewsAdminModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsAdminModel.html" class="more">« More »</a>
+</div>
+<a name="NewsAdminView" id="NewsAdminView"></a><div class="element ajax clickable class" href="../classes/NewsAdminView.html">
+<h1>NewsAdminView<a href="../classes/NewsAdminView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsAdminView.html" class="more">« More »</a>
+</div>
+<a name="NewsController" id="NewsController"></a><div class="element ajax clickable class" href="../classes/NewsController.html">
+<h1>NewsController<a href="../classes/NewsController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsController.html" class="more">« More »</a>
+</div>
+<a name="NewsModel" id="NewsModel"></a><div class="element ajax clickable class" href="../classes/NewsModel.html">
+<h1>NewsModel<a href="../classes/NewsModel.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/NewsModel.html" class="more">« More »</a>
+</div>
+<a name="NewsView" id="NewsView"></a><div class="element ajax clickable class" href="../classes/NewsView.html">
+<h1>NewsView<a href="../classes/NewsView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsView.html" class="more">« More »</a>
+</div>
+<a name="NewsletterAdminController" id="NewsletterAdminController"></a><div class="element ajax clickable class" href="../classes/NewsletterAdminController.html">
+<h1>NewsletterAdminController<a href="../classes/NewsletterAdminController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsletterAdminController.html" class="more">« More »</a>
+</div>
+<a name="NewsletterAdminModel" id="NewsletterAdminModel"></a><div class="element ajax clickable class" href="../classes/NewsletterAdminModel.html">
+<h1>NewsletterAdminModel<a href="../classes/NewsletterAdminModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsletterAdminModel.html" class="more">« More »</a>
+</div>
+<a name="NewsletterAdminView" id="NewsletterAdminView"></a><div class="element ajax clickable class" href="../classes/NewsletterAdminView.html">
+<h1>NewsletterAdminView<a href="../classes/NewsletterAdminView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/NewsletterAdminView.html" class="more">« More »</a>
+</div>
+<a name="PDF" id="PDF"></a><div class="element ajax clickable class" href="../classes/PDF.html">
+<h1>PDF<a href="../classes/PDF.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/PDF.html" class="more">« More »</a>
+</div>
+<a name="PDF" id="PDF"></a><div class="element ajax clickable class" href="../classes/PDF.html">
+<h1>PDF<a href="../classes/PDF.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/PDF.html" class="more">« More »</a>
+</div>
+<a name="PDF" id="PDF"></a><div class="element ajax clickable class" href="../classes/PDF.html">
+<h1>PDF<a href="../classes/PDF.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/PDF.html" class="more">« More »</a>
+</div>
+<a name="PDF" id="PDF"></a><div class="element ajax clickable class" href="../classes/PDF.html">
+<h1>PDF<a href="../classes/PDF.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/PDF.html" class="more">« More »</a>
+</div>
+<a name="PDF" id="PDF"></a><div class="element ajax clickable class" href="../classes/PDF.html">
+<h1>PDF<a href="../classes/PDF.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/PDF.html" class="more">« More »</a>
+</div>
+<a name="PageAdminController" id="PageAdminController"></a><div class="element ajax clickable class" href="../classes/PageAdminController.html">
+<h1>PageAdminController<a href="../classes/PageAdminController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/PageAdminController.html" class="more">« More »</a>
+</div>
+<a name="PageAdminModel" id="PageAdminModel"></a><div class="element ajax clickable class" href="../classes/PageAdminModel.html">
+<h1>PageAdminModel<a href="../classes/PageAdminModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/PageAdminModel.html" class="more">« More »</a>
+</div>
+<a name="PageAdminView" id="PageAdminView"></a><div class="element ajax clickable class" href="../classes/PageAdminView.html">
+<h1>PageAdminView<a href="../classes/PageAdminView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/PageAdminView.html" class="more">« More »</a>
+</div>
+<a name="PageController" id="PageController"></a><div class="element ajax clickable class" href="../classes/PageController.html">
+<h1>PageController<a href="../classes/PageController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/PageController.html" class="more">« More »</a>
+</div>
+<a name="PageModel" id="PageModel"></a><div class="element ajax clickable class" href="../classes/PageModel.html">
+<h1>PageModel<a href="../classes/PageModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/PageModel.html" class="more">« More »</a>
+</div>
+<a name="PageView" id="PageView"></a><div class="element ajax clickable class" href="../classes/PageView.html">
+<h1>PageView<a href="../classes/PageView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/PageView.html" class="more">« More »</a>
+</div>
+<a name="Pagination" id="Pagination"></a><div class="element ajax clickable class" href="../classes/Pagination.html">
+<h1>Pagination<a href="../classes/Pagination.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/Pagination.html" class="more">« More »</a>
+</div>
+<a name="SimpleImage" id="SimpleImage"></a><div class="element ajax clickable class" href="../classes/SimpleImage.html">
+<h1>SimpleImage<a href="../classes/SimpleImage.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/SimpleImage.html" class="more">« More »</a>
+</div>
+<a name="SortingHelper" id="SortingHelper"></a><div class="element ajax clickable class" href="../classes/SortingHelper.html">
+<h1>SortingHelper<a href="../classes/SortingHelper.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/SortingHelper.html" class="more">« More »</a>
+</div>
+<a name="TTFParser" id="TTFParser"></a><div class="element ajax clickable class" href="../classes/TTFParser.html">
+<h1>TTFParser<a href="../classes/TTFParser.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/TTFParser.html" class="more">« More »</a>
+</div>
+<a name="UserAdminController" id="UserAdminController"></a><div class="element ajax clickable class" href="../classes/UserAdminController.html">
+<h1>UserAdminController<a href="../classes/UserAdminController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserAdminController.html" class="more">« More »</a>
+</div>
+<a name="UserAdminModel" id="UserAdminModel"></a><div class="element ajax clickable class" href="../classes/UserAdminModel.html">
+<h1>UserAdminModel<a href="../classes/UserAdminModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserAdminModel.html" class="more">« More »</a>
+</div>
+<a name="UserAdminView" id="UserAdminView"></a><div class="element ajax clickable class" href="../classes/UserAdminView.html">
+<h1>UserAdminView<a href="../classes/UserAdminView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserAdminView.html" class="more">« More »</a>
+</div>
+<a name="UserController" id="UserController"></a><div class="element ajax clickable class" href="../classes/UserController.html">
+<h1>UserController<a href="../classes/UserController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserController.html" class="more">« More »</a>
+</div>
+<a name="UserModel" id="UserModel"></a><div class="element ajax clickable class" href="../classes/UserModel.html">
+<h1>UserModel<a href="../classes/UserModel.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserModel.html" class="more">« More »</a>
+</div>
+<a name="UserView" id="UserView"></a><div class="element ajax clickable class" href="../classes/UserView.html">
+<h1>UserView<a href="../classes/UserView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/UserView.html" class="more">« More »</a>
+</div>
+<a name="WConfig" id="WConfig"></a><div class="element ajax clickable class" href="../classes/WConfig.html">
+<h1>WConfig<a href="../classes/WConfig.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WConfig.html" class="more">« More »</a>
+</div>
+<a name="WController" id="WController"></a><div class="element ajax clickable class" href="../classes/WController.html">
+<h1>WController<a href="../classes/WController.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WController.html" class="more">« More »</a>
+</div>
+<a name="WMain" id="WMain"></a><div class="element ajax clickable class" href="../classes/WMain.html">
+<h1>WMain<a href="../classes/WMain.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/WMain.html" class="more">« More »</a>
+</div>
+<a name="WNote" id="WNote"></a><div class="element ajax clickable class" href="../classes/WNote.html">
+<h1>WNote<a href="../classes/WNote.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WNote.html" class="more">« More »</a>
+</div>
+<a name="WRequest" id="WRequest"></a><div class="element ajax clickable class" href="../classes/WRequest.html">
+<h1>WRequest<a href="../classes/WRequest.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WRequest.html" class="more">« More »</a>
+</div>
+<a name="WRoute" id="WRoute"></a><div class="element ajax clickable class" href="../classes/WRoute.html">
+<h1>WRoute<a href="../classes/WRoute.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WRoute.html" class="more">« More »</a>
+</div>
+<a name="WSession" id="WSession"></a><div class="element ajax clickable class" href="../classes/WSession.html">
+<h1>WSession<a href="../classes/WSession.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WSession.html" class="more">« More »</a>
+</div>
+<a name="WSystem" id="WSystem"></a><div class="element ajax clickable class" href="../classes/WSystem.html">
+<h1>WSystem<a href="../classes/WSystem.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WSystem.html" class="more">« More »</a>
+</div>
+<a name="WTemplate" id="WTemplate"></a><div class="element ajax clickable class" href="../classes/WTemplate.html">
+<h1>WTemplate<a href="../classes/WTemplate.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/WTemplate.html" class="more">« More »</a>
+</div>
+<a name="WTemplateCompiler" id="WTemplateCompiler"></a><div class="element ajax clickable class" href="../classes/WTemplateCompiler.html">
+<h1>WTemplateCompiler<a href="../classes/WTemplateCompiler.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WTemplateCompiler.html" class="more">« More »</a>
+</div>
+<a name="WTemplateFile" id="WTemplateFile"></a><div class="element ajax clickable class" href="../classes/WTemplateFile.html">
+<h1>WTemplateFile<a href="../classes/WTemplateFile.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WTemplateFile.html" class="more">« More »</a>
+</div>
+<a name="WView" id="WView"></a><div class="element ajax clickable class" href="../classes/WView.html">
+<h1>WView<a href="../classes/WView.html">¶</a>
+</h1>
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details collapse"></div>
+<a href="../classes/WView.html" class="more">« More »</a>
+</div>
+<a name="Watermark" id="Watermark"></a><div class="element ajax clickable class" href="../classes/Watermark.html">
+<h1>Watermark<a href="../classes/Watermark.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/Watermark.html" class="more">« More »</a>
+</div>
+<a name="wtFile" id="wtFile"></a><div class="element ajax clickable class" href="../classes/wtFile.html">
+<h1>wtFile<a href="../classes/wtFile.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/wtFile.html" class="more">« More »</a>
+</div>
+<a name="wtJSON" id="wtJSON"></a><div class="element ajax clickable class" href="../classes/wtJSON.html">
+<h1>wtJSON<a href="../classes/wtJSON.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/wtJSON.html" class="more">« More »</a>
+</div>
+<a name="wtXml" id="wtXml"></a><div class="element ajax clickable class" href="../classes/wtXml.html">
+<h1>wtXml<a href="../classes/wtXml.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/wtXml.html" class="more">« More »</a>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a name="APPS_DIR" id="APPS_DIR"> </a><div class="element clickable constant  APPS_DIR" data-toggle="collapse" data-target=".APPS_DIR .collapse">
+<h2>Emplacement des Applications</h2>
+<pre>APPS_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CACHE_DIR" id="CACHE_DIR"> </a><div class="element clickable constant  CACHE_DIR" data-toggle="collapse" data-target=".CACHE_DIR .collapse">
+<h2>Emplacement des Fichiers de cache</h2>
+<pre>CACHE_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_DELETE" id="CKFINDER_CONNECTOR_ACL_FILE_DELETE"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_DELETE" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_DELETE .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_DELETE</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_DELETE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_DELETE" id="CKFINDER_CONNECTOR_ACL_FILE_DELETE"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_DELETE" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_DELETE .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_DELETE</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_DELETE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_RENAME" id="CKFINDER_CONNECTOR_ACL_FILE_RENAME"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_RENAME" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_RENAME .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_RENAME</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_RENAME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_RENAME" id="CKFINDER_CONNECTOR_ACL_FILE_RENAME"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_RENAME" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_RENAME .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_RENAME</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_RENAME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_UPLOAD" id="CKFINDER_CONNECTOR_ACL_FILE_UPLOAD"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_UPLOAD" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_UPLOAD .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_UPLOAD</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_UPLOAD </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_UPLOAD" id="CKFINDER_CONNECTOR_ACL_FILE_UPLOAD"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_UPLOAD" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_UPLOAD .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_UPLOAD</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_UPLOAD </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_VIEW" id="CKFINDER_CONNECTOR_ACL_FILE_VIEW"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_VIEW" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_VIEW .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_VIEW</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_VIEW </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FILE_VIEW" id="CKFINDER_CONNECTOR_ACL_FILE_VIEW"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FILE_VIEW" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FILE_VIEW .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FILE_VIEW</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FILE_VIEW </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_CREATE" id="CKFINDER_CONNECTOR_ACL_FOLDER_CREATE"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_CREATE" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_CREATE .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FOLDER_CREATE</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_CREATE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_CREATE" id="CKFINDER_CONNECTOR_ACL_FOLDER_CREATE"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_CREATE" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_CREATE .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FOLDER_CREATE</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_CREATE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_DELETE" id="CKFINDER_CONNECTOR_ACL_FOLDER_DELETE"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_DELETE" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_DELETE .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FOLDER_DELETE</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_DELETE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_DELETE" id="CKFINDER_CONNECTOR_ACL_FOLDER_DELETE"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_DELETE" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_DELETE .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FOLDER_DELETE</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_DELETE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_RENAME" id="CKFINDER_CONNECTOR_ACL_FOLDER_RENAME"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_RENAME" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_RENAME .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FOLDER_RENAME</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_RENAME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_RENAME" id="CKFINDER_CONNECTOR_ACL_FOLDER_RENAME"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_RENAME" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_RENAME .collapse">
+<h2>CKFINDER_CONNECTOR_ACL_FOLDER_RENAME</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_RENAME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_VIEW" id="CKFINDER_CONNECTOR_ACL_FOLDER_VIEW"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_VIEW" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_VIEW .collapse">
+<h2>Folder view mask</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_VIEW </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_CONNECTOR_ACL_FOLDER_VIEW" id="CKFINDER_CONNECTOR_ACL_FOLDER_VIEW"> </a><div class="element clickable constant  CKFINDER_CONNECTOR_ACL_FOLDER_VIEW" data-toggle="collapse" data-target=".CKFINDER_CONNECTOR_ACL_FOLDER_VIEW .collapse">
+<h2>Folder view mask</h2>
+<pre>CKFINDER_CONNECTOR_ACL_FOLDER_VIEW </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_DEFAULT_BASEPATH" id="CKFINDER_DEFAULT_BASEPATH"> </a><div class="element clickable constant  CKFINDER_DEFAULT_BASEPATH" data-toggle="collapse" data-target=".CKFINDER_DEFAULT_BASEPATH .collapse">
+<h2>CKFINDER_DEFAULT_BASEPATH</h2>
+<pre>CKFINDER_DEFAULT_BASEPATH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="CKFINDER_DEFAULT_BASEPATH" id="CKFINDER_DEFAULT_BASEPATH"> </a><div class="element clickable constant  CKFINDER_DEFAULT_BASEPATH" data-toggle="collapse" data-target=".CKFINDER_DEFAULT_BASEPATH .collapse">
+<h2>CKFINDER_DEFAULT_BASEPATH</h2>
+<pre>CKFINDER_DEFAULT_BASEPATH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="DS" id="DS"> </a><div class="element clickable constant  DS" data-toggle="collapse" data-target=".DS .collapse">
+<h2>Séparateur de dossiers</h2>
+<pre>DS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="DS" id="DS"> </a><div class="element clickable constant  DS" data-toggle="collapse" data-target=".DS .collapse">
+<h2>DS</h2>
+<pre>DS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="FPDF_FONTPATH" id="FPDF_FONTPATH"> </a><div class="element clickable constant  FPDF_FONTPATH" data-toggle="collapse" data-target=".FPDF_FONTPATH .collapse">
+<h2>FPDF_FONTPATH</h2>
+<pre>FPDF_FONTPATH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="FPDF_VERSION" id="FPDF_VERSION"> </a><div class="element clickable constant  FPDF_VERSION" data-toggle="collapse" data-target=".FPDF_VERSION .collapse">
+<h2>FPDF_VERSION</h2>
+<pre>FPDF_VERSION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="HELPERS_DIR" id="HELPERS_DIR"> </a><div class="element clickable constant  HELPERS_DIR" data-toggle="collapse" data-target=".HELPERS_DIR .collapse">
+<h2>Emplacement des Helpers</h2>
+<pre>HELPERS_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_WITY" id="IN_WITY"> </a><div class="element clickable constant  IN_WITY" data-toggle="collapse" data-target=".IN_WITY .collapse">
+<h2>Wity CMS
+Système de gestion de contenu pour tous.</h2>
+<pre>IN_WITY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Fofif</a></td>
+</tr>
+<tr>
+<th>version</th>
+<td>$Id: index.php 0000 27-05-2012 Fofif $</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="LIBS_DIR" id="LIBS_DIR"> </a><div class="element clickable constant  LIBS_DIR" data-toggle="collapse" data-target=".LIBS_DIR .collapse">
+<h2>Emplacement des Librairies</h2>
+<pre>LIBS_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="LOGS_DIR" id="LOGS_DIR"> </a><div class="element clickable constant  LOGS_DIR" data-toggle="collapse" data-target=".LOGS_DIR .collapse">
+<h2>Emplacement des Logs</h2>
+<pre>LOGS_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="SYS_DIR" id="SYS_DIR"> </a><div class="element clickable constant  SYS_DIR" data-toggle="collapse" data-target=".SYS_DIR .collapse">
+<h2>Emplacement du Système</h2>
+<pre>SYS_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="THEMES_DIR" id="THEMES_DIR"> </a><div class="element clickable constant  THEMES_DIR" data-toggle="collapse" data-target=".THEMES_DIR .collapse">
+<h2>Emplacement des Thèmes</h2>
+<pre>THEMES_DIR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="WITY_PATH" id="WITY_PATH"> </a><div class="element clickable constant  WITY_PATH" data-toggle="collapse" data-target=".WITY_PATH .collapse">
+<h2>Racine du CMS</h2>
+<pre>WITY_PATH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="WITY_VERSION" id="WITY_VERSION"> </a><div class="element clickable constant  WITY_VERSION" data-toggle="collapse" data-target=".WITY_VERSION .collapse">
+<h2>WITY_VERSION</h2>
+<pre>WITY_VERSION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

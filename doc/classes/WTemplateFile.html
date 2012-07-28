@@ -1,0 +1,249 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » \WTemplateFile</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#compile" title="compile :: Compilation du fichier"><span class="description">Compilation du fichier</span><pre>compile()</pre></a></li>
+<li class="method public "><a href="#getCompilationHref" title="getCompilationHref :: "><span class="description">getCompilationHref()
+        </span><pre>getCompilationHref()</pre></a></li>
+<li class="method public "><a href="#getCompilationTime" title="getCompilationTime :: "><span class="description">getCompilationTime()
+        </span><pre>getCompilationTime()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#checkCompilation" title="checkCompilation :: Vérifie si une compilation du fichier est nécessaire"><span class="description">Vérifie si une compilation du fichier est nécessaire</span><pre>checkCompilation()</pre></a></li>
+<li class="method private "><a href="#createCompilationHref" title="createCompilationHref :: Génère le chemin complet du fichier compilé"><span class="description">Génère le chemin complet du fichier compilé</span><pre>createCompilationHref()</pre></a></li>
+<li class="method private "><a href="#saveFile" title="saveFile :: Enregistre le fichier"><span class="description">Enregistre le fichier</span><pre>saveFile()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24baseDir" title="$baseDir :: "><span class="description">$baseDir</span><pre>$baseDir</pre></a></li>
+<li class="property private "><a href="#%24compilationDir" title="$compilationDir :: "><span class="description">$compilationDir</span><pre>$compilationDir</pre></a></li>
+<li class="property private "><a href="#%24compilationHref" title="$compilationHref :: "><span class="description">$compilationHref</span><pre>$compilationHref</pre></a></li>
+<li class="property private "><a href="#%24compilationTime" title="$compilationTime :: "><span class="description">$compilationTime</span><pre>$compilationTime</pre></a></li>
+<li class="property private "><a href="#%24compiled" title="$compiled :: "><span class="description">$compiled</span><pre>$compiled</pre></a></li>
+<li class="property private "><a href="#%24creationTime" title="$creationTime :: "><span class="description">$creationTime</span><pre>$creationTime</pre></a></li>
+<li class="property private "><a href="#%24href" title="$href :: "><span class="description">$href</span><pre>$href</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CWTemplateFile" id="\WTemplateFile"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/WTemplateFile.html">WTemplateFile</a>
+</li>
+</ul>
+<div href="../classes/WTemplateFile.html" class="element class">
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Fofif</a></td>
+</tr>
+<tr>
+<th>version</th>
+<td>$Id: WTemplate/WTemplateFile.php 0002 28-04-2012 fofif $</td>
+</tr>
+<tr>
+<th>desc</th>
+<td>Moteur de template, classe fichier</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($href, $baseDir, $compDir) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$href</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$baseDir</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$compDir</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="compile" id="compile"></a><div class="element clickable method public compile" data-toggle="collapse" data-target=".compile .collapse">
+<h2>Compilation du fichier</h2>
+<pre>compile(<a href="../classes/WTemplateCompiler.html">\WTemplateCompiler</a> $compiler) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$compiler</h4>
+<code><a href="../classes/WTemplateCompiler.html">\WTemplateCompiler</a></code><p>Un compilateur de template</p></div>
+</div></div>
+</div>
+<a name="getCompilationHref" id="getCompilationHref"></a><div class="element clickable method public getCompilationHref" data-toggle="collapse" data-target=".getCompilationHref .collapse">
+<h2>getCompilationHref()
+        </h2>
+<pre>getCompilationHref() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="getCompilationTime" id="getCompilationTime"></a><div class="element clickable method public getCompilationTime" data-toggle="collapse" data-target=".getCompilationTime .collapse">
+<h2>getCompilationTime()
+        </h2>
+<pre>getCompilationTime() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="checkCompilation" id="checkCompilation"></a><div class="element clickable method private checkCompilation" data-toggle="collapse" data-target=".checkCompilation .collapse">
+<h2>Vérifie si une compilation du fichier est nécessaire</h2>
+<pre>checkCompilation() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Le cache est-il valide ?</div>
+</div></div>
+</div>
+<a name="createCompilationHref" id="createCompilationHref"></a><div class="element clickable method private createCompilationHref" data-toggle="collapse" data-target=".createCompilationHref .collapse">
+<h2>Génère le chemin complet du fichier compilé</h2>
+<pre>createCompilationHref() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="saveFile" id="saveFile"></a><div class="element clickable method private saveFile" data-toggle="collapse" data-target=".saveFile .collapse">
+<h2>Enregistre le fichier</h2>
+<pre>saveFile($data) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24baseDir" id="$baseDir"> </a><div class="element clickable property private $baseDir" data-toggle="collapse" data-target=".$baseDir .collapse">
+<h2>$baseDir</h2>
+<pre>$baseDir </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24compilationDir" id="$compilationDir"> </a><div class="element clickable property private $compilationDir" data-toggle="collapse" data-target=".$compilationDir .collapse">
+<h2>$compilationDir</h2>
+<pre>$compilationDir </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24compilationHref" id="$compilationHref"> </a><div class="element clickable property private $compilationHref" data-toggle="collapse" data-target=".$compilationHref .collapse">
+<h2>$compilationHref</h2>
+<pre>$compilationHref </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24compilationTime" id="$compilationTime"> </a><div class="element clickable property private $compilationTime" data-toggle="collapse" data-target=".$compilationTime .collapse">
+<h2>$compilationTime</h2>
+<pre>$compilationTime </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24compiled" id="$compiled"> </a><div class="element clickable property private $compiled" data-toggle="collapse" data-target=".$compiled .collapse">
+<h2>$compiled</h2>
+<pre>$compiled </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24creationTime" id="$creationTime"> </a><div class="element clickable property private $creationTime" data-toggle="collapse" data-target=".$creationTime .collapse">
+<h2>$creationTime</h2>
+<pre>$creationTime </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24href" id="$href"> </a><div class="element clickable property private $href" data-toggle="collapse" data-target=".$href .collapse">
+<h2>$href</h2>
+<pre>$href </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:25+02:00.<br></footer></div>
+</div>
+</body>
+</html>

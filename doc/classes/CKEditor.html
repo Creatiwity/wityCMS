@@ -1,0 +1,981 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » \CKEditor</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#CKEditor" title="CKEditor :: Main Constructor."><span class="description">Main Constructor.</span><pre>CKEditor()</pre></a></li>
+<li class="method public "><a href="#addEventHandler" title="addEventHandler :: Adds event listener."><span class="description">Adds event listener.</span><pre>addEventHandler()</pre></a></li>
+<li class="method public "><a href="#addGlobalEventHandler" title="addGlobalEventHandler :: Adds global event listener."><span class="description">Adds global event listener.</span><pre>addGlobalEventHandler()</pre></a></li>
+<li class="method public "><a href="#ckeditorPath" title="ckeditorPath :: Return path to ckeditor.js."><span class="description">Return path to ckeditor.js.</span><pre>ckeditorPath()</pre></a></li>
+<li class="method public "><a href="#clearEventHandlers" title="clearEventHandlers :: Clear registered event handlers."><span class="description">Clear registered event handlers.</span><pre>clearEventHandlers()</pre></a></li>
+<li class="method public "><a href="#clearGlobalEventHandlers" title="clearGlobalEventHandlers :: Clear registered global event handlers."><span class="description">Clear registered global event handlers.</span><pre>clearGlobalEventHandlers()</pre></a></li>
+<li class="method public "><a href="#configSettings" title="configSettings :: Returns the configuration array (global and instance specific settings are merged into one array)."><span class="description">Returns the configuration array (global and instance specific settings are merged into one array).</span><pre>configSettings()</pre></a></li>
+<li class="method public "><a href="#editor" title="editor :: Creates a %CKEditor instance."><span class="description">Creates a %CKEditor instance.</span><pre>editor()</pre></a></li>
+<li class="method public "><a href="#init" title="init :: Initializes CKEditor (executed only once)."><span class="description">Initializes CKEditor (executed only once).</span><pre>init()</pre></a></li>
+<li class="method public "><a href="#jsEncode" title="jsEncode :: This little function provides a basic JSON support."><span class="description">This little function provides a basic JSON support.</span><pre>jsEncode()</pre></a></li>
+<li class="method public "><a href="#replace" title="replace :: Replaces a &amp;lt;textarea&amp;gt; with a %CKEditor instance."><span class="description">Replaces a &amp;lt;textarea&amp;gt; with a %CKEditor instance.</span><pre>replace()</pre></a></li>
+<li class="method public "><a href="#replaceAll" title="replaceAll :: Replace all &amp;lt;textarea&amp;gt; elements available in the document with editor instances."><span class="description">Replace all &amp;lt;textarea&amp;gt; elements available in the document with editor instances.</span><pre>replaceAll()</pre></a></li>
+<li class="method public "><a href="#returnGlobalEvents" title="returnGlobalEvents :: Return global event handlers."><span class="description">Return global event handlers.</span><pre>returnGlobalEvents()</pre></a></li>
+<li class="method public "><a href="#script" title="script :: Prints javascript code."><span class="description">Prints javascript code.</span><pre>script()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_events" title="$_events :: An array that holds event listeners."><span class="description">An array that holds event listeners.</span><pre>$_events</pre></a></li>
+<li class="property public "><a href="#%24_globalEvents" title="$_globalEvents :: An array that holds global event listeners."><span class="description">An array that holds global event listeners.</span><pre>$_globalEvents</pre></a></li>
+<li class="property public "><a href="#%24_timestamp" title="$_timestamp :: A constant string unique for each release of %CKEditor."><span class="description">A constant string unique for each release of %CKEditor.</span><pre>$_timestamp</pre></a></li>
+<li class="property public "><a href="#%24basePath" title="$basePath :: URL to the %CKEditor installation directory (absolute or relative to document root)."><span class="description">URL to the %CKEditor installation directory (absolute or relative to document root).</span><pre>$basePath</pre></a></li>
+<li class="property public "><a href="#%24config" title="$config :: An array that holds the global %CKEditor configuration."><span class="description">An array that holds the global %CKEditor configuration.</span><pre>$config</pre></a></li>
+<li class="property public "><a href="#%24initialized" title="$initialized :: A boolean variable indicating whether CKEditor has been initialized."><span class="description">A boolean variable indicating whether CKEditor has been initialized.</span><pre>$initialized</pre></a></li>
+<li class="property public "><a href="#%24returnOutput" title="$returnOutput :: Boolean variable indicating whether created code should be printed out or returned by a function."><span class="description">Boolean variable indicating whether created code should be printed out or returned by a function.</span><pre>$returnOutput</pre></a></li>
+<li class="property public "><a href="#%24textareaAttributes" title="$textareaAttributes :: An array with textarea attributes."><span class="description">An array with textarea attributes.</span><pre>$textareaAttributes</pre></a></li>
+<li class="property public "><a href="#%24timestamp" title="$timestamp :: A string indicating the creation date of %CKEditor."><span class="description">A string indicating the creation date of %CKEditor.</span><pre>$timestamp</pre></a></li>
+<li class="property public "><a href="#%24version" title="$version :: The version of %CKEditor."><span class="description">The version of %CKEditor.</span><pre>$version</pre></a></li>
+</ul>
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Main Constructor."><span class="description">Main Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#addEventHandler" title="addEventHandler :: Adds event listener."><span class="description">Adds event listener.</span><pre>addEventHandler()</pre></a></li>
+<li class="method public "><a href="#addGlobalEventHandler" title="addGlobalEventHandler :: Adds global event listener."><span class="description">Adds global event listener.</span><pre>addGlobalEventHandler()</pre></a></li>
+<li class="method public "><a href="#clearEventHandlers" title="clearEventHandlers :: Clear registered event handlers."><span class="description">Clear registered event handlers.</span><pre>clearEventHandlers()</pre></a></li>
+<li class="method public "><a href="#clearGlobalEventHandlers" title="clearGlobalEventHandlers :: Clear registered global event handlers."><span class="description">Clear registered global event handlers.</span><pre>clearGlobalEventHandlers()</pre></a></li>
+<li class="method public "><a href="#editor" title="editor :: Creates a %CKEditor instance."><span class="description">Creates a %CKEditor instance.</span><pre>editor()</pre></a></li>
+<li class="method public "><a href="#replace" title="replace :: Replaces a &amp;lt;textarea&amp;gt; with a %CKEditor instance."><span class="description">Replaces a &amp;lt;textarea&amp;gt; with a %CKEditor instance.</span><pre>replace()</pre></a></li>
+<li class="method public "><a href="#replaceAll" title="replaceAll :: Replace all &amp;lt;textarea&amp;gt; elements available in the document with editor instances."><span class="description">Replace all &amp;lt;textarea&amp;gt; elements available in the document with editor instances.</span><pre>replaceAll()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#ckeditorPath" title="ckeditorPath :: Return path to ckeditor.js."><span class="description">Return path to ckeditor.js.</span><pre>ckeditorPath()</pre></a></li>
+<li class="method private "><a href="#configSettings" title="configSettings :: Returns the configuration array (global and instance specific settings are merged into one array)."><span class="description">Returns the configuration array (global and instance specific settings are merged into one array).</span><pre>configSettings()</pre></a></li>
+<li class="method private "><a href="#init" title="init :: Initializes CKEditor (executed only once)."><span class="description">Initializes CKEditor (executed only once).</span><pre>init()</pre></a></li>
+<li class="method private "><a href="#jsEncode" title="jsEncode :: This little function provides a basic JSON support."><span class="description">This little function provides a basic JSON support.</span><pre>jsEncode()</pre></a></li>
+<li class="method private "><a href="#returnGlobalEvents" title="returnGlobalEvents :: Return global event handlers."><span class="description">Return global event handlers.</span><pre>returnGlobalEvents()</pre></a></li>
+<li class="method private "><a href="#script" title="script :: Prints javascript code."><span class="description">Prints javascript code.</span><pre>script()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24basePath" title="$basePath :: URL to the %CKEditor installation directory (absolute or relative to document root)."><span class="description">URL to the %CKEditor installation directory (absolute or relative to document root).</span><pre>$basePath</pre></a></li>
+<li class="property public "><a href="#%24config" title="$config :: An array that holds the global %CKEditor configuration."><span class="description">An array that holds the global %CKEditor configuration.</span><pre>$config</pre></a></li>
+<li class="property public "><a href="#%24initialized" title="$initialized :: A boolean variable indicating whether CKEditor has been initialized."><span class="description">A boolean variable indicating whether CKEditor has been initialized.</span><pre>$initialized</pre></a></li>
+<li class="property public "><a href="#%24returnOutput" title="$returnOutput :: Boolean variable indicating whether created code should be printed out or returned by a function."><span class="description">Boolean variable indicating whether created code should be printed out or returned by a function.</span><pre>$returnOutput</pre></a></li>
+<li class="property public "><a href="#%24textareaAttributes" title="$textareaAttributes :: An array with textarea attributes."><span class="description">An array with textarea attributes.</span><pre>$textareaAttributes</pre></a></li>
+<li class="property public "><a href="#%24timestamp" title="$timestamp :: A string indicating the creation date of %CKEditor."><span class="description">A string indicating the creation date of %CKEditor.</span><pre>$timestamp</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24events" title="$events :: An array that holds event listeners."><span class="description">An array that holds event listeners.</span><pre>$events</pre></a></li>
+<li class="property private "><a href="#%24globalEvents" title="$globalEvents :: An array that holds global event listeners."><span class="description">An array that holds global event listeners.</span><pre>$globalEvents</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  "><a href="#timestamp" title="timestamp :: A constant string unique for each release of %CKEditor."><span class="description">A constant string unique for each release of %CKEditor.</span><pre>timestamp</pre></a></li>
+<li class="constant  "><a href="#version" title="version :: The version of %CKEditor."><span class="description">The version of %CKEditor.</span><pre>version</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCKEditor" id="\CKEditor"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CKEditor.html">CKEditor</a>
+</li>
+</ul>
+<div href="../classes/CKEditor.html" class="element class">
+<p class="short_description">\brief CKEditor class that can be used to create editor
+instances in PHP pages on server side.</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>see</th>
+<td>\global\http://ckeditor.com</td>
+</tr>
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;editor("editor1", "&lt;p&gt;Initial value.&lt;/p&gt;");</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="CKEditor" id="CKEditor"></a><div class="element clickable method public CKEditor" data-toggle="collapse" data-target=".CKEditor .collapse">
+<h2>Main Constructor.</h2>
+<pre>CKEditor($basePath) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>@param $basePath (string) URL to the %CKEditor installation directory (optional).</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$basePath</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="addEventHandler" id="addEventHandler"></a><div class="element clickable method public addEventHandler" data-toggle="collapse" data-target=".addEventHandler .collapse">
+<h2>Adds event listener.</h2>
+<pre>addEventHandler(\$event $event, \$javascriptCode $javascriptCode) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Events are fired by %CKEditor in various situations.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;addEventHandler('instanceReady', 'function (ev) {
+alert("Loaded: " + ev.editor.name);
+}');</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name.</p>
+</div>
+<div class="subelement argument">
+<h4>$javascriptCode</h4>
+<code>\$javascriptCode</code><p>(string) Javascript anonymous function or function name. Example usage:</p>
+</div>
+</div></div>
+</div>
+<a name="addGlobalEventHandler" id="addGlobalEventHandler"></a><div class="element clickable method public addGlobalEventHandler" data-toggle="collapse" data-target=".addGlobalEventHandler .collapse">
+<h2>Adds global event listener.</h2>
+<pre>addGlobalEventHandler(\$event $event, \$javascriptCode $javascriptCode) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;addGlobalEventHandler('dialogDefinition', 'function (ev) {
+alert("Loading dialog: " + ev.data.name);
+}');</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name.</p>
+</div>
+<div class="subelement argument">
+<h4>$javascriptCode</h4>
+<code>\$javascriptCode</code><p>(string) Javascript anonymous function or function name. Example usage:</p>
+</div>
+</div></div>
+</div>
+<a name="ckeditorPath" id="ckeditorPath"></a><div class="element clickable method public ckeditorPath" data-toggle="collapse" data-target=".ckeditorPath .collapse">
+<h2>Return path to ckeditor.js.</h2>
+<pre>ckeditorPath() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+<a name="clearEventHandlers" id="clearEventHandlers"></a><div class="element clickable method public clearEventHandlers" data-toggle="collapse" data-target=".clearEventHandlers .collapse">
+<h2>Clear registered event handlers.</h2>
+<pre>clearEventHandlers(\$event $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Note: this function will have no effect on already created editor instances.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name, if not set all event handlers will be removed (optional).</p>
+</div>
+</div></div>
+</div>
+<a name="clearGlobalEventHandlers" id="clearGlobalEventHandlers"></a><div class="element clickable method public clearGlobalEventHandlers" data-toggle="collapse" data-target=".clearGlobalEventHandlers .collapse">
+<h2>Clear registered global event handlers.</h2>
+<pre>clearGlobalEventHandlers(\$event $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Note: this function will have no effect if the event handler has been already printed/returned.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name, if not set all event handlers will be removed (optional).</p>
+</div>
+</div></div>
+</div>
+<a name="configSettings" id="configSettings"></a><div class="element clickable method public configSettings" data-toggle="collapse" data-target=".configSettings .collapse">
+<h2>Returns the configuration array (global and instance specific settings are merged into one array).</h2>
+<pre>configSettings(\$config $config, \$events $events) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>\private</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>\$config</code><p>(array) The specific configurations to apply to editor instance.</p>
+</div>
+<div class="subelement argument">
+<h4>$events</h4>
+<code>\$events</code><p>(array) Event listeners for editor instance.</p>
+</div>
+</div></div>
+</div>
+<a name="editor" id="editor"></a><div class="element clickable method public editor" data-toggle="collapse" data-target=".editor .collapse">
+<h2>Creates a %CKEditor instance.</h2>
+<pre>editor(\$name $name, \$value $value, \$config $config, \$events $events) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>In incompatible browsers %CKEditor will downgrade to plain HTML &lt;textarea&gt; element.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;editor("field1", "&lt;p&gt;Initial value.&lt;/p&gt;");</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td>Advanced example:</td>
+</tr>
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$config = array();
+$config['toolbar'] = array(
+array( 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike' ),
+array( 'Image', 'Link', 'Unlink', 'Anchor' )
+);
+$events['instanceReady'] = 'function (ev) {
+alert("Loaded: " + ev.editor.name);
+}';
+$CKEditor-&gt;editor("field1", "&lt;p&gt;Initial value.&lt;/p&gt;", $config, $events);</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>\$name</code><p>(string) Name of the %CKEditor instance (this will be also the "name" attribute of textarea element).</p>
+</div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>\$value</code><p>(string) Initial value (optional).</p>
+</div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>\$config</code><p>(array) The specific configurations to apply to this editor instance (optional).</p>
+</div>
+<div class="subelement argument">
+<h4>$events</h4>
+<code>\$events</code><p>(array) Event listeners for this editor instance (optional). Example usage:</p>
+</div>
+</div></div>
+</div>
+<a name="init" id="init"></a><div class="element clickable method public init" data-toggle="collapse" data-target=".init .collapse">
+<h2>Initializes CKEditor (executed only once).</h2>
+<pre>init() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+<a name="jsEncode" id="jsEncode"></a><div class="element clickable method public jsEncode" data-toggle="collapse" data-target=".jsEncode .collapse">
+<h2>This little function provides a basic JSON support.</h2>
+<pre>jsEncode(mixed $val) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>\private</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code>mixed</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="replace" id="replace"></a><div class="element clickable method public replace" data-toggle="collapse" data-target=".replace .collapse">
+<h2>Replaces a &amp;lt;textarea&amp;gt; with a %CKEditor instance.</h2>
+<pre>replace(\$id $id, \$config $config, \$events $events) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;replace("article");</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>\$id</code><p>(string) The id or name of textarea element.</p>
+</div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>\$config</code><p>(array) The specific configurations to apply to this editor instance (optional).</p>
+</div>
+<div class="subelement argument">
+<h4>$events</h4>
+<code>\$events</code><p>(array) Event listeners for this editor instance (optional). Example 1: adding %CKEditor to <textarea name="article"></textarea> element:</p>
+</div>
+</div></div>
+</div>
+<a name="replaceAll" id="replaceAll"></a><div class="element clickable method public replaceAll" data-toggle="collapse" data-target=".replaceAll .collapse">
+<h2>Replace all &amp;lt;textarea&amp;gt; elements available in the document with editor instances.</h2>
+<pre>replaceAll(\$className $className) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;replaceAll();</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td>Example 2: replace all &amp;lt;textarea class="myClassName"&amp;gt; elements in the page.</td>
+</tr>
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;replaceAll( 'myClassName' );</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$className</h4>
+<code>\$className</code><p>(string) If set, replace all textareas with class className in the page. Example 1: replace all <textarea> elements in the page.</p>
+</div>
+</div></div>
+</div>
+<a name="returnGlobalEvents" id="returnGlobalEvents"></a><div class="element clickable method public returnGlobalEvents" data-toggle="collapse" data-target=".returnGlobalEvents .collapse">
+<h2>Return global event handlers.</h2>
+<pre>returnGlobalEvents() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+<a name="script" id="script"></a><div class="element clickable method public script" data-toggle="collapse" data-target=".script .collapse">
+<h2>Prints javascript code.</h2>
+<pre>script(string $js) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>\private</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_events" id="$_events"> </a><div class="element clickable property public $_events" data-toggle="collapse" data-target=".$_events .collapse">
+<h2>An array that holds event listeners.</h2>
+<pre>$_events </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+<a name="%24_globalEvents" id="$_globalEvents"> </a><div class="element clickable property public $_globalEvents" data-toggle="collapse" data-target=".$_globalEvents .collapse">
+<h2>An array that holds global event listeners.</h2>
+<pre>$_globalEvents </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+<a name="%24_timestamp" id="$_timestamp"> </a><div class="element clickable property public $_timestamp" data-toggle="collapse" data-target=".$_timestamp .collapse">
+<h2>A constant string unique for each release of %CKEditor.</h2>
+<pre>$_timestamp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+<a name="%24basePath" id="$basePath"> </a><div class="element clickable property public $basePath" data-toggle="collapse" data-target=".$basePath .collapse">
+<h2>URL to the %CKEditor installation directory (absolute or relative to document root).</h2>
+<pre>$basePath </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If not set, CKEditor will try to guess it's path.</p>
+
+<p>Example usage:</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;basePath = '/ckeditor/';</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24config" id="$config"> </a><div class="element clickable property public $config" data-toggle="collapse" data-target=".$config .collapse">
+<h2>An array that holds the global %CKEditor configuration.</h2>
+<pre>$config </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>For the list of available options, see http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html</p>
+
+<p>Example usage:</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;config['height'] = 400;
+// Use @@ at the beggining of a string to ouput it without surrounding quotes.
+$CKEditor-&gt;config['width'] = '@@screen.width * 0.8';</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24initialized" id="$initialized"> </a><div class="element clickable property public $initialized" data-toggle="collapse" data-target=".$initialized .collapse">
+<h2>A boolean variable indicating whether CKEditor has been initialized.</h2>
+<pre>$initialized </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>Set it to true only if you have already included
+&lt;script&gt; tag loading ckeditor.js in your website.</p></p></div></div>
+</div>
+<a name="%24returnOutput" id="$returnOutput"> </a><div class="element clickable property public $returnOutput" data-toggle="collapse" data-target=".$returnOutput .collapse">
+<h2>Boolean variable indicating whether created code should be printed out or returned by a function.</h2>
+<pre>$returnOutput </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Example 1: get the code creating %CKEditor instance and print it on a page with the "echo" function.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;returnOutput = true;
+$code = $CKEditor-&gt;editor("editor1", "&lt;p&gt;Initial value.&lt;/p&gt;");
+echo "&lt;p&gt;Editor 1:&lt;/p&gt;";
+echo $code;</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24textareaAttributes" id="$textareaAttributes"> </a><div class="element clickable property public $textareaAttributes" data-toggle="collapse" data-target=".$textareaAttributes .collapse">
+<h2>An array with textarea attributes.</h2>
+<pre>$textareaAttributes </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>When %CKEditor is created with the editor() method, a HTML &lt;textarea&gt; element is created,
+it will be displayed to anyone with JavaScript disabled or with incompatible browser.</p></p></div></div>
+</div>
+<a name="%24timestamp" id="$timestamp"> </a><div class="element clickable property public $timestamp" data-toggle="collapse" data-target=".$timestamp .collapse">
+<h2>A string indicating the creation date of %CKEditor.</h2>
+<pre>$timestamp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>Do not change it unless you want to force browsers to not use previously cached version of %CKEditor.</p></p></div></div>
+</div>
+<a name="%24version" id="$version"> </a><div class="element clickable property public $version" data-toggle="collapse" data-target=".$version .collapse">
+<h2>The version of %CKEditor.</h2>
+<pre>$version </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>\private</p></p></div></div>
+</div>
+</div>
+</div>
+<a name="%5CCKEditor" id="\CKEditor"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CKEditor.html">CKEditor</a>
+</li>
+</ul>
+<div href="../classes/CKEditor.html" class="element class">
+<p class="short_description">\brief CKEditor class that can be used to create editor
+instances in PHP pages on server side.</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>see</th>
+<td>\global\http://ckeditor.com</td>
+</tr>
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;editor("editor1", "&lt;p&gt;Initial value.&lt;/p&gt;");</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Main Constructor.</h2>
+<pre>__construct($basePath) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>@param $basePath (string) URL to the %CKEditor installation directory (optional).</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$basePath</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="addEventHandler" id="addEventHandler"></a><div class="element clickable method public addEventHandler" data-toggle="collapse" data-target=".addEventHandler .collapse">
+<h2>Adds event listener.</h2>
+<pre>addEventHandler(\$event $event, \$javascriptCode $javascriptCode) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Events are fired by %CKEditor in various situations.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;addEventHandler('instanceReady', 'function (ev) {
+alert("Loaded: " + ev.editor.name);
+}');</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name.</p>
+</div>
+<div class="subelement argument">
+<h4>$javascriptCode</h4>
+<code>\$javascriptCode</code><p>(string) Javascript anonymous function or function name. Example usage:</p>
+</div>
+</div></div>
+</div>
+<a name="addGlobalEventHandler" id="addGlobalEventHandler"></a><div class="element clickable method public addGlobalEventHandler" data-toggle="collapse" data-target=".addGlobalEventHandler .collapse">
+<h2>Adds global event listener.</h2>
+<pre>addGlobalEventHandler(\$event $event, \$javascriptCode $javascriptCode) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;addGlobalEventHandler('dialogDefinition', 'function (ev) {
+alert("Loading dialog: " + ev.data.name);
+}');</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name.</p>
+</div>
+<div class="subelement argument">
+<h4>$javascriptCode</h4>
+<code>\$javascriptCode</code><p>(string) Javascript anonymous function or function name. Example usage:</p>
+</div>
+</div></div>
+</div>
+<a name="clearEventHandlers" id="clearEventHandlers"></a><div class="element clickable method public clearEventHandlers" data-toggle="collapse" data-target=".clearEventHandlers .collapse">
+<h2>Clear registered event handlers.</h2>
+<pre>clearEventHandlers(\$event $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Note: this function will have no effect on already created editor instances.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name, if not set all event handlers will be removed (optional).</p>
+</div>
+</div></div>
+</div>
+<a name="clearGlobalEventHandlers" id="clearGlobalEventHandlers"></a><div class="element clickable method public clearGlobalEventHandlers" data-toggle="collapse" data-target=".clearGlobalEventHandlers .collapse">
+<h2>Clear registered global event handlers.</h2>
+<pre>clearGlobalEventHandlers(\$event $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Note: this function will have no effect if the event handler has been already printed/returned.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>\$event</code><p>(string) Event name, if not set all event handlers will be removed (optional).</p>
+</div>
+</div></div>
+</div>
+<a name="editor" id="editor"></a><div class="element clickable method public editor" data-toggle="collapse" data-target=".editor .collapse">
+<h2>Creates a %CKEditor instance.</h2>
+<pre>editor(\$name $name, \$value $value, \$config $config, \$events $events) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>In incompatible browsers %CKEditor will downgrade to plain HTML &lt;textarea&gt; element.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;editor("field1", "&lt;p&gt;Initial value.&lt;/p&gt;");</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td>Advanced example:</td>
+</tr>
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$config = array();
+$config['toolbar'] = array(
+array( 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike' ),
+array( 'Image', 'Link', 'Unlink', 'Anchor' )
+);
+$events['instanceReady'] = 'function (ev) {
+alert("Loaded: " + ev.editor.name);
+}';
+$CKEditor-&gt;editor("field1", "&lt;p&gt;Initial value.&lt;/p&gt;", $config, $events);</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>\$name</code><p>(string) Name of the %CKEditor instance (this will be also the "name" attribute of textarea element).</p>
+</div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>\$value</code><p>(string) Initial value (optional).</p>
+</div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>\$config</code><p>(array) The specific configurations to apply to this editor instance (optional).</p>
+</div>
+<div class="subelement argument">
+<h4>$events</h4>
+<code>\$events</code><p>(array) Event listeners for this editor instance (optional). Example usage:</p>
+</div>
+</div></div>
+</div>
+<a name="replace" id="replace"></a><div class="element clickable method public replace" data-toggle="collapse" data-target=".replace .collapse">
+<h2>Replaces a &amp;lt;textarea&amp;gt; with a %CKEditor instance.</h2>
+<pre>replace(\$id $id, \$config $config, \$events $events) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;replace("article");</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>\$id</code><p>(string) The id or name of textarea element.</p>
+</div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>\$config</code><p>(array) The specific configurations to apply to this editor instance (optional).</p>
+</div>
+<div class="subelement argument">
+<h4>$events</h4>
+<code>\$events</code><p>(array) Event listeners for this editor instance (optional). Example 1: adding %CKEditor to <textarea name="article"></textarea> element:</p>
+</div>
+</div></div>
+</div>
+<a name="replaceAll" id="replaceAll"></a><div class="element clickable method public replaceAll" data-toggle="collapse" data-target=".replaceAll .collapse">
+<h2>Replace all &amp;lt;textarea&amp;gt; elements available in the document with editor instances.</h2>
+<pre>replaceAll(\$className $className) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;replaceAll();</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td>Example 2: replace all &amp;lt;textarea class="myClassName"&amp;gt; elements in the page.</td>
+</tr>
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;replaceAll( 'myClassName' );</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$className</h4>
+<code>\$className</code><p>(string) If set, replace all textareas with class className in the page. Example 1: replace all <textarea> elements in the page.</p>
+</div>
+</div></div>
+</div>
+<a name="ckeditorPath" id="ckeditorPath"></a><div class="element clickable method private ckeditorPath" data-toggle="collapse" data-target=".ckeditorPath .collapse">
+<h2>Return path to ckeditor.js.</h2>
+<pre>ckeditorPath() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="configSettings" id="configSettings"></a><div class="element clickable method private configSettings" data-toggle="collapse" data-target=".configSettings .collapse">
+<h2>Returns the configuration array (global and instance specific settings are merged into one array).</h2>
+<pre>configSettings(\$config $config, \$events $events) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>\$config</code><p>(array) The specific configurations to apply to editor instance.</p>
+</div>
+<div class="subelement argument">
+<h4>$events</h4>
+<code>\$events</code><p>(array) Event listeners for editor instance.</p>
+</div>
+</div></div>
+</div>
+<a name="init" id="init"></a><div class="element clickable method private init" data-toggle="collapse" data-target=".init .collapse">
+<h2>Initializes CKEditor (executed only once).</h2>
+<pre>init() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="jsEncode" id="jsEncode"></a><div class="element clickable method private jsEncode" data-toggle="collapse" data-target=".jsEncode .collapse">
+<h2>This little function provides a basic JSON support.</h2>
+<pre>jsEncode(mixed $val) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code>mixed</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="returnGlobalEvents" id="returnGlobalEvents"></a><div class="element clickable method private returnGlobalEvents" data-toggle="collapse" data-target=".returnGlobalEvents .collapse">
+<h2>Return global event handlers.</h2>
+<pre>returnGlobalEvents() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="script" id="script"></a><div class="element clickable method private script" data-toggle="collapse" data-target=".script .collapse">
+<h2>Prints javascript code.</h2>
+<pre>script(string $js) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24basePath" id="$basePath"> </a><div class="element clickable property public $basePath" data-toggle="collapse" data-target=".$basePath .collapse">
+<h2>URL to the %CKEditor installation directory (absolute or relative to document root).</h2>
+<pre>$basePath </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If not set, CKEditor will try to guess it's path.</p>
+
+<p>Example usage:</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;basePath = '/ckeditor/';</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24config" id="$config"> </a><div class="element clickable property public $config" data-toggle="collapse" data-target=".$config .collapse">
+<h2>An array that holds the global %CKEditor configuration.</h2>
+<pre>$config </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>For the list of available options, see http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html</p>
+
+<p>Example usage:</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor-&gt;config['height'] = 400;
+// Use @@ at the beggining of a string to ouput it without surrounding quotes.
+$CKEditor-&gt;config['width'] = '@@screen.width * 0.8';</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24initialized" id="$initialized"> </a><div class="element clickable property public $initialized" data-toggle="collapse" data-target=".$initialized .collapse">
+<h2>A boolean variable indicating whether CKEditor has been initialized.</h2>
+<pre>$initialized </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>Set it to true only if you have already included
+&lt;script&gt; tag loading ckeditor.js in your website.</p></p></div></div>
+</div>
+<a name="%24returnOutput" id="$returnOutput"> </a><div class="element clickable property public $returnOutput" data-toggle="collapse" data-target=".$returnOutput .collapse">
+<h2>Boolean variable indicating whether created code should be printed out or returned by a function.</h2>
+<pre>$returnOutput </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Example 1: get the code creating %CKEditor instance and print it on a page with the "echo" function.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>code</th>
+<td>$CKEditor = new CKEditor();
+$CKEditor-&gt;returnOutput = true;
+$code = $CKEditor-&gt;editor("editor1", "&lt;p&gt;Initial value.&lt;/p&gt;");
+echo "&lt;p&gt;Editor 1:&lt;/p&gt;";
+echo $code;</td>
+</tr>
+<tr>
+<th>endcode</th>
+<td></td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24textareaAttributes" id="$textareaAttributes"> </a><div class="element clickable property public $textareaAttributes" data-toggle="collapse" data-target=".$textareaAttributes .collapse">
+<h2>An array with textarea attributes.</h2>
+<pre>$textareaAttributes </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>When %CKEditor is created with the editor() method, a HTML &lt;textarea&gt; element is created,
+it will be displayed to anyone with JavaScript disabled or with incompatible browser.</p></p></div></div>
+</div>
+<a name="%24timestamp" id="$timestamp"> </a><div class="element clickable property public $timestamp" data-toggle="collapse" data-target=".$timestamp .collapse">
+<h2>A string indicating the creation date of %CKEditor.</h2>
+<pre>$timestamp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>Do not change it unless you want to force browsers to not use previously cached version of %CKEditor.</p></p></div></div>
+</div>
+<a name="%24events" id="$events"> </a><div class="element clickable property private $events" data-toggle="collapse" data-target=".$events .collapse">
+<h2>An array that holds event listeners.</h2>
+<pre>$events </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24globalEvents" id="$globalEvents"> </a><div class="element clickable property private $globalEvents" data-toggle="collapse" data-target=".$globalEvents .collapse">
+<h2>An array that holds global event listeners.</h2>
+<pre>$globalEvents </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a name="timestamp" id="timestamp"> </a><div class="element clickable constant  timestamp" data-toggle="collapse" data-target=".timestamp .collapse">
+<h2>A constant string unique for each release of %CKEditor.</h2>
+<pre>timestamp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="version" id="version"> </a><div class="element clickable constant  version" data-toggle="collapse" data-target=".version .collapse">
+<h2>The version of %CKEditor.</h2>
+<pre>version </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:23+02:00.<br></footer></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » CKFinder\CommandHandlers</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<a href="../packages/CKFinder.CommandHandlers.html" title="CommandHandlers"><i class="icon-folder-open"></i>CommandHandlers</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-class"></i> Classes</li>
+<li><a href="#CKFinder_Connector_CommandHandler_CommandHandlerBase" title="Base commands handler">CKFinder_Connector_CommandHandler_CommandHandlerBase</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_CopyFiles" title="Handle CopyFiles command">CKFinder_Connector_CommandHandler_CopyFiles</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_CreateFolder" title="Handle CreateFolder command">CKFinder_Connector_CommandHandler_CreateFolder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_DeleteFile" title="Handle DeleteFile command">CKFinder_Connector_CommandHandler_DeleteFile</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_DeleteFolder" title="Handle DeleteFolder command">CKFinder_Connector_CommandHandler_DeleteFolder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_DownloadFile" title="Handle DownloadFile command">CKFinder_Connector_CommandHandler_DownloadFile</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_FileUpload" title="Handle FileUpload command">CKFinder_Connector_CommandHandler_FileUpload</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_GetFiles" title="Handle GetFiles command">CKFinder_Connector_CommandHandler_GetFiles</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_GetFolders" title="Handle GetFolders command">CKFinder_Connector_CommandHandler_GetFolders</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_Init" title="Handle Init command">CKFinder_Connector_CommandHandler_Init</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_LoadCookies" title="Handle DeleteFile command">CKFinder_Connector_CommandHandler_LoadCookies</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_MoveFiles" title="Handle MoveFiles command">CKFinder_Connector_CommandHandler_MoveFiles</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_QuickUpload" title="Handle QuickUpload command">CKFinder_Connector_CommandHandler_QuickUpload</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_RenameFile" title="Handle RenameFile command">CKFinder_Connector_CommandHandler_RenameFile</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_RenameFolder" title="Handle RenameFolder command">CKFinder_Connector_CommandHandler_RenameFolder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_Thumbnail" title="Handle Thumbnail command (create thumbnail if doesn't exist)">CKFinder_Connector_CommandHandler_Thumbnail</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_XmlCommandHandlerBase" title="Base XML commands handler">CKFinder_Connector_CommandHandler_XmlCommandHandlerBase</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_CommandHandlerBase" title="Base commands handler">CKFinder_Connector_CommandHandler_CommandHandlerBase</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_CopyFiles" title="Handle CopyFiles command">CKFinder_Connector_CommandHandler_CopyFiles</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_CreateFolder" title="Handle CreateFolder command">CKFinder_Connector_CommandHandler_CreateFolder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_DeleteFile" title="Handle DeleteFile command">CKFinder_Connector_CommandHandler_DeleteFile</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_DeleteFolder" title="Handle DeleteFolder command">CKFinder_Connector_CommandHandler_DeleteFolder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_DownloadFile" title="Handle DownloadFile command">CKFinder_Connector_CommandHandler_DownloadFile</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_FileUpload" title="Handle FileUpload command">CKFinder_Connector_CommandHandler_FileUpload</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_GetFiles" title="Handle GetFiles command">CKFinder_Connector_CommandHandler_GetFiles</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_GetFolders" title="Handle GetFolders command">CKFinder_Connector_CommandHandler_GetFolders</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_Init" title="Handle Init command">CKFinder_Connector_CommandHandler_Init</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_LoadCookies" title="Handle DeleteFile command">CKFinder_Connector_CommandHandler_LoadCookies</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_MoveFiles" title="Handle MoveFiles command">CKFinder_Connector_CommandHandler_MoveFiles</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_QuickUpload" title="Handle QuickUpload command">CKFinder_Connector_CommandHandler_QuickUpload</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_RenameFile" title="Handle RenameFile command">CKFinder_Connector_CommandHandler_RenameFile</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_RenameFolder" title="Handle RenameFolder command">CKFinder_Connector_CommandHandler_RenameFolder</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_Thumbnail" title="Handle Thumbnail command (create thumbnail if doesn't exist)">CKFinder_Connector_CommandHandler_Thumbnail</a></li>
+<li><a href="#CKFinder_Connector_CommandHandler_XmlCommandHandlerBase" title="Base XML commands handler">CKFinder_Connector_CommandHandler_XmlCommandHandlerBase</a></li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../packages/CKFinder.html">CKFinder</a></li>
+<span class="divider">\</span><li class="active"><a href="../packages/CKFinder.CommandHandlers.html">CommandHandlers</a></li>
+</ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="CKFinder_Connector_CommandHandler_CommandHandlerBase" id="CKFinder_Connector_CommandHandler_CommandHandlerBase"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_CommandHandlerBase.html">
+<h1>CKFinder_Connector_CommandHandler_CommandHandlerBase<a href="../classes/CKFinder_Connector_CommandHandler_CommandHandlerBase.html">¶</a>
+</h1>
+<p class="short_description">Base commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_CommandHandlerBase.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_CommandHandlerBase" id="CKFinder_Connector_CommandHandler_CommandHandlerBase"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_CommandHandlerBase.html">
+<h1>CKFinder_Connector_CommandHandler_CommandHandlerBase<a href="../classes/CKFinder_Connector_CommandHandler_CommandHandlerBase.html">¶</a>
+</h1>
+<p class="short_description">Base commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_CommandHandlerBase.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_CopyFiles" id="CKFinder_Connector_CommandHandler_CopyFiles"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_CopyFiles.html">
+<h1>CKFinder_Connector_CommandHandler_CopyFiles<a href="../classes/CKFinder_Connector_CommandHandler_CopyFiles.html">¶</a>
+</h1>
+<p class="short_description">Handle CopyFiles command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_CopyFiles.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_CopyFiles" id="CKFinder_Connector_CommandHandler_CopyFiles"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_CopyFiles.html">
+<h1>CKFinder_Connector_CommandHandler_CopyFiles<a href="../classes/CKFinder_Connector_CommandHandler_CopyFiles.html">¶</a>
+</h1>
+<p class="short_description">Handle CopyFiles command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_CopyFiles.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_CreateFolder" id="CKFinder_Connector_CommandHandler_CreateFolder"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_CreateFolder.html">
+<h1>CKFinder_Connector_CommandHandler_CreateFolder<a href="../classes/CKFinder_Connector_CommandHandler_CreateFolder.html">¶</a>
+</h1>
+<p class="short_description">Handle CreateFolder command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_CreateFolder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_CreateFolder" id="CKFinder_Connector_CommandHandler_CreateFolder"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_CreateFolder.html">
+<h1>CKFinder_Connector_CommandHandler_CreateFolder<a href="../classes/CKFinder_Connector_CommandHandler_CreateFolder.html">¶</a>
+</h1>
+<p class="short_description">Handle CreateFolder command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_CreateFolder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_DeleteFile" id="CKFinder_Connector_CommandHandler_DeleteFile"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_DeleteFile.html">
+<h1>CKFinder_Connector_CommandHandler_DeleteFile<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFile.html">¶</a>
+</h1>
+<p class="short_description">Handle DeleteFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFile.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_DeleteFile" id="CKFinder_Connector_CommandHandler_DeleteFile"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_DeleteFile.html">
+<h1>CKFinder_Connector_CommandHandler_DeleteFile<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFile.html">¶</a>
+</h1>
+<p class="short_description">Handle DeleteFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFile.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_DeleteFolder" id="CKFinder_Connector_CommandHandler_DeleteFolder"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_DeleteFolder.html">
+<h1>CKFinder_Connector_CommandHandler_DeleteFolder<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFolder.html">¶</a>
+</h1>
+<p class="short_description">Handle DeleteFolder command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFolder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_DeleteFolder" id="CKFinder_Connector_CommandHandler_DeleteFolder"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_DeleteFolder.html">
+<h1>CKFinder_Connector_CommandHandler_DeleteFolder<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFolder.html">¶</a>
+</h1>
+<p class="short_description">Handle DeleteFolder command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_DeleteFolder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_DownloadFile" id="CKFinder_Connector_CommandHandler_DownloadFile"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_DownloadFile.html">
+<h1>CKFinder_Connector_CommandHandler_DownloadFile<a href="../classes/CKFinder_Connector_CommandHandler_DownloadFile.html">¶</a>
+</h1>
+<p class="short_description">Handle DownloadFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_DownloadFile.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_DownloadFile" id="CKFinder_Connector_CommandHandler_DownloadFile"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_DownloadFile.html">
+<h1>CKFinder_Connector_CommandHandler_DownloadFile<a href="../classes/CKFinder_Connector_CommandHandler_DownloadFile.html">¶</a>
+</h1>
+<p class="short_description">Handle DownloadFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_DownloadFile.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_FileUpload" id="CKFinder_Connector_CommandHandler_FileUpload"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_FileUpload.html">
+<h1>CKFinder_Connector_CommandHandler_FileUpload<a href="../classes/CKFinder_Connector_CommandHandler_FileUpload.html">¶</a>
+</h1>
+<p class="short_description">Handle FileUpload command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_FileUpload.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_FileUpload" id="CKFinder_Connector_CommandHandler_FileUpload"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_FileUpload.html">
+<h1>CKFinder_Connector_CommandHandler_FileUpload<a href="../classes/CKFinder_Connector_CommandHandler_FileUpload.html">¶</a>
+</h1>
+<p class="short_description">Handle FileUpload command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_FileUpload.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_GetFiles" id="CKFinder_Connector_CommandHandler_GetFiles"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_GetFiles.html">
+<h1>CKFinder_Connector_CommandHandler_GetFiles<a href="../classes/CKFinder_Connector_CommandHandler_GetFiles.html">¶</a>
+</h1>
+<p class="short_description">Handle GetFiles command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_GetFiles.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_GetFiles" id="CKFinder_Connector_CommandHandler_GetFiles"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_GetFiles.html">
+<h1>CKFinder_Connector_CommandHandler_GetFiles<a href="../classes/CKFinder_Connector_CommandHandler_GetFiles.html">¶</a>
+</h1>
+<p class="short_description">Handle GetFiles command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_GetFiles.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_GetFolders" id="CKFinder_Connector_CommandHandler_GetFolders"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_GetFolders.html">
+<h1>CKFinder_Connector_CommandHandler_GetFolders<a href="../classes/CKFinder_Connector_CommandHandler_GetFolders.html">¶</a>
+</h1>
+<p class="short_description">Handle GetFolders command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_GetFolders.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_GetFolders" id="CKFinder_Connector_CommandHandler_GetFolders"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_GetFolders.html">
+<h1>CKFinder_Connector_CommandHandler_GetFolders<a href="../classes/CKFinder_Connector_CommandHandler_GetFolders.html">¶</a>
+</h1>
+<p class="short_description">Handle GetFolders command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_GetFolders.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_Init" id="CKFinder_Connector_CommandHandler_Init"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_Init.html">
+<h1>CKFinder_Connector_CommandHandler_Init<a href="../classes/CKFinder_Connector_CommandHandler_Init.html">¶</a>
+</h1>
+<p class="short_description">Handle Init command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_Init.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_Init" id="CKFinder_Connector_CommandHandler_Init"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_Init.html">
+<h1>CKFinder_Connector_CommandHandler_Init<a href="../classes/CKFinder_Connector_CommandHandler_Init.html">¶</a>
+</h1>
+<p class="short_description">Handle Init command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_Init.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_LoadCookies" id="CKFinder_Connector_CommandHandler_LoadCookies"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_LoadCookies.html">
+<h1>CKFinder_Connector_CommandHandler_LoadCookies<a href="../classes/CKFinder_Connector_CommandHandler_LoadCookies.html">¶</a>
+</h1>
+<p class="short_description">Handle DeleteFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_LoadCookies.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_LoadCookies" id="CKFinder_Connector_CommandHandler_LoadCookies"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_LoadCookies.html">
+<h1>CKFinder_Connector_CommandHandler_LoadCookies<a href="../classes/CKFinder_Connector_CommandHandler_LoadCookies.html">¶</a>
+</h1>
+<p class="short_description">Handle DeleteFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_LoadCookies.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_MoveFiles" id="CKFinder_Connector_CommandHandler_MoveFiles"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_MoveFiles.html">
+<h1>CKFinder_Connector_CommandHandler_MoveFiles<a href="../classes/CKFinder_Connector_CommandHandler_MoveFiles.html">¶</a>
+</h1>
+<p class="short_description">Handle MoveFiles command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_MoveFiles.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_MoveFiles" id="CKFinder_Connector_CommandHandler_MoveFiles"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_MoveFiles.html">
+<h1>CKFinder_Connector_CommandHandler_MoveFiles<a href="../classes/CKFinder_Connector_CommandHandler_MoveFiles.html">¶</a>
+</h1>
+<p class="short_description">Handle MoveFiles command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_MoveFiles.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_QuickUpload" id="CKFinder_Connector_CommandHandler_QuickUpload"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_QuickUpload.html">
+<h1>CKFinder_Connector_CommandHandler_QuickUpload<a href="../classes/CKFinder_Connector_CommandHandler_QuickUpload.html">¶</a>
+</h1>
+<p class="short_description">Handle QuickUpload command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_QuickUpload.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_QuickUpload" id="CKFinder_Connector_CommandHandler_QuickUpload"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_QuickUpload.html">
+<h1>CKFinder_Connector_CommandHandler_QuickUpload<a href="../classes/CKFinder_Connector_CommandHandler_QuickUpload.html">¶</a>
+</h1>
+<p class="short_description">Handle QuickUpload command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_QuickUpload.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_RenameFile" id="CKFinder_Connector_CommandHandler_RenameFile"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_RenameFile.html">
+<h1>CKFinder_Connector_CommandHandler_RenameFile<a href="../classes/CKFinder_Connector_CommandHandler_RenameFile.html">¶</a>
+</h1>
+<p class="short_description">Handle RenameFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_RenameFile.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_RenameFile" id="CKFinder_Connector_CommandHandler_RenameFile"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_RenameFile.html">
+<h1>CKFinder_Connector_CommandHandler_RenameFile<a href="../classes/CKFinder_Connector_CommandHandler_RenameFile.html">¶</a>
+</h1>
+<p class="short_description">Handle RenameFile command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_RenameFile.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_RenameFolder" id="CKFinder_Connector_CommandHandler_RenameFolder"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_RenameFolder.html">
+<h1>CKFinder_Connector_CommandHandler_RenameFolder<a href="../classes/CKFinder_Connector_CommandHandler_RenameFolder.html">¶</a>
+</h1>
+<p class="short_description">Handle RenameFolder command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_RenameFolder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_RenameFolder" id="CKFinder_Connector_CommandHandler_RenameFolder"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_RenameFolder.html">
+<h1>CKFinder_Connector_CommandHandler_RenameFolder<a href="../classes/CKFinder_Connector_CommandHandler_RenameFolder.html">¶</a>
+</h1>
+<p class="short_description">Handle RenameFolder command</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_RenameFolder.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_Thumbnail" id="CKFinder_Connector_CommandHandler_Thumbnail"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_Thumbnail.html">
+<h1>CKFinder_Connector_CommandHandler_Thumbnail<a href="../classes/CKFinder_Connector_CommandHandler_Thumbnail.html">¶</a>
+</h1>
+<p class="short_description">Handle Thumbnail command (create thumbnail if doesn't exist)</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_Thumbnail.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_Thumbnail" id="CKFinder_Connector_CommandHandler_Thumbnail"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_Thumbnail.html">
+<h1>CKFinder_Connector_CommandHandler_Thumbnail<a href="../classes/CKFinder_Connector_CommandHandler_Thumbnail.html">¶</a>
+</h1>
+<p class="short_description">Handle Thumbnail command (create thumbnail if doesn't exist)</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_Thumbnail.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_XmlCommandHandlerBase" id="CKFinder_Connector_CommandHandler_XmlCommandHandlerBase"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_XmlCommandHandlerBase.html">
+<h1>CKFinder_Connector_CommandHandler_XmlCommandHandlerBase<a href="../classes/CKFinder_Connector_CommandHandler_XmlCommandHandlerBase.html">¶</a>
+</h1>
+<p class="short_description">Base XML commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_XmlCommandHandlerBase.html" class="more">« More »</a>
+</div>
+<a name="CKFinder_Connector_CommandHandler_XmlCommandHandlerBase" id="CKFinder_Connector_CommandHandler_XmlCommandHandlerBase"></a><div class="element ajax clickable class" href="../classes/CKFinder_Connector_CommandHandler_XmlCommandHandlerBase.html">
+<h1>CKFinder_Connector_CommandHandler_XmlCommandHandlerBase<a href="../classes/CKFinder_Connector_CommandHandler_XmlCommandHandlerBase.html">¶</a>
+</h1>
+<p class="short_description">Base XML commands handler</p>
+<div class="details collapse"></div>
+<a href="../classes/CKFinder_Connector_CommandHandler_XmlCommandHandlerBase.html" class="more">« More »</a>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>
