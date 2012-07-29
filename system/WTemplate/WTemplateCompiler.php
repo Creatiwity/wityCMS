@@ -9,34 +9,51 @@
  */
 
 class WTemplateCompiler {
+	private $openTags = array();
+	
 	/**
 	 * Compilation d'un élément bien précis
 	 */
 	public function compileTplCode($tpl_code, $data = array()) {
-		// Affichage d'une variable
+		// Variable display
 		if ($tpl_code[0] == '$') {
 			$output = $this->compile_var("name=".$tpl_code, $data);
 		}
-		// Fermeture d'une balise
+		// Closing tag
 		else if ($tpl_code[0] == '/') {
-			$handler = 'compile_'.trim($tpl_code, '/').'_close';
+			$tag = trim($tpl_code, '/');
+			
+			$handler = 'compile_'.$tag.'_close';
 			if (method_exists('WTemplateCompiler', $handler)) {
-				// Appel de la fonction
+				// Check last open tag
+				if (array_pop($this->openTags) != $tag) {
+					throw new Exception("WTemplateCompiler::compileTplCode(): mismatched ".$tag." opening tag.");
+				}
+				
+				// Call handler
 				$output = $this->$handler($data);
 			} else {
 				$output = '';
 			}
-		} else {
-			// Récupération du nom de balise : {"name" ...}
+		}
+		// Opening tag
+		else {
+			// Get begining tag name : {"name" ...}
 			preg_match('#^([a-zA-Z0-9_]+)#', $tpl_code, $matches);
-			$name = $matches[0];
-			$handler = 'compile_'.$name;
+			$tag = $matches[0];
+			$handler = 'compile_'.$tag;
 			
-			// On retire le name pour récupérer les arguments
-			$args = substr($tpl_code, strlen($name));
+			// Remove tag name to get following string
+			$args = substr($tpl_code, strlen($tag));
 			
 			if (method_exists('WTemplateCompiler', $handler)) {
-				// Appel de la fonction
+				// Check whether it is not an open only tag
+				if (method_exists('WTemplateCompiler', $handler.'_close')) {
+					// Add item in open tags list
+					$this->openTags[] = $tag;
+				}
+				
+				// Call handler
 				$output = $this->$handler($args, $data);
 			} else {
 				$output = '';
@@ -56,7 +73,7 @@ class WTemplateCompiler {
 	 * @return array
 	 */
 	public static function findCode($string, $asked_level) {
-		$vars = array();
+		$tags = array();
 		$level = 0;
 		$max_level = 0;
 		$tmp = "";
@@ -79,7 +96,7 @@ class WTemplateCompiler {
 						$max_level = $level;
 						
 						// Si on demande le niveau le plus bas, on nettoie ce qu'on a trouvé précédemment car c'était au-dessus
-						$vars = array();
+						$tags = array();
 						$tmp = "";
 					}
 					break;
@@ -92,7 +109,7 @@ class WTemplateCompiler {
 					
 					// On a atteint le fermeture de la première accolade, on compile la chaîne trouvée
 					if ($level == $asked_level || ($asked_level == -1 && $level == $max_level)) {
-						$vars[] = $tmp;
+						$tags[] = $tmp;
 						$tmp = "";
 					}
 					
@@ -109,10 +126,10 @@ class WTemplateCompiler {
 		
 		// Ajout du reste
 		if ($level == $asked_level && !empty($tmp)) {
-			$vars[] = $tmp;
+			$tags[] = $tmp;
 		}
 		
-		return $vars;
+		return $tags;
 	}
 	
 	/**
@@ -124,7 +141,7 @@ class WTemplateCompiler {
 		$vars = self::findCode($string, 1);
 		foreach ($vars as $v) {
 			if ($v[0] == '$') {
-				$string = str_replace('{'.$v.'}', WTemplateCompiler::getVar($v), $string);
+				$string = str_replace('{'.$v.'}', self::getVar($v), $string);
 			}
 		}
 		
@@ -182,9 +199,8 @@ class WTemplateCompiler {
 			
 			// Couche fonctions
 			if (isset($var_structure[1])) {
-				$functions = preg_split('#,\s*#', $var_structure[1]);
-				foreach ($functions as $f) {
-					$root = $f.'('.$root.')';
+				for ($i = 1; $i < sizeof($var_structure); $i++) {
+					$root = $var_structure[$i].'('.$root.')';
 				}
 			}
 			
@@ -246,7 +262,7 @@ class WTemplateCompiler {
 			$name = trim($attr['name'], '"');
 			return "<?php \$this->tpl_vars['count'] = 0;"
 				."if (isset(\$this->tpl_vars['".$name."_block']) && is_array(\$this->tpl_vars['".$name."_block'])):\n"
-				. "\tforeach (\$this->tpl_vars['".$name."_block'] as \$this->tpl_vars['".$name."']): ?>";
+				. "\tforeach (\$this->tpl_vars['".$name."_block'] as \$this->tpl_vars['".$name."']): ?>\n";
 		} else {
 			return '';
 		}
@@ -259,28 +275,24 @@ class WTemplateCompiler {
 	/* Syntaxe de foreach :
 	 * {foreach item="{$array}" as="{$var}"}
 	 */
-	public function compile_foreach($args) {
+	public function compile_for($args, array $data) {
 		$args = $this->parseVars($args);
-		$attr = $this->getAttributes($args);
+		//$attr = $this->getAttributes($args);
 		
 		if (isset($attr['item']) && isset($attr['as'])) {
-			return '<?php '.$attr['as'].'[\'count\'] = -1;'."\n"
-				.'foreach('.$attr['item'].' as '.$attr['as'].'[\'key\'] => '.$attr['as'].'[\'value\']):'."\n"
-				.$attr['as'].'[\'count\']++; ?>';
+			return "<?php ".$attr['as']."['count'] = -1;\n"
+				."foreach(".$attr['item']." as ".$attr['as']."['key'] => ".$attr['as']."['value']):\n"
+				.$attr['as']."[\'count\']++; ?>\n";
 		} else {
 			return '';
 		}
 	}
 	
-	public function compile_foreach_close(array $data) {
+	public function compile_for_close(array $data) {
 		return '<?php endforeach; ?>';
 	}
 	
 	public function compile_while($args, array $data) {
-		
-	}
-	
-	public function compile_for($args, array $data) {
 		
 	}
 }

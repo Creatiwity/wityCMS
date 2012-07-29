@@ -44,7 +44,7 @@ class WMain {
 			$controller->init($this);
 			$controller->launch();
 		} else {
-			WNote::info("error404", "L'application \"".$appName."\" n'existe pas.", 'display');
+			WNote::info(404, "L'application \"".$appName."\" n'existe pas.", 'display');
 		}
 	}
 	

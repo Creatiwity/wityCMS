@@ -3,7 +3,7 @@
 $route = array (
   'default' => 
   array (
-    0 => 'news',
+    0 => 'accueil',
     1 => 
     array (
     ),

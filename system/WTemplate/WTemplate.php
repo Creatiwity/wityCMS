@@ -132,7 +132,10 @@ class WTemplate {
 		$file->compile($this->compiler);
 		
 		ob_start();
+		
+		// Evaluation
 		eval('?>'.file_get_contents($file->getCompilationHref()));
+		
 		$result = ob_get_contents();
 		ob_end_clean();
 		

@@ -3,19 +3,18 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @author  Fofif
- * @version	$Id: WCore/WNote.php 0004 21-07-2012 Fofif $
- * @desc	Affichage de messages
+ * @version	$Id: WCore/WNote.php 0005 27-07-2012 Fofif $
  */
 
 class WNote {
-	// Les niveaux de note
+	// Notes levels
 	const ERROR   = 'error';
 	const INFO    = 'info';
 	const SUCCESS = 'success';
 	
 	/**
 	 * Crée une nouvelle note
+	 * 
 	 * @static
 	 * @param  string $level   Niveau de la note
 	 * @param  string $code    Intitulé de la note
@@ -71,6 +70,7 @@ class WNote {
 	
 	/**
 	 * Affichage de la note par un die
+	 * 
 	 * @param array $note
 	 */
 	public static function handle_die($note) {
@@ -79,6 +79,7 @@ class WNote {
 	
 	/**
 	 * Assignation de la note parsée dans le tpl
+	 * 
 	 * @param array $note
 	 */
 	public static function handle_assign($note) {
@@ -87,11 +88,10 @@ class WNote {
 	
 	/**
 	 * Affichage d'une page avec la note en tant que réponse HTML
+	 * 
 	 * @param array $note
 	 */
 	public static function handle_display($note) {
-		//self::handle_assign($note);
-		
 		// own view
 		$view = new WView();
 		$view->assign(array(
@@ -105,23 +105,33 @@ class WNote {
 		$view->render();
 	}
 	
+	/**
+	 * Get notes saved into session whose code property matches $code
+	 */
 	public static function get($code = '*') {
 		$result = array();
-		foreach ($_SESSION['notes'] as $key => $note) {
-			if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
-				$result[] = $note;
-				// remove the note
-				unset($_SESSION['notes'][$key]);
+		if (!empty($_SESSION['notes'])) {
+			foreach ($_SESSION['notes'] as $key => $note) {
+				if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
+					$result[] = $note;
+					// remove the note
+					unset($_SESSION['notes'][$key]);
+				}
 			}
 		}
 		return $result;
 	}
 	
+	/**
+	 * Counts the notes saved whose code property matches $code
+	 */
 	public static function count($code = '*') {
 		$count = 0;
-		foreach ($_SESSION['notes'] as $key => $note) {
-			if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
-				$count++;
+		if (!empty($_SESSION['notes'])) {
+			foreach ($_SESSION['notes'] as $key => $note) {
+				if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
+					$count++;
+				}
 			}
 		}
 		return $count;
