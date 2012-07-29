@@ -1,0 +1,2956 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » \upload</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#_mkdir" title="_mkdir :: Creates directory"><span class="description">Creates directory</span><pre>_mkdir()</pre></a></li>
+<li class="method public "><a href="#clean" title="clean :: Deletes the uploaded file from its temporary location"><span class="description">Deletes the uploaded file from its temporary location</span><pre>clean()</pre></a></li>
+<li class="method public "><a href="#gdversion" title="gdversion :: Returns the version of GD"><span class="description">Returns the version of GD</span><pre>gdversion()</pre></a></li>
+<li class="method public "><a href="#getcolors" title="getcolors :: Decodes colors"><span class="description">Decodes colors</span><pre>getcolors()</pre></a></li>
+<li class="method public "><a href="#imagebmp" title="imagebmp :: Saves a BMP image"><span class="description">Saves a BMP image</span><pre>imagebmp()</pre></a></li>
+<li class="method public "><a href="#imagecopymergealpha" title="imagecopymergealpha :: Merges two images"><span class="description">Merges two images</span><pre>imagecopymergealpha()</pre></a></li>
+<li class="method public "><a href="#imagecreatefrombmp" title="imagecreatefrombmp :: Opens a BMP image"><span class="description">Opens a BMP image</span><pre>imagecreatefrombmp()</pre></a></li>
+<li class="method public "><a href="#imagecreatenew" title="imagecreatenew :: Creates a container image"><span class="description">Creates a container image</span><pre>imagecreatenew()</pre></a></li>
+<li class="method public "><a href="#imagetransfer" title="imagetransfer :: Transfers an image from the container to the destination image"><span class="description">Transfers an image from the container to the destination image</span><pre>imagetransfer()</pre></a></li>
+<li class="method public "><a href="#init" title="init :: Init or re-init all the processing variables to their default values"><span class="description">Init or re-init all the processing variables to their default values</span><pre>init()</pre></a></li>
+<li class="method public "><a href="#process" title="process :: Actually uploads the file, and act on it according to the set processing class variables"><span class="description">Actually uploads the file, and act on it according to the set processing class variables</span><pre>process()</pre></a></li>
+<li class="method public "><a href="#rmkdir" title="rmkdir :: Creates directories recursively"><span class="description">Creates directories recursively</span><pre>rmkdir()</pre></a></li>
+<li class="method public "><a href="#translate" title="translate :: Translate error messages"><span class="description">Translate error messages</span><pre>translate()</pre></a></li>
+<li class="method public "><a href="#upload" title="upload :: Constructor."><span class="description">Constructor.</span><pre>upload()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24allowed" title="$allowed :: Allowed MIME types"><span class="description">Allowed MIME types</span><pre>$allowed</pre></a></li>
+<li class="property public "><a href="#%24dir_auto_chmod" title="$dir_auto_chmod :: Set this variable to true to allow automatic chmod of the destination
+directory if it is not writeable"><span class="description">Set this variable to true to allow automatic chmod of the destination
+directory if it is not writeable</span><pre>$dir_auto_chmod</pre></a></li>
+<li class="property public "><a href="#%24dir_auto_create" title="$dir_auto_create :: Set this variable to true to allow automatic creation of the destination
+directory if it is missing (works recursively)"><span class="description">Set this variable to true to allow automatic creation of the destination
+directory if it is missing (works recursively)</span><pre>$dir_auto_create</pre></a></li>
+<li class="property public "><a href="#%24dir_chmod" title="$dir_chmod :: Set this variable to the default chmod you want the class to use
+when creating directories, or attempting to write in a directory"><span class="description">Set this variable to the default chmod you want the class to use
+when creating directories, or attempting to write in a directory</span><pre>$dir_chmod</pre></a></li>
+<li class="property public "><a href="#%24error" title="$error :: Holds eventual error message in plain english"><span class="description">Holds eventual error message in plain english</span><pre>$error</pre></a></li>
+<li class="property public "><a href="#%24file_auto_rename" title="$file_auto_rename :: Set this variable to true to allow automatic renaming of the file
+if the file already exists"><span class="description">Set this variable to true to allow automatic renaming of the file
+if the file already exists</span><pre>$file_auto_rename</pre></a></li>
+<li class="property public "><a href="#%24file_dst_name" title="$file_dst_name :: Destination file name"><span class="description">Destination file name</span><pre>$file_dst_name</pre></a></li>
+<li class="property public "><a href="#%24file_dst_name_body" title="$file_dst_name_body :: Destination file name body (i.e."><span class="description">Destination file name body (i.e.</span><pre>$file_dst_name_body</pre></a></li>
+<li class="property public "><a href="#%24file_dst_name_ext" title="$file_dst_name_ext :: Destination file extension"><span class="description">Destination file extension</span><pre>$file_dst_name_ext</pre></a></li>
+<li class="property public "><a href="#%24file_dst_path" title="$file_dst_path :: Destination file name"><span class="description">Destination file name</span><pre>$file_dst_path</pre></a></li>
+<li class="property public "><a href="#%24file_dst_pathname" title="$file_dst_pathname :: Destination file name, including path"><span class="description">Destination file name, including path</span><pre>$file_dst_pathname</pre></a></li>
+<li class="property public "><a href="#%24file_is_image" title="$file_is_image :: Flag to determine if the source file is an image"><span class="description">Flag to determine if the source file is an image</span><pre>$file_is_image</pre></a></li>
+<li class="property public "><a href="#%24file_max_size" title="$file_max_size :: Set this variable to change the maximum size in bytes for an uploaded file"><span class="description">Set this variable to change the maximum size in bytes for an uploaded file</span><pre>$file_max_size</pre></a></li>
+<li class="property public "><a href="#%24file_name_body_add" title="$file_name_body_add :: Set this variable to append a string to the file name body"><span class="description">Set this variable to append a string to the file name body</span><pre>$file_name_body_add</pre></a></li>
+<li class="property public "><a href="#%24file_name_body_pre" title="$file_name_body_pre :: Set this variable to prepend a string to the file name body"><span class="description">Set this variable to prepend a string to the file name body</span><pre>$file_name_body_pre</pre></a></li>
+<li class="property public "><a href="#%24file_new_name_body" title="$file_new_name_body :: Set this variable to replace the name body (i.e."><span class="description">Set this variable to replace the name body (i.e.</span><pre>$file_new_name_body</pre></a></li>
+<li class="property public "><a href="#%24file_new_name_ext" title="$file_new_name_ext :: Set this variable to change the file extension"><span class="description">Set this variable to change the file extension</span><pre>$file_new_name_ext</pre></a></li>
+<li class="property public "><a href="#%24file_overwrite" title="$file_overwrite :: Set this variable tu true to allow overwriting of an existing file"><span class="description">Set this variable tu true to allow overwriting of an existing file</span><pre>$file_overwrite</pre></a></li>
+<li class="property public "><a href="#%24file_safe_name" title="$file_safe_name :: Set this variable to format the filename (spaces changed to _)"><span class="description">Set this variable to format the filename (spaces changed to _)</span><pre>$file_safe_name</pre></a></li>
+<li class="property public "><a href="#%24file_src_error" title="$file_src_error :: Holds eventual PHP error code from $_FILES"><span class="description">Holds eventual PHP error code from $_FILES</span><pre>$file_src_error</pre></a></li>
+<li class="property public "><a href="#%24file_src_mime" title="$file_src_mime :: Uploaded file MIME type"><span class="description">Uploaded file MIME type</span><pre>$file_src_mime</pre></a></li>
+<li class="property public "><a href="#%24file_src_name" title="$file_src_name :: Uploaded file name"><span class="description">Uploaded file name</span><pre>$file_src_name</pre></a></li>
+<li class="property public "><a href="#%24file_src_name_body" title="$file_src_name_body :: Uploaded file name body (i.e."><span class="description">Uploaded file name body (i.e.</span><pre>$file_src_name_body</pre></a></li>
+<li class="property public "><a href="#%24file_src_name_ext" title="$file_src_name_ext :: Uploaded file name extension"><span class="description">Uploaded file name extension</span><pre>$file_src_name_ext</pre></a></li>
+<li class="property public "><a href="#%24file_src_name_ext_" title="$file_src_name_ext_ :: Uploaded file name extension, original"><span class="description">Uploaded file name extension, original</span><pre>$file_src_name_ext_</pre></a></li>
+<li class="property public "><a href="#%24file_src_pathname" title="$file_src_pathname :: Uloaded file name, including server path"><span class="description">Uloaded file name, including server path</span><pre>$file_src_pathname</pre></a></li>
+<li class="property public "><a href="#%24file_src_size" title="$file_src_size :: Uploaded file size, in bytes"><span class="description">Uploaded file size, in bytes</span><pre>$file_src_size</pre></a></li>
+<li class="property public "><a href="#%24file_src_temp" title="$file_src_temp :: Uloaded file name temporary copy"><span class="description">Uloaded file name temporary copy</span><pre>$file_src_temp</pre></a></li>
+<li class="property public "><a href="#%24forbidden" title="$forbidden :: Forbidden MIME types"><span class="description">Forbidden MIME types</span><pre>$forbidden</pre></a></li>
+<li class="property public "><a href="#%24image_background_color" title="$image_background_color :: Background color, used to paint transparent areas with"><span class="description">Background color, used to paint transparent areas with</span><pre>$image_background_color</pre></a></li>
+<li class="property public "><a href="#%24image_bevel" title="$image_bevel :: Adds a bevel border on the image"><span class="description">Adds a bevel border on the image</span><pre>$image_bevel</pre></a></li>
+<li class="property public "><a href="#%24image_bevel_color1" title="$image_bevel_color1 :: Top and left bevel color"><span class="description">Top and left bevel color</span><pre>$image_bevel_color1</pre></a></li>
+<li class="property public "><a href="#%24image_bevel_color2" title="$image_bevel_color2 :: Right and bottom bevel color"><span class="description">Right and bottom bevel color</span><pre>$image_bevel_color2</pre></a></li>
+<li class="property public "><a href="#%24image_border" title="$image_border :: Adds a single-color border on the outer of the image"><span class="description">Adds a single-color border on the outer of the image</span><pre>$image_border</pre></a></li>
+<li class="property public "><a href="#%24image_border_color" title="$image_border_color :: Border color"><span class="description">Border color</span><pre>$image_border_color</pre></a></li>
+<li class="property public "><a href="#%24image_brightness" title="$image_brightness :: Corrects the image brightness"><span class="description">Corrects the image brightness</span><pre>$image_brightness</pre></a></li>
+<li class="property public "><a href="#%24image_contrast" title="$image_contrast :: Corrects the image contrast"><span class="description">Corrects the image contrast</span><pre>$image_contrast</pre></a></li>
+<li class="property public "><a href="#%24image_convert" title="$image_convert :: Set this variable to convert the file if it is an image"><span class="description">Set this variable to convert the file if it is an image</span><pre>$image_convert</pre></a></li>
+<li class="property public "><a href="#%24image_crop" title="$image_crop :: Crops an image"><span class="description">Crops an image</span><pre>$image_crop</pre></a></li>
+<li class="property public "><a href="#%24image_default_color" title="$image_default_color :: Default color for non alpha-transparent images"><span class="description">Default color for non alpha-transparent images</span><pre>$image_default_color</pre></a></li>
+<li class="property public "><a href="#%24image_dst_x" title="$image_dst_x :: Destination image width"><span class="description">Destination image width</span><pre>$image_dst_x</pre></a></li>
+<li class="property public "><a href="#%24image_dst_y" title="$image_dst_y :: Destination image height"><span class="description">Destination image height</span><pre>$image_dst_y</pre></a></li>
+<li class="property public "><a href="#%24image_flip" title="$image_flip :: Flips the image vertically or horizontally"><span class="description">Flips the image vertically or horizontally</span><pre>$image_flip</pre></a></li>
+<li class="property public "><a href="#%24image_frame" title="$image_frame :: Adds a multi-color frame on the outer of the image"><span class="description">Adds a multi-color frame on the outer of the image</span><pre>$image_frame</pre></a></li>
+<li class="property public "><a href="#%24image_frame_colors" title="$image_frame_colors :: Sets the colors used to draw a frame"><span class="description">Sets the colors used to draw a frame</span><pre>$image_frame_colors</pre></a></li>
+<li class="property public "><a href="#%24image_greyscale" title="$image_greyscale :: Turns the image into greyscale"><span class="description">Turns the image into greyscale</span><pre>$image_greyscale</pre></a></li>
+<li class="property public "><a href="#%24image_is_palette" title="$image_is_palette :: Flag set to true when the image is not true color"><span class="description">Flag set to true when the image is not true color</span><pre>$image_is_palette</pre></a></li>
+<li class="property public "><a href="#%24image_is_transparent" title="$image_is_transparent :: Flag set to true when the image is transparent"><span class="description">Flag set to true when the image is transparent</span><pre>$image_is_transparent</pre></a></li>
+<li class="property public "><a href="#%24image_max_height" title="$image_max_height :: Set this variable to set a maximum image height, above which the upload will be invalid"><span class="description">Set this variable to set a maximum image height, above which the upload will be invalid</span><pre>$image_max_height</pre></a></li>
+<li class="property public "><a href="#%24image_max_pixels" title="$image_max_pixels :: Set this variable to set a maximum number of pixels for an image, above which the upload will be invalid"><span class="description">Set this variable to set a maximum number of pixels for an image, above which the upload will be invalid</span><pre>$image_max_pixels</pre></a></li>
+<li class="property public "><a href="#%24image_max_ratio" title="$image_max_ratio :: Set this variable to set a maximum image aspect ratio, above which the upload will be invalid"><span class="description">Set this variable to set a maximum image aspect ratio, above which the upload will be invalid</span><pre>$image_max_ratio</pre></a></li>
+<li class="property public "><a href="#%24image_max_width" title="$image_max_width :: Set this variable to set a maximum image width, above which the upload will be invalid"><span class="description">Set this variable to set a maximum image width, above which the upload will be invalid</span><pre>$image_max_width</pre></a></li>
+<li class="property public "><a href="#%24image_min_height" title="$image_min_height :: Set this variable to set a minimum image height, below which the upload will be invalid"><span class="description">Set this variable to set a minimum image height, below which the upload will be invalid</span><pre>$image_min_height</pre></a></li>
+<li class="property public "><a href="#%24image_min_pixels" title="$image_min_pixels :: Set this variable to set a minimum number of pixels for an image, below which the upload will be invalid"><span class="description">Set this variable to set a minimum number of pixels for an image, below which the upload will be invalid</span><pre>$image_min_pixels</pre></a></li>
+<li class="property public "><a href="#%24image_min_ratio" title="$image_min_ratio :: Set this variable to set a minimum image aspect ratio, below which the upload will be invalid"><span class="description">Set this variable to set a minimum image aspect ratio, below which the upload will be invalid</span><pre>$image_min_ratio</pre></a></li>
+<li class="property public "><a href="#%24image_min_width" title="$image_min_width :: Set this variable to set a minimum image width, below which the upload will be invalid"><span class="description">Set this variable to set a minimum image width, below which the upload will be invalid</span><pre>$image_min_width</pre></a></li>
+<li class="property public "><a href="#%24image_negative" title="$image_negative :: Inverts the color of an image"><span class="description">Inverts the color of an image</span><pre>$image_negative</pre></a></li>
+<li class="property public "><a href="#%24image_overlay_color" title="$image_overlay_color :: Applies a colored overlay on the image"><span class="description">Applies a colored overlay on the image</span><pre>$image_overlay_color</pre></a></li>
+<li class="property public "><a href="#%24image_overlay_percent" title="$image_overlay_percent :: Sets the percentage for the colored overlay"><span class="description">Sets the percentage for the colored overlay</span><pre>$image_overlay_percent</pre></a></li>
+<li class="property public "><a href="#%24image_precrop" title="$image_precrop :: Crops an image, before an eventual resizing"><span class="description">Crops an image, before an eventual resizing</span><pre>$image_precrop</pre></a></li>
+<li class="property public "><a href="#%24image_ratio" title="$image_ratio :: Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}"><span class="description">Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}</span><pre>$image_ratio</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_crop" title="$image_ratio_crop :: Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}"><span class="description">Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}</span><pre>$image_ratio_crop</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_fill" title="$image_ratio_fill :: Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}"><span class="description">Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}</span><pre>$image_ratio_fill</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_no_zoom_in" title="$image_ratio_no_zoom_in :: Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+but only if original image is bigger"><span class="description">Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+but only if original image is bigger</span><pre>$image_ratio_no_zoom_in</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_no_zoom_out" title="$image_ratio_no_zoom_out :: Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+but only if original image is smaller"><span class="description">Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+but only if original image is smaller</span><pre>$image_ratio_no_zoom_out</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_pixels" title="$image_ratio_pixels :: Set this variable to a number of pixels so that {@link image_x} and {@link image_y} are the best match possible"><span class="description">Set this variable to a number of pixels so that {@link image_x} and {@link image_y} are the best match possible</span><pre>$image_ratio_pixels</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_x" title="$image_ratio_x :: Set this variable to calculate {@link image_x} automatically , using {@link image_y} and conserving ratio"><span class="description">Set this variable to calculate {@link image_x} automatically , using {@link image_y} and conserving ratio</span><pre>$image_ratio_x</pre></a></li>
+<li class="property public "><a href="#%24image_ratio_y" title="$image_ratio_y :: Set this variable to calculate {@link image_y} automatically , using {@link image_x} and conserving ratio"><span class="description">Set this variable to calculate {@link image_y} automatically , using {@link image_x} and conserving ratio</span><pre>$image_ratio_y</pre></a></li>
+<li class="property public "><a href="#%24image_reflection_color" title="$image_reflection_color :: Sets the color of the reflection background (deprecated)"><span class="description">Sets the color of the reflection background (deprecated)</span><pre>$image_reflection_color</pre></a></li>
+<li class="property public "><a href="#%24image_reflection_height" title="$image_reflection_height :: Sets the height of the reflection"><span class="description">Sets the height of the reflection</span><pre>$image_reflection_height</pre></a></li>
+<li class="property public "><a href="#%24image_reflection_opacity" title="$image_reflection_opacity :: Sets the initial opacity of the reflection"><span class="description">Sets the initial opacity of the reflection</span><pre>$image_reflection_opacity</pre></a></li>
+<li class="property public "><a href="#%24image_reflection_space" title="$image_reflection_space :: Sets the space between the source image and its relection"><span class="description">Sets the space between the source image and its relection</span><pre>$image_reflection_space</pre></a></li>
+<li class="property public "><a href="#%24image_resize" title="$image_resize :: Set this variable to true to resize the file if it is an image"><span class="description">Set this variable to true to resize the file if it is an image</span><pre>$image_resize</pre></a></li>
+<li class="property public "><a href="#%24image_rotate" title="$image_rotate :: Rotates the image by increments of 45 degrees"><span class="description">Rotates the image by increments of 45 degrees</span><pre>$image_rotate</pre></a></li>
+<li class="property public "><a href="#%24image_src_bits" title="$image_src_bits :: Source image color depth"><span class="description">Source image color depth</span><pre>$image_src_bits</pre></a></li>
+<li class="property public "><a href="#%24image_src_pixels" title="$image_src_pixels :: Number of pixels"><span class="description">Number of pixels</span><pre>$image_src_pixels</pre></a></li>
+<li class="property public "><a href="#%24image_src_type" title="$image_src_type :: Type of image (png, gif, jpg or bmp)"><span class="description">Type of image (png, gif, jpg or bmp)</span><pre>$image_src_type</pre></a></li>
+<li class="property public "><a href="#%24image_src_x" title="$image_src_x :: Source image width"><span class="description">Source image width</span><pre>$image_src_x</pre></a></li>
+<li class="property public "><a href="#%24image_src_y" title="$image_src_y :: Source image height"><span class="description">Source image height</span><pre>$image_src_y</pre></a></li>
+<li class="property public "><a href="#%24image_supported" title="$image_supported :: Supported image formats"><span class="description">Supported image formats</span><pre>$image_supported</pre></a></li>
+<li class="property public "><a href="#%24image_text" title="$image_text :: Adds a text label on the image"><span class="description">Adds a text label on the image</span><pre>$image_text</pre></a></li>
+<li class="property public "><a href="#%24image_text_alignment" title="$image_text_alignment :: Sets the text alignment"><span class="description">Sets the text alignment</span><pre>$image_text_alignment</pre></a></li>
+<li class="property public "><a href="#%24image_text_background" title="$image_text_background :: Sets the text background color for the text label"><span class="description">Sets the text background color for the text label</span><pre>$image_text_background</pre></a></li>
+<li class="property public "><a href="#%24image_text_background_percent" title="$image_text_background_percent :: Sets the text background visibility in the text label"><span class="description">Sets the text background visibility in the text label</span><pre>$image_text_background_percent</pre></a></li>
+<li class="property public "><a href="#%24image_text_color" title="$image_text_color :: Sets the text color for the text label"><span class="description">Sets the text color for the text label</span><pre>$image_text_color</pre></a></li>
+<li class="property public "><a href="#%24image_text_direction" title="$image_text_direction :: Sets the text direction for the text label"><span class="description">Sets the text direction for the text label</span><pre>$image_text_direction</pre></a></li>
+<li class="property public "><a href="#%24image_text_font" title="$image_text_font :: Sets the text font in the text label"><span class="description">Sets the text font in the text label</span><pre>$image_text_font</pre></a></li>
+<li class="property public "><a href="#%24image_text_line_spacing" title="$image_text_line_spacing :: Sets the text line spacing"><span class="description">Sets the text line spacing</span><pre>$image_text_line_spacing</pre></a></li>
+<li class="property public "><a href="#%24image_text_padding" title="$image_text_padding :: Sets the text label padding"><span class="description">Sets the text label padding</span><pre>$image_text_padding</pre></a></li>
+<li class="property public "><a href="#%24image_text_padding_x" title="$image_text_padding_x :: Sets the text label horizontal padding"><span class="description">Sets the text label horizontal padding</span><pre>$image_text_padding_x</pre></a></li>
+<li class="property public "><a href="#%24image_text_padding_y" title="$image_text_padding_y :: Sets the text label vertical padding"><span class="description">Sets the text label vertical padding</span><pre>$image_text_padding_y</pre></a></li>
+<li class="property public "><a href="#%24image_text_percent" title="$image_text_percent :: Sets the text visibility in the text label"><span class="description">Sets the text visibility in the text label</span><pre>$image_text_percent</pre></a></li>
+<li class="property public "><a href="#%24image_text_position" title="$image_text_position :: Sets the text label position within the image"><span class="description">Sets the text label position within the image</span><pre>$image_text_position</pre></a></li>
+<li class="property public "><a href="#%24image_text_x" title="$image_text_x :: Sets the text label absolute X position within the image"><span class="description">Sets the text label absolute X position within the image</span><pre>$image_text_x</pre></a></li>
+<li class="property public "><a href="#%24image_text_y" title="$image_text_y :: Sets the text label absolute Y position within the image"><span class="description">Sets the text label absolute Y position within the image</span><pre>$image_text_y</pre></a></li>
+<li class="property public "><a href="#%24image_threshold" title="$image_threshold :: Applies threshold filter"><span class="description">Applies threshold filter</span><pre>$image_threshold</pre></a></li>
+<li class="property public "><a href="#%24image_tint_color" title="$image_tint_color :: Applies a tint on the image"><span class="description">Applies a tint on the image</span><pre>$image_tint_color</pre></a></li>
+<li class="property public "><a href="#%24image_transparent_color" title="$image_transparent_color :: Transparent color in a palette"><span class="description">Transparent color in a palette</span><pre>$image_transparent_color</pre></a></li>
+<li class="property public "><a href="#%24image_unsharp" title="$image_unsharp :: Applies an unsharp mask, with alpha transparency support"><span class="description">Applies an unsharp mask, with alpha transparency support</span><pre>$image_unsharp</pre></a></li>
+<li class="property public "><a href="#%24image_unsharp_amount" title="$image_unsharp_amount :: Sets the unsharp mask amount"><span class="description">Sets the unsharp mask amount</span><pre>$image_unsharp_amount</pre></a></li>
+<li class="property public "><a href="#%24image_unsharp_radius" title="$image_unsharp_radius :: Sets the unsharp mask radius"><span class="description">Sets the unsharp mask radius</span><pre>$image_unsharp_radius</pre></a></li>
+<li class="property public "><a href="#%24image_unsharp_threshold" title="$image_unsharp_threshold :: Sets the unsharp mask threshold"><span class="description">Sets the unsharp mask threshold</span><pre>$image_unsharp_threshold</pre></a></li>
+<li class="property public "><a href="#%24image_watermark" title="$image_watermark :: Adds a watermark on the image"><span class="description">Adds a watermark on the image</span><pre>$image_watermark</pre></a></li>
+<li class="property public "><a href="#%24image_watermark_no_zoom_in" title="$image_watermark_no_zoom_in :: Prevents the watermark to be resized up if it is smaller than the image"><span class="description">Prevents the watermark to be resized up if it is smaller than the image</span><pre>$image_watermark_no_zoom_in</pre></a></li>
+<li class="property public "><a href="#%24image_watermark_no_zoom_out" title="$image_watermark_no_zoom_out :: Prevents the watermark to be resized down if it is bigger than the image"><span class="description">Prevents the watermark to be resized down if it is bigger than the image</span><pre>$image_watermark_no_zoom_out</pre></a></li>
+<li class="property public "><a href="#%24image_watermark_position" title="$image_watermark_position :: Sets the watermarkposition within the image"><span class="description">Sets the watermarkposition within the image</span><pre>$image_watermark_position</pre></a></li>
+<li class="property public "><a href="#%24image_watermark_x" title="$image_watermark_x :: Sets the watermark absolute X position within the image"><span class="description">Sets the watermark absolute X position within the image</span><pre>$image_watermark_x</pre></a></li>
+<li class="property public "><a href="#%24image_watermark_y" title="$image_watermark_y :: Sets the twatermark absolute Y position within the image"><span class="description">Sets the twatermark absolute Y position within the image</span><pre>$image_watermark_y</pre></a></li>
+<li class="property public "><a href="#%24image_x" title="$image_x :: Set this variable to the wanted (or maximum/minimum) width for the processed image, in pixels"><span class="description">Set this variable to the wanted (or maximum/minimum) width for the processed image, in pixels</span><pre>$image_x</pre></a></li>
+<li class="property public "><a href="#%24image_y" title="$image_y :: Set this variable to the wanted (or maximum/minimum) height for the processed image, in pixels"><span class="description">Set this variable to the wanted (or maximum/minimum) height for the processed image, in pixels</span><pre>$image_y</pre></a></li>
+<li class="property public "><a href="#%24jpeg_quality" title="$jpeg_quality :: Quality of JPEG created/converted destination image"><span class="description">Quality of JPEG created/converted destination image</span><pre>$jpeg_quality</pre></a></li>
+<li class="property public "><a href="#%24jpeg_size" title="$jpeg_size :: Determines the quality of the JPG image to fit a desired file size"><span class="description">Determines the quality of the JPG image to fit a desired file size</span><pre>$jpeg_size</pre></a></li>
+<li class="property public "><a href="#%24language" title="$language :: Language selected for the translations"><span class="description">Language selected for the translations</span><pre>$language</pre></a></li>
+<li class="property public "><a href="#%24log" title="$log :: Holds an HTML formatted log"><span class="description">Holds an HTML formatted log</span><pre>$log</pre></a></li>
+<li class="property public "><a href="#%24mime_check" title="$mime_check :: Set this variable to false if you don't want to check the MIME against the allowed list"><span class="description">Set this variable to false if you don't want to check the MIME against the allowed list</span><pre>$mime_check</pre></a></li>
+<li class="property public "><a href="#%24mime_file" title="$mime_file :: Set this variable to false in the init() function if you don't want to check the MIME
+with UNIX file() command"><span class="description">Set this variable to false in the init() function if you don't want to check the MIME
+with UNIX file() command</span><pre>$mime_file</pre></a></li>
+<li class="property public "><a href="#%24mime_fileinfo" title="$mime_fileinfo :: Set this variable to false in the init() function if you don't want to check the MIME
+with Fileinfo PECL extension."><span class="description">Set this variable to false in the init() function if you don't want to check the MIME
+with Fileinfo PECL extension.</span><pre>$mime_fileinfo</pre></a></li>
+<li class="property public "><a href="#%24mime_getimagesize" title="$mime_getimagesize :: Set this variable to false in the init() function if you don't want to check the MIME
+with getimagesize()"><span class="description">Set this variable to false in the init() function if you don't want to check the MIME
+with getimagesize()</span><pre>$mime_getimagesize</pre></a></li>
+<li class="property public "><a href="#%24mime_magic" title="$mime_magic :: Set this variable to false in the init() function if you don't want to check the MIME
+with the magic.mime file"><span class="description">Set this variable to false in the init() function if you don't want to check the MIME
+with the magic.mime file</span><pre>$mime_magic</pre></a></li>
+<li class="property public "><a href="#%24no_script" title="$no_script :: Set this variable to false if you don't want to turn dangerous scripts into simple text files"><span class="description">Set this variable to false if you don't want to turn dangerous scripts into simple text files</span><pre>$no_script</pre></a></li>
+<li class="property public "><a href="#%24no_upload_check" title="$no_upload_check :: Flag stopping PHP upload checks"><span class="description">Flag stopping PHP upload checks</span><pre>$no_upload_check</pre></a></li>
+<li class="property public "><a href="#%24preserve_transparency" title="$preserve_transparency :: Preserve transparency when resizing or converting an image (deprecated)"><span class="description">Preserve transparency when resizing or converting an image (deprecated)</span><pre>$preserve_transparency</pre></a></li>
+<li class="property public "><a href="#%24processed" title="$processed :: Flag set after calling a process"><span class="description">Flag set after calling a process</span><pre>$processed</pre></a></li>
+<li class="property public "><a href="#%24translation" title="$translation :: Array of translated error messages"><span class="description">Array of translated error messages</span><pre>$translation</pre></a></li>
+<li class="property public "><a href="#%24uploaded" title="$uploaded :: Flag set after instanciating the class"><span class="description">Flag set after instanciating the class</span><pre>$uploaded</pre></a></li>
+<li class="property public "><a href="#%24version" title="$version :: Class version"><span class="description">Class version</span><pre>$version</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cupload" id="\upload"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/upload.html">upload</a>
+</li>
+</ul>
+<div href="../classes/upload.html" class="element class">
+<p class="short_description">Class upload</p>
+<div class="details">
+<p class="long_description"><p><b>What does it do?</b></p>
+
+<p>It manages file uploads for you. In short, it manages the uploaded file,
+and allows you to do whatever you want with the file, especially if it
+is an image, and as many times as you want.</p>
+
+<p>It is the ideal class to quickly integrate file upload in your site.
+If the file is an image, you can convert, resize, crop it in many ways.
+You can also apply filters, add borders, text, watermarks, etc...
+That's all you need for a gallery script for instance. Supported formats
+are PNG, JPG, GIF and BMP.</p>
+
+<p>You can also use the class to work on local files, which is especially
+useful to use the image manipulation features. The class also supports
+Flash uploaders.</p>
+
+<p>The class works with PHP 4 and 5, and its error messages can
+be localized at will.</p>
+
+<p><b>How does it work?</b></p>
+
+<p>You instanciate the class with the $_FILES['my_field'] array
+where my_field is the field name from your upload form.
+The class will check if the original file has been uploaded
+to its temporary location (alternatively, you can instanciate
+the class with a local filename).</p>
+
+<p>You can then set a number of processing variables to act on the file.
+For instance, you can rename the file, and if it is an image,
+convert and resize it in many ways.
+You can also set what will the class do if the file already exists.</p>
+
+<p>Then you call the function <a href="process">process</a> to actually perform the actions
+according to the processing parameters you set above.
+It will create new instances of the original file,
+so the original file remains the same between each process.
+The file will be manipulated, and copied to the given location.
+The processing variables will be reset once it is done.</p>
+
+<p>You can repeat setting up a new set of processing variables,
+and calling <a href="process">process</a> again as many times as you want.
+When you have finished, you can call <a href="clean">clean</a> to delete
+the original uploaded file.</p>
+
+<p>If you don't set any processing parameters and call <a href="process">process</a>
+just after instanciating the class. The uploaded file will be simply
+copied to the given location without any alteration or checks.</p>
+
+<p>Don't forget to add <i>enctype="multipart/form-data"</i> in your form
+tag</p>
+
+<p><</p>
+
+<p>form> if you want your form to upload the file.</p>
+
+<p><b>How to use it?</b><br>
+Create a simple HTML file, with a form such as:</p>
+
+<pre>
+<form enctype="multipart/form-data" method="post" action="upload.php">
+  <input type="file" size="32" name="image_field" value="">
+  <input type="submit" name="Submit" value="upload">
+</form>
+</pre>
+
+<p>Create a file called upload.php:</p>
+
+<pre>
+ $handle = new upload($_FILES['image_field']);
+ if ($handle->uploaded) {
+     $handle->file_new_name_body   = 'image_resized';
+     $handle->image_resize         = true;
+     $handle->image_x              = 100;
+     $handle->image_ratio_y        = true;
+     $handle->process('/home/user/files/');
+     if ($handle->processed) {
+         echo 'image resized';
+         $handle->clean();
+     } else {
+         echo 'error : ' . $handle->error;
+     }
+ }
+</pre>
+
+<p><b>How to process local files?</b><br>
+Use the class as following, the rest being the same as above:</p>
+
+<pre>
+ $handle = new upload('/home/user/myfile.jpg');
+</pre>
+
+<p><b>How to set the language?</b><br>
+Instantiate the class with a second argument being the language code:</p>
+
+<pre>
+ $handle = new upload($_FILES['image_field'], 'fr_FR');
+ $handle = new upload('/home/user/myfile.jpg', 'fr_FR');
+</pre>
+
+<p><b>How to output the resulting file or picture directly to the browser?</b><br>
+Simply call <a href="process">process</a>() without an argument (or with null as first argument):</p>
+
+<pre>
+ $handle = new upload($_FILES['image_field']);
+ header('Content-type: ' . $handle->file_src_mime);
+ echo $handle->Process();
+ die();
+</pre>
+
+<p>Or if you want to force the download of the file:</p>
+
+<pre>
+ $handle = new upload($_FILES['image_field']);
+ header('Content-type: ' . $handle->file_src_mime);
+ header("Content-Disposition: attachment; filename=".rawurlencode($handle->file_src_name).";");
+ echo $handle->Process();
+ die();
+</pre>
+
+<p><b>Processing parameters</b> (reset after each process)</p>
+
+<ul>
+ <li><b><a href="file_new_name_body">file_new_name_body</a></b> replaces the name body (default: '')<br>
+ <pre>$handle->file_new_name_body = 'new name';</pre></li>
+ <li><b><a href="file_name_body_add">file_name_body_add</a></b> appends to the name body (default: '')<br>
+ <pre>$handle->file_name_body_add = '_uploaded';</pre></li>
+ <li><b><a href="file_name_body_pre">file_name_body_pre</a></b> prepends to the name body (default: '')<br>
+ <pre>$handle->file_name_body_pre = 'thumb_';</pre></li>
+ <li><b><a href="file_new_name_ext">file_new_name_ext</a></b> replaces the file extension (default: '')<br>
+ <pre>$handle->file_new_name_ext = 'txt';</pre></li>
+ <li><b><a href="file_safe_name">file_safe_name</a></b> formats the filename (spaces changed to _) (default: true)<br>
+ <pre>$handle->file_safe_name = true;</pre></li>
+ <li><b><a href="file_overwrite">file_overwrite</a></b> sets behaviour if file already exists (default: false)<br>
+ <pre>$handle->file_overwrite = true;</pre></li>
+ <li><b><a href="file_auto_rename">file_auto_rename</a></b> automatically renames file if it already exists (default: true)<br>
+ <pre>$handle->file_auto_rename = true;</pre></li>
+ <li><b><a href="dir_auto_create">dir_auto_create</a></b> automatically creates destination directory if missing (default: true)<br>
+ <pre>$handle->auto_create_dir = true;</pre></li>
+ <li><b><a href="dir_auto_chmod">dir_auto_chmod</a></b> automatically attempts to chmod the destination directory if not writeable (default: true)<br>
+ <pre>$handle->dir_auto_chmod = true;</pre></li>
+ <li><b><a href="dir_chmod">dir_chmod</a></b> chmod used when creating directory or if directory not writeable (default: 0777)<br>
+ <pre>$handle->dir_chmod = 0777;</pre></li>
+ <li><b><a href="file_max_size">file_max_size</a></b> sets maximum upload size (default: upload_max_filesize from php.ini)<br>
+ <pre>$handle->file_max_size = '1024'; // 1KB</pre></li>
+ <li><b><a href="mime_check">mime_check</a></b> sets if the class check the MIME against the <a href="allowed">allowed</a> list (default: true)<br>
+ <pre>$handle->mime_check = true;</pre></li>
+ <li><b><a href="no_script">no_script</a></b> sets if the class turns scripts into text files (default: true)<br>
+ <pre>$handle->no_script = false;</pre></li>
+ <li><b><a href="allowed">allowed</a></b> array of allowed mime-types. wildcard accepted, as in image/* (default: check <a href="Init">Init</a>)<br>
+ <pre>$handle->allowed = array('application/pdf','application/msword', 'image/*');</pre></li>
+ <li><b><a href="forbidden">forbidden</a></b> array of forbidden mime-types. wildcard accepted, as in image/*  (default: check <a href="Init">Init</a>)<br>
+ <pre>$handle->forbidden = array('application/*');</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_convert">image_convert</a></b> if set, image will be converted (possible values : ''|'png'|'jpeg'|'gif'|'bmp'; default: '')<br>
+ <pre>$handle->image_convert = 'jpg';</pre></li>
+ <li><b><a href="image_background_color">image_background_color</a></b> if set, will forcibly fill transparent areas with the color, in hexadecimal (default: null)<br>
+ <pre>$handle->image_background_color = '#FF00FF';</pre></li>
+ <li><b><a href="image_default_color">image_default_color</a></b> fallback color background color for non alpha-transparent output formats, such as JPEG or BMP, in hexadecimal (default: #FFFFFF)<br>
+ <pre>$handle->image_default_color = '#FF00FF';</pre></li>
+ <li><b><a href="jpeg_quality">jpeg_quality</a></b> sets the compression quality for JPEG images (default: 85)<br>
+ <pre>$handle->jpeg_quality = 50;</pre></li>
+ <li><b><a href="jpeg_size">jpeg_size</a></b> if set to a size in bytes, will approximate <a href="jpeg_quality">jpeg_quality</a> so the output image fits within the size (default: null)<br>
+ <pre>$handle->jpeg_size = 3072;</pre></li>
+</ul>
+
+<p>The following eight settings can be used to invalidate an upload if the file is an image (note that <i>open_basedir</i> restrictions prevent the use of these settings)</p>
+
+<ul>
+ <li><b><a href="image_max_width">image_max_width</a></b> if set to a dimension in pixels, the upload will be invalid if the image width is greater (default: null)<br>
+ <pre>$handle->image_max_width = 200;</pre></li>
+ <li><b><a href="image_max_height">image_max_height</a></b> if set to a dimension in pixels, the upload will be invalid if the image height is greater (default: null)<br>
+ <pre>$handle->image_max_height = 100;</pre></li>
+ <li><b><a href="image_max_pixels">image_max_pixels</a></b> if set to a number of pixels, the upload will be invalid if the image number of pixels is greater (default: null)<br>
+ <pre>$handle->image_max_pixels = 50000;</pre></li>
+ <li><b><a href="image_max_ratio">image_max_ratio</a></b> if set to a aspect ratio (width/height), the upload will be invalid if the image apect ratio is greater (default: null)<br>
+ <pre>$handle->image_max_ratio = 1.5;</pre></li>
+ <li><b><a href="image_min_width">image_min_width</a></b> if set to a dimension in pixels, the upload will be invalid if the image width is lower (default: null)<br>
+ <pre>$handle->image_min_width = 100;</pre></li>
+ <li><b><a href="image_min_height">image_min_height</a></b> if set to a dimension in pixels, the upload will be invalid if the image height is lower (default: null)<br>
+ <pre>$handle->image_min_height = 500;</pre></li>
+ <li><b><a href="image_min_pixels">image_min_pixels</a></b> if set to a number of pixels, the upload will be invalid if the image number of pixels is lower (default: null)<br>
+ <pre>$handle->image_min_pixels = 20000;</pre></li>
+ <li><b><a href="image_min_ratio">image_min_ratio</a></b> if set to a aspect ratio (width/height), the upload will be invalid if the image apect ratio is lower (default: null)<br>
+ <pre>$handle->image_min_ratio = 0.5;</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_resize">image_resize</a></b> determines is an image will be resized (default: false)<br>
+ <pre>$handle->image_resize = true;</pre></li>
+</ul>
+
+<p>The following variables are used only if <a href="image_resize">image_resize</a> == true</p>
+
+<ul>
+ <li><b><a href="image_x">image_x</a></b> destination image width (default: 150)<br>
+ <pre>$handle->image_x = 100;</pre></li>
+ <li><b><a href="image_y">image_y</a></b> destination image height (default: 150)<br>
+ <pre>$handle->image_y = 200;</pre></li>
+</ul>
+
+<p>Use either one of the following</p>
+
+<ul>
+ <li><b><a href="image_ratio">image_ratio</a></b> if true, resize image conserving the original sizes ratio, using <a href="image_x">image_x</a> AND <a href="image_y">image_y</a> as max sizes if true (default: false)<br>
+ <pre>$handle->image_ratio = true;</pre></li>
+ <li><b><a href="image_ratio_crop">image_ratio_crop</a></b> if true, resize image conserving the original sizes ratio, using <a href="image_x">image_x</a> AND <a href="image_y">image_y</a> as max sizes, and cropping excedent to fill the space. setting can also be a string, with one or more from 'TBLR', indicating which side of the image will be kept while cropping (default: false)<br>
+ <pre>$handle->image_ratio_crop = true;</pre></li>
+ <li><b><a href="image_ratio_fill">image_ratio_fill</a></b> if true, resize image conserving the original sizes ratio, using <a href="image_x">image_x</a> AND <a href="image_y">image_y</a> as max sizes, fitting the image in the space and coloring the remaining space. setting can also be a string, with one or more from 'TBLR', indicating which side of the space the image will be in (default: false)<br>
+ <pre>$handle->image_ratio_fill = true;</pre></li>
+ <li><b><a href="image_ratio_no_zoom_in">image_ratio_no_zoom_in</a></b> same as <a href="image_ratio">image_ratio</a>, but won't resize if the source image is smaller than <a href="image_x">image_x</a> x <a href="image_y">image_y</a> (default: false)<br>
+ <pre>$handle->image_ratio_no_zoom_in = true;</pre></li>
+ <li><b><a href="image_ratio_no_zoom_out">image_ratio_no_zoom_out</a></b> same as <a href="image_ratio">image_ratio</a>, but won't resize if the source image is bigger than <a href="image_x">image_x</a> x <a href="image_y">image_y</a> (default: false)<br>
+ <pre>$handle->image_ratio_no_zoom_out = true;</pre></li>
+ <li><b><a href="image_ratio_x">image_ratio_x</a></b> if true, resize image, calculating <a href="image_x">image_x</a> from <a href="image_y">image_y</a> and conserving the original sizes ratio (default: false)<br>
+ <pre>$handle->image_ratio_x = true;</pre></li>
+ <li><b><a href="image_ratio_y">image_ratio_y</a></b> if true, resize image, calculating <a href="image_y">image_y</a> from <a href="image_x">image_x</a> and conserving the original sizes ratio (default: false)<br>
+ <pre>$handle->image_ratio_y = true;</pre></li>
+ <li><b><a href="image_ratio_pixels">image_ratio_pixels</a></b> if set to a long integer, resize image, calculating <a href="image_y">image_y</a> and <a href="image_x">image_x</a> to match a the number of pixels (default: false)<br>
+ <pre>$handle->image_ratio_pixels = 25000;</pre></li>
+</ul>
+
+<p>The following image manipulations require GD2+</p>
+
+<ul>
+ <li><b><a href="image_brightness">image_brightness</a></b> if set, corrects the brightness. value between -127 and 127 (default: null)<br>
+ <pre>$handle->image_brightness = 40;</pre></li>
+ <li><b><a href="image_contrast">image_contrast</a></b> if set, corrects the contrast. value between -127 and 127 (default: null)<br>
+ <pre>$handle->image_contrast = 50;</pre></li>
+ <li><b><a href="image_tint_color">image_tint_color</a></b> if set, will tint the image with a color, value as hexadecimal #FFFFFF (default: null)<br>
+ <pre>$handle->image_tint_color = '#FF0000';</pre></li>
+ <li><b><a href="image_overlay_color">image_overlay_color</a></b> if set, will add a colored overlay, value as hexadecimal #FFFFFF (default: null)<br>
+ <pre>$handle->image_overlay_color = '#FF0000';</pre></li>
+ <li><b><a href="image_overlay_percent">image_overlay_percent</a></b> used when <a href="image_overlay_color">image_overlay_color</a> is set, determines the opacity (default: 50)<br>
+ <pre>$handle->image_overlay_percent = 20;</pre></li>
+ <li><b><a href="image_negative">image_negative</a></b> inverts the colors in the image (default: false)<br>
+ <pre>$handle->image_negative = true;</pre></li>
+ <li><b><a href="image_greyscale">image_greyscale</a></b> transforms an image into greyscale (default: false)<br>
+ <pre>$handle->image_greyscale = true;</pre></li>
+ <li><b><a href="image_threshold">image_threshold</a></b> applies a threshold filter. value between -127 and 127 (default: null)<br>
+ <pre>$handle->image_threshold = 20;</pre></li>
+ <li><b><a href="image_unsharp">image_unsharp</a></b> applies an unsharp mask, with alpha transparency support (default: false)<br>
+ <pre>$handle->image_unsharp = true;</pre></li>
+ <li><b><a href="image_unsharp_amount">image_unsharp_amount</a></b> unsharp mask amount, typically 50 - 200 (default: 80)<br>
+ <pre>$handle->image_unsharp_amount = 120;</pre></li>
+ <li><b><a href="image_unsharp_radius">image_unsharp_radius</a></b> unsharp mask radius, typically 0.5 - 1 (default: 0.5)<br>
+ <pre>$handle->image_unsharp_radius = 0.8;</pre></li>
+ <li><b><a href="image_unsharp_threshold">image_unsharp_threshold</a></b> unsharp mask threshold, typically 0 - 5 (default: 1)<br>
+ <pre>$handle->image_unsharp_threshold = 0;</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_text">image_text</a></b> creates a text label on the image, value is a string, with eventual replacement tokens (default: null)<br>
+ <pre>$handle->image_text = 'test';</pre></li>
+ <li><b><a href="image_text_direction">image_text_direction</a></b> text label direction, either 'h' horizontal or 'v' vertical (default: 'h')<br>
+ <pre>$handle->image_text_direction = 'v';</pre></li>
+ <li><b><a href="image_text_color">image_text_color</a></b> text color for the text label, in hexadecimal (default: #FFFFFF)<br>
+ <pre>$handle->image_text_color = '#FF0000';</pre></li>
+ <li><b><a href="image_text_percent">image_text_percent</a></b> text opacity on the text label, integer between 0 and 100 (default: 100)<br>
+ <pre>$handle->image_text_percent = 50;</pre></li>
+ <li><b><a href="image_text_background">image_text_background</a></b> text label background color, in hexadecimal (default: null)<br>
+ <pre>$handle->image_text_background = '#FFFFFF';</pre></li>
+ <li><b><a href="image_text_background_percent">image_text_background_percent</a></b> text label background opacity, integer between 0 and 100 (default: 100)<br>
+ <pre>$handle->image_text_background_percent = 50;</pre></li>
+ <li><b><a href="image_text_font">image_text_font</a></b> built-in font for the text label, from 1 to 5. 1 is the smallest (default: 5)<br>
+ <pre>$handle->image_text_font = 4;</pre></li>
+ <li><b><a href="image_text_x">image_text_x</a></b> absolute text label position, in pixels from the left border. can be negative (default: null)<br>
+ <pre>$handle->image_text_x = 5;</pre></li>
+ <li><b><a href="image_text_y">image_text_y</a></b> absolute text label position, in pixels from the top border. can be negative (default: null)<br>
+ <pre>$handle->image_text_y = 5;</pre></li>
+ <li><b><a href="image_text_position">image_text_position</a></b> text label position withing the image, a combination of one or two from 'TBLR': top, bottom, left, right (default: null)<br>
+ <pre>$handle->image_text_position = 'LR';</pre></li>
+ <li><b><a href="image_text_padding">image_text_padding</a></b> text label padding, in pixels. can be overridden by <a href="image_text_padding_x">image_text_padding_x</a> and <a href="image_text_padding_y">image_text_padding_y</a> (default: 0)<br>
+ <pre>$handle->image_text_padding = 5;</pre></li>
+ <li><b><a href="image_text_padding_x">image_text_padding_x</a></b> text label horizontal padding (default: null)<br>
+ <pre>$handle->image_text_padding_x = 2;</pre></li>
+ <li><b><a href="image_text_padding_y">image_text_padding_y</a></b> text label vertical padding (default: null)<br>
+ <pre>$handle->image_text_padding_y = 10;</pre></li>
+ <li><b><a href="image_text_alignment">image_text_alignment</a></b> text alignment when text has multiple lines, either 'L', 'C' or 'R' (default: 'C')<br>
+ <pre>$handle->image_text_alignment = 'R';</pre></li>
+ <li><b><a href="image_text_line_spacing">image_text_line_spacing</a></b> space between lines in pixels, when text has multiple lines (default: 0)<br>
+ <pre>$handle->image_text_line_spacing = 3;</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_flip">image_flip</a></b> flips image, wither 'h' horizontal or 'v' vertical (default: null)<br>
+ <pre>$handle->image_flip = 'h';</pre></li>
+ <li><b><a href="image_rotate">image_rotate</a></b> rotates image. possible values are 90, 180 and 270 (default: null)<br>
+ <pre>$handle->image_rotate = 90;</pre></li>
+ <li><b><a href="image_crop">image_crop</a></b> crops image. accepts 4, 2 or 1 values as 'T R B L' or 'TB LR' or 'TBLR'. dimension can be 20, or 20px or 20% (default: null)<br>
+ <pre>$handle->image_crop = array(50,40,30,20); OR '-20 20%'...</pre></li>
+ <li><b><a href="image_precrop">image_precrop</a></b> crops image, before an eventual resizing. accepts 4, 2 or 1 values as 'T R B L' or 'TB LR' or 'TBLR'. dimension can be 20, or 20px or 20% (default: null)<br>
+ <pre>$handle->image_precrop = array(50,40,30,20); OR '-20 20%'...</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_bevel">image_bevel</a></b> adds a bevel border to the image. value is thickness in pixels (default: null)<br>
+ <pre>$handle->image_bevel = 20;</pre></li>
+ <li><b><a href="image_bevel_color1">image_bevel_color1</a></b> top and left bevel color, in hexadecimal (default: #FFFFFF)<br>
+ <pre>$handle->image_bevel_color1 = '#FFFFFF';</pre></li>
+ <li><b><a href="image_bevel_color2">image_bevel_color2</a></b> bottom and right bevel color, in hexadecimal (default: #000000)<br>
+ <pre>$handle->image_bevel_color2 = '#000000';</pre></li>
+ <li><b><a href="image_border">image_border</a></b> adds a unicolor border to the image. accepts 4, 2 or 1 values as 'T R B L' or 'TB LR' or 'TBLR'. dimension can be 20, or 20px or 20% (default: null)<br>
+ <pre>$handle->image_border = '3px'; OR '-20 20%' OR array(3,2)...</pre></li>
+ <li><b><a href="image_border_color">image_border_color</a></b> border color, in hexadecimal (default: #FFFFFF)<br>
+ <pre>$handle->image_border_color = '#FFFFFF';</pre></li>
+ <li><b><a href="image_frame">image_frame</a></b> type of frame: 1=flat 2=crossed (default: null)<br>
+ <pre>$handle->image_frame = 2;</pre></li>
+ <li><b><a href="image_frame_colors">image_frame_colors</a></b> list of hex colors, in an array or a space separated string (default: '#FFFFFF #999999 #666666 #000000')<br>
+ <pre>$handle->image_frame_colors = array('#999999',  '#FF0000', '#666666', '#333333', '#000000');</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_watermark">image_watermark</a></b> adds a watermark on the image, value is a local filename. accepted files are GIF, JPG, BMP, PNG and PNG alpha (default: null)<br>
+ <pre>$handle->image_watermark = 'watermark.png';</pre></li>
+ <li><b><a href="image_watermark_x">image_watermark_x</a></b> absolute watermark position, in pixels from the left border. can be negative (default: null)<br>
+ <pre>$handle->image_watermark_x = 5;</pre></li>
+ <li><b><a href="image_watermark_y">image_watermark_y</a></b> absolute watermark position, in pixels from the top border. can be negative (default: null)<br>
+ <pre>$handle->image_watermark_y = 5;</pre></li>
+ <li><b><a href="image_watermark_position">image_watermark_position</a></b> watermark position withing the image, a combination of one or two from 'TBLR': top, bottom, left, right (default: null)<br>
+ <pre>$handle->image_watermark_position = 'LR';</pre></li>
+ <li><b><a href="image_watermark_no_zoom_in">image_watermark_no_zoom_in</a></b> prevents the watermark to be resized up if it is smaller than the image (default: true)<br>
+ <pre>$handle->image_watermark_no_zoom_in = false;</pre></li>
+ <li><b><a href="image_watermark_no_zoom_out">image_watermark_no_zoom_out</a></b> prevents the watermark to be resized down if it is bigger than the image (default: false)<br>
+ <pre>$handle->image_watermark_no_zoom_out = true;</pre></li>
+</ul>
+
+<ul>
+ <li><b><a href="image_reflection_height">image_reflection_height</a></b> if set, a reflection will be added. Format is either in pixels or percentage, such as 40, '40', '40px' or '40%' (default: null)<br>
+ <pre>$handle->image_reflection_height = '25%';</pre></li>
+ <li><b><a href="image_reflection_space">image_reflection_space</a></b> space in pixels between the source image and the reflection, can be negative (default: null)<br>
+ <pre>$handle->image_reflection_space = 3;</pre></li>
+ <li><b><a href="image_reflection_color">image_reflection_color</a></b> reflection background color, in hexadecimal. Now deprecated in favor of <a href="image_default_color">image_default_color</a> (default: #FFFFFF)<br>
+ <pre>$handle->image_default_color = '#000000';</pre></li>
+ <li><b><a href="image_reflection_opacity">image_reflection_opacity</a></b> opacity level at which the reflection starts, integer between 0 and 100 (default: 60)<br>
+ <pre>$handle->image_reflection_opacity = 60;</pre></li>
+</ul>
+
+<p><b>Values that can be read before calling <a href="process">process</a>()</b></p>
+
+<ul>
+ <li><b><a href="file_src_name">file_src_name</a></b> Source file name</li>
+ <li><b><a href="file_src_name_body">file_src_name_body</a></b> Source file name body</li>
+ <li><b><a href="file_src_name_ext">file_src_name_ext</a></b> Source file extension</li>
+ <li><b><a href="file_src_pathname">file_src_pathname</a></b> Source file complete path and name</li>
+ <li><b><a href="file_src_mime">file_src_mime</a></b> Source file mime type</li>
+ <li><b><a href="file_src_size">file_src_size</a></b> Source file size in bytes</li>
+ <li><b><a href="file_src_error">file_src_error</a></b> Upload error code</li>
+ <li><b><a href="file_is_image">file_is_image</a></b> Boolean flag, true if the file is a supported image type</li>
+</ul>
+
+<p>If the file is a supported image type (and <i>open_basedir</i> restrictions allow it)</p>
+
+<ul>
+ <li><b><a href="image_src_x">image_src_x</a></b> Source file width in pixels</li>
+ <li><b><a href="image_src_y">image_src_y</a></b> Source file height in pixels</li>
+ <li><b><a href="image_src_pixels">image_src_pixels</a></b> Source file number of pixels</li>
+ <li><b><a href="image_src_type">image_src_type</a></b> Source file type (png, jpg, gif or bmp)</li>
+ <li><b><a href="image_src_bits">image_src_bits</a></b> Source file color depth</li>
+</ul>
+
+<p><b>Values that can be read after calling <a href="process">process</a>()</b></p>
+
+<ul>
+ <li><b><a href="file_dst_path">file_dst_path</a></b> Destination file path</li>
+ <li><b><a href="file_dst_name_body">file_dst_name_body</a></b> Destination file name body</li>
+ <li><b><a href="file_dst_name_ext">file_dst_name_ext</a></b> Destination file extension</li>
+ <li><b><a href="file_dst_name">file_dst_name</a></b> Destination file name</li>
+ <li><b><a href="file_dst_pathname">file_dst_pathname</a></b> Destination file complete path and name</li>
+</ul>
+
+<p>If the file is a supported image type</p>
+
+<ul>
+ <li><b><a href="image_dst_x">image_dst_x</a></b> Destination file width</li>
+ <li><b><a href="image_dst_y">image_dst_y</a></b> Destination file height</li>
+ <li><b><a href="image_convert">image_convert</a></b> Destination file format</li>
+</ul>
+
+<p><b>Requirements</b></p>
+
+<p>Most of the image operations require GD. GD2 is greatly recommended</p>
+
+<p>The class is compatible with PHP 4.3+, and compatible with PHP5</p>
+
+<p><b>Changelog</b></p>
+
+<ul>
+ <li><b>v 0.30</b> 05/09/2010<br>
+  - implemented an unsharp mask, with alpha transparency support, activated if <a href="image_unsharp">image_unsharp</a> is true. added <a href="image_unsharp_amount">image_unsharp_amount</a>, <a href="image_unsharp_radius">image_unsharp_radius</a>, and <a href="image_unsharp_threshold">image_unsharp_threshold</a><br>
+  - added text/rtf MIME type, and no_script exception<br>
+  - corrected bug when <a href="no_script">no_script</a> is activated and several process() are called<br>
+  - better error handling for finfo<br>
+  - display upload_max_filesize information from php.ini in the log<br>
+  - automatic extension for extension-less images<br>
+  - fixed <a href="image_ratio_fill">image_ratio_fill</a> top and left filling<br>
+  - fixed alphablending issue when applying a transparent PNG watermark on a transparent PNG<br>
+  - added <a href="image_watermark_no_zoom_in">image_watermark_no_zoom_in</a> and <a href="image_watermark_no_zoom_out">image_watermark_no_zoom_out</a> to allow the watermark to be resized down (or up) to fit in the image. By default, the watermark may be resized down, but not up.</li>
+ <li><b>v 0.29</b> 03/02/2010<br>
+  - added protection against malicious images<br>
+  - added zip and torrent MIME type<br>
+  - replaced split() with explode()<br>
+  - initialise image_dst_x/y with image_src_x/y<br>
+  - removed <a href="mime_fileinfo">mime_fileinfo</a>, <a href="mime_file">mime_file</a>, <a href="mime_magic">mime_magic</a> and <a href="mime_getimagesize">mime_getimagesize</a> from the docs since they are used before <a href="process">process</a><br>
+  - added more extensions and MIME types<br>
+  - improved MIME type validation<br>
+  - improved logging</li>
+ <li><b>v 0.28</b> 10/08/2009<br>
+  - replaced ereg functions to be compatible with PHP 5.3<br>
+  - added flv MIME type<br>
+  - improved MIME type detection<br>
+  - added <a href="file_name_body_pre">file_name_body_pre</a> to prepend a string to the file name<br>
+  - added <a href="mime_fileinfo">mime_fileinfo</a>, <a href="mime_file">mime_file</a>, <a href="mime_magic">mime_magic</a> and <a href="mime_getimagesize">mime_getimagesize</a> so that it is possible to deactivate some MIME type checking method<br>
+  - use exec() rather than shell_exec(), to play better with safe mode <br>
+  - added some error messages<br>
+  - fix bug when checking on conditions, <a href="processed">processed</a> wasn't propagated properly</li>
+ <li><b>v 0.27</b> 14/05/2009<br>
+  - look for the language files directory from __FILE__<br>
+  - deactivate <a href="file_auto_rename">file_auto_rename</a> if <a href="file_overwrite">file_overwrite</a> is set<br>
+  - improved transparency replacement for true color images<br>
+  - fixed calls to newer version of UNIX file utility<br>
+  - fixed error when using PECL Fileinfo extension in SAFE MODE, and when using the finfo class<br>
+  - added <a href="image_precrop">image_precrop</a> to crop the image before an eventual resizing</li>
+ <li><b>v 0.26</b> 13/11/2008<br>
+  - rewrote conversion from palette to true color to handle transparency better<br>
+  - fixed imagecopymergealpha() when the overlayed image is of wrong dimensions<br>
+  - fixed imagecreatenew() when the image to create have less than 1 pixels width or height<br>
+  - rewrote MIME type detection to be more secure and not rely on browser information; now using Fileinfo PECL extension, UNIX file() command, MIME magic, and getimagesize(), in that order<br>
+  - added support for Flash uploaders<br>
+  - some bug fixing and error handling</li>
+ <li><b>v 0.25</b> 17/11/2007<br>
+  - added translation files and mechanism to instantiate the class with a language different from English<br>
+  - added <a href="forbidden">forbidden</a> to set an array of forbidden MIME types<br>
+  - implemented support for simple wildcards in <a href="allowed">allowed</a> and <a href="forbidden">forbidden</a>, such as image/*<br>
+  - preset the file extension to the desired conversion format when converting an image<br>
+  - added read and write support for BMP images<br>
+  - added a flag <a href="file_is_image">file_is_image</a> to determine if the file is a supported image type<br>
+  - the class now provides some information about the image, before calling <a href="process">process</a>(). Available are <a href="image_src_x">image_src_x</a>, <a href="image_src_y">image_src_y</a> and the newly introduced <a href="image_src_bits">image_src_bits</a>, <a href="image_src_pixels">image_src_pixels</a> and <a href="image_src_type">image_src_type</a>. Note that this will not work if <i>open_basedir</i> restrictions are in place<br>
+  - improved logging; now provides useful system information<br>
+  - added some more pre-processing checks for files that are images: <a href="image_max_width">image_max_width</a>, <a href="image_max_height">image_max_height</a>, <a href="image_max_pixels">image_max_pixels</a>, <a href="image_max_ratio">image_max_ratio</a>, <a href="image_min_width">image_min_width</a>, <a href="image_min_height">image_min_height</a>, <a href="image_min_pixels">image_min_pixels</a> and <a href="image_min_ratio">image_min_ratio</a><br>
+  - added <a href="image_ratio_pixels">image_ratio_pixels</a> to resize an image to a number of pixels, keeping aspect ratio<br>
+  - added <a href="image_is_palette">image_is_palette</a> and <a href="image_is_transparent">image_is_transparent</a> and <a href="image_transparent_color">image_transparent_color</a> for GIF images<br>
+  - added <a href="image_default_color">image_default_color</a> to define a fallback color for non alpha-transparent output formats, such as JPEG or BMP<br>
+  - changed <a href="image_background_color">image_background_color</a>, which now forces transparent areas to be painted<br>
+  - improved reflections and color overlays so that it works with alpha transparent images<br>
+  - <a href="image_reflection_color">image_reflection_color</a> is now deprecated in favour of <a href="image_default_color">image_default_color</a><br />
+  - transparent PNGs are now processed in true color, and fully preserving the alpha channel when doing merges<br>
+  - transparent GIFs are now automatically detected. <a href="preserve_transparency">preserve_transparency</a> is deprecated<br>
+  - transparent true color images can be saved as GIF while retaining transparency, semi transparent areas being merged with <a href="image_default_color">image_default_color</a><br>
+  - transparent true color images can be saved as JPG/BMP with the semi transparent areas being merged with <a href="image_default_color">image_default_color</a><br>
+  - fixed conversion of images to true color<br>
+  - the class can now output the uploaded files content as the return value of process() if the function is called with an empty or null argumenti, or no argument</li>
+ <li><b>v 0.24</b> 25/05/2007<br>
+  - added <a href="image_background_color">image_background_color</a>, to set the default background color of an image<br>
+  - added possibility of using replacement tokens in text labels<br>
+  - changed default JPEG quality to 85<br>
+  - fixed a small bug when using greyscale filter and associated filters<br>
+  - added <a href="image_ratio_fill">image_ratio_fill</a> in order to fit an image within some dimensions and color the remaining space. Very similar to <a href="image_ratio_crop">image_ratio_crop</a><br>
+  - improved the recursive creation of directories<br>
+  - the class now converts palette based images to true colors before doing graphic manipulations</li>
+ <li><b>v 0.23</b> 23/12/2006<br>
+  - fixed a bug when processing more than once the same uploaded file. If there is an open_basedir restriction, the class now creates a temporary file for the first call to process(). This file will be used for subsequent processes, and will be deleted upon calling clean()</li>
+ <li><b>v 0.22</b> 16/12/2006<br>
+  - added automatic creation of a temporary file if the upload directory is not within open_basedir<br>
+  - fixed a bug which was preventing to work on a local file by overwriting it with its processed copy<br>
+  - added MIME types video/x-ms-wmv and image/x-png and fixed PNG support for IE weird MIME types<br>
+  - modified <a href="image_ratio_crop">image_ratio_crop</a> so it can accept one or more from string 'TBLR', determining which side of the image is kept while cropping<br>
+  - added support for multiple lines in the text, using "\n" as a line break<br>
+  - added <a href="image_text_line_spacing">image_text_line_spacing</a> which allow to set the space between several lines of text<br>
+  - added <a href="image_text_alignment">image_text_alignment</a> which allow to set the alignment when text has several lines<br>
+  - <a href="image_text_font">image_text_font</a> can now be set to the path of a GDF font to load external fonts<br>
+  - added <a href="image_reflection_height">image_reflection_height</a> to create a reflection of the source image, which height is in pixels or percentage<br>
+  - added <a href="image_reflection_space">image_reflection_space</a> to set the space in pixels between the source image and the reflection<br>
+  - added <a href="image_reflection_color">image_reflection_color</a> to set the reflection background color<br>
+  - added <a href="image_reflection_opacity">image_reflection_opacity</a> to set the initial level of opacity of the reflection</li>
+ <li><b>v 0.21</b> 30/09/2006<br>
+  - added <a href="image_ratio_crop">image_ratio_crop</a> which resizes within <a href="image_x">image_x</a> and <a href="image_y">image_y</a>, keeping ratio, but filling the space by cropping excedent of image<br>
+  - added <a href="mime_check">mime_check</a>, which default is true, to set checks against <a href="allowed">allowed</a> MIME list<br>
+  - if MIME is empty, the class now triggers an error<br>
+  - color #000000 is OK for <a href="image_text_color">image_text_color</a>, and related text transparency bug fixed<br>
+  - <a href="gd_version">gd_version</a>() now uses gd_info(), or else phpinfo()<br>
+  - fixed path issue when the destination path has no trailing slash on Windows systems <br>
+  - removed inline functions to be fully PHP5 compatible </li>
+ <li><b>v 0.20</b> 11/08/2006<br>
+  - added some more error checking and messages (GD presence, permissions...)<br>
+  - fix when uploading files without extension<br>
+  - changed values for <a href="image_brightness">image_brightness</a> and <a href="image_contrast">image_contrast</a> to be between -127 and 127<br>
+  - added <a href="dir_auto_create">dir_auto_create</a> to automatically and recursively create destination directory if missing.<br>
+  - added <a href="dir_auto_chmod">dir_auto_chmod</a> to automatically chmod the destination directory if not writeable.<br>
+  - added <a href="dir_chmod">dir_chmod</a> to set the default chmod to use.<br>
+  - added <a href="image_crop">image_crop</a> to crop images<br>
+  - added <a href="image_negative">image_negative</a> to invert the colors on the image<br>
+  - added <a href="image_greyscale">image_greyscale</a> to turn the image into greyscale<br>
+  - added <a href="image_threshold">image_threshold</a> to apply a threshold filter on the image<br>
+  - added <a href="image_bevel">image_bevel</a>, <a href="image_bevel_color1">image_bevel_color1</a> and <a href="image_bevel_color2">image_bevel_color2</a> to add a bevel border<br>
+  - added <a href="image_border">image_border</a> and <a href="image_border_color">image_border_color</a> to add a single color border<br>
+  - added <a href="image_frame">image_frame</a> and <a href="image_frame_colors">image_frame_colors</a> to add a multicolored frame</li>
+ <li><b>v 0.19</b> 29/03/2006<br>
+  - class is now compatible i18n (thanks Sylwester).<br>
+  - the class can mow manipulate local files, not only uploaded files (instanciate the class with a local filename).<br>
+  - <a href="file_safe_name">file_safe_name</a> has been improved a bit.<br>
+  - added <a href="image_brightness">image_brightness</a>, <a href="image_contrast">image_contrast</a>, <a href="image_tint_color">image_tint_color</a>, <a href="image_overlay_color">image_overlay_color</a> and <a href="image_overlay_percent">image_overlay_percent</a> to do color manipulation on the images.<br>
+  - added <a href="image_text">image_text</a> and all derivated settings to add a text label on the image.<br>
+  - added <a href="image_watermark">image_watermark</a> and all derivated settings to add a watermark image on the image.<br>
+  - added <a href="image_flip">image_flip</a> and <a href="image_rotate">image_rotate</a> for more image manipulations<br>
+  - added <a href="jpeg_size">jpeg_size</a> to calculate the JPG compression quality in order to fit within one filesize.</li>
+ <li><b>v 0.18</b> 02/02/2006<br>
+  - added <a href="no_script">no_script</a> to turn dangerous scripts into text files.<br>
+  - added <a href="mime_magic_check">mime_magic_check</a> to set the class to use mime_magic.<br>
+  - added <a href="preserve_transparency">preserve_transparency</a> *experimental*. Thanks Gregor.<br>
+  - fixed size and mime checking, wasn't working :/ Thanks Willem.<br>
+  - fixed memory leak when resizing images.<br>
+  - when resizing, it is not necessary anymore to set <a href="image_convert">image_convert</a>.<br>
+  - il is now possible to simply convert an image, with no resizing.<br>
+  - sets the default <a href="file_max_size">file_max_size</a> to upload_max_filesize from php.ini. Thanks Edward</li>
+ <li><b>v 0.17</b> 28/05/2005<br>
+  - the class can be used with any version of GD.<br>
+  - added security check on the file with a list of mime-types.<br>
+  - changed the license to GPL v2 only</li>
+ <li><b>v 0.16</b> 19/05/2005<br>
+  - added <a href="file_auto_rename">file_auto_rename</a> automatic file renaming if the same filename already exists.<br>
+  - added <a href="file_safe_name">file_safe_name</a> safe formatting of the filename (spaces to _underscores so far).<br>
+  - added some more error reporting to avoid crash if GD is not present</li>
+ <li><b>v 0.15</b> 16/04/2005<br>
+  - added JPEG compression quality setting. Thanks Vad</li>
+ <li><b>v 0.14</b> 14/03/2005<br>
+  - reworked the class file to allow parsing with phpDocumentor</li>
+ <li><b>v 0.13</b> 07/03/2005<br>
+  - fixed a bug with <a href="image_ratio">image_ratio</a>. Thanks Justin.<br>
+  - added <a href="image_ratio_no_zoom_in">image_ratio_no_zoom_in</a> and <a href="image_ratio_no_zoom_out">image_ratio_no_zoom_out</a> </li>
+ <li><b>v 0.12</b> 21/01/2005<br>
+  - added <a href="image_ratio">image_ratio</a> to resize within max values, keeping image ratio</li>
+ <li><b>v 0.11</b> 22/08/2003<br>
+  - update for GD2 (changed imageresized() into imagecopyresampled() and imagecreate() into imagecreatetruecolor())</li>
+</ul></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/cmf.external.html">cmf</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>external</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="_mkdir" id="_mkdir"></a><div class="element clickable method public _mkdir" data-toggle="collapse" data-target="._mkdir .collapse">
+<h2>Creates directory</h2>
+<pre>_mkdir(string $path, integer $mode) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>Path to create</p></div>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code>integer</code><p>Optional permissions</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>Success</div>
+</div></div>
+</div>
+<a name="clean" id="clean"></a><div class="element clickable method public clean" data-toggle="collapse" data-target=".clean .collapse">
+<h2>Deletes the uploaded file from its temporary location</h2>
+<pre>clean() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>When PHP uploads a file, it stores it in a temporary location.
+When you <a href="process">process</a> the file, you actually copy the resulting file to the given location, it doesn't alter the original file.
+Once you have processed the file as many times as you wanted, you can delete the uploaded file.
+If there is open_basedir restrictions, the uploaded file is in fact a temporary file</p>
+
+<p>You might want not to use this function if you work on local files, as it will delete the source file</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="gdversion" id="gdversion"></a><div class="element clickable method public gdversion" data-toggle="collapse" data-target=".gdversion .collapse">
+<h2>Returns the version of GD</h2>
+<pre>gdversion(boolean $full) : float</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$full</h4>
+<code>boolean</code><p>Optional flag to get precise version</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>float</code>GD version</div>
+</div></div>
+</div>
+<a name="getcolors" id="getcolors"></a><div class="element clickable method public getcolors" data-toggle="collapse" data-target=".getcolors .collapse">
+<h2>Decodes colors</h2>
+<pre>getcolors(string $color) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$color</h4>
+<code>string</code><p>Color string</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>RGB colors</div>
+</div></div>
+</div>
+<a name="imagebmp" id="imagebmp"></a><div class="element clickable method public imagebmp" data-toggle="collapse" data-target=".imagebmp .collapse">
+<h2>Saves a BMP image</h2>
+<pre>imagebmp($im, $filename) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function has been published on the PHP website, and can be used freely</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$im</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="imagecopymergealpha" id="imagecopymergealpha"></a><div class="element clickable method public imagecopymergealpha" data-toggle="collapse" data-target=".imagecopymergealpha .collapse">
+<h2>Merges two images</h2>
+<pre>imagecopymergealpha($dst_im, $src_im, int $dst_x, int $dst_y, int $src_x, int $src_y, int $src_w, int $src_h, int $pct) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If the output format is PNG, then we do it pixel per pixel to retain the alpha channel</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$dst_im</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$src_im</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$dst_x</h4>
+<code>int</code><p>x-coordinate of destination point</p>
+</div>
+<div class="subelement argument">
+<h4>$dst_y</h4>
+<code>int</code><p>y-coordinate of destination point</p>
+</div>
+<div class="subelement argument">
+<h4>$src_x</h4>
+<code>int</code><p>x-coordinate of source point</p>
+</div>
+<div class="subelement argument">
+<h4>$src_y</h4>
+<code>int</code><p>y-coordinate of source point</p>
+</div>
+<div class="subelement argument">
+<h4>$src_w</h4>
+<code>int</code><p>Source width</p></div>
+<div class="subelement argument">
+<h4>$src_h</h4>
+<code>int</code><p>Source height</p></div>
+<div class="subelement argument">
+<h4>$pct</h4>
+<code>int</code><p>Optional percentage of the overlay, between 0 and 100 (default: 100)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>resource</code>Destination image</div>
+</div></div>
+</div>
+<a name="imagecreatefrombmp" id="imagecreatefrombmp"></a><div class="element clickable method public imagecreatefrombmp" data-toggle="collapse" data-target=".imagecreatefrombmp .collapse">
+<h2>Opens a BMP image</h2>
+<pre>imagecreatefrombmp($filename) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function has been written by DHKold, and is used with permission of the author</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="imagecreatenew" id="imagecreatenew"></a><div class="element clickable method public imagecreatenew" data-toggle="collapse" data-target=".imagecreatenew .collapse">
+<h2>Creates a container image</h2>
+<pre>imagecreatenew(integer $x, integer $y, boolean $fill, boolean $trsp) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$x</h4>
+<code>integer</code><p>Width</p></div>
+<div class="subelement argument">
+<h4>$y</h4>
+<code>integer</code><p>Height</p></div>
+<div class="subelement argument">
+<h4>$fill</h4>
+<code>boolean</code><p>Optional flag to draw the background color or not</p></div>
+<div class="subelement argument">
+<h4>$trsp</h4>
+<code>boolean</code><p>Optional flag to set the background to be transparent</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>resource</code>Container image</div>
+</div></div>
+</div>
+<a name="imagetransfer" id="imagetransfer"></a><div class="element clickable method public imagetransfer" data-toggle="collapse" data-target=".imagetransfer .collapse">
+<h2>Transfers an image from the container to the destination image</h2>
+<pre>imagetransfer(resource $src_im, resource $dst_im) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$src_im</h4>
+<code>resource</code><p>Container image</p></div>
+<div class="subelement argument">
+<h4>$dst_im</h4>
+<code>resource</code><p>Destination image</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>resource</code>Destination image</div>
+</div></div>
+</div>
+<a name="init" id="init"></a><div class="element clickable method public init" data-toggle="collapse" data-target=".init .collapse">
+<h2>Init or re-init all the processing variables to their default values</h2>
+<pre>init() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function is called in the constructor, and after each call of <a href="process">process</a></p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="process" id="process"></a><div class="element clickable method public process" data-toggle="collapse" data-target=".process .collapse">
+<h2>Actually uploads the file, and act on it according to the set processing class variables</h2>
+<pre>process(string $server_path) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function copies the uploaded file to the given location, eventually performing actions on it.
+Typically, you can call <a href="process">process</a> several times for the same file,
+for instance to create a resized image and a thumbnail of the same file.
+The original uploaded file remains intact in its temporary location, so you can use <a href="process">process</a> several times.
+You will be able to delete the uploaded file with <a href="clean">clean</a> when you have finished all your <a href="process">process</a> calls.</p>
+
+<p>According to the processing class variables set in the calling file, the file can be renamed,
+and if it is an image, can be resized or converted.</p>
+
+<p>When the processing is completed, and the file copied to its new location, the
+processing class variables will be reset to their default value.
+This allows you to set new properties, and perform another <a href="process">process</a> on the same uploaded file</p>
+
+<p>If the function is called with a null or empty argument, then it will return the content of the picture</p>
+
+<p>It will set <a href="processed">processed</a> (and <a href="error">error</a> is an error occurred)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$server_path</h4>
+<code>string</code><p>Optional path location of the uploaded file, with an ending slash</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Optional content of the image</div>
+</div></div>
+</div>
+<a name="rmkdir" id="rmkdir"></a><div class="element clickable method public rmkdir" data-toggle="collapse" data-target=".rmkdir .collapse">
+<h2>Creates directories recursively</h2>
+<pre>rmkdir(string $path, integer $mode) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>Path to create</p></div>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code>integer</code><p>Optional permissions</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>Success</div>
+</div></div>
+</div>
+<a name="translate" id="translate"></a><div class="element clickable method public translate" data-toggle="collapse" data-target=".translate .collapse">
+<h2>Translate error messages</h2>
+<pre>translate(string $str, array $tokens) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code>string</code><p>Message to translate</p></div>
+<div class="subelement argument">
+<h4>$tokens</h4>
+<code>array</code><p>Optional token values</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Translated string</div>
+</div></div>
+</div>
+<a name="upload" id="upload"></a><div class="element clickable method public upload" data-toggle="collapse" data-target=".upload .collapse">
+<h2>Constructor.</h2>
+<pre>upload(array $file, string $lang) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Checks if the file has been uploaded</p>
+
+<p>The constructor takes $_FILES['form_field'] array as argument
+where form_field is the form field name</p>
+
+<p>The constructor will check if the file has been uploaded in its temporary location, and
+accordingly will set <a href="uploaded">uploaded</a> (and <a href="error">error</a> is an error occurred)</p>
+
+<p>If the file has been uploaded, the constructor will populate all the variables holding the upload
+information (none of the processing class variables are used here).
+You can have access to information about the file (name, size, MIME type...).</p>
+
+<p>Alternatively, you can set the first argument to be a local filename (string)
+This allows processing of a local file, as if the file was uploaded</p>
+
+<p>The optional second argument allows you to set the language for the error messages</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code>array</code><p>$_FILES['form_field'] or string $file Local filename</p>
+</div>
+<div class="subelement argument">
+<h4>$lang</h4>
+<code>string</code><p>Optional language code</p></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24allowed" id="$allowed"> </a><div class="element clickable property public $allowed" data-toggle="collapse" data-target=".$allowed .collapse">
+<h2>Allowed MIME types</h2>
+<pre>$allowed : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default is a selection of safe mime-types, but you might want to change it</p>
+
+<p>Simple wildcards are allowed, such as image/* or application/*</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24dir_auto_chmod" id="$dir_auto_chmod"> </a><div class="element clickable property public $dir_auto_chmod" data-toggle="collapse" data-target=".$dir_auto_chmod .collapse">
+<h2>Set this variable to true to allow automatic chmod of the destination
+directory if it is not writeable</h2>
+<pre>$dir_auto_chmod : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is true</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24dir_auto_create" id="$dir_auto_create"> </a><div class="element clickable property public $dir_auto_create" data-toggle="collapse" data-target=".$dir_auto_create .collapse">
+<h2>Set this variable to true to allow automatic creation of the destination
+directory if it is missing (works recursively)</h2>
+<pre>$dir_auto_create : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is true</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24dir_chmod" id="$dir_chmod"> </a><div class="element clickable property public $dir_chmod" data-toggle="collapse" data-target=".$dir_chmod .collapse">
+<h2>Set this variable to the default chmod you want the class to use
+when creating directories, or attempting to write in a directory</h2>
+<pre>$dir_chmod : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is 0777 (without quotes)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24error" id="$error"> </a><div class="element clickable property public $error" data-toggle="collapse" data-target=".$error .collapse">
+<h2>Holds eventual error message in plain english</h2>
+<pre>$error : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_auto_rename" id="$file_auto_rename"> </a><div class="element clickable property public $file_auto_rename" data-toggle="collapse" data-target=".$file_auto_rename .collapse">
+<h2>Set this variable to true to allow automatic renaming of the file
+if the file already exists</h2>
+<pre>$file_auto_rename : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is true</p>
+
+<p>For instance, on uploading foo.ext,<br>
+if foo.ext already exists, upload will be renamed foo_1.ext<br>
+and if foo_1.ext already exists, upload will be renamed foo_2.ext<br></p>
+
+<p>Note that this option doesn't have any effect if <a href="file_overwrite">file_overwrite</a> is true</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_dst_name" id="$file_dst_name"> </a><div class="element clickable property public $file_dst_name" data-toggle="collapse" data-target=".$file_dst_name .collapse">
+<h2>Destination file name</h2>
+<pre>$file_dst_name : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_dst_name_body" id="$file_dst_name_body"> </a><div class="element clickable property public $file_dst_name_body" data-toggle="collapse" data-target=".$file_dst_name_body .collapse">
+<h2>Destination file name body (i.e.</h2>
+<pre>$file_dst_name_body : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>without extension)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_dst_name_ext" id="$file_dst_name_ext"> </a><div class="element clickable property public $file_dst_name_ext" data-toggle="collapse" data-target=".$file_dst_name_ext .collapse">
+<h2>Destination file extension</h2>
+<pre>$file_dst_name_ext : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_dst_path" id="$file_dst_path"> </a><div class="element clickable property public $file_dst_path" data-toggle="collapse" data-target=".$file_dst_path .collapse">
+<h2>Destination file name</h2>
+<pre>$file_dst_path : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_dst_pathname" id="$file_dst_pathname"> </a><div class="element clickable property public $file_dst_pathname" data-toggle="collapse" data-target=".$file_dst_pathname .collapse">
+<h2>Destination file name, including path</h2>
+<pre>$file_dst_pathname : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_is_image" id="$file_is_image"> </a><div class="element clickable property public $file_is_image" data-toggle="collapse" data-target=".$file_is_image .collapse">
+<h2>Flag to determine if the source file is an image</h2>
+<pre>$file_is_image : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_max_size" id="$file_max_size"> </a><div class="element clickable property public $file_max_size" data-toggle="collapse" data-target=".$file_max_size .collapse">
+<h2>Set this variable to change the maximum size in bytes for an uploaded file</h2>
+<pre>$file_max_size : double</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is the value <i>upload_max_filesize</i> from php.ini</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_name_body_add" id="$file_name_body_add"> </a><div class="element clickable property public $file_name_body_add" data-toggle="collapse" data-target=".$file_name_body_add .collapse">
+<h2>Set this variable to append a string to the file name body</h2>
+<pre>$file_name_body_add : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_name_body_pre" id="$file_name_body_pre"> </a><div class="element clickable property public $file_name_body_pre" data-toggle="collapse" data-target=".$file_name_body_pre .collapse">
+<h2>Set this variable to prepend a string to the file name body</h2>
+<pre>$file_name_body_pre : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_new_name_body" id="$file_new_name_body"> </a><div class="element clickable property public $file_new_name_body" data-toggle="collapse" data-target=".$file_new_name_body .collapse">
+<h2>Set this variable to replace the name body (i.e.</h2>
+<pre>$file_new_name_body : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>without extension)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_new_name_ext" id="$file_new_name_ext"> </a><div class="element clickable property public $file_new_name_ext" data-toggle="collapse" data-target=".$file_new_name_ext .collapse">
+<h2>Set this variable to change the file extension</h2>
+<pre>$file_new_name_ext : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_overwrite" id="$file_overwrite"> </a><div class="element clickable property public $file_overwrite" data-toggle="collapse" data-target=".$file_overwrite .collapse">
+<h2>Set this variable tu true to allow overwriting of an existing file</h2>
+<pre>$file_overwrite : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is false, so no files will be overwritten</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_safe_name" id="$file_safe_name"> </a><div class="element clickable property public $file_safe_name" data-toggle="collapse" data-target=".$file_safe_name .collapse">
+<h2>Set this variable to format the filename (spaces changed to _)</h2>
+<pre>$file_safe_name : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_error" id="$file_src_error"> </a><div class="element clickable property public $file_src_error" data-toggle="collapse" data-target=".$file_src_error .collapse">
+<h2>Holds eventual PHP error code from $_FILES</h2>
+<pre>$file_src_error : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_mime" id="$file_src_mime"> </a><div class="element clickable property public $file_src_mime" data-toggle="collapse" data-target=".$file_src_mime .collapse">
+<h2>Uploaded file MIME type</h2>
+<pre>$file_src_mime : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_name" id="$file_src_name"> </a><div class="element clickable property public $file_src_name" data-toggle="collapse" data-target=".$file_src_name .collapse">
+<h2>Uploaded file name</h2>
+<pre>$file_src_name : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_name_body" id="$file_src_name_body"> </a><div class="element clickable property public $file_src_name_body" data-toggle="collapse" data-target=".$file_src_name_body .collapse">
+<h2>Uploaded file name body (i.e.</h2>
+<pre>$file_src_name_body : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>without extension)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_name_ext" id="$file_src_name_ext"> </a><div class="element clickable property public $file_src_name_ext" data-toggle="collapse" data-target=".$file_src_name_ext .collapse">
+<h2>Uploaded file name extension</h2>
+<pre>$file_src_name_ext : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_name_ext_" id="$file_src_name_ext_"> </a><div class="element clickable property public $file_src_name_ext_" data-toggle="collapse" data-target=".$file_src_name_ext_ .collapse">
+<h2>Uploaded file name extension, original</h2>
+<pre>$file_src_name_ext_ : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_pathname" id="$file_src_pathname"> </a><div class="element clickable property public $file_src_pathname" data-toggle="collapse" data-target=".$file_src_pathname .collapse">
+<h2>Uloaded file name, including server path</h2>
+<pre>$file_src_pathname : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_size" id="$file_src_size"> </a><div class="element clickable property public $file_src_size" data-toggle="collapse" data-target=".$file_src_size .collapse">
+<h2>Uploaded file size, in bytes</h2>
+<pre>$file_src_size : double</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24file_src_temp" id="$file_src_temp"> </a><div class="element clickable property public $file_src_temp" data-toggle="collapse" data-target=".$file_src_temp .collapse">
+<h2>Uloaded file name temporary copy</h2>
+<pre>$file_src_temp : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24forbidden" id="$forbidden"> </a><div class="element clickable property public $forbidden" data-toggle="collapse" data-target=".$forbidden .collapse">
+<h2>Forbidden MIME types</h2>
+<pre>$forbidden : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default is a selection of safe mime-types, but you might want to change it
+To only check for forbidden MIME types, and allow everything else, set <a href="allowed">allowed</a> to array('* / *') without the spaces</p>
+
+<p>Simple wildcards are allowed, such as image/* or application/*</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_background_color" id="$image_background_color"> </a><div class="element clickable property public $image_background_color" data-toggle="collapse" data-target=".$image_background_color .collapse">
+<h2>Background color, used to paint transparent areas with</h2>
+<pre>$image_background_color : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If set, it will forcibly remove transparency by painting transparent areas with the color
+This setting will fill in all transparent areas in PNG and GIF, as opposed to <a href="image_default_color">image_default_color</a>
+which will do so only in BMP, JPEG, and alpha transparent areas in transparent GIFs
+This setting overrides <a href="image_default_color">image_default_color</a></p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_bevel" id="$image_bevel"> </a><div class="element clickable property public $image_bevel" data-toggle="collapse" data-target=".$image_bevel .collapse">
+<h2>Adds a bevel border on the image</h2>
+<pre>$image_bevel : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a positive integer, representing the thickness of the bevel</p>
+
+<p>If the bevel colors are the same as the background, it makes a fade out effect</p>
+
+<p>Default value is null (no bevel)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_bevel_color1" id="$image_bevel_color1"> </a><div class="element clickable property public $image_bevel_color1" data-toggle="collapse" data-target=".$image_bevel_color1 .collapse">
+<h2>Top and left bevel color</h2>
+<pre>$image_bevel_color1 : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a color, in hexadecimal format
+This setting is used only if <a href="image_bevel">image_bevel</a> is set</p>
+
+<p>Default value is #FFFFFF</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_bevel_color2" id="$image_bevel_color2"> </a><div class="element clickable property public $image_bevel_color2" data-toggle="collapse" data-target=".$image_bevel_color2 .collapse">
+<h2>Right and bottom bevel color</h2>
+<pre>$image_bevel_color2 : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a color, in hexadecimal format
+This setting is used only if <a href="image_bevel">image_bevel</a> is set</p>
+
+<p>Default value is #000000</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_border" id="$image_border"> </a><div class="element clickable property public $image_border" data-toggle="collapse" data-target=".$image_border .collapse">
+<h2>Adds a single-color border on the outer of the image</h2>
+<pre>$image_border : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Values are four dimensions, or two, or one (CSS style)
+They represent the border thickness top, right, bottom and left.
+These values can either be in an array, or a space separated string.
+Each value can be in pixels (with or without 'px'), or percentage (of the source image)</p>
+
+<p>See <a href="image_crop">image_crop</a> for valid formats</p>
+
+<p>If a value is negative, the image will be cropped.
+Note that the dimensions of the picture will be increased by the borders' thickness</p>
+
+<p>Default value is null (no border)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_border_color" id="$image_border_color"> </a><div class="element clickable property public $image_border_color" data-toggle="collapse" data-target=".$image_border_color .collapse">
+<h2>Border color</h2>
+<pre>$image_border_color : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a color, in hexadecimal format.
+This setting is used only if <a href="image_border">image_border</a> is set</p>
+
+<p>Default value is #FFFFFF</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_brightness" id="$image_brightness"> </a><div class="element clickable property public $image_brightness" data-toggle="collapse" data-target=".$image_brightness .collapse">
+<h2>Corrects the image brightness</h2>
+<pre>$image_brightness : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value can range between -127 and 127</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_contrast" id="$image_contrast"> </a><div class="element clickable property public $image_contrast" data-toggle="collapse" data-target=".$image_contrast .collapse">
+<h2>Corrects the image contrast</h2>
+<pre>$image_contrast : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value can range between -127 and 127</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_convert" id="$image_convert"> </a><div class="element clickable property public $image_convert" data-toggle="collapse" data-target=".$image_convert .collapse">
+<h2>Set this variable to convert the file if it is an image</h2>
+<pre>$image_convert : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Possibles values are : ''; 'png'; 'jpeg'; 'gif'; 'bmp'</p>
+
+<p>Default value is '' (no conversion)<br>
+If <a href="resize">resize</a> is true, <a href="convert">convert</a> will be set to the source file extension</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_crop" id="$image_crop"> </a><div class="element clickable property public $image_crop" data-toggle="collapse" data-target=".$image_crop .collapse">
+<h2>Crops an image</h2>
+<pre>$image_crop : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Values are four dimensions, or two, or one (CSS style)
+They represent the amount cropped top, right, bottom and left.
+These values can either be in an array, or a space separated string.
+Each value can be in pixels (with or without 'px'), or percentage (of the source image)</p>
+
+<p>For instance, are valid:</p>
+
+<pre>
+$foo->image_crop = 20                  OR array(20);
+$foo->image_crop = '20px'              OR array('20px');
+$foo->image_crop = '20 40'             OR array('20', 40);
+$foo->image_crop = '-20 25%'           OR array(-20, '25%');
+$foo->image_crop = '20px 25%'          OR array('20px', '25%');
+$foo->image_crop = '20% 25%'           OR array('20%', '25%');
+$foo->image_crop = '20% 25% 10% 30%'   OR array('20%', '25%', '10%', '30%');
+$foo->image_crop = '20px 25px 2px 2px' OR array('20px', '25%px', '2px', '2px');
+$foo->image_crop = '20 25% 40px 10%'   OR array(20, '25%', '40px', '10%');
+</pre>
+
+<p>If a value is negative, the image will be expanded, and the extra parts will be filled with black</p>
+
+<p>Default value is null (no cropping)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_default_color" id="$image_default_color"> </a><div class="element clickable property public $image_default_color" data-toggle="collapse" data-target=".$image_default_color .collapse">
+<h2>Default color for non alpha-transparent images</h2>
+<pre>$image_default_color : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This setting is to be used to define a background color for semi transparent areas
+of an alpha transparent when the output format doesn't support alpha transparency
+This is useful when, from an alpha transparent PNG image, or an image with alpha transparent features
+if you want to output it as a transparent GIFs for instance, you can set a blending color for transparent areas
+If you output in JPEG or BMP, this color will be used to fill in the previously transparent areas</p>
+
+<p>The default color white</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_dst_x" id="$image_dst_x"> </a><div class="element clickable property public $image_dst_x" data-toggle="collapse" data-target=".$image_dst_x .collapse">
+<h2>Destination image width</h2>
+<pre>$image_dst_x : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_dst_y" id="$image_dst_y"> </a><div class="element clickable property public $image_dst_y" data-toggle="collapse" data-target=".$image_dst_y .collapse">
+<h2>Destination image height</h2>
+<pre>$image_dst_y : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_flip" id="$image_flip"> </a><div class="element clickable property public $image_flip" data-toggle="collapse" data-target=".$image_flip .collapse">
+<h2>Flips the image vertically or horizontally</h2>
+<pre>$image_flip : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is either 'h' or 'v', as in horizontal and vertical</p>
+
+<p>Default value is null (no flip)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_frame" id="$image_frame"> </a><div class="element clickable property public $image_frame" data-toggle="collapse" data-target=".$image_frame .collapse">
+<h2>Adds a multi-color frame on the outer of the image</h2>
+<pre>$image_frame : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer. Two values are possible for now:
+1 for flat border, meaning that the frame is mirrored horizontally and vertically
+2 for crossed border, meaning that the frame will be inversed, as in a bevel effect</p>
+
+<p>The frame will be composed of colored lines set in <a href="image_frame_colors">image_frame_colors</a></p>
+
+<p>Note that the dimensions of the picture will be increased by the borders' thickness</p>
+
+<p>Default value is null (no frame)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_frame_colors" id="$image_frame_colors"> </a><div class="element clickable property public $image_frame_colors" data-toggle="collapse" data-target=".$image_frame_colors .collapse">
+<h2>Sets the colors used to draw a frame</h2>
+<pre>$image_frame_colors : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Values is a list of n colors in hexadecimal format.
+These values can either be in an array, or a space separated string.</p>
+
+<p>The colors are listed in the following order: from the outset of the image to its center</p>
+
+<p>For instance, are valid:</p>
+
+<pre>
+$foo->image_frame_colors = '#FFFFFF #999999 #666666 #000000';
+$foo->image_frame_colors = array('#FFFFFF', '#999999', '#666666', '#000000');
+</pre>
+
+<p>This setting is used only if <a href="image_frame">image_frame</a> is set</p>
+
+<p>Default value is '#FFFFFF #999999 #666666 #000000'</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_greyscale" id="$image_greyscale"> </a><div class="element clickable property public $image_greyscale" data-toggle="collapse" data-target=".$image_greyscale .collapse">
+<h2>Turns the image into greyscale</h2>
+<pre>$image_greyscale : \boolean;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is FALSE</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_is_palette" id="$image_is_palette"> </a><div class="element clickable property public $image_is_palette" data-toggle="collapse" data-target=".$image_is_palette .collapse">
+<h2>Flag set to true when the image is not true color</h2>
+<pre>$image_is_palette : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_is_transparent" id="$image_is_transparent"> </a><div class="element clickable property public $image_is_transparent" data-toggle="collapse" data-target=".$image_is_transparent .collapse">
+<h2>Flag set to true when the image is transparent</h2>
+<pre>$image_is_transparent : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is actually used only for transparent GIFs</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_max_height" id="$image_max_height"> </a><div class="element clickable property public $image_max_height" data-toggle="collapse" data-target=".$image_max_height .collapse">
+<h2>Set this variable to set a maximum image height, above which the upload will be invalid</h2>
+<pre>$image_max_height : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_max_pixels" id="$image_max_pixels"> </a><div class="element clickable property public $image_max_pixels" data-toggle="collapse" data-target=".$image_max_pixels .collapse">
+<h2>Set this variable to set a maximum number of pixels for an image, above which the upload will be invalid</h2>
+<pre>$image_max_pixels : \long</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_max_ratio" id="$image_max_ratio"> </a><div class="element clickable property public $image_max_ratio" data-toggle="collapse" data-target=".$image_max_ratio .collapse">
+<h2>Set this variable to set a maximum image aspect ratio, above which the upload will be invalid</h2>
+<pre>$image_max_ratio : float</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Note that ratio = width / height</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_max_width" id="$image_max_width"> </a><div class="element clickable property public $image_max_width" data-toggle="collapse" data-target=".$image_max_width .collapse">
+<h2>Set this variable to set a maximum image width, above which the upload will be invalid</h2>
+<pre>$image_max_width : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_min_height" id="$image_min_height"> </a><div class="element clickable property public $image_min_height" data-toggle="collapse" data-target=".$image_min_height .collapse">
+<h2>Set this variable to set a minimum image height, below which the upload will be invalid</h2>
+<pre>$image_min_height : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_min_pixels" id="$image_min_pixels"> </a><div class="element clickable property public $image_min_pixels" data-toggle="collapse" data-target=".$image_min_pixels .collapse">
+<h2>Set this variable to set a minimum number of pixels for an image, below which the upload will be invalid</h2>
+<pre>$image_min_pixels : \long</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_min_ratio" id="$image_min_ratio"> </a><div class="element clickable property public $image_min_ratio" data-toggle="collapse" data-target=".$image_min_ratio .collapse">
+<h2>Set this variable to set a minimum image aspect ratio, below which the upload will be invalid</h2>
+<pre>$image_min_ratio : float</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Note that ratio = width / height</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_min_width" id="$image_min_width"> </a><div class="element clickable property public $image_min_width" data-toggle="collapse" data-target=".$image_min_width .collapse">
+<h2>Set this variable to set a minimum image width, below which the upload will be invalid</h2>
+<pre>$image_min_width : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_negative" id="$image_negative"> </a><div class="element clickable property public $image_negative" data-toggle="collapse" data-target=".$image_negative .collapse">
+<h2>Inverts the color of an image</h2>
+<pre>$image_negative : \boolean;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is FALSE</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_overlay_color" id="$image_overlay_color"> </a><div class="element clickable property public $image_overlay_color" data-toggle="collapse" data-target=".$image_overlay_color .collapse">
+<h2>Applies a colored overlay on the image</h2>
+<pre>$image_overlay_color : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an hexadecimal color, such as #FFFFFF</p>
+
+<p>To use with <a href="image_overlay_percent">image_overlay_percent</a></p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_overlay_percent" id="$image_overlay_percent"> </a><div class="element clickable property public $image_overlay_percent" data-toggle="collapse" data-target=".$image_overlay_percent .collapse">
+<h2>Sets the percentage for the colored overlay</h2>
+<pre>$image_overlay_percent : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a percentage, as an integer between 0 and 100</p>
+
+<p>Unless used with <a href="image_overlay_color">image_overlay_color</a>, this setting has no effect</p>
+
+<p>Default value is 50</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_precrop" id="$image_precrop"> </a><div class="element clickable property public $image_precrop" data-toggle="collapse" data-target=".$image_precrop .collapse">
+<h2>Crops an image, before an eventual resizing</h2>
+<pre>$image_precrop : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>See <a href="image_crop">image_crop</a> for valid formats</p>
+
+<p>Default value is null (no cropping)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio" id="$image_ratio"> </a><div class="element clickable property public $image_ratio" data-toggle="collapse" data-target=".$image_ratio .collapse">
+<h2>Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}</h2>
+<pre>$image_ratio : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_crop" id="$image_ratio_crop"> </a><div class="element clickable property public $image_ratio_crop" data-toggle="collapse" data-target=".$image_ratio_crop .collapse">
+<h2>Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}</h2>
+<pre>$image_ratio_crop : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The image will be resized as to fill the whole space, and excedent will be cropped</p>
+
+<p>Value can also be a string, one or more character from 'TBLR' (top, bottom, left and right)
+If set as a string, it determines which side of the image is kept while cropping.
+By default, the part of the image kept is in the center, i.e. it crops equally on both sides</p>
+
+<p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_fill" id="$image_ratio_fill"> </a><div class="element clickable property public $image_ratio_fill" data-toggle="collapse" data-target=".$image_ratio_fill .collapse">
+<h2>Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y}</h2>
+<pre>$image_ratio_fill : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The image will be resized to fit entirely in the space, and the rest will be colored.
+The default color is white, but can be set with <a href="image_default_color">image_default_color</a></p>
+
+<p>Value can also be a string, one or more character from 'TBLR' (top, bottom, left and right)
+If set as a string, it determines in which side of the space the image is displayed.
+By default, the image is displayed in the center, i.e. it fills the remaining space equally on both sides</p>
+
+<p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_no_zoom_in" id="$image_ratio_no_zoom_in"> </a><div class="element clickable property public $image_ratio_no_zoom_in" data-toggle="collapse" data-target=".$image_ratio_no_zoom_in .collapse">
+<h2>Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+but only if original image is bigger</h2>
+<pre>$image_ratio_no_zoom_in : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_no_zoom_out" id="$image_ratio_no_zoom_out"> </a><div class="element clickable property public $image_ratio_no_zoom_out" data-toggle="collapse" data-target=".$image_ratio_no_zoom_out .collapse">
+<h2>Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+but only if original image is smaller</h2>
+<pre>$image_ratio_no_zoom_out : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_pixels" id="$image_ratio_pixels"> </a><div class="element clickable property public $image_ratio_pixels" data-toggle="collapse" data-target=".$image_ratio_pixels .collapse">
+<h2>Set this variable to a number of pixels so that {@link image_x} and {@link image_y} are the best match possible</h2>
+<pre>$image_ratio_pixels : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The image will be resized to have approximatively the number of pixels
+The aspect ratio wil be conserved</p>
+
+<p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_x" id="$image_ratio_x"> </a><div class="element clickable property public $image_ratio_x" data-toggle="collapse" data-target=".$image_ratio_x .collapse">
+<h2>Set this variable to calculate {@link image_x} automatically , using {@link image_y} and conserving ratio</h2>
+<pre>$image_ratio_x : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_ratio_y" id="$image_ratio_y"> </a><div class="element clickable property public $image_ratio_y" data-toggle="collapse" data-target=".$image_ratio_y .collapse">
+<h2>Set this variable to calculate {@link image_y} automatically , using {@link image_x} and conserving ratio</h2>
+<pre>$image_ratio_y : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is false</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_reflection_color" id="$image_reflection_color"> </a><div class="element clickable property public $image_reflection_color" data-toggle="collapse" data-target=".$image_reflection_color .collapse">
+<h2>Sets the color of the reflection background (deprecated)</h2>
+<pre>$image_reflection_color : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an hexadecimal color, such as #FFFFFF</p>
+
+<p>Default value is #FFFFFF</p>
+
+<p>This setting is relevant only if <a href="image_reflection_height">image_reflection_height</a> is set</p>
+
+<p>This setting is now deprecated in favor of <a href="image_default_color">image_default_color</a></p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_reflection_height" id="$image_reflection_height"> </a><div class="element clickable property public $image_reflection_height" data-toggle="collapse" data-target=".$image_reflection_height .collapse">
+<h2>Sets the height of the reflection</h2>
+<pre>$image_reflection_height : \mixed;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer in pixels, or a string which format can be in pixels or percentage.
+For instance, values can be : 40, '40', '40px' or '40%'</p>
+
+<p>Default value is null, no reflection</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_reflection_opacity" id="$image_reflection_opacity"> </a><div class="element clickable property public $image_reflection_opacity" data-toggle="collapse" data-target=".$image_reflection_opacity .collapse">
+<h2>Sets the initial opacity of the reflection</h2>
+<pre>$image_reflection_opacity : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer between 0 (no opacity) and 100 (full opacity).
+The reflection will start from <a href="image_reflection_opacity">image_reflection_opacity</a> and end up at 0</p>
+
+<p>Default value is 60</p>
+
+<p>This setting is relevant only if <a href="image_reflection_height">image_reflection_height</a> is set</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_reflection_space" id="$image_reflection_space"> </a><div class="element clickable property public $image_reflection_space" data-toggle="collapse" data-target=".$image_reflection_space .collapse">
+<h2>Sets the space between the source image and its relection</h2>
+<pre>$image_reflection_space : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer in pixels, which can be negative</p>
+
+<p>Default value is 2</p>
+
+<p>This setting is relevant only if <a href="image_reflection_height">image_reflection_height</a> is set</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_resize" id="$image_resize"> </a><div class="element clickable property public $image_resize" data-toggle="collapse" data-target=".$image_resize .collapse">
+<h2>Set this variable to true to resize the file if it is an image</h2>
+<pre>$image_resize : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>You will probably want to set <a href="image_x">image_x</a> and <a href="image_y">image_y</a>, and maybe one of the ratio variables</p>
+
+<p>Default value is false (no resizing)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_rotate" id="$image_rotate"> </a><div class="element clickable property public $image_rotate" data-toggle="collapse" data-target=".$image_rotate .collapse">
+<h2>Rotates the image by increments of 45 degrees</h2>
+<pre>$image_rotate : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is either 90, 180 or 270</p>
+
+<p>Default value is null (no rotation)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_src_bits" id="$image_src_bits"> </a><div class="element clickable property public $image_src_bits" data-toggle="collapse" data-target=".$image_src_bits .collapse">
+<h2>Source image color depth</h2>
+<pre>$image_src_bits : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_src_pixels" id="$image_src_pixels"> </a><div class="element clickable property public $image_src_pixels" data-toggle="collapse" data-target=".$image_src_pixels .collapse">
+<h2>Number of pixels</h2>
+<pre>$image_src_pixels : \long</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_src_type" id="$image_src_type"> </a><div class="element clickable property public $image_src_type" data-toggle="collapse" data-target=".$image_src_type .collapse">
+<h2>Type of image (png, gif, jpg or bmp)</h2>
+<pre>$image_src_type : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_src_x" id="$image_src_x"> </a><div class="element clickable property public $image_src_x" data-toggle="collapse" data-target=".$image_src_x .collapse">
+<h2>Source image width</h2>
+<pre>$image_src_x : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_src_y" id="$image_src_y"> </a><div class="element clickable property public $image_src_y" data-toggle="collapse" data-target=".$image_src_y .collapse">
+<h2>Source image height</h2>
+<pre>$image_src_y : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_supported" id="$image_supported"> </a><div class="element clickable property public $image_supported" data-toggle="collapse" data-target=".$image_supported .collapse">
+<h2>Supported image formats</h2>
+<pre>$image_supported : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text" id="$image_text"> </a><div class="element clickable property public $image_text" data-toggle="collapse" data-target=".$image_text .collapse">
+<h2>Adds a text label on the image</h2>
+<pre>$image_text : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a string, any text. Text will not word-wrap, although you can use breaklines in your text "\n"</p>
+
+<p>If set, this setting allow the use of all other settings starting with image_text_</p>
+
+<p>Replacement tokens can be used in the string:</p>
+
+<pre>
+gd_version    src_name       src_name_body src_name_ext
+src_pathname  src_mime       src_x         src_y
+src_type      src_bits       src_pixels
+src_size      src_size_kb    src_size_mb   src_size_human
+dst_path      dst_name_body  dst_pathname
+dst_name      dst_name_ext   dst_x         dst_y
+date          time           host          server        ip
+</pre>
+
+<p>The tokens must be enclosed in square brackets: [dst_x] will be replaced by the width of the picture</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_alignment" id="$image_text_alignment"> </a><div class="element clickable property public $image_text_alignment" data-toggle="collapse" data-target=".$image_text_alignment .collapse">
+<h2>Sets the text alignment</h2>
+<pre>$image_text_alignment : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a string, which can be either 'L', 'C' or 'R'</p>
+
+<p>Default value is 'C'</p>
+
+<p>This setting is relevant only if the text has several lines.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_background" id="$image_text_background"> </a><div class="element clickable property public $image_text_background" data-toggle="collapse" data-target=".$image_text_background .collapse">
+<h2>Sets the text background color for the text label</h2>
+<pre>$image_text_background : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an hexadecimal color, such as #FFFFFF</p>
+
+<p>Default value is null (no background)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_background_percent" id="$image_text_background_percent"> </a><div class="element clickable property public $image_text_background_percent" data-toggle="collapse" data-target=".$image_text_background_percent .collapse">
+<h2>Sets the text background visibility in the text label</h2>
+<pre>$image_text_background_percent : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a percentage, as an integer between 0 and 100</p>
+
+<p>Default value is 100</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_color" id="$image_text_color"> </a><div class="element clickable property public $image_text_color" data-toggle="collapse" data-target=".$image_text_color .collapse">
+<h2>Sets the text color for the text label</h2>
+<pre>$image_text_color : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an hexadecimal color, such as #FFFFFF</p>
+
+<p>Default value is #FFFFFF (white)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_direction" id="$image_text_direction"> </a><div class="element clickable property public $image_text_direction" data-toggle="collapse" data-target=".$image_text_direction .collapse">
+<h2>Sets the text direction for the text label</h2>
+<pre>$image_text_direction : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is either 'h' or 'v', as in horizontal and vertical</p>
+
+<p>Default value is h (horizontal)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_font" id="$image_text_font"> </a><div class="element clickable property public $image_text_font" data-toggle="collapse" data-target=".$image_text_font .collapse">
+<h2>Sets the text font in the text label</h2>
+<pre>$image_text_font : \mixed;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a an integer between 1 and 5 for GD built-in fonts. 1 is the smallest font, 5 the biggest
+Value can also be a string, which represents the path to a GDF font. The font will be loaded into GD, and used as a built-in font.</p>
+
+<p>Default value is 5</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_line_spacing" id="$image_text_line_spacing"> </a><div class="element clickable property public $image_text_line_spacing" data-toggle="collapse" data-target=".$image_text_line_spacing .collapse">
+<h2>Sets the text line spacing</h2>
+<pre>$image_text_line_spacing : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer, in pixels</p>
+
+<p>Default value is 0</p>
+
+<p>This setting is relevant only if the text has several lines.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_padding" id="$image_text_padding"> </a><div class="element clickable property public $image_text_padding" data-toggle="collapse" data-target=".$image_text_padding .collapse">
+<h2>Sets the text label padding</h2>
+<pre>$image_text_padding : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the text and the label background border</p>
+
+<p>Default value is 0</p>
+
+<p>This setting can be overriden by <a href="image_text_padding_x">image_text_padding_x</a> and <a href="image_text_padding_y">image_text_padding_y</a></p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_padding_x" id="$image_text_padding_x"> </a><div class="element clickable property public $image_text_padding_x" data-toggle="collapse" data-target=".$image_text_padding_x .collapse">
+<h2>Sets the text label horizontal padding</h2>
+<pre>$image_text_padding_x : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the text and the left and right label background borders</p>
+
+<p>Default value is null</p>
+
+<p>If set, this setting overrides the horizontal part of <a href="image_text_padding">image_text_padding</a></p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_padding_y" id="$image_text_padding_y"> </a><div class="element clickable property public $image_text_padding_y" data-toggle="collapse" data-target=".$image_text_padding_y .collapse">
+<h2>Sets the text label vertical padding</h2>
+<pre>$image_text_padding_y : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the text and the top and bottom label background borders</p>
+
+<p>Default value is null</p>
+
+<p>If set, his setting overrides the vertical part of <a href="image_text_padding">image_text_padding</a></p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_percent" id="$image_text_percent"> </a><div class="element clickable property public $image_text_percent" data-toggle="collapse" data-target=".$image_text_percent .collapse">
+<h2>Sets the text visibility in the text label</h2>
+<pre>$image_text_percent : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a percentage, as an integer between 0 and 100</p>
+
+<p>Default value is 100</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_position" id="$image_text_position"> </a><div class="element clickable property public $image_text_position" data-toggle="collapse" data-target=".$image_text_position .collapse">
+<h2>Sets the text label position within the image</h2>
+<pre>$image_text_position : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is one or two out of 'TBLR' (top, bottom, left, right)</p>
+
+<p>The positions are as following:</p>
+
+<pre>
+                       TL  T  TR
+                       L       R
+                       BL  B  BR
+</pre>
+
+<p>Default value is null (centered, horizontal and vertical)</p>
+
+<p>Note that is <a href="image_text_x">image_text_x</a> and <a href="image_text_y">image_text_y</a> are used, this setting has no effect</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_x" id="$image_text_x"> </a><div class="element clickable property public $image_text_x" data-toggle="collapse" data-target=".$image_text_x .collapse">
+<h2>Sets the text label absolute X position within the image</h2>
+<pre>$image_text_x : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the left of the image and the label
+If a negative value is used, it will represent the distance between the right of the image and the label</p>
+
+<p>Default value is null (so <a href="image_text_position">image_text_position</a> is used)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_text_y" id="$image_text_y"> </a><div class="element clickable property public $image_text_y" data-toggle="collapse" data-target=".$image_text_y .collapse">
+<h2>Sets the text label absolute Y position within the image</h2>
+<pre>$image_text_y : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the top of the image and the label
+If a negative value is used, it will represent the distance between the bottom of the image and the label</p>
+
+<p>Default value is null (so <a href="image_text_position">image_text_position</a> is used)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_threshold" id="$image_threshold"> </a><div class="element clickable property public $image_threshold" data-toggle="collapse" data-target=".$image_threshold .collapse">
+<h2>Applies threshold filter</h2>
+<pre>$image_threshold : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value can range between -127 and 127</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_tint_color" id="$image_tint_color"> </a><div class="element clickable property public $image_tint_color" data-toggle="collapse" data-target=".$image_tint_color .collapse">
+<h2>Applies a tint on the image</h2>
+<pre>$image_tint_color : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an hexadecimal color, such as #FFFFFF</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_transparent_color" id="$image_transparent_color"> </a><div class="element clickable property public $image_transparent_color" data-toggle="collapse" data-target=".$image_transparent_color .collapse">
+<h2>Transparent color in a palette</h2>
+<pre>$image_transparent_color : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is actually used only for transparent GIFs</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_unsharp" id="$image_unsharp"> </a><div class="element clickable property public $image_unsharp" data-toggle="collapse" data-target=".$image_unsharp .collapse">
+<h2>Applies an unsharp mask, with alpha transparency support</h2>
+<pre>$image_unsharp : \boolean;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Beware that this unsharp mask is quite resource-intensive</p>
+
+<p>Default value is FALSE</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_unsharp_amount" id="$image_unsharp_amount"> </a><div class="element clickable property public $image_unsharp_amount" data-toggle="collapse" data-target=".$image_unsharp_amount .collapse">
+<h2>Sets the unsharp mask amount</h2>
+<pre>$image_unsharp_amount : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer between 0 and 500, typically between 50 and 200</p>
+
+<p>Unless used with <a href="image_unsharp">image_unsharp</a>, this setting has no effect</p>
+
+<p>Default value is 80</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_unsharp_radius" id="$image_unsharp_radius"> </a><div class="element clickable property public $image_unsharp_radius" data-toggle="collapse" data-target=".$image_unsharp_radius .collapse">
+<h2>Sets the unsharp mask radius</h2>
+<pre>$image_unsharp_radius : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer between 0 and 50, typically between 0.5 and 1</p>
+
+<p>Unless used with <a href="image_unsharp">image_unsharp</a>, this setting has no effect</p>
+
+<p>Default value is 0.5</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_unsharp_threshold" id="$image_unsharp_threshold"> </a><div class="element clickable property public $image_unsharp_threshold" data-toggle="collapse" data-target=".$image_unsharp_threshold .collapse">
+<h2>Sets the unsharp mask threshold</h2>
+<pre>$image_unsharp_threshold : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is an integer between 0 and 255, typically between 0 and 5</p>
+
+<p>Unless used with <a href="image_unsharp">image_unsharp</a>, this setting has no effect</p>
+
+<p>Default value is 1</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_watermark" id="$image_watermark"> </a><div class="element clickable property public $image_watermark" data-toggle="collapse" data-target=".$image_watermark .collapse">
+<h2>Adds a watermark on the image</h2>
+<pre>$image_watermark : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is a local image filename, relative or absolute. GIF, JPG, BMP and PNG are supported, as well as PNG alpha.</p>
+
+<p>If set, this setting allow the use of all other settings starting with image_watermark_</p>
+
+<p>Default value is null</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_watermark_no_zoom_in" id="$image_watermark_no_zoom_in"> </a><div class="element clickable property public $image_watermark_no_zoom_in" data-toggle="collapse" data-target=".$image_watermark_no_zoom_in .collapse">
+<h2>Prevents the watermark to be resized up if it is smaller than the image</h2>
+<pre>$image_watermark_no_zoom_in : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If the watermark if smaller than the destination image, taking in account the desired watermark position
+then it will be resized up to fill in the image (minus the <a href="image_watermark_x">image_watermark_x</a> or <a href="image_watermark_y">image_watermark_y</a> values)</p>
+
+<p>If you don't want your watermark to be resized in any way, then
+set <a href="image_watermark_no_zoom_in">image_watermark_no_zoom_in</a> and <a href="image_watermark_no_zoom_out">image_watermark_no_zoom_out</a> to true
+If you want your watermark to be resized up or doan to fill in the image better, then
+set <a href="image_watermark_no_zoom_in">image_watermark_no_zoom_in</a> and <a href="image_watermark_no_zoom_out">image_watermark_no_zoom_out</a> to false</p>
+
+<p>Default value is true (so the watermark will not be resized up, which is the behaviour most people expect)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_watermark_no_zoom_out" id="$image_watermark_no_zoom_out"> </a><div class="element clickable property public $image_watermark_no_zoom_out" data-toggle="collapse" data-target=".$image_watermark_no_zoom_out .collapse">
+<h2>Prevents the watermark to be resized down if it is bigger than the image</h2>
+<pre>$image_watermark_no_zoom_out : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If the watermark if bigger than the destination image, taking in account the desired watermark position
+then it will be resized down to fit in the image (minus the <a href="image_watermark_x">image_watermark_x</a> or <a href="image_watermark_y">image_watermark_y</a> values)</p>
+
+<p>If you don't want your watermark to be resized in any way, then
+set <a href="image_watermark_no_zoom_in">image_watermark_no_zoom_in</a> and <a href="image_watermark_no_zoom_out">image_watermark_no_zoom_out</a> to true
+If you want your watermark to be resized up or doan to fill in the image better, then
+set <a href="image_watermark_no_zoom_in">image_watermark_no_zoom_in</a> and <a href="image_watermark_no_zoom_out">image_watermark_no_zoom_out</a> to false</p>
+
+<p>Default value is false (so the watermark may be shrinked to fit in the image)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_watermark_position" id="$image_watermark_position"> </a><div class="element clickable property public $image_watermark_position" data-toggle="collapse" data-target=".$image_watermark_position .collapse">
+<h2>Sets the watermarkposition within the image</h2>
+<pre>$image_watermark_position : \string;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is one or two out of 'TBLR' (top, bottom, left, right)</p>
+
+<p>The positions are as following:   TL  T  TR
+                                  L       R
+                                  BL  B  BR</p>
+
+<p>Default value is null (centered, horizontal and vertical)</p>
+
+<p>Note that is <a href="image_watermark_x">image_watermark_x</a> and <a href="image_watermark_y">image_watermark_y</a> are used, this setting has no effect</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_watermark_x" id="$image_watermark_x"> </a><div class="element clickable property public $image_watermark_x" data-toggle="collapse" data-target=".$image_watermark_x .collapse">
+<h2>Sets the watermark absolute X position within the image</h2>
+<pre>$image_watermark_x : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the top of the image and the watermark
+If a negative value is used, it will represent the distance between the bottom of the image and the watermark</p>
+
+<p>Default value is null (so <a href="image_watermark_position">image_watermark_position</a> is used)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_watermark_y" id="$image_watermark_y"> </a><div class="element clickable property public $image_watermark_y" data-toggle="collapse" data-target=".$image_watermark_y .collapse">
+<h2>Sets the twatermark absolute Y position within the image</h2>
+<pre>$image_watermark_y : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in pixels, representing the distance between the left of the image and the watermark
+If a negative value is used, it will represent the distance between the right of the image and the watermark</p>
+
+<p>Default value is null (so <a href="image_watermark_position">image_watermark_position</a> is used)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_x" id="$image_x"> </a><div class="element clickable property public $image_x" data-toggle="collapse" data-target=".$image_x .collapse">
+<h2>Set this variable to the wanted (or maximum/minimum) width for the processed image, in pixels</h2>
+<pre>$image_x : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is 150</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24image_y" id="$image_y"> </a><div class="element clickable property public $image_y" data-toggle="collapse" data-target=".$image_y .collapse">
+<h2>Set this variable to the wanted (or maximum/minimum) height for the processed image, in pixels</h2>
+<pre>$image_y : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is 150</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24jpeg_quality" id="$jpeg_quality"> </a><div class="element clickable property public $jpeg_quality" data-toggle="collapse" data-target=".$jpeg_quality .collapse">
+<h2>Quality of JPEG created/converted destination image</h2>
+<pre>$jpeg_quality : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is 85</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24jpeg_size" id="$jpeg_size"> </a><div class="element clickable property public $jpeg_size" data-toggle="collapse" data-target=".$jpeg_size .collapse">
+<h2>Determines the quality of the JPG image to fit a desired file size</h2>
+<pre>$jpeg_size : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Value is in bytes. The JPG quality will be set between 1 and 100%
+The calculations are approximations.</p>
+
+<p>Default value is null (no calculations)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24language" id="$language"> </a><div class="element clickable property public $language" data-toggle="collapse" data-target=".$language .collapse">
+<h2>Language selected for the translations</h2>
+<pre>$language : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>By default, the language is english ("en_GB")</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24log" id="$log"> </a><div class="element clickable property public $log" data-toggle="collapse" data-target=".$log .collapse">
+<h2>Holds an HTML formatted log</h2>
+<pre>$log : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24mime_check" id="$mime_check"> </a><div class="element clickable property public $mime_check" data-toggle="collapse" data-target=".$mime_check .collapse">
+<h2>Set this variable to false if you don't want to check the MIME against the allowed list</h2>
+<pre>$mime_check : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This variable is set to true by default for security reason</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24mime_file" id="$mime_file"> </a><div class="element clickable property public $mime_file" data-toggle="collapse" data-target=".$mime_file .collapse">
+<h2>Set this variable to false in the init() function if you don't want to check the MIME
+with UNIX file() command</h2>
+<pre>$mime_file : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This variable is set to true by default for security reason</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24mime_fileinfo" id="$mime_fileinfo"> </a><div class="element clickable property public $mime_fileinfo" data-toggle="collapse" data-target=".$mime_fileinfo .collapse">
+<h2>Set this variable to false in the init() function if you don't want to check the MIME
+with Fileinfo PECL extension.</h2>
+<pre>$mime_fileinfo : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>On some systems, Fileinfo is known to be buggy, and you
+may want to deactivate it in the class code directly.</p>
+
+<p>You can also set it with the path of the magic database file.
+If set to true, the class will try to read the MAGIC environment variable
+  and if it is empty, will default to '/usr/share/file/magic'
+If set to an empty string, it will call finfo_open without the path argument</p>
+
+<p>This variable is set to true by default for security reason</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24mime_getimagesize" id="$mime_getimagesize"> </a><div class="element clickable property public $mime_getimagesize" data-toggle="collapse" data-target=".$mime_getimagesize .collapse">
+<h2>Set this variable to false in the init() function if you don't want to check the MIME
+with getimagesize()</h2>
+<pre>$mime_getimagesize : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The class tries to get a MIME type from getimagesize()
+If no MIME is returned, it tries to guess the MIME type from the file type</p>
+
+<p>This variable is set to true by default for security reason</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24mime_magic" id="$mime_magic"> </a><div class="element clickable property public $mime_magic" data-toggle="collapse" data-target=".$mime_magic .collapse">
+<h2>Set this variable to false in the init() function if you don't want to check the MIME
+with the magic.mime file</h2>
+<pre>$mime_magic : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The function mime_content_type() will be deprecated,
+and this variable will be set to false in a future release</p>
+
+<p>This variable is set to true by default for security reason</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24no_script" id="$no_script"> </a><div class="element clickable property public $no_script" data-toggle="collapse" data-target=".$no_script .collapse">
+<h2>Set this variable to false if you don't want to turn dangerous scripts into simple text files</h2>
+<pre>$no_script : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24no_upload_check" id="$no_upload_check"> </a><div class="element clickable property public $no_upload_check" data-toggle="collapse" data-target=".$no_upload_check .collapse">
+<h2>Flag stopping PHP upload checks</h2>
+<pre>$no_upload_check : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Indicates whether we instanciated the class with a filename, in which case
+we will not check on the validity of the PHP <em>upload</em></p>
+
+<p>This flag is automatically set to true when working on a local file</p>
+
+<p>Warning: for uploads, this flag MUST be set to false for security reason</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24preserve_transparency" id="$preserve_transparency"> </a><div class="element clickable property public $preserve_transparency" data-toggle="collapse" data-target=".$preserve_transparency .collapse">
+<h2>Preserve transparency when resizing or converting an image (deprecated)</h2>
+<pre>$preserve_transparency : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Default value is automatically set to true for transparent GIFs
+This setting is now deprecated</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24processed" id="$processed"> </a><div class="element clickable property public $processed" data-toggle="collapse" data-target=".$processed .collapse">
+<h2>Flag set after calling a process</h2>
+<pre>$processed : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Indicates if the processing, and copy of the resulting file went OK</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24translation" id="$translation"> </a><div class="element clickable property public $translation" data-toggle="collapse" data-target=".$translation .collapse">
+<h2>Array of translated error messages</h2>
+<pre>$translation : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>By default, the language is english (en_GB)
+Translations can be in separate files, in a lang/ subdirectory</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24uploaded" id="$uploaded"> </a><div class="element clickable property public $uploaded" data-toggle="collapse" data-target=".$uploaded .collapse">
+<h2>Flag set after instanciating the class</h2>
+<pre>$uploaded : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Indicates if the file has been uploaded properly</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24version" id="$version"> </a><div class="element clickable property public $version" data-toggle="collapse" data-target=".$version .collapse">
+<h2>Class version</h2>
+<pre>$version : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:25+02:00.<br></footer></div>
+</div>
+</body>
+</html>

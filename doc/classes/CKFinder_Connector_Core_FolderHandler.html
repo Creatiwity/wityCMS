@@ -1,0 +1,654 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Wity-Lite » \CKFinder_Connector_Core_FolderHandler</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Wity-Lite</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
+<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1013</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">2</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#CKFinder_Connector_Core_FolderHandler" title="CKFinder_Connector_Core_FolderHandler :: "><span class="description">CKFinder_Connector_Core_FolderHandler()
+        </span><pre>CKFinder_Connector_Core_FolderHandler()</pre></a></li>
+<li class="method public "><a href="#checkAcl" title="checkAcl :: Check ACL"><span class="description">Check ACL</span><pre>checkAcl()</pre></a></li>
+<li class="method public "><a href="#getAclMask" title="getAclMask :: Get ACL Mask"><span class="description">Get ACL Mask</span><pre>getAclMask()</pre></a></li>
+<li class="method public "><a href="#getClientPath" title="getClientPath :: Get Client path"><span class="description">Get Client path</span><pre>getClientPath()</pre></a></li>
+<li class="method public "><a href="#getResourceTypeConfig" title="getResourceTypeConfig :: Get resource type config"><span class="description">Get resource type config</span><pre>getResourceTypeConfig()</pre></a></li>
+<li class="method public "><a href="#getResourceTypeName" title="getResourceTypeName :: Get resource type name"><span class="description">Get resource type name</span><pre>getResourceTypeName()</pre></a></li>
+<li class="method public "><a href="#getServerPath" title="getServerPath :: Get server path"><span class="description">Get server path</span><pre>getServerPath()</pre></a></li>
+<li class="method public "><a href="#getThumbsServerPath" title="getThumbsServerPath :: Get server path to thumbnails directory"><span class="description">Get server path to thumbnails directory</span><pre>getThumbsServerPath()</pre></a></li>
+<li class="method public "><a href="#getUrl" title="getUrl :: Get Url"><span class="description">Get Url</span><pre>getUrl()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_aclMask" title="$_aclMask :: ACL mask"><span class="description">ACL mask</span><pre>$_aclMask</pre></a></li>
+<li class="property public "><a href="#%24_clientPath" title="$_clientPath :: Client path"><span class="description">Client path</span><pre>$_clientPath</pre></a></li>
+<li class="property public "><a href="#%24_folderInfo" title="$_folderInfo :: Folder info"><span class="description">Folder info</span><pre>$_folderInfo</pre></a></li>
+<li class="property public "><a href="#%24_resourceTypeConfig" title="$_resourceTypeConfig :: CKFinder_Connector_Core_ResourceTypeConfig object"><span class="description">CKFinder_Connector_Core_ResourceTypeConfig object</span><pre>$_resourceTypeConfig</pre></a></li>
+<li class="property public "><a href="#%24_resourceTypeName" title="$_resourceTypeName :: ResourceType name"><span class="description">ResourceType name</span><pre>$_resourceTypeName</pre></a></li>
+<li class="property public "><a href="#%24_serverPath" title="$_serverPath :: Server path"><span class="description">Server path</span><pre>$_serverPath</pre></a></li>
+<li class="property public "><a href="#%24_thumbsFolderInfo" title="$_thumbsFolderInfo :: Thumbnails folder info"><span class="description">Thumbnails folder info</span><pre>$_thumbsFolderInfo</pre></a></li>
+<li class="property public "><a href="#%24_thumbsServerPath" title="$_thumbsServerPath :: Thumbnails server path"><span class="description">Thumbnails server path</span><pre>$_thumbsServerPath</pre></a></li>
+<li class="property public "><a href="#%24_url" title="$_url :: Url"><span class="description">Url</span><pre>$_url</pre></a></li>
+</ul>
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#checkAcl" title="checkAcl :: Check ACL"><span class="description">Check ACL</span><pre>checkAcl()</pre></a></li>
+<li class="method public "><a href="#getAclMask" title="getAclMask :: Get ACL Mask"><span class="description">Get ACL Mask</span><pre>getAclMask()</pre></a></li>
+<li class="method public "><a href="#getClientPath" title="getClientPath :: Get Client path"><span class="description">Get Client path</span><pre>getClientPath()</pre></a></li>
+<li class="method public "><a href="#getResourceTypeConfig" title="getResourceTypeConfig :: Get resource type config"><span class="description">Get resource type config</span><pre>getResourceTypeConfig()</pre></a></li>
+<li class="method public "><a href="#getResourceTypeName" title="getResourceTypeName :: Get resource type name"><span class="description">Get resource type name</span><pre>getResourceTypeName()</pre></a></li>
+<li class="method public "><a href="#getServerPath" title="getServerPath :: Get server path"><span class="description">Get server path</span><pre>getServerPath()</pre></a></li>
+<li class="method public "><a href="#getThumbsServerPath" title="getThumbsServerPath :: Get server path to thumbnails directory"><span class="description">Get server path to thumbnails directory</span><pre>getThumbsServerPath()</pre></a></li>
+<li class="method public "><a href="#getUrl" title="getUrl :: Get Url"><span class="description">Get Url</span><pre>getUrl()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24_aclMask" title="$_aclMask :: ACL mask"><span class="description">ACL mask</span><pre>$_aclMask</pre></a></li>
+<li class="property private "><a href="#%24_clientPath" title="$_clientPath :: Client path"><span class="description">Client path</span><pre>$_clientPath</pre></a></li>
+<li class="property private "><a href="#%24_folderInfo" title="$_folderInfo :: Folder info"><span class="description">Folder info</span><pre>$_folderInfo</pre></a></li>
+<li class="property private "><a href="#%24_resourceTypeConfig" title="$_resourceTypeConfig :: CKFinder_Connector_Core_ResourceTypeConfig object"><span class="description">CKFinder_Connector_Core_ResourceTypeConfig object</span><pre>$_resourceTypeConfig</pre></a></li>
+<li class="property private "><a href="#%24_resourceTypeName" title="$_resourceTypeName :: ResourceType name"><span class="description">ResourceType name</span><pre>$_resourceTypeName</pre></a></li>
+<li class="property private "><a href="#%24_serverPath" title="$_serverPath :: Server path"><span class="description">Server path</span><pre>$_serverPath</pre></a></li>
+<li class="property private "><a href="#%24_thumbsFolderInfo" title="$_thumbsFolderInfo :: Thumbnails folder info"><span class="description">Thumbnails folder info</span><pre>$_thumbsFolderInfo</pre></a></li>
+<li class="property private "><a href="#%24_thumbsServerPath" title="$_thumbsServerPath :: Thumbnails server path"><span class="description">Thumbnails server path</span><pre>$_thumbsServerPath</pre></a></li>
+<li class="property private "><a href="#%24_url" title="$_url :: Url"><span class="description">Url</span><pre>$_url</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCKFinder_Connector_Core_FolderHandler" id="\CKFinder_Connector_Core_FolderHandler"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CKFinder_Connector_Core_FolderHandler.html">CKFinder_Connector_Core_FolderHandler</a>
+</li>
+</ul>
+<div href="../classes/CKFinder_Connector_Core_FolderHandler.html" class="element class">
+<p class="short_description"></p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CKFinder.Core.html">CKFinder</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Core</td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>CKSource - Frederico Knabben</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="CKFinder_Connector_Core_FolderHandler" id="CKFinder_Connector_Core_FolderHandler"></a><div class="element clickable method public CKFinder_Connector_Core_FolderHandler" data-toggle="collapse" data-target=".CKFinder_Connector_Core_FolderHandler .collapse">
+<h2>CKFinder_Connector_Core_FolderHandler()
+        </h2>
+<pre>CKFinder_Connector_Core_FolderHandler() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="checkAcl" id="checkAcl"></a><div class="element clickable method public checkAcl" data-toggle="collapse" data-target=".checkAcl .collapse">
+<h2>Check ACL</h2>
+<pre>checkAcl(int $aclToCkeck) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aclToCkeck</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="getAclMask" id="getAclMask"></a><div class="element clickable method public getAclMask" data-toggle="collapse" data-target=".getAclMask .collapse">
+<h2>Get ACL Mask</h2>
+<pre>getAclMask() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a name="getClientPath" id="getClientPath"></a><div class="element clickable method public getClientPath" data-toggle="collapse" data-target=".getClientPath .collapse">
+<h2>Get Client path</h2>
+<pre>getClientPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getResourceTypeConfig" id="getResourceTypeConfig"></a><div class="element clickable method public getResourceTypeConfig" data-toggle="collapse" data-target=".getResourceTypeConfig .collapse">
+<h2>Get resource type config</h2>
+<pre>getResourceTypeConfig() : <a href="../classes/CKFinder_Connector_Core_ResourceTypeConfig.html">\CKFinder_Connector_Core_ResourceTypeConfig</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/CKFinder_Connector_Core_ResourceTypeConfig.html">\CKFinder_Connector_Core_ResourceTypeConfig</a></code></div>
+</div></div>
+</div>
+<a name="getResourceTypeName" id="getResourceTypeName"></a><div class="element clickable method public getResourceTypeName" data-toggle="collapse" data-target=".getResourceTypeName .collapse">
+<h2>Get resource type name</h2>
+<pre>getResourceTypeName() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getServerPath" id="getServerPath"></a><div class="element clickable method public getServerPath" data-toggle="collapse" data-target=".getServerPath .collapse">
+<h2>Get server path</h2>
+<pre>getServerPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getThumbsServerPath" id="getThumbsServerPath"></a><div class="element clickable method public getThumbsServerPath" data-toggle="collapse" data-target=".getThumbsServerPath .collapse">
+<h2>Get server path to thumbnails directory</h2>
+<pre>getThumbsServerPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getUrl" id="getUrl"></a><div class="element clickable method public getUrl" data-toggle="collapse" data-target=".getUrl .collapse">
+<h2>Get Url</h2>
+<pre>getUrl() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_aclMask" id="$_aclMask"> </a><div class="element clickable property public $_aclMask" data-toggle="collapse" data-target=".$_aclMask .collapse">
+<h2>ACL mask</h2>
+<pre>$_aclMask : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_clientPath" id="$_clientPath"> </a><div class="element clickable property public $_clientPath" data-toggle="collapse" data-target=".$_clientPath .collapse">
+<h2>Client path</h2>
+<pre>$_clientPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_folderInfo" id="$_folderInfo"> </a><div class="element clickable property public $_folderInfo" data-toggle="collapse" data-target=".$_folderInfo .collapse">
+<h2>Folder info</h2>
+<pre>$_folderInfo : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_resourceTypeConfig" id="$_resourceTypeConfig"> </a><div class="element clickable property public $_resourceTypeConfig" data-toggle="collapse" data-target=".$_resourceTypeConfig .collapse">
+<h2>CKFinder_Connector_Core_ResourceTypeConfig object</h2>
+<pre>$_resourceTypeConfig : <a href="../classes/CKFinder_Connector_Core_ResourceTypeConfig.html">\CKFinder_Connector_Core_ResourceTypeConfig</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_resourceTypeName" id="$_resourceTypeName"> </a><div class="element clickable property public $_resourceTypeName" data-toggle="collapse" data-target=".$_resourceTypeName .collapse">
+<h2>ResourceType name</h2>
+<pre>$_resourceTypeName : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_serverPath" id="$_serverPath"> </a><div class="element clickable property public $_serverPath" data-toggle="collapse" data-target=".$_serverPath .collapse">
+<h2>Server path</h2>
+<pre>$_serverPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_thumbsFolderInfo" id="$_thumbsFolderInfo"> </a><div class="element clickable property public $_thumbsFolderInfo" data-toggle="collapse" data-target=".$_thumbsFolderInfo .collapse">
+<h2>Thumbnails folder info</h2>
+<pre>$_thumbsFolderInfo : \mized</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_thumbsServerPath" id="$_thumbsServerPath"> </a><div class="element clickable property public $_thumbsServerPath" data-toggle="collapse" data-target=".$_thumbsServerPath .collapse">
+<h2>Thumbnails server path</h2>
+<pre>$_thumbsServerPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_url" id="$_url"> </a><div class="element clickable property public $_url" data-toggle="collapse" data-target=".$_url .collapse">
+<h2>Url</h2>
+<pre>$_url : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+<a name="%5CCKFinder_Connector_Core_FolderHandler" id="\CKFinder_Connector_Core_FolderHandler"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CKFinder_Connector_Core_FolderHandler.html">CKFinder_Connector_Core_FolderHandler</a>
+</li>
+</ul>
+<div href="../classes/CKFinder_Connector_Core_FolderHandler.html" class="element class">
+<p class="short_description"></p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CKFinder.Core.html">CKFinder</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Core</td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>CKSource - Frederico Knabben</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="checkAcl" id="checkAcl"></a><div class="element clickable method public checkAcl" data-toggle="collapse" data-target=".checkAcl .collapse">
+<h2>Check ACL</h2>
+<pre>checkAcl(int $aclToCkeck) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aclToCkeck</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="getAclMask" id="getAclMask"></a><div class="element clickable method public getAclMask" data-toggle="collapse" data-target=".getAclMask .collapse">
+<h2>Get ACL Mask</h2>
+<pre>getAclMask() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a name="getClientPath" id="getClientPath"></a><div class="element clickable method public getClientPath" data-toggle="collapse" data-target=".getClientPath .collapse">
+<h2>Get Client path</h2>
+<pre>getClientPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getResourceTypeConfig" id="getResourceTypeConfig"></a><div class="element clickable method public getResourceTypeConfig" data-toggle="collapse" data-target=".getResourceTypeConfig .collapse">
+<h2>Get resource type config</h2>
+<pre>getResourceTypeConfig() : <a href="../classes/CKFinder_Connector_Core_ResourceTypeConfig.html">\CKFinder_Connector_Core_ResourceTypeConfig</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/CKFinder_Connector_Core_ResourceTypeConfig.html">\CKFinder_Connector_Core_ResourceTypeConfig</a></code></div>
+</div></div>
+</div>
+<a name="getResourceTypeName" id="getResourceTypeName"></a><div class="element clickable method public getResourceTypeName" data-toggle="collapse" data-target=".getResourceTypeName .collapse">
+<h2>Get resource type name</h2>
+<pre>getResourceTypeName() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getServerPath" id="getServerPath"></a><div class="element clickable method public getServerPath" data-toggle="collapse" data-target=".getServerPath .collapse">
+<h2>Get server path</h2>
+<pre>getServerPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getThumbsServerPath" id="getThumbsServerPath"></a><div class="element clickable method public getThumbsServerPath" data-toggle="collapse" data-target=".getThumbsServerPath .collapse">
+<h2>Get server path to thumbnails directory</h2>
+<pre>getThumbsServerPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getUrl" id="getUrl"></a><div class="element clickable method public getUrl" data-toggle="collapse" data-target=".getUrl .collapse">
+<h2>Get Url</h2>
+<pre>getUrl() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_aclMask" id="$_aclMask"> </a><div class="element clickable property private $_aclMask" data-toggle="collapse" data-target=".$_aclMask .collapse">
+<h2>ACL mask</h2>
+<pre>$_aclMask : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_clientPath" id="$_clientPath"> </a><div class="element clickable property private $_clientPath" data-toggle="collapse" data-target=".$_clientPath .collapse">
+<h2>Client path</h2>
+<pre>$_clientPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_folderInfo" id="$_folderInfo"> </a><div class="element clickable property private $_folderInfo" data-toggle="collapse" data-target=".$_folderInfo .collapse">
+<h2>Folder info</h2>
+<pre>$_folderInfo : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_resourceTypeConfig" id="$_resourceTypeConfig"> </a><div class="element clickable property private $_resourceTypeConfig" data-toggle="collapse" data-target=".$_resourceTypeConfig .collapse">
+<h2>CKFinder_Connector_Core_ResourceTypeConfig object</h2>
+<pre>$_resourceTypeConfig : <a href="../classes/CKFinder_Connector_Core_ResourceTypeConfig.html">\CKFinder_Connector_Core_ResourceTypeConfig</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_resourceTypeName" id="$_resourceTypeName"> </a><div class="element clickable property private $_resourceTypeName" data-toggle="collapse" data-target=".$_resourceTypeName .collapse">
+<h2>ResourceType name</h2>
+<pre>$_resourceTypeName : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_serverPath" id="$_serverPath"> </a><div class="element clickable property private $_serverPath" data-toggle="collapse" data-target=".$_serverPath .collapse">
+<h2>Server path</h2>
+<pre>$_serverPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_thumbsFolderInfo" id="$_thumbsFolderInfo"> </a><div class="element clickable property private $_thumbsFolderInfo" data-toggle="collapse" data-target=".$_thumbsFolderInfo .collapse">
+<h2>Thumbnails folder info</h2>
+<pre>$_thumbsFolderInfo : \mized</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_thumbsServerPath" id="$_thumbsServerPath"> </a><div class="element clickable property private $_thumbsServerPath" data-toggle="collapse" data-target=".$_thumbsServerPath .collapse">
+<h2>Thumbnails server path</h2>
+<pre>$_thumbsServerPath : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_url" id="$_url"> </a><div class="element clickable property private $_url" data-toggle="collapse" data-target=".$_url .collapse">
+<h2>Url</h2>
+<pre>$_url : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-28T15:04:24+02:00.<br></footer></div>
+</div>
+</body>
+</html>
