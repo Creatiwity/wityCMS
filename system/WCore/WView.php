@@ -3,8 +3,14 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @desc Classe responsable de l'affichage final
  * @version $Id: WCore/WView.php 0002 21-07-2012 Fofif $
+ * @package Wity
+ */
+
+/**
+ * WView
+ * 
+ * This class handles applications response
  */
 
 class WView {
@@ -59,6 +65,7 @@ class WView {
 	/**
 	 * Recherche un fichier template en fonction du nom de l'appli et de l'action
 	 * Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli
+	 * 
 	 * @return string adresse du fichier
 	 */
 	public function findResponse($appName, $action, $adminLoaded) {
@@ -107,6 +114,7 @@ class WView {
 	
 	/**
 	 * Retourne une variable en "stack" avec un traitement particulier
+	 * 
 	 * @param $stackName Nom du stack
 	 * @return string
 	 */

@@ -3,8 +3,8 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @author	Fofif
- * @version	$Id: WCore/WMain.php 0000 29-04-2012 Fofif $
+ * @version	$Id: WCore/WMain.php 0001 29-04-2012 Fofif $
+ * @package Wity
  */
 
 require SYS_DIR.'WCore'.DS.'WController.php';

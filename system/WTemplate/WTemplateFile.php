@@ -1,33 +1,48 @@
 <?php defined('IN_WITY') or die('Access denied');
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
+ * WTemplate
+ * Moteur de template pour le CMS Wity
  *
- * @author    Fofif
- * @version   $Id: WTemplate/WTemplateFile.php 0002 28-04-2012 fofif $
- * @desc      Moteur de template, classe fichier
+ * @author     Fofif
+ * @version    $Id: WTemplate/WTemplateFile.php 0003 29-07-2012 Fofif $
+ * @package    Wity
+ * @subpackage WTemplate
  */
 
 class WTemplateFile {
-	// Chemin complet du fichier
+	/**
+	 * Chemin complet du fichier
+	 */
 	private $href;
 	
-	// Répertoire racine
+	/**
+	 * Répertoire racine
+	 */
 	private $baseDir;
 	
-	// Répertoire des fichiers compilés
+	/**
+	 * Répertoire des fichiers compilés
+	 */
 	private $compilationDir;
 	
-	// Chemin du fichier compilé
+	/**
+	 * Chemin du fichier compilé
+	 */
 	private $compilationHref;
 	
-	// Date de création du fichier .tpl original
+	/**
+	 * Date de création du fichier .tpl original
+	 */
 	private $creationTime;
 	
-	// Etat de la compilation
+	/**
+	 * Etat de la compilation
+	 */
 	private $compiled = false;
 	
-	// Durée de la compilation
+	/**
+	 * Durée de la compilation
+	 */
 	private $compilationTime = 0;
 	
 	public function __construct($href, $baseDir, $compDir) {
@@ -88,74 +103,17 @@ class WTemplateFile {
 	/**
 	 * Compilation du fichier
 	 * 
-	 * @param WTemplateCompiler Un compilateur de template
+	 * @param WTemplateCompiler $compiler This object is a compiler that will compile each nodes
 	 * @return void
 	 */
-	public function compile($compiler) {
+	public function compile(WTemplateCompiler $compiler) {
 		// Vérification de la compilation
 		if (!$this->checkCompilation()) {
-			// Temps marquant le début de la compilation
 			$start = microtime(true);
 			
-			// Ouverture du fichier
-			if (!($handler = fopen($this->href, 'r'))) {
-				throw new Exception("WTemplateFile::compile() : Unable top open file \"".$this->href."\".");
-			}
-			
-			$code = "";
-			$char = '';
-			$level = 0;
-			$tmp = "";
-			// Tant qu'on est pas arrivé à la fin du fichier
-			while (!feof($handler)) {
-				// Récupération du caractère suivant
-				$char = fgetc($handler);
-				
-				switch ($char) {
-					case '{':
-						if ($level > 0) {
-							$tmp .= '{';
-						}
-						
-						// On vérifie que l'accolade n'a pas été commentée
-						if (strlen($code) == 0 || $code[strlen($code)-1] != '\\') {
-							$level++;
-						}
-						break;
-					
-					case '}':
-						// On vérifie que l'accolade n'a pas été commentée
-						if (strlen($code) == 0 || $code[strlen($code)-1] != '\\') {
-							$level--;
-							// On a atteint le fermeture de la première accolade, on compile la chaîne trouvée
-							if ($level == 0) {
-								$code .= $compiler->compileTplCode($tmp, array('filename' => $this->href));
-								$tmp = "";
-							}
-						}
-						
-						if ($level > 0) {
-							$tmp .= '}';
-						}
-						break;
-					
-					default: // Cas d'un caractère quelconque
-						if ($level == 0) {
-							// Si on est pas dans un sous niveau d'accolade, c'est du texte et on l'ajoute simplement à la chaîne compilée
-							$code .= $char;
-						} else {
-							// Sinon, on la met dans la variable temporaire
-							$tmp .= $char;
-						}
-						break;
-				}
-			}
-			
-			// Fermeture du fichier
-			fclose($handler);
-			
-			// Suppression des short tags pour le xml
-			$code = str_replace("<?xml", "<?php echo '<?xml'; ?>", $code);
+			// Create new parser
+			$parser = new WTemplateParser($this->href);
+			$code = $parser->compileNodes($compiler);
 			
 			// Enregistrement du fichier compilé
 			$this->saveFile($code);

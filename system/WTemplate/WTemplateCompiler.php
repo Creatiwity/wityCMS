@@ -1,27 +1,36 @@
 <?php defined('IN_WITY') or die('Access denied');
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
+ * WTemplate
+ * Moteur de template pour le CMS Wity
  *
- * @author    Fofif
- * @version   $Id: WTemplate/WTemplateCompiler.php 0004 28-04-2012 Fofif $
- * @desc      Compilateur du moteur de template
+ * @author     Fofif
+ * @version    $Id: WTemplate/WTemplateCompiler.php 0004 28-04-2012 Fofif $
+ * @package    Wity
+ * @subpackage WTemplate
  */
 
 class WTemplateCompiler {
+	/**
+	 * List of tags opened so that we can check there is no jam in opening and closing the nodes
+	 */
 	private $openTags = array();
 	
 	/**
 	 * Compilation d'un élément bien précis
 	 */
-	public function compileTplCode($tpl_code, $data = array()) {
+	public function compileTplCode($node, $data = array()) {
+		$node = substr($node, 1, strlen($node)-2);
+		if (empty($node)) {
+			return "";
+		}
+		
 		// Variable display
-		if ($tpl_code[0] == '$') {
-			$output = $this->compile_var("name=".$tpl_code, $data);
+		if ($node[0] == '$') {
+			$output = $this->compile_var($node, $data);
 		}
 		// Closing tag
-		else if ($tpl_code[0] == '/') {
-			$tag = trim($tpl_code, '/');
+		else if ($node[0] == '/') {
+			$tag = trim($node, '/');
 			
 			$handler = 'compile_'.$tag.'_close';
 			if (method_exists('WTemplateCompiler', $handler)) {
@@ -39,12 +48,18 @@ class WTemplateCompiler {
 		// Opening tag
 		else {
 			// Get begining tag name : {"name" ...}
-			preg_match('#^([a-zA-Z0-9_]+)#', $tpl_code, $matches);
+			$matches = null;
+			preg_match('#^([a-zA-Z0-9_]+)#', $node, $matches);
+			
+			if (empty($matches)) {
+				throw new Exception("WTemplateCompiler::compileTplCode(): invalid node \"{".$node."}\".");
+			}
+			
 			$tag = $matches[0];
 			$handler = 'compile_'.$tag;
 			
 			// Remove tag name to get following string
-			$args = substr($tpl_code, strlen($tag));
+			$args = substr($node, strlen($tag));
 			
 			if (method_exists('WTemplateCompiler', $handler)) {
 				// Check whether it is not an open only tag
@@ -60,76 +75,7 @@ class WTemplateCompiler {
 			}
 		}
 		
-		// Suppression des short tags pour le xml
-		$output = preg_replace("#<?(^php)#", "", $output);
-		
 		return $output;
-	}
-	
-	/**
-	 * Trouve le niveau d'accolade recherché
-	 * @param string $string chaîne de recherche
-	 * @param int $asked_level niveau souhaité (-1 = niveau le plus bas)
-	 * @return array
-	 */
-	public static function findCode($string, $asked_level) {
-		$tags = array();
-		$level = 0;
-		$max_level = 0;
-		$tmp = "";
-		
-		// Parcours de la chaîne
-		for ($i = 0; $i < strlen($string); $i++) {
-			// Récupération du caractère suivant
-			$char = $string[$i];
-			
-			switch ($char) {
-				case '{':
-					// Si on est à un niveau inférieur, on sauvegarde les accolades
-					if ($level >= $asked_level && $asked_level >= 0) {
-						$tmp .= '{';
-					}
-					
-					$level++;
-					
-					if ($level > $max_level && $asked_level == -1) {
-						$max_level = $level;
-						
-						// Si on demande le niveau le plus bas, on nettoie ce qu'on a trouvé précédemment car c'était au-dessus
-						$tags = array();
-						$tmp = "";
-					}
-					break;
-				
-				case '}':
-					// Si on est à un niveau inférieur, on sauvegarde les accolades
-					if ($level > $asked_level && $asked_level >= 0) {
-						$tmp .= '}';
-					}
-					
-					// On a atteint le fermeture de la première accolade, on compile la chaîne trouvée
-					if ($level == $asked_level || ($asked_level == -1 && $level == $max_level)) {
-						$tags[] = $tmp;
-						$tmp = "";
-					}
-					
-					$level--;
-					break;
-				
-				default: // Cas d'un caractère quelconque
-					if ($level >= $asked_level) {
-						$tmp .= $char;
-					}
-					break;
-			}
-		}
-		
-		// Ajout du reste
-		if ($level == $asked_level && !empty($tmp)) {
-			$tags[] = $tmp;
-		}
-		
-		return $tags;
 	}
 	
 	/**
@@ -138,7 +84,7 @@ class WTemplateCompiler {
 	public static function parseVars($string) {
 		$string = trim($string);
 		
-		$vars = self::findCode($string, 1);
+		$vars = WTemplateParser::findAllNodes($string, 1);
 		foreach ($vars as $v) {
 			if ($v[0] == '$') {
 				$string = str_replace('{'.$v.'}', self::getVar($v), $string);
@@ -187,13 +133,13 @@ class WTemplateCompiler {
 		return $args;
 	}
 	
-	// Schéma d'une variable : $var.sub_array(.sub2...)|functions
+	/**
+	 * Schéma d'une variable : $var.sub_array(.sub2...)|functions
+	 */
 	public function compile_var($args, array $data) {
-		$attr = $this->getAttributes($args);
-		
-		if (isset($attr['name'])) {
+		if (!empty($args)) {
 			// On sépare la variable des fonctions de traitement en queue
-			$var_structure = explode('|', $attr['name']);
+			$var_structure = explode('|', $args);
 			
 			$root = $this->getVar($var_structure[0]);
 			

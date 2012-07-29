@@ -4,6 +4,7 @@
  * Système de gestion de contenu pour tous.
  *
  * @version	$Id: WCore/WNote.php 0005 27-07-2012 Fofif $
+ * @package Wity
  */
 
 class WNote {

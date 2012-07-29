@@ -19,6 +19,7 @@ abstract class WController {
 	
 	/**
 	 * Initialisation de l'application
+	 * 
 	 * @param WMain $wity Instance de wity
 	 */
 	public function init(WMain $wity) {
@@ -40,13 +41,15 @@ abstract class WController {
 	}
 	
 	/**
-	 * Launcher de l'applcation exécuté par wity
+	 * Launcher de l'applcation exécuté par Wity
+	 * 
 	 * @abstract
 	 */
 	abstract public function launch();
 	
 	/**
 	 * Retourne le nom de l'application
+	 * 
 	 * @return string
 	 */
 	public function getAppName() {
@@ -61,6 +64,7 @@ abstract class WController {
 	
 	/**
 	 * Forward permet d'éxécuter la méthode associée à l'$action de l'application
+	 * 
 	 * @param string $action Action à exécuter
 	 * @param string $default Action par défaut si $action est introuvable
 	 */
@@ -126,6 +130,7 @@ abstract class WController {
 	
 	/**
 	 * Détermine si la partie admin est chargée ou non
+	 * 
 	 * @return bool
 	 */
 	public function adminLoaded() {
@@ -138,7 +143,7 @@ abstract class WController {
 	protected function render($action) {
 		$this->view->assign('actionForwarded', $this->action);
 		
-		// Affichage de la vue
+		// View: find response and render it
 		$action = str_replace(array('.html', '.tpl'), '', $action);
 		$this->view->findResponse($this->getAppName(), $action, $this->adminLoaded());
 		$this->view->render();

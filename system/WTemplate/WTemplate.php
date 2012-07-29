@@ -1,19 +1,21 @@
 <?php defined('IN_WITY') or die('Access denied');
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
+ * WTemplate
+ * Moteur de template pour le CMS Wity
  *
- * @author    Fofif
- * @version   $Id: WTemplate/WTemplate.php 0007 12-12-2010 fofif $
- * @desc      Moteur de template
+ * @author     Fofif
+ * @version    $Id: WTemplate/WTemplate.php 0008 29-07-2012 Fofif $
+ * @package    Wity
+ * @subpackage WTemplate
  */
 
 if (!defined('DS')) {
 	define('DS', DIRECTORY_SEPARATOR);
 }
 
-include dirname(__FILE__).DS.'WTemplateCompiler.php';
 include dirname(__FILE__).DS.'WTemplateFile.php';
+include dirname(__FILE__).DS.'WTemplateParser.php';
+include dirname(__FILE__).DS.'WTemplateCompiler.php';
 
 class WTemplate {
 	// Répertoire des fichiers compilés
