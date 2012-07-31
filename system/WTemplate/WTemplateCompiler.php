@@ -134,19 +134,21 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Schéma d'une variable : $var.sub_array(.sub2...)|functions
+	 * Schéma d'une variable : $var.index1[.index2...]|functions
 	 */
 	public function compile_var($args, array $data) {
 		if (!empty($args)) {
 			// On sépare la variable des fonctions de traitement en queue
-			$var_structure = explode('|', $args);
+			$items = explode('|', $args);
+			$root = $this->getVar(array_shift($items));
 			
-			$root = $this->getVar($var_structure[0]);
-			
-			// Couche fonctions
-			if (isset($var_structure[1])) {
-				for ($i = 1; $i < sizeof($var_structure); $i++) {
-					$root = $var_structure[$i].'('.$root.')';
+			foreach ($items as $f) {
+				switch ($f) {
+					default:
+						if (function_exists($f)) {
+							$root = $f.'('.$root.')';
+						}
+						break;
 				}
 			}
 			
