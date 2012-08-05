@@ -23,7 +23,7 @@ class WMain {
 		
 		// Paramétrage des sessions
 		$this->setupSession();
-
+		
         // $this->log();
 		
 		// Execution de l'action
@@ -33,18 +33,22 @@ class WMain {
 	/**
 	 * Exéxcution d'une application
 	 */
-	public function exec($appName) {
+	public function exec($app_name) {
 		// Gestion de l'existence de l'appli
-		if ($this->isApp($appName)) {
+		if ($this->isApp($app_name)) {
 			// Inclusion du fichier principal de l'appli
-			include APPS_DIR.$appName.DS.'front'.DS.'main.php';
-			$class = str_replace('-', '_', ucfirst($appName)).'Controller';
-			//if (class_exists($class) && get_parent_class($class) == 'WController') {
-			$controller = new $class();
-			$controller->init($this);
-			$controller->launch();
+			include APPS_DIR.$app_name.DS.'front'.DS.'main.php';
+			$class = str_replace('-', '_', ucfirst($app_name)).'Controller';
+			
+			if (class_exists($class) && get_parent_class($class) == 'WController') {
+				$controller = new $class();
+				$controller->init($this);
+				$controller->launch();
+			} else {
+				WNote::info('app_structure', "L'application \"".$app_name."\" est mal structurée.", 'display');
+			}
 		} else {
-			WNote::info(404, "L'application \"".$appName."\" n'existe pas.", 'display');
+			WNote::info(404, "L'application \"".$app_name."\" est introuvable.", 'display');
 		}
 	}
 	

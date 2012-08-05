@@ -170,14 +170,9 @@ class WView {
 		if (!empty($viewErrors)) {
 			$this->setTheme('_blank');
 			$this->setResponse('themes/system/note/note_full_view.html');
-			foreach ($viewErrors as $note) {
-				$this->assignBlock('notes', $note);
-			}
+			//$this->assign('notes', $viewErrors);
 		} else {
-			$notes = WNote::get('*');
-			foreach ($notes as $note) {
-				$this->assignBlock('notes', $note);
-			}
+			$this->assign('notes', WNote::get('*'));
 		}
 		
 		// Treat "special vars"

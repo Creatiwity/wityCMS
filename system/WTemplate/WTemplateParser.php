@@ -4,38 +4,12 @@
  * Moteur de template pour le CMS Wity
  *
  * @author     Fofif
- * @version    $Id: WTemplate/WTemplateParser.php 0000 29-07-2012 Fofif $
+ * @version    $Id: WTemplate/WTemplateParser.php 0001 04-08-2012 Fofif $
  * @package    Wity
  * @subpackage WTemplate
  */
 
 class WTemplateParser {
-	/**
-	 * Href of the file to parse
-	 */
-	private $href;
-	
-	/**
-	 * The file's content to parse
-	 */
-	private $string;
-	
-	/**
-	 * Length of the content of the file
-	 */
-	private $length;
-	
-	public function __construct($href) {
-		$this->href = $href;
-		
-		// Read template file
-		if (!($this->string = file_get_contents($this->href))) {
-			throw new Exception("WTemplateParser::__construct() : Unable top read file \"".$this->href."\".");
-		}
-		
-		$this->length = strlen($this->string);
-	}
-	
 	/**
 	 * This function reads a string and finds node matching {im a node}
 	 * and gives these nodes to a compiler which will replace them.
@@ -43,61 +17,93 @@ class WTemplateParser {
 	 * @param WTemplateCompiler $compiler The compiler which will work on nodes
 	 * @return string Parsed and compiled template file
 	 */
-	public function compileNodes($compiler) {
+	public static function replaceNodes($string, $callback, &$nodes = null) {
+		$length = strlen($string);
 		$level = 0;
-		$code = "";
-		$tmp = "";
+		$code = ""; // $code stocks the entire code compiled
+		$tmp = ""; // $tmp stocks the node currently being read
 		$last_char = '';
-		$in_node = false;
 		$return = null;
 		
-		for ($i = 0; $i < $this->length; $i++) {
+		if (!is_callable($callback)) {
+			if (is_array($callback)) {
+				$class = is_object($callback[0]) ? get_class($callback[0]) : $callback[0];
+				$callback = $class.'::'.$callback[1];
+			}
+			throw new Exception("WTemplateParser::replaceNodes(): callback function \"".$callback."\" given is not callable.");
+		}
+		
+		for ($i = 0; $i < strlen($string); $i++) {
 			// Get next char
-			$char = $this->string[$i];
+			$char = $string[$i];
 			
 			switch ($char) {
 				case '\\': // backslash
-					if ($last_char == '\\') {
+					// backslash in a node are always saved since it is up to self::findAllNodes to manage them
+					if ($level > 0) {
 						$tmp .= '\\';
+					} else {
+						if ($last_char == '\\') {
+							$code .= '\\';
+							
+							// $char set to null in order to set $last_char to null because the '\' char has been canceled by the previous '\'
+							$char = '';
+						}
 					}
 					break;
 				
 				case '{':
-					$tmp .= '{';
-					
 					// Check whether { is backslashed
 					// If we are deeper than level 0
 					if ($last_char != '\\') {
 						$level++;
 					}
+					
+					// Are we in a node?
+					if ($level > 0) {
+						if ($level > 1) {
+							$tmp .= '{';
+						}
+					} else {
+						$code .= '{';
+					}
 					break;
 				
 				case '}':
-					$tmp .= '}';
-					
-					// Check whether it's not been backslashed
-					if ($last_char != '\\' && $level > 0) {
-						$level--;
+					if ($level > 0) {
+						if ($level > 1) {
+							$tmp .= '}';
+						}
+						
+						// Check whether } is backslashed
+						if ($last_char != '\\') {
+							$level--;
+						}
+						
 						// We are arrived at the end of the node => compile it
 						if ($level == 0) {
-							$code .= $compiler->compileTplCode($tmp, array('filename' => $this->href));
+							$code .= call_user_func($callback, $tmp);
 							$tmp = "";
 						}
+					} else {
+						$code .= '}';
 					}
 					break;
 				
 				default:
-					if ($last_char == '\\') {
-						$tmp .= '\\';
-					}
-					
 					if ($char == "\n" && $level > 0) {
-						throw new Exception("WTemplateParser::findNextNode(): found illegal carriage return character in a node.");
+						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node.");
 					}
 					
 					if ($level > 0) {
+						if ($last_char == '\\') {
+							$tmp .= '\\';
+						}
 						$tmp .= $char;
 					} else {
+						if ($last_char == '\\') {
+							$code .= '\\';
+						}
 						$code .= $char;
 					}
 					break;
@@ -106,81 +112,7 @@ class WTemplateParser {
 			$last_char = $char;
 		}
 		
-		// Replace xml tag to prevent short open tag conflict
-		$code = str_replace("<?xml", "<?php echo '<?xml'; ?>", $code);
-		
 		return $code;
-	}
-	
-	/**
-	 * Find all nodes matchin a given level
-	 * 
-	 * @param string $string String to search into
-	 * @param int $asked_level Level wanted (can be set to -1 meaning the deeper level)
-	 * @return array
-	 */
-	public static function findAllNodes($string, $asked_level) {
-		$nodes = array();
-		$level = 0;
-		$max_level = 0;
-		$tmp = "";
-		$backslash = false;
-		
-		for ($i = 0; $i < strlen($string); $i++) {
-			// Get next char
-			$char = $string[$i];
-			
-			switch ($char) {
-				case '\\':
-					$backslash = !$backslash;
-					break;
-				
-				case '{':
-					// Si on est à un niveau inférieur, on sauvegarde les accolades
-					if ($level >= $asked_level && $asked_level >= 0) {
-						$tmp .= '{';
-					}
-					
-					$level++;
-					
-					if ($level > $max_level && $asked_level == -1) {
-						$max_level = $level;
-						
-						// Si on demande le niveau le plus bas, on nettoie ce qu'on a trouvé précédemment car c'était au-dessus
-						$nodes = array();
-						$tmp = "";
-					}
-					break;
-				
-				case '}':
-					// Si on est à un niveau inférieur, on sauvegarde les accolades
-					if ($level > $asked_level && $asked_level >= 0) {
-						$tmp .= '}';
-					}
-					
-					// On a atteint le fermeture de la première accolade, on compile la chaîne trouvée
-					if ($level == $asked_level || ($asked_level == -1 && $level == $max_level)) {
-						$nodes[] = $tmp;
-						$tmp = "";
-					}
-					
-					$level--;
-					break;
-				
-				default: // Cas d'un caractère quelconque
-					if ($level >= $asked_level) {
-						$tmp .= $char;
-					}
-					break;
-			}
-		}
-		
-		// Ajout du reste
-		if ($level == $asked_level && !empty($tmp)) {
-			$nodes[] = $tmp;
-		}
-		
-		return $nodes;
 	}
 }
 

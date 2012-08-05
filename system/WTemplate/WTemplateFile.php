@@ -4,7 +4,7 @@
  * Moteur de template pour le CMS Wity
  *
  * @author     Fofif
- * @version    $Id: WTemplate/WTemplateFile.php 0003 29-07-2012 Fofif $
+ * @version    $Id: WTemplate/WTemplateFile.php 0003 04-08-2012 Fofif $
  * @package    Wity
  * @subpackage WTemplate
  */
@@ -111,9 +111,8 @@ class WTemplateFile {
 		if (!$this->checkCompilation()) {
 			$start = microtime(true);
 			
-			// Create new parser
-			$parser = new WTemplateParser($this->href);
-			$code = $parser->compileNodes($compiler);
+			// Compile file
+			$code = $compiler->compileFile($this->href);
 			
 			// Enregistrement du fichier compilé
 			$this->saveFile($code);

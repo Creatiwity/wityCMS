@@ -4,7 +4,7 @@
  * Moteur de template pour le CMS Wity
  *
  * @author     Fofif
- * @version    $Id: WTemplate/WTemplateCompiler.php 0004 28-04-2012 Fofif $
+ * @version    $Id: WTemplate/WTemplateCompiler.php 0005 04-08-2012 Fofif $
  * @package    Wity
  * @subpackage WTemplate
  */
@@ -15,18 +15,44 @@ class WTemplateCompiler {
 	 */
 	private $openTags = array();
 	
+	private $data = array();
+	
+	/**
+	 * Compile an entire file using the parser
+	 * 
+	 * @return string File compiled
+	 */
+	public function compileFile($href) {
+		// clear open tags
+		$this->openTags = array();
+		
+		// Read template file
+		if (!($string = file_get_contents($href))) {
+			throw new Exception("WTemplateCompiler::compileFile() : Unable top read file \"".$href."\".");
+		}
+		
+		$this->data['href'] = $href;
+		$code = WTemplateParser::replaceNodes($string, array($this, 'compileNode'));
+		$this->data = array();
+		
+		// Replace xml tag to prevent short open tag conflict
+		$code = str_replace("<?xml", "<?php echo '<?xml'; ?>", $code);
+		
+		return $code;
+	}
+	
 	/**
 	 * Compilation d'un élément bien précis
 	 */
-	public function compileTplCode($node, $data = array()) {
-		$node = substr($node, 1, strlen($node)-2);
+	public function compileNode($node) {
+		$node = trim($node);
 		if (empty($node)) {
 			return "";
 		}
 		
 		// Variable display
 		if ($node[0] == '$') {
-			$output = $this->compile_var($node, $data);
+			$output = $this->compile_var($node);
 		}
 		// Closing tag
 		else if ($node[0] == '/') {
@@ -40,7 +66,7 @@ class WTemplateCompiler {
 				}
 				
 				// Call handler
-				$output = $this->$handler($data);
+				$output = $this->$handler();
 			} else {
 				$output = '';
 			}
@@ -59,7 +85,7 @@ class WTemplateCompiler {
 			$handler = 'compile_'.$tag;
 			
 			// Remove tag name to get following string
-			$args = substr($node, strlen($tag));
+			$args = trim(substr($node, strlen($tag)));
 			
 			if (method_exists('WTemplateCompiler', $handler)) {
 				// Check whether it is not an open only tag
@@ -69,7 +95,7 @@ class WTemplateCompiler {
 				}
 				
 				// Call handler
-				$output = $this->$handler($args, $data);
+				$output = $this->$handler($args);
 			} else {
 				$output = '';
 			}
@@ -79,39 +105,44 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Recherche dans une chaîne une variable de la forme {$var} pour la parser via self::getVar()
+	 * Convertit une variable de la forme {$var.index1[.index2...]|func1[|func2...]} sous forme php
+	 * Possibilité d'utiliser des sous niveaux de variable (ex : {$var1.{$var2.x}}
 	 */
 	public static function parseVars($string) {
-		$string = trim($string);
-		
-		$vars = WTemplateParser::findAllNodes($string, 1);
-		foreach ($vars as $v) {
-			if ($v[0] == '$') {
-				$string = str_replace('{'.$v.'}', self::getVar($v), $string);
-			}
+		if ($string[0] != '$') {
+			return;
 		}
-		
-		return $string;
-	}
-	
-	/**
-	 * Convertit une variable de la forme {$var.x} sous forme php
-	 * Possibilité d'utiliser un sous niveau de variable (ex : {$var1.{$var2.x}}
-	 */
-	public static function getVar($string) {
 		// On supprime le '$' du début
-		if ($string[0] == '$') {
-			$string = substr($string, 1);
+		$string = substr($string, 1);
+		
+		if (strpos($string, '{') !== false) {
+			$string = WTemplateParser::replaceNodes($string, 'WTemplateCompiler::parseVars');
 		}
 		
-		$string = self::parseVars($string);
+		$functions = explode('|', $string);
+		
+		$var_string = array_shift($functions);
 		
 		$return = '$this->tpl_vars';
-		foreach (explode('.', $string) as $s) {
-			if ($s[0] == '$') {
+		// sub arrays
+		foreach (explode('.', $var_string) as $s) {
+			$s = trim($s);
+			if ($s[0] == '$' || strpos($s, '(') !== false) {
 				$return .= '['.$s.']';
 			} else {
 				$return .= "['".$s."']";
+			}
+		}
+		
+		// functions to apply
+		foreach ($functions as $f) {
+			$f = trim($f);
+			switch ($f) {
+				default:
+					if (function_exists($f)) {
+						$return = $f.'('.$return.')';
+					}
+					break;
 			}
 		}
 		
@@ -134,25 +165,12 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Schéma d'une variable : $var.index1[.index2...]|functions
+	 * Schéma d'une variable : {$var.index1[.index2...]|func1[|func2...]}
 	 */
-	public function compile_var($args, array $data) {
+	public function compile_var($args) {
 		if (!empty($args)) {
-			// On sépare la variable des fonctions de traitement en queue
-			$items = explode('|', $args);
-			$root = $this->getVar(array_shift($items));
-			
-			foreach ($items as $f) {
-				switch ($f) {
-					default:
-						if (function_exists($f)) {
-							$root = $f.'('.$root.')';
-						}
-						break;
-				}
-			}
-			
-			return '<?php echo '.$root.'; ?>';
+			$var = $this->parseVars($args);
+			return '<?php echo '.$var.'; ?>';
 		} else {
 			return '';
 		}
@@ -163,7 +181,7 @@ class WTemplateCompiler {
 	 * 
 	 * @param string $file Le fichier à inclure
 	 */
-	public function compile_include($args, array $data) {
+	public function compile_include($args) {
 		$attr = $this->getAttributes($args);
 		
 		if (isset($attr['file'])) {
@@ -171,9 +189,10 @@ class WTemplateCompiler {
 			$file = str_replace(array('{', '}'), array('".{', '}."'), $attr['file']);
 			$file = $this->parseVars($file);
 			
-			if (isset($data['filename'])) {
-				$file = str_replace('./', dirname($data['filename']).'/', $file);
-				$file = str_replace('../', dirname(dirname($data['filename'])).'/', $file);
+			if (!empty($this->href)) {
+				$dir = dirname($this->href);
+				$file = str_replace('./', $dir.'/', $file);
+				$file = str_replace('../', dirname($dir).'/', $file);
 			}
 			
 			return '<?php $this->display("'.$file.'"); ?>';
@@ -182,7 +201,7 @@ class WTemplateCompiler {
 		}
 	}
 	
-	public function compile_if($args, array $data) {
+	public function compile_if($args) {
 		$cond = trim($args);
 		
 		// Traitement des variables de la condition
@@ -191,57 +210,53 @@ class WTemplateCompiler {
 		return '<?php if ('.$cond.'): ?>';
 	}
 	
-	public function compile_else($args, array $data) {
-		return '<?php else: ?>';
+	public function compile_else($args) {
+		if (current($this->openTags) == 'for' && empty($this->data['for_else'])) {
+			$this->data['for_else'] = true;
+			return "<?php endforeach; endif; if (empty(\$this->tpl_vars['".current($this->data['for'])."'])): ?>";
+		} else {
+			return '<?php else: ?>';
+		}
 	}
 	
-	public function compile_elseif($args, array $data) {
+	public function compile_elseif($args) {
 		return str_replace('<?php if', '<?php elseif', $this->compile_if($args));
 	}
 	
-	public function compile_if_close(array $data) {
+	public function compile_if_close() {
 		return '<?php endif; ?>';
 	}
 	
-	public function compile_block($args, array $data) {
-		$attr = $this->getAttributes($args);
-		
-		if (isset($attr['name'])) {
-			$name = trim($attr['name'], '"');
-			return "<?php \$this->tpl_vars['count'] = 0;"
-				."if (isset(\$this->tpl_vars['".$name."_block']) && is_array(\$this->tpl_vars['".$name."_block'])):\n"
-				. "\tforeach (\$this->tpl_vars['".$name."_block'] as \$this->tpl_vars['".$name."']): ?>\n";
-		} else {
-			return '';
-		}
-	}
-	
-	public function compile_block_close(array $data) {
-		return '<?php $this->tpl_vars[\'count\']++; endforeach; endif; ?>';
-	}
-	
 	/* Syntaxe de foreach :
-	 * {foreach item="{$array}" as="{$var}"}
+	 * {for [$key, ]$value in $array}
 	 */
-	public function compile_for($args, array $data) {
-		$args = $this->parseVars($args);
-		//$attr = $this->getAttributes($args);
-		
-		if (isset($attr['item']) && isset($attr['as'])) {
-			return "<?php ".$attr['as']."['count'] = -1;\n"
-				."foreach(".$attr['item']." as ".$attr['as']."['key'] => ".$attr['as']."['value']):\n"
-				.$attr['as']."[\'count\']++; ?>\n";
+	public function compile_for($args) {
+		$matches = array();
+		if (preg_match('#^(\$([a-zA-Z0-9_]+),\s*)?\$([a-zA-Z0-9_]+)\s+in\s+\$([a-zA-Z0-9_]+)$#', $args, $matches)) {
+			list(, , $key, $value, $array) = $matches;
+			$this->data['for'][] = $array;
+			
+			if (empty($key)) {
+				return "<?php if (!empty(\$this->tpl_vars['".$array."'])):\n"
+					."foreach(\$this->tpl_vars['".$array."'] as \$this->tpl_vars['".$value."']): ?>";
+			} else {
+				return "<?php if (!empty(\$this->tpl_vars['".$array."'])):\n"
+					."foreach(\$this->tpl_vars['".$array."'] as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']): ?>";
+			}
 		} else {
 			return '';
 		}
 	}
 	
-	public function compile_for_close(array $data) {
-		return '<?php endforeach; ?>';
-	}
-	
-	public function compile_while($args, array $data) {
-		
+	public function compile_for_close() {
+		// remove last element of for
+		array_pop($this->data['for']);
+		if (!empty($this->data['for_else'])) {
+			unset($this->data['for_else']);
+			return '<?php endif; ?>';
+		} else {
+			return '<?php endif; endforeach; ?>';
+		}
 	}
 }
 

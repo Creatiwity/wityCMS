@@ -84,7 +84,9 @@ class WNote {
 	 * @param array $note
 	 */
 	public static function handle_assign($note) {
-		$_SESSION['notes'][] = $note;
+		if (self::count($note['code']) == 0) {
+			$_SESSION['notes'][] = $note;
+		}
 	}
 	
 	/**
@@ -108,6 +110,7 @@ class WNote {
 	
 	/**
 	 * Get notes saved into session whose code property matches $code
+	 * Notice: once you get a note, you won't get it anymore afterwards
 	 */
 	public static function get($code = '*') {
 		$result = array();

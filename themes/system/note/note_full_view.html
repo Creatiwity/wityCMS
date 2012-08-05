@@ -11,12 +11,14 @@
 	<body id="full_note">
 		<div id="box">
 			<h1>Wity Error Page</h1>
-			{block name="notes"}
-				<div class="note {$notes.level}">
-					<strong>{$notes.code}</strong>
-					<p>{$notes.message}</p>
+			{for $note in $notes}
+				<div class="note {$note.level}">
+					<strong>{$note.code}</strong>
+					<p>{$note.message}</p>
 				</div>
-			{/block}
+			{else}
+				<p>empty</p>
+			{/for}
 		</div>
 	</body>
 </html>
