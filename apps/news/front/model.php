@@ -1,7 +1,7 @@
 <?php
 /**
  * Wity CMS
- * Système de gestion de contenu pour tous.
+ * SystÃ¨me de gestion de contenu pour tous.
  *
  * @author Fofif
  * @version	$Id: apps/news/front/model.php 0002 31-07-2011 Fofif $
@@ -15,7 +15,7 @@ class NewsModel {
 	}
 	
 	/**
-	 * Récupère la liste complète des pages
+	 * RÃ©cupÃ¨re la liste complÃ¨te des pages
 	 */
 	public function getNewsList($from, $number, $order = 'date', $asc = false) {
 		$prep = $this->db->prepare('
@@ -31,7 +31,7 @@ class NewsModel {
 	}
 	
 	/**
-	 * Filtre les news selon une catégorie
+	 * Filtre les news selon une catÃ©gorie
 	 */
 	public function getNewsByCat(array $cats, $from, $number, $order = 'date', $asc = false) {
 		if (empty($cats)) {
@@ -42,7 +42,7 @@ class NewsModel {
 			$order = 'news.date';
 		}
 		
-		// Elaboration de la chaîne conditionnelle
+		// Elaboration de la chaÃ®ne conditionnelle
 		$s = '';
 		foreach ($cats as $c) {
 			$s .= 'shortname = "'.$c.'" OR ';
@@ -68,7 +68,7 @@ class NewsModel {
 	}
 	
 	/**
-	 * Récupération des données d'une page
+	 * RÃ©cupÃ©ration des donnÃ©es d'une page
 	 */
 	public function loadNews($id) {
 		$prep = $this->db->prepare('

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 	<head>
-		<title>{$pageTitle}</title>
+		<title>{$page_title}</title>
 		<meta name="Language" content="fr" />
 		<meta name="Robots" content="nofollow" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -16,7 +16,7 @@
 		<div class="wrapper">
 			<div id="header">
 				<div id="title">
-					<h1><a href="/">{$siteName}</a></h1>
+					<h1><a href="/">{$site_name}</a></h1>
 					<p>Wity <span>CMS</span><br />
 					<em>Bienvenue {$userNickname}</em></p>
 				</div>
@@ -29,16 +29,16 @@
 			<div id="nav">
 				<div class="inner">
 					<ul id="modules">
-						{foreach item={$appList} as={$app}}
-							<li{if {$app.value} == {$appSelected}} class="hover"{/if}>
+						{for $app in $appList}
+							<li{if {$app} == {$appSelected}} class="hover"{/if}>
 								<div><a href="/admin/{$app.value}/">{$app.value}</a></div></li>
-						{/foreach}
+						{/for}
 					</ul>
 					<ul id="actions">
-						{foreach item={$actionShownList} as={$act}}
+						{for $act in $actionShownList}
 							<li class="{if {$act.key} == @{$actionForwarded}}on{/if} {if {$act.count} == 0}first{/if}">
 								<a href="/admin/{$appSelected}/{if {$act.key} != 'index'}{$act.key}/{/if}">{$act.value}</a></li>
-						{/foreach}
+						{/for}
 					</ul>
 					<div class="sub">
 						<p>Votre position actuelle est : <span class="app">{$appSelected}</span>

@@ -36,6 +36,7 @@ class AdminController extends WController {
 	/**
 	 * Launcher de l'admin
 	 * Vérifie si on y a accès, quelle app charger...
+	 * 
 	 * @return void
 	 */
 	public function launch() {
@@ -72,6 +73,7 @@ class AdminController extends WController {
 	
 	/**
 	 * Vérifie si l'utilisateur a accès à l'administration
+	 * 
 	 * @return bool
 	 */
 	private function checkAdminAccess() {
@@ -80,6 +82,7 @@ class AdminController extends WController {
 	
 	/**
 	 * Vérifie si l'utilisateur a accès à l'administration de l'app demandée
+	 * 
 	 * @param $app nom de l'appli
 	 * @return bool
 	 */
@@ -89,6 +92,7 @@ class AdminController extends WController {
 	
 	/**
 	 * Met à jour le routage de l'appli admin
+	 * 
 	 * @return void
 	 */
 	private function routeAdmin() {
@@ -114,6 +118,7 @@ class AdminController extends WController {
 	
 	/**
 	 * Une appli possède-t-elle une administration ?
+	 * 
 	 * @param $app string appName
 	 * @return bool
 	 */
@@ -125,6 +130,7 @@ class AdminController extends WController {
 	 * Traitement des actions d'une application
 	 * Si la description d'une action débute par un antislash (\),
 	 * elle ne doit pas s'afficher dans la liste des opérations
+	 * 
 	 * @param $actions Liste des actions
 	 * @param $toDisplay bool détermine si les actions sont à afficher ou non
 	 */
@@ -144,6 +150,7 @@ class AdminController extends WController {
 	
 	/**
 	 * Configuration du thème de l'admin
+	 * 
 	 * @void
 	 */
 	private function configTheme() {

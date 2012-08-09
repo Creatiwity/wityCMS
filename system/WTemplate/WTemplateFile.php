@@ -63,7 +63,7 @@ class WTemplateFile {
 	 */
 	private function createCompilationHref() {
 		return $this->compilationDir
-			.str_replace(array('/', '\\'), '-', trim(str_replace($this->baseDir, '', dirname($this->href)), DS))
+			.str_replace(array('/', '\\'), '-', trim(str_replace($this->baseDir, '', dirname($this->href)), '\/'))
 			.'-'.str_replace(array('.html', '.tpl'), '.php', basename($this->href));
 	}
 	
@@ -111,8 +111,13 @@ class WTemplateFile {
 		if (!$this->checkCompilation()) {
 			$start = microtime(true);
 			
+			// Read template file
+			if (!($string = file_get_contents($this->href))) {
+				throw new Exception("WTemplateFile::compile() : Unable top read file \"".$this->href."\".");
+			}
+			
 			// Compile file
-			$code = $compiler->compileFile($this->href);
+			$code = $compiler->compileString($string, array('dir' => dirname($this->href)));
 			
 			// Enregistrement du fichier compilé
 			$this->saveFile($code);

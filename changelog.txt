@@ -2,14 +2,17 @@
 # Wity Changelog #
 ##################
 
-v1.0.2
+v0.2
 ------
 
 WTemplate
-- Moteur de template recodé (réglage de nombreux bugs)
+- Parser recodé (réglage de nombreux bugs)
 - Gestion des short tags (<?xml)
 - Correction d'un bug avec les chemins de compilation qui contiennent des caractères "."
 - Fixed a bug when a tag {} was present at the begining of a file
+- New node: {for $key, $value in $array}
+- Modified node: {include href}
+- Deleted node {block} and method WTemplate::assignBlockVars no longer exists
 
 WMain
 - Template configuration déplacée directement dans WView
@@ -18,7 +21,7 @@ WRoute
 - Correction d'un bug de routage lorsque wity se trouve à la racine
 
 WView
-- Special theme "null" added
+- Special theme "_blank" added
 - Method "setTpl" renamed into "setResponse"
 - New method "findResponse" from WController::findTpl()
 

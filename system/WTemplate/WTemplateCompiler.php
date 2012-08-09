@@ -17,22 +17,34 @@ class WTemplateCompiler {
 	
 	private $data = array();
 	
+	private static $externalCallbacks = array();
+	
+	public static function registerCompiler($compiler_name, $callback) {
+		if (is_callable($callback)) {
+			if (!isset(self::$externalCallbacks[$compiler_name])) {
+				self::$externalCallbacks[$compiler_name] = $callback;
+			}
+		} else {
+			if (is_array($callback)) {
+				$class = is_object($callback[0]) ? get_class($callback[0]) : $callback[0];
+				$callback = $class.'::'.$callback[1];
+			}
+			throw new Exception("WTemplateParser::replaceNodes(): callback function \"".$callback."\" given is not callable.");
+		}
+	}
+	
 	/**
 	 * Compile an entire file using the parser
 	 * 
 	 * @return string File compiled
 	 */
-	public function compileFile($href) {
+	public function compileString($string, array $data = array()) {
 		// clear open tags
 		$this->openTags = array();
+		$this->data = $data;
 		
-		// Read template file
-		if (!($string = file_get_contents($href))) {
-			throw new Exception("WTemplateCompiler::compileFile() : Unable top read file \"".$href."\".");
-		}
-		
-		$this->data['href'] = $href;
 		$code = WTemplateParser::replaceNodes($string, array($this, 'compileNode'));
+		
 		$this->data = array();
 		
 		// Replace xml tag to prevent short open tag conflict
@@ -62,7 +74,7 @@ class WTemplateCompiler {
 			if (method_exists('WTemplateCompiler', $handler)) {
 				// Check last open tag
 				if (array_pop($this->openTags) != $tag) {
-					throw new Exception("WTemplateCompiler::compileTplCode(): mismatched ".$tag." opening tag.");
+					throw new Exception("WTemplateCompiler::compileNode(): mismatched ".$tag." opening tag.");
 				}
 				
 				// Call handler
@@ -78,7 +90,7 @@ class WTemplateCompiler {
 			preg_match('#^([a-zA-Z0-9_]+)#', $node, $matches);
 			
 			if (empty($matches)) {
-				throw new Exception("WTemplateCompiler::compileTplCode(): invalid node \"{".$node."}\".");
+				throw new Exception("WTemplateCompiler::compileNode(): invalid node \"{".$node."}\".");
 			}
 			
 			$tag = $matches[0];
@@ -108,7 +120,7 @@ class WTemplateCompiler {
 	 * Convertit une variable de la forme {$var.index1[.index2...]|func1[|func2...]} sous forme php
 	 * Possibilité d'utiliser des sous niveaux de variable (ex : {$var1.{$var2.x}}
 	 */
-	public static function parseVars($string) {
+	public function parseVar($string) {
 		if ($string[0] != '$') {
 			return;
 		}
@@ -116,7 +128,7 @@ class WTemplateCompiler {
 		$string = substr($string, 1);
 		
 		if (strpos($string, '{') !== false) {
-			$string = WTemplateParser::replaceNodes($string, 'WTemplateCompiler::parseVars');
+			$string = $this->replaceVars($string);
 		}
 		
 		$functions = explode('|', $string);
@@ -149,19 +161,8 @@ class WTemplateCompiler {
 		return $return;
 	}
 	
-	/**
-	 * Fonction permettant de parser une chaîne fournie en argument, dans les accolades
-	 */
-	public function getAttributes($string) {
-		$string_arr = preg_split('#\s+#', trim($string));
-		
-		$args = array();
-		foreach ($string_arr as $str) {
-			list($name, $value) = explode('=', $str);
-			$args[$name] = $value;
-		}
-		
-		return $args;
+	public function replaceVars($string) {
+		return WTemplateParser::replaceNodes($string, 'WTemplateCompiler::parseVar');
 	}
 	
 	/**
@@ -169,7 +170,7 @@ class WTemplateCompiler {
 	 */
 	public function compile_var($args) {
 		if (!empty($args)) {
-			$var = $this->parseVars($args);
+			$var = $this->parseVar($args);
 			return '<?php echo '.$var.'; ?>';
 		} else {
 			return '';
@@ -181,46 +182,42 @@ class WTemplateCompiler {
 	 * 
 	 * @param string $file Le fichier à inclure
 	 */
-	public function compile_include($args) {
-		$attr = $this->getAttributes($args);
-		
-		if (isset($attr['file'])) {
-			// {$var} are replaced by ".{$var}." so that they can concat with other strings
-			$file = str_replace(array('{', '}'), array('".{', '}."'), $attr['file']);
-			$file = $this->parseVars($file);
-			
-			if (!empty($this->href)) {
-				$dir = dirname($this->href);
-				$file = str_replace('./', $dir.'/', $file);
-				$file = str_replace('../', dirname($dir).'/', $file);
-			}
-			
-			return '<?php $this->display("'.$file.'"); ?>';
-		} else {
+	public function compile_include($file) {
+		if (empty($file)) {
 			return '';
 		}
+		
+		// {$var} are replaced by ".{$var}." so that they can concat with other strings
+		$file = str_replace(array('{', '}'), array('".{', '}."'), $file);
+		$file = $this->replaceVars($file);
+		
+		if (!empty($this->data['dir'])) {
+			$file = str_replace('./', $this->data['dir'].'/', $file);
+			$file = str_replace('../', dirname($this->data['dir']).'/', $file);
+		}
+		
+		return '<?php $this->display("'.$file.'"); ?>';
 	}
 	
 	public function compile_if($args) {
 		$cond = trim($args);
 		
 		// Traitement des variables de la condition
-		$cond = $this->parseVars($cond);
+		$cond = $this->replaceVars($cond);
 		
 		return '<?php if ('.$cond.'): ?>';
 	}
 	
 	public function compile_else($args) {
-		if (current($this->openTags) == 'for' && empty($this->data['for_else'])) {
-			$this->data['for_else'] = true;
-			return "<?php endforeach; endif; if (empty(\$this->tpl_vars['".current($this->data['for'])."'])): ?>";
+		if (current($this->openTags) == 'for') {
+			return "<?php endforeach; endif; if (empty(\$this->tpl_vars['".current($this->data['for_array'])."'])): ?>";
 		} else {
 			return '<?php else: ?>';
 		}
 	}
 	
 	public function compile_elseif($args) {
-		return str_replace('<?php if', '<?php elseif', $this->compile_if($args));
+		return str_replace('if', 'elseif', $this->compile_if($args));
 	}
 	
 	public function compile_if_close() {
@@ -234,7 +231,9 @@ class WTemplateCompiler {
 		$matches = array();
 		if (preg_match('#^(\$([a-zA-Z0-9_]+),\s*)?\$([a-zA-Z0-9_]+)\s+in\s+\$([a-zA-Z0-9_]+)$#', $args, $matches)) {
 			list(, , $key, $value, $array) = $matches;
-			$this->data['for'][] = $array;
+			
+			// compile_else needs to know which array is beeing read
+			$this->data['for_array'][] = $array;
 			
 			if (empty($key)) {
 				return "<?php if (!empty(\$this->tpl_vars['".$array."'])):\n"
@@ -249,13 +248,14 @@ class WTemplateCompiler {
 	}
 	
 	public function compile_for_close() {
-		// remove last element of for
-		array_pop($this->data['for']);
+		// remove last array of for
+		array_pop($this->data['for_array']);
+		
 		if (!empty($this->data['for_else'])) {
 			unset($this->data['for_else']);
 			return '<?php endif; ?>';
 		} else {
-			return '<?php endif; endforeach; ?>';
+			return '<?php endforeach; endif; ?>';
 		}
 	}
 }

@@ -3,7 +3,7 @@
 $config = array(
     'base' => 'localhost/Wity-Lite/',
 	'site_name' => 'Wity Lite',
-	'theme' => '_blan',
+	'theme' => '_blank',
 	'lang' => 'fr-FR',
 );
 

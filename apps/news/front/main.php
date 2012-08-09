@@ -1,7 +1,7 @@
 <?php
 /**
  * Wity CMS
- * Système de gestion de contenu pour tous.
+ * SystÃ¨me de gestion de contenu pour tous.
  *
  * @author Fofif
  * @version	$Id: main.php 0001 09-04-2011 Fofif $
@@ -13,7 +13,7 @@ class NewsController extends WController {
 	);
 	
 	/*
-	 * Chargement du modèle et de la view
+	 * Chargement du modÃ¨le et de la view
 	 */
 	public function __construct() {
 		include 'model.php';
@@ -29,7 +29,7 @@ class NewsController extends WController {
 	}
 	
 	/**
-	 * Récupère un id fourni dans l'url
+	 * RÃ©cupÃ¨re un id fourni dans l'url
 	 */
 	private function getId() {
 		$args = WRoute::getArgs();
@@ -43,13 +43,13 @@ class NewsController extends WController {
 	
 	protected function index() {
 		$id = $this->getId();
-		// Si l'id fourni est valide, on charge la news demandée
+		// Si l'id fourni est valide, on charge la news demandÃ©e
 		if (!empty($id) && $this->model->validId($id)) {
 			$this->view->detail($id);
 			$this->render('detail');
 		} else {
 			$this->view->index();
-			$this->render('index');
+			$this->render('news');
 		}
 	}
 }

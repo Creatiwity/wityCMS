@@ -10,7 +10,7 @@
 /**
  * WView
  * 
- * This class handles applications response
+ * This class handles application's response
  */
 
 class WView {
@@ -31,6 +31,17 @@ class WView {
 	
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
+		
+		// Default theme configuration
+		$theme = WConfig::get('config.theme');
+		if (!empty($theme)) {
+			$this->setTheme($theme);
+		}
+		
+		// Default vars
+		$site_name = WConfig::get('config.site_name');
+		$this->assign('site_name', $site_name);
+		$this->assign('page_title', $site_name);
 	}
 	
 	/**
@@ -58,7 +69,7 @@ class WView {
 		if (file_exists($file)) {
 			$this->responseFile = $file;
 		} else {
-			WView::error('view_error_response', "WView::setResponse(): The file \"".$file."\" does not exist.");
+			WNote::error('view_error_response', "WView::setResponse(): The file \"".$file."\" does not exist.");
 		}
 	}
 	
@@ -74,9 +85,9 @@ class WView {
 		} else {
 			$themeTplHref = $this->themeDir.'templates'.DS.$appName.DS.$action.'.html';
 			if (file_exists($themeTplHref)) {
-				$this->setResponse($themeTpleHref);
+				$this->setResponse($themeTplHref);
 			} else {
-				$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
+				$this->setResponse(APPS_DIR.$appName.DS.'front'.DS.'templates'.DS.$action.'.html');
 			}
 		}
 	}
@@ -170,7 +181,7 @@ class WView {
 		if (!empty($viewErrors)) {
 			$this->setTheme('_blank');
 			$this->setResponse('themes/system/note/note_full_view.html');
-			//$this->assign('notes', $viewErrors);
+			$this->assign('notes', $viewErrors);
 		} else {
 			$this->assign('notes', WNote::get('*'));
 		}
