@@ -2,7 +2,7 @@
 /**
  * Wity CMS
  * 
- * SortingHelper est une classe qui permet de connaître selon quelle variable
+ * SortingHelper est une classe qui permet de connaÃ®tre selon quelle variable
  * d'un ensemble on doit faire un classement
  *
  * @author Fofif
@@ -57,7 +57,7 @@ class SortingHelper {
 	}
 	
 	/**
-	 * Génère les variables utiles pour l'affichage du template
+	 * GÃ©nÃ¨re les variables utiles pour l'affichage du template
 	 * - les classes pour la variable de classement
 	 * - le sens du classement
 	 */
