@@ -58,6 +58,11 @@ class WTemplate {
 	public function setCompileDir($compileDir) {
 		if (is_dir($compileDir)) {
 			$this->compileDir = $compileDir;
+		} else {
+			// Attempt to create compile directory
+			if (mkdir($compileDir)) {
+				$this->compileDir = $compileDir;
+			}
 		}
 	}
 	

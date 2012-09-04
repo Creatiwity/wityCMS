@@ -60,3 +60,7 @@
 #full_note #box h1 {
 	margin-top: 0;
 }
+
+#full_note #box img {
+	vertical-align: middle;
+}

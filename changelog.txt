@@ -13,6 +13,7 @@ WTemplate
 - New node: {for $key, $value in $array}
 - Modified node: {include href}
 - Deleted node {block} and method WTemplate::assignBlockVars no longer exists
+- The specified cache dir is automaticly created if no exists
 
 WMain
 - Template configuration déplacée directement dans WView
