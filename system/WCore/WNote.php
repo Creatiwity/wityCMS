@@ -140,6 +140,10 @@ class WNote {
 		}
 		return $count;
 	}
+	
+	public static function display_full(array $notes) {
+		
+	}
 }
 
 

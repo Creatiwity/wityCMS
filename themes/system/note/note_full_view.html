@@ -7,16 +7,30 @@
 		<title></title>
 		
 		<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />
+		<script type="text/javascript" src="/themes/system/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#display_errors').click(function() {
+					$('#errors').slideToggle();
+				});
+			});
+		</script>
 	</head>
 	<body id="full_note">
 		<div id="box">
-			<h1><img src="/themes/system/images/wity_logo.png" alt="wity" width="60" /> Error Page</h1>
-			{for $note in $notes}
-				<div class="note {$note.level}">
-					<strong>{$note.code}</strong>
-					<p>{$note.message}</p>
-				</div>
-			{/for}
+			<h1 class="tcenter">
+				<img src="/themes/system/images/wity_logo.png" alt="wity" width="100" />
+			</h1>
+			<p>Wity a rencontré une erreur lors de son exécution.</p>
+			<p><a id="display_errors" href="javascript:void(0)">Afficher les erreurs</a></p>
+			<div id="errors" class="hidden">
+				{for $note in $notes}
+					<div class="note {$note.level}">
+						<strong>{$note.code}</strong>
+						<p>{$note.message}</p>
+					</div>
+				{/for}
+			</div>
 		</div>
 	</body>
 </html>

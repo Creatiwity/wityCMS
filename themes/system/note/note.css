@@ -2,6 +2,13 @@
  * Feuille de style des Notes
  */
 
+.tcenter {
+	text-align: center;
+}
+
+.hidden {
+	display: none;
+}
 
 /************************
  * Note classique <dt>

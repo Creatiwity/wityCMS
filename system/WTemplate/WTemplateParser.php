@@ -14,6 +14,8 @@ class WTemplateParser {
 	 * This function reads a string and finds node matching {im a node}
 	 * and gives these nodes to a compiler which will replace them.
 	 * 
+	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+	 * 
 	 * @param WTemplateCompiler $compiler The compiler which will work on nodes
 	 * @return string Parsed and compiled template file
 	 */
@@ -54,8 +56,7 @@ class WTemplateParser {
 				
 				case '{':
 					// Check whether { is backslashed
-					// If we are deeper than level 0
-					if ($last_char != '\\') {
+					if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $string[$i+1] != "\r\n" && $last_char != '\\') {
 						$level++;
 					}
 					

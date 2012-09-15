@@ -14,6 +14,10 @@
  */
 
 class WView {
+	// State variable telling whether the view was already rendered
+	private static $response_sent = false;
+	
+	// Instance of WTemplate
 	public $tpl;
 	
 	// Theme to be loaded
@@ -169,6 +173,11 @@ class WView {
 	 * Render the view
 	 */
 	public function render() {
+		// Check if no previous view has already been rendered
+		if (self::$response_sent) {
+			return;
+		}
+		
 		// Check response file
 		if (empty($this->responseFile) && WNote::count('view_error_response') == 0) {
 			WNote::error('view_error_response', "WView::render(): No response file given.");
@@ -224,6 +233,9 @@ class WView {
 				$html
 			);
 		}
+		
+		// Mark the view as rendered
+		self::$response_sent = true;
 	}
 }
 ?>

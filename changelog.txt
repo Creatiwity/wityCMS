@@ -24,7 +24,7 @@ WRoute
 WView
 - Special theme "_blank" added
 - Method "setTpl" renamed into "setResponse"
-- New method "findResponse" from WController::findTpl()
+- New method "findResponse" moved from WController::findTpl()
 
 Apps
 - User : correction du bug de redirection à la connexion
@@ -33,3 +33,4 @@ WNote
 - Class moved to %SYS_DIR%/WCore/
 - WException removed
 - Removed handler session: all notes are saved into session and are automaticly treated by WView
+- New handlers

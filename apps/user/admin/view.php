@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Wity CMS
  * Système de gestion de contenu pour tous.
@@ -20,7 +20,7 @@ class UserAdminView extends WView {
 	public function liste($sortBy, $sens, $currentPage, $filtres) {
 		// -- AdminStyle Helper
 		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$adminStyle = new AdminStyle(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'nickname');
+		$adminStyle = new AdminStyle(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC');
 		// Sorting vars
 		$sort = $adminStyle->getSorting($sortBy, $sens);
 		// Enregistrement des variables de classement
