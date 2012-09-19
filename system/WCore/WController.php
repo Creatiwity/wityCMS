@@ -35,6 +35,11 @@ abstract class WController {
 		if (is_null($this->view)) {
 			$this->view = new WView();
 		}
+		
+		// Default theme configuration
+		if ($this->view->getTheme() == '') {
+			$this->view->setTheme(WConfig::get('config.theme'));
+		}
 	}
 	
 	/**

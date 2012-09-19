@@ -36,12 +36,6 @@ class WView {
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
 		
-		// Default theme configuration
-		$theme = WConfig::get('config.theme');
-		if (!empty($theme)) {
-			$this->setTheme($theme);
-		}
-		
 		// Default vars
 		$site_name = WConfig::get('config.site_name');
 		$this->assign('site_name', $site_name);
@@ -73,7 +67,7 @@ class WView {
 		if (file_exists($file)) {
 			$this->responseFile = $file;
 		} else {
-			WNote::error('view_error_response', "WView::setResponse(): The file \"".$file."\" does not exist.");
+			WNote::error('view_error_response', "WView::setResponse(): The response file \"".$file."\" does not exist.");
 		}
 	}
 	
@@ -175,26 +169,26 @@ class WView {
 	public function render() {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
+			// HTML sent => abort
 			return;
-		}
-		
-		// Check response file
-		if (empty($this->responseFile) && WNote::count('view_error_response') == 0) {
-			WNote::error('view_error_response', "WView::render(): No response file given.");
 		}
 		
 		// Check theme
 		if (empty($this->themeName) && WNote::count('view_error_theme') == 0) {
 			WNote::error('view_error_theme', "WView::render(): No theme given or it was not found.");
 		}
+		// Check response file
+		if (empty($this->responseFile) && WNote::count('view_error_response') == 0) {
+			WNote::error('view_error_response', "WView::render(): No response file given.");
+		}
 		
 		// Handle errors
-		$viewErrors = WNote::get('view_error*');
-		if (!empty($viewErrors)) {
-			$this->setTheme('_blank');
-			$this->setResponse('themes/system/note/note_full_view.html');
-			$this->assign('notes', $viewErrors);
-		} else if ($this->getTheme() != '_blank') {
+		$view_errors = WNote::get('view_error*');
+		if (!empty($view_errors)) {
+			WNote::display_full($view_errors);
+			return;
+		}
+		if ($this->getTheme() != '_blank') {
 			$this->assign('notes', WNote::get('*'));
 		}
 		

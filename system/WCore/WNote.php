@@ -45,24 +45,21 @@ class WNote {
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
 	public static function error($code, $message, $handler = 'assign') {
-		$note = self::raise(self::ERROR, $code, $message, $handler);
-		return $note;
+		return self::raise(self::ERROR, $code, $message, $handler);
 	}
 	
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
 	public static function info($code, $message, $handler = 'assign') {
-		$note = self::raise(self::INFO, $code, $message, $handler);
-		return $note;
+		return self::raise(self::INFO, $code, $message, $handler);
 	}
 	
 	/**
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
 	public static function success($code, $message, $handler = 'assign') {
-		$note = self::raise(self::SUCCESS, $code, $message, $handler);
-		return $note;
+		return self::raise(self::SUCCESS, $code, $message, $handler);
 	}
 	
 	public static function handle_ignore($note) {
@@ -97,14 +94,14 @@ class WNote {
 	public static function handle_display($note) {
 		// own view
 		$view = new WView();
+		$view->setTheme(WConfig::get('config.theme'));
+		$view->setResponse('themes/system/note/note_view.html');
 		$view->assign(array(
 			'note_level'   => $note['level'],
 			'note_code'    => $note['code'],
 			'note_message' => $note['message'],
 			'css'          => '/themes/system/note/note.css'
 		));
-		$view->setTheme(WConfig::get('config.theme'));
-		$view->setResponse('themes/system/note/note_view.html');
 		$view->render();
 	}
 	
@@ -112,11 +109,11 @@ class WNote {
 	 * Get notes saved into session whose code property matches $code
 	 * Notice: once you get a note, you won't get it anymore afterwards
 	 */
-	public static function get($code = '*') {
+	public static function get($pattern = "*") {
 		$result = array();
 		if (!empty($_SESSION['notes'])) {
 			foreach ($_SESSION['notes'] as $key => $note) {
-				if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
+				if ($pattern == '*' || $note['code'] == $pattern || (strpos($pattern, '*') !== false && preg_match('#'.str_replace('*', '.*', $pattern).'#', $note['code']))) {
 					$result[] = $note;
 					// remove the note
 					unset($_SESSION['notes'][$key]);
@@ -127,13 +124,13 @@ class WNote {
 	}
 	
 	/**
-	 * Counts the notes saved whose code property matches $code
+	 * Counts the notes saved whose code property matches $pattern
 	 */
-	public static function count($code = '*') {
+	public static function count($pattern = "*") {
 		$count = 0;
 		if (!empty($_SESSION['notes'])) {
 			foreach ($_SESSION['notes'] as $key => $note) {
-				if ($code == '*' || $note['code'] == $code || (strpos($code, '*') !== false && preg_match('#'.str_replace('*', '.*', $code).'#', $note['code']))) {
+				if ($pattern == '*' || $note['code'] == $pattern || (strpos($pattern, '*') !== false && preg_match('#'.str_replace('*', '.*', $pattern).'#', $note['code']))) {
 					$count++;
 				}
 			}
@@ -141,8 +138,21 @@ class WNote {
 		return $count;
 	}
 	
+	/**
+	 * Display a set of notes in a dedicated view
+	 */
 	public static function display_full(array $notes) {
+		// If no notes found, show it
+		if (empty($notes)) {
+			$notes = array(self::info("There is no note to display.", '', 'ignore'));
+		}
 		
+		// Generate view
+		$view = new WView();
+		$view->setTheme('_blank');
+		$view->setResponse('themes/system/note/note_full_view.html');
+		$view->assign('notes', $notes);
+		$view->render();
 	}
 }
 
