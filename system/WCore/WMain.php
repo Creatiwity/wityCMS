@@ -48,10 +48,10 @@ class WMain {
 				$controller->init($this);
 				$controller->launch();
 			} else {
-				WNote::info('app_structure', "L'application \"".$app_name."\" est mal structurée.", 'display');
+				WNote::error('app_structure', "The application \"".$app_name."\" has to inherit WController abstract class.", 'display');
 			}
 		} else {
-			WNote::info(404, "L'application \"".$app_name."\" est introuvable.", 'display');
+			WNote::error(404, "The application \"".$app_name."\" is not found.", 'display');
 		}
 	}
 	
@@ -77,7 +77,7 @@ class WMain {
 	 * Vérifie si une app existe
 	 */
 	public function isApp($app) {
-		return in_array($app, $this->getAppsList());
+		return !empty($app) && in_array($app, $this->getAppsList());
 	}
 	
 	private function loadConfigs() {

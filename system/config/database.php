@@ -1,7 +1,5 @@
 <?php
-// arrays
 
-// Exemple
 $database = array(
 	'server' => 'localhost',
 	'port'   => '',

@@ -91,7 +91,7 @@ class WTemplateCompiler {
 			
 			// Check last open tag
 			if (array_pop($this->openNodes) != $node) {
-				throw new Exception("WTemplateCompiler::compileNode(): mismatched ".$node." opening tag.");
+				throw new Exception("WTemplateCompiler::compileNode(): mismatched node {".$node."} opening tag.");
 			}
 			
 			// Call handler
@@ -189,7 +189,7 @@ class WTemplateCompiler {
 	}
 	
 	public function replaceVars($string) {
-		return WTemplateParser::replaceNodes($string, 'WTemplateCompiler::parseVar');
+		return WTemplateParser::replaceNodes($string, 'WTemplateCompiler::parseVar()');
 	}
 	
 	/**

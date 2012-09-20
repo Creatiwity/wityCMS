@@ -45,6 +45,7 @@ class WNote {
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
 	public static function error($code, $message, $handler = 'assign') {
+		//var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 		return self::raise(self::ERROR, $code, $message, $handler);
 	}
 	
@@ -72,7 +73,7 @@ class WNote {
 	 * @param array $note
 	 */
 	public static function handle_die($note) {
-		die("<br /><strong>".$note['code'].":</strong> ".$note['message']."<br />\n");
+		die("<p><strong>".$note['code'].":</strong> ".$note['message']."</p>\n");
 	}
 	
 	/**
@@ -142,7 +143,13 @@ class WNote {
 	 * Display a set of notes in a dedicated view
 	 */
 	public static function display_full(array $notes) {
-		// If no notes found, show it
+		static $mutex = false;
+		if ($mutex) {
+			self::error('wnote_critical_section', "WNote::diplay_full(): tried to enter into a critical section. Probably nesting.", 'die');
+		}
+		$mutex = true;
+		
+		// If no notes found, display a custom message
 		if (empty($notes)) {
 			$notes = array(self::info("There is no note to display.", '', 'ignore'));
 		}
@@ -153,6 +160,8 @@ class WNote {
 		$view->setResponse('themes/system/note/note_full_view.html');
 		$view->assign('notes', $notes);
 		$view->render();
+		
+		$mutex = false;
 	}
 }
 

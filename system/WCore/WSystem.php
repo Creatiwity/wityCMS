@@ -56,9 +56,10 @@ class WSystem {
 			
 			try {
 				# Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
-				self::$dbInstance = new PDO($dsn, $user, $password);
+				@self::$dbInstance = new PDO($dsn, $user, $password);
 			} catch (PDOException $e) {
-				die("Erreur : " . $e->getMessage());
+				WNote::display_full(array(WNote::error('sql_conn_error', "Impossible to connect to MySQL.<br /><br /><em>PDO's error</em><br />".utf8_encode($e->getMessage()), 'ignore')));
+				die;
 			}
 			self::$dbInstance->query("SET NAMES 'utf8'");
 			self::$dbInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

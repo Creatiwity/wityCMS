@@ -49,11 +49,9 @@ class WView {
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
 			$this->themeName = '_blank';
-			return true;
 		} else if (is_dir(THEMES_DIR.$theme)) {
 			$this->themeName = $theme;
 			$this->themeDir = THEMES_DIR.$theme.DS;
-			return true;
 		} else {
 			WNote::error('view_error_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.");
 		}
@@ -216,16 +214,24 @@ class WView {
 		$base = WRoute::getDir();
 		if ($base == '/') {
 			// Direct render
-			$this->tpl->display($themeMainFile);
+			try {
+				$this->tpl->display($themeMainFile);
+			} catch (Exception $e) {
+				WNote::display_full(array(WNote::error('view_error_tpl_display', $e->getMessage(), 'ignore')));
+			}
 		} else {
 			// Absolute links fix
 			// If $base is not the root file, then change links
-			$html = $this->tpl->parse($themeMainFile);
-			echo str_replace(
-				array('src="/', 'href="/', 'action="/'),
-				array('src="'.$base, 'href="'.$base, 'action="'.$base),
-				$html
-			);
+			try {
+				$html = $this->tpl->parse($themeMainFile);
+				echo str_replace(
+					array('src="/', 'href="/', 'action="/'),
+					array('src="'.$base, 'href="'.$base, 'action="'.$base),
+					$html
+				);
+			} catch (Exception $e) {
+				WNote::display_full(array(WNote::error('view_error_tpl_parse', $e->getMessage(), 'ignore')));
+			}
 		}
 		
 		// Mark the view as rendered
