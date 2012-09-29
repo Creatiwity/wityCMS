@@ -22,7 +22,7 @@
 				</div>
 				<div id="logout">
 					<a href="/user/deconnexion/" title="déconnexion">déconnexion</a>
-					<img class="preload" src="/themes/admin/images/logout-on.jpg" alt="déconnexion" />
+					<img class="hidden" src="/themes/admin/images/logout-on.jpg" alt="déconnexion" />
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -31,13 +31,13 @@
 					<ul id="modules">
 						{for $app in $appList}
 							<li{if {$app} == {$appSelected}} class="hover"{/if}>
-								<div><a href="/admin/{$app.value}/">{$app.value}</a></div></li>
+								<div><a href="/admin/{$app}/">{$app}</a></div></li>
 						{/for}
 					</ul>
 					<ul id="actions">
-						{for $act in $actionShownList}
-							<li class="{if {$act.key} == @{$actionForwarded}}on{/if} {if {$act.count} == 0}first{/if}">
-								<a href="/admin/{$appSelected}/{if {$act.key} != 'index'}{$act.key}/{/if}">{$act.value}</a></li>
+						{for $action, $desc in $actionShownList}
+							<li class="{if {$action} == @{$actionForwarded}}on{/if} {if {$count} == 0}first{/if}">
+								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc}</a></li>
 						{/for}
 					</ul>
 					<div class="sub">
@@ -52,7 +52,7 @@
 				<div class="bottom"></div>
 			</div>
 			<div id="body">
-				{include file={$include}}
+				{include {$include}}
 			</div>
 			<div id="footer" class="tcenter">
 				<br />Merci de rapporter tout dysfonctionnement au pôle informatique<br />
