@@ -42,14 +42,16 @@ class NewsController extends WController {
 	}
 	
 	protected function index() {
-		$id = $this->getId();
+		// Récupération éventuelle d'un id si on demande l'affichage d'une news
+		$nid = $this->getId();
+		
 		// Si l'id fourni est valide, on charge la news demandée
 		if (!empty($id) && $this->model->validId($id)) {
 			$this->view->detail($id);
 			$this->render('detail');
 		} else {
-			$this->view->index();
-			$this->render('news');
+			$this->view->main_listing();
+			$this->render('main_listing');
 		}
 	}
 }

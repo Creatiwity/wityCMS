@@ -62,6 +62,10 @@ class WTemplateCompiler {
 		
 		$code = WTemplateParser::replaceNodes($string, array($this, 'compileNode'));
 		
+		if (!empty($this->openNodes)) {
+			throw new Exception("WTemplateCompiler::compileString(): some tags were not properly closed (".implode(', ', $this->openNodes).").");
+		}
+		
 		$this->data = array();
 		
 		// Replace xml tag to prevent short open tag conflict
@@ -189,7 +193,7 @@ class WTemplateCompiler {
 	}
 	
 	public function replaceVars($string) {
-		return WTemplateParser::replaceNodes($string, 'WTemplateCompiler::parseVar()');
+		return WTemplateParser::replaceNodes($string, array('WTemplateCompiler', 'parseVar'));
 	}
 	
 	/**

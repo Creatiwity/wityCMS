@@ -1,16 +1,27 @@
-<?php
-/*
- * Wity
- * @copyright NkDeus 2010
- * @version	$Id: wtXml.php 0000 10-04-2010 CharlyPoly. $
+<?php defined('IN_WITY') or die('Access denied');
+/**
+ * Wity CMS
+ * Système de gestion de contenu pour tous.
+ *
+ * @author	Fofif <Johan Dufau>
+ * @version	$Id: WFile/WXML.php 0000 28-09-2012 Fofif $
  */
-class wtXml {
-    //on utilisera SimpleXml pour la première version ;)
+
+class WXML {
     /**
      * @todo loadFile();
      * @todo loadString();
      *
      * @todo createDoc();
      */
+	
+	public function loadFile($file) {
+		
+	}
+	
+	public function loadString($string) {
+		
+	}
 }
+
 ?>

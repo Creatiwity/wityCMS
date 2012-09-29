@@ -12,89 +12,31 @@ class WLang {
 	public static $language;
 	
 	private static $lang_dirs = array();
+	private static $lang_dirs_loaded = array();
 	
 	// Lang values
 	private static $values = array();
 	
-	private static $short_node = false;
-	
+	/**
+	 * Declaration of new compiler's handlers
+	 */
 	public static function init() {
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
 		WTemplateCompiler::registerCompiler('lang_close', array('WLang', 'compile_lang_close'));
 	}
 	
-	public static function compile_lang($args) {
-		if (empty($args)) {
-			self::$short_node = true;
-			return "<?php echo WLang::get('";
-		} else {
-			return "<?php \$lang = WLang::get('".$args."');\n"
-				."if (!empty(\$lang)): echo \$lang;\n"
-				."else: ?>";
-		}
+	public static function selectLang($lang) {
+		// todo: check if $lang is a correct language
+		self::$language = strtolower(substr($lang, 0, 2));
 	}
-	
-	public static function compile_lang_close() {
-		if (self::$short_node) {
-			self::$short_node = false;
-			return "'); ?>";
-		} else {
-			return "<?php endif; ?>";
-		}
-	}
-	
-	public static function selectLanguage($lang) {
-		// todo: check $lang is a correct language
-		self::$language = strtolower($lang);
-	}
-	
-	public static function addLanguageDir($dir) {
-		if (is_dir($dir)) {
-			self::$lang_dirs[] = rtrim($dir, '/');
-		}
-	}
-	
-	/**
-	 * Constructor
-	 */
-	/*public function __construct($lang = null) {
-		if(empty(self::$values)) {
-
-			// Obtention de la langue de l'utilisateur
-			self::$language = (wtConfig::get('user.language')) ? wtConfig::get('user.language') : wtConfig::get('system.language');
-
-			// Ouverture du fichier principal de configuration
-			include WT_PATH.DS.'languages' . DS . self::$language . DS . 'common.php';
-
-			// Mise à jour des valeurs de langage
-			self::$values = $lang;
-
-			// Effacement de la variable $lang
-			unset($lang);
-
-		}
-
-	}*/
 
 	/**
-	 * Pour charger un autre fichier
+	 * Assign a new language constant
 	 *
 	 * @access public
-	 * @param  string $name     Nom du fichier à charger (sans extension)
-	 */
-	public static function findLanguageFile($dir) {
-		if (file_exists($dir.DS.self::$language.'.xml')) {
-			
-		}
-	}
-
-	/**
-	 * Pour assigner une constante de langage
-	 *
-	 * @access public
-	 * @param  string $name     Nom de la constante
-	 * @param  string $value    Valeur de la constante
+	 * @param string $name  Name
+	 * @param string $value Value
 	 */
 	public static function assign($name, $value) {
 		if (!empty($name) && !empty($value)) {
@@ -111,8 +53,10 @@ class WLang {
 	public static function get($id) {
 		// Try to load lang files
 		while (!isset(self::$values[$id]) && !empty(self::$lang_dirs)) {
-			$dir = array_shift(self::$lang_dir);
-			self::loadLanguageFile($dir);
+			$dir = array_shift(self::$lang_dirs);
+			self::loadLangFile($dir);
+			// Mark as loaded
+			self::$lang_dirs_loaded[] = $dir;
 		}
 		
 		if (isset(self::$values[$id])) {
@@ -128,7 +72,68 @@ class WLang {
 	public static function _($id) {
 		return self::get($id);
 	}
-
+	
+	/**
+	 * Pour charger un autre fichier
+	 *
+	 * @access public
+	 * @param  string $name     Nom du fichier à charger (sans extension)
+	 */
+	public static function declareLangDir($dir) {
+		if (is_dir($dir)) {
+			// Save lang directory
+			self::$lang_dirs[] = rtrim($dir, '/').'/';
+			return true;
+		}
+		return false;
+	}
+	
+	private static function loadLangFile($dir) {
+		$file = $dir.self::$language.'.xml';
+		if (file_exists($file)) {
+			$string = file_get_contents($file);
+			$xml = new SimpleXMLElement($string);
+			
+			foreach ($xml->item as $lang_item) {
+				self::assign((string) $lang_item->attributes()->id, (string) $lang_item);
+			}
+		}
+	}
+	
+	/*****************************************
+	 * WTemplateCompiler's new handlers part *
+	 *****************************************/
+	
+	/**
+	 * Variable to remember if a node was opened
+	 */
+	private static $short_node = false;
+	
+	/**
+	 * Handles the {lang} opening node in WTemplate
+	 */
+	public static function compile_lang($args) {
+		if (empty($args)) {
+			self::$short_node = true;
+			return "<?php echo WLang::get('";
+		} else {
+			return "<?php \$lang = WLang::get('".$args."');\n"
+				."if (!empty(\$lang)): echo \$lang;\n"
+				."else: ?>";
+		}
+	}
+	
+	/**
+	 * Handles the {/lang} closing node in WTemplate
+	 */
+	public static function compile_lang_close() {
+		if (self::$short_node) {
+			self::$short_node = false;
+			return "'); ?>";
+		} else {
+			return "<?php endif; ?>";
+		}
+	}
 }
 
 ?>

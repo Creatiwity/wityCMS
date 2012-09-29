@@ -12,11 +12,12 @@ class NewsView extends WView {
 	
 	public function __construct(NewsModel $model) {
 		parent::__construct();
+		
 		$this->model = $model;
 	}
 	
-	public function index() {
-		$this->assign($this->model->getNewsList(0, 3));
+	public function main_listing() {
+		$this->assign('news', $this->model->getNewsList(0, 3));
 	}
 	
 	public function detail($id) {

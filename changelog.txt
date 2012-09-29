@@ -3,7 +3,7 @@
 ##################
 
 v0.2
-------
+----
 
 WTemplate
 - Parser recodé (réglage de nombreux bugs)
@@ -25,6 +25,7 @@ WView
 - Special theme "_blank" added
 - Method "setTpl" renamed into "setResponse"
 - New method "findResponse" moved from WController::findTpl()
+- Handles WTemplate's exceptions while compiling
 
 Apps
 - User : correction du bug de redirection à la connexion
@@ -33,4 +34,13 @@ WNote
 - Class moved to %SYS_DIR%/WCore/
 - WException removed
 - Removed handler session: all notes are saved into session and are automaticly treated by WView
-- New handlers
+- New handlers 
+- New method "display_full" handling a set of notes. It displays them in a full custom error page
+
+WSession
+- Now handles error while trying to connect to the database
+
+WLang
+- Creation of WLang
+- Linked with WTemplate : {lang id}default{/lang} will find the translation for the entry "id" 
+  with the failover default string or use directly {lang}id{/lang} 

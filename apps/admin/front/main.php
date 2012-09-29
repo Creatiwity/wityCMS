@@ -42,7 +42,7 @@ class AdminController extends WController {
 	public function launch() {
 		if (!$this->session->isLoaded()) {
 			// Affichage du formulaire d'autentification
-			WNote::info("Authentification requise", "Cette zone nécessite une authentification.", 'assign');
+			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
 			$this->wity->exec('user');
 		} else if ($this->checkAdminAccess()) {
 			$this->routeAdmin();
@@ -64,10 +64,10 @@ class AdminController extends WController {
 			} else {
 				// Config du template
 				$this->configTheme();
-				WNote::error("Accès interdit", "Vous n'avez pas accès à la zone <strong>".$this->appAsked."</strong> de l'administration.", 'display');
+				WNote::error('admin_access_denied', "Vous n'avez pas accès à la zone <strong>".$this->appAsked."</strong> de l'administration.", 'display');
 			}
 		} else {
-			WNote::error("Accès interdit", "Vous n'avez pas accès à l'administration.", 'display');
+			WNote::error('admin_access_forbidden', "Vous n'avez pas accès à l'administration.", 'display');
 		}
 	}
 	

@@ -3,7 +3,7 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @version	$Id: WCore/WMain.php 0001 29-04-2012 Fofif $
+ * @version	$Id: WCore/WMain.php 0002 29-09-2012 Fofif $
  * @package Wity
  */
 
@@ -25,7 +25,7 @@ class WMain {
 		$this->setupSession();
 		
 		// Lang init
-		WLang::init();
+		$this->setupLang();
 		
 		// $this->log();
 		
@@ -37,15 +37,17 @@ class WMain {
 	 * Exéxcution d'une application
 	 */
 	public function exec($app_name) {
-		// Gestion de l'existence de l'appli
+		// App asked exists?
 		if ($this->isApp($app_name)) {
-			// Inclusion du fichier principal de l'appli
-			include APPS_DIR.$app_name.DS.'front'.DS.'main.php';
+			// App controller file
+			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
+			include $app_dir.'main.php';
 			$class = str_replace('-', '_', ucfirst($app_name)).'Controller';
 			
+			// App's controller must inherit WController
 			if (class_exists($class) && get_parent_class($class) == 'WController') {
 				$controller = new $class();
-				$controller->init($this);
+				$controller->init($this, $app_dir);
 				$controller->launch();
 			} else {
 				WNote::error('app_structure', "The application \"".$app_name."\" has to inherit WController abstract class.", 'display');
@@ -97,6 +99,12 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
+	}
+	
+	private function setupLang() {
+		$lang_config = WConfig::get('config.lang');
+		WLang::init();
+		WLang::selectLang($lang_config);
 	}
 	
 	private function log() {

@@ -1,0 +1,9 @@
+<div id="news_serie">
+{for $n in $news}
+	<div class="item">
+		<h2>{$n.title}</h2>
+		<em>Rédigé par {$n.author}, le {$n.date}</em>
+		{$n.content}
+	</div>
+{/for}
+</div>

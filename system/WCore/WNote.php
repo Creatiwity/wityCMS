@@ -3,7 +3,7 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @version	$Id: WCore/WNote.php 0005 27-07-2012 Fofif $
+ * @version	$Id: WCore/WNote.php 0006 19-09-2012 Fofif $
  * @package Wity
  */
 
@@ -68,16 +68,16 @@ class WNote {
 	}
 	
 	/**
-	 * Affichage de la note par un die
+	 * Display the note dying the whole execution
 	 * 
 	 * @param array $note
 	 */
 	public static function handle_die($note) {
-		die("<p><strong>".$note['code'].":</strong> ".$note['message']."</p>\n");
+		die("<p>".strtoupper($note['level'])." - <strong>".$note['code'].":</strong> ".$note['message']."</p>\n");
 	}
 	
 	/**
-	 * Assignation de la note parsée dans le tpl
+	 * Assign a note in the stack
 	 * 
 	 * @param array $note
 	 */
@@ -145,7 +145,8 @@ class WNote {
 	public static function display_full(array $notes) {
 		static $mutex = false;
 		if ($mutex) {
-			self::error('wnote_critical_section', "WNote::diplay_full(): tried to enter into a critical section. Probably nesting.", 'die');
+			self::error('wnote_critical_section', "WNote::diplay_full(): tried to enter into a critical section. Probably nesting.\n
+			Triggering notes :\n".serialize($notes), 'die');
 		}
 		$mutex = true;
 		

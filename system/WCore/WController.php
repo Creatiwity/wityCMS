@@ -14,6 +14,11 @@ abstract class WController {
 	protected $wity;
 	
 	/**
+	 * The full application directory
+	 */
+	protected $app_dir;
+	
+	/**
 	 * View object (of WView)
 	 */
 	protected $view;
@@ -27,11 +32,13 @@ abstract class WController {
 	 * Initialisation de l'application
 	 * 
 	 * @param WMain $wity Instance de wity
+	 * @param string $app_dir Directory of the application inheriting this Controller
 	 */
-	public function init(WMain $wity) {
+	public function init(WMain $wity, $app_dir) {
 		$this->wity = $wity;
+		$this->app_dir = $app_dir;
 		
-		// Initialize view if the app's constructor did not dot it
+		// Initialize view if the app's constructor did not do it
 		if (is_null($this->view)) {
 			$this->view = new WView();
 		}
@@ -40,6 +47,12 @@ abstract class WController {
 		if ($this->view->getTheme() == '') {
 			$this->view->setTheme(WConfig::get('config.theme'));
 		}
+		
+		// Parse the manifest
+		
+		
+		// Load language configuration
+		WLang::declareLangDir($app_dir.DS.'lang');
 	}
 	
 	/**
@@ -48,21 +61,6 @@ abstract class WController {
 	 * @abstract
 	 */
 	abstract public function launch();
-	
-	/**
-	 * Retourne le nom de l'application
-	 * 
-	 * @return string
-	 */
-	public function getAppName() {
-		$className = str_replace('_', '-', get_class($this));
-		if (strpos($className, 'Admin') === 0) {
-			$appName = 'admin';
-		} else {
-			$appName = strtolower(str_replace(array('AdminController', 'Controller'), '', $className));
-		}
-		return $appName;
-	}
 	
 	/**
 	 * Forward permet d'éxécuter la méthode associée à l'$action de l'application
@@ -79,6 +77,21 @@ abstract class WController {
 		} else {
 			throw new Exception("L'action \"".$action."\" est inconnue de l'application ".$this->getAppName().".");
 		}
+	}
+	
+	/**
+	 * Retourne le nom de l'application
+	 * 
+	 * @return string
+	 */
+	public function getAppName() {
+		$className = str_replace('_', '-', get_class($this));
+		if (strpos($className, 'Admin') === 0) {
+			$appName = 'admin';
+		} else {
+			$appName = strtolower(str_replace(array('AdminController', 'Controller'), '', $className));
+		}
+		return $appName;
 	}
 	
 	/**
