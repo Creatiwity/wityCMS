@@ -48,7 +48,7 @@ class SortingHelper {
 		}
 		
 		if (!empty($sens)) {
-			$this->sens = $this->clearSens($sens);
+			$this->sens = $this->formatDirection($sens);
 		} else {
 			$this->sens = $this->sensDef;
 		}

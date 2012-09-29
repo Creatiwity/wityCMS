@@ -36,7 +36,7 @@
 					</ul>
 					<ul id="actions">
 						{for $action, $desc in $actionShownList}
-							<li class="{if {$action} == @{$actionForwarded}}on{/if} {if {$count} == 0}first{/if}">
+							<li class="{if {$action} == @{$actionForwarded}}on{/if}">
 								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc}</a></li>
 						{/for}
 					</ul>
@@ -52,6 +52,7 @@
 				<div class="bottom"></div>
 			</div>
 			<div id="body">
+				{$notes}
 				{include {$include}}
 			</div>
 			<div id="footer" class="tcenter">

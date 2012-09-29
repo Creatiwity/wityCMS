@@ -231,7 +231,7 @@ ul#actions li {
 	background: url('../images/actions-bg.jpg') no-repeat top left;
 }
 
-ul#actions li.first {
+ul#actions li:first-child {
 	background: none;
 }
 

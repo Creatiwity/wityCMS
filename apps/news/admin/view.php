@@ -17,20 +17,18 @@ class NewsAdminView extends WView {
 	
 	public function index($sortBy, $sens) {
 		// AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$dispFields = array('id', 'title', 'author', 'date', 'modified');
-		$adminStyle = new AdminStyle($dispFields, 'date', 'DESC');
+		include HELPERS_DIR.'SortingHelper'.DS.'SortingHelper.php';
+		$dispFields = array('id', 'title', 'author', 'cat', 'date', 'views');
+		$adminStyle = new SortingHelper($dispFields, 'date', 'DESC');
 		
 		// Sorting vars
 		$sort = $adminStyle->getSorting($sortBy, $sens);
 		
 		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
+		$this->assign($adminStyle->getTplVars());
 		
 		$data = $this->model->getNewsList(0, 20, $sort[0], $sort[1] == 'ASC');
-		foreach ($data as $values) {
-			$this->tpl->assignBlockVars('news', $values);
-		}
+		$this->assign('news', $data);
 	}
 	
 	/**

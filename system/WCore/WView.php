@@ -183,11 +183,11 @@ class WView {
 		// Handle errors
 		$view_errors = WNote::get('view_error*');
 		if (!empty($view_errors)) {
-			WNote::display_full($view_errors);
+			WNote::displayFull($view_errors);
 			return;
 		}
 		if ($this->getTheme() != '_blank') {
-			$this->assign('notes', WNote::get('*'));
+			$this->assign('notes', WNote::parse(WNote::get('*')));
 		}
 		
 		// Treat "special vars"
@@ -217,7 +217,7 @@ class WView {
 			try {
 				$this->tpl->display($themeMainFile);
 			} catch (Exception $e) {
-				WNote::display_full(array(WNote::error('view_error_tpl_display', $e->getMessage(), 'ignore')));
+				WNote::displayFull(array(WNote::error('view_error_tpl_display', $e->getMessage(), 'ignore')));
 			}
 		} else {
 			// Absolute links fix
@@ -230,7 +230,7 @@ class WView {
 					$html
 				);
 			} catch (Exception $e) {
-				WNote::display_full(array(WNote::error('view_error_tpl_parse', $e->getMessage(), 'ignore')));
+				WNote::displayFull(array(WNote::error('view_error_tpl_parse', $e->getMessage(), 'ignore')));
 			}
 		}
 		

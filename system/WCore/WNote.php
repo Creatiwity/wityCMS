@@ -139,10 +139,26 @@ class WNote {
 		return $count;
 	}
 	
+	public static function parse(array $notes) {
+		$html = "";
+		$tpl = WSystem::getTemplate();
+		$tpl->assign('css', $tpl->getVar('css').'<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n");
+		foreach ($notes as $note) {
+			$tpl->assign(array(
+				'note_level'   => $note['level'],
+				'note_code'    => $note['code'],
+				'note_message' => $note['message'],
+			));
+			$html .= $tpl->parse('themes/system/note/note_view.html');
+		}
+		$tpl->clear(array('note_level', 'note_code', 'note_message'));
+		return $html;
+	}
+	
 	/**
 	 * Display a set of notes in a dedicated view
 	 */
-	public static function display_full(array $notes) {
+	public static function displayFull(array $notes) {
 		static $mutex = false;
 		if ($mutex) {
 			self::error('wnote_critical_section', "WNote::diplay_full(): tried to enter into a critical section. Probably nesting.\n

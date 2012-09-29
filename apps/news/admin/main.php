@@ -56,9 +56,6 @@ class NewsAdminController extends WController {
 			$sens = !empty($sortData) ? $sortData[0] : '';
 		}
 		
-		// Les notes
-		WNote::treatNoteSession();
-		
 		$this->view->index($sortBy, $sens);
 		$this->render('index');
 	}

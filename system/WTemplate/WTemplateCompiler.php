@@ -240,7 +240,7 @@ class WTemplateCompiler {
 	}
 	
 	public function compile_else($args) {
-		if (current($this->openNodes) == 'for') {
+		if (end($this->openNodes) == 'for') {
 			$this->data['for_else'] = true;
 			return "<?php endforeach; else: ?>";
 		} else {
