@@ -12,14 +12,17 @@ class UserController extends WController {
 	 * Durée par défaut d'une session
 	 */
 	const REMEMBER_TIME = 604800; // 1 semaine
+	
 	/*
 	 * Nombre maximum de tentatives de connexion
 	 */
 	const MAX_LOGIN_ATTEMPT = 3;
+	
 	/*
 	 * Pointeurs vers WSession et UserModel
 	 */
 	private $session, $model;
+	
 	/**
 	 * Les constantes d'erreur
 	 */
@@ -37,6 +40,9 @@ class UserController extends WController {
 		$this->session = WSystem::getSession();
 		
 		$action = $this->getAskedAction();
+		if ($action == 'login') {
+			$action = '';
+		}
 		$this->forward($action, 'connexion');
 	}
 	
@@ -48,7 +54,7 @@ class UserController extends WController {
 	 * @param int $remember temps de connexion (-1 = non spécifié)
 	 * @param mixed  $remember durée de la session si précisée
 	 */
-	public function login($nick, $pass, $remember) {
+	public function login($nickname, $password, $remember) {
 		// Système de régulation en cas d'erreur multiple du couple pseudo/pass
 		// On stocke dans la variable session $login_try le nombre de tentatives de connexion
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
@@ -59,14 +65,15 @@ class UserController extends WController {
 		}
 		
 		// Petit traitement des informations
-		$nick = trim($nick);
-		if (strpos($nick, '@') !== false) {
-			$nick = strtolower($nick);
+		$nickname = trim($nickname);
+		if (strpos($nickname, '@') !== false) {
+			// mise en miniscule pour les adresses mail
+			$nickname = strtolower($nickname);
 		}
-		$pass = sha1($pass);
+		$password = sha1($password);
 		
-		// Recherche d'une correspondance dans la bdd pour le couple (user, password)
-		$data = $this->model->matchUser($nick, $pass);
+		// Recherche d'une correspondance dans la bdd pour le couple (nickname, password)
+		$data = $this->model->matchUser($nickname, $password);
 		if (!empty($data)) {
 			$this->session->loadUser($data['id'], $data);
 			$this->model->updateLastActivity($data['id']);
@@ -76,10 +83,10 @@ class UserController extends WController {
 				$lifetime = time() + $remember;
 				// see WSession
 				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
-				setcookie('hash', $this->session->generate_hash($nick, $pass), $lifetime, '/');
+				setcookie('hash', $this->session->generate_hash($nickname, $password), $lifetime, '/');
 			}
 			
-			return 1;
+			return 1; // success
 		} else {
 			// Incrémente le nombre d'essais
 			$_SESSION['login_try']++;
@@ -92,44 +99,43 @@ class UserController extends WController {
 	 */
 	protected function connexion() {
 		if ($this->session->isLoaded()) {
-			WNote::error("Accès interdit", "Inutile d'accéder à cette page si vous êtes connecté(e).", 'display');
-		} else {
-			$data = WRequest::get(array('nick', 'pass', 'remember', 'time', 'redirect'), null, 'POST');
-			
-			// Affichage du formulaire de connexion
-			if (empty($data['redirect'])) {
-				if (WRoute::getApp() != 'user') {
-					$data['redirect'] = WRoute::getURL();
-				} else {
-					$referer = WRoute::getReferer();
-					// On évite de rediriger vers une page du module user
-					$data['redirect'] = (strpos($referer, 'user') === false) ? $referer : WRoute::getBase();
-				}
-			}
-			
-			if (!empty($data['nick']) && !empty($data['pass'])) {
-				// L'utilisateur demande-t-il une connexion automatique ? (de combien de temps ?)
-				$rememberTime = (!is_null($data['remember'])) ? self::REMEMBER_TIME : intval($data['time']) * 60;
-				
-				// Connexion
-				switch ($this->login($data['nick'], $data['pass'], $rememberTime)) {
-					case 1: // Connexion réussie
-						header('location: '.$data['redirect']);
-						return;
-						break;
-					case self::ANTIFLOOD_ERROR:
-						WNote::error("Erreur de connexion", "Vous avez atteint le nombre maximum de tentatives de connexion autorisées.<br />
-Merci d'attendre un instant avant de réessayer.", 'assign');
-						break;
-					default:
-						WNote::error("Erreur de connexion", "Le couple <em>nom d'utilisateur / mot de passe</em> est erroné.", 'assign');
-						break;
-				}
-			}
-			
-			$this->view->connexion($data['redirect']);
-			$this->render('connexion');
+			WNote::error("user_already_loged", "Inutile d'accéder à cette page si vous êtes connecté(e).", 'display');
+			return;
 		}
+		
+		$data = WRequest::getAssoc(array('nickname', 'password', 'remember', 'time', 'redirect'), null, 'POST');
+		
+		// Affichage du formulaire de connexion
+		if (empty($data['redirect'])) {
+			if (WRoute::getApp() != 'user') {
+				$data['redirect'] = WRoute::getURL();
+			} else {
+				$referer = WRoute::getReferer();
+				// On évite de rediriger vers une page du module user
+				$data['redirect'] = (strpos($referer, 'user') === false) ? $referer : WRoute::getBase();
+			}
+		}
+		
+		if (!empty($data['nickname']) && !empty($data['password'])) {
+			// L'utilisateur demande-t-il une connexion automatique ? (de combien de temps ?)
+			$rememberTime = (!is_null($data['remember'])) ? self::REMEMBER_TIME : intval($data['time']) * 60;
+			
+			// Connexion
+			switch ($this->login($data['nickname'], $data['password'], $rememberTime)) {
+				case 1: // Connexion réussie
+					header('location: '.$data['redirect']);
+					return;
+				case self::ANTIFLOOD_ERROR:
+					WNote::error("Erreur de connexion", "Vous avez atteint le nombre maximum de tentatives de connexion autorisées.\nMerci d'attendre un instant avant de réessayer.", 'assign');
+					break;
+				default:
+					WNote::error("Erreur de connexion", "Le couple <em>nom d'utilisateur / mot de passe</em> est erroné.", 'assign');
+					break;
+			}
+		}
+		
+		$this->view->connexion($data['redirect']);
+		$this->render('connexion');
 	}
 	
 	/**

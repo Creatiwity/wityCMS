@@ -50,11 +50,11 @@ class AdminController extends WController {
 			$this->appAsked = WRoute::getApp();
 			if ($this->isAdminApp($this->appAsked) && $this->checkAccess($this->appAsked)) {
 				// Chargement de la partie admin de l'appli
-				$file = APPS_DIR.$this->appAsked.DS.'admin'.DS.'main.php';
-				include $file;
+				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
+				include $app_dir.'main.php';
 				$class = ucfirst($this->appAsked).'AdminController';
 				$this->appController = new $class();
-				$this->appController->init($this->wity);
+				$this->appController->init($this->wity, $app_dir);
 				
 				// Config du template
 				$this->configTheme();
@@ -166,7 +166,7 @@ class AdminController extends WController {
 		// Ce sont des variables de template et non de view
 		// Il est donc nécessaire des les assigner directement dans le moteur
 		$tpl = WSystem::getTemplate();
-		$tpl->assign('appList', array_merge($this->model->getAdminAppList()));
+		$tpl->assign('appList', $this->model->getAdminAppList());
 		
 		// Pseudonyme de l'utilisateur
 		$tpl->assign('userNickname', $_SESSION['nickname']);
@@ -180,11 +180,12 @@ class AdminController extends WController {
 				'actionList' => $this->treatActionList($appActions, false),
 				'actionShownList' => $this->treatActionList($appActions, true),
 			));
-			$this->view->assign('pageTitle', sprintf('Administration &raquo; %s%s',
+			$this->view->assign('page_title', sprintf('Administration &raquo; %s%s',
 				ucwords($this->appAsked),
-				isset($appActions[$this->appController->getAskedAction()]) ? 
-					' &raquo; '.trim($appActions[$this->appController->getAskedAction()], '\\') : ''
+				isset($appActions[$this->appController->getAskedAction()]) ? ' &raquo; '.trim($appActions[$this->appController->getAskedAction()], '\\') : ''
 			));
+		} else {
+			$tpl->assign('appSelected', '');
 		}
 	}
 }

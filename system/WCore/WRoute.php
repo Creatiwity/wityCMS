@@ -4,7 +4,7 @@
  * Système de gestion de contenu pour tous.
  *
  * @author	Fofif <Johan Dufau>
- * @version	$Id: WCore/WRoute.php 0002 12-02-2012 Fofif $
+ * @version	$Id: WCore/WRoute.php 0003 29-09-2012 Fofif $
  */
 
 class WRoute {
@@ -13,31 +13,36 @@ class WRoute {
 	 */
 	
 	/**
-	 * L'URL de la page
+	 * Request string of the page
+	 * ex: the URL is http://mysite.fr/wity/user/login
+	 * If wity is executed in /wity/, then the $query will be set to "user/login"
 	 */
-	public static $url;
+	public static $query;
 	
 	public static function init() {
 		$dir = self::getDir();
 		if ($dir != '/') {
-			self::$url = str_replace($dir, '', $_SERVER['REQUEST_URI']);
+			self::$query = str_replace($dir, '', $_SERVER['REQUEST_URI']);
 		} else {
-			self::$url = $_SERVER['REQUEST_URI'];
+			self::$query = $_SERVER['REQUEST_URI'];
 		}
 		
 		// Chargement des valeurs de config du routage
 		WConfig::load('route', SYS_DIR.'config'.DS.'route.php', 'php');
 	}
 	
+	/**
+	 * Launches the calculation of the route to find out the app to execute
+	 */
 	public static function route() {
 		// Vérification de l'existence d'un routage perso
 		$perso = WConfig::get('route.perso');
-		$url = trim(self::$url, '/');
-		if (isset($perso[$url])) {
-			self::setRoute($perso[$url]);
+		$query = trim(self::$query, '/');
+		if (isset($perso[$query])) {
+			self::setRoute($perso[$query]);
 		} else {
 			// Chargement de la config URL
-			$routage = self::parseURL(self::$url);
+			$routage = self::parseURL(self::$query);
 			if (!empty($routage)) {
 				self::setRoute($routage);
 			} else {
@@ -47,22 +52,30 @@ class WRoute {
 		}
 	}
 	
+	/**
+	 * Returns the full root location in which wity is installed, as defined in /system/config/config.php
+	 * ex: if the website adress is http://mysite.fr/wity/user/login,
+	 * it should return http://mysite.fr/wity/
+	 */
 	public static function getBase() {
-		return rtrim(WConfig::get('config.base'), '/');
+		return rtrim(WConfig::get('config.base'), '/').'/';
 	}
 	
 	/**
 	 * Obtention de l'url du dossier où se situe wity
+	 * ex: if the website adress is http://mysite.fr/wity/user/login
+	 * it will return /wity/
 	 */
 	public static function getDir() {
 		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
 	}
 	
 	/**
-	 * Retourne l'url de la page
+	 * Returns the FULL URL of the page
+	 * ex: http://mysite.fr/wity/user/login
 	 */
 	public static function getURL() {
-		return self::$url;
+		return self::getBase().self::$query;
 	}
 	
 	/**
@@ -78,6 +91,7 @@ class WRoute {
 	}
 	
 	/**
+	 * Defines a personnal route which is not following the regular application rules
 	 * 
 	 * <code>
 	 *   WRoute::defineRoutePerso('/test/', array(
@@ -111,7 +125,10 @@ class WRoute {
 	}
 	
 	/**
-	 * @desc Pour les url du type http://MonSite.fr/News/Read/1
+	 * Parse the webpage URL
+	 * 
+	 * @param string $url Webpage URL (ex: http://MonSite.fr/News/Read/1)
+	 * @return array The route (ex: array('app' => "News", 'args' => array(1)))
 	 */
 	private static function parseURL($url) {
 		$routage = array();
@@ -138,6 +155,7 @@ class WRoute {
 	/**
 	 * Vérifie qu'un routage a la bonne structure qui doit être :
 	 * $routage = array('AppName', array('argument1', 'argument2'));
+	 * 
 	 * @param mixed
 	 * @return bool
 	 */
