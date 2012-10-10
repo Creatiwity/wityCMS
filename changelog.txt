@@ -10,10 +10,10 @@ WTemplate
 - Gestion des short tags (<?xml)
 - Correction d'un bug avec les chemins de compilation qui contiennent des caractères "."
 - Fixed a bug when a tag {} was present at the begining of a file
-- New node: {for $key, $value in $array}
+- New nodes: {for $key, $value in $array} and {empty} in case of empty $array
 - Modified node: {include href}
 - Deleted node {block} and method WTemplate::assignBlockVars no longer exists
-- The specified cache dir is automaticly created if no exists
+- The specified cache directory is automaticly created if no exists
 
 WMain
 - Template configuration déplacée directement dans WView
@@ -43,4 +43,7 @@ WSession
 WLang
 - Creation of WLang
 - Linked with WTemplate : {lang id}default{/lang} will find the translation for the entry "id" 
-  with the failover default string or use directly {lang}id{/lang} 
+  with the failover default string or use directly {lang}id{/lang}
+
+Apache
+- Force to use UTF-8 by default in .htaccess

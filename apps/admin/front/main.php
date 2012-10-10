@@ -105,7 +105,7 @@ class AdminController extends WController {
 			WRoute::updateArgs($args); // Nettoyage des arguments
 		} else {
 			$default = WConfig::get('route.admin');
-			if ($this->checkAccess($default[0])) {
+			if ($this->checkAccess($default[0]) && $this->isAdminApp($default[0])) {
 				WRoute::setRoute($default);
 			} else {
 				// Le user est forcément admin

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Wity CMS
  * Système de gestion de contenu pour tous.

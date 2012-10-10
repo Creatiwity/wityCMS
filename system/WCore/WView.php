@@ -208,7 +208,7 @@ class WView {
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $this->responseFile);
 			
-			$themeMainFile = $this->themeDir.DS.'templates'.DS.'index.html';
+			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
 		}
 		
 		$base = WRoute::getDir();

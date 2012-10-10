@@ -109,8 +109,8 @@ class WTemplateFile {
 			$start = microtime(true);
 			
 			// Read template file
-			if (!($string = file_get_contents($this->href))) {
-				throw new Exception("WTemplateFile::compile(): Unable top read file \"".$this->href."\".");
+			if (($string = file_get_contents($this->href)) === false) {
+				throw new Exception("WTemplateFile::compile(): Unable to read file \"".$this->href."\".");
 			}
 			
 			// Compile file

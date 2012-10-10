@@ -34,6 +34,11 @@ class WTemplate {
 	private $compiler;
 	
 	/**
+	 * Buffer state
+	 */
+	private $buffer_launched = false;
+	
+	/**
 	 * Constructor
 	 * 
 	 * @param $baseDir Script root directory
@@ -119,39 +124,47 @@ class WTemplate {
 	}
 	
 	/**
-	 * Display a file on screen
-	 * 
-	 * @param string $href File's href
-	 */
-	public function display($href) {
-		$file = new WTemplateFile($href, $this->baseDir, $this->compileDir);
-		
-		// Get file compiled
-		$file->compile($this->compiler);
-		
-		// Include file so that it is executed
-		include $file->getCompilationHref();
-	}
-	
-	/**
 	 * Get the resulting output of a compiled file without printing anything on screen
 	 * 
 	 * @param string $href File's href
 	 * @return string Output string
 	 */
 	public function parse($href) {
+		// File init
 		$file = new WTemplateFile($href, $this->baseDir, $this->compileDir);
+		
+		// Compilation (if needed)
 		$file->compile($this->compiler);
 		
+		// Buffer
 		ob_start();
 		
-		// Evaluation
-		eval('?>'.file_get_contents($file->getCompilationHref()));
+		try { // Critical section
+			// Evaluation
+			eval('?>'.file_get_contents($file->getCompilationHref()));
+		} catch (Exception $e) {
+			// Just stores the exception into $e to throw it later
+		}
 		
 		$result = ob_get_contents();
 		ob_end_clean();
 		
+		// Throw exception if any
+		if (!empty($e)) {
+			throw $e;
+		}
+		
 		return $result;
+	}
+	
+	/**
+	 * Display a file on screen
+	 * 
+	 * @param string $href File's href
+	 */
+	public function display($href) {
+		// Display parsing result
+		echo $this->parse($href);
 	}
 }
 

@@ -9,7 +9,7 @@
 
 // Inclusion du modèle principal pour héritage
 if (!class_exists('UserModel')) {
-	include APP_DIR.'user'.DS.'front'.DS.'model.php';
+	include APPS_DIR.'user'.DS.'front'.DS.'model.php';
 }
 
 class UserAdminModel extends UserModel {

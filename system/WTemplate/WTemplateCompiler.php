@@ -84,11 +84,11 @@ class WTemplateCompiler {
 		}
 		
 		// Variable display
-		if ($node[0] == '$') {
+		if (strpos($node, '$') === 0) {
 			$output = $this->compile_var($node);
 		}
 		// Closing tag
-		else if ($node[0] == '/') {
+		else if (strpos($node, '/') === 0) {
 			$node = substr($node, 1);
 			$node_name = $node.'_close';
 			$handler = 'compile_'.$node_name;
@@ -151,15 +151,16 @@ class WTemplateCompiler {
 	 * Compile vars having this format {$var.index1[.index2...]|func1[|func2...]} into php format
 	 * Several levels of vars are managed (for instance: {$var1.{$var2.x}}
 	 */
-	public function parseVar($string) {
-		if ($string[0] != '$') {
+	public static function parseVar($string) {
+		if (strpos($string, '$') !== 0) {
 			return;
 		}
+		
 		// Remove begining '$' char
 		$string = substr($string, 1);
 		
 		if (strpos($string, '{') !== false) {
-			$string = $this->replaceVars($string);
+			$string = self::replaceVars($string);
 		}
 		
 		$functions = explode('|', $string);
@@ -170,7 +171,7 @@ class WTemplateCompiler {
 		// sub arrays
 		foreach (explode('.', $var_string) as $s) {
 			$s = trim($s);
-			if ($s[0] == '$' || strpos($s, '(') !== false) {
+			if (strpos($s, '$') === 0 || strpos($s, '(') !== false) {
 				$return .= '['.$s.']';
 			} else {
 				$return .= "['".$s."']";
@@ -192,7 +193,7 @@ class WTemplateCompiler {
 		return $return;
 	}
 	
-	public function replaceVars($string) {
+	public static function replaceVars($string) {
 		return WTemplateParser::replaceNodes($string, array('WTemplateCompiler', 'parseVar'));
 	}
 	
@@ -240,12 +241,7 @@ class WTemplateCompiler {
 	}
 	
 	public function compile_else($args) {
-		if (end($this->openNodes) == 'for') {
-			$this->data['for_else'] = true;
-			return "<?php endforeach; else: ?>";
-		} else {
-			return '<?php else: ?>';
-		}
+		return '<?php else: ?>';
 	}
 	
 	public function compile_elseif($args) {
@@ -262,15 +258,23 @@ class WTemplateCompiler {
 	public function compile_for($args) {
 		$matches = array();
 		// RegEx string to search "$key, $value in $array" substring
-		if (preg_match('#^(\$([a-zA-Z0-9_]+),\s*)?\$([a-zA-Z0-9_]+)\s+in\s+\$([a-zA-Z0-9_]+)$#', $args, $matches)) {
+		if (preg_match('#^(\$([a-zA-Z0-9_]+),\s*)?\$([a-zA-Z0-9_]+)\s+in\s+(.+)$#U', $args, $matches)) {
 			list(, , $key, $value, $array) = $matches;
 			
+			if (strpos($array, '$') === 0) {
+				$array = "\$this->tpl_vars['".substr($array, 1)."']";
+			} else if (strpos($array, '{') === 0) {
+				$array = $this->parseVar(substr($array, 1, -1));
+			}
+			
 			if (empty($key)) {
-				return "<?php if (!empty(\$this->tpl_vars['".$array."'])):\n"
-					."foreach(\$this->tpl_vars['".$array."'] as \$this->tpl_vars['".$value."']): ?>";
+				return "<?php \$hidden_counter = 0;\n"
+					."foreach((array) ".$array." as \$this->tpl_vars['".$value."']):\n"
+					."	\$hidden_counter++; ?>";
 			} else {
-				return "<?php if (!empty(\$this->tpl_vars['".$array."'])):\n"
-					."foreach(\$this->tpl_vars['".$array."'] as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']): ?>";
+				return "<?php \$hidden_counter = 0;\n"
+					."foreach((array) ".$array." as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']):\n"
+					."	\$hidden_counter++; ?>";
 			}
 		} else {
 			return '';
@@ -278,12 +282,18 @@ class WTemplateCompiler {
 	}
 	
 	public function compile_for_close() {
-		if (!empty($this->data['for_else'])) {
-			unset($this->data['for_else']);
-			return '<?php endif; ?>';
-		} else {
-			return '<?php endforeach; endif; ?>';
-		}
+		return '<?php endforeach; ?>';
+	}
+	
+	/**
+	 * For's array iterating: empty case
+	 */
+	public function compile_empty() {
+		return "<?php if (isset(\$hidden_counter) && intval(\$hidden_counter) == 0): ?>";
+	}
+	
+	public function compile_empty_close() {
+		return "<?php endif; ?>";
 	}
 }
 

@@ -5,6 +5,9 @@ SetEnv REGISTER_GLOBALS 0
 # Activation du module rewriting
 RewriteEngine on
 
+# Utilisation d'utf8 par défaut
+AddDefaultCharset UTF-8
+
 # Rules
 #RewriteCond %{HTTP_HOST} ^site.com$
 #RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
