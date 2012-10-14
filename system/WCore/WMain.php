@@ -53,7 +53,7 @@ class WMain {
 				WNote::error('app_structure', "The application \"".$app_name."\" has to inherit WController abstract class.", 'display');
 			}
 		} else {
-			WNote::error(404, "The application \"".$app_name."\" is not found.", 'display');
+			WNote::error(404, "The page requested was not found.", 'display');
 		}
 	}
 	

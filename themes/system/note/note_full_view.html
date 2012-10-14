@@ -24,12 +24,7 @@
 			<p>Wity a rencontré une erreur lors de son exécution.</p>
 			<p><a id="display_errors" href="javascript:void(0)">Afficher les erreurs</a></p>
 			<div id="errors" class="hidden">
-				{for $note in $notes}
-					<div class="note {$note.level}">
-						<strong>{$note.code}</strong>
-						<p>{$note.message}</p>
-					</div>
-				{/for}
+				{include "note_view.html"}
 			</div>
 		</div>
 	</body>

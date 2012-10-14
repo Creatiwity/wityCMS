@@ -1,4 +1,6 @@
-<div class="note {$note_level}">
-	<strong>{$note_code}</strong>
-	<p>{$note_message}</p>
+{for $note in $notes_data}
+<div class="note {$note.level}">
+	<strong>{$note.code}</strong>
+	<p>{$note.message}</p>
 </div>
+{/for}

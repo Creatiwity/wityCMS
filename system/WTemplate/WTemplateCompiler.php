@@ -4,7 +4,7 @@
  * Moteur de template pour le CMS Wity
  *
  * @author     Fofif
- * @version    $Id: WTemplate/WTemplateCompiler.php 0005 04-08-2012 Fofif $
+ * @version    $Id: WTemplate/WTemplateCompiler.php 0006 10-10-2012 Fofif $
  * @package    Wity
  * @subpackage WTemplate
  */
@@ -32,7 +32,7 @@ class WTemplateCompiler {
 	/**
 	 * Define an external compiler
 	 * 
-	 * @param string   $compiler_name Node name
+	 * @param string   $compiler_name Node name (without brackets)
 	 * @param callback $callback      Compiler to call
 	 * @static
 	 */
@@ -182,6 +182,8 @@ class WTemplateCompiler {
 		foreach ($functions as $f) {
 			$f = trim($f);
 			switch ($f) {
+				// Add personnal fonctions here case 'perso': ...
+				
 				default:
 					if (function_exists($f)) {
 						$return = $f.'('.$return.')';
@@ -253,12 +255,21 @@ class WTemplateCompiler {
 	}
 	
 	/**
+	 * Counts the number of {for} in order to make {empty} work properly
+	 */
+	private $for_count = 0;
+	
+	/**
 	 * {for [$key, ]$value in $array}
 	 */
 	public function compile_for($args) {
 		$matches = array();
 		// RegEx string to search "$key, $value in $array" substring
-		if (preg_match('#^(\$([a-zA-Z0-9_]+),\s*)?\$([a-zA-Z0-9_]+)\s+in\s+(.+)$#U', $args, $matches)) {
+		if (preg_match('#^(\{?\$([a-zA-Z0-9_]+)\}?,\s*)?\{?\$([a-zA-Z0-9_]+)\}?\s+in\s+(.+)$#U', $args, $matches)) {
+			if ($this->for_count < 0) {
+				$this->for_count = 0;
+			}
+			$this->for_count++;
 			list(, , $key, $value, $array) = $matches;
 			
 			if (strpos($array, '$') === 0) {
@@ -267,29 +278,28 @@ class WTemplateCompiler {
 				$array = $this->parseVar(substr($array, 1, -1));
 			}
 			
+			$s = "<?php \$hidden_counter".$this->for_count." = 0;\n";
 			if (empty($key)) {
-				return "<?php \$hidden_counter = 0;\n"
-					."foreach((array) ".$array." as \$this->tpl_vars['".$value."']):\n"
-					."	\$hidden_counter++; ?>";
+				$s .= "foreach((array) ".$array." as \$this->tpl_vars['".$value."']):\n";
 			} else {
-				return "<?php \$hidden_counter = 0;\n"
-					."foreach((array) ".$array." as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']):\n"
-					."	\$hidden_counter++; ?>";
+				$s .= "foreach((array) ".$array." as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']):\n";
 			}
+			return $s."	\$hidden_counter".$this->for_count."++; ?>";
 		} else {
 			return '';
 		}
 	}
 	
 	public function compile_for_close() {
+		$this->for_count--;
 		return '<?php endforeach; ?>';
 	}
 	
 	/**
-	 * For's array iterating: empty case
+	 * Case of emptiness of last for's array being iterated
 	 */
-	public function compile_empty() {
-		return "<?php if (isset(\$hidden_counter) && intval(\$hidden_counter) == 0): ?>";
+	public function compile_empty($args) {
+		return "<?php if (isset(\$hidden_counter".($this->for_count+1).") && intval(\$hidden_counter".($this->for_count+1).") == 0): ?>";
 	}
 	
 	public function compile_empty_close() {

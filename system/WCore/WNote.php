@@ -88,7 +88,9 @@ class WNote {
 	}
 	
 	/**
-	 * Affichage d'une page avec la note en tant que réponse HTML
+	 * Display a note as a response
+	 * The aim of this handler is to redirect the response to a note
+	 * (not only displaying it as a note in the template)
 	 * 
 	 * @param array $note
 	 */
@@ -97,12 +99,8 @@ class WNote {
 		$view = new WView();
 		$view->setTheme(WConfig::get('config.theme'));
 		$view->setResponse('themes/system/note/note_view.html');
-		$view->assign(array(
-			'note_level'   => $note['level'],
-			'note_code'    => $note['code'],
-			'note_message' => $note['message'],
-			'css'          => '/themes/system/note/note.css'
-		));
+		$view->assign('css', '/themes/system/note/note.css');
+		$view->assign('notes_data', array($note));
 		$view->render();
 	}
 	
@@ -140,18 +138,14 @@ class WNote {
 	}
 	
 	public static function parse(array $notes) {
-		$html = "";
+		if (empty($notes)) {
+			return "";
+		}
 		$tpl = WSystem::getTemplate();
 		$tpl->assign('css', $tpl->getVar('css').'<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n");
-		foreach ($notes as $note) {
-			$tpl->assign(array(
-				'note_level'   => $note['level'],
-				'note_code'    => $note['code'],
-				'note_message' => $note['message'],
-			));
-			$html .= $tpl->parse('themes/system/note/note_view.html');
-		}
-		$tpl->clear(array('note_level', 'note_code', 'note_message'));
+		$tpl->assign('notes_data', $notes);
+		$html = $tpl->parse('themes/system/note/note_view.html');
+		$tpl->clear('notes_data');
 		return $html;
 	}
 	
