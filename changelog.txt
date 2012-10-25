@@ -1,11 +1,6 @@
-# Wity Changelog
-
-0.3.0 changes
--------------
-
-
-
-
+##################
+# Wity Changelog #
+##################
 
 v0.2
 ----
@@ -52,4 +47,3 @@ WLang
 
 Apache
 - Force to use UTF-8 by default in .htaccess
-

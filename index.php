@@ -8,7 +8,7 @@
  */
 
 define('IN_WITY', true);
-define('WITY_VERSION', '0.3.0dev');
+define('WITY_VERSION', '0.2.0');
 
 // Niveau d'affichage des erreurs = maximal
 error_reporting(E_ALL);
