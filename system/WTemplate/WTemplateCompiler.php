@@ -222,6 +222,7 @@ class WTemplateCompiler {
 		}
 		
 		// {$var} are replaced by ".{$var}." so that they can concat with other strings
+		$file = str_replace(array('"', "'"), '', $file);
 		$file = str_replace(array('{', '}'), array('".{', '}."'), $file);
 		$file = $this->replaceVars($file);
 		

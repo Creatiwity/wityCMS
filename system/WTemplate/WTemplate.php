@@ -9,13 +9,9 @@
  * @subpackage WTemplate
  */
 
-if (!defined('DS')) {
-	define('DS', DIRECTORY_SEPARATOR);
-}
-
-include dirname(__FILE__).DS.'WTemplateFile.php';
-include dirname(__FILE__).DS.'WTemplateParser.php';
-include dirname(__FILE__).DS.'WTemplateCompiler.php';
+include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateFile.php';
+include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateParser.php';
+include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateCompiler.php';
 
 class WTemplate {
 	/**
@@ -52,7 +48,7 @@ class WTemplate {
 		}
 		
 		// Default value
-		$this->compileDir = '.'.DS.'tpl_compiled'.DS;
+		$this->compileDir = '.'.DIRECTORY_SEPARATOR.'tpl_compiled'.DIRECTORY_SEPARATOR;
 		if (!empty($compileDir)) {
 			$this->setCompileDir($compileDir);
 		}
@@ -65,8 +61,10 @@ class WTemplate {
 			$this->compileDir = $compileDir;
 		} else {
 			// Attempt to create compile directory
-			if (mkdir($compileDir)) {
+			if (@mkdir($compileDir, 0777)) {
 				$this->compileDir = $compileDir;
+			} else {
+				throw new Exception("WTemplate::setCompileDir(): Impossible to create cache directory in ".$compileDir.".");
 			}
 		}
 	}
@@ -140,21 +138,23 @@ class WTemplate {
 		ob_start();
 		
 		try { // Critical section
-			// Evaluation
-			eval('?>'.file_get_contents($file->getCompilationHref()));
+			// Adds the php close balise at the begining because it is a whole php file being evaluated
+			$eval_result = eval('?>'.file_get_contents($file->getCompilationHref()));
 		} catch (Exception $e) {
 			// Just stores the exception into $e to throw it later
 		}
 		
-		$result = ob_get_contents();
+		$buffer = ob_get_contents();
 		ob_end_clean();
 		
 		// Throw exception if any
 		if (!empty($e)) {
 			throw $e;
+		} else if ($eval_result === false) {
+			throw new Exception("WTemplate::parse(): File $href encountered an error during evaluation :".$buffer);
 		}
 		
-		return $result;
+		return $buffer;
 	}
 	
 	/**

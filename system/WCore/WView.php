@@ -51,9 +51,9 @@ class WView {
 			$this->themeName = '_blank';
 		} else if (is_dir(THEMES_DIR.$theme)) {
 			$this->themeName = $theme;
-			$this->themeDir = THEMES_DIR.$theme.DS;
+			$this->themeDir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
-			WNote::error('view_error_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.");
+			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'custom');
 		}
 	}
 	
@@ -62,10 +62,12 @@ class WView {
 	}
 	
 	public function setResponse($file) {
-		if (file_exists($file)) {
+		$file = str_replace(WITY_PATH, '', $file);
+		if (file_exists(WITY_PATH.$file)) {
+			// WTemplate automaticly adds the base directory defined in WSystem::getTemplate()
 			$this->responseFile = $file;
 		} else {
-			WNote::error('view_error_response', "WView::setResponse(): The response file \"".$file."\" does not exist.");
+			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'custom');
 		}
 	}
 	
@@ -168,24 +170,21 @@ class WView {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
 			// HTML sent => abort
-			return;
+			return false;
 		}
 		
 		// Check theme
-		if (empty($this->themeName) && WNote::count('view_error_theme') == 0) {
-			WNote::error('view_error_theme', "WView::render(): No theme given or it was not found.");
+		if (empty($this->themeName) && WNote::count('view_theme') == 0) {
+			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'custom');
+			return false;
 		}
 		// Check response file
-		if (empty($this->responseFile) && WNote::count('view_error_response') == 0) {
-			WNote::error('view_error_response', "WView::render(): No response file given.");
+		if (empty($this->responseFile) && WNote::count('view_response') == 0) {
+			WNote::error('view_response', "WView::render(): No response file given.", 'custom');
+			return false;
 		}
 		
-		// Handle errors
-		$view_errors = WNote::get('view_error*');
-		if (!empty($view_errors)) {
-			WNote::displayFull($view_errors);
-			return;
-		}
+		// Handle notes
 		if ($this->getTheme() != '_blank') {
 			$this->assign('notes', WNote::parse(WNote::get('*')));
 		}
@@ -217,7 +216,8 @@ class WView {
 			try {
 				$this->tpl->display($themeMainFile);
 			} catch (Exception $e) {
-				WNote::displayFull(array(WNote::error('view_error_tpl_display', $e->getMessage(), 'ignore')));
+				WNote::error('view_tpl_display', $e->getMessage(), 'custom');
+				return false;
 			}
 		} else {
 			// Absolute links fix
@@ -230,12 +230,14 @@ class WView {
 					$html
 				);
 			} catch (Exception $e) {
-				WNote::displayFull(array(WNote::error('view_error_tpl_parse', $e->getMessage(), 'ignore')));
+				WNote::error('view_tpl_parse', $e->getMessage(), 'custom');
+				return false;
 			}
 		}
 		
 		// Mark the view as rendered
 		self::$response_sent = true;
+		return true;
 	}
 }
 ?>
