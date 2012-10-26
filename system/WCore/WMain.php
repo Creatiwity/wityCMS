@@ -3,7 +3,7 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @version	$Id: WCore/WMain.php 0002 29-09-2012 Fofif $
+ * @version	$Id: WCore/WMain.php 0003 26-10-2012 Fofif $
  * @package Wity
  */
 
@@ -31,6 +31,14 @@ class WMain {
 		
 		// Execution de l'action
 		$this->exec(WRoute::getApp());
+	}
+	
+	/**
+	 * Adds action to perform at the end of the script
+	 */
+	public function __destruct() {
+		// Flush the notes waiting for their own view
+		WNote::displayCustomView();
 	}
 	
 	/**
