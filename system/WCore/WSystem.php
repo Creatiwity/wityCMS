@@ -35,7 +35,11 @@ class WSystem {
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
 			include SYS_DIR.'WTemplate/WTemplate.php';
-			self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
+			try {
+				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
+			} catch (Exception $e) {
+				WNote::error('system_template_instanciation', $e->getMessage(), 'die');
+			}
 		}
 		
 		return self::$templateInstance;
@@ -50,17 +54,7 @@ class WSystem {
 			$user = WConfig::get('database.user');
 			$password = WConfig::get('database.pw');
 			
-			if (!class_exists('PDO')) {
-				throw new Exception("WSystem::getDB(): Class PDO unfound.");
-			}
-			
-			try {
-				# Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
-				@self::$dbInstance = new PDO($dsn, $user, $password);
-			} catch (PDOException $e) {
-				WNote::displayFull(array(WNote::error('sql_conn_error', "Impossible to connect to MySQL.<br /><br /><em>PDO's error</em><br />".utf8_encode($e->getMessage()), 'ignore')));
-				die;
-			}
+			self::$dbInstance = new WDatabase($dsn, $user, $password);
 			self::$dbInstance->query("SET NAMES 'utf8'");
 			self::$dbInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		}

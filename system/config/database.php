@@ -5,7 +5,8 @@ $database = array(
 	'port'   => '',
 	'user'   => 'root',
 	'pw'     => '',
-	'dbname' => 'test'
+	'dbname' => 'test',
+	'prefix' => ''
 );
 
 ?>

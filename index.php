@@ -18,6 +18,7 @@ require 'paths.php';
 
 // Inclusion des classes principales
 require SYS_DIR.'WCore'.DS.'WSystem.php';
+require SYS_DIR.'WCore'.DS.'WDatabase.php';
 require SYS_DIR.'WCore'.DS.'WRoute.php';
 require SYS_DIR.'WCore'.DS.'WConfig.php';
 require SYS_DIR.'WCore'.DS.'WRequest.php';
