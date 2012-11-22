@@ -4,7 +4,7 @@
  * Moteur de template pour le CMS Wity
  *
  * @author     Fofif
- * @version    $Id: WTemplate/WTemplateCompiler.php 0006 10-10-2012 Fofif $
+ * @version    $Id: WTemplate/WTemplateCompiler.php 0006 22-11-2012 Fofif $
  * @package    Wity
  * @subpackage WTemplate
  */
@@ -82,6 +82,7 @@ class WTemplateCompiler {
 		if (empty($node)) {
 			return "";
 		}
+		$output = "";
 		
 		// Variable display
 		if (strpos($node, '$') === 0) {
@@ -103,8 +104,6 @@ class WTemplateCompiler {
 				$output = $this->$handler();
 			} else if (isset(self::$external_compilers[$node_name])) {
 				$output = call_user_func(self::$external_compilers[$node_name]);
-			} else {
-				$output = '';
 			}
 		}
 		// Opening tag
@@ -139,8 +138,6 @@ class WTemplateCompiler {
 				}
 				
 				$output = call_user_func(self::$external_compilers[$node_name], $args);
-			} else {
-				$output = '';
 			}
 		}
 		
@@ -305,6 +302,25 @@ class WTemplateCompiler {
 	
 	public function compile_empty_close() {
 		return "<?php endif; ?>";
+	}
+	
+	/**
+	 * {set $a = 5}
+	 * {set {$a} = {$b} + 1}
+	 */
+	public function compile_set($args) {
+		$a = explode('=', $args);
+		if (count($a) != 2) {
+			return '';
+		}
+		list($var, $value) = $a;
+		$var = trim($var, '{}');
+		if ($var[0] != '$') {
+			return '';
+		}
+		$var = $this->parseVar(trim($var));
+		$value = $this->replaceVars(trim($value));
+		return "<?php ".$var." = ".$value."; ?>";
 	}
 }
 

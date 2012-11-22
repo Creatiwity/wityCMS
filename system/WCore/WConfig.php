@@ -97,7 +97,7 @@ class WConfig {
 				break;
 			
 			case 'php':
-				include $file;
+				include_once $file;
 				if (isset(${$field})) {
 					self::$configs[$field] = ${$field};
 				}

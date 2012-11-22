@@ -12,6 +12,9 @@ class NewsModel {
 	
 	public function __construct() {
 		$this->db = WSystem::getDB();
+		
+		// Declare table
+		$this->db->declareTable('news');
 	}
 	
 	/**

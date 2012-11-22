@@ -51,8 +51,10 @@ abstract class WController {
 		// Parse the manifest
 		
 		
-		// Load language configuration
-		WLang::declareLangDir($app_dir.DS.'lang');
+		// Automaticly declare the language directory
+		if (is_dir($app_dir.DS.'lang')) {
+			WLang::declareLangDir($app_dir.DS.'lang');
+		}
 	}
 	
 	/**

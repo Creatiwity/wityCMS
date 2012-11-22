@@ -3,16 +3,17 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  *
- * @version	$Id: WCore/WDatabase.php 0000 25-10-2012 Fofif $
+ * @version	$Id: WCore/WDatabase.php 0001 21-11-2012 Fofif $
  * @package Wity
  */
 
 class WDatabase extends PDO {
 	private $tablePrefix = "";
+	private $tables = array();
 	
 	public function __construct($dsn, $user, $password) {
 		if (!class_exists('PDO')) {
-			throw new Exception("WSystem::getDB(): Class PDO unfound.");
+			throw new Exception("WSystem::__construct(): Class PDO not found.");
 		}
 		
 		try {
@@ -25,16 +26,23 @@ class WDatabase extends PDO {
 		$this->tablePrefix = WConfig::get('database.prefix');
 	}
 	
-	public function prefixTables($querystring) {
+	/**
+	 * Declare a new table in order to be automaticly prefixed
+	 * 
+	 * @param string $table Table's name
+	 */
+	public function declareTable($table) {
+		$this->tables[] = $table;
+	}
+	
+	/**
+	 * Add prefix to table's name (see WDatabase::declareTable()) in a querystring
+	 */
+	private function prefixTables($querystring) {
 		if (!empty($this->tablePrefix)) {
-			// TODO
-			// detect keywords AS to keep temporary tables unaffected
-			
-			// Replace vars prefixes
-			$querystring = preg_replace('#\s([a-z0-9_]+)\.#i', $this->tablePrefix.'$1.', $querystring);
-			
-			// Replace table names
-			$querystring = preg_replace('#(UPDATE|FROM)\s+([a-z0-9_]+)#i', '$1 '.$this->tablePrefix.'$2', $querystring);
+			foreach ($this->tables as $table) {
+				$querystring = preg_replace('#([^a-z0-9_])'.$table.'([^a-z0-9_])#', '$1'.$this->tablePrefix.$table.'$2', $querystring);
+			}
 		}
 		return $querystring;
 	}

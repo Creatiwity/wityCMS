@@ -17,7 +17,7 @@ class WNote {
 	private static $custom_stack = array();
 	
 	/**
-	 * Crée une nouvelle note
+	 * Raise a new note
 	 * 
 	 * @static
 	 * @param  string $level   Niveau de la note
@@ -26,7 +26,7 @@ class WNote {
 	 * @return $note
 	 */
 	public static function raise($level, $code, $message, $handler) {
-		// Création d'une nouvelle note
+		// Note creation
 		$note = array(
 			'level'   => $level,
 			'code'    => $code,
@@ -35,11 +35,11 @@ class WNote {
 		
 		$function = 'handle_'.$handler;
 		if (is_callable(array('WNote', $function))) {
-			// Execution du handler
+			// Execute handler
 			self::$function($note);
 			return $note;
 		} else {
-			// On évite de laisser l'écran vide
+			// If no handler was found, don't let the screen blank
 			die("WNote::raise() : Unfound handler <strong>\"".$handler."\"</strong><br /><u>Triggering note:</u>\n".self::handle_html($note));
 		}
 	}
@@ -48,7 +48,6 @@ class WNote {
 	 * Dérivée de self::raise : passe un niveau précis en argument
 	 */
 	public static function error($code, $message, $handler = 'assign') {
-		//var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 		return self::raise(self::ERROR, $code, $message, $handler);
 	}
 	
@@ -114,6 +113,9 @@ class WNote {
 		$view->render();
 	}
 	
+	/**
+	 * Note to be displayed in a custom page
+	 */
 	public static function handle_custom($note) {
 		self::$custom_stack[] = $note;
 	}
@@ -168,6 +170,7 @@ class WNote {
 	
 	/**
 	 * Display a set of notes in a dedicated view
+	 * @return bool custom view triggered?
 	 */
 	public static function displayCustomView() {
 		// Generate view
@@ -181,7 +184,9 @@ class WNote {
 					."<u>Triggering notes:</u>\n"
 					.implode('', array_map('WNote::handle_html', self::$custom_stack)), 'die');
 			}
+			return true;
 		}
+		return false;
 	}
 }
 
