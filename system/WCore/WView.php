@@ -185,8 +185,11 @@ class WView {
 		}
 		
 		// Handle notes
+		$notes = WNote::parse(WNote::get('*'));
 		if ($this->getTheme() != '_blank') {
-			$this->assign('notes', WNote::parse(WNote::get('*')));
+			$this->assign('notes', $notes);
+		} else {
+			echo $notes;
 		}
 		
 		// Treat "special vars"

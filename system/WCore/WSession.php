@@ -15,7 +15,7 @@ class WSession {
 	// Temps avant d'être considéré comme inactif en minutes
 	const ACTIVITY = 3;
 	// Temps minimum séparant l'envoie de deux postes en secondes
-	const FLOOD_TIME = 0;
+	const FLOOD_TIME = 30;
 	
 	/**
 	 * Setup des sessions
@@ -31,9 +31,9 @@ class WSession {
 		session_start();
 		
 		// Tentative de chargement de l'utilisateur en vérifiant les cookies
-		if (!$this->isLoaded() && !empty($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
+		if (!$this->isLoaded() && isset($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
 			// Le hash assure une connexion unique
-			$this->reloadSession($_COOKIE['userid'], $_COOKIE['hash']);
+			$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash']);
 		}
 	}
 	
@@ -82,10 +82,10 @@ class WSession {
 	 */
 	public function loadUser($userid, $data) {
 		// Création des variables de session
-		$_SESSION['userid'] = $userid;
+		$_SESSION['userid']   = $userid;
 		$_SESSION['nickname'] = $data['nickname'];
-		$_SESSION['email'] = $data['email'];
-		$_SESSION['groupe'] = $data['groupe'];
+		$_SESSION['email']    = $data['email'];
+		$_SESSION['groupe']   = $data['groupe'];
 		
 		$_SESSION['accessString'] = $data['access'];
 		$_SESSION['access'] = array();
@@ -105,7 +105,7 @@ class WSession {
 	 * @return bool l'utilisateur est-il connecté ?
 	 */
 	public static function isLoaded() {
-		return !empty($_SESSION['userid']);
+		return isset($_SESSION['userid']);
 	}
 	
 	// Génère un hash caractéristique de l'utilisateur

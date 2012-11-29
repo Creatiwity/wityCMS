@@ -21,12 +21,14 @@ class UserController extends WController {
 	/*
 	 * Pointeurs vers WSession et UserModel
 	 */
-	private $session, $model;
+	private $model;
+	private $session;
 	
 	/**
 	 * Les constantes d'erreur
 	 */
-	const ANTIFLOOD_ERROR = 2;
+	const LOGIN_SUCCESS = 1;
+	const LOGIN_MAX_ATTEMPT_REACHED = 2;
 	
 	public function __construct() {
 		include_once 'model.php';
@@ -39,11 +41,22 @@ class UserController extends WController {
 	public function launch() {
 		$this->session = WSystem::getSession();
 		
-		$action = $this->getAskedAction();
-		if ($action == 'login') {
-			$action = '';
+		switch ($this->getAskedAction()) {
+			case 'login':
+			case 'connexion':
+				$action = 'login';
+				break;
+			
+			case 'logout':
+			case 'deconnexion':
+				$action = 'logout';
+				break;
+			
+			default:
+				$action = 'login';
+				break;
 		}
-		$this->forward($action, 'connexion');
+		$this->forward($action);
 	}
 	
 	/**
@@ -54,20 +67,19 @@ class UserController extends WController {
 	 * @param int $remember temps de connexion (-1 = non spécifié)
 	 * @param mixed  $remember durée de la session si précisée
 	 */
-	public function login($nickname, $password, $remember) {
+	public function createSession($nickname, $password, $remember) {
 		// Système de régulation en cas d'erreur multiple du couple pseudo/pass
 		// On stocke dans la variable session $login_try le nombre de tentatives de connexion
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
 			$_SESSION['login_try'] = 0;
 		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
-			// erreur type antiflood
-			return self::ANTIFLOOD_ERROR;
+			return self::LOGIN_MAX_ATTEMPT_REACHED;
 		}
 		
-		// Petit traitement des informations
+		// Vars treatment
 		$nickname = trim($nickname);
+		// Email to lower case
 		if (strpos($nickname, '@') !== false) {
-			// mise en miniscule pour les adresses mail
 			$nickname = strtolower($nickname);
 		}
 		$password = sha1($password);
@@ -86,7 +98,7 @@ class UserController extends WController {
 				setcookie('hash', $this->session->generate_hash($nickname, $password), $lifetime, '/');
 			}
 			
-			return 1; // success
+			return self::LOGIN_SUCCESS; 
 		} else {
 			// Incrémente le nombre d'essais
 			$_SESSION['login_try']++;
@@ -97,15 +109,15 @@ class UserController extends WController {
 	/**
 	 * Connexion d'un membre
 	 */
-	protected function connexion() {
+	protected function login() {
 		if ($this->session->isLoaded()) {
-			WNote::error("user_already_loged", "Inutile d'accéder à cette page si vous êtes connecté(e).", 'display');
+			WNote::error("user_connected", "Inutile d'accéder à cette page si vous êtes connecté(e).", 'display');
 			return;
 		}
 		
 		$data = WRequest::getAssoc(array('nickname', 'password', 'remember', 'time', 'redirect'), null, 'POST');
 		
-		// Affichage du formulaire de connexion
+		// Find redirect URL
 		if (empty($data['redirect'])) {
 			if (WRoute::getApp() != 'user') {
 				$data['redirect'] = WRoute::getURL();
@@ -121,15 +133,17 @@ class UserController extends WController {
 			$rememberTime = (!is_null($data['remember'])) ? self::REMEMBER_TIME : intval($data['time']) * 60;
 			
 			// Connexion
-			switch ($this->login($data['nickname'], $data['password'], $rememberTime)) {
-				case 1: // Connexion réussie
+			switch ($this->createSession($data['nickname'], $data['password'], $rememberTime)) {
+				case self::LOGIN_SUCCESS:
 					header('location: '.$data['redirect']);
 					return;
-				case self::ANTIFLOOD_ERROR:
-					WNote::error("Erreur de connexion", "Vous avez atteint le nombre maximum de tentatives de connexion autorisées.\nMerci d'attendre un instant avant de réessayer.", 'assign');
+				
+				case self::LOGIN_MAX_ATTEMPT_REACHED:
+					WNote::error("login_max_attempt", "Vous avez atteint le nombre maximum de tentatives de connexion autorisées.\nMerci d'attendre un instant avant de réessayer.", 'assign');
 					break;
+				
 				default:
-					WNote::error("Erreur de connexion", "Le couple <em>nom d'utilisateur / mot de passe</em> est erroné.", 'assign');
+					WNote::error("login_error", "Le couple <em>nom d'utilisateur / mot de passe</em> est erroné.", 'assign');
 					break;
 			}
 		}
@@ -141,16 +155,12 @@ class UserController extends WController {
 	/**
 	 * Déconnexion
 	 */
-	protected function deconnexion() {
-		if (!$this->session->isLoaded()) {
-			WNote::error("Accès interdit !", "Vous devez être connecté(e) pour accéder à cette page.", 'display');
-		} else {
-			// Destruction de la session
-			$this->session->logout();
-			
-			// Redirection
-			WNote::success("Déconnexion", "Vous êtes maintenant déconnecté.", 'display');
-		}
+	protected function logout() {
+		// Destruction de la session
+		$this->session->logout();
+		
+		// Redirection
+		WNote::success("user_disconnected", "Vous êtes maintenant déconnecté.", 'display');
 	}
 }
 
