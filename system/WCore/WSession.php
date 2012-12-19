@@ -3,71 +3,148 @@
  * Wity CMS
  * Système de gestion de contenu pour tous.
  * 
- * Gestion de sessions
+ * Session handler
  * 
  * @auteur	Fofif
- * @version	$Id: WCore/WSession.php 0003 02-08-2011 Fofif $
+ * @version	$Id: WCore/WSession.php 0004 19-12-2012 Fofif $
  */
 
 class WSession {
-	// Table des utilisateurs
-	const USER_TABLE = 'users';
-	// Temps avant d'être considéré comme inactif en minutes
-	const ACTIVITY = 3;
-	// Temps minimum séparant l'envoie de deux postes en secondes
-	const FLOOD_TIME = 30;
+	/*
+	 * SQL Table
+	 */
+	const USERS_TABLE = 'users';
+	/*
+	 * Minimum time betwen two POST requests
+	 */
+	const FLOOD_TIME = 15;
+	/**
+	 * Time before the session expires
+	 */
+	const TOKEN_EXPIRATION = 120;
+	/*
+	 * Inactivity time (minuts)
+	 */
+	//const ACTIVITY = 3;
 	
 	/**
-	 * Setup des sessions
+	 * States
+	 */
+	const LOGIN_SUCCESS = 1;
+	const LOGIN_MAX_ATTEMPT_REACHED = 2;
+	
+	/**
+	 * Session setup
 	 */
 	public function __construct() {
-		// Pas de sid dans les liens
+		// No sid in HTML links
 		ini_set('session.use_trans_sid', '0');
-		
-		// Nom de session
 		session_name('wsid');
 		
-		// Démarrage des sessions
+		// Start sessions
 		session_start();
 		
-		// Tentative de chargement de l'utilisateur en vérifiant les cookies
-		if (!$this->isLoaded() && isset($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
-			// Le hash assure une connexion unique
-			$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash']);
+		if ($this->isLoaded()) {
+			// Token expiration checking
+			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
+				if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
+					$this->closeSession();
+				}
+			}
+		}
+		// Attempt to load a user based on its cookies
+		else if (isset($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
+			// Hash => unique connection
+			if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
+				$this->closeSession();
+			}
 		}
 	}
 	
 	/**
-	 * Fonction de déconnexion de l'utilisateur
+	 * @return bool Is the user connected?
 	 */
-	public function logout() {
-		// Suppression des cookies
-		setcookie('userid', '', time()-3600, '/');
-		setcookie('hash', '', time()-3600, '/');
-		
-		// Suppression totale de la session
-		$this->destroy();
-		
-		return true;
+	public static function isLoaded() {
+		return isset($_SESSION['userid']);
 	}
 	
 	/**
-	 * Chargement d'un utilisateur
+	 * Create a session for the user
 	 * 
-	 * @param string $userid id de l'utilisateur
-	 * @param string $cookie_hash hash de connexion pour la vérification
+	 * @param string $nickname
+	 * @param string $password
+	 * @param int $remember Session life time (-1 = N/A)
+	 */
+	public function createSession($nickname, $password, $remember) {
+		// Système de régulation en cas d'erreur multiple du couple pseudo/pass
+		// On stocke dans la variable session $login_try le nombre de tentatives de connexion
+		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
+			$_SESSION['login_try'] = 0;
+		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
+			return self::LOGIN_MAX_ATTEMPT_REACHED;
+		}
+		
+		// Treatment
+		$nickname = trim($nickname);
+		// Email to lower case
+		if (strpos($nickname, '@') !== false) {
+			$nickname = strtolower($nickname);
+		}
+		$password_hash = sha1($password);
+		
+		// Search a matching couple (nickname, password_hash) in DB
+		$db = WSystem::getDB();
+		$prep = $db->prepare('
+			SELECT id, nickname, email, groupe, access
+			FROM users
+			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
+		');
+		$prep->bindParam(':nickname', $nickname);
+		$prep->bindParam(':password', $password_hash);
+		$prep->execute();
+		$data = $prep->fetch();
+		
+		// User found
+		if (!empty($data)) {
+			$this->setupSession($data['id'], $data);
+			
+			// Cookie setup
+			if ($remember > 0) {
+				$lifetime = time() + $remember;
+				// Cookie setup
+				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
+				setcookie('hash', $this->generate_hash($nickname, $password_hash), $lifetime, '/');
+			}
+			
+			return self::LOGIN_SUCCESS; 
+		} else {
+			// Attempt + 1
+			$_SESSION['login_try']++;
+			return 0;
+		}
+	}
+	
+	/**
+	 * Reload a user based on cookies
+	 * 
+	 * @param string $userid
+	 * @param string $cookie_hash Connexion hash for checking
 	 */
 	private function reloadSession($userid, $cookie_hash) {
 		$db = WSystem::getDB();
+		$prep = $db->prepare('
+			SELECT id, nickname, password, email, groupe, access
+			FROM '.self::USERS_TABLE.'
+			WHERE id = :userid
+		');
+		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+		$prep->execute();
+		$data = $prep->fetch();
 		
-		$query = $db->query('SELECT id, nickname, password, email, groupe, access FROM '.self::USER_TABLE.' WHERE id = '.$userid);
-		if ($query->rowCount() > 0) {
-			// Chargement des informations
-			$data = $query->fetch(PDO::FETCH_ASSOC);
-			
-			// Vérification du hash
+		if (!empty($data)) {
+			// Check hash
 			if ($cookie_hash == $this->generate_hash($data['nickname'], $data['password'])) {
-				$this->loadUser($userid, $data);
+				$this->setupSession($userid, $data);
 				return true;
 			}
 		}
@@ -76,12 +153,12 @@ class WSession {
 	}
 	
 	/**
-	 * Chargement en session des données d'un utilisateur
+	 * Setup session variables for the user
 	 * 
-	 * @param string $userid id de l'utilisateur
+	 * @param string $userid
+	 * @param array $data Data to store into $_SESSION
 	 */
-	public function loadUser($userid, $data) {
-		// Création des variables de session
+	public function setupSession($userid, $data) {
 		$_SESSION['userid']   = $userid;
 		$_SESSION['nickname'] = $data['nickname'];
 		$_SESSION['email']    = $data['email'];
@@ -99,16 +176,47 @@ class WSession {
 				}
 			}
 		}
+		
+		// Next checking time
+		$_SESSION['token_expiration'] = time() + self::TOKEN_EXPIRATION;
 	}
 	
 	/**
-	 * @return bool l'utilisateur est-il connecté ?
+	 * Disconnect the user
 	 */
-	public static function isLoaded() {
-		return isset($_SESSION['userid']);
+	public function closeSession() {
+		// Delete vars
+		unset(
+			$_SESSION['userid'], 
+			$_SESSION['nickname'], 
+			$_SESSION['email'], 
+			$_SESSION['groupe'], 
+			$_SESSION['accessString'], 
+			$_SESSION['access'],
+			$_SESSION['token_expiration']
+		);
+		
+		// Reset cookies
+		setcookie('userid', '', time()-3600, '/');
+		setcookie('hash', '', time()-3600, '/');
 	}
 	
-	// Génère un hash caractéristique de l'utilisateur
+	/**
+	 * Clean variables used to define a user loaded
+	 */
+	public function destroy() {
+		$this->closeSession();
+		
+		$_SESSION = array();
+		session_destroy();
+		
+		// Reset cookies
+    	setcookie(session_name(), '', time()-3600, '/');
+	}
+	
+	/**
+	 * Generate a hash designed for the user computer, to be stored in a cookie
+	 */
 	public function generate_hash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
 		// Rajout de quelques valeurs rendant le hash lié à l'environnement de l'utilisateur
@@ -117,22 +225,6 @@ class WSession {
 		}
 		
 		return sha1($string);
-	}
-	
-	/**
-	 * Destruction de la session php
-	 */
-	public function destroy() {
-		// Suppression des variables de session
-		$_SESSION = array();
-		
-		// Destruction de la session
-		session_destroy();
-		
-		// Elimination du cookie s'il existe
-		if (isset($_COOKIE[session_name()])) {
-    		setcookie(session_name(), '', time()-3600, '/');
-		}
 	}
 	
 	/**
