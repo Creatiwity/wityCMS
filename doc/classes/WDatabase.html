@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Wity-Lite » \NewsletterAdminModel</title>
+<title>Wity-Lite » \WDatabase</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -61,43 +61,36 @@
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_countNewsletters" title="countNewsletters :: "><span class="description">countNewsletters()
-        </span><pre>countNewsletters()</pre></a></li>
-<li class="method public "><a href="#method_getAll" title="getAll :: "><span class="description">getAll()
-        </span><pre>getAll()</pre></a></li>
-<li class="method public "><a href="#method_getMailsArray" title="getMailsArray :: "><span class="description">getMailsArray()
-        </span><pre>getMailsArray()</pre></a></li>
-<li class="method public "><a href="#method_getNewsletters" title="getNewsletters :: "><span class="description">getNewsletters()
-        </span><pre>getNewsletters()</pre></a></li>
-<li class="method public "><a href="#method_getRegistered" title="getRegistered :: "><span class="description">getRegistered()
-        </span><pre>getRegistered()</pre></a></li>
-<li class="method public "><a href="#method_getWithoutBrochure" title="getWithoutBrochure :: "><span class="description">getWithoutBrochure()
-        </span><pre>getWithoutBrochure()</pre></a></li>
-<li class="method public "><a href="#method_getWithoutStand" title="getWithoutStand :: "><span class="description">getWithoutStand()
-        </span><pre>getWithoutStand()</pre></a></li>
-<li class="method public "><a href="#method_loadNewsletter" title="loadNewsletter :: "><span class="description">loadNewsletter()
-        </span><pre>loadNewsletter()</pre></a></li>
-<li class="method public "><a href="#method_saveNewsletter" title="saveNewsletter :: "><span class="description">saveNewsletter()
-        </span><pre>saveNewsletter()</pre></a></li>
+<li class="method public "><a href="#method_declareTable" title="declareTable :: Declare a new table in order to be automaticly prefixed"><span class="description">Declare a new table in order to be automaticly prefixed</span><pre>declareTable()</pre></a></li>
+<li class="method public "><a href="#method_prepare" title="prepare :: "><span class="description">prepare()
+        </span><pre>prepare()</pre></a></li>
+<li class="method public "><a href="#method_query" title="query :: "><span class="description">query()
+        </span><pre>query()</pre></a></li>
 </ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul><li class="method private "><a href="#method_prefixTables" title="prefixTables :: Add prefix to table's name (see WDatabase::declareTable()) in a querystring"><span class="description">Add prefix to table's name (see WDatabase::declareTable()) in a querystring</span><pre>prefixTables()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
                     <ul></ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="property private "><a href="#property_db" title="$db :: "><span class="description"></span><pre>$db</pre></a></li></ul>
+                    <ul>
+<li class="property private "><a href="#property_tablePrefix" title="$tablePrefix :: "><span class="description"></span><pre>$tablePrefix</pre></a></li>
+<li class="property private "><a href="#property_tables" title="$tables :: "><span class="description"></span><pre>$tables</pre></a></li>
+</ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\NewsletterAdminModel"></a><ul class="breadcrumb">
+<a id="\WDatabase"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/global.html">global</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/NewsletterAdminModel.html">NewsletterAdminModel</a>
+<span class="divider">\</span><a href="../classes/WDatabase.html">WDatabase</a>
 </li>
 </ul>
 <div class="element class">
@@ -107,12 +100,12 @@ Système de gestion de contenu pour tous.</p>
 <div class="long_description"></div>
 <table class="table table-bordered">
 <tr>
-<th>author</th>
-<td><a href="">Fofif &lt;Johan Dufau&gt;</a></td>
+<th>version</th>
+<td>$Id: WCore/WDatabase.php 0001 21-11-2012 Fofif $</td>
 </tr>
 <tr>
-<th>version</th>
-<td>$Id: apps/newsletter/admin/model.php 0001 06-10-2011 Fofif $</td>
+<th>package</th>
+<td><a href="../packages/Wity.html">Wity</a></td>
 </tr>
 </table>
 <h3>
@@ -120,97 +113,73 @@ Système de gestion de contenu pour tous.</p>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>__construct()
         </h2>
-<pre>__construct() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="method_countNewsletters"></a><div class="element clickable method public method_countNewsletters" data-toggle="collapse" data-target=".method_countNewsletters .collapse">
-<h2>countNewsletters()
-        </h2>
-<pre>countNewsletters() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="method_getAll"></a><div class="element clickable method public method_getAll" data-toggle="collapse" data-target=".method_getAll .collapse">
-<h2>getAll()
-        </h2>
-<pre>getAll() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="method_getMailsArray"></a><div class="element clickable method public method_getMailsArray" data-toggle="collapse" data-target=".method_getMailsArray .collapse">
-<h2>getMailsArray()
-        </h2>
-<pre>getMailsArray($type) </pre>
+<pre>__construct($dsn, $user, $password) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$type</h4></div>
+<div class="subelement argument"><h4>$dsn</h4></div>
+<div class="subelement argument"><h4>$user</h4></div>
+<div class="subelement argument"><h4>$password</h4></div>
 </div></div>
 </div>
-<a id="method_getNewsletters"></a><div class="element clickable method public method_getNewsletters" data-toggle="collapse" data-target=".method_getNewsletters .collapse">
-<h2>getNewsletters()
-        </h2>
-<pre>getNewsletters($from, $number, $order, $asc) </pre>
+<a id="method_declareTable"></a><div class="element clickable method public method_declareTable" data-toggle="collapse" data-target=".method_declareTable .collapse">
+<h2>Declare a new table in order to be automaticly prefixed</h2>
+<pre>declareTable(string $table) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$from</h4></div>
-<div class="subelement argument"><h4>$number</h4></div>
-<div class="subelement argument"><h4>$order</h4></div>
-<div class="subelement argument"><h4>$asc</h4></div>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>Table's name</p>
+</div>
 </div></div>
 </div>
-<a id="method_getRegistered"></a><div class="element clickable method public method_getRegistered" data-toggle="collapse" data-target=".method_getRegistered .collapse">
-<h2>getRegistered()
+<a id="method_prepare"></a><div class="element clickable method public method_prepare" data-toggle="collapse" data-target=".method_prepare .collapse">
+<h2>prepare()
         </h2>
-<pre>getRegistered() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="method_getWithoutBrochure"></a><div class="element clickable method public method_getWithoutBrochure" data-toggle="collapse" data-target=".method_getWithoutBrochure .collapse">
-<h2>getWithoutBrochure()
-        </h2>
-<pre>getWithoutBrochure() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="method_getWithoutStand"></a><div class="element clickable method public method_getWithoutStand" data-toggle="collapse" data-target=".method_getWithoutStand .collapse">
-<h2>getWithoutStand()
-        </h2>
-<pre>getWithoutStand() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
-</div>
-<a id="method_loadNewsletter"></a><div class="element clickable method public method_loadNewsletter" data-toggle="collapse" data-target=".method_loadNewsletter .collapse">
-<h2>loadNewsletter()
-        </h2>
-<pre>loadNewsletter($nid) </pre>
+<pre>prepare($querystring, $driver_options) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$nid</h4></div>
+<div class="subelement argument"><h4>$querystring</h4></div>
+<div class="subelement argument"><h4>$driver_options</h4></div>
 </div></div>
 </div>
-<a id="method_saveNewsletter"></a><div class="element clickable method public method_saveNewsletter" data-toggle="collapse" data-target=".method_saveNewsletter .collapse">
-<h2>saveNewsletter()
+<a id="method_query"></a><div class="element clickable method public method_query" data-toggle="collapse" data-target=".method_query .collapse">
+<h2>query()
         </h2>
-<pre>saveNewsletter($data) </pre>
+<pre>query($querystring) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$data</h4></div>
+<div class="subelement argument"><h4>$querystring</h4></div>
+</div></div>
+</div>
+<a id="method_prefixTables"></a><div class="element clickable method private method_prefixTables" data-toggle="collapse" data-target=".method_prefixTables .collapse">
+<h2>Add prefix to table's name (see WDatabase::declareTable()) in a querystring</h2>
+<pre>prefixTables($querystring) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$querystring</h4></div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a id="property_db"> </a><div class="element clickable property private property_db" data-toggle="collapse" data-target=".property_db .collapse">
+<a id="property_tablePrefix"> </a><div class="element clickable property private property_tablePrefix" data-toggle="collapse" data-target=".property_tablePrefix .collapse">
 <h2></h2>
-<pre>$db </pre>
+<pre>$tablePrefix </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_tables"> </a><div class="element clickable property private property_tables" data-toggle="collapse" data-target=".property_tables .collapse">
+<h2></h2>
+<pre>$tables </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>

@@ -1,9 +1,9 @@
-<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>Wity-Lite » PHPMailer</title>
+<title>Wity-Lite » \WXML</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -20,10 +20,8 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
-<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
-<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+<li><a href="../packages/Wity.html"><i class="icon-folder-open"></i> Wity</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -34,10 +32,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">1013</span></a></li>
+                <span class="label label-info">387</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">2</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -54,56 +52,90 @@
                         </div></noscript>
 <div class="row">
 <div class="span4">
-<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
 <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
 </div>
-<ul class="side-nav nav nav-list">
-<li class="nav-header">
-<i class="icon-map-marker"></i> Packages</li>
-<li>
-<a href="../packages/PHPMailer.html" title="PHPMailer"><i class="icon-folder-open"></i>PHPMailer</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li class="nav-header">
-<i class="icon-custom icon-class"></i> Classes</li>
-<li><a href="#PHPMailer" title="PHPMailer - PHP email transport class">PHPMailer</a></li>
-<li><a href="#SMTP" title="SMTP is rfc 821 compliant and implements all the rfc 821 SMTP
-commands except TURN which will always return a not implemented
-error.">SMTP</a></li>
+<ul class="side-nav nav nav-list"><li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_loadFile" title="loadFile :: "><span class="description">loadFile()
+        </span><pre>loadFile()</pre></a></li>
+<li class="method public "><a href="#method_loadString" title="loadString :: "><span class="description">loadString()
+        </span><pre>loadString()</pre></a></li>
 </ul>
+</li></ul>
 </div>
-<div class="span8 package-contents">
-<ul class="breadcrumb">
+<div class="span8">
+<a id="\WXML"></a><ul class="breadcrumb">
 <li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
-<li class="active"><a href="../packages/PHPMailer.html">PHPMailer</a></li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/WXML.html">WXML</a>
+</li>
 </ul>
-<div class="package-indent">
+<div class="element class">
+<p class="short_description">Wity CMS
+Système de gestion de contenu pour tous.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>author</th>
+<td><a href="">Fofif &lt;Johan Dufau&gt;</a></td>
+</tr>
+<tr>
+<th>version</th>
+<td>$Id: WFile/WXML.php 0000 28-09-2012 Fofif $</td>
+</tr>
+</table>
 <h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<a name="PHPMailer" id="PHPMailer"></a><div class="element ajax clickable class" href="../classes/PHPMailer.html">
-<h1>PHPMailer<a href="../classes/PHPMailer.html">¶</a>
-</h1>
-<p class="short_description">PHPMailer - PHP email transport class</p>
-<div class="details collapse"></div>
-<a href="../classes/PHPMailer.html" class="more">« More »</a>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_loadFile"></a><div class="element clickable method public method_loadFile" data-toggle="collapse" data-target=".method_loadFile .collapse">
+<h2>loadFile()
+        </h2>
+<pre>loadFile($file) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>todo</th>
+<td>loadFile();</td>
+</tr>
+<tr>
+<th>todo</th>
+<td>loadString();</td>
+</tr>
+<tr>
+<th>todo</th>
+<td>createDoc();</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$file</h4></div>
+</div></div>
 </div>
-<a name="SMTP" id="SMTP"></a><div class="element ajax clickable class" href="../classes/SMTP.html">
-<h1>SMTP<a href="../classes/SMTP.html">¶</a>
-</h1>
-<p class="short_description">SMTP is rfc 821 compliant and implements all the rfc 821 SMTP
-commands except TURN which will always return a not implemented
-error.</p>
-<div class="details collapse"></div>
-<a href="../classes/SMTP.html" class="more">« More »</a>
+<a id="method_loadString"></a><div class="element clickable method public method_loadString" data-toggle="collapse" data-target=".method_loadString .collapse">
+<h2>loadString()
+        </h2>
+<pre>loadString($string) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$string</h4></div>
+</div></div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
-            generated on 2012-07-28T15:04:22+02:00.<br></footer></div>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-27T00:39:57+01:00.<br></footer></div>
 </div>
 </body>
 </html>

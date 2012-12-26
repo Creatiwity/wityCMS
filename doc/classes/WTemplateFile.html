@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
@@ -20,10 +20,8 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
-<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
-<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+<li><a href="../packages/Wity.html"><i class="icon-folder-open"></i> Wity</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -34,10 +32,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">1013</span></a></li>
+                <span class="label label-info">387</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">2</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -59,32 +57,43 @@
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
-<i class="icon-custom icon-method"></i> Methods</li>
-<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#compile" title="compile :: Compilation du fichier"><span class="description">Compilation du fichier</span><pre>compile()</pre></a></li>
-<li class="method public "><a href="#getCompilationHref" title="getCompilationHref :: "><span class="description">getCompilationHref()
+<li class="method public "><a href="#method_compile" title="compile :: Compile this file"><span class="description">Compile this file</span><pre>compile()</pre></a></li>
+<li class="method public "><a href="#method_getCompilationHref" title="getCompilationHref :: "><span class="description">getCompilationHref()
         </span><pre>getCompilationHref()</pre></a></li>
-<li class="method public "><a href="#getCompilationTime" title="getCompilationTime :: "><span class="description">getCompilationTime()
+<li class="method public "><a href="#method_getCompilationTime" title="getCompilationTime :: "><span class="description">getCompilationTime()
         </span><pre>getCompilationTime()</pre></a></li>
-<li class="nav-header private">» Private</li>
-<li class="method private "><a href="#checkCompilation" title="checkCompilation :: Vérifie si une compilation du fichier est nécessaire"><span class="description">Vérifie si une compilation du fichier est nécessaire</span><pre>checkCompilation()</pre></a></li>
-<li class="method private "><a href="#createCompilationHref" title="createCompilationHref :: Génère le chemin complet du fichier compilé"><span class="description">Génère le chemin complet du fichier compilé</span><pre>createCompilationHref()</pre></a></li>
-<li class="method private "><a href="#saveFile" title="saveFile :: Enregistre le fichier"><span class="description">Enregistre le fichier</span><pre>saveFile()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method_checkCompilation" title="checkCompilation :: Checks whether compilation is required"><span class="description">Checks whether compilation is required</span><pre>checkCompilation()</pre></a></li>
+<li class="method private "><a href="#method_createCompilationHref" title="createCompilationHref :: Create the position of the cached file compiled"><span class="description">Create the position of the cached file compiled</span><pre>createCompilationHref()</pre></a></li>
+<li class="method private "><a href="#method_saveFile" title="saveFile :: Write output string into the cache file"><span class="description">Write output string into the cache file</span><pre>saveFile()</pre></a></li>
+</ul>
+</li>
 <li class="nav-header">
-<i class="icon-custom icon-property"></i> Properties</li>
-<li class="nav-header private">» Private</li>
-<li class="property private "><a href="#%24baseDir" title="$baseDir :: "><span class="description">$baseDir</span><pre>$baseDir</pre></a></li>
-<li class="property private "><a href="#%24compilationDir" title="$compilationDir :: "><span class="description">$compilationDir</span><pre>$compilationDir</pre></a></li>
-<li class="property private "><a href="#%24compilationHref" title="$compilationHref :: "><span class="description">$compilationHref</span><pre>$compilationHref</pre></a></li>
-<li class="property private "><a href="#%24compilationTime" title="$compilationTime :: "><span class="description">$compilationTime</span><pre>$compilationTime</pre></a></li>
-<li class="property private "><a href="#%24compiled" title="$compiled :: "><span class="description">$compiled</span><pre>$compiled</pre></a></li>
-<li class="property private "><a href="#%24creationTime" title="$creationTime :: "><span class="description">$creationTime</span><pre>$creationTime</pre></a></li>
-<li class="property private "><a href="#%24href" title="$href :: "><span class="description">$href</span><pre>$href</pre></a></li>
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property_baseDir" title="$baseDir :: Directory containing this file"><span class="description"></span><pre>$baseDir</pre></a></li>
+<li class="property private "><a href="#property_compilationDir" title="$compilationDir :: Compilation directory"><span class="description"></span><pre>$compilationDir</pre></a></li>
+<li class="property private "><a href="#property_compilationHref" title="$compilationHref :: Compiled file href"><span class="description"></span><pre>$compilationHref</pre></a></li>
+<li class="property private "><a href="#property_compilationTime" title="$compilationTime :: Compilation ellapsed time"><span class="description"></span><pre>$compilationTime</pre></a></li>
+<li class="property private "><a href="#property_compiled" title="$compiled :: Compilation state"><span class="description"></span><pre>$compiled</pre></a></li>
+<li class="property private "><a href="#property_creationTime" title="$creationTime :: Creation time of this file"><span class="description"></span><pre>$creationTime</pre></a></li>
+<li class="property private "><a href="#property_href" title="$href :: Complete file href"><span class="description"></span><pre>$href</pre></a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5CWTemplateFile" id="\WTemplateFile"></a><ul class="breadcrumb">
+<a id="\WTemplateFile"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -93,11 +102,11 @@
 <span class="divider">\</span><a href="../classes/WTemplateFile.html">WTemplateFile</a>
 </li>
 </ul>
-<div href="../classes/WTemplateFile.html" class="element class">
-<p class="short_description">Wity CMS
-Système de gestion de contenu pour tous.</p>
+<div class="element class">
+<p class="short_description">WTemplate
+Moteur de template pour le CMS Wity</p>
 <div class="details">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -105,136 +114,127 @@ Système de gestion de contenu pour tous.</p>
 </tr>
 <tr>
 <th>version</th>
-<td>$Id: WTemplate/WTemplateFile.php 0002 28-04-2012 fofif $</td>
+<td>$Id: WTemplate/WTemplateFile.php 0003 04-08-2012 Fofif $</td>
 </tr>
 <tr>
-<th>desc</th>
-<td>Moteur de template, classe fichier</td>
+<th>package</th>
+<td><a href="../packages/Wity.WTemplate.html">Wity</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>WTemplate</td>
 </tr>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>__construct()
         </h2>
 <pre>__construct($href, $baseDir, $compDir) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$href</h4>
-<code></code>
-</div>
-<div class="subelement argument">
-<h4>$baseDir</h4>
-<code></code>
-</div>
-<div class="subelement argument">
-<h4>$compDir</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$href</h4></div>
+<div class="subelement argument"><h4>$baseDir</h4></div>
+<div class="subelement argument"><h4>$compDir</h4></div>
 </div></div>
 </div>
-<a name="compile" id="compile"></a><div class="element clickable method public compile" data-toggle="collapse" data-target=".compile .collapse">
-<h2>Compilation du fichier</h2>
-<pre>compile(<a href="../classes/WTemplateCompiler.html">\WTemplateCompiler</a> $compiler) : void</pre>
+<a id="method_compile"></a><div class="element clickable method public method_compile" data-toggle="collapse" data-target=".method_compile .collapse">
+<h2>Compile this file</h2>
+<pre>compile(\WTemplateCompiler $compiler) : void</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$compiler</h4>
-<code><a href="../classes/WTemplateCompiler.html">\WTemplateCompiler</a></code><p>Un compilateur de template</p></div>
+<code><a href="../classes/WTemplateCompiler.html">\WTemplateCompiler</a></code><p>This object is a compiler which will compile each nodes</p></div>
 </div></div>
 </div>
-<a name="getCompilationHref" id="getCompilationHref"></a><div class="element clickable method public getCompilationHref" data-toggle="collapse" data-target=".getCompilationHref .collapse">
+<a id="method_getCompilationHref"></a><div class="element clickable method public method_getCompilationHref" data-toggle="collapse" data-target=".method_getCompilationHref .collapse">
 <h2>getCompilationHref()
         </h2>
 <pre>getCompilationHref() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="getCompilationTime" id="getCompilationTime"></a><div class="element clickable method public getCompilationTime" data-toggle="collapse" data-target=".getCompilationTime .collapse">
+<a id="method_getCompilationTime"></a><div class="element clickable method public method_getCompilationTime" data-toggle="collapse" data-target=".method_getCompilationTime .collapse">
 <h2>getCompilationTime()
         </h2>
 <pre>getCompilationTime() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="checkCompilation" id="checkCompilation"></a><div class="element clickable method private checkCompilation" data-toggle="collapse" data-target=".checkCompilation .collapse">
-<h2>Vérifie si une compilation du fichier est nécessaire</h2>
+<a id="method_checkCompilation"></a><div class="element clickable method private method_checkCompilation" data-toggle="collapse" data-target=".method_checkCompilation .collapse">
+<h2>Checks whether compilation is required</h2>
 <pre>checkCompilation() : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Returns</h3>
-<div class="subelement response">
-<code>bool</code>Le cache est-il valide ?</div>
+<div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
-<a name="createCompilationHref" id="createCompilationHref"></a><div class="element clickable method private createCompilationHref" data-toggle="collapse" data-target=".createCompilationHref .collapse">
-<h2>Génère le chemin complet du fichier compilé</h2>
+<a id="method_createCompilationHref"></a><div class="element clickable method private method_createCompilationHref" data-toggle="collapse" data-target=".method_createCompilationHref .collapse">
+<h2>Create the position of the cached file compiled</h2>
 <pre>createCompilationHref() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="saveFile" id="saveFile"></a><div class="element clickable method private saveFile" data-toggle="collapse" data-target=".saveFile .collapse">
-<h2>Enregistre le fichier</h2>
+<a id="method_saveFile"></a><div class="element clickable method private method_saveFile" data-toggle="collapse" data-target=".method_saveFile .collapse">
+<h2>Write output string into the cache file</h2>
 <pre>saveFile($data) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$data</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$data</h4></div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24baseDir" id="$baseDir"> </a><div class="element clickable property private $baseDir" data-toggle="collapse" data-target=".$baseDir .collapse">
-<h2>$baseDir</h2>
+<a id="property_baseDir"> </a><div class="element clickable property private property_baseDir" data-toggle="collapse" data-target=".property_baseDir .collapse">
+<h2></h2>
 <pre>$baseDir </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24compilationDir" id="$compilationDir"> </a><div class="element clickable property private $compilationDir" data-toggle="collapse" data-target=".$compilationDir .collapse">
-<h2>$compilationDir</h2>
+<a id="property_compilationDir"> </a><div class="element clickable property private property_compilationDir" data-toggle="collapse" data-target=".property_compilationDir .collapse">
+<h2></h2>
 <pre>$compilationDir </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24compilationHref" id="$compilationHref"> </a><div class="element clickable property private $compilationHref" data-toggle="collapse" data-target=".$compilationHref .collapse">
-<h2>$compilationHref</h2>
+<a id="property_compilationHref"> </a><div class="element clickable property private property_compilationHref" data-toggle="collapse" data-target=".property_compilationHref .collapse">
+<h2></h2>
 <pre>$compilationHref </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24compilationTime" id="$compilationTime"> </a><div class="element clickable property private $compilationTime" data-toggle="collapse" data-target=".$compilationTime .collapse">
-<h2>$compilationTime</h2>
+<a id="property_compilationTime"> </a><div class="element clickable property private property_compilationTime" data-toggle="collapse" data-target=".property_compilationTime .collapse">
+<h2></h2>
 <pre>$compilationTime </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24compiled" id="$compiled"> </a><div class="element clickable property private $compiled" data-toggle="collapse" data-target=".$compiled .collapse">
-<h2>$compiled</h2>
+<a id="property_compiled"> </a><div class="element clickable property private property_compiled" data-toggle="collapse" data-target=".property_compiled .collapse">
+<h2></h2>
 <pre>$compiled </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24creationTime" id="$creationTime"> </a><div class="element clickable property private $creationTime" data-toggle="collapse" data-target=".$creationTime .collapse">
-<h2>$creationTime</h2>
+<a id="property_creationTime"> </a><div class="element clickable property private property_creationTime" data-toggle="collapse" data-target=".property_creationTime .collapse">
+<h2></h2>
 <pre>$creationTime </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24href" id="$href"> </a><div class="element clickable property private $href" data-toggle="collapse" data-target=".$href .collapse">
-<h2>$href</h2>
+<a id="property_href"> </a><div class="element clickable property private property_href" data-toggle="collapse" data-target=".property_href .collapse">
+<h2></h2>
 <pre>$href </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 </div>
 </div>
@@ -242,8 +242,8 @@ Système de gestion de contenu pour tous.</p>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
-            generated on 2012-07-28T15:04:25+02:00.<br></footer></div>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-27T00:39:57+01:00.<br></footer></div>
 </div>
 </body>
 </html>

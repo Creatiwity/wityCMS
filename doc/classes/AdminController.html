@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
@@ -20,10 +20,8 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
-<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
-<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+<li><a href="../packages/Wity.html"><i class="icon-folder-open"></i> Wity</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -34,10 +32,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">1013</span></a></li>
+                <span class="label label-info">387</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">2</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -59,49 +57,67 @@
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
-<i class="icon-custom icon-method"></i> Methods</li>
-<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
-<li class="method public inherited"><a href="#adminLoaded" title="adminLoaded :: Détermine si la partie admin est chargée ou non"><span class="description">Détermine si la partie admin est chargée ou non</span><pre>adminLoaded()</pre></a></li>
-<li class="method public "><a href="#checkAccess" title="checkAccess :: Vérifie si l'utilisateur a accès à l'administration de l'app demandée"><span class="description">Vérifie si l'utilisateur a accès à l'administration de l'app demandée</span><pre>checkAccess()</pre></a></li>
-<li class="method public inherited"><a href="#getActionList" title="getActionList :: Récupère la liste des actions prédéfinies d'une app"><span class="description">Récupère la liste des actions prédéfinies d'une app</span><pre>getActionList()</pre></a></li>
-<li class="method public inherited"><a href="#getAppName" title="getAppName :: Retourne le nom de l'application"><span class="description">Retourne le nom de l'application</span><pre>getAppName()</pre></a></li>
-<li class="method public inherited"><a href="#getAskedAction" title="getAskedAction :: Retourne le nom de l'action initialement demandé en paramètre"><span class="description">Retourne le nom de l'action initialement demandé en paramètre</span><pre>getAskedAction()</pre></a></li>
-<li class="method public inherited"><a href="#getTriggeredAction" title="getTriggeredAction :: Retourne l'action effectivement déclenchée"><span class="description">Retourne l'action effectivement déclenchée</span><pre>getTriggeredAction()</pre></a></li>
-<li class="method public inherited"><a href="#getView" title="getView :: Getter pour la view"><span class="description">Getter pour la view</span><pre>getView()</pre></a></li>
-<li class="method public inherited"><a href="#init" title="init :: Initialisation de l'application"><span class="description">Initialisation de l'application</span><pre>init()</pre></a></li>
-<li class="method public "><a href="#launch" title="launch :: Launcher de l'admin
+<li class="method public inherited"><a href="#method_adminLoaded" title="adminLoaded :: Détermine si la partie admin est chargée ou non"><span class="description">Détermine si la partie admin est chargée ou non</span><pre>adminLoaded()</pre></a></li>
+<li class="method public "><a href="#method_checkAccess" title="checkAccess :: Vérifie si l'utilisateur a accès à l'administration de l'app demandée"><span class="description">Vérifie si l'utilisateur a accès à l'administration de l'app demandée</span><pre>checkAccess()</pre></a></li>
+<li class="method public inherited"><a href="#method_getActionList" title="getActionList :: Récupère la liste des actions prédéfinies d'une app"><span class="description">Récupère la liste des actions prédéfinies d'une app</span><pre>getActionList()</pre></a></li>
+<li class="method public inherited"><a href="#method_getAppName" title="getAppName :: Retourne le nom de l'application"><span class="description">Retourne le nom de l'application</span><pre>getAppName()</pre></a></li>
+<li class="method public inherited"><a href="#method_getAskedAction" title="getAskedAction :: Retourne le nom de l'action initialement demandé en paramètre"><span class="description">Retourne le nom de l'action initialement demandé en paramètre</span><pre>getAskedAction()</pre></a></li>
+<li class="method public inherited"><a href="#method_getTriggeredAction" title="getTriggeredAction :: Retourne l'action effectivement déclenchée"><span class="description">Retourne l'action effectivement déclenchée</span><pre>getTriggeredAction()</pre></a></li>
+<li class="method public inherited"><a href="#method_getView" title="getView :: Getter pour la view"><span class="description">Getter pour la view</span><pre>getView()</pre></a></li>
+<li class="method public inherited"><a href="#method_init" title="init :: Initialisation de l'application"><span class="description">Initialisation de l'application</span><pre>init()</pre></a></li>
+<li class="method public "><a href="#method_launch" title="launch :: Launcher de l'admin
 Vérifie si on y a accès, quelle app charger."><span class="description">Launcher de l'admin
 Vérifie si on y a accès, quelle app charger.</span><pre>launch()</pre></a></li>
-<li class="method public inherited"><a href="#setView" title="setView :: Setter pour la view"><span class="description">Setter pour la view</span><pre>setView()</pre></a></li>
-<li class="nav-header protected">» Protected</li>
-<li class="method protected inherited"><a href="#forward" title="forward :: Forward permet d'éxécuter la méthode associée à l'$action de l'application"><span class="description">Forward permet d'éxécuter la méthode associée à l'$action de l'application</span><pre>forward()</pre></a></li>
-<li class="method protected inherited"><a href="#render" title="render :: Déclenche l'action d'affichage du template"><span class="description">Déclenche l'action d'affichage du template</span><pre>render()</pre></a></li>
-<li class="nav-header private">» Private</li>
-<li class="method private "><a href="#checkAdminAccess" title="checkAdminAccess :: Vérifie si l'utilisateur a accès à l'administration"><span class="description">Vérifie si l'utilisateur a accès à l'administration</span><pre>checkAdminAccess()</pre></a></li>
-<li class="method private "><a href="#configTheme" title="configTheme :: Configuration du thème de l'admin"><span class="description">Configuration du thème de l'admin</span><pre>configTheme()</pre></a></li>
-<li class="method private "><a href="#isAdminApp" title="isAdminApp :: Une appli possède-t-elle une administration ?"><span class="description">Une appli possède-t-elle une administration ?</span><pre>isAdminApp()</pre></a></li>
-<li class="method private "><a href="#routeAdmin" title="routeAdmin :: Met à jour le routage de l'appli admin"><span class="description">Met à jour le routage de l'appli admin</span><pre>routeAdmin()</pre></a></li>
-<li class="method private "><a href="#treatActionList" title="treatActionList :: Traitement des actions d'une application
+<li class="method public inherited"><a href="#method_setView" title="setView :: Setter pour la view"><span class="description">Setter pour la view</span><pre>setView()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected inherited"><a href="#method_forward" title="forward :: Forward permet d'éxécuter la méthode associée à l'$action de l'application"><span class="description">Forward permet d'éxécuter la méthode associée à l'$action de l'application</span><pre>forward()</pre></a></li>
+<li class="method protected inherited"><a href="#method_render" title="render :: Déclenche l'action d'affichage du template"><span class="description">Déclenche l'action d'affichage du template</span><pre>render()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method_checkAdminAccess" title="checkAdminAccess :: Vérifie si l'utilisateur a accès à l'administration"><span class="description">Vérifie si l'utilisateur a accès à l'administration</span><pre>checkAdminAccess()</pre></a></li>
+<li class="method private "><a href="#method_configTheme" title="configTheme :: Configuration du thème de l'admin"><span class="description">Configuration du thème de l'admin</span><pre>configTheme()</pre></a></li>
+<li class="method private "><a href="#method_isAdminApp" title="isAdminApp :: Une appli possède-t-elle une administration ?"><span class="description">Une appli possède-t-elle une administration ?</span><pre>isAdminApp()</pre></a></li>
+<li class="method private "><a href="#method_routeAdmin" title="routeAdmin :: Met à jour le routage de l'appli admin"><span class="description">Met à jour le routage de l'appli admin</span><pre>routeAdmin()</pre></a></li>
+<li class="method private "><a href="#method_treatActionList" title="treatActionList :: Traitement des actions d'une application
 Si la description d'une action débute par un antislash (\),
 elle ne doit pas s'afficher dans la liste des opérations"><span class="description">Traitement des actions d'une application
 Si la description d'une action débute par un antislash (\),
 elle ne doit pas s'afficher dans la liste des opérations</span><pre>treatActionList()</pre></a></li>
+</ul>
+</li>
 <li class="nav-header">
-<i class="icon-custom icon-property"></i> Properties</li>
-<li class="nav-header protected">» Protected</li>
-<li class="property protected inherited"><a href="#%24action" title="$action :: "><span class="description">$action</span><pre>$action</pre></a></li>
-<li class="property protected inherited"><a href="#%24view" title="$view :: "><span class="description">$view</span><pre>$view</pre></a></li>
-<li class="property protected inherited"><a href="#%24wity" title="$wity :: "><span class="description">$wity</span><pre>$wity</pre></a></li>
-<li class="nav-header private">» Private</li>
-<li class="property private "><a href="#%24appAsked" title="$appAsked :: Nom de l'application à administrer"><span class="description">Nom de l'application à administrer</span><pre>$appAsked</pre></a></li>
-<li class="property private "><a href="#%24appController" title="$appController :: Instance du controller de l'application administrée"><span class="description">Instance du controller de l'application administrée</span><pre>$appController</pre></a></li>
-<li class="property private "><a href="#%24model" title="$model :: Instance du modèle"><span class="description">Instance du modèle</span><pre>$model</pre></a></li>
-<li class="property private "><a href="#%24session" title="$session :: Instance de la classe Session"><span class="description">Instance de la classe Session</span><pre>$session</pre></a></li>
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected inherited"><a href="#property_app_dir" title="$app_dir :: The full application directory"><span class="description"></span><pre>$app_dir</pre></a></li>
+<li class="property protected inherited"><a href="#property_view" title="$view :: View object (of WView)"><span class="description"></span><pre>$view</pre></a></li>
+<li class="property protected inherited"><a href="#property_wity" title="$wity :: WMain instance"><span class="description"></span><pre>$wity</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private inherited"><a href="#property_action" title="$action :: App's action to be performed"><span class="description"></span><pre>$action</pre></a></li>
+<li class="property private "><a href="#property_appAsked" title="$appAsked :: Nom de l'application à administrer"><span class="description"></span><pre>$appAsked</pre></a></li>
+<li class="property private "><a href="#property_appController" title="$appController :: Instance du controller de l'application administrée"><span class="description"></span><pre>$appController</pre></a></li>
+<li class="property private "><a href="#property_model" title="$model :: Instance du modèle"><span class="description"></span><pre>$model</pre></a></li>
+<li class="property private "><a href="#property_session" title="$session :: Instance de la classe Session"><span class="description"></span><pre>$session</pre></a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5CAdminController" id="\AdminController"></a><ul class="breadcrumb">
+<a id="\AdminController"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -110,11 +126,11 @@ elle ne doit pas s'afficher dans la liste des opérations</span><pre>treatAction
 <span class="divider">\</span><a href="../classes/AdminController.html">AdminController</a>
 </li>
 </ul>
-<div href="../classes/AdminController.html" class="element class">
+<div class="element class">
 <p class="short_description">Wity CMS
 Système de gestion de contenu pour tous.</p>
 <div class="details">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -127,19 +143,19 @@ Système de gestion de contenu pour tous.</p>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>__construct()
         </h2>
 <pre>__construct() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="adminLoaded" id="adminLoaded"></a><div class="element clickable method public adminLoaded" data-toggle="collapse" data-target=".adminLoaded .collapse">
+<a id="method_adminLoaded"></a><div class="element clickable method public method_adminLoaded" data-toggle="collapse" data-target=".method_adminLoaded .collapse">
 <h2>Détermine si la partie admin est chargée ou non</h2>
 <pre>adminLoaded() : bool</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::adminLoaded()</td>
@@ -148,39 +164,38 @@ Système de gestion de contenu pour tous.</p>
 <div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
-<a name="checkAccess" id="checkAccess"></a><div class="element clickable method public checkAccess" data-toggle="collapse" data-target=".checkAccess .collapse">
+<a id="method_checkAccess"></a><div class="element clickable method public method_checkAccess" data-toggle="collapse" data-target=".method_checkAccess .collapse">
 <h2>Vérifie si l'utilisateur a accès à l'administration de l'app demandée</h2>
-<pre>checkAccess(\$app $app) : bool</pre>
-<div class="labels"></div>
+<pre>checkAccess($app) : bool</pre>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$app</h4>
-<code>\$app</code><p>nom de l'appli</p>
+<h4>$app</h4><p>nom de l'appli</p>
 </div>
 <h3>Returns</h3>
 <div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
-<a name="getActionList" id="getActionList"></a><div class="element clickable method public getActionList" data-toggle="collapse" data-target=".getActionList .collapse">
+<a id="method_getActionList"></a><div class="element clickable method public method_getActionList" data-toggle="collapse" data-target=".method_getActionList .collapse">
 <h2>Récupère la liste des actions prédéfinies d'une app</h2>
 <pre>getActionList() </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::getActionList()</td>
 </tr></table>
 </div></div>
 </div>
-<a name="getAppName" id="getAppName"></a><div class="element clickable method public getAppName" data-toggle="collapse" data-target=".getAppName .collapse">
+<a id="method_getAppName"></a><div class="element clickable method public method_getAppName" data-toggle="collapse" data-target=".method_getAppName .collapse">
 <h2>Retourne le nom de l'application</h2>
 <pre>getAppName() : string</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::getAppName()</td>
@@ -189,12 +204,12 @@ Système de gestion de contenu pour tous.</p>
 <div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
-<a name="getAskedAction" id="getAskedAction"></a><div class="element clickable method public getAskedAction" data-toggle="collapse" data-target=".getAskedAction .collapse">
+<a id="method_getAskedAction"></a><div class="element clickable method public method_getAskedAction" data-toggle="collapse" data-target=".method_getAskedAction .collapse">
 <h2>Retourne le nom de l'action initialement demandé en paramètre</h2>
 <pre>getAskedAction() : string</pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::getAskedAction()</td>
@@ -203,24 +218,24 @@ Système de gestion de contenu pour tous.</p>
 <div class="subelement response"><code>string</code></div>
 </div></div>
 </div>
-<a name="getTriggeredAction" id="getTriggeredAction"></a><div class="element clickable method public getTriggeredAction" data-toggle="collapse" data-target=".getTriggeredAction .collapse">
+<a id="method_getTriggeredAction"></a><div class="element clickable method public method_getTriggeredAction" data-toggle="collapse" data-target=".method_getTriggeredAction .collapse">
 <h2>Retourne l'action effectivement déclenchée</h2>
 <pre>getTriggeredAction() </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::getTriggeredAction()</td>
 </tr></table>
 </div></div>
 </div>
-<a name="getView" id="getView"></a><div class="element clickable method public getView" data-toggle="collapse" data-target=".getView .collapse">
+<a id="method_getView"></a><div class="element clickable method public method_getView" data-toggle="collapse" data-target=".method_getView .collapse">
 <h2>Getter pour la view</h2>
 <pre>getView() : <a href="../classes/WView.html">\WView</a></pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::getView()</td>
@@ -229,12 +244,12 @@ Système de gestion de contenu pour tous.</p>
 <div class="subelement response"><code><a href="../classes/WView.html">\WView</a></code></div>
 </div></div>
 </div>
-<a name="init" id="init"></a><div class="element clickable method public init" data-toggle="collapse" data-target=".init .collapse">
+<a id="method_init"></a><div class="element clickable method public method_init" data-toggle="collapse" data-target=".method_init .collapse">
 <h2>Initialisation de l'application</h2>
-<pre>init(\WMain $wity) </pre>
+<pre>init(\WMain $wity, string $app_dir) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::init()</td>
@@ -243,38 +258,38 @@ Système de gestion de contenu pour tous.</p>
 <div class="subelement argument">
 <h4>$wity</h4>
 <code><a href="../classes/WMain.html">\WMain</a></code><p>Instance de wity</p></div>
+<div class="subelement argument">
+<h4>$app_dir</h4>
+<code>string</code><p>Directory of the application inheriting this Controller</p></div>
 </div></div>
 </div>
-<a name="launch" id="launch"></a><div class="element clickable method public launch" data-toggle="collapse" data-target=".launch .collapse">
+<a id="method_launch"></a><div class="element clickable method public method_launch" data-toggle="collapse" data-target=".method_launch .collapse">
 <h2>Launcher de l'admin
 Vérifie si on y a accès, quelle app charger.</h2>
 <pre>launch() : void</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"><p>..</p></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>..</p></div></div></div>
 </div>
-<a name="setView" id="setView"></a><div class="element clickable method public setView" data-toggle="collapse" data-target=".setView .collapse">
+<a id="method_setView"></a><div class="element clickable method public method_setView" data-toggle="collapse" data-target=".method_setView .collapse">
 <h2>Setter pour la view</h2>
 <pre>setView(\WView $view) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::setView()</td>
 </tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$view</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$view</h4></div>
 </div></div>
 </div>
-<a name="forward" id="forward"></a><div class="element clickable method protected forward" data-toggle="collapse" data-target=".forward .collapse">
+<a id="method_forward"></a><div class="element clickable method protected method_forward" data-toggle="collapse" data-target=".method_forward .collapse">
 <h2>Forward permet d'éxécuter la méthode associée à l'$action de l'application</h2>
 <pre>forward(string $action, string $default) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::forward()</td>
@@ -290,144 +305,150 @@ Vérifie si on y a accès, quelle app charger.</h2>
 </div>
 </div></div>
 </div>
-<a name="render" id="render"></a><div class="element clickable method protected render" data-toggle="collapse" data-target=".render .collapse">
+<a id="method_render"></a><div class="element clickable method protected method_render" data-toggle="collapse" data-target=".method_render .collapse">
 <h2>Déclenche l'action d'affichage du template</h2>
 <pre>render($action) </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::render()</td>
 </tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$action</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$action</h4></div>
 </div></div>
 </div>
-<a name="checkAdminAccess" id="checkAdminAccess"></a><div class="element clickable method private checkAdminAccess" data-toggle="collapse" data-target=".checkAdminAccess .collapse">
+<a id="method_checkAdminAccess"></a><div class="element clickable method private method_checkAdminAccess" data-toggle="collapse" data-target=".method_checkAdminAccess .collapse">
 <h2>Vérifie si l'utilisateur a accès à l'administration</h2>
 <pre>checkAdminAccess() : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
-<a name="configTheme" id="configTheme"></a><div class="element clickable method private configTheme" data-toggle="collapse" data-target=".configTheme .collapse">
+<a id="method_configTheme"></a><div class="element clickable method private method_configTheme" data-toggle="collapse" data-target=".method_configTheme .collapse">
 <h2>Configuration du thème de l'admin</h2>
 <pre>configTheme() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>void</th>
 <td></td>
 </tr></table>
 </div></div>
 </div>
-<a name="isAdminApp" id="isAdminApp"></a><div class="element clickable method private isAdminApp" data-toggle="collapse" data-target=".isAdminApp .collapse">
+<a id="method_isAdminApp"></a><div class="element clickable method private method_isAdminApp" data-toggle="collapse" data-target=".method_isAdminApp .collapse">
 <h2>Une appli possède-t-elle une administration ?</h2>
-<pre>isAdminApp(\$app $app) : bool</pre>
+<pre>isAdminApp($app) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$app</h4>
-<code>\$app</code><p>string appName</p></div>
+<h4>$app</h4><p>string appName</p></div>
 <h3>Returns</h3>
 <div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
-<a name="routeAdmin" id="routeAdmin"></a><div class="element clickable method private routeAdmin" data-toggle="collapse" data-target=".routeAdmin .collapse">
+<a id="method_routeAdmin"></a><div class="element clickable method private method_routeAdmin" data-toggle="collapse" data-target=".method_routeAdmin .collapse">
 <h2>Met à jour le routage de l'appli admin</h2>
 <pre>routeAdmin() : void</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="treatActionList" id="treatActionList"></a><div class="element clickable method private treatActionList" data-toggle="collapse" data-target=".treatActionList .collapse">
+<a id="method_treatActionList"></a><div class="element clickable method private method_treatActionList" data-toggle="collapse" data-target=".method_treatActionList .collapse">
 <h2>Traitement des actions d'une application
 Si la description d'une action débute par un antislash (\),
 elle ne doit pas s'afficher dans la liste des opérations</h2>
-<pre>treatActionList(\$actions $actions, \$toDisplay $toDisplay) </pre>
+<pre>treatActionList($actions, $toDisplay) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$actions</h4>
-<code>\$actions</code><p>Liste des actions</p></div>
+<h4>$actions</h4><p>Liste des actions</p></div>
 <div class="subelement argument">
-<h4>$toDisplay</h4>
-<code>\$toDisplay</code><p>bool détermine si les actions sont à afficher ou non</p>
+<h4>$toDisplay</h4><p>bool détermine si les actions sont à afficher ou non</p>
 </div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24action" id="$action"> </a><div class="element clickable property protected $action" data-toggle="collapse" data-target=".$action .collapse">
-<h2>$action</h2>
-<pre>$action </pre>
+<a id="property_app_dir"> </a><div class="element clickable property protected property_app_dir" data-toggle="collapse" data-target=".property_app_dir .collapse">
+<h2></h2>
+<pre>$app_dir </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
-<td>\WController::$$action</td>
+<td>\WController::$$app_dir</td>
 </tr></table>
 </div></div>
 </div>
-<a name="%24view" id="$view"> </a><div class="element clickable property protected $view" data-toggle="collapse" data-target=".$view .collapse">
-<h2>$view</h2>
+<a id="property_view"> </a><div class="element clickable property protected property_view" data-toggle="collapse" data-target=".property_view .collapse">
+<h2></h2>
 <pre>$view </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::$$view</td>
 </tr></table>
 </div></div>
 </div>
-<a name="%24wity" id="$wity"> </a><div class="element clickable property protected $wity" data-toggle="collapse" data-target=".$wity .collapse">
-<h2>$wity</h2>
+<a id="property_wity"> </a><div class="element clickable property protected property_wity" data-toggle="collapse" data-target=".property_wity .collapse">
+<h2></h2>
 <pre>$wity </pre>
 <div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>inherited_from</th>
 <td>\WController::$$wity</td>
 </tr></table>
 </div></div>
 </div>
-<a name="%24appAsked" id="$appAsked"> </a><div class="element clickable property private $appAsked" data-toggle="collapse" data-target=".$appAsked .collapse">
-<h2>Nom de l'application à administrer</h2>
+<a id="property_action"> </a><div class="element clickable property private property_action" data-toggle="collapse" data-target=".property_action .collapse">
+<h2></h2>
+<pre>$action </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\WController::$$action</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_appAsked"> </a><div class="element clickable property private property_appAsked" data-toggle="collapse" data-target=".property_appAsked .collapse">
+<h2></h2>
 <pre>$appAsked </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24appController" id="$appController"> </a><div class="element clickable property private $appController" data-toggle="collapse" data-target=".$appController .collapse">
-<h2>Instance du controller de l'application administrée</h2>
+<a id="property_appController"> </a><div class="element clickable property private property_appController" data-toggle="collapse" data-target=".property_appController .collapse">
+<h2></h2>
 <pre>$appController </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24model" id="$model"> </a><div class="element clickable property private $model" data-toggle="collapse" data-target=".$model .collapse">
-<h2>Instance du modèle</h2>
+<a id="property_model"> </a><div class="element clickable property private property_model" data-toggle="collapse" data-target=".property_model .collapse">
+<h2></h2>
 <pre>$model </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="%24session" id="$session"> </a><div class="element clickable property private $session" data-toggle="collapse" data-target=".$session .collapse">
-<h2>Instance de la classe Session</h2>
+<a id="property_session"> </a><div class="element clickable property private property_session" data-toggle="collapse" data-target=".property_session .collapse">
+<h2></h2>
 <pre>$session </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 </div>
 </div>
@@ -435,8 +456,8 @@ elle ne doit pas s'afficher dans la liste des opérations</h2>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
-            generated on 2012-07-28T15:04:22+02:00.<br></footer></div>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-27T00:39:57+01:00.<br></footer></div>
 </div>
 </body>
 </html>

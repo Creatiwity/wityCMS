@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
@@ -20,10 +20,8 @@
 <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
-<li><a href="../packages/CKFinder.html"><i class="icon-folder-open"></i> CKFinder</a></li>
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
-<li><a href="../packages/PHPMailer.html"><i class="icon-folder-open"></i> PHPMailer</a></li>
-<li><a href="../packages/cmf.html"><i class="icon-folder-open"></i> cmf</a></li>
+<li><a href="../packages/Wity.html"><i class="icon-folder-open"></i> Wity</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -34,10 +32,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">1013</span></a></li>
+                <span class="label label-info">387</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">2</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -59,50 +57,56 @@
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
-<i class="icon-custom icon-method"></i> Methods</li>
-<li class="method public "><a href="#defineRoutePerso" title="defineRoutePerso :: &lt;code&gt;
-  WRoute::defineRoutePerso('/test/', array(
-    'appName',
-    array('arg1', 'arg2')
-  ));
-&lt;/code&gt;"><span class="description">&lt;code&gt;
-  WRoute::defineRoutePerso('/test/', array(
-    'appName',
-    array('arg1', 'arg2')
-  ));
-&lt;/code&gt;</span><pre>defineRoutePerso()</pre></a></li>
-<li class="method public "><a href="#deleteRoutePerso" title="deleteRoutePerso :: Suppression d'un routage perso"><span class="description">Suppression d'un routage perso</span><pre>deleteRoutePerso()</pre></a></li>
-<li class="method public "><a href="#getApp" title="getApp :: "><span class="description">getApp()
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_defineRoutePerso" title="defineRoutePerso :: Defines a personnal route which is not following the regular application rules"><span class="description">Defines a personnal route which is not following the regular application rules</span><pre>defineRoutePerso()</pre></a></li>
+<li class="method public "><a href="#method_deleteRoutePerso" title="deleteRoutePerso :: Suppression d'un routage perso"><span class="description">Suppression d'un routage perso</span><pre>deleteRoutePerso()</pre></a></li>
+<li class="method public "><a href="#method_getApp" title="getApp :: "><span class="description">getApp()
         </span><pre>getApp()</pre></a></li>
-<li class="method public "><a href="#getArgs" title="getArgs :: "><span class="description">getArgs()
+<li class="method public "><a href="#method_getArgs" title="getArgs :: "><span class="description">getArgs()
         </span><pre>getArgs()</pre></a></li>
-<li class="method public "><a href="#getBase" title="getBase :: "><span class="description">getBase()
-        </span><pre>getBase()</pre></a></li>
-<li class="method public "><a href="#getDir" title="getDir :: Obtention de l'url du dossier où se situe wity"><span class="description">Obtention de l'url du dossier où se situe wity</span><pre>getDir()</pre></a></li>
-<li class="method public "><a href="#getReferer" title="getReferer :: Obtention du référant (adresse précédente)"><span class="description">Obtention du référant (adresse précédente)</span><pre>getReferer()</pre></a></li>
-<li class="method public "><a href="#getURL" title="getURL :: Retourne l'url de la page"><span class="description">Retourne l'url de la page</span><pre>getURL()</pre></a></li>
-<li class="method public "><a href="#init" title="init :: "><span class="description">init()
+<li class="method public "><a href="#method_getBase" title="getBase :: Returns the full root location in which wity is installed, as defined in /system/config/config.php
+ex: if the website adress is http://mysite.fr/wity/user/login,
+it should return http://mysite.fr/wity/"><span class="description">Returns the full root location in which wity is installed, as defined in /system/config/config.php
+ex: if the website adress is http://mysite.fr/wity/user/login,
+it should return http://mysite.fr/wity/</span><pre>getBase()</pre></a></li>
+<li class="method public "><a href="#method_getDir" title="getDir :: Obtention de l'url du dossier où se situe wity
+ex: if the website adress is http://mysite.fr/wity/user/login
+it will return /wity/"><span class="description">Obtention de l'url du dossier où se situe wity
+ex: if the website adress is http://mysite.fr/wity/user/login
+it will return /wity/</span><pre>getDir()</pre></a></li>
+<li class="method public "><a href="#method_getReferer" title="getReferer :: Obtention du référant (adresse précédente)"><span class="description">Obtention du référant (adresse précédente)</span><pre>getReferer()</pre></a></li>
+<li class="method public "><a href="#method_getURL" title="getURL :: Returns the FULL URL of the page
+ex: http://mysite.fr/wity/user/login"><span class="description">Returns the FULL URL of the page
+ex: http://mysite.fr/wity/user/login</span><pre>getURL()</pre></a></li>
+<li class="method public "><a href="#method_init" title="init :: "><span class="description">init()
         </span><pre>init()</pre></a></li>
-<li class="method public "><a href="#route" title="route :: "><span class="description">route()
-        </span><pre>route()</pre></a></li>
-<li class="method public "><a href="#setRoute" title="setRoute :: Définie les valeurs de routage dans la configuration"><span class="description">Définie les valeurs de routage dans la configuration</span><pre>setRoute()</pre></a></li>
-<li class="method public "><a href="#updateApp" title="updateApp :: "><span class="description">updateApp()
+<li class="method public "><a href="#method_route" title="route :: Launches the calculation of the route to find out the app to execute"><span class="description">Launches the calculation of the route to find out the app to execute</span><pre>route()</pre></a></li>
+<li class="method public "><a href="#method_setRoute" title="setRoute :: Définie les valeurs de routage dans la configuration"><span class="description">Définie les valeurs de routage dans la configuration</span><pre>setRoute()</pre></a></li>
+<li class="method public "><a href="#method_updateApp" title="updateApp :: "><span class="description">updateApp()
         </span><pre>updateApp()</pre></a></li>
-<li class="method public "><a href="#updateArgs" title="updateArgs :: "><span class="description">updateArgs()
+<li class="method public "><a href="#method_updateArgs" title="updateArgs :: "><span class="description">updateArgs()
         </span><pre>updateArgs()</pre></a></li>
-<li class="nav-header private">» Private</li>
-<li class="method private "><a href="#checkRouteStructure" title="checkRouteStructure :: Vérifie qu'un routage a la bonne structure qui doit être :
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="method private "><a href="#method_checkRouteStructure" title="checkRouteStructure :: Vérifie qu'un routage a la bonne structure qui doit être :
 $routage = array('AppName', array('argument1', 'argument2'));"><span class="description">Vérifie qu'un routage a la bonne structure qui doit être :
 $routage = array('AppName', array('argument1', 'argument2'));</span><pre>checkRouteStructure()</pre></a></li>
-<li class="method private "><a href="#parseURL" title="parseURL :: "><span class="description">parseURL()
-        </span><pre>parseURL()</pre></a></li>
+<li class="method private "><a href="#method_parseURL" title="parseURL :: Parse the webpage URL"><span class="description">Parse the webpage URL</span><pre>parseURL()</pre></a></li>
+</ul>
+</li>
 <li class="nav-header">
-<i class="icon-custom icon-property"></i> Properties</li>
-<li class="property public "><a href="#%24url" title="$url :: L'URL de la page"><span class="description">L'URL de la page</span><pre>$url</pre></a></li>
+<i class="icon-custom icon-property"></i> Properties
+                    <ul><li class="property public "><a href="#property_query" title='$query :: Request string of the page
+ex: the URL is http://mysite.fr/wity/user/login
+If wity is executed in /wity/, then the $query will be set to "user/login"'><span class="description"></span><pre>$query</pre></a></li></ul>
+</li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5CWRoute" id="\WRoute"></a><ul class="breadcrumb">
+<a id="\WRoute"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -111,11 +115,11 @@ $routage = array('AppName', array('argument1', 'argument2'));</span><pre>checkRo
 <span class="divider">\</span><a href="../classes/WRoute.html">WRoute</a>
 </li>
 </ul>
-<div href="../classes/WRoute.html" class="element class">
+<div class="element class">
 <p class="short_description">Wity CMS
 Système de gestion de contenu pour tous.</p>
 <div class="details">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <table class="table table-bordered">
 <tr>
 <th>author</th>
@@ -123,105 +127,98 @@ Système de gestion de contenu pour tous.</p>
 </tr>
 <tr>
 <th>version</th>
-<td>$Id: WCore/WRoute.php 0002 12-02-2012 Fofif $</td>
+<td>$Id: WCore/WRoute.php 0003 29-09-2012 Fofif $</td>
 </tr>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a name="defineRoutePerso" id="defineRoutePerso"></a><div class="element clickable method public defineRoutePerso" data-toggle="collapse" data-target=".defineRoutePerso .collapse">
-<h2>&lt;code&gt;
-  WRoute::defineRoutePerso('/test/', array(
+<a id="method_defineRoutePerso"></a><div class="element clickable method public method_defineRoutePerso" data-toggle="collapse" data-target=".method_defineRoutePerso .collapse">
+<h2>Defines a personnal route which is not following the regular application rules</h2>
+<pre>defineRoutePerso($uri, array $routage) </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><pre><code>  WRoute::defineRoutePerso('/test/', array(
     'appName',
     array('arg1', 'arg2')
   ));
-&lt;/code&gt;</h2>
-<pre>defineRoutePerso($uri, array $routage) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+</code></pre></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$uri</h4>
-<code></code>
-</div>
-<div class="subelement argument">
-<h4>$routage</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$uri</h4></div>
+<div class="subelement argument"><h4>$routage</h4></div>
 </div></div>
 </div>
-<a name="deleteRoutePerso" id="deleteRoutePerso"></a><div class="element clickable method public deleteRoutePerso" data-toggle="collapse" data-target=".deleteRoutePerso .collapse">
+<a id="method_deleteRoutePerso"></a><div class="element clickable method public method_deleteRoutePerso" data-toggle="collapse" data-target=".method_deleteRoutePerso .collapse">
 <h2>Suppression d'un routage perso</h2>
 <pre>deleteRoutePerso($uri) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$uri</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$uri</h4></div>
 </div></div>
 </div>
-<a name="getApp" id="getApp"></a><div class="element clickable method public getApp" data-toggle="collapse" data-target=".getApp .collapse">
+<a id="method_getApp"></a><div class="element clickable method public method_getApp" data-toggle="collapse" data-target=".method_getApp .collapse">
 <h2>getApp()
         </h2>
 <pre>getApp() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="getArgs" id="getArgs"></a><div class="element clickable method public getArgs" data-toggle="collapse" data-target=".getArgs .collapse">
+<a id="method_getArgs"></a><div class="element clickable method public method_getArgs" data-toggle="collapse" data-target=".method_getArgs .collapse">
 <h2>getArgs()
         </h2>
 <pre>getArgs() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="getBase" id="getBase"></a><div class="element clickable method public getBase" data-toggle="collapse" data-target=".getBase .collapse">
-<h2>getBase()
-        </h2>
+<a id="method_getBase"></a><div class="element clickable method public method_getBase" data-toggle="collapse" data-target=".method_getBase .collapse">
+<h2>Returns the full root location in which wity is installed, as defined in /system/config/config.php
+ex: if the website adress is http://mysite.fr/wity/user/login,
+it should return http://mysite.fr/wity/</h2>
 <pre>getBase() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="getDir" id="getDir"></a><div class="element clickable method public getDir" data-toggle="collapse" data-target=".getDir .collapse">
-<h2>Obtention de l'url du dossier où se situe wity</h2>
+<a id="method_getDir"></a><div class="element clickable method public method_getDir" data-toggle="collapse" data-target=".method_getDir .collapse">
+<h2>Obtention de l'url du dossier où se situe wity
+ex: if the website adress is http://mysite.fr/wity/user/login
+it will return /wity/</h2>
 <pre>getDir() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="getReferer" id="getReferer"></a><div class="element clickable method public getReferer" data-toggle="collapse" data-target=".getReferer .collapse">
+<a id="method_getReferer"></a><div class="element clickable method public method_getReferer" data-toggle="collapse" data-target=".method_getReferer .collapse">
 <h2>Obtention du référant (adresse précédente)</h2>
 <pre>getReferer() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="getURL" id="getURL"></a><div class="element clickable method public getURL" data-toggle="collapse" data-target=".getURL .collapse">
-<h2>Retourne l'url de la page</h2>
+<a id="method_getURL"></a><div class="element clickable method public method_getURL" data-toggle="collapse" data-target=".method_getURL .collapse">
+<h2>Returns the FULL URL of the page
+ex: http://mysite.fr/wity/user/login</h2>
 <pre>getURL() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="init" id="init"></a><div class="element clickable method public init" data-toggle="collapse" data-target=".init .collapse">
+<a id="method_init"></a><div class="element clickable method public method_init" data-toggle="collapse" data-target=".method_init .collapse">
 <h2>init()
         </h2>
 <pre>init() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="route" id="route"></a><div class="element clickable method public route" data-toggle="collapse" data-target=".route .collapse">
-<h2>route()
-        </h2>
+<a id="method_route"></a><div class="element clickable method public method_route" data-toggle="collapse" data-target=".method_route .collapse">
+<h2>Launches the calculation of the route to find out the app to execute</h2>
 <pre>route() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a name="setRoute" id="setRoute"></a><div class="element clickable method public setRoute" data-toggle="collapse" data-target=".setRoute .collapse">
+<a id="method_setRoute"></a><div class="element clickable method public method_setRoute" data-toggle="collapse" data-target=".method_setRoute .collapse">
 <h2>Définie les valeurs de routage dans la configuration</h2>
 <pre>setRoute(array $routage) : bool</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$routage</h4>
@@ -232,74 +229,67 @@ Système de gestion de contenu pour tous.</p>
 <code>bool</code>success</div>
 </div></div>
 </div>
-<a name="updateApp" id="updateApp"></a><div class="element clickable method public updateApp" data-toggle="collapse" data-target=".updateApp .collapse">
+<a id="method_updateApp"></a><div class="element clickable method public method_updateApp" data-toggle="collapse" data-target=".method_updateApp .collapse">
 <h2>updateApp()
         </h2>
 <pre>updateApp($app) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$app</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$app</h4></div>
 </div></div>
 </div>
-<a name="updateArgs" id="updateArgs"></a><div class="element clickable method public updateArgs" data-toggle="collapse" data-target=".updateArgs .collapse">
+<a id="method_updateArgs"></a><div class="element clickable method public method_updateArgs" data-toggle="collapse" data-target=".method_updateArgs .collapse">
 <h2>updateArgs()
         </h2>
 <pre>updateArgs(array $args) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$args</h4>
-<code></code>
-</div>
+<div class="subelement argument"><h4>$args</h4></div>
 </div></div>
 </div>
-<a name="checkRouteStructure" id="checkRouteStructure"></a><div class="element clickable method private checkRouteStructure" data-toggle="collapse" data-target=".checkRouteStructure .collapse">
+<a id="method_checkRouteStructure"></a><div class="element clickable method private method_checkRouteStructure" data-toggle="collapse" data-target=".method_checkRouteStructure .collapse">
 <h2>Vérifie qu'un routage a la bonne structure qui doit être :
 $routage = array('AppName', array('argument1', 'argument2'));</h2>
 <pre>checkRouteStructure(array $routage) : bool</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$routage</h4>
-<code></code><p>mixed</p></div>
+<code>mixed</code>
+</div>
 <h3>Returns</h3>
 <div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
-<a name="parseURL" id="parseURL"></a><div class="element clickable method private parseURL" data-toggle="collapse" data-target=".parseURL .collapse">
-<h2>parseURL()
-        </h2>
-<pre>parseURL($url) </pre>
-<div class="labels"></div>
+<a id="method_parseURL"></a><div class="element clickable method private method_parseURL" data-toggle="collapse" data-target=".method_parseURL .collapse">
+<h2>Parse the webpage URL</h2>
+<pre>parseURL(string $url) : array</pre>
+<div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
-<table class="table table-bordered"><tr>
-<th>desc</th>
-<td>Pour les url du type http://MonSite.fr/News/Read/1</td>
-</tr></table>
+<div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$url</h4>
-<code></code>
+<code>string</code><p>Webpage URL (ex: http://MonSite.fr/News/Read/1)</p>
 </div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>The route (ex: array('app' => "News", 'args' => array(1)))</div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24url" id="$url"> </a><div class="element clickable property public $url" data-toggle="collapse" data-target=".$url .collapse">
-<h2>L'URL de la page</h2>
-<pre>$url </pre>
+<a id="property_query"> </a><div class="element clickable property public property_query" data-toggle="collapse" data-target=".property_query .collapse">
+<h2></h2>
+<pre>$query </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 </div>
 </div>
@@ -307,8 +297,8 @@ $routage = array('AppName', array('argument1', 'argument2'));</h2>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
-            generated on 2012-07-28T15:04:25+02:00.<br></footer></div>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-12-27T00:39:57+01:00.<br></footer></div>
 </div>
 </body>
 </html>
