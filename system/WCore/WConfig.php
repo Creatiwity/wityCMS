@@ -1,40 +1,52 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version   $Id: WCore/WConfig.php 0003 13-05-2010 xplosive $
- * @desc      Gestion des variables de configuration
+ * WConfig.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WConfig loads all configuration files, manages all configuration values
+ *
+ * @package WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-22-11-2012
+ */
 class WConfig {
-	// Array multidimensionnel contenant les configurations classées par type
-	// Pas de '.' dans les clés car il est réservé
+	
+    /**
+     * @var array() Multidimensionnal array containing configurations sorted by type
+     * 
+     * No '.' in keys because it's a reserved character
+     */
 	private static $configs = array();
 	
-	// Les fichiers de configuration chargés
+    /**
+     * @var array() List of loaded configuration files
+     */
 	private static $files = array();
-	
-	// Enregistre les configurations modifiées
+
+    /**
+     * @var array() Stores modified configurations 
+     */
 	private static $modified = array();
 	
 	/**
-	 * Retourne la valeur d'une configuration
+	 * Returns configuration value
 	 * 
-	 * @access public
-	 * @param  string $path     Chemin de la config
-	 * @param  mixed  $default  Facultative: valeur par défaut de la config
-	 * @return mixed  Valeur de la config associée au path
+	 * @param  string $path     configuration path
+	 * @param  mixed  $default  optional default value
+	 * @return mixed  configuration value related to $path
 	 */
 	public static function get($path, $default = null) {
 		$result = $default;
 		
-		// Noeuds du chemin de la config
+		// Config nodes path
 		if ($nodes = explode('.', $path)) {
 			$config = &self::$configs;
 			$path_count = count($nodes) - 1;
 			
-			// On parcourt les configs
+			// Running through configs
 			for ($i = 0; $i < $path_count; $i++) {
 				if (isset($config[$nodes[$i]])) {
 					$config = &$config[$nodes[$i]];
@@ -52,15 +64,13 @@ class WConfig {
 	}
 	
 	/**
-	 * Assigne une valeur de configuration
+     * Assign a configuration value to a path
 	 * 
-	 * @access public
-	 * @param  string $path   Chemin de la config
-	 * @param  mixed  $value  Valeur de la config
-	 * @return mixed  Valeur de la config
+	 * @param  string $path   configuration path
+	 * @param  mixed  $value  configuration value
+	 * @return mixed  configuration value
 	 */
 	public static function set($path, $value) {
-		// Explose le path en array
 		$nodes = explode('.', $path);
 		
 		$config = &self::$configs;
@@ -74,17 +84,17 @@ class WConfig {
 		
 		$config[$nodes[$i]] = $value;
 		
-		// On précise que la config a été modifiée
+		// Notifying configuration modification
 		array_push(self::$modified, $nodes[0]);
 	}
 	
 	/**
-	 * Ajout de configurations depuis un fichier
+     * Adds configurations from a file
 	 * 
-	 * @param  string  $field nom de la config
-	 * @param  string  $file  fichier de config
-	 * @param  string  $type  type du fichier de config
-	 * @return boolean
+	 * @param  string  $field configuration name
+	 * @param  string  $file  configuration file
+	 * @param  string  $type  file type
+	 * @return boolean true if successful, false otherwise
 	 */
 	public static function load($field, $file, $type = 'php') {
 		if (!is_file($file) || isset(self::$files[$field])) {
@@ -112,19 +122,17 @@ class WConfig {
 				self::$configs[$field] = json_decode(file_get_contents($file), true);
 				break;
 		}
-		// Enregistrement du fichier
+		// Saving the file
 		self::$files[$field] = array($file, $type);
 		return true;
 	}
 	
 	/**
-	 * Supprime une valeur de configuration
+	 * Destroys a configuration value
 	 * 
-	 * @param  string  $path chemin de la config
-	 * @return void
+	 * @param  string  $path configuration path
 	 */
 	public static function clear($path) {
-		// Explose le path en array
 		$nodes = explode('.', $path);
 		
 		$config = &self::$configs;
@@ -143,14 +151,14 @@ class WConfig {
 			unset($config[$nodes[$i]]);
 		}
 		
-		// On précise que la config a été modifiée
+		// Notifying configuration modification
 		array_push(self::$modified, $nodes[0]);
 	}
 	
 	/**
-	 * Enregistrement des configurations
+	 * Saves configurations
 	 * 
-	 * @param  string  $field nom de la config
+	 * @param  string  $field configuration name
 	 */
 	public static function save($field) {
 		if (in_array($field, self::$modified)) {
@@ -159,7 +167,7 @@ class WConfig {
 			switch (strtolower($type)) {
 				case 'ini':
 					if (is_writable(dirname($file))) {
-						// Ouverture
+						// Opening
 						if (!($handle = fopen($file, 'w'))) {
 							return false;
 						}
@@ -168,34 +176,34 @@ class WConfig {
 							$data .= $name . ' = ' . $value ."\n";
 						}
 						
-						// Ecriture
+						// Writing
 						fwrite($handle, $data);
 						fclose($handle);
 						
-						// Modification du chmod
+						// chmod editing
 						$chmod = chmod($file, 0777);
 					}
 					break;
 				
 				case 'php':
 					if (is_writable(dirname($file))) {
-						// Ouverture
+						// Opening
 						if (!($handle = fopen($file, 'w'))) {
 							return false;
 						}
 						
-						// Ecriture
+						// Writing
 						fwrite($handle, "<?php\n\n$".$field." = ".var_export(self::$configs[$field], true).";\n\n?>");
 						fclose($handle);
 						
-						// Modification du chmod
+						// chmod editing
 						$chmod = chmod($file, 0777);
 					}
 					break;
 				
 				case 'xml':
 					if (is_writable(dirname($file))) {
-						// Ouverture
+						// Openning
 						if (!($handle = fopen($file, 'w'))) {
 							return false;
 						}
@@ -209,27 +217,27 @@ class WConfig {
 						
 						$data = '</configs>' ."\n";
 						
-						// Ecriture
+						// Writing
 						fwrite($handle, $data);
 						fclose($handle);
 						
-						// Modification du chmod
+						// chmod editing
 						$chmod = chmod($file, 0777);
 					}
 					break;
 				
 				case 'json':
 					if (is_writable(dirname($file))) {
-						// Ouverture
+						// Openning
 						if (!($handle = fopen($file, 'w'))) {
 							return false;
 						}
 						
-						// Ecriture
+						// Writing
 						fwrite($handle, json_encode(self::$configs[$field]));
 						fclose($handle);
 						
-						// Modification du chmod
+						// chmod editing
 						$chmod = chmod($file, 0777);
 					}
 					break;
@@ -238,9 +246,9 @@ class WConfig {
 	}
 	
 	/**
-	 * Déchargement d'une config (peut être utile...)
+	 * Unloads a configuration
 	 * 
-	 * @param  string  $field nom de la config
+	 * @param  string  $field configuartion name
 	 */
 	public static function unload($field) {
 		unset(self::$configs[$field], self::$files[$field]);
