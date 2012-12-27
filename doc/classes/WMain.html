@@ -21,6 +21,7 @@
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Packages</a></li>
 <li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/WCore.html"><i class="icon-folder-open"></i> WCore</a></li>
 <li><a href="../packages/Wity.html"><i class="icon-folder-open"></i> Wity</a></li>
 </ul>
 </li>
@@ -32,7 +33,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">387</span></a></li>
+                <span class="label label-info">368</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">3</span>
@@ -59,26 +60,20 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method___destruct" title="__destruct :: Adds action to perform at the end of the script"><span class="description">Adds action to perform at the end of the script</span><pre>__destruct()</pre></a></li>
-<li class="method public "><a href="#method_exec" title="exec :: Exéxcution d'une application"><span class="description">Exéxcution d'une application</span><pre>exec()</pre></a></li>
-<li class="method public "><a href="#method_getAppsList" title="getAppsList :: Récupère la liste des apps"><span class="description">Récupère la liste des apps</span><pre>getAppsList()</pre></a></li>
-<li class="method public "><a href="#method_isApp" title="isApp :: Vérifie si une app existe"><span class="description">Vérifie si une app existe</span><pre>isApp()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Initializes config, route, session, lang and then exec the application"><span class="description">Initializes config, route, session, lang and then exec the application</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___destruct" title="__destruct :: Flush the notes waiting for their own view, and then destroys WMain instance"><span class="description">Flush the notes waiting for their own view, and then destroys WMain instance</span><pre>__destruct()</pre></a></li>
+<li class="method public "><a href="#method_exec" title="exec :: If found, execute the application in the apps/$app_name directory"><span class="description">If found, execute the application in the apps/$app_name directory</span><pre>exec()</pre></a></li>
+<li class="method public "><a href="#method_getAppsList" title="getAppsList :: Returns a list of applications that contains a main.php file in their front directory"><span class="description">Returns a list of applications that contains a main.php file in their front directory</span><pre>getAppsList()</pre></a></li>
+<li class="method public "><a href="#method_isApp" title="isApp :: Returns application existence"><span class="description">Returns application existence</span><pre>isApp()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="method private "><a href="#method_loadConfigs" title="loadConfigs :: "><span class="description">loadConfigs()
-        </span><pre>loadConfigs()</pre></a></li>
-<li class="method private "><a href="#method_log" title="log :: "><span class="description">log()
-        </span><pre>log()</pre></a></li>
-<li class="method private "><a href="#method_route" title="route :: "><span class="description">route()
-        </span><pre>route()</pre></a></li>
-<li class="method private "><a href="#method_setupLang" title="setupLang :: "><span class="description">setupLang()
-        </span><pre>setupLang()</pre></a></li>
-<li class="method private "><a href="#method_setupSession" title="setupSession :: "><span class="description">setupSession()
-        </span><pre>setupSession()</pre></a></li>
+<li class="method private "><a href="#method_loadConfigs" title="loadConfigs :: Loads WConfig"><span class="description">Loads WConfig</span><pre>loadConfigs()</pre></a></li>
+<li class="method private "><a href="#method_log" title="log :: Log activity in a file, DEBUG ONLY"><span class="description">Log activity in a file, DEBUG ONLY</span><pre>log()</pre></a></li>
+<li class="method private "><a href="#method_route" title="route :: Loads WRoute"><span class="description">Loads WRoute</span><pre>route()</pre></a></li>
+<li class="method private "><a href="#method_setupLang" title="setupLang :: Loads lang config"><span class="description">Loads lang config</span><pre>setupLang()</pre></a></li>
+<li class="method private "><a href="#method_setupSession" title="setupSession :: Initializes session and check the flood condition"><span class="description">Initializes session and check the flood condition</span><pre>setupSession()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -86,7 +81,7 @@
                     <ul></ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="property private "><a href="#property_apps" title="$apps :: "><span class="description"></span><pre>$apps</pre></a></li></ul>
+                    <ul><li class="property private "><a href="#property_apps" title="$apps :: "><span class="description">Stores all the accessible applications</span><pre>$apps</pre></a></li></ul>
 </li>
 </ul>
 </div>
@@ -100,34 +95,52 @@
 <span class="divider">\</span><a href="../classes/WMain.html">WMain</a>
 </li>
 </ul>
-<div class="element class"><div class="details">
+<div class="element class">
+<p class="short_description">WMain is the main class that Wity launches at startup</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/WCore.html">WCore</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="mailto:johandufau@gmail.com">Johan Dufau</a></td>
+</tr>
+<tr>
+<th>version</th>
+<td>0.3-14-10-2012</td>
+</tr>
+</table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-<h2>__construct()
-        </h2>
+<h2>Initializes config, route, session, lang and then exec the application</h2>
 <pre>__construct() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method___destruct"></a><div class="element clickable method public method___destruct" data-toggle="collapse" data-target=".method___destruct .collapse">
-<h2>Adds action to perform at the end of the script</h2>
+<h2>Flush the notes waiting for their own view, and then destroys WMain instance</h2>
 <pre>__destruct() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_exec"></a><div class="element clickable method public method_exec" data-toggle="collapse" data-target=".method_exec .collapse">
-<h2>Exéxcution d'une application</h2>
-<pre>exec($app_name) </pre>
+<h2>If found, execute the application in the apps/$app_name directory</h2>
+<pre>exec(string $app_name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$app_name</h4></div>
+<div class="subelement argument">
+<h4>$app_name</h4>
+<code>string</code><p>name of the application that will be launched</p></div>
 </div></div>
 </div>
 <a id="method_getAppsList"></a><div class="element clickable method public method_getAppsList" data-toggle="collapse" data-target=".method_getAppsList .collapse">
-<h2>Récupère la liste des apps</h2>
+<h2>Returns a list of applications that contains a main.php file in their front directory</h2>
 <pre>getAppsList() : \array(string)</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -137,46 +150,47 @@
 </div></div>
 </div>
 <a id="method_isApp"></a><div class="element clickable method public method_isApp" data-toggle="collapse" data-target=".method_isApp .collapse">
-<h2>Vérifie si une app existe</h2>
-<pre>isApp($app) </pre>
+<h2>Returns application existence</h2>
+<pre>isApp(string $app) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$app</h4></div>
+<div class="subelement argument">
+<h4>$app</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>true if $app exists, false otherwise</div>
 </div></div>
 </div>
 <a id="method_loadConfigs"></a><div class="element clickable method private method_loadConfigs" data-toggle="collapse" data-target=".method_loadConfigs .collapse">
-<h2>loadConfigs()
-        </h2>
+<h2>Loads WConfig</h2>
 <pre>loadConfigs() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_log"></a><div class="element clickable method private method_log" data-toggle="collapse" data-target=".method_log .collapse">
-<h2>log()
-        </h2>
+<h2>Log activity in a file, DEBUG ONLY</h2>
 <pre>log() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_route"></a><div class="element clickable method private method_route" data-toggle="collapse" data-target=".method_route .collapse">
-<h2>route()
-        </h2>
+<h2>Loads WRoute</h2>
 <pre>route() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_setupLang"></a><div class="element clickable method private method_setupLang" data-toggle="collapse" data-target=".method_setupLang .collapse">
-<h2>setupLang()
-        </h2>
+<h2>Loads lang config</h2>
 <pre>setupLang() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_setupSession"></a><div class="element clickable method private method_setupSession" data-toggle="collapse" data-target=".method_setupSession .collapse">
-<h2>setupSession()
-        </h2>
+<h2>Initializes session and check the flood condition</h2>
 <pre>setupSession() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
@@ -184,18 +198,19 @@
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_apps"> </a><div class="element clickable property private property_apps" data-toggle="collapse" data-target=".property_apps .collapse">
-<h2></h2>
-<pre>$apps </pre>
+<h2>Stores all the accessible applications</h2>
+<pre>$apps : \array(string) | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-</div></div>
+</div>
+</div>
 </div>
 </div>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-27T00:39:57+01:00.<br></footer></div>
+            generated on 2012-12-28T00:57:53+01:00.<br></footer></div>
 </div>
 </body>
 </html>

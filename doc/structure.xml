@@ -14,32 +14,32 @@
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/admin/front/main.php 0003 17-09-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="14" namespace="global" package="Default">
         <name>$session</name>
-        <default></default>
+        <default/>
         <docblock line="11">
           <description>Instance de la classe Session</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="18" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
         <docblock line="15">
           <description>Instance du modèle</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="22" namespace="global" package="Default">
         <name>$appAsked</name>
-        <default></default>
+        <default/>
         <docblock line="19">
           <description>Nom de l'application à administrer</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="26" namespace="global" package="Default">
@@ -47,7 +47,7 @@ Système de gestion de contenu pour tous.</description>
         <default>null</default>
         <docblock line="23">
           <description>Instance du controller de l'application administrée</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="28" package="Default">
@@ -71,7 +71,7 @@ Vérifie si on y a accès, quelle app charger.</description>
         <full_name>checkAdminAccess</full_name>
         <docblock line="74">
           <description>Vérifie si l'utilisateur a accès à l'administration</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="74" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -82,7 +82,7 @@ Vérifie si on y a accès, quelle app charger.</description>
         <full_name>checkAccess</full_name>
         <docblock line="83">
           <description>Vérifie si l'utilisateur a accès à l'administration de l'app demandée</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="83" name="param" description="nom de l'appli" type="\" variable="$app"/>
           <tag line="83" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
@@ -90,7 +90,7 @@ Vérifie si on y a accès, quelle app charger.</description>
         </docblock>
         <argument line="89">
           <name>$app</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -99,7 +99,7 @@ Vérifie si on y a accès, quelle app charger.</description>
         <full_name>routeAdmin</full_name>
         <docblock line="93">
           <description>Met à jour le routage de l'appli admin</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="93" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
@@ -110,7 +110,7 @@ Vérifie si on y a accès, quelle app charger.</description>
         <full_name>isAdminApp</full_name>
         <docblock line="119">
           <description>Une appli possède-t-elle une administration ?</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="119" name="param" description="string appName" type="\" variable="$app"/>
           <tag line="119" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
@@ -118,7 +118,7 @@ Vérifie si on y a accès, quelle app charger.</description>
         </docblock>
         <argument line="125">
           <name>$app</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -129,18 +129,18 @@ Vérifie si on y a accès, quelle app charger.</description>
           <description>Traitement des actions d'une application
 Si la description d'une action débute par un antislash (\),
 elle ne doit pas s'afficher dans la liste des opérations</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="129" name="param" description="Liste des actions" type="\" variable="$actions"/>
           <tag line="129" name="param" description="bool détermine si les actions sont à afficher ou non" type="\" variable="$toDisplay"/>
         </docblock>
         <argument line="137">
           <name>$actions</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="137">
           <name>$toDisplay</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -149,7 +149,7 @@ elle ne doit pas s'afficher dans la liste des opérations</description>
         <full_name>configTheme</full_name>
         <docblock line="151">
           <description>Configuration du thème de l'admin</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="151" name="void" description=""/>
         </docblock>
       </method>
@@ -167,13 +167,13 @@ elle ne doit pas s'afficher dans la liste des opérations</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/admin/front/model.php 0003 17-09-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -184,7 +184,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getAdminAppList</full_name>
         <docblock line="17">
           <description>Récupère la liste des applis administrables</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="17" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -195,7 +195,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadAppData</full_name>
         <argument line="34">
           <name>$app</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -204,7 +204,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getLevels</full_name>
         <argument line="39">
           <name>$app</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -237,7 +237,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/contact/front/main.php 0001 19-05-2011 Julien1619 $"/>
       </docblock>
@@ -269,13 +269,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/contact/front/model.php 0000 19-05-2011 Julien1619 $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -286,11 +286,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>createMail</full_name>
         <docblock line="17">
           <description>Création d'un mail de contact dans la BDD</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="20">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -313,20 +313,20 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/contact/front/view.php 0000 19-05-2011 Julien1619 $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="13">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\ContactModel</type>
         </argument>
       </method>
@@ -335,16 +335,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>fillForm</full_name>
         <docblock line="18">
           <description>Définition des valeurs de contenu du formulaire</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="21">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="21">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -387,7 +387,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: apps/news/admin/main.php 0002 01-08-2011 Fofif $"/>
       </docblock>
@@ -408,7 +408,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getId</full_name>
         <docblock line="35">
           <description>Récupère un id fourni dans l'url</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="48" package="Default">
@@ -432,7 +432,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>cat</full_name>
         <docblock line="241">
           <description>Gestion des catégories</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="334" package="Default">
@@ -460,13 +460,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: apps/news/admin/model.php 0003 01-08-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -477,16 +477,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getNewsList</full_name>
         <docblock line="17">
           <description>Récupère la liste complète des pages</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="20">
           <name>$from</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="20">
           <name>$number</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="20">
@@ -505,11 +505,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>findNewsCats</full_name>
         <docblock line="34">
           <description>Récupère les catégories liées à une news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="37">
           <name>$nid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -518,11 +518,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>createNews</full_name>
         <docblock line="50">
           <description>Création d'une news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="53">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -532,7 +532,7 @@ Système de gestion de contenu pour tous.</description>
         <docblock line="68">
           <description>Obtenir le dernier id inséré dans la table
 Utile pour le nouveau routage lors de la création d'une page</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="83" package="Default">
@@ -540,11 +540,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>loadNews</full_name>
         <docblock line="80">
           <description>Récupération des données d'une news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="83">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -553,16 +553,16 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>updateNews</full_name>
         <docblock line="94">
           <description>Mise à jour d'une news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="97">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="97">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -571,11 +571,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>deleteNews</full_name>
         <docblock line="112">
           <description>Suppression d'une news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="115">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -584,11 +584,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>validId</full_name>
         <docblock line="123">
           <description>Vérifie l'existence d'une news pour un id donné</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="126">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -597,16 +597,16 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>newsAddCat</full_name>
         <docblock line="135">
           <description>Ajout d'une relation news/cat</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="138">
           <name>$nid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="138">
           <name>$cid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -615,11 +615,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>newsDestroyCats</full_name>
         <docblock line="148">
           <description>Destruction des relations news/cats d'une news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="151">
           <name>$nid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -628,7 +628,7 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>getCatList</full_name>
         <docblock line="159">
           <description>Récupère la liste complète des pages</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="162">
           <name>$order</name>
@@ -646,11 +646,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>catExists</full_name>
         <docblock line="172">
           <description>Vérifie l'existence d'une catégorie</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="175">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -659,11 +659,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>createCat</full_name>
         <docblock line="184">
           <description>Création d'une catégorie</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="187">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -672,16 +672,16 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>updateCat</full_name>
         <docblock line="198">
           <description>Mise à jour d'une catégorie</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="201">
           <name>$cid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="201">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -690,11 +690,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>deleteCat</full_name>
         <docblock line="209">
           <description>Suppression d'une catégorie</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="212">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -740,20 +740,20 @@ Utile pour le nouveau routage lors de la création d'une page</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: apps/news/admin/view.php 0002 01-08-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="13">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\NewsAdminModel</type>
         </argument>
       </method>
@@ -762,12 +762,12 @@ Système de gestion de contenu pour tous.</description>
         <full_name>index</full_name>
         <argument line="18">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="18">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -776,7 +776,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadMainForm</full_name>
         <docblock line="34">
           <description>Fonction de chargement de la page principale du formulaire de news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="58" package="Default">
@@ -784,16 +784,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>fillMainForm</full_name>
         <docblock line="55">
           <description>Définition des valeurs de contenu du formulaire</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="58">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="58">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -811,7 +811,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>edit</full_name>
         <argument line="84">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="84">
@@ -825,7 +825,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>del</full_name>
         <argument line="113">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -834,12 +834,12 @@ Système de gestion de contenu pour tous.</description>
         <full_name>cat</full_name>
         <argument line="118">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="118">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -871,7 +871,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: main.php 0001 09-04-2011 Fofif $"/>
       </docblock>
@@ -892,7 +892,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getId</full_name>
         <docblock line="31">
           <description>Récupère un id fourni dans l'url</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="44" package="Default">
@@ -916,13 +916,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: apps/news/front/model.php 0002 31-07-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -933,16 +933,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getNewsList</full_name>
         <docblock line="20">
           <description>Récupère la liste complète des pages</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="23">
           <name>$from</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="23">
           <name>$number</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="23">
@@ -961,21 +961,21 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getNewsByCat</full_name>
         <docblock line="36">
           <description>Filtre les news selon une catégorie</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="39">
           <name>$cats</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
         <argument line="39">
           <name>$from</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="39">
           <name>$number</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="39">
@@ -994,11 +994,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadNews</full_name>
         <docblock line="73">
           <description>Récupération des données d'une page</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="76">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1007,7 +1007,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>validId</full_name>
         <argument line="87">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1016,7 +1016,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getCid</full_name>
         <argument line="96">
           <name>$cname</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1047,20 +1047,20 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: view.php 0001 09-04-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="13">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\NewsModel</type>
         </argument>
       </method>
@@ -1073,7 +1073,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>detail</full_name>
         <argument line="23">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1106,7 +1106,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/newsletter/admin/main.php 0001 06-10-2011 Fofif $"/>
       </docblock>
@@ -1127,7 +1127,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getId</full_name>
         <docblock line="37">
           <description>Récupération de l'id de l'utilisateur fourni en Url</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="37" name="param" description="" type="void" variable="">
             <type by_reference="false">void</type>
           </tag>
@@ -1141,7 +1141,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>liste</full_name>
         <docblock line="52">
           <description>Listage des newsletters</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="67" package="Default">
@@ -1176,13 +1176,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/newsletter/admin/model.php 0001 06-10-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -1197,12 +1197,12 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getNewsletters</full_name>
         <argument line="26">
           <name>$from</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="26">
           <name>$number</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="26">
@@ -1221,7 +1221,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadNewsletter</full_name>
         <argument line="40">
           <name>$nid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1230,7 +1230,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>saveNewsletter</full_name>
         <argument line="52">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1239,7 +1239,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getMailsArray</full_name>
         <argument line="66">
           <name>$type</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1289,20 +1289,20 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/newsletter/admin/view.php 0001 06-10-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="13">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\NewsletterAdminModel</type>
         </argument>
       </method>
@@ -1311,21 +1311,21 @@ Système de gestion de contenu pour tous.</description>
         <full_name>liste</full_name>
         <docblock line="18">
           <description>Liste des entreprises</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="21">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="21">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="21">
           <name>$currentPage</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1334,7 +1334,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>read</full_name>
         <argument line="44">
           <name>$nid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1343,7 +1343,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadMainForm</full_name>
         <docblock line="58">
           <description>Fonction de chargement de la page principale du formulaire de news</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="72" package="Default">
@@ -1351,16 +1351,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>fillMainForm</full_name>
         <docblock line="69">
           <description>Définition des valeurs de contenu du formulaire</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="72">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="72">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1456,13 +1456,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="auteur" description="NkDeuS"/>
         <tag line="2" name="version" description="$Id: index.php 0001 05-04-2010 xpLosIve. $&#13;&#10;Copyright 2010 NkDeuS.Com"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="13" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="15" package="Default">
         <name>__construct</name>
@@ -1473,16 +1473,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getPageList</full_name>
         <docblock line="19">
           <description>Récupère la liste complète des pages</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="22">
           <name>$from</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="22">
           <name>$number</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="22">
@@ -1501,11 +1501,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>permalienAvailable</full_name>
         <docblock line="35">
           <description>Vérifie si un permalien n'est pas déjà utilisé</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="38">
           <name>$permalien</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1514,7 +1514,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>createPage</full_name>
         <argument line="47">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1524,7 +1524,7 @@ Système de gestion de contenu pour tous.</description>
         <docblock line="62">
           <description>Obtenir le dernier id inséré dans la table
 Utile pour le nouveau routage lors de la création d'une page</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="73" package="Default">
@@ -1532,11 +1532,11 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>loadPage</full_name>
         <docblock line="70">
           <description>Récupération des données d'une page</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="73">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1545,12 +1545,12 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>updatePage</full_name>
         <argument line="84">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="84">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1559,7 +1559,7 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>deletePage</full_name>
         <argument line="98">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1568,7 +1568,7 @@ Utile pour le nouveau routage lors de la création d'une page</description>
         <full_name>validId</full_name>
         <argument line="106">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1600,18 +1600,18 @@ Utile pour le nouveau routage lors de la création d'une page</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
       </docblock>
       <property final="false" static="false" visibility="private" line="8" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="10" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="10">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\PageAdminModel</type>
         </argument>
       </method>
@@ -1620,12 +1620,12 @@ Système de gestion de contenu pour tous.</description>
         <full_name>index</full_name>
         <argument line="15">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="15">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1643,7 +1643,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>edit</full_name>
         <argument line="83">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="83">
@@ -1657,7 +1657,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>del</full_name>
         <argument line="135">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1684,8 +1684,8 @@ Système de gestion de contenu pour tous.</description>
       <name>PageController</name>
       <full_name>\PageController</full_name>
       <docblock line="2">
-        <description></description>
-        <long-description></long-description>
+        <description/>
+        <long-description/>
       </docblock>
       <property final="false" static="false" visibility="protected" line="11" namespace="global" package="Default">
         <name>$actionList</name>
@@ -1699,8 +1699,8 @@ Système de gestion de contenu pour tous.</description>
         <name>getId</name>
         <full_name>getId</full_name>
         <docblock line="26">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="39" package="Default">
@@ -1730,13 +1730,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: model.php 0001 10-04-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -1747,7 +1747,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>validId</full_name>
         <argument line="17">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1756,11 +1756,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadPage</full_name>
         <docblock line="26">
           <description>Récupération des données d'une page</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="29">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1781,20 +1781,20 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: view.php 0001 10-04-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="13">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\PageModel</type>
         </argument>
       </method>
@@ -1803,7 +1803,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>see</full_name>
         <argument line="18">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1832,7 +1832,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: apps/user/admin/main.php 0003 02-02-2012 Fofif $"/>
       </docblock>
@@ -1853,7 +1853,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getId</full_name>
         <docblock line="40">
           <description>Récupération de l'id de l'utilisateur fourni en Url</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="40" name="param" description="" type="void" variable="">
             <type by_reference="false">void</type>
           </tag>
@@ -1905,7 +1905,7 @@ Système de gestion de contenu pour tous.</description>
     <docblock line="2">
       <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-      <long-description></long-description>
+      <long-description/>
       <tag line="2" name="author" description="Fofif"/>
       <tag line="2" name="version" description="$Id: apps/user/admin/model.php 0003 22-08-2011 Fofif $"/>
     </docblock>
@@ -1918,7 +1918,7 @@ Système de gestion de contenu pour tous.</description>
       <full_name>\UserAdminModel</full_name>
       <property final="false" static="false" visibility="private" line="16" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="18" package="Default">
         <name>__construct</name>
@@ -1929,7 +1929,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>deleteUser</full_name>
         <argument line="23">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1938,7 +1938,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getCatList</full_name>
         <docblock line="31">
           <description>Récupère la liste complète des pages</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="34">
           <name>$order</name>
@@ -1956,7 +1956,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>createCat</full_name>
         <argument line="44">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1965,12 +1965,12 @@ Système de gestion de contenu pour tous.</description>
         <full_name>updateCat</full_name>
         <argument line="54">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="54">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -1979,7 +1979,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>deleteCat</full_name>
         <argument line="62">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2013,20 +2013,20 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: apps/user/admin/view.php 0004 02-02-2012 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="13">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type>\UserAdminModel</type>
         </argument>
       </method>
@@ -2035,22 +2035,22 @@ Système de gestion de contenu pour tous.</description>
         <full_name>liste</full_name>
         <argument line="20">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="20">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="20">
           <name>$currentPage</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="20">
           <name>$filtres</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2059,16 +2059,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>fillForm</full_name>
         <docblock line="67">
           <description>Définition des valeurs de contenu du formulaire</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="70">
           <name>$model</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="70">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2086,7 +2086,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>edit</full_name>
         <argument line="99">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2095,7 +2095,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>del</full_name>
         <argument line="116">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2104,12 +2104,12 @@ Système de gestion de contenu pour tous.</description>
         <full_name>cat</full_name>
         <argument line="121">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="121">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2141,7 +2141,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/user/front/main.php 0005 24-04-2012 Fofif $"/>
       </docblock>
@@ -2157,11 +2157,11 @@ Système de gestion de contenu pour tous.</description>
       </constant>
       <property final="false" static="false" visibility="private" line="24" namespace="global" package="Default">
         <name>$model</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="25" namespace="global" package="Default">
         <name>$session</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="27" package="Default">
         <name>__construct</name>
@@ -2176,7 +2176,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>login</full_name>
         <docblock line="56">
           <description>Connexion d'un membre</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="113" package="Default">
@@ -2184,7 +2184,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>logout</full_name>
         <docblock line="110">
           <description>Déconnexion</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
     </class>
@@ -2204,13 +2204,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/user/front/model.php 0004 17-09-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="private" line="11" namespace="global" package="Default">
         <name>$db</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="13" package="Default">
         <name>__construct</name>
@@ -2221,7 +2221,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>validId</full_name>
         <argument line="17">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2230,11 +2230,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>nicknameAvailable</full_name>
         <docblock line="26">
           <description>Vérifie qu'un pseudo est disponible</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="29">
           <name>$nickname</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2243,11 +2243,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>emailAvailable</full_name>
         <docblock line="38">
           <description>Vérifie qu'une adresse email n'est pas déjà présente dans la base</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="41">
           <name>$email</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2257,7 +2257,7 @@ Système de gestion de contenu pour tous.</description>
         <docblock line="50">
           <description>Obtenir le dernier id inséré dans la table
 Peut s'avérer utile pour d'autres apps</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="62" package="Default">
@@ -2278,12 +2278,12 @@ Peut s'avérer utile pour d'autres apps</description>
         <full_name>getUserList</full_name>
         <argument line="94">
           <name>$from</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="94">
           <name>$number</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="94">
@@ -2307,7 +2307,7 @@ Peut s'avérer utile pour d'autres apps</description>
         <full_name>getUserData</full_name>
         <argument line="122">
           <name>$userid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2316,12 +2316,12 @@ Peut s'avérer utile pour d'autres apps</description>
         <full_name>matchUser</full_name>
         <argument line="133">
           <name>$nickname</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="133">
           <name>$password</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2330,7 +2330,7 @@ Peut s'avérer utile pour d'autres apps</description>
         <full_name>createUser</full_name>
         <argument line="145">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2339,12 +2339,12 @@ Peut s'avérer utile pour d'autres apps</description>
         <full_name>updateUser</full_name>
         <argument line="166">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="166">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2353,11 +2353,11 @@ Peut s'avérer utile pour d'autres apps</description>
         <full_name>updateLastActivity</full_name>
         <docblock line="180">
           <description>Met à jour la date de dernière activité d'un utilisateur</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="183">
           <name>$userid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2387,7 +2387,7 @@ Peut s'avérer utile pour d'autres apps</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: apps/user/front/view.php 0001 12-05-2011 Fofif $"/>
       </docblock>
@@ -2400,11 +2400,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>connexion</full_name>
         <docblock line="15">
           <description>Petite vue pour le formulaire de connexion</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="18">
           <name>$redirect</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2430,45 +2430,45 @@ en fonction du nombre d'éléments à afficher par page&lt;/p&gt;</long-descript
       </docblock>
       <property final="false" static="false" visibility="private" line="15" namespace="global" package="Default">
         <name>$n</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="16" namespace="global" package="Default">
         <name>$total</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="17" namespace="global" package="Default">
         <name>$limit</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="18" namespace="global" package="Default">
         <name>$currentPage</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="19" namespace="global" package="Default">
         <name>$scheme</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="21" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="21">
           <name>$total</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="21">
           <name>$limit</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="21">
           <name>$currentPage</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="21">
           <name>$scheme</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2511,26 +2511,26 @@ d'un ensemble on doit faire un classement&lt;/p&gt;</long-description>
       </property>
       <property final="false" static="false" visibility="private" line="17" namespace="global" package="Default">
         <name>$sortBy</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="18" namespace="global" package="Default">
         <name>$sens</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="21" namespace="global" package="Default">
         <name>$sortByDef</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="22" namespace="global" package="Default">
         <name>$sensDef</name>
-        <default></default>
+        <default/>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="24" package="Default">
         <name>__construct</name>
         <full_name>__construct</full_name>
         <argument line="24">
           <name>$fields</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
         <argument line="24">
@@ -2549,12 +2549,12 @@ d'un ensemble on doit faire un classement&lt;/p&gt;</long-description>
         <full_name>defineDefault</full_name>
         <argument line="32">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="32">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2563,7 +2563,7 @@ d'un ensemble on doit faire un classement&lt;/p&gt;</long-description>
         <full_name>formatDirection</full_name>
         <argument line="39">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2572,12 +2572,12 @@ d'un ensemble on doit faire un classement&lt;/p&gt;</long-description>
         <full_name>getSorting</full_name>
         <argument line="43">
           <name>$sortBy</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="43">
           <name>$sens</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2588,7 +2588,7 @@ d'un ensemble on doit faire un classement&lt;/p&gt;</long-description>
           <description>Génère les variables utiles pour l'affichage du template
 - les classes pour la variable de classement
 - le sens du classement</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
     </class>
@@ -2717,182 +2717,196 @@ d'un ensemble on doit faire un classement&lt;/p&gt;</long-description>
       <error line="0" code="50007">No page-level DocBlock was found in file system\config\route.php</error>
     </parse_markers>
   </file>
-  <file path="system\WCore\WConfig.php" hash="45a605689ecef193d044b829684b7c29" package="Default">
-    <include line="100" type="Include Once" package="Default">
+  <file path="system\WCore\WConfig.php" hash="934e15109e1c843f463967a9cda501b8" package="Default">
+    <docblock line="2">
+      <description>WConfig.php</description>
+      <long-description></long-description>
+    </docblock>
+    <include line="110" type="Include Once" package="Default">
       <name/>
     </include>
-    <class final="false" abstract="false" namespace="global" line="10" package="Default">
+    <class final="false" abstract="false" namespace="global" line="15" package="WCore">
       <extends/>
       <name>WConfig</name>
       <full_name>\WConfig</full_name>
-      <docblock line="2">
-        <description>Wity CMS
-Système de gestion de contenu pour tous.</description>
+      <docblock line="8">
+        <description>WConfig loads all configuration files, manages all configuration values</description>
         <long-description></long-description>
-        <tag line="2" name="version" description="$Id: WCore/WConfig.php 0003 13-05-2010 xplosive $"/>
-        <tag line="2" name="desc" description="Gestion des variables de configuration"/>
+        <tag line="8" name="package" description="WCore"/>
+        <tag line="8" name="author" description="Johan Dufau &lt;johandufau@gmail.com&gt;"/>
+        <tag line="8" name="version" description="0.3-22-11-2012"/>
       </docblock>
-      <property final="false" static="true" visibility="private" line="13" namespace="global" package="Default">
+      <property final="false" static="true" visibility="private" line="22" namespace="global" package="Default">
         <name>$configs</name>
         <default>array()</default>
+        <docblock line="17">
+          <description></description>
+          <long-description></long-description>
+          <tag line="17" name="var" description="Multidimensionnal array containing configurations sorted by type No '.' in keys because it's a reserved character" type="\array()">
+            <type by_reference="false">\array()</type>
+          </tag>
+        </docblock>
       </property>
-      <property final="false" static="true" visibility="private" line="16" namespace="global" package="Default">
+      <property final="false" static="true" visibility="private" line="27" namespace="global" package="Default">
         <name>$files</name>
         <default>array()</default>
+        <docblock line="24">
+          <description></description>
+          <long-description></long-description>
+          <tag line="24" name="var" description="List of loaded configuration files" type="\array()">
+            <type by_reference="false">\array()</type>
+          </tag>
+        </docblock>
       </property>
-      <property final="false" static="true" visibility="private" line="19" namespace="global" package="Default">
+      <property final="false" static="true" visibility="private" line="32" namespace="global" package="Default">
         <name>$modified</name>
         <default>array()</default>
+        <docblock line="29">
+          <description></description>
+          <long-description></long-description>
+          <tag line="29" name="var" description="Stores modified configurations" type="\array()">
+            <type by_reference="false">\array()</type>
+          </tag>
+        </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="29" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="41" package="WCore">
         <name>get</name>
         <full_name>get</full_name>
-        <docblock line="21">
-          <description>Retourne la valeur d'une configuration</description>
+        <docblock line="34">
+          <description>Returns configuration value</description>
           <long-description></long-description>
-          <tag line="21" name="access" description="public"/>
-          <tag line="21" name="param" description="Chemin de la config" type="string" variable="$path">
+          <tag line="34" name="param" description="configuration path" type="string" variable="$path">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="21" name="param" description="Facultative: valeur par défaut de la config" type="mixed" variable="$default">
+          <tag line="34" name="param" description="optional default value" type="mixed" variable="$default">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="21" name="return" description="Valeur de la config associée au path" type="mixed">
+          <tag line="34" name="return" description="configuration value related to $path" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="29">
+        <argument line="41">
           <name>$path</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="29">
+        <argument line="41">
           <name>$default</name>
           <default>null</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="62" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="73" package="WCore">
         <name>set</name>
         <full_name>set</full_name>
-        <docblock line="54">
-          <description>Assigne une valeur de configuration</description>
+        <docblock line="66">
+          <description>Assign a configuration value to a path</description>
           <long-description></long-description>
-          <tag line="54" name="access" description="public"/>
-          <tag line="54" name="param" description="Chemin de la config" type="string" variable="$path">
+          <tag line="66" name="param" description="configuration path" type="string" variable="$path">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="54" name="param" description="Valeur de la config" type="mixed" variable="$value">
+          <tag line="66" name="param" description="configuration value" type="mixed" variable="$value">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="54" name="return" description="Valeur de la config" type="mixed">
+          <tag line="66" name="return" description="configuration value" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="62">
+        <argument line="73">
           <name>$path</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="62">
+        <argument line="73">
           <name>$value</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="89" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="99" package="WCore">
         <name>load</name>
         <full_name>load</full_name>
-        <docblock line="81">
-          <description>Ajout de configurations depuis un fichier</description>
+        <docblock line="91">
+          <description>Adds configurations from a file</description>
           <long-description></long-description>
-          <tag line="81" name="param" description="nom de la config" type="string" variable="$field">
+          <tag line="91" name="param" description="configuration name" type="string" variable="$field">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="81" name="param" description="fichier de config" type="string" variable="$file">
+          <tag line="91" name="param" description="configuration file" type="string" variable="$file">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="81" name="param" description="type du fichier de config" type="string" variable="$type">
+          <tag line="91" name="param" description="file type" type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="81" name="return" description="" type="boolean">
+          <tag line="91" name="return" description="true if successful, false otherwise" type="boolean">
             <type by_reference="false">boolean</type>
           </tag>
         </docblock>
-        <argument line="89">
+        <argument line="99">
           <name>$field</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="89">
+        <argument line="99">
           <name>$file</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="89">
+        <argument line="99">
           <name>$type</name>
           <default>'php'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="126" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="135" package="WCore">
         <name>clear</name>
         <full_name>clear</full_name>
-        <docblock line="120">
-          <description>Supprime une valeur de configuration</description>
+        <docblock line="130">
+          <description>Destroys a configuration value</description>
           <long-description></long-description>
-          <tag line="120" name="param" description="chemin de la config" type="string" variable="$path">
+          <tag line="130" name="param" description="configuration path" type="string" variable="$path">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="120" name="return" description="" type="void">
-            <type by_reference="false">void</type>
-          </tag>
         </docblock>
-        <argument line="126">
+        <argument line="135">
           <name>$path</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="155" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="163" package="WCore">
         <name>save</name>
         <full_name>save</full_name>
-        <docblock line="150">
-          <description>Enregistrement des configurations</description>
+        <docblock line="158">
+          <description>Saves configurations</description>
           <long-description></long-description>
-          <tag line="150" name="param" description="nom de la config" type="string" variable="$field">
+          <tag line="158" name="param" description="configuration name" type="string" variable="$field">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="155">
+        <argument line="163">
           <name>$field</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="245" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="253" package="WCore">
         <name>unload</name>
         <full_name>unload</full_name>
-        <docblock line="240">
-          <description>Déchargement d'une config (peut être utile.</description>
-          <long-description>&lt;p&gt;..)&lt;/p&gt;</long-description>
-          <tag line="240" name="param" description="nom de la config" type="string" variable="$field">
+        <docblock line="248">
+          <description>Unloads a configuration</description>
+          <long-description></long-description>
+          <tag line="248" name="param" description="configuartion name" type="string" variable="$field">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="245">
+        <argument line="253">
           <name>$field</name>
           <default></default>
           <type/>
         </argument>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="50007">No page-level DocBlock was found in file system\WCore\WConfig.php</error>
-      <error line="13" code="50018">No DocBlock was found for property $configs</error>
-      <error line="16" code="50018">No DocBlock was found for property $files</error>
-      <error line="19" code="50018">No DocBlock was found for property $modified</error>
-    </parse_markers>
   </file>
   <file path="system\WCore\WController.php" hash="461b4e26b8dfe6e1c40a717d44e4255b" package="Default">
     <class final="false" abstract="true" namespace="global" line="10" package="Default">
@@ -2902,32 +2916,32 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: WCore/WController.php 0002 17-04-2011 Fofif $"/>
       </docblock>
       <property final="false" static="false" visibility="protected" line="14" namespace="global" package="Default">
         <name>$wity</name>
-        <default></default>
+        <default/>
         <docblock line="11">
           <description>WMain instance</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="protected" line="19" namespace="global" package="Default">
         <name>$app_dir</name>
-        <default></default>
+        <default/>
         <docblock line="16">
           <description>The full application directory</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="protected" line="24" namespace="global" package="Default">
         <name>$view</name>
-        <default></default>
+        <default/>
         <docblock line="21">
           <description>View object (of WView)</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="29" namespace="global" package="Default">
@@ -2935,7 +2949,7 @@ Système de gestion de contenu pour tous.</description>
         <default>'index'</default>
         <docblock line="26">
           <description>App's action to be performed</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="37" package="Default">
@@ -2943,7 +2957,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>init</full_name>
         <docblock line="31">
           <description>Initialisation de l'application</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="31" name="param" description="Instance de wity" type="\WMain" variable="$wity">
             <type by_reference="false">\WMain</type>
           </tag>
@@ -2953,12 +2967,12 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="37">
           <name>$wity</name>
-          <default></default>
+          <default/>
           <type>\WMain</type>
         </argument>
         <argument line="37">
           <name>$app_dir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -2967,7 +2981,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>launch</full_name>
         <docblock line="60">
           <description>Launcher de l'applcation exécuté par Wity</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="60" name="abstract" description=""/>
         </docblock>
       </method>
@@ -2976,7 +2990,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>forward</full_name>
         <docblock line="67">
           <description>Forward permet d'éxécuter la méthode associée à l'$action de l'application</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="67" name="param" description="Action à exécuter" type="string" variable="$action">
             <type by_reference="false">string</type>
           </tag>
@@ -2986,7 +3000,7 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="73">
           <name>$action</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="73">
@@ -3000,7 +3014,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getAppName</full_name>
         <docblock line="84">
           <description>Retourne le nom de l'application</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="84" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3011,7 +3025,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getAskedAction</full_name>
         <docblock line="99">
           <description>Retourne le nom de l'action initialement demandé en paramètre</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="99" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -3022,7 +3036,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getTriggeredAction</full_name>
         <docblock line="113">
           <description>Retourne l'action effectivement déclenchée</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="123" package="Default">
@@ -3030,11 +3044,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>setView</full_name>
         <docblock line="120">
           <description>Setter pour la view</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="123">
           <name>$view</name>
-          <default></default>
+          <default/>
           <type>\WView</type>
         </argument>
       </method>
@@ -3043,7 +3057,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getView</full_name>
         <docblock line="128">
           <description>Getter pour la view</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="128" name="return" description="" type="\WView">
             <type by_reference="false">\WView</type>
           </tag>
@@ -3054,7 +3068,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>getActionList</full_name>
         <docblock line="137">
           <description>Récupère la liste des actions prédéfinies d'une app</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="153" package="Default">
@@ -3062,7 +3076,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>adminLoaded</full_name>
         <docblock line="148">
           <description>Détermine si la partie admin est chargée ou non</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="148" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -3073,11 +3087,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>render</full_name>
         <docblock line="157">
           <description>Déclenche l'action d'affichage du template</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="160">
           <name>$action</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3096,7 +3110,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="version" description="$Id: WCore/WDatabase.php 0001 21-11-2012 Fofif $"/>
         <tag line="2" name="package" description="Wity"/>
       </docblock>
@@ -3113,17 +3127,17 @@ Système de gestion de contenu pour tous.</description>
         <full_name>__construct</full_name>
         <argument line="14">
           <name>$dsn</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="14">
           <name>$user</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="14">
           <name>$password</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3132,14 +3146,14 @@ Système de gestion de contenu pour tous.</description>
         <full_name>declareTable</full_name>
         <docblock line="29">
           <description>Declare a new table in order to be automaticly prefixed</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="29" name="param" description="Table's name" type="string" variable="$table">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="34">
           <name>$table</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3148,11 +3162,11 @@ Système de gestion de contenu pour tous.</description>
         <full_name>prefixTables</full_name>
         <docblock line="38">
           <description>Add prefix to table's name (see WDatabase::declareTable()) in a querystring</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="41">
           <name>$querystring</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3161,7 +3175,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>query</full_name>
         <argument line="50">
           <name>$querystring</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3170,7 +3184,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>prepare</full_name>
         <argument line="54">
           <name>$querystring</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="54">
@@ -3196,8 +3210,8 @@ Système de gestion de contenu pour tous.</description>
       <name>WHelper</name>
       <full_name>\WHelper</full_name>
       <docblock line="2">
-        <description></description>
-        <long-description></long-description>
+        <description/>
+        <long-description/>
       </docblock>
     </class>
     <parse_markers>
@@ -3213,13 +3227,13 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="version" description="$Id: WCore/WLang.php 0001 10-08-2012 xpLosIve.|Fofif $"/>
         <tag line="2" name="package" description="Wity"/>
       </docblock>
       <property final="false" static="true" visibility="public" line="12" namespace="global" package="Default">
         <name>$language</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="true" visibility="private" line="14" namespace="global" package="Default">
         <name>$lang_dirs</name>
@@ -3238,7 +3252,7 @@ Système de gestion de contenu pour tous.</description>
         <default>false</default>
         <docblock line="107">
           <description>Variable to remember if a node was opened</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="23" package="Wity">
@@ -3246,7 +3260,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>init</full_name>
         <docblock line="20">
           <description>Declaration of new compiler's handlers</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="29" package="Wity">
@@ -3254,7 +3268,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>selectLang</full_name>
         <argument line="29">
           <name>$lang</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3263,7 +3277,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>assign</full_name>
         <docblock line="34">
           <description>Assign a new language constant</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="34" name="access" description="public"/>
           <tag line="34" name="param" description="Name" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3274,12 +3288,12 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="41">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="41">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3288,7 +3302,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>get</full_name>
         <docblock line="47">
           <description>Retourne une valeur de constante</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="47" name="access" description="public"/>
           <tag line="47" name="param" description="Nom de la valeur" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3296,7 +3310,7 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="53">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3306,11 +3320,11 @@ Système de gestion de contenu pour tous.</description>
         <docblock line="68">
           <description>Alias permettant un accès rapide à la fonction get()
 WLang::_('LANG_ID');</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="72">
           <name>$id</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3319,7 +3333,7 @@ WLang::_('LANG_ID');</description>
         <full_name>declareLangDir</full_name>
         <docblock line="76">
           <description>Pour charger un autre fichier</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="76" name="access" description="public"/>
           <tag line="76" name="param" description="Nom du fichier à charger (sans extension)" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -3327,7 +3341,7 @@ WLang::_('LANG_ID');</description>
         </docblock>
         <argument line="82">
           <name>$dir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3336,7 +3350,7 @@ WLang::_('LANG_ID');</description>
         <full_name>loadLangFile</full_name>
         <argument line="91">
           <name>$dir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3345,11 +3359,11 @@ WLang::_('LANG_ID');</description>
         <full_name>compile_lang</full_name>
         <docblock line="112">
           <description>Handles the {lang} opening node in WTemplate</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="115">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3358,7 +3372,7 @@ WLang::_('LANG_ID');</description>
         <full_name>compile_lang_close</full_name>
         <docblock line="126">
           <description>Handles the {/lang} closing node in WTemplate</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
     </class>
@@ -3378,114 +3392,146 @@ WLang::_('LANG_ID');</description>
       <error line="112" code="50015">Argument $args is missing from the Docblock of compile_lang()</error>
     </parse_markers>
   </file>
-  <file path="system\WCore\WMain.php" hash="fe536f6be5518965314f0944588774a6" package="Default">
-    <include line="10" type="Require" package="Wity">
-      <name/>
-      <docblock line="2">
-        <description>Wity CMS
-Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
-        <tag line="2" name="version" description="$Id: WCore/WMain.php 0003 26-10-2012 Fofif $"/>
-        <tag line="2" name="package" description="Wity"/>
-      </docblock>
-    </include>
-    <include line="11" type="Require" package="Default">
+  <file path="system\WCore\WMain.php" hash="9d04358ca0634879d4c02dc803eeb1b0" package="Default">
+    <docblock line="2">
+      <description>WMain.php</description>
+      <long-description/>
+    </docblock>
+    <include line="8" type="Require" package="Default">
       <name/>
     </include>
-    <include line="52" type="Include" package="Default">
+    <include line="9" type="Require" package="Default">
       <name/>
     </include>
-    <class final="false" abstract="false" namespace="global" line="13" package="Default">
+    <include line="64" type="Include" package="Default">
+      <name/>
+    </include>
+    <class final="false" abstract="false" namespace="global" line="18" package="WCore">
       <extends/>
       <name>WMain</name>
       <full_name>\WMain</full_name>
-      <property final="false" static="false" visibility="private" line="15" namespace="global" package="Default">
+      <docblock line="11">
+        <description>WMain is the main class that Wity launches at startup</description>
+        <long-description/>
+        <tag line="11" name="package" description="WCore"/>
+        <tag line="11" name="author" description="Johan Dufau &lt;johandufau@gmail.com&gt;"/>
+        <tag line="11" name="version" description="0.3-14-10-2012"/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="22" namespace="global" package="Default">
         <name>$apps</name>
-        <default></default>
+        <default>null</default>
+        <docblock line="19">
+          <description/>
+          <long-description/>
+          <tag line="19" name="var" description="Stores all the accessible applications" type="\array(string)|null">
+            <type by_reference="false">\array(string)</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="17" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="27" package="WCore">
         <name>__construct</name>
         <full_name>__construct</full_name>
+        <docblock line="24">
+          <description>Initializes config, route, session, lang and then exec the application</description>
+          <long-description/>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="39" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="49" package="WCore">
         <name>__destruct</name>
         <full_name>__destruct</full_name>
-        <docblock line="36">
-          <description>Adds action to perform at the end of the script</description>
-          <long-description></long-description>
+        <docblock line="46">
+          <description>Flush the notes waiting for their own view, and then destroys WMain instance</description>
+          <long-description/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="47" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="59" package="WCore">
         <name>exec</name>
         <full_name>exec</full_name>
-        <docblock line="44">
-          <description>Exéxcution d'une application</description>
-          <long-description></long-description>
+        <docblock line="54">
+          <description>If found, execute the application in the apps/$app_name directory</description>
+          <long-description/>
+          <tag line="54" name="param" description="name of the application that will be launched" type="string" variable="$app_name">
+            <type by_reference="false">string</type>
+          </tag>
         </docblock>
-        <argument line="47">
+        <argument line="59">
           <name>$app_name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="73" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="85" package="WCore">
         <name>getAppsList</name>
         <full_name>getAppsList</full_name>
-        <docblock line="68">
-          <description>Récupère la liste des apps</description>
-          <long-description></long-description>
-          <tag line="68" name="return" description="" type="\array(string)">
+        <docblock line="80">
+          <description>Returns a list of applications that contains a main.php file in their front directory</description>
+          <long-description/>
+          <tag line="80" name="return" description="" type="\array(string)">
             <type by_reference="false">\array(string)</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="89" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="104" package="WCore">
         <name>isApp</name>
         <full_name>isApp</full_name>
-        <docblock line="86">
-          <description>Vérifie si une app existe</description>
-          <long-description></long-description>
+        <docblock line="98">
+          <description>Returns application existence</description>
+          <long-description/>
+          <tag line="98" name="param" description="" type="string" variable="$app">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="98" name="return" description="true if $app exists, false otherwise" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
         </docblock>
-        <argument line="89">
+        <argument line="104">
           <name>$app</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="93" package="Default">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="111" package="WCore">
         <name>loadConfigs</name>
         <full_name>loadConfigs</full_name>
+        <docblock line="108">
+          <description>Loads WConfig</description>
+          <long-description/>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="97" package="Default">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="118" package="WCore">
         <name>route</name>
         <full_name>route</full_name>
+        <docblock line="115">
+          <description>Loads WRoute</description>
+          <long-description/>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="102" package="Default">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="126" package="WCore">
         <name>setupSession</name>
         <full_name>setupSession</full_name>
+        <docblock line="123">
+          <description>Initializes session and check the flood condition</description>
+          <long-description/>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="112" package="Default">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="139" package="WCore">
         <name>setupLang</name>
         <full_name>setupLang</full_name>
+        <docblock line="136">
+          <description>Loads lang config</description>
+          <long-description/>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="118" package="Default">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="148" package="WCore">
         <name>log</name>
         <full_name>log</full_name>
+        <docblock line="145">
+          <description>Log activity in a file, DEBUG ONLY</description>
+          <long-description/>
+        </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="50007">No page-level DocBlock was found in file system\WCore\WMain.php</error>
-      <error line="13" code="50000">No DocBlock was found for \WMain</error>
-      <error line="15" code="50018">No DocBlock was found for property $apps</error>
-      <error line="17" code="50010">No DocBlock was found for method __construct()</error>
-      <error line="44" code="50015">Argument $app_name is missing from the Docblock of exec()</error>
-      <error line="86" code="50015">Argument $app is missing from the Docblock of isApp()</error>
-      <error line="93" code="50010">No DocBlock was found for method loadConfigs()</error>
-      <error line="97" code="50010">No DocBlock was found for method route()</error>
-      <error line="102" code="50010">No DocBlock was found for method setupSession()</error>
-      <error line="112" code="50010">No DocBlock was found for method setupLang()</error>
-      <error line="118" code="50010">No DocBlock was found for method log()</error>
-    </parse_markers>
   </file>
   <file path="system\WCore\WNote.php" hash="440d3368432551440dc7bb255a065d81" package="Default">
     <class final="false" abstract="false" namespace="global" line="10" package="Wity">
@@ -3495,7 +3541,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="version" description="$Id: WCore/WNote.php 0006 19-09-2012 Fofif $"/>
         <tag line="2" name="package" description="Wity"/>
       </docblock>
@@ -3523,7 +3569,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>raise</full_name>
         <docblock line="19">
           <description>Raise a new note</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="19" name="static" description=""/>
           <tag line="19" name="param" description="Niveau de la note" type="string" variable="$level">
             <type by_reference="false">string</type>
@@ -3540,22 +3586,22 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="28">
           <name>$level</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="28">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="28">
           <name>$message</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="28">
           <name>$handler</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3564,16 +3610,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>error</full_name>
         <docblock line="47">
           <description>Dérivée de self::raise : passe un niveau précis en argument</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="50">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="50">
           <name>$message</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="50">
@@ -3587,16 +3633,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>info</full_name>
         <docblock line="54">
           <description>Dérivée de self::raise : passe un niveau précis en argument</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="57">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="57">
           <name>$message</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="57">
@@ -3610,16 +3656,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>success</full_name>
         <docblock line="61">
           <description>Dérivée de self::raise : passe un niveau précis en argument</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="64">
           <name>$code</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="64">
           <name>$message</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="64">
@@ -3633,7 +3679,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>handle_ignore</full_name>
         <argument line="68">
           <name>$note</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3642,7 +3688,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>handle_html</full_name>
         <argument line="72">
           <name>$note</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3651,14 +3697,14 @@ Système de gestion de contenu pour tous.</description>
         <full_name>handle_die</full_name>
         <docblock line="79">
           <description>Display the note dying the whole execution</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="79" name="param" description="" type="array" variable="$note">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
         <argument line="84">
           <name>$note</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3667,14 +3713,14 @@ Système de gestion de contenu pour tous.</description>
         <full_name>handle_assign</full_name>
         <docblock line="88">
           <description>Assign a note in the stack</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="88" name="param" description="" type="array" variable="$note">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
         <argument line="93">
           <name>$note</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3685,14 +3731,14 @@ Système de gestion de contenu pour tous.</description>
           <description>Display a note as a response
 The aim of this handler is to redirect the response to a note
 (not only displaying it as a note in the template)</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="99" name="param" description="" type="array" variable="$note">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
         <argument line="106">
           <name>$note</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3701,11 +3747,11 @@ The aim of this handler is to redirect the response to a note
         <full_name>handle_custom</full_name>
         <docblock line="116">
           <description>Note to be displayed in a custom page</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="119">
           <name>$note</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3715,7 +3761,7 @@ The aim of this handler is to redirect the response to a note
         <docblock line="123">
           <description>Get notes saved into session whose code property matches $code
 Notice: once you get a note, you won't get it anymore afterwards</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="127">
           <name>$pattern</name>
@@ -3728,7 +3774,7 @@ Notice: once you get a note, you won't get it anymore afterwards</description>
         <full_name>count</full_name>
         <docblock line="141">
           <description>Counts the notes saved whose code property matches $pattern</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="144">
           <name>$pattern</name>
@@ -3741,11 +3787,11 @@ Notice: once you get a note, you won't get it anymore afterwards</description>
         <full_name>parse</full_name>
         <docblock line="156">
           <description>Parses a set of notes and returns the html response</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="159">
           <name>$notes</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
       </method>
@@ -3754,7 +3800,7 @@ Notice: once you get a note, you won't get it anymore afterwards</description>
         <full_name>displayCustomView</full_name>
         <docblock line="171">
           <description>Display a set of notes in a dedicated view</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="171" name="return" description="custom view triggered?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -3790,7 +3836,7 @@ Notice: once you get a note, you won't get it anymore afterwards</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: WCore/WRequest.php 0003 29-12-2011 Fofif $"/>
         <tag line="2" name="desc" description="Gestion des variables de type REQUEST"/>
@@ -3822,7 +3868,7 @@ Permet l'utilisation de la syntaxe : list($v1, .</description>
         </docblock>
         <argument line="24">
           <name>$names</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="24">
@@ -3842,7 +3888,7 @@ Permet l'utilisation de la syntaxe : list($v1, .</description>
         <docblock line="59">
           <description>Récupération d'une ou plusieurs valeurs REQUEST
 Ce mode renvoie un tableau</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="59" name="param" description="Noms des valeurs souhaitées" type="array" variable="$names">
             <type by_reference="false">array</type>
           </tag>
@@ -3858,7 +3904,7 @@ Ce mode renvoie un tableau</description>
         </docblock>
         <argument line="68">
           <name>$names</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
         <argument line="68">
@@ -3877,7 +3923,7 @@ Ce mode renvoie un tableau</description>
         <full_name>getValue</full_name>
         <docblock line="98">
           <description>Récupération d'une valeur REQUEST</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="98" name="param" description="Tableau de REQUEST" type="array" variable="$data">
             <type by_reference="false">array</type>
           </tag>
@@ -3893,22 +3939,22 @@ Ce mode renvoie un tableau</description>
         </docblock>
         <argument line="106">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="106">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="106">
           <name>$default</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="106">
           <name>$hash</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3917,7 +3963,7 @@ Ce mode renvoie un tableau</description>
         <full_name>set</full_name>
         <docblock line="128">
           <description>Assignation d'une valeur Requête</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="128" name="param" description="Nom de la valeur" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
@@ -3936,12 +3982,12 @@ Ce mode renvoie un tableau</description>
         </docblock>
         <argument line="137">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="137">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="137">
@@ -3960,7 +4006,7 @@ Ce mode renvoie un tableau</description>
         <full_name>filter</full_name>
         <docblock line="173">
           <description>Fonction de filtrage des variables de requête</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="173" name="param" description="Variable à filtrer" type="mixed" variable="$variable">
             <type by_reference="false">mixed</type>
           </tag>
@@ -3970,7 +4016,7 @@ Ce mode renvoie un tableau</description>
         </docblock>
         <argument line="179">
           <name>$variable</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -3991,18 +4037,18 @@ Ce mode renvoie un tableau</description>
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: WCore/WRoute.php 0003 29-09-2012 Fofif $"/>
       </docblock>
       <property final="false" static="true" visibility="public" line="20" namespace="global" package="Default">
         <name>$query</name>
-        <default></default>
+        <default/>
         <docblock line="15">
           <description>Request string of the page
 ex: the URL is http://mysite.fr/wity/user/login
 If wity is executed in /wity/, then the $query will be set to "user/login"</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="22" package="Default">
@@ -4014,7 +4060,7 @@ If wity is executed in /wity/, then the $query will be set to "user/login"</desc
         <full_name>route</full_name>
         <docblock line="34">
           <description>Launches the calculation of the route to find out the app to execute</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="60" package="Default">
@@ -4024,7 +4070,7 @@ If wity is executed in /wity/, then the $query will be set to "user/login"</desc
           <description>Returns the full root location in which wity is installed, as defined in /system/config/config.php
 ex: if the website adress is http://mysite.fr/wity/user/login,
 it should return http://mysite.fr/wity/</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="69" package="Default">
@@ -4034,7 +4080,7 @@ it should return http://mysite.fr/wity/</description>
           <description>Obtention de l'url du dossier où se situe wity
 ex: if the website adress is http://mysite.fr/wity/user/login
 it will return /wity/</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="77" package="Default">
@@ -4043,7 +4089,7 @@ it will return /wity/</description>
         <docblock line="73">
           <description>Returns the FULL URL of the page
 ex: http://mysite.fr/wity/user/login</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="84" package="Default">
@@ -4051,7 +4097,7 @@ ex: http://mysite.fr/wity/user/login</description>
         <full_name>getReferer</full_name>
         <docblock line="81">
           <description>Obtention du référant (adresse précédente)</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="103" package="Default">
@@ -4067,12 +4113,12 @@ ex: http://mysite.fr/wity/user/login</description>
         </docblock>
         <argument line="103">
           <name>$uri</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="103">
           <name>$routage</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
       </method>
@@ -4081,11 +4127,11 @@ ex: http://mysite.fr/wity/user/login</description>
         <full_name>deleteRoutePerso</full_name>
         <docblock line="115">
           <description>Suppression d'un routage perso</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="118">
           <name>$uri</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4094,7 +4140,7 @@ ex: http://mysite.fr/wity/user/login</description>
         <full_name>parseURL</full_name>
         <docblock line="127">
           <description>Parse the webpage URL</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="127" name="param" description="Webpage URL (ex: http://MonSite.fr/News/Read/1)" type="string" variable="$url">
             <type by_reference="false">string</type>
           </tag>
@@ -4104,7 +4150,7 @@ ex: http://mysite.fr/wity/user/login</description>
         </docblock>
         <argument line="133">
           <name>$url</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4114,7 +4160,7 @@ ex: http://mysite.fr/wity/user/login</description>
         <docblock line="155">
           <description>Vérifie qu'un routage a la bonne structure qui doit être :
 $routage = array('AppName', array('argument1', 'argument2'));</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="155" name="param" description="" type="mixed" variable="$routage">
             <type by_reference="false">mixed</type>
           </tag>
@@ -4124,7 +4170,7 @@ $routage = array('AppName', array('argument1', 'argument2'));</description>
         </docblock>
         <argument line="162">
           <name>$routage</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
       </method>
@@ -4133,7 +4179,7 @@ $routage = array('AppName', array('argument1', 'argument2'));</description>
         <full_name>setRoute</full_name>
         <docblock line="173">
           <description>Définie les valeurs de routage dans la configuration</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="173" name="param" description="" type="array" variable="$routage">
             <type by_reference="false">array</type>
           </tag>
@@ -4143,7 +4189,7 @@ $routage = array('AppName', array('argument1', 'argument2'));</description>
         </docblock>
         <argument line="178">
           <name>$routage</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
       </method>
@@ -4156,7 +4202,7 @@ $routage = array('AppName', array('argument1', 'argument2'));</description>
         <full_name>updateApp</full_name>
         <argument line="192">
           <name>$app</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4169,7 +4215,7 @@ $routage = array('AppName', array('argument1', 'argument2'));</description>
         <full_name>updateArgs</full_name>
         <argument line="200">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type>array</type>
         </argument>
       </method>
@@ -4215,7 +4261,7 @@ Système de gestion de contenu pour tous.</description>
         <value>120</value>
         <docblock line="21">
           <description>Time before the session expires</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </constant>
       <constant namespace="global" line="33" package="Default">
@@ -4224,7 +4270,7 @@ Système de gestion de contenu pour tous.</description>
         <value>1</value>
         <docblock line="30">
           <description>States</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </constant>
       <constant namespace="global" line="34" package="Default">
@@ -4237,15 +4283,15 @@ Système de gestion de contenu pour tous.</description>
         <full_name>__construct</full_name>
         <docblock line="36">
           <description>Session setup</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="67" package="Default">
         <name>isLoaded</name>
         <full_name>isLoaded</full_name>
         <docblock line="64">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="64" name="return" description="Is the user connected?" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -4256,7 +4302,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>createSession</full_name>
         <docblock line="71">
           <description>Create a session for the user</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="71" name="param" description="" type="string" variable="$nickname">
             <type by_reference="false">string</type>
           </tag>
@@ -4269,17 +4315,17 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="78">
           <name>$nickname</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="78">
           <name>$password</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="78">
           <name>$remember</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4288,7 +4334,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>reloadSession</full_name>
         <docblock line="127">
           <description>Reload a user based on cookies</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="127" name="param" description="" type="string" variable="$userid">
             <type by_reference="false">string</type>
           </tag>
@@ -4298,12 +4344,12 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="133">
           <name>$userid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="133">
           <name>$cookie_hash</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4312,7 +4358,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>setupSession</full_name>
         <docblock line="155">
           <description>Setup session variables for the user</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="155" name="param" description="" type="string" variable="$userid">
             <type by_reference="false">string</type>
           </tag>
@@ -4322,12 +4368,12 @@ Système de gestion de contenu pour tous.</description>
         </docblock>
         <argument line="161">
           <name>$userid</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="161">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4336,7 +4382,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>closeSession</full_name>
         <docblock line="184">
           <description>Disconnect the user</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="207" package="Default">
@@ -4344,7 +4390,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>destroy</full_name>
         <docblock line="204">
           <description>Clean variables used to define a user loaded</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="220" package="Default">
@@ -4352,16 +4398,16 @@ Système de gestion de contenu pour tous.</description>
         <full_name>generate_hash</full_name>
         <docblock line="217">
           <description>Generate a hash designed for the user computer, to be stored in a cookie</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="220">
           <name>$nick</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="220">
           <name>$pass</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="220">
@@ -4376,7 +4422,7 @@ Système de gestion de contenu pour tous.</description>
         <docblock line="230">
           <description>Système général d'antiflood
 Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, redondant</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="230" name="return" description="flood dans la page" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -4387,7 +4433,7 @@ Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, 
         <full_name>upgrade_flood</full_name>
         <docblock line="280">
           <description>Fonction de mise à jour du temps de flood</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="280" name="param" description="timestamp limite" type="int" variable="$limit">
             <type by_reference="false">int</type>
           </tag>
@@ -4397,7 +4443,7 @@ Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, 
         </docblock>
         <argument line="286">
           <name>$limit</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4410,67 +4456,98 @@ Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, 
       <error line="217" code="50015">Argument $environment is missing from the Docblock of generate_hash()</error>
     </parse_markers>
   </file>
-  <file path="system\WCore\WSystem.php" hash="d7e53b06a25dc21aa6b8b17b50eb94ba" package="Default">
-    <include line="28" type="Include" package="Default">
+  <file path="system\WCore\WSystem.php" hash="4dcfa29dc5febf1bd8b5c2005341e8ce" package="Default">
+    <docblock line="2">
+      <description>WSystem.php</description>
+      <long-description/>
+    </docblock>
+    <include line="43" type="Include" package="Default">
       <name/>
     </include>
-    <include line="37" type="Include" package="Default">
+    <include line="56" type="Include" package="Default">
       <name/>
     </include>
-    <class final="false" abstract="false" namespace="global" line="10" package="Wity">
+    <class final="false" abstract="false" namespace="global" line="20" package="WCore">
       <extends/>
       <name>WSystem</name>
       <full_name>\WSystem</full_name>
-      <docblock line="2">
-        <description>Wity CMS
-Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
-        <tag line="2" name="version" description="$Id: WCore/WSystem.php 0001 10-04-2010 Fofif $"/>
-        <tag line="2" name="package" description="Wity"/>
+      <docblock line="8">
+        <description>WSystem keeps the session, template and database instances as singletons</description>
+        <long-description>&lt;p&gt;If you need the WSession instance, just call :
+&lt;pre&gt;&lt;code&gt;WSystem::getSession();&lt;/code&gt;&lt;/pre&gt;
+It's the same thing with WTemplate andWDatabase.
+&lt;/p&gt;</long-description>
+        <tag line="8" name="package" description="WCore"/>
+        <tag line="8" name="author" description="Johan Dufau &lt;johandufau@gmail.com&gt;"/>
+        <tag line="8" name="version" description="0.3-28-09-2012"/>
       </docblock>
-      <property final="false" static="true" visibility="private" line="14" namespace="global" package="Default">
+      <property final="false" static="true" visibility="private" line="25" namespace="global" package="Default">
         <name>$sessionInstance</name>
-        <default></default>
-        <docblock line="11">
-          <description>Session object</description>
-          <long-description></long-description>
+        <default/>
+        <docblock line="22">
+          <description/>
+          <long-description/>
+          <tag line="22" name="var" description="Session object" type="\WSession">
+            <type by_reference="false">\WSession</type>
+          </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="private" line="19" namespace="global" package="Default">
+      <property final="false" static="true" visibility="private" line="30" namespace="global" package="Default">
         <name>$templateInstance</name>
-        <default></default>
-        <docblock line="16">
-          <description>WTemplate object</description>
-          <long-description></long-description>
+        <default/>
+        <docblock line="27">
+          <description/>
+          <long-description/>
+          <tag line="27" name="var" description="WTemplate object" type="\WTemplate">
+            <type by_reference="false">\WTemplate</type>
+          </tag>
         </docblock>
       </property>
-      <property final="false" static="true" visibility="private" line="24" namespace="global" package="Default">
+      <property final="false" static="true" visibility="private" line="35" namespace="global" package="Default">
         <name>$dbInstance</name>
-        <default></default>
-        <docblock line="21">
-          <description>DB Manager object</description>
-          <long-description></long-description>
+        <default/>
+        <docblock line="32">
+          <description/>
+          <long-description/>
+          <tag line="32" name="var" description="WDatabase object" type="\WDatabase">
+            <type by_reference="false">\WDatabase</type>
+          </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="26" package="Wity">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="41" package="WCore">
         <name>getSession</name>
         <full_name>getSession</full_name>
+        <docblock line="37">
+          <description>Returns current session or creates it if it doesn't exist yet</description>
+          <long-description/>
+          <tag line="37" name="return" description="returns current session" type="\WSession">
+            <type by_reference="false">\WSession</type>
+          </tag>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="35" package="Wity">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="54" package="WCore">
         <name>getTemplate</name>
         <full_name>getTemplate</full_name>
+        <docblock line="50">
+          <description>Returns current template or creates it if it doesn't exist yet</description>
+          <long-description/>
+          <tag line="50" name="return" description="returns current template" type="\WSession">
+            <type by_reference="false">\WSession</type>
+          </tag>
+        </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="48" package="Wity">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="71" package="WCore">
         <name>getDB</name>
         <full_name>getDB</full_name>
+        <docblock line="67">
+          <description>Returns current database manager or creates it if it doesn't exist yet</description>
+          <long-description/>
+          <tag line="67" name="return" description="returns current database manager" type="\WSession">
+            <type by_reference="false">\WSession</type>
+          </tag>
+        </docblock>
       </method>
     </class>
-    <parse_markers>
-      <error line="0" code="50007">No page-level DocBlock was found in file system\WCore\WSystem.php</error>
-      <error line="26" code="50010">No DocBlock was found for method getSession()</error>
-      <error line="35" code="50010">No DocBlock was found for method getTemplate()</error>
-      <error line="48" code="50010">No DocBlock was found for method getDB()</error>
-    </parse_markers>
   </file>
   <file path="system\WCore\WView.php" hash="a4a517ef51f050eacc5cf44df9ad1f4b" package="Default">
     <class final="false" abstract="false" namespace="global" line="16" package="Default">
@@ -4487,7 +4564,7 @@ Système de gestion de contenu pour tous.</description>
       </property>
       <property final="false" static="false" visibility="public" line="21" namespace="global" package="Default">
         <name>$tpl</name>
-        <default></default>
+        <default/>
       </property>
       <property final="false" static="false" visibility="private" line="24" namespace="global" package="Default">
         <name>$themeName</name>
@@ -4519,11 +4596,11 @@ Système de gestion de contenu pour tous.</description>
         <docblock line="45">
           <description>Assign a theme
 Must a be an existing directory in /themes/</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="49">
           <name>$theme</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4536,7 +4613,7 @@ Must a be an existing directory in /themes/</description>
         <full_name>setResponse</full_name>
         <argument line="64">
           <name>$file</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4546,24 +4623,24 @@ Must a be an existing directory in /themes/</description>
         <docblock line="74">
           <description>Recherche un fichier template en fonction du nom de l'appli et de l'action
 Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="74" name="return" description="adresse du fichier" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="80">
           <name>$appName</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="80">
           <name>$action</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="80">
           <name>$adminLoaded</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4572,12 +4649,12 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
         <full_name>assignOne</full_name>
         <argument line="93">
           <name>$name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="93">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4586,7 +4663,7 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
         <full_name>assign</full_name>
         <argument line="106">
           <name>$a</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="106">
@@ -4600,12 +4677,12 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
         <full_name>assignBlock</full_name>
         <argument line="116">
           <name>$blockName</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="116">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4614,7 +4691,7 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
         <full_name>getStack</full_name>
         <docblock line="124">
           <description>Retourne une variable en "stack" avec un traitement particulier</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="124" name="param" description="Nom du stack" type="\" variable="$stack_name"/>
           <tag line="124" name="return" description="" type="string">
             <type by_reference="false">string</type>
@@ -4622,7 +4699,7 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
         </docblock>
         <argument line="130">
           <name>$stack_name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4631,7 +4708,7 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
         <full_name>render</full_name>
         <docblock line="166">
           <description>Render the view</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
     </class>
@@ -4686,7 +4763,7 @@ Le fichier sera cherché en priorité dans les fichiers du thème puis dans les 
       <docblock line="2">
         <description>Wity CMS
 Système de gestion de contenu pour tous.</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif &lt;Johan Dufau&gt;"/>
         <tag line="2" name="version" description="$Id: WFile/WXML.php 0000 28-09-2012 Fofif $"/>
       </docblock>
@@ -4694,15 +4771,15 @@ Système de gestion de contenu pour tous.</description>
         <name>loadFile</name>
         <full_name>loadFile</full_name>
         <docblock line="11">
-          <description></description>
-          <long-description></long-description>
+          <description/>
+          <long-description/>
           <tag line="11" name="todo" description="loadFile();"/>
           <tag line="11" name="todo" description="loadString();"/>
           <tag line="11" name="todo" description="createDoc();"/>
         </docblock>
         <argument line="18">
           <name>$file</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4711,7 +4788,7 @@ Système de gestion de contenu pour tous.</description>
         <full_name>loadString</full_name>
         <argument line="22">
           <name>$string</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4729,7 +4806,7 @@ Système de gestion de contenu pour tous.</description>
       <docblock line="2">
         <description>WTemplate
 Moteur de template pour le CMS Wity</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: WTemplate/WTemplate.php 0008 29-07-2012 Fofif $"/>
         <tag line="2" name="package" description="Wity"/>
@@ -4748,10 +4825,10 @@ Moteur de template pour le CMS Wity</description>
       <full_name>\WTemplate</full_name>
       <property final="false" static="false" visibility="private" line="20" namespace="global" package="Default">
         <name>$compileDir</name>
-        <default></default>
+        <default/>
         <docblock line="17">
           <description>Compilation directory: where to place compiled files</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="25" namespace="global" package="Default">
@@ -4759,15 +4836,15 @@ Moteur de template pour le CMS Wity</description>
         <default>array()</default>
         <docblock line="22">
           <description>Template variables</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="30" namespace="global" package="Default">
         <name>$compiler</name>
-        <default></default>
+        <default/>
         <docblock line="27">
           <description>Template compilator</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="35" namespace="global" package="Default">
@@ -4775,7 +4852,7 @@ Moteur de template pour le CMS Wity</description>
         <default>false</default>
         <docblock line="32">
           <description>Buffer state</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="43" package="Default">
@@ -4783,13 +4860,13 @@ Moteur de template pour le CMS Wity</description>
         <full_name>__construct</full_name>
         <docblock line="37">
           <description>Constructor</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="37" name="param" description="Script root directory" type="\" variable="$baseDir"/>
           <tag line="37" name="param" description="Compilation directory" type="\" variable="$compileDir"/>
         </docblock>
         <argument line="43">
           <name>$baseDir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="43">
@@ -4803,7 +4880,7 @@ Moteur de template pour le CMS Wity</description>
         <full_name>setCompileDir</full_name>
         <argument line="59">
           <name>$compileDir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4812,11 +4889,11 @@ Moteur de template pour le CMS Wity</description>
         <full_name>assign</full_name>
         <docblock line="72">
           <description>Assign variables</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="75">
           <name>$a</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="75">
@@ -4831,16 +4908,16 @@ Moteur de template pour le CMS Wity</description>
         <docblock line="83">
           <description>Add values in a variable if exists
 (automaticy transforms this var into array)</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="87">
           <name>$var</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="87">
           <name>$value</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4849,11 +4926,11 @@ Moteur de template pour le CMS Wity</description>
         <full_name>getVar</full_name>
         <docblock line="98">
           <description>Get a template variable</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="101">
           <name>$var</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4862,12 +4939,12 @@ Moteur de template pour le CMS Wity</description>
         <full_name>clear</full_name>
         <docblock line="109">
           <description>Remove template variables</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="109" name="param" description="string|array(string) List of keys" type="\" variable="$vars"/>
         </docblock>
         <argument line="114">
           <name>$vars</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4876,7 +4953,7 @@ Moteur de template pour le CMS Wity</description>
         <full_name>parse</full_name>
         <docblock line="124">
           <description>Get the resulting output of a compiled file without printing anything on screen</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="124" name="param" description="File's href" type="string" variable="$href">
             <type by_reference="false">string</type>
           </tag>
@@ -4886,7 +4963,7 @@ Moteur de template pour le CMS Wity</description>
         </docblock>
         <argument line="130">
           <name>$href</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4895,14 +4972,14 @@ Moteur de template pour le CMS Wity</description>
         <full_name>display</full_name>
         <docblock line="160">
           <description>Display a file on screen</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="160" name="param" description="File's href" type="string" variable="$href">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="165">
           <name>$href</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4944,7 +5021,7 @@ For a closing node, such as&lt;/p&gt;
         <default>array()</default>
         <docblock line="23">
           <description>List of tags opened so that we can check there is no jam in opening and closing the nodes</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="28" namespace="global" package="Default">
@@ -4960,7 +5037,7 @@ For a closing node, such as&lt;/p&gt;
         <default>0</default>
         <docblock line="255">
           <description>Counts the number of {for} in order to make {empty} work properly</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="39" package="Default">
@@ -4968,7 +5045,7 @@ For a closing node, such as&lt;/p&gt;
         <full_name>registerCompiler</full_name>
         <docblock line="32">
           <description>Define an external compiler</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="32" name="param" description="Node name (without brackets)" type="string" variable="$compiler_name">
             <type by_reference="false">string</type>
           </tag>
@@ -4979,12 +5056,12 @@ For a closing node, such as&lt;/p&gt;
         </docblock>
         <argument line="39">
           <name>$node_name</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="39">
           <name>$callback</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -4993,14 +5070,14 @@ For a closing node, such as&lt;/p&gt;
         <full_name>compileString</full_name>
         <docblock line="53">
           <description>Compile an entire file using the parser</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="53" name="return" description="File compiled" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="58">
           <name>$string</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="58">
@@ -5014,11 +5091,11 @@ For a closing node, such as&lt;/p&gt;
         <full_name>compileNode</full_name>
         <docblock line="77">
           <description>Compilation d'un élément bien précis</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="80">
           <name>$node</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5032,7 +5109,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         </docblock>
         <argument line="151">
           <name>$string</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5041,7 +5118,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>replaceVars</full_name>
         <argument line="195">
           <name>$string</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5054,7 +5131,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         </docblock>
         <argument line="202">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5063,14 +5140,14 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>compile_include</full_name>
         <docblock line="211">
           <description>Compile {include} node to include sub template files</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="211" name="param" description="Le fichier à inclure" type="string" variable="$file">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="216">
           <name>$file</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5079,7 +5156,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>compile_if</full_name>
         <argument line="234">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5088,7 +5165,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>compile_else</full_name>
         <argument line="243">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5097,7 +5174,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>compile_elseif</full_name>
         <argument line="247">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5110,11 +5187,11 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>compile_for</full_name>
         <docblock line="260">
           <description>{for [$key, ]$value in $array}</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="263">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5127,11 +5204,11 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <full_name>compile_empty</full_name>
         <docblock line="296">
           <description>Case of emptiness of last for's array being iterated</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="299">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5145,11 +5222,11 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
         <docblock line="307">
           <description>{set $a = 5}
 {set {$a} = {$b} + 1}</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="311">
           <name>$args</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5185,7 +5262,7 @@ Several levels of vars are managed (for instance: {$var1.{$var2.x}}&lt;/p&gt;</l
       <docblock line="2">
         <description>WTemplate
 Moteur de template pour le CMS Wity</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: WTemplate/WTemplateFile.php 0003 04-08-2012 Fofif $"/>
         <tag line="2" name="package" description="Wity"/>
@@ -5193,42 +5270,42 @@ Moteur de template pour le CMS Wity</description>
       </docblock>
       <property final="false" static="false" visibility="private" line="16" namespace="global" package="Default">
         <name>$href</name>
-        <default></default>
+        <default/>
         <docblock line="13">
           <description>Complete file href</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="21" namespace="global" package="Default">
         <name>$baseDir</name>
-        <default></default>
+        <default/>
         <docblock line="18">
           <description>Directory containing this file</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="26" namespace="global" package="Default">
         <name>$compilationDir</name>
-        <default></default>
+        <default/>
         <docblock line="23">
           <description>Compilation directory</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="31" namespace="global" package="Default">
         <name>$compilationHref</name>
-        <default></default>
+        <default/>
         <docblock line="28">
           <description>Compiled file href</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="36" namespace="global" package="Default">
         <name>$creationTime</name>
-        <default></default>
+        <default/>
         <docblock line="33">
           <description>Creation time of this file</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="41" namespace="global" package="Default">
@@ -5236,7 +5313,7 @@ Moteur de template pour le CMS Wity</description>
         <default>false</default>
         <docblock line="38">
           <description>Compilation state</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="46" namespace="global" package="Default">
@@ -5244,7 +5321,7 @@ Moteur de template pour le CMS Wity</description>
         <default>0</default>
         <docblock line="43">
           <description>Compilation ellapsed time</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </property>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="48" package="Wity\WTemplate">
@@ -5252,17 +5329,17 @@ Moteur de template pour le CMS Wity</description>
         <full_name>__construct</full_name>
         <argument line="48">
           <name>$href</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="48">
           <name>$baseDir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="48">
           <name>$compDir</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5271,7 +5348,7 @@ Moteur de template pour le CMS Wity</description>
         <full_name>createCompilationHref</full_name>
         <docblock line="60">
           <description>Create the position of the cached file compiled</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="69" package="Wity\WTemplate">
@@ -5287,7 +5364,7 @@ Moteur de template pour le CMS Wity</description>
         <full_name>checkCompilation</full_name>
         <docblock line="77">
           <description>Checks whether compilation is required</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="77" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -5298,7 +5375,7 @@ Moteur de template pour le CMS Wity</description>
         <full_name>compile</full_name>
         <docblock line="101">
           <description>Compile this file</description>
-          <long-description></long-description>
+          <long-description/>
           <tag line="101" name="param" description="This object is a compiler which will compile each nodes" type="\WTemplateCompiler" variable="$compiler">
             <type by_reference="false">\WTemplateCompiler</type>
           </tag>
@@ -5308,7 +5385,7 @@ Moteur de template pour le CMS Wity</description>
         </docblock>
         <argument line="107">
           <name>$compiler</name>
-          <default></default>
+          <default/>
           <type>\WTemplateCompiler</type>
         </argument>
       </method>
@@ -5317,11 +5394,11 @@ Moteur de template pour le CMS Wity</description>
         <full_name>saveFile</full_name>
         <docblock line="128">
           <description>Write output string into the cache file</description>
-          <long-description></long-description>
+          <long-description/>
         </docblock>
         <argument line="131">
           <name>$data</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
       </method>
@@ -5342,7 +5419,7 @@ Moteur de template pour le CMS Wity</description>
       <docblock line="2">
         <description>WTemplate
 Moteur de template pour le CMS Wity</description>
-        <long-description></long-description>
+        <long-description/>
         <tag line="2" name="author" description="Fofif"/>
         <tag line="2" name="version" description="$Id: WTemplate/WTemplateParser.php 0002 22-11-2012 Fofif $"/>
         <tag line="2" name="package" description="Wity"/>
@@ -5364,12 +5441,12 @@ and gives these nodes to a compiler which will replace them.</description>
         </docblock>
         <argument line="22">
           <name>$string</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="22">
           <name>$callback</name>
-          <default></default>
+          <default/>
           <type/>
         </argument>
         <argument line="22">
@@ -5388,6 +5465,7 @@ and gives these nodes to a compiler which will replace them.</description>
     </parse_markers>
   </file>
   <package name="Default" full_name="Default"/>
+  <package name="WCore" full_name="WCore"/>
   <package name="Wity" full_name="Wity">
     <package name="WTemplate" full_name="Wity\WTemplate"/>
   </package>
