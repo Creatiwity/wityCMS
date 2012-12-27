@@ -1,49 +1,61 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version	$Id: WCore/WMain.php 0003 26-10-2012 Fofif $
- * @package Wity
+ * WMain.php
  */
+
+defined('IN_WITY') or die('Access denied');
 
 require SYS_DIR.'WCore'.DS.'WController.php';
 require SYS_DIR.'WCore'.DS.'WView.php';
 
+/**
+ * WMain is the main class that Wity launches at startup
+ *
+ * @package WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-26-10-2012
+ */
 class WMain {
-	// Liste des applications accessibles
-	private $apps;
+    /**
+     * @var array(string)|null Stores all the accessible applications
+     */
+	private $apps = null;
 	
+    /**
+     * Initializes config, route, session, lang and then exec the application
+     */
 	public function __construct() {
-		// Chargement des configs
+		// Loading config
 		$this->loadConfigs();
 		
 		// Route
 		$this->route();
 		
-		// Paramétrage des sessions
+		// Initializing sessions
 		$this->setupSession();
 		
-		// Lang init
+		// Initializing lang
 		$this->setupLang();
 		
 		// $this->log();
 		
-		// Execution de l'action
+		// exec application
 		$this->exec(WRoute::getApp());
 	}
 	
 	/**
-	 * Adds action to perform at the end of the script
+	 * Flush the notes waiting for their own view, and then destroys WMain instance
 	 */
 	public function __destruct() {
 		// Flush the notes waiting for their own view
 		WNote::displayCustomView();
 	}
 	
-	/**
-	 * Exéxcution d'une application
-	 */
+    /**
+     * If found, execute the application in the apps/$app_name directory
+     * 
+     * @param string $app_name name of the application that will be launched
+     */
 	public function exec($app_name) {
 		// App asked exists?
 		if ($this->isApp($app_name)) {
@@ -66,7 +78,7 @@ class WMain {
 	}
 	
 	/**
-	 * Récupère la liste des apps
+	 * Returns a list of applications that contains a main.php file in their front directory
 	 * 
 	 * @return array(string)
 	 */
@@ -83,38 +95,56 @@ class WMain {
 		return $this->apps;
 	}
 	
-	/**
-	 * Vérifie si une app existe
-	 */
+    /**
+     * Returns application existence
+     * 
+     * @param string $app
+     * @return bool true if $app exists, false otherwise
+     */
 	public function isApp($app) {
 		return !empty($app) && in_array($app, $this->getAppsList());
 	}
 	
+    /**
+     * Loads WConfig
+     */
 	private function loadConfigs() {
 		WConfig::load('config', SYS_DIR.'config'.DS.'config.php', 'php');
 	}
 	
+    /**
+     * Loads WRoute
+     */
 	private function route() {
 		WRoute::init();
 		WRoute::route();
 	}
 	
+    /**
+     * Initializes session and check the flood condition
+     */
 	private function setupSession() {
-		// Il suffit de l'instancier
+		// Instanciates it
 		$session = WSystem::getSession();
 		
-		// Check de l'antiflood
+		// Anti-flood checking
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
 	}
 	
+    /**
+     * Loads lang config
+     */
 	private function setupLang() {
 		$lang_config = WConfig::get('config.lang');
 		WLang::init();
 		WLang::selectLang($lang_config);
 	}
 	
+    /**
+     * Log activity in a file, DEBUG ONLY
+     */
 	private function log() {
 		$file = fopen(WT_PATH.'log', 'a+');
 		fwrite($file, "\n".@$_SESSION['userid']." - Route : ".$_SERVER['REQUEST_URI']." / ".date('d/m/Y H:i:s', time()));

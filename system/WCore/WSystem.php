@@ -1,28 +1,43 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version	$Id: WCore/WSystem.php 0001 10-04-2010 Fofif $
- * @package Wity
+ * WSystem.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WSystem keeps the session, template and database instances as singletons
+ * 
+ * <p>If you need the WSession instance, just call :
+ * <code>WSystem::getSession();</code>
+ * It's the same thing with WTemplate andWDatabase.
+ * </p>
+ *
+ * @package WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.1-10-04-2010
+ */
 class WSystem {
-	/**
-	 * Session object
-	 */
+	
+    /**
+     * @var WSession Session object
+     */
 	private static $sessionInstance;
 	
 	/**
-	 * WTemplate object
+	 * @var WTemplate WTemplate object
 	 */
 	private static $templateInstance;
 	
 	/**
-	 * DB Manager object
+	 * @var WDatabase WDatabase object
 	 */
 	private static $dbInstance;
 	
+    /**
+     * Returns current session or creates it if it doesn't exist yet
+     * @return WSession Returns current session
+     */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
 			include SYS_DIR.'WCore/WSession.php';
@@ -32,6 +47,10 @@ class WSystem {
 		return self::$sessionInstance;
 	}
 	
+    /**
+     * Returns current template or creates it if it doesn't exist yet
+     * @return WSession Returns current template
+     */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
 			include SYS_DIR.'WTemplate/WTemplate.php';
@@ -45,6 +64,10 @@ class WSystem {
 		return self::$templateInstance;
 	}
 	
+    /**
+     * Returns current database manager or creates it if it doesn't exist yet
+     * @return WSession Returns current database manager
+     */
 	public static function getDB() {
 		if (!is_object(self::$dbInstance)) {
 			// Chargement des infos db
