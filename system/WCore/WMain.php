@@ -13,7 +13,7 @@ require SYS_DIR.'WCore'.DS.'WView.php';
  *
  * @package WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-26-10-2012
+ * @version 0.3-14-10-2012
  */
 class WMain {
     /**

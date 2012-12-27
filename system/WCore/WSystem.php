@@ -15,7 +15,7 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.1-10-04-2010
+ * @version 0.3-28-09-2012
  */
 class WSystem {
 	
@@ -36,7 +36,7 @@ class WSystem {
 	
     /**
      * Returns current session or creates it if it doesn't exist yet
-     * @return WSession Returns current session
+     * @return WSession returns current session
      */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
@@ -49,7 +49,7 @@ class WSystem {
 	
     /**
      * Returns current template or creates it if it doesn't exist yet
-     * @return WSession Returns current template
+     * @return WSession returns current template
      */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
@@ -66,7 +66,7 @@ class WSystem {
 	
     /**
      * Returns current database manager or creates it if it doesn't exist yet
-     * @return WSession Returns current database manager
+     * @return WSession returns current database manager
      */
 	public static function getDB() {
 		if (!is_object(self::$dbInstance)) {
