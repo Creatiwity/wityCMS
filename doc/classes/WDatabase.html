@@ -33,10 +33,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">368</span></a></li>
+                <span class="label label-info">358</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">3</span>
+                <span class="label label-info">4</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -60,17 +60,14 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Opens the PDO connection with the database"><span class="description">Opens the PDO connection with the database</span><pre>__construct()</pre></a></li>
 <li class="method public "><a href="#method_declareTable" title="declareTable :: Declare a new table in order to be automaticly prefixed"><span class="description">Declare a new table in order to be automaticly prefixed</span><pre>declareTable()</pre></a></li>
-<li class="method public "><a href="#method_prepare" title="prepare :: "><span class="description">prepare()
-        </span><pre>prepare()</pre></a></li>
-<li class="method public "><a href="#method_query" title="query :: "><span class="description">query()
-        </span><pre>query()</pre></a></li>
+<li class="method public "><a href="#method_prepare" title="prepare :: Prepares a statement for execution and returns a statement object"><span class="description">Prepares a statement for execution and returns a statement object</span><pre>prepare()</pre></a></li>
+<li class="method public "><a href="#method_query" title="query :: Executes the query and returns the response"><span class="description">Executes the query and returns the response</span><pre>query()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="method private "><a href="#method_prefixTables" title="prefixTables :: Add prefix to table's name (see WDatabase::declareTable()) in a querystring"><span class="description">Add prefix to table's name (see WDatabase::declareTable()) in a querystring</span><pre>prefixTables()</pre></a></li></ul>
+                    <ul><li class="method private "><a href="#method_prefixTables" title="prefixTables :: Transforms a query into another query with prefixed tables"><span class="description">Transforms a query into another query with prefixed tables</span><pre>prefixTables()</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
@@ -78,8 +75,8 @@
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="property private "><a href="#property_tablePrefix" title="$tablePrefix :: "><span class="description"></span><pre>$tablePrefix</pre></a></li>
-<li class="property private "><a href="#property_tables" title="$tables :: "><span class="description"></span><pre>$tables</pre></a></li>
+<li class="property private "><a href="#property_tablePrefix" title="$tablePrefix :: "><span class="description">stores table prefix that is used in the database</span><pre>$tablePrefix</pre></a></li>
+<li class="property private "><a href="#property_tables" title="$tables :: "><span class="description">list of all tables that will be automatically prefixed</span><pre>$tables</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -95,33 +92,46 @@
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">Wity CMS
-Système de gestion de contenu pour tous.</p>
+<p class="short_description">WDatabase manages all database interactions</p>
 <div class="details">
 <div class="long_description"></div>
 <table class="table table-bordered">
 <tr>
-<th>version</th>
-<td>$Id: WCore/WDatabase.php 0001 21-11-2012 Fofif $</td>
+<th>package</th>
+<td><a href="../packages/WCore.html">WCore</a></td>
 </tr>
 <tr>
-<th>package</th>
-<td><a href="../packages/Wity.html">Wity</a></td>
+<th>author</th>
+<td><a href="mailto:johandufau@gmail.com">Johan Dufau</a></td>
+</tr>
+<tr>
+<th>version</th>
+<td>0.3-22-11-2012</td>
 </tr>
 </table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-<h2>__construct()
-        </h2>
-<pre>__construct($dsn, $user, $password) </pre>
+<h2>Opens the PDO connection with the database</h2>
+<pre>__construct(string $dsn, string $user, string $password) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$dsn</h4></div>
-<div class="subelement argument"><h4>$user</h4></div>
-<div class="subelement argument"><h4>$password</h4></div>
+<div class="subelement argument">
+<h4>$dsn</h4>
+<code>string</code><p>database server</p></div>
+<div class="subelement argument">
+<h4>$user</h4>
+<code>string</code><p>username</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>password</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td></td>
+</tr></table>
 </div></div>
 </div>
 <a id="method_declareTable"></a><div class="element clickable method public method_declareTable" data-toggle="collapse" data-target=".method_declareTable .collapse">
@@ -133,54 +143,75 @@ Système de gestion de contenu pour tous.</p>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$table</h4>
-<code>string</code><p>Table's name</p>
+<code>string</code><p>table's name</p>
 </div>
 </div></div>
 </div>
 <a id="method_prepare"></a><div class="element clickable method public method_prepare" data-toggle="collapse" data-target=".method_prepare .collapse">
-<h2>prepare()
-        </h2>
-<pre>prepare($querystring, $driver_options) </pre>
+<h2>Prepares a statement for execution and returns a statement object</h2>
+<pre>prepare(string $querystring, string $driver_options) : <a href="http://php.net/manual/en/class.pdostatement.php">\PDOStatement</a> | false</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>todo</th>
+<td>Catch the eventual exception throwed by PDO::prepare</td>
+</tr></table>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$querystring</h4></div>
-<div class="subelement argument"><h4>$driver_options</h4></div>
+<div class="subelement argument">
+<h4>$querystring</h4>
+<code>string</code><p>the query that will be prepared</p></div>
+<div class="subelement argument">
+<h4>$driver_options</h4>
+<code>string</code><p>optional list of key=>value pairs</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="http://php.net/manual/en/class.pdostatement.php">\PDOStatement</a></code><code>false</code>a PDOStatement object or false if an error occurs</div>
 </div></div>
 </div>
 <a id="method_query"></a><div class="element clickable method public method_query" data-toggle="collapse" data-target=".method_query .collapse">
-<h2>query()
-        </h2>
-<pre>query($querystring) </pre>
+<h2>Executes the query and returns the response</h2>
+<pre>query(string $querystring) : <a href="http://php.net/manual/en/class.pdostatement.php">\PDOStatement</a> | false</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$querystring</h4></div>
+<div class="subelement argument">
+<h4>$querystring</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="http://php.net/manual/en/class.pdostatement.php">\PDOStatement</a></code><code>false</code>a PDOStatement object or false if an error occurs</div>
 </div></div>
 </div>
 <a id="method_prefixTables"></a><div class="element clickable method private method_prefixTables" data-toggle="collapse" data-target=".method_prefixTables .collapse">
-<h2>Add prefix to table's name (see WDatabase::declareTable()) in a querystring</h2>
-<pre>prefixTables($querystring) </pre>
+<h2>Transforms a query into another query with prefixed tables</h2>
+<pre>prefixTables(\type $querystring) : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$querystring</h4></div>
+<div class="subelement argument">
+<h4>$querystring</h4>
+<code>\type</code><p>query without prefix</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>query with all tables contained in the $table private property prefixed</div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
 <a id="property_tablePrefix"> </a><div class="element clickable property private property_tablePrefix" data-toggle="collapse" data-target=".property_tablePrefix .collapse">
-<h2></h2>
-<pre>$tablePrefix </pre>
+<h2>stores table prefix that is used in the database</h2>
+<pre>$tablePrefix : string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property_tables"> </a><div class="element clickable property private property_tables" data-toggle="collapse" data-target=".property_tables .collapse">
-<h2></h2>
-<pre>$tables </pre>
+<h2>list of all tables that will be automatically prefixed</h2>
+<pre>$tables : \array(string)</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -191,7 +222,7 @@ Système de gestion de contenu pour tous.</p>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2012-12-28T00:57:53+01:00.<br></footer></div>
+            generated on 2012-12-28T23:09:03+01:00.<br></footer></div>
 </div>
 </body>
 </html>
