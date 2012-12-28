@@ -1,39 +1,49 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author	Fofif
- * @version	$Id: WCore/WController.php 0002 17-04-2011 Fofif $
+ * WController.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WController is the base class that will be inherited by all the applications
+ *
+ * @package WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-28-09-2012
+ */
 abstract class WController {
-	/**
-	 * WMain instance
-	 */
+
+    /**
+     *
+     * @var WMain main Wity instance of WMain 
+     */
 	protected $wity;
 	
-	/**
-	 * The full application directory
-	 */
+    /**
+     *
+     * @var string the full application directory
+     */
 	protected $app_dir;
 	
-	/**
-	 * View object (of WView)
-	 */
+    /**
+     *
+     * @var WView view object corresponding to this controller instance
+     */
 	protected $view;
 	
-	/**
-	 * App's action to be performed
-	 */
+    /**
+     *
+     * @var string action that will be performed in this application (default: 'index')
+     */
 	private $action = 'index';
 	
-	/**
-	 * Initialisation de l'application
-	 * 
-	 * @param WMain $wity Instance de wity
-	 * @param string $app_dir Directory of the application inheriting this Controller
-	 */
+    /**
+     * Application initialization
+     * 
+     * @param WMain $wity main Wity instance of WMain
+     * @param type $app_dir directory of the application inheriting this Controller
+     */
 	public function init(WMain $wity, $app_dir) {
 		$this->wity = $wity;
 		$this->app_dir = $app_dir;
@@ -57,19 +67,18 @@ abstract class WController {
 		}
 	}
 	
-	/**
-	 * Launcher de l'applcation exécuté par Wity
-	 * 
-	 * @abstract
-	 */
+    /**
+     * Application's launcher method
+     */
 	abstract public function launch();
 	
-	/**
-	 * Forward permet d'éxécuter la méthode associée à l'$action de l'application
-	 * 
-	 * @param string $action Action à exécuter
-	 * @param string $default Action par défaut si $action est introuvable
-	 */
+    /**
+     * Calls the application's method which is associated to the $action value
+     * 
+     * @param type $action action that we try to execute
+     * @param type $default optional default action value
+     * @throws Exception
+     */
 	protected function forward($action, $default = '') {
 		if (method_exists($this, $action)) {
 			$this->action = $action;
@@ -81,11 +90,11 @@ abstract class WController {
 		}
 	}
 	
-	/**
-	 * Retourne le nom de l'application
-	 * 
-	 * @return string
-	 */
+    /**
+     * Returns the application's name
+     * 
+     * @return string application's name
+     */
 	public function getAppName() {
 		$className = str_replace('_', '-', get_class($this));
 		if (strpos($className, 'Admin') === 0) {
@@ -101,6 +110,11 @@ abstract class WController {
 	 * 
 	 * @return string
 	 */
+    /**
+     * Returns the first asked action which was the first parameter of the forward method
+     * 
+     * @return string action name
+     */
 	public function getAskedAction() {
 		$args = WRoute::getArgs();
 		if (isset($args[0])) {
@@ -109,34 +123,40 @@ abstract class WController {
 			return 'index';
 		}
 	}
-	
-	/**
-	 * Retourne l'action effectivement déclenchée
-	 */
+
+    /**
+     * Returns the real executed action
+     * 
+     * @return string real executed action name
+     */
 	public function getTriggeredAction() {
 		return $this->action;
 	}
 	
-	/**
-	 * Setter pour la view
-	 */
+    /**
+     * Sets the private view property to $view
+     * 
+     * @param WView $view the view that will be associated to this instance of the controller
+     */
 	public function setView(WView $view) {
 		unset($this->view);
 		$this->view = $view;
 	}
 	
-	/**
-	 * Getter pour la view
-	 * 
-	 * @return WView
-	 */
+    /**
+     * Returns the current view
+     * 
+     * @return WView the current view
+     */
 	public function getView() {
 		return $this->view;
 	}
 	
-	/**
-	 * Récupère la liste des actions prédéfinies d'une app
-	 */
+    /**
+     * Returns a list of available actions in this application
+     * 
+     * @return array(string) a list of available actions in this application
+     */
 	public function getActionList() {
 		if (!empty($this->actionList) && is_array($this->actionList)) {
 			return $this->actionList;
@@ -145,11 +165,11 @@ abstract class WController {
 		}
 	}
 	
-	/**
-	 * Détermine si la partie admin est chargée ou non
-	 * 
-	 * @return bool
-	 */
+    /**
+     * Returns if the application is in admin mode or not
+     * 
+     * @return bool true if admin mode loaded, false otherwise
+     */
 	public function adminLoaded() {
 		return strpos(get_class($this), 'Admin') !== false;
 	}
@@ -157,6 +177,11 @@ abstract class WController {
 	/**
 	 * Déclenche l'action d'affichage du template
 	 */
+    /**
+     * Renders the application with the right view
+     * 
+     * @param string $action name of the file that will be used for rendering this application
+     */
 	protected function render($action) {
 		$this->view->assign('actionForwarded', $this->action);
 		
