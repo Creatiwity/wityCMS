@@ -9,6 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * WConfig loads all configuration files, manages all configuration values
  *
  * @package WCore
+ * @author xpLosIve
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-22-11-2012
  */
