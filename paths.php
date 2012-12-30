@@ -1,12 +1,18 @@
-<?php defined('IN_WITY') or die('Access denied');
-/*
- * Wity CMS
- * Système de gestion de contenu pour tous.
+<?php
+/**
+ * WityCMS paths.php
  * 
- * Défintion de la structure de wity qui est modulable
- * 
+ * Content Management System for everyone
+ *
+ * @package System
  * @author Charly Poly <charly[dot]poly at live[dot]fr>
+ * @version	0.3
  */
+
+/**
+ * Avoid direct access
+ */
+defined('IN_WITY') or die('Access denied');
 
 /**
  * Séparateur de dossiers

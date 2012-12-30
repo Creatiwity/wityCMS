@@ -1,26 +1,32 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- * 
- * Session handler
- * 
- * @auteur	Fofif
- * @version	$Id: WCore/WSession.php 0004 19-12-2012 Fofif $
+ * WSession.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WSession manages all session variables and anti flood system
+ * 
+ * @package System\WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-19-12-2012
+ */
 class WSession {
-	/*
-	 * SQL Table
-	 */
+    
+    /**
+     * SQL Table
+     */
 	const USERS_TABLE = 'users';
-	/*
-	 * Minimum time betwen two POST requests
-	 */
+	
+    /**
+     * Minimum time betwen two POST requests
+     */
 	const FLOOD_TIME = 15;
-	/**
-	 * Time before the session expires
-	 */
+	
+    /**
+     * Time before the session expires
+     */
 	const TOKEN_EXPIRATION = 120;
 	/*
 	 * Inactivity time (minuts)
@@ -33,9 +39,9 @@ class WSession {
 	const LOGIN_SUCCESS = 1;
 	const LOGIN_MAX_ATTEMPT_REACHED = 2;
 	
-	/**
-	 * Session setup
-	 */
+    /**
+     * Session setup
+     */
 	public function __construct() {
 		// No sid in HTML links
 		ini_set('session.use_trans_sid', '0');
@@ -61,23 +67,26 @@ class WSession {
 		}
 	}
 	
-	/**
-	 * @return bool Is the user connected?
-	 */
+    /**
+     * Returns if the user is logged in
+     * 
+     * @return boolean true if the user is logged in, false otherwise
+     */
 	public static function isLoaded() {
 		return isset($_SESSION['userid']);
 	}
 	
-	/**
-	 * Create a session for the user
-	 * 
-	 * @param string $nickname
-	 * @param string $password
-	 * @param int $remember Session life time (-1 = N/A)
-	 */
+    /**
+     * Creates a session for the user
+     * 
+     * @param string $nickname nickname
+     * @param string $password password
+     * @param string $remember true if auto-log in of the user enabled for the next time
+     * @return int session life time (-1 = N/A)
+     */
 	public function createSession($nickname, $password, $remember) {
-		// Système de régulation en cas d'erreur multiple du couple pseudo/pass
-		// On stocke dans la variable session $login_try le nombre de tentatives de connexion
+        // In case of multiple errors of login, return an error
+		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
 			$_SESSION['login_try'] = 0;
 		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
@@ -124,12 +133,13 @@ class WSession {
 		}
 	}
 	
-	/**
-	 * Reload a user based on cookies
-	 * 
-	 * @param string $userid
-	 * @param string $cookie_hash Connexion hash for checking
-	 */
+    /**
+     * Reloads a user based on cookies
+     * 
+     * @param string $userid        current user id
+     * @param string $cookie_hash   cookie hash for security checking
+     * @return boolean true if successfully reloaded, false otherwise
+     */
 	private function reloadSession($userid, $cookie_hash) {
 		$db = WSystem::getDB();
 		$prep = $db->prepare('
@@ -155,8 +165,8 @@ class WSession {
 	/**
 	 * Setup session variables for the user
 	 * 
-	 * @param string $userid
-	 * @param array $data Data to store into $_SESSION
+	 * @param string $userid current user id
+	 * @param array $data data to store into $_SESSION
 	 */
 	public function setupSession($userid, $data) {
 		$_SESSION['userid']   = $userid;
@@ -182,7 +192,7 @@ class WSession {
 	}
 	
 	/**
-	 * Disconnect the user
+	 * Disconnects the user
 	 */
 	public function closeSession() {
 		// Delete vars
@@ -214,9 +224,14 @@ class WSession {
     	setcookie(session_name(), '', time()-3600, '/');
 	}
 	
-	/**
-	 * Generate a hash designed for the user computer, to be stored in a cookie
-	 */
+    /**
+     * Generates a user-and-computer specific hash that will be stored in a cookie
+
+     * @param string $nick nickname
+     * @param string $pass password
+     * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
+     * @return string the generated hash
+     */
 	public function generate_hash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
 		// Rajout de quelques valeurs rendant le hash lié à l'environnement de l'utilisateur
@@ -227,27 +242,28 @@ class WSession {
 		return sha1($string);
 	}
 	
-	/**
-	 * Système général d'antiflood
-	 * Vérification du contenue de $_POST pour éviter le renvoie, volontaire ou non, redondant
-	 * 
-	 * @return bool flood dans la page
-	 */
+    /**
+     * Antiflood method
+     * 
+     * Checking the $_POST content to avoid multiple and repeating similar sending
+     * 
+     * @return boolean true if flood detected, false otherwise
+     */
 	public function check_flood() {
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$flood = true;
 			
-			// Vérification du référant
+			// Referer checking
 			if (empty($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
 				header('location: '.WRoute::getDir());
 				$flood = false;
 			}
-			// Vérification de la dernière requête
+			// Last request checking
 			else if (!empty($_SESSION['last_query']) && md5(serialize($_POST)) == $_SESSION['last_query']) {
 				WNote::info("Modération", "Vous avez déjà envoyé ces informations.", 'assign');
 				$flood = false;
 			}
-			// Vérification du temps de flood
+			// Flood time limit checking
 			else if (empty($_SESSION['access'][0]) && !empty($_SESSION['flood_time']) && $_SESSION['flood_time'] > time()) {
 				// Liste des exceptions échappant à cette vérification
 				$exceptions = array('user');
@@ -257,32 +273,31 @@ class WSession {
 				}
 			}
 			
-			// Mise à jour des variables de flood
+			// Updating flood variables
 			$_SESSION['last_query'] = md5(serialize($_POST));
-			
-			// Mise à jour du temps de flood à l'extinction pour laisser les scripts moins prioritaires utiliser cette variable
+		
+            // Updating flood time at shutdown to let less priorized script using this variable
 			register_shutdown_function(array($this, 'upgrade_flood'), time() + self::FLOOD_TIME + 1);
 			
 			return $flood;
 		} else {
-			// Création de la variable session $flood_time
+            // Creating SESSION variable $flood_time
 			if (!isset($_SESSION['flood_time'])) {
 				$_SESSION['flood_time'] = 0;
 			}
 			
-			// Remise à zero de la dernière requête
+			// Void last request
 			$_SESSION['last_query'] = '';
 		}
 		
 		return true;
 	}
 	
-	/**
-	 * Fonction de mise à jour du temps de flood
-	 * 
-	 * @param  int  timestamp limite
-	 * @return void
-	 */
+    /**
+     * Updates flood time
+     * 
+     * @param int $limit tiestamp limit
+     */
 	public function upgrade_flood($limit) {
 		$_SESSION['flood_time'] = $limit;
 	}

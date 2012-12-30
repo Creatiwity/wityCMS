@@ -1,10 +1,20 @@
 <?php
-/*
- * Wity
- * @copyright NkDeus 2010
- * @version	$Id: wtFile.php 0000 10-04-2010 CharlyPoly. $
+/**
+ * WFile.php
+ * 
+ * @ignore
  */
-class wtFile {
+
+defined('IN_WITY') or die('Access denied');
+
+/*
+ * WFile
+ * 
+ * @package WFile
+ * @author CharlyPoly
+ * @version	0.3-10-04-2010
+ */
+class WFile {
     /**
      * @todo static getExtension()
      * @todo static getType()
