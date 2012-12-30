@@ -1,38 +1,63 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version $Id: WCore/WView.php 0002 21-07-2012 Fofif $
- * @package Wity
+ * WView.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
 /**
- * WView
+ * WView handles application's response
  * 
- * This class handles application's response
+ * @package WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-29-11-2012
  */
-
 class WView {
-	// State variable telling whether the view was already rendered
+	
+    /**
+     *
+     * @var boolean State variable telling whether the view was already rendered
+     */
 	private static $response_sent = false;
 	
-	// Instance of WTemplate
+    /**
+     *
+     * @var WTemplate Instance of WTemplate
+     */
 	public $tpl;
 	
-	// Theme to be loaded
+    /**
+     *
+     * @var string Theme name to be loaded
+     */
 	private $themeName = '';
+    /**
+     *
+     * @var string Theme directory
+     */
 	private $themeDir = '';
 	
-	// Template response file to display as output
+    /**
+     *
+     * @var string Template response file to display as output
+     */
 	private $responseFile = '';
 	
-	// Variables with a special treatment
+    /**
+     *
+     * @var array Variables with a special treatment like "css" and "js"
+     */
 	private $specialVars = array('css', 'js');
 	
-	// Template variables
+    /**
+     *
+     * @var array Template variables
+     */
 	private $vars = array();
 	
+    /**
+     * Setup template
+     */
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
 		
@@ -42,10 +67,11 @@ class WView {
 		$this->assign('page_title', $site_name);
 	}
 	
-	/**
-	 * Assign a theme
-	 * Must a be an existing directory in /themes/
-	 */
+    /**
+     * Assigns a theme
+     * 
+     * @param string $theme theme name (must a be an existing directory in /themes/)
+     */
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
 			$this->themeName = '_blank';
@@ -57,26 +83,39 @@ class WView {
 		}
 	}
 	
+    /**
+     * Returns current theme name
+     * 
+     * @return string current theme name
+     */
 	public function getTheme() {
 		return $this->themeName;
 	}
 	
+    /**
+     * Sets the file that will be used for template compiling
+     * 
+     * @param string $file file that will be used for template compiling
+     */
 	public function setResponse($file) {
 		$file = str_replace(WITY_PATH, '', $file);
 		if (file_exists(WITY_PATH.$file)) {
-			// WTemplate automaticly adds the base directory defined in WSystem::getTemplate()
+			// WTemplate automatically adds the base directory defined in WSystem::getTemplate()
 			$this->responseFile = $file;
 		} else {
 			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'custom');
 		}
 	}
 	
-	/**
-	 * Recherche un fichier template en fonction du nom de l'appli et de l'action
-	 * Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli
-	 * 
-	 * @return string adresse du fichier
-	 */
+    /**
+     * Searches a template file which relates to the current application name and asked action
+     * 
+     * The file will be searched first in theme files, then in application files
+     * 
+     * @param string $appName       application name
+     * @param string $action        asked action
+     * @param string $adminLoaded   true if admin mode is loaded, false otherwise
+     */
 	public function findResponse($appName, $action, $adminLoaded) {
 		if ($adminLoaded) {
 			$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
@@ -90,6 +129,12 @@ class WView {
 		}
 	}
 	
+    /**
+     * Assigns a variable whose name is $name to a $value
+     * 
+     * @param mixed $name   variable name 
+     * @param mixed $value  variable value
+     */
 	public function assignOne($name, $value) {
 		// Is $name a Special var?
 		if (in_array($name, $this->specialVars)) {
@@ -103,16 +148,29 @@ class WView {
 		}
 	}
 	
-	public function assign($a, $b = null) {
-		if (is_string($a)) {
-			$this->assignOne($a, $b);
-		} else if (is_array($a)) {
-			foreach ($a as $key => $value) {
+    /**
+     * Assigns a list of variables whose names are in $names to their $values
+     * 
+     * @param mixed $names  variable names
+     * @param mixed $values variable values
+     */
+	public function assign($names, $values = null) {
+		if (is_string($names)) {
+			$this->assignOne($names, $values);
+		} else if (is_array($names)) {
+			foreach ($names as $key => $value) {
 				$this->assignOne($key, $value);
 			}
 		}
 	}
 	
+    /**
+     * Assigns a variable block to a set of values
+     * 
+     * @todo Describe a little bit more and better the assignBlock method and the way to use it
+     * @param string    $blockName  block name in the template file
+     * @param array     $value      set of values that will be set in the block
+     */
 	public function assignBlock($blockName, $value) {
 		if (!isset($this->vars[$blockName.'_block'])) {
 			$this->vars[$blockName.'_block'] = array($value);
@@ -121,12 +179,13 @@ class WView {
 		}
 	}
 	
-	/**
-	 * Retourne une variable en "stack" avec un traitement particulier
-	 * 
-	 * @param $stack_name Nom du stack
-	 * @return string
-	 */
+    /**
+     * Returns a "stack" variable with a particular treatment
+     * 
+     * @todo Describe a little bit more and better the getStack method and the way to use it
+     * @param string $stack_name stack name
+     * @return string variable value
+     */
 	public function getStack($stack_name) {
 		if (empty($this->vars[$stack_name])) {
 			return '';
@@ -163,9 +222,11 @@ class WView {
 		}
 	}
 	
-	/**
-	 * Render the view
-	 */
+    /**
+     * Renders the view
+     * 
+     * @return boolean true if view successfully loaded, false otherwise
+     */
 	public function render() {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
