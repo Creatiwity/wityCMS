@@ -1,4 +1,9 @@
 <?php
+/**
+ * Route configuration file
+ * 
+ * @package System
+ */
 
 $route = array (
   'default' => 

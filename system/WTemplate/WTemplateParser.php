@@ -1,24 +1,31 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * WTemplate
- * Moteur de template pour le CMS Wity
- *
- * @author     Fofif
- * @version    $Id: WTemplate/WTemplateParser.php 0002 22-11-2012 Fofif $
- * @package    Wity
- * @subpackage WTemplate
+ * WTemplateParser.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WTemplateParser is the parser part of WTemplate
+ *
+ * @package System\WTemplate
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-22-11-2012
+ */
 class WTemplateParser {
-	/**
-	 * This function reads a string and finds node matching {im a node}
-	 * and gives these nodes to a compiler which will replace them.
-	 * 
-	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
-	 * 
-	 * @param WTemplateCompiler $compiler The compiler which will work on nodes
-	 * @return string Parsed and compiled template file
-	 */
+	
+    /**
+     * Replaces all nodes found in $string by the callback result
+     * 
+     * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+     * 
+     * @todo Do something with the unused &$nodes value
+     * @param string    $string     a string to parse
+     * @param string    $callback   the callback to call to replace the node
+     * @param type      $nodes      optional and unused
+     * @return string the parsed string on which all callback results are in it
+     * @throws Exception
+     */
 	public static function replaceNodes($string, $callback, &$nodes = null) {
 		$length = strlen($string);
 		$level = 0;

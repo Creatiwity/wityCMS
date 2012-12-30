@@ -1,12 +1,17 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
+ * WityCMS index.php start-file
+ * 
+ * Content Management System for everyone
  *
- * @author Fofif
- * @version	$Id: index.php 0000 27-05-2012 Fofif $
+ * @package System
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version	0.3
  */
 
+/**
+ * Security system to avoid direct access to the other php files
+ */
 define('IN_WITY', true);
 define('WITY_VERSION', '0.2.0');
 

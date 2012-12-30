@@ -1,29 +1,57 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- * 
- * Classe destinée à générer le sommaire des pages
- * en fonction du nombre d'éléments à afficher par page
- * 
- * @author	Fofif
- * @version	$Id: pagination.php 0001 01-04-2010 Fofif $
+ * pagination.php
  */
 
+/**
+ * Pagination generates the page counter according to the number of elements to display
+ *
+ * @package Helpers
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-01-04-2010
+ */
 class Pagination {
-	private 
-		$n,
-		$total,
-		$limit,
-		$currentPage,
-		$scheme;
+    
+    /**
+     *
+     * @var int Total pages number 
+     */
+	private $n;
+    /**
+     *
+     * @var int Total elements number 
+     */
+	private $total;
+    /**
+     *
+     * @var int Maximum number of elements on a page
+     */
+	private $limit;
+    /**
+     *
+     * @var int Current page 
+     */
+	private $currentPage;
+    /**
+     *
+     * @var string URL model for the current page
+     */
+	private $scheme;
 	
+    /**
+     * Setup Pagination
+     * 
+     * @param type  $total          Total elements number
+     * @param type  $limit          Maximum number of elements on a page
+     * @param int   $currentPage    Page Current page
+     * @param type  $scheme         URL model for the current page
+     */
 	public function __construct($total, $limit, &$currentPage, $scheme) {
 		$this->total = $total <= 0 ? 1 : $total;
 		$this->limit = $limit;
 		$this->scheme = $scheme;
 		
-		// Calcul du nombre de pages (arrondi à l'entier sup)
+		// Computes the number of pages (rule for inexact value : trunc(n)+1)
 		$this->n = ceil($this->total / $this->limit);
 		
 		if ($currentPage <= 0 || $currentPage > $this->n) {
@@ -32,12 +60,17 @@ class Pagination {
 		$this->currentPage = $currentPage;
 	}
 	
+    /**
+     * Returns the HTML code corresponding to the current page page-selector
+     * 
+     * @return string HTML code of the page selector
+     */
 	public function getHtml() {
-		// Ajout du css
+		// CSS adding
 		$tpl = WSystem::getTemplate();
 		$tpl->assign('css', $tpl->getVar('css').'<link href="/helpers/pagination/pagination.css" rel="stylesheet" type="text/css" media="screen" />');
 		
-		// Début de la chaîne d'affichage
+		// Beginning of the display-chain
 		$output = sprintf(
 			'<div class="pages">
 				<strong>Page %s sur %s</strong> ',
@@ -50,13 +83,13 @@ class Pagination {
 			if ($i == $this->currentPage) {
 				$output .= sprintf('<span class="current">%d</span> ', $i);
 			}
-			// On est autour de la page actuelle : on affiche
+			// We are around the current page : we display it
 			else if (abs($this->currentPage - $i) <= 3) {
 				$output .= sprintf('<a href="'.$this->scheme.'">%d</a> ', $i, $i);
 			}
-			// On affiche quelque chose avant d'omettre les pages inutiles
+            // Displaying something before forgetting useless pages
 			else {
-				// On est avant la page courante
+				// Before the current page
 				if (!$firstDone && $i < $this->currentPage) {
 					$firstDone = true;
 					$output .= sprintf(
@@ -66,7 +99,7 @@ class Pagination {
 						sprintf($this->scheme, 1), sprintf($this->scheme, $this->currentPage-1)
 					);
 				}
-				// Après la page courante
+				// After the current page
 				else if (!$lastDone && $i > $this->currentPage) {
 					$lastDone = true;
 					$output .= sprintf(
@@ -76,7 +109,7 @@ class Pagination {
 						sprintf($this->scheme, $this->currentPage+1), sprintf($this->scheme, $this->n)
 					);
 				}
-				// On a dépassé les cas qui nous intéressent : inutile de continuer
+				// After interesting cases : stop
 				else if ($i > $this->currentPage) {
 					break;
 				}
@@ -87,6 +120,12 @@ class Pagination {
 		return $output;
 	}
 	
+    /**
+     * Returns the HTML code corresponding to the current page page-selector
+     * 
+     * @see Pagination::getHtml()
+     * @return string HTML code of the page selector
+     */
 	public function __toString() {
 		return $this->getHtml();
 	}
