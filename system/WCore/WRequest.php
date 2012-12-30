@@ -16,7 +16,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WRequest manages all requests
  *
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-29-12-2011
  */

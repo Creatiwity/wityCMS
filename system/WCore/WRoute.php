@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  *
  * @todo Change perso or personnal route to custom
  * 
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-29-09-2012
  */

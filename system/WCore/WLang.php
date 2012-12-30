@@ -8,7 +8,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WLang manages everything about languages
  *
- * @package WCore
+ * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-28-09-2012

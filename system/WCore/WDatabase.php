@@ -8,7 +8,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WDatabase manages all database interactions
  *
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-22-11-2012
  */

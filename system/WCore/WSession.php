@@ -8,7 +8,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WSession manages all session variables and anti flood system
  * 
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-19-12-2012
  */

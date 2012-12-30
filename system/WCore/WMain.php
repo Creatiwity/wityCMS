@@ -11,7 +11,7 @@ require SYS_DIR.'WCore'.DS.'WView.php';
 /**
  * WMain is the main class that Wity launches at startup
  *
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-14-10-2012
  */

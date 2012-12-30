@@ -13,7 +13,7 @@ defined('IN_WITY') or die('Access denied');
  * It's the same thing with WTemplate andWDatabase.
  * </p>
  *
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-28-09-2012
  */

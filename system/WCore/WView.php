@@ -8,7 +8,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WView handles application's response
  * 
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-29-11-2012
  */

@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WHelper
  * 
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-07-08-2012
  */

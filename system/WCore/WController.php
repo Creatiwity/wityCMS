@@ -8,7 +8,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WController is the base class that will be inherited by all the applications
  *
- * @package WCore
+ * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-28-09-2012
  */
