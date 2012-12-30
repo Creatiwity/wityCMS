@@ -1,4 +1,10 @@
 <?php
+/**
+ * Helper configuration file
+ * 
+ * @ignore
+ * @package System
+ */
 // arrays
 
 // Exemple

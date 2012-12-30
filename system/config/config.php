@@ -1,4 +1,9 @@
 <?php
+/**
+ * Main configuration file
+ * 
+ * @package System
+ */
 
 $config = array(
     'base' => 'http://localhost/Wity-Lite/',
