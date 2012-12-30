@@ -1,10 +1,18 @@
 <?php
-/*
- * Wity
- * @copyright NkDeus 2010
- * @version	$Id: wtJSON.php 0000 10-04-2010 CharlyPoly. $
+/**
+ * WJSON.php
+ * 
+ * @ignore
  */
-class wtJSON {
+
+/*
+ * WJSON
+ * 
+ * @package WFile
+ * @author CharlyPoly
+ * @version	0.3-10-04-2010
+ */
+class WJSON {
     /**
      * @todo getObjectFrom($file);
      * @todo getArrayFrom($file);
