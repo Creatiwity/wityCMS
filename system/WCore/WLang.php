@@ -1,31 +1,58 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version	$Id: WCore/WLang.php 0001 10-08-2012 xpLosIve.|Fofif $
- * @package Wity
+ * WLang.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WLang manages everything about languages
+ *
+ * @package WCore
+ * @author xpLosIve
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-28-09-2012
+ */
 class WLang {
-	// Langue à utiliser
+
+    /**
+     *
+     * @var string current language
+     */
 	public static $language;
 	
+    /**
+     *
+     * @var array(string) list of all language directories 
+     */
 	private static $lang_dirs = array();
+    
+    /**
+     *
+     * @var array(string) list of all loaded language directories 
+     */
 	private static $lang_dirs_loaded = array();
-	
-	// Lang values
+
+    /**
+     *
+     * @var array(string) list of all key (name)=>value (in current language) pairs 
+     */
 	private static $values = array();
 	
-	/**
-	 * Declaration of new compiler's handlers
-	 */
+    /**
+     * Declaration of new compiler's handlers
+     */
 	public static function init() {
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
 		WTemplateCompiler::registerCompiler('lang_close', array('WLang', 'compile_lang_close'));
 	}
 	
+    /**
+     * Stores the choosen language $lang in the private property $language
+     * 
+     * @param string $lang choosen language
+     */
 	public static function selectLang($lang) {
 		// todo: check if $lang is a correct language
 		self::$language = strtolower(substr($lang, 0, 2));
@@ -34,9 +61,8 @@ class WLang {
 	/**
 	 * Assign a new language constant
 	 *
-	 * @access public
-	 * @param string $name  Name
-	 * @param string $value Value
+	 * @param string $name  name as it is in the template file
+	 * @param string $value value as it is after compiling the template file
 	 */
 	public static function assign($name, $value) {
 		if (!empty($name) && !empty($value)) {
@@ -45,40 +71,44 @@ class WLang {
 	}
 
 	/**
-	 * Retourne une valeur de constante
+	 * Returns the value in the current language associated to the $name key
 	 *
-	 * @access public
-	 * @param  string $name Nom de la valeur
+	 * @param  string $name name as it is in the template file
+     * @return string value as it is after compiling the template file
 	 */
-	public static function get($id) {
+	public static function get($name) {
 		// Try to load lang files
-		while (!isset(self::$values[$id]) && !empty(self::$lang_dirs)) {
+		while (!isset(self::$values[$name]) && !empty(self::$lang_dirs)) {
 			$dir = array_shift(self::$lang_dirs);
 			self::loadLangFile($dir);
 			// Mark as loaded
 			self::$lang_dirs_loaded[] = $dir;
 		}
 		
-		if (isset(self::$values[$id])) {
-			return self::$values[$id];
+		if (isset(self::$values[$name])) {
+			return self::$values[$name];
 		}
 		return '';
 	}
 
-	/**
-	 * Alias permettant un accès rapide à la fonction get()
-	 * WLang::_('LANG_ID');
-	 */
-	public static function _($id) {
-		return self::get($id);
+    /**
+     * get($name) alias
+     * 
+     * Example : <code>WLang::_('LANG_ID');</code>
+     * 
+     * @param string $name name as it is in the template file
+     * @return string value as it is after compiling the template file
+     */
+	public static function _($name) {
+		return self::get($name);
 	}
 	
-	/**
-	 * Pour charger un autre fichier
-	 *
-	 * @access public
-	 * @param  string $name     Nom du fichier à charger (sans extension)
-	 */
+    /**
+     * Declares a directory in which there are language files
+     * 
+     * @param string $dir language directory
+     * @return boolean true if $dir is a directory, false otherwise
+     */
 	public static function declareLangDir($dir) {
 		if (is_dir($dir)) {
 			// Save lang directory
@@ -88,6 +118,11 @@ class WLang {
 		return false;
 	}
 	
+    /**
+     * Loads a language file
+     * 
+     * @param string $dir language file path without its extension and without the locale identifier
+     */
 	private static function loadLangFile($dir) {
 		$file = $dir.self::$language.'.xml';
 		if (file_exists($file)) {
@@ -104,14 +139,22 @@ class WLang {
 	 * WTemplateCompiler's new handlers part *
 	 *****************************************/
 	
-	/**
-	 * Variable to remember if a node was opened
-	 */
+    /**
+     *
+     * @var boolean true if a node is open 
+     */
 	private static $short_node = false;
 	
 	/**
 	 * Handles the {lang} opening node in WTemplate
 	 */
+    /**
+     * Handles the {lang} opening node in WTemplate
+     * 
+     * @todo Remove syntax choice
+     * @param string $args optional language identifier if no closing node in template file
+     * @return string php string that calls the WLang::get()
+     */
 	public static function compile_lang($args) {
 		if (empty($args)) {
 			self::$short_node = true;
@@ -123,9 +166,11 @@ class WLang {
 		}
 	}
 	
-	/**
-	 * Handles the {/lang} closing node in WTemplate
-	 */
+    /**
+     * Handles the {/lang} closing node in WTemplate
+     * 
+     * @return string php string that closes the 
+     */
 	public static function compile_lang_close() {
 		if (self::$short_node) {
 			self::$short_node = false;
