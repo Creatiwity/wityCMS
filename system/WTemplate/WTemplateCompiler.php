@@ -288,7 +288,6 @@ class WTemplateCompiler {
     /**
      * Compiles {else}
      * 
-     * @param string $args unused
      * @return string the php-else code
      */
 	public function compile_else() {
