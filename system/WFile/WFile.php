@@ -5,6 +5,8 @@
  * @ignore
  */
 
+defined('IN_WITY') or die('Access denied');
+
 /*
  * WFile
  * 
