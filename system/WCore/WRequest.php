@@ -1,4 +1,9 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
+/**
+ * WRequest.php
+ */
+
+defined('IN_WITY') or die('Access denied');
 /**
  * Wity CMS
  * Système de gestion de contenu pour tous.
@@ -8,19 +13,39 @@
  * @desc      Gestion des variables de type REQUEST
  */
 
+/**
+ * WRequest manages all requests
+ *
+ * @package WCore
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-29-12-2011
+ */
 class WRequest {
-	// On enregistre les variables qui ont été vérifiées pour ne pas refaire la même chose...
+	
+    /**
+     *
+     * @var array Contains all checked variables to avoid infinite loop
+     */
 	private static $checked = array();
 	
-	/**
-	 * Récupération d'une ou plusieurs valeurs REQUEST
-	 * Permet l'utilisation de la syntaxe : list($v1, ...) = WRequest::get(array('v1', 'v2'));
-	 * 
-	 * @param string|array $names    Noms des valeurs souhaitées
-	 * @param mixed        $default  Facultatif: valeurs par défaut
-	 * @param string       $hash     Nom de la variable dans laquelle sont stockées les valeurs
-	 * @return mixed Tableau de valeurs ou valeur demandée
-	 */
+    /**
+     * Returns the values of all variables with name in $names sent by $hash method
+     * 
+     * You can use the following hashes :
+     * - "GET"
+     * - "POST"
+     * - "FILES"
+     * - "COOKIE"
+     * - "REQUEST" (default)
+     * 
+     * The following syntax IS allowed :
+     * <code>list($v1, ...) = WRequest::get(array('v1', 'v2'));</code>
+     * 
+     * @param string|array  $names      variable names
+     * @param mixed         $default    optional default values
+     * @param string        $hash       name of the method used to send
+     * @return mixed    array of values or the value
+     */
 	public static function get($names, $default = null, $hash = 'REQUEST') {
 		// Data hash
 		switch (strtoupper($hash)) {
@@ -43,7 +68,7 @@ class WRequest {
 		}
 		
 		if (is_array($names)) {
-			// On va parcourir la liste demandée et renvoyer un tableau
+			// Going through the asked values in order to returns the array
 			$result = array();
 			foreach ($names as $name) {
 				$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
@@ -56,15 +81,15 @@ class WRequest {
 		}
 	}
 	
-	/**
-	 * Récupération d'une ou plusieurs valeurs REQUEST
-	 * Ce mode renvoie un tableau 
-	 * 
-	 * @param array   $names    Noms des valeurs souhaitées
-	 * @param mixed   $default  Facultatif: valeurs par défaut
-	 * @param string  $hash     Nom de la variable dans laquelle sont stockées les valeurs
-	 * @return array Tableau de valeurs demandées qui ne contient que des clés associées
-	 */
+    /**
+     * Returns an associative array of values in which keys are the $names
+     * 
+     * @see WRequest::get()
+     * @param array     $names      variable names
+     * @param type      $default    optional default values
+     * @param string    $hash       name of the method used to send
+     * @return array array of values in which keys are the $names
+     */
 	public static function getAssoc(array $names, $default = null, $hash = 'REQUEST') {
 		// Data hash
 		switch (strtoupper($hash)) {
@@ -86,7 +111,7 @@ class WRequest {
 				break;
 		}
 		
-		// On va parcourir la liste demandée et renvoyer un tableau
+		// Going through the asked values in order to returns the array
 		$result = array();
 		foreach ($names as $name) {
 			$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
@@ -95,14 +120,15 @@ class WRequest {
 		return $result;
 	}
 	
-	/**
-	 * Récupération d'une valeur REQUEST
-	 * 
-	 * @param array  $data     Tableau de REQUEST
-	 * @param mixed  $default  Facultatif: valeur par défaut
-	 * @param mixed  $hash     Nom de la variable dans laquelle sont stockées les valeurs
-	 * @return mixed Valeur de la requête
-	 */
+    /**
+     * Returns the checked value associated to $name
+     * 
+     * @param &array $data      request array
+     * @param string $name      variable name
+     * @param string $default   optional default value
+     * @param string $hash      name of the method used to send
+     * @return mixed the checked value associated to $name or null if not exists
+     */
 	public static function getValue(&$data, $name, $default, $hash) {
 		if (isset(self::$checked[$hash.$name])) {
 			// On récupère la variable vérifiée des données
@@ -125,22 +151,22 @@ class WRequest {
 		}
 	}
 	
-	/**
-	 * Assignation d'une valeur Requête
-	 * 
-	 * @param string $name       Nom de la valeur
-	 * @param mixed  $value      Valeur de la requête
-	 * @param mixed  $hash       Hash des données dans lesquelles chercher
-	 * @param bool   $overwrite  Réécrire par dessus si elle existe ?
-	 * @return mixed Valeur précédente de la requête
-	 */
+    /**
+     * Sets a request value
+     * 
+     * @param string    $name       variable name
+     * @param mixed     $value      the value that will be set
+     * @param string    $hash       name of the method used to initially send
+     * @param boolean   $overwrite  optional overwrite command, true by default
+     * @return mixed previous value, may be null
+     */
 	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
-		// Vérification pour la réécriture
+		// Check if overwriting is allowed
 		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
 			return $_REQUEST[$name];
 		}
 		
-		// Valeur précédente
+		// Stores previous value
 		$previous = array_key_exists($name, $_REQUEST) ? $_REQUEST[$name] : null;
 		
 		switch (strtoupper($hash)) {
@@ -164,18 +190,17 @@ class WRequest {
 				break;
 		}
 		
-		// On met la var à SET
 		self::$checked[$hash.$name] = true;
 		
 		return $previous;
 	}
 	
-	/**
-	 * Fonction de filtrage des variables de requête
-	 * 
-	 * @param mixed $variable Variable à filtrer
-	 * @return Valeur filtrée
-	 */
+    /**
+     * Returns the filtered variable after a tiny security check
+     * 
+     * @param mixed $variable variable that we want to filter
+     * @return mixed the filtered variable
+     */
 	public static function filter($variable) {
 		if (is_array($variable)) {
 			foreach ($variable as $key => $val) {
