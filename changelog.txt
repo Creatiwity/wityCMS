@@ -2,6 +2,9 @@
 # Wity Changelog #
 ##################
 
+18/12/2012
+- Add a token life to a session, in order to improve session security
+
 26/10/2012
 - WDatabase created
 - WSystem modified to deal with WDatabase

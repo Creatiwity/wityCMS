@@ -15,27 +15,21 @@ $route = array (
   ),
   'admin' => 
   array (
-    0 => 'entreprise',
+    0 => 'news',
     1 => 
     array (
-      0 => 'dashboard',
     ),
   ),
   'perso' => 
   array (
-    'plan-site' => 
+    'test' => 
     array (
-      0 => 'page',
+      0 => 'app_name',
       1 => 
       array (
-        0 => 18,
+        0 => 'arg1',
       ),
     ),
-  ),
-  'app' => 'page',
-  'args' => 
-  array (
-    0 => 'add',
   ),
 );
 

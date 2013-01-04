@@ -97,9 +97,14 @@ class WConfig {
 	 * @param  string  $type  file type
 	 * @return boolean true if successful, false otherwise
 	 */
-	public static function load($field, $file, $type = 'php') {
-		if (!is_file($file) || isset(self::$files[$field])) {
+	public static function load($field, $file, $type = '') {
+		if (!is_file($file) || isset(self::$files[$field]) || strpos($field, '.') !== false) {
 			return false;
+		}
+		
+		// Find type using file extension
+		if (empty($type)) {
+			$type = substr($file, strrpos($file, '.') + 1);
 		}
 		
 		switch(strtolower($type)) {
@@ -122,6 +127,9 @@ class WConfig {
 			case 'json':
 				self::$configs[$field] = json_decode(file_get_contents($file), true);
 				break;
+			
+			default:
+				return false;
 		}
 		// Saving the file
 		self::$files[$field] = array($file, $type);

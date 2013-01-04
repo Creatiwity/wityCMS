@@ -19,10 +19,13 @@ class UserController extends WController {
 	const MAX_LOGIN_ATTEMPT = 3;
 	
 	/*
-	 * Pointeurs vers WSession et UserModel
+	 * Instance of WSession
+	 */
+	private $session;
+	/**
+	 * Instance of UserModel
 	 */
 	private $model;
-	private $session;
 	
 	public function __construct() {
 		include_once 'model.php';
@@ -57,7 +60,7 @@ class UserController extends WController {
 	 * Connexion d'un membre
 	 */
 	protected function login() {
-		if ($this->session->isLoaded()) {
+		if ($this->session->isConnected()) {
 			WNote::error("user_connected", "Inutile d'accéder à cette page si vous êtes connecté(e).", 'display');
 			return;
 		}
@@ -108,11 +111,13 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Déconnexion
+	 * Log out the user
 	 */
 	protected function logout() {
-		// Destruction de la session
-		$this->session->closeSession();
+		if ($this->session->isConnected()) {
+			// Destroy the session of the user
+			$this->session->closeSession();
+		}
 		
 		// Redirection
 		WNote::success("user_disconnected", "Vous êtes maintenant déconnecté.", 'display');

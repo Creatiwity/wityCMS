@@ -50,7 +50,7 @@ class WSession {
 		// Start sessions
 		session_start();
 		
-		if ($this->isLoaded()) {
+		if ($this->isConnected()) {
 			// Token expiration checking
 			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
 				if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
@@ -72,7 +72,7 @@ class WSession {
      * 
      * @return boolean true if the user is logged in, false otherwise
      */
-	public static function isLoaded() {
+	public static function isConnected() {
 		return isset($_SESSION['userid']);
 	}
 	
