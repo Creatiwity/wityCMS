@@ -19,14 +19,13 @@ class WTemplateParser {
      * 
      * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
      * 
-     * @todo Do something with the unused &$nodes value
      * @param string    $string     a string to parse
      * @param string    $callback   the callback to call to replace the node
      * @param type      $nodes      optional and unused
      * @return string the parsed string on which all callback results are in it
      * @throws Exception
      */
-	public static function replaceNodes($string, $callback, &$nodes = null) {
+	public static function replaceNodes($string, $callback) {
 		$length = strlen($string);
 		$level = 0;
 		$code = ""; // $code stocks the entire code compiled
