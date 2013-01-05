@@ -105,7 +105,7 @@ class WSession {
 		$db = WSystem::getDB();
 		$prep = $db->prepare('
 			SELECT id, nickname, email, groupe, access
-			FROM users
+			FROM '.self::USERS_TABLE.'
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
 		');
 		$prep->bindParam(':nickname', $nickname);
