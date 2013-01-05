@@ -7,8 +7,6 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * WRoute
- *
- * @todo Change perso or personnal route to custom
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
@@ -26,7 +24,7 @@ class WRoute {
     /**
      * @var string Request string of the page
      */
-	public static $query;
+	private static $query;
 	
     /**
      * Initializes WRoute
@@ -47,18 +45,19 @@ class WRoute {
 	 * Launches the calculation of the route to find out the app to execute
 	 */
 	public static function route() {
-        // Checking the existency of a personnal route
-		$perso = WConfig::get('route.perso');
-		$query = trim(self::$query, '/');
-		if (isset($perso[$query])) {
-			self::setRoute($perso[$query]);
+        $query = trim(self::$query, '/');
+		
+		// Checking the existency of a custom route
+		$custom_routes = WConfig::get('route.custom');
+		if (isset($custom_routes[$query])) {
+			self::setRoute($custom_routes[$query]);
 		} else {
 			// Loading URL config
 			$routage = self::parseURL(self::$query);
 			if (!empty($routage)) {
 				self::setRoute($routage);
 			} else {
-				// If nothing given, launching the default route
+				// If nothing found, launch the default route
 				self::setRoute(WConfig::get('route.default'));
 			}
 		}
@@ -114,10 +113,10 @@ class WRoute {
 	}
     
     /**
-     * Defines a personnal route which is not following the regular application rules
+     * Defines a custom route which is not following the regular application rules
      * 
      * <code>
-	 *   WRoute::defineRoutePerso('/test/', array(
+	 *   WRoute::defineCustomRoute('/test/', array(
 	 *     'appName',
 	 *     array('arg1', 'arg2')
 	 *   ));
@@ -127,16 +126,16 @@ class WRoute {
      * @see WConfig::set()
      * @see WConfig::save()
      * 
-     * @param string    $uri        the personnal route to catch
-     * @param array     $routage    application that will be launched with its arguments
-     * @return boolean  true if route structure is valid, false otherwise
+     * @param  string  $uri     the custom route to catch
+     * @param  array   $routage application that will be launched with its arguments
+     * @return boolean true if route structure is valid, false otherwise
      */
-	public static function defineRoutePerso($uri, array $routage) {
-		// Checking the structure
+	public static function defineCustomRoute($uri, array $routage) {
+		// Checking the routage structure
 		if (self::checkRouteStructure($routage)) {
-			$perso = WConfig::get('route.perso');
-			$perso[$uri] = $routage;
-			WConfig::set('route.perso', $perso);
+			$custom_routes = WConfig::get('route.custom');
+			$custom_routes[$uri] = $routage;
+			WConfig::set('route.custom', $custom_routes);
 			WConfig::save('route');
 			return true;
 		}
@@ -144,16 +143,16 @@ class WRoute {
 	}
 	
     /**
-     * Removing a personnal route
+     * Removing a custom route
      * 
      * @see WConfig::get()
-     * @param string $uri the personnal route to remove
+     * @param string $uri the custom route to remove
      */
-	public static function deleteRoutePerso($uri) {
-		if (!is_null(WConfig::get('route.perso.'.$uri))) {
-			$perso = WConfig::get('route.perso');
-			unset($perso[$uri]);
-			WConfig::set('route.perso', $perso);
+	public static function deleteCustomRoute($uri) {
+		if (!is_null(WConfig::get('route.custom.'.$uri))) {
+			$custom_routes = WConfig::get('route.custom');
+			unset($custom_routes[$uri]);
+			WConfig::set('route.custom', $custom_routes);
 			WConfig::save('route');
 		}
 	}

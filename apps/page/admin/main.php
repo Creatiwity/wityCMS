@@ -82,8 +82,8 @@ class PageAdminController extends WController {
 			} else {
 				// Mise à jour des infos
 				if ($this->model->createPage($data)) {
-					// Mettre à jour le routage perso
-					WRoute::defineRoutePerso($data['pUrl'], array('page', array($this->model->getLastId())));
+					// Mettre à jour le routage custom
+					WRoute::defineCustomRoute($data['pUrl'], array('page', array($this->model->getLastId())));
 					
 					WNote::success("Page créée", "La page <strong>".$data['pTitle']."</strong> a été créée avec succès.", 'session');
 					header('location: '.WRoute::getDir().'admin/page/');
@@ -146,11 +146,10 @@ class PageAdminController extends WController {
 			} else {
 				// Mise à jour des infos
 				if ($this->model->updatePage($id, $data)) {
-					// Mettre à jour le routage perso
+					// Mettre à jour le routage custom
 					// Pour l'édition, on doit supprimer l'ancien routage et ajouter le niveau
 					if ($realData['url'] != $data['pUrl']) {
-						WRoute::deleteRoutePerso($realData['url']);
-						WRoute::defineRoutePerso($data['pUrl'], array('page', array($id)));
+						WRoute::defineCustomRoute($data['pUrl'], array('page', array($id)));
 					}
 					
 					WNote::success("Page éditée", "La page <strong>".$data['pTitle']."</strong> a été modifiée avec succès.", 'session');
@@ -171,7 +170,7 @@ class PageAdminController extends WController {
 			if (WRequest::get('confirm', null, 'POST') === '1') {
 				$data = $this->model->loadPage($id);
 				$this->model->deletePage($id);
-				WRoute::deleteRoutePerso($data['url']);
+				WRoute::deleteCustomRoute($data['url']);
 				WNote::success("Suppression d'une page", "La page \"<strong>".$data['title']."</strong>\" a été supprimée avec succès.", 'session');
 				header('location: '.WRoute::getDir().'admin/page/');
 			} else {

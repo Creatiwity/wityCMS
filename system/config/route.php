@@ -20,7 +20,7 @@ $route = array (
     array (
     ),
   ),
-  'perso' => 
+  'custom' => 
   array (
     'test' => 
     array (
