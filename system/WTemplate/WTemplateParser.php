@@ -95,7 +95,7 @@ class WTemplateParser {
 								$level--;
 							}
 							
-							// We are arrived at the end of the node => compile it
+							// We arrived at the end of the node => compile it
 							if ($level == 0) {
 								$code .= call_user_func($callback, $tmp);
 								$tmp = "";
