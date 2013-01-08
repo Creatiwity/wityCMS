@@ -40,7 +40,7 @@ class AdminController extends WController {
 	 * @return void
 	 */
 	public function launch() {
-		if (!$this->session->isLoaded()) {
+		if (!$this->session->isConnected()) {
 			// Affichage du formulaire d'autentification
 			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
 			$this->wity->exec('user');
