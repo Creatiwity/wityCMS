@@ -112,7 +112,6 @@ class WTemplateParser {
 				
 				default:
 					if ($char == "\n" && $level > 0 && !$comment) {
-						var_dump($comment);
 						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node.");
 					}
 					
