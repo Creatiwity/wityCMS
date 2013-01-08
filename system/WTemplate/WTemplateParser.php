@@ -120,11 +120,15 @@ class WTemplateParser {
 						// add the last backslash which was skipped
 						if ($last_char == '\\') {
 							$tmp .= '\\';
+						} else if ($last_char == '%') {
+							$tmp .= '%';
 						}
 						$tmp .= $char;
 					} else {
 						if ($last_char == '\\') {
 							$code .= '\\';
+						} else if ($last_char == '%') {
+							$code .= '%';
 						}
 						$code .= $char;
 					}
