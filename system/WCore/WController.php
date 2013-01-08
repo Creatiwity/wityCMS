@@ -59,7 +59,7 @@ abstract class WController {
 		}
 		
 		// Parse the manifest
-		
+		$this->loadManifest($this->getAppName());
 		
 		// Automaticly declare the language directory
 		if (is_dir($app_dir.DS.'lang')) {
@@ -172,6 +172,40 @@ abstract class WController {
      */
 	public function adminLoaded() {
 		return strpos(get_class($this), 'Admin') !== false;
+	}
+	
+	/**
+	 * Load the manifest file of a given application
+	 * 
+	 * @param string $app_name name of the application owning the manifest
+	 */
+	public function loadManifest($app_name) {
+		$manifest_href = APPS_DIR.$app_name.'/manifest.xml';
+		if (file_exists($manifest_href)) {
+			$xml = simplexml_load_file($manifest_href);
+			$manifest = array();
+			
+			// Nodes to look for
+			$nodes = array('title', 'version', 'date', 'icone', 'services', 'operations', 'adminOperations');
+			foreach ($nodes as $node) {
+				switch ($node) {
+					case 'services':
+						break;
+					
+					case 'operations':
+						break;
+					
+					case 'adminOperations':
+						break;
+					
+					default:
+						$manifest[$node] = property_exists($xml, $node) ? $xml->$node : '';
+						break;
+				}
+			}
+			
+			//var_dump($manifest);
+		}
 	}
 	
 	/**
