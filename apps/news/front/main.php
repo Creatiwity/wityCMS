@@ -24,8 +24,12 @@ class NewsController extends WController {
 	}
 	
 	public function launch() {
-		$action = $this->getAskedAction();
-		$this->forward($action, 'index');
+		$newsid = $this->getId();
+		if (!empty($newsid) && $this->model->validId($newsid)) {
+			$this->displayItem($newsid);
+		} else {
+			$this->listNews();
+		}
 	}
 	
 	/**
@@ -41,18 +45,14 @@ class NewsController extends WController {
 		}
 	}
 	
-	protected function index() {
-		// Récupération éventuelle d'un id si on demande l'affichage d'une news
-		$nid = $this->getId();
-		
-		// Si l'id fourni est valide, on charge la news demandée
-		if (!empty($id) && $this->model->validId($id)) {
-			$this->view->detail($id);
-			$this->render('detail');
-		} else {
-			$this->view->main_listing();
-			$this->render('main_listing');
-		}
+	protected function listNews() {
+		$this->view->listing();
+		$this->render('listing');
+	}
+	
+	protected function displayItem($id) {
+		$this->view->detail($id);
+		$this->render('detail');
 	}
 }
 

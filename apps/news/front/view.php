@@ -16,7 +16,7 @@ class NewsView extends WView {
 		$this->model = $model;
 	}
 	
-	public function main_listing() {
+	public function listing() {
 		$this->assign('news', $this->model->getNewsList(0, 3));
 	}
 	

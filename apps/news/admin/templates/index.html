@@ -1,5 +1,4 @@
 <div id="content" class="large">
-	{if !empty({$note})}{$note}{/if}
 	<table class="liste sorted" cellpadding="0" cellspacing="0">
 		<colgroup>
 			<col style="width: 35%;" />
@@ -28,10 +27,11 @@
 					<a href="/admin/news/del/{$n.id}-{$n.url}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
 				</td>
 			</tr>
-		{else}
+			{empty}
 			<tr>
 				<td colspan="6" class="tcenter">Aucune news trouvée dans la base de données.</td>
 			</tr>
+			{/empty}
 		{/for}
 	</table>
 </div>
