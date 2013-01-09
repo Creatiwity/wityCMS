@@ -36,6 +36,7 @@ require SYS_DIR.'WCore'.DS.'WConfig.php';
 require SYS_DIR.'WCore'.DS.'WRequest.php';
 require SYS_DIR.'WCore'.DS.'WLang.php';
 require SYS_DIR.'WCore'.DS.'WNote.php';
+require SYS_DIR.'WCore'.DS.'WHelper.php';
 require SYS_DIR.'WCore'.DS.'WMain.php';
 
 /**
