@@ -34,9 +34,9 @@ class Pagination {
 	private $currentPage;
     /**
      *
-     * @var string URL model for the current page
+     * @var string URL pattern for the current page
      */
-	private $scheme;
+	private $urlPattern;
 	
     /**
      * Setup Pagination
@@ -44,12 +44,12 @@ class Pagination {
      * @param type  $total          Total elements number
      * @param type  $limit          Maximum number of elements on a page
      * @param int   $currentPage    Page Current page
-     * @param type  $scheme         URL model for the current page
+     * @param type  $urlPattern     URL model for the current page
      */
-	public function __construct($total, $limit, &$currentPage, $scheme) {
+	public function __construct($total, $limit, $currentPage, $urlPattern) {
 		$this->total = $total <= 0 ? 1 : $total;
 		$this->limit = $limit;
-		$this->scheme = $scheme;
+		$this->urlPattern = $urlPattern;
 		
 		// Computes the number of pages (rule for inexact value : trunc(n)+1)
 		$this->n = ceil($this->total / $this->limit);
@@ -65,7 +65,7 @@ class Pagination {
      * 
      * @return string HTML code of the page selector
      */
-	public function getHtml() {
+	public function getHTML() {
 		// CSS adding
 		$tpl = WSystem::getTemplate();
 		$tpl->assign('css', $tpl->getVar('css').'<link href="/helpers/pagination/pagination.css" rel="stylesheet" type="text/css" media="screen" />');
@@ -85,7 +85,7 @@ class Pagination {
 			}
 			// We are around the current page : we display it
 			else if (abs($this->currentPage - $i) <= 3) {
-				$output .= sprintf('<a href="'.$this->scheme.'">%d</a> ', $i, $i);
+				$output .= sprintf('<a href="'.$this->urlPattern.'">%d</a> ', $i, $i);
 			}
             // Displaying something before forgetting useless pages
 			else {
@@ -96,7 +96,7 @@ class Pagination {
 						'<a href="%s">First</a> 
 						... 
 						<a href="%s" title="Page précédente">&laquo; Prev</a> ', 
-						sprintf($this->scheme, 1), sprintf($this->scheme, $this->currentPage-1)
+						sprintf($this->urlPattern, 1), sprintf($this->urlPattern, $this->currentPage-1)
 					);
 				}
 				// After the current page
@@ -106,7 +106,7 @@ class Pagination {
 						'<a href="%s" title="Page suivante">Next &raquo;</a> 
 						... 
 						<a href="%s">Last</a>', 
-						sprintf($this->scheme, $this->currentPage+1), sprintf($this->scheme, $this->n)
+						sprintf($this->urlPattern, $this->currentPage+1), sprintf($this->urlPattern, $this->n)
 					);
 				}
 				// After interesting cases : stop
@@ -123,11 +123,11 @@ class Pagination {
     /**
      * Returns the HTML code corresponding to the current page page-selector
      * 
-     * @see Pagination::getHtml()
+     * @see Pagination::getHTML()
      * @return string HTML code of the page selector
      */
 	public function __toString() {
-		return $this->getHtml();
+		return $this->getHTML();
 	}
 }
 
