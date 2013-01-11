@@ -1,7 +1,6 @@
 <?php 
 /**
  * WHelper.php
- * @ignore
  */
 
 defined('IN_WITY') or die('Access denied');
@@ -11,17 +10,19 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-07-08-2012
+ * @version 0.3-09-01-2013
  */
 class WHelper {
 	/**
-	 * 
+	 * @var array Stores the class names and params expected of the helpers already loaded
 	 */
 	private static $helpers_loaded = array();
 	
 	/**
-	 * Ob
+	 * Obtains a helper's instance
 	 * 
+	 * @param $helper_name  Name of the helper
+	 * @param $params       Params to give to the __construct() method of the helper
 	 * @throws Exception
 	 * @return Object
 	 */

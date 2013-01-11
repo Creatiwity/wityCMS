@@ -105,11 +105,6 @@ abstract class WController {
 		return $appName;
 	}
 	
-	/**
-	 * Retourne le nom de l'action initialement demandé en paramètre
-	 * 
-	 * @return string
-	 */
     /**
      * Returns the first asked action which was the first parameter of the forward method
      * 
@@ -208,9 +203,6 @@ abstract class WController {
 		}
 	}
 	
-	/**
-	 * Déclenche l'action d'affichage du template
-	 */
     /**
      * Renders the application with the right view
      * 
