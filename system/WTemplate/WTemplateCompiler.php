@@ -59,11 +59,6 @@ class WTemplateCompiler {
 		}
 	}
 	
-	/**
-	 * Compile an entire file using the parser
-	 * 
-	 * @return string File compiled
-	 */
     /**
      * Compiles an entire file using the parser
      * 
@@ -314,7 +309,6 @@ class WTemplateCompiler {
 	}
 	
     /**
-     *
      * @var int Counts the number of {for} in order to make {empty} work properly
      */
 	private $for_count = 0;
@@ -328,29 +322,29 @@ class WTemplateCompiler {
 	public function compile_for($args) {
 		$matches = array();
 		// RegEx string to search "$key, $value in $array" substring
-		if (preg_match('#^(\{?\$([a-zA-Z0-9_]+)\}?,\s*)?\{?\$([a-zA-Z0-9_]+)\}?\s+in\s+(.+)$#U', $args, $matches)) {
-			if ($this->for_count < 0) {
-				$this->for_count = 0;
-			}
-			$this->for_count++;
-			list(, , $key, $value, $array) = $matches;
-			
-			if (strpos($array, '$') === 0) {
-				$array = "\$this->tpl_vars['".substr($array, 1)."']";
-			} else if (strpos($array, '{') === 0) {
-				$array = $this->parseVar(substr($array, 1, -1));
-			}
-			
-			$s = "<?php \$hidden_counter".$this->for_count." = 0;\n";
-			if (empty($key)) {
-				$s .= "foreach((array) ".$array." as \$this->tpl_vars['".$value."']):\n";
-			} else {
-				$s .= "foreach((array) ".$array." as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']):\n";
-			}
-			return $s."	\$hidden_counter".$this->for_count."++; ?>";
-		} else {
-			return '';
+		if (!preg_match('#^(\{?\$([a-zA-Z0-9_]+)\}?,\s*)?\{?\$([a-zA-Z0-9_]+)\}?\s+in\s+(.+)$#U', $args, $matches)) {
+			throw new Exception("WTemplateCompiler::compile_for(): Wrong syntax for node {for ".$args."}.");
 		}
+		
+		if ($this->for_count < 0) {
+			$this->for_count = 0;
+		}
+		$this->for_count++;
+		list(, , $key, $value, $array) = $matches;
+		
+		if (strpos($array, '$') === 0) {
+			$array = "\$this->tpl_vars['".substr($array, 1)."']";
+		} else if (strpos($array, '{') === 0) {
+			$array = $this->parseVar(substr($array, 1, -1));
+		}
+		
+		$s = "<?php \$hidden_counter".$this->for_count." = 0;\n";
+		if (empty($key)) {
+			$s .= "foreach((array) ".$array." as \$this->tpl_vars['".$value."']):\n";
+		} else {
+			$s .= "foreach((array) ".$array." as \$this->tpl_vars['".$key."'] => \$this->tpl_vars['".$value."']):\n";
+		}
+		return $s."	\$hidden_counter".$this->for_count."++; ?>";
 	}
 	
     /**
@@ -382,10 +376,6 @@ class WTemplateCompiler {
 		return "<?php endif; ?>";
 	}
 	
-	/**
-	 * {set $a = 5}
-	 * {set {$a} = {$b} + 1}
-	 */
     /**
      * Compiles an assignement
      * 
