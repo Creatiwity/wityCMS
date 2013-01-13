@@ -47,9 +47,7 @@ class NewsAdminView extends WView {
 		
 		// Chargement des catégories
 		$data = $this->model->getCatList("name", "ASC");
-		foreach ($data as $values) {
-			$this->tpl->assignBlockVars('cat', $values);
-		}
+		$this->assign('cat', $data);
 	}
 	
 	/**
@@ -120,9 +118,12 @@ class NewsAdminView extends WView {
 		$this->assign('js', '/apps/news/admin/js/cat.js');
 		
 		// AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$dispFields = array('name', 'shortname');
-		$adminStyle = new AdminStyle($dispFields, 'name');
+		$orderingFields = array('name', 'shortname');
+		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'name'));
+		
+		/*include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
+		
+		$adminStyle = new AdminStyle($dispFields, 'name');*/
 		
 		// Sorting vars
 		$sort = $adminStyle->getSorting($sortBy, $sens);
@@ -131,9 +132,7 @@ class NewsAdminView extends WView {
 		$this->tpl->assign($adminStyle->getTplVars());
 		
 		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
-		foreach ($data as $values) {
-			$this->tpl->assignBlockVars('cat', $values);
-		}
+		$this->assign('cat', $data);
 	}
 }
 

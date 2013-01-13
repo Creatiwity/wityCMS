@@ -324,9 +324,6 @@ class NewsAdminController extends WController {
 			}
 		}
 		
-		// Les notes
-		WNote::treatNoteSession();
-		
 		$this->view->cat($sortBy, $sens);
 		$this->render('cat');
 	}

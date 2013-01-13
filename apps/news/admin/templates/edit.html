@@ -13,10 +13,10 @@
 				</tr>
 			</table>
 			<h3>Catégorie de l'article</h3>
-			{block name=cat}
-				<input id="cat{$cat.cid}" type="checkbox" name="nCat[{$cat.cid}]"{if in_array({$cat.cid}, {$ncat})} checked="checked"{/if} />
-				<label for="cat{$cat.cid}">{$cat.name}</label><br />
-			{/block}
+			{for $c in $cat}
+				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]"{if in_array({$c.cid}, {$ncat})} checked="checked"{/if} />
+				<label for="cat{$c.cid}">{$c.name}</label><br />
+			{/for}
 		</div>
 		<div class="block">
 			<div class="top"></div>
