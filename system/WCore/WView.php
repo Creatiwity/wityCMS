@@ -20,6 +20,12 @@ class WView {
      */
 	private static $response_sent = false;
 	
+	/**
+	 * 
+	 * @var array Context of the application describing app's name, app's directory and app's main class
+	 */
+	private $context;
+	
     /**
      *
      * @var WTemplate Instance of WTemplate
@@ -67,6 +73,17 @@ class WView {
 		$this->assign('page_title', $site_name);
 	}
 	
+	/**
+	 * Defines the context of the application this View belongs to
+	 * 
+	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
+	 */
+	public function setContext($context) {
+		if (empty($this->context)) {
+			$this->context = $context;
+		}
+	}
+	
     /**
      * Assigns a theme
      * 
@@ -98,34 +115,17 @@ class WView {
      * @param string $file file that will be used for template compiling
      */
 	public function setResponse($file) {
+		// Format the file asked
+		if (strpos($file, '/') === false) {
+			$file = $this->context['directory'].'templates'.DS.$file.'.html';
+		}
+		
 		$file = str_replace(WITY_PATH, '', $file);
 		if (file_exists(WITY_PATH.$file)) {
 			// WTemplate automatically adds the base directory defined in WSystem::getTemplate()
 			$this->responseFile = $file;
 		} else {
 			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'custom');
-		}
-	}
-	
-    /**
-     * Searches a template file which relates to the current application name and asked action
-     * 
-     * The file will be searched first in theme files, then in application files
-     * 
-     * @param string $appName       application name
-     * @param string $action        asked action
-     * @param string $adminLoaded   true if admin mode is loaded, false otherwise
-     */
-	public function findResponse($appName, $action, $adminLoaded) {
-		if ($adminLoaded) {
-			$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
-		} else {
-			$themeTplHref = $this->themeDir.'templates'.DS.$appName.DS.$action.'.html';
-			if (file_exists($themeTplHref)) {
-				$this->setResponse($themeTplHref);
-			} else {
-				$this->setResponse(APPS_DIR.$appName.DS.'front'.DS.'templates'.DS.$action.'.html');
-			}
 		}
 	}
 	

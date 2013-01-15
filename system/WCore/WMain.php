@@ -63,15 +63,22 @@ class WMain {
 			// App controller file
 			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
 			include $app_dir.'main.php';
-			$class = str_replace('-', '_', ucfirst($app_name)).'Controller';
+			$app_class = str_replace('-', '_', ucfirst($app_name)).'Controller';
 			
 			// App's controller must inherit WController
-			if (class_exists($class) && get_parent_class($class) == 'WController') {
-				$controller = new $class();
-				$controller->init($this, $app_dir);
+			if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
+				$context = array(
+					'name'       => $app_name,
+					'directory'  => $app_dir,
+					'controller' => $app_class,
+					'admin'      => false
+				);
+				
+				$controller = new $app_class();
+				$controller->init($this, $context);
 				$controller->launch();
 			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to inherit WController abstract class.", 'display');
+				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting WController abstract class.", 'display');
 			}
 		} else {
 			WNote::error(404, "The page requested was not found.", 'display');

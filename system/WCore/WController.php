@@ -22,9 +22,9 @@ abstract class WController {
 	
     /**
      *
-     * @var string the full application directory
+     * @var array Context of the application describing app's name, app's directory and app's main class
      */
-	protected $app_dir;
+	protected $context;
 	
     /**
      *
@@ -41,17 +41,20 @@ abstract class WController {
     /**
      * Application initialization
      * 
-     * @param WMain $wity main Wity instance of WMain
-     * @param type $app_dir directory of the application inheriting this Controller
+     * @param WMain  $wity     main Wity instance of WMain
+     * @param array  $context  Context of the application describing app's name, app's directory and app's main class
      */
-	public function init(WMain $wity, $app_dir) {
+	public function init(WMain $wity, $context) {
 		$this->wity = $wity;
-		$this->app_dir = $app_dir;
+		$this->context = $context;
 		
 		// Initialize view if the app's constructor did not do it
 		if (is_null($this->view)) {
-			$this->view = new WView();
+			$this->setView(new WView());
 		}
+		
+		// Forward the context to the View
+		$this->view->setContext($this->context);
 		
 		// Default theme configuration
 		if ($this->view->getTheme() == '') {
@@ -62,8 +65,8 @@ abstract class WController {
 		$this->loadManifest($this->getAppName());
 		
 		// Automaticly declare the language directory
-		if (is_dir($app_dir.DS.'lang')) {
-			WLang::declareLangDir($app_dir.DS.'lang');
+		if (is_dir($context['directory'].DS.'lang')) {
+			WLang::declareLangDir($context['directory'].DS.'lang');
 		}
 	}
 	
@@ -86,7 +89,7 @@ abstract class WController {
 		} else if (!empty($default)) {
 			$this->forward($default);
 		} else {
-			throw new Exception("L'action \"".$action."\" est inconnue de l'application ".$this->getAppName().".");
+			throw new Exception("The page \"".$action."\" cannot be found in application ".$this->getAppName().".");
 		}
 	}
 	
@@ -96,36 +99,16 @@ abstract class WController {
      * @return string application's name
      */
 	public function getAppName() {
-		$className = str_replace('_', '-', get_class($this));
-		if (strpos($className, 'Admin') === 0) {
-			$appName = 'admin';
-		} else {
-			$appName = strtolower(str_replace(array('AdminController', 'Controller'), '', $className));
-		}
-		return $appName;
+		return $this->context['name'];
 	}
 	
-    /**
-     * Returns the first asked action which was the first parameter of the forward method
+	/**
+     * Returns if the application is in admin mode or not
      * 
-     * @return string action name
+     * @return bool true if admin mode loaded, false otherwise
      */
-	public function getAskedAction() {
-		$args = WRoute::getArgs();
-		if (isset($args[0])) {
-			return $args[0];
-		} else {
-			return 'index';
-		}
-	}
-
-    /**
-     * Returns the real executed action
-     * 
-     * @return string real executed action name
-     */
-	public function getTriggeredAction() {
-		return $this->action;
+	public function getAdminContext() {
+		return $this->context['admin'];
 	}
 	
     /**
@@ -147,6 +130,29 @@ abstract class WController {
 		return $this->view;
 	}
 	
+	/**
+     * Returns the first asked action which was the first parameter of the forward method
+     * 
+     * @return string action name
+     */
+	public function getAskedAction() {
+		$args = WRoute::getArgs();
+		if (isset($args[0])) {
+			return $args[0];
+		} else {
+			return 'index';
+		}
+	}
+	
+    /**
+     * Returns the real executed action
+     * 
+     * @return string real executed action name
+     */
+	public function getTriggeredAction() {
+		return $this->action;
+	}
+	
     /**
      * Returns a list of available actions in this application
      * 
@@ -158,15 +164,6 @@ abstract class WController {
 		} else {
 			return array();
 		}
-	}
-	
-    /**
-     * Returns if the application is in admin mode or not
-     * 
-     * @return bool true if admin mode loaded, false otherwise
-     */
-	public function adminLoaded() {
-		return strpos(get_class($this), 'Admin') !== false;
 	}
 	
 	/**
@@ -181,40 +178,44 @@ abstract class WController {
 			$manifest = array();
 			
 			// Nodes to look for
-			$nodes = array('title', 'version', 'date', 'icone', 'services', 'operations', 'adminOperations');
+			$nodes = array('title', 'version', 'date', 'icone', 'service', 'page', 'admin');
 			foreach ($nodes as $node) {
 				switch ($node) {
-					case 'services':
+					case 'service':
+						foreach ($xml->service as $page) {
+							
+						}
 						break;
 					
-					case 'operations':
+					case 'page':
+						foreach ($xml->page as $page) {
+							$attributes = $page->attributes();
+							$manifest['admin'][] = array(
+								'method' => $page->__toString(),
+								'lang' => isset($attributes['lang']) ? $attributes['lang'] : '',
+							);
+						}
 						break;
 					
-					case 'adminOperations':
+					case 'admin':
+						foreach ($xml->admin->page as $page) {
+							$attributes = $page->attributes();
+							$manifest['admin'][] = array(
+								'method' => $page->__toString(),
+								'lang' => isset($attributes['lang']) ? $attributes['lang'] : '',
+								'menu' => isset($attributes['menu']) ? $attributes['menu'] == 'true' : '',
+							);
+						}
 						break;
 					
 					default:
-						$manifest[$node] = property_exists($xml, $node) ? $xml->$node : '';
+						$manifest[$node] = property_exists($xml, $node) ? $xml->$node->__toString() : '';
 						break;
 				}
 			}
 			
 			//var_dump($manifest);
 		}
-	}
-	
-    /**
-     * Renders the application with the right view
-     * 
-     * @param string $action name of the file that will be used for rendering this application
-     */
-	protected function render($action) {
-		$this->view->assign('actionForwarded', $this->action);
-		
-		// View: find response and render it
-		$action = str_replace(array('.html', '.tpl'), '', $action);
-		$this->view->findResponse($this->getAppName(), $action, $this->adminLoaded());
-		$this->view->render();
 	}
 }
 

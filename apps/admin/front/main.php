@@ -52,9 +52,18 @@ class AdminController extends WController {
 				// Chargement de la partie admin de l'appli
 				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
 				include $app_dir.'main.php';
-				$class = ucfirst($this->appAsked).'AdminController';
-				$this->appController = new $class();
-				$this->appController->init($this->wity, $app_dir);
+				$app_class = ucfirst($this->appAsked).'AdminController';
+				
+				// Create context
+				$context = array(
+					'name'       => $this->appAsked,
+					'directory'  => $app_dir,
+					'controller' => $app_class,
+					'admin'      => true
+				);
+				
+				$this->appController = new $app_class();
+				$this->appController->init($this->wity, $context);
 				
 				// Config du template
 				$this->configTheme();
