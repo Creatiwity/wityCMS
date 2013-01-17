@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-29-11-2012
+ * @version 0.3-17-01-2013
  */
 class WView {
 	

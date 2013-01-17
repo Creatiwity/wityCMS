@@ -25,9 +25,10 @@ class WSession {
 	const FLOOD_TIME = 15;
 	
     /**
-     * Time before the session expires
+     * Time before the session expires (seconds)
      */
 	const TOKEN_EXPIRATION = 120;
+	
 	/*
 	 * Inactivity time (minuts)
 	 */
@@ -178,9 +179,12 @@ class WSession {
 		$_SESSION['access'] = array();
 		foreach (explode(',', $data['access']) as $access) {
 			if (!empty($access)) {
-				if (strpos($access, '|') !== false) {
-					$split = explode('|', $access);
-					$_SESSION['access'][$split[0]] = $split[1];
+				$pages_begin = strpos($access, '[');
+				if ($pages_begin !== false) {
+					$app_name = substr($access, 0, $pages_begin);
+					$pages = substr($access, $pages_begin+1, -1);
+					
+					$_SESSION['access'][$app_name] = explode('|', $pages);
 				} else {
 					$_SESSION['access'][$access] = 0;
 				}
