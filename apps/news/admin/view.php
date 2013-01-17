@@ -29,6 +29,7 @@ class NewsAdminView extends WView {
 		
 		$data = $this->model->getNewsList(0, 20, $sort[0], $sort[1] == 'ASC');
 		$this->assign('news', $data);
+		$this->setResponse('index');
 	}
 	
 	/**
@@ -77,6 +78,9 @@ class NewsAdminView extends WView {
 			),
 			$data
 		);
+		
+		$this->setResponse('add');
+		$this->render();
 	}
 	
 	public function edit($id, $formData = array()) {
@@ -106,11 +110,16 @@ class NewsAdminView extends WView {
 			), 
 			$formData
 		);
+		
+		$this->setResponse('edit');
+		$this->render();
 	}
 	
 	public function del($id) {
 		$data = $this->model->loadNews($id);
 		$this->assign('nTitle', $data['title']);
+		
+		$this->setResponse('del');
 	}
 	
 	public function cat($sortBy, $sens) {
@@ -121,10 +130,6 @@ class NewsAdminView extends WView {
 		$orderingFields = array('name', 'shortname');
 		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'name'));
 		
-		/*include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		
-		$adminStyle = new AdminStyle($dispFields, 'name');*/
-		
 		// Sorting vars
 		$sort = $adminStyle->getSorting($sortBy, $sens);
 		
@@ -133,6 +138,8 @@ class NewsAdminView extends WView {
 		
 		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
 		$this->assign('cat', $data);
+		
+		$this->setResponse('cat');
 	}
 }
 

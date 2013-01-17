@@ -18,12 +18,14 @@ class NewsView extends WView {
 	
 	public function listing() {
 		$this->assign('news', $this->model->getNewsList(0, 3));
+		$this->setResponse('listing');
 	}
 	
 	public function detail($id) {
 		$data = $this->model->loadNews($id);
 		$data['content'] = str_replace('<hr />', '', $data['content']);
 		$this->assign($data);
+		$this->setResponse('detail');
 	}
 }
 

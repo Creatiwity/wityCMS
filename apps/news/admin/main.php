@@ -8,14 +8,6 @@
  */
 
 class NewsAdminController extends WController {
-	protected $actionList = array(
-		'index' => "Liste des articles",
-		'add' => "Ajouter un article",
-		'edit' => "\Edition d'une news",
-		'del' => "\Suppression d'une news",
-		'cat' => "Gestion des catégories"
-	);
-	
 	/*
 	 * Chargement du modèle et de la view
 	 */
@@ -25,11 +17,6 @@ class NewsAdminController extends WController {
 		
 		include 'view.php';
 		$this->setView(new NewsAdminView($this->model));
-	}
-	
-	public function launch() {
-		$action = $this->getAskedAction();
-		$this->forward($action, 'index');
 	}
 	
 	/**
@@ -57,7 +44,7 @@ class NewsAdminController extends WController {
 		}
 		
 		$this->view->index($sortBy, $sens);
-		$this->render('index');
+		$this->view->render();
 	}
 	
 	/*
@@ -107,7 +94,6 @@ class NewsAdminController extends WController {
 			if (!empty($erreurs)) { // Il y a un problème
 				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
 				$this->view->add($data);
-				$this->render('add');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->createNews($data)) {
@@ -125,12 +111,10 @@ class NewsAdminController extends WController {
 				} else {
 					WNote::error("Erreur lors de l'ajout", "Une erreur inconnue s'est produite.", 'assign');
 					$this->view->add($data);
-					$this->render('add');
 				}
 			}
 		} else {
 			$this->view->add();
-			$this->render('add');
 		}
 	}
 	
@@ -201,7 +185,6 @@ class NewsAdminController extends WController {
 			if (!empty($erreurs)) { // Il y a un problème
 				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
 				$this->view->edit($id, $data);
-				$this->render('edit');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->updateNews($id, $data)) {
@@ -210,12 +193,10 @@ class NewsAdminController extends WController {
 				} else {
 					WNote::error("Erreur lors de l'édition", "Une erreur inconnue s'est produite.", 'assign');
 					$this->view->edit($id, $data);
-					$this->render('edit');
 				}
 			}
 		} else {
 			$this->view->edit($id);
-			$this->render('edit');
 		}
 	}
 	
@@ -230,7 +211,7 @@ class NewsAdminController extends WController {
 				header('location: '.WRoute::getDir().'admin/news/');
 			} else {
 				$this->view->del($id);
-				$this->render('del');
+				$this->render();
 			}
 		} else {
 			WNote::error("Article introuvable", "L'article que vous tentez de supprimer n'existe pas.", 'session');
@@ -325,7 +306,7 @@ class NewsAdminController extends WController {
 		}
 		
 		$this->view->cat($sortBy, $sens);
-		$this->render('cat');
+		$this->view->render();
 	}
 	
 	protected function cat_del() {

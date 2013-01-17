@@ -23,13 +23,14 @@ class NewsController extends WController {
 		$this->setView(new NewsView($this->model));
 	}
 	
-	public function launch() {
+	public function index() {
 		$newsid = $this->getId();
 		if (!empty($newsid) && $this->model->validId($newsid)) {
 			$this->displayItem($newsid);
 		} else {
 			$this->listNews();
 		}
+		$this->view->render();
 	}
 	
 	/**
@@ -47,12 +48,10 @@ class NewsController extends WController {
 	
 	protected function listNews() {
 		$this->view->listing();
-		$this->render('listing');
 	}
 	
 	protected function displayItem($id) {
 		$this->view->detail($id);
-		$this->render('detail');
 	}
 }
 
