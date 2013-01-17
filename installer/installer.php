@@ -13,6 +13,15 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-17-01-2013
  */
 class Installer {
+/**
+*  if (the lock file exists && the lock file is still valid) || lock file does not exist
+*      create lock file (again)
+*      execute control
+*  else
+*      return an error message (msg: delete lock file) 
+*  
+*/
+    
     
 }
 ?>

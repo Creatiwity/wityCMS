@@ -44,12 +44,6 @@ class Route {
 
         // Loading URL config
         $routage = self::parseURL(self::$query);
-        if (!empty($routage)) {
-            self::setRoute($routage);
-        } else {
-            // If nothing found, launch the default route
-            self::setRoute(WConfig::get('route.default'));
-        }
     }
 
     /**
