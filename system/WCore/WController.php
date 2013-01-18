@@ -235,12 +235,12 @@ abstract class WController {
 					if (property_exists($xml, 'page')) {
 						foreach ($xml->page as $page) {
 							$attributes = $page->attributes();
-							$key = $page->__toString();
+							$key = (string) $page;
 							if (!empty($key)) {
 								if (!isset($manifest['pages'][$key])) {
 									$manifest['pages'][$key] = array(
-										'lang' => isset($attributes['lang']) ? $attributes['lang']->__toString() : '',
-										'restriction' => isset($attributes['restriction']) ? intval($attributes['restriction']->__toString()) : ''
+										'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
+										'restriction' => isset($attributes['restriction']) ? intval($attributes['restriction']) : 0
 									);
 								}
 								if (isset($attributes['default']) && empty($manifest['default'])) {
@@ -256,12 +256,12 @@ abstract class WController {
 						foreach ($xml->admin->page as $page) {
 							if (!empty($page)) {
 								$attributes = $page->attributes();
-								$key = $page->__toString();
+								$key = (string) $page;
 								if (!empty($key)) {
 									if (!isset($manifest['admin'][$key])) {
 										$manifest['admin'][$key] = array(
-											'lang' => isset($attributes['lang']) ? $attributes['lang']->__toString() : '',
-											'menu' => isset($attributes['menu']) ? $attributes['menu']->__toString() == 'true' : true
+											'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
+											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true
 										);
 									}
 								}
@@ -274,7 +274,7 @@ abstract class WController {
 					break;
 				
 				default:
-					$manifest[$node] = property_exists($xml, $node) ? $xml->$node->__toString() : '';
+					$manifest[$node] = property_exists($xml, $node) ? (string) $xml->$node : '';
 					break;
 			}
 		}
