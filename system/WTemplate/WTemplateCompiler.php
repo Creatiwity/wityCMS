@@ -154,6 +154,8 @@ class WTemplateCompiler {
 				}
 				
 				$output = call_user_func(self::$external_compilers[$node_name], $args);
+			} else {
+				throw new Exception("WTemplateCompiler::compileNode(): no compiler handler found for node {".$node."}.");
 			}
 		}
 		
@@ -364,7 +366,7 @@ class WTemplateCompiler {
      * @return string php-empty code
      */
 	public function compile_empty() {
-		return "<?php if (isset(\$hidden_counter".($this->for_count+1).") && intval(\$hidden_counter".($this->for_count+1).") == 0): ?>";
+		return "<?php if (isset(\$hidden_counter".($this->for_count).") && intval(\$hidden_counter".($this->for_count).") == 0): ?>";
 	}
 	
     /**

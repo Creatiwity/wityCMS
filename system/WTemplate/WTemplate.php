@@ -37,16 +37,8 @@ class WTemplate {
 	private $compiler;
 	
     /**
-     *
-     * @var boolean Buffer state 
-     * @todo unused variable buffer_launched. Clean it or not ?
-     */
-	private $buffer_launched = false;
-	
-    /**
      * Setup template engine
      * 
-     * @todo Sets the default compile_dir to cache/templates ?
      * @param string $baseDir script root directory
      * @param string $compileDir optional compilation directory
      * @throws Exception
