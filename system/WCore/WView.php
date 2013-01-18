@@ -165,28 +165,21 @@ class WView {
 	}
 	
     /**
-     * Assigns a variable block to a set of values
+     * Some variables may be considered as "special vars" in a way that they will have a
+	 * particular treatment when they will be assigned in the template compilator.
+	 * This treatment is defined in this function.
+	 * Special vars are not erased. If two different values are assigned to a same special var,
+	 * they will stack in an array.
+	 * 
+	 * For instance, $css and $js are considered as special vars since they will be automaticly
+	 * inserted in a <script> or <link> html tag.
+	 * $this->assign('css', 'style.css');
+	 * {$css} will be replaced by <link href="THEMES_DIR/style.css" rel="stylesheet" type="text/css" />
      * 
-     * @todo Describe a little bit more and better the assignBlock method and the way to use it
-     * @param string    $blockName  block name in the template file
-     * @param array     $value      set of values that will be set in the block
-     */
-	public function assignBlock($blockName, $value) {
-		if (!isset($this->vars[$blockName.'_block'])) {
-			$this->vars[$blockName.'_block'] = array($value);
-		} else {
-			$this->vars[$blockName.'_block'][] = $value;
-		}
-	}
-	
-    /**
-     * Returns a "stack" variable with a particular treatment
-     * 
-     * @todo Describe a little bit more and better the getStack method and the way to use it
      * @param string $stack_name stack name
      * @return string variable value
      */
-	public function getStack($stack_name) {
+	public function getSpecialVar($stack_name) {
 		if (empty($this->vars[$stack_name])) {
 			return '';
 		}
@@ -225,13 +218,19 @@ class WView {
     /**
      * Renders the view
      * 
+	 * @param  string  $response  Template file to be displayed
      * @return boolean true if view successfully loaded, false otherwise
      */
-	public function render() {
+	public function render($response = '') {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
 			// HTML sent => abort
 			return false;
+		}
+		
+		// Declare response file if given
+		if (!empty($response)) {
+			$this->setResponse($response);
 		}
 		
 		// Check theme
@@ -256,7 +255,7 @@ class WView {
 		// Treat "special vars"
 		foreach ($this->specialVars as $stack) {
 			if (!empty($this->vars[$stack])) {
-				$this->vars[$stack] = $this->getStack($stack);
+				$this->vars[$stack] = $this->getSpecialVar($stack);
 			} else {
 				unset($this->vars[$stack]);
 			}
