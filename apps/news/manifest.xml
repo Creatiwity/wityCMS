@@ -23,12 +23,11 @@
 		  1 - User connected required
 		  2 - Require specific access -->
 	<page restriction="1" default="1">index</page>
-	<!--<page lang="Affichage d'un article" restriction="1">detail</page>
-	<page lang="Private" restriction="2">private</page>-->
+	<page lang="Affichage d'un article">detail</page>
 	
 	<!-- Admin pages -->
 	<admin>
-		<page lang="Liste des articles">index</page>
+		<page lang="Liste des articles" default="1">index</page>
 		<page lang="Ajouter un article">add</page>
 		<page lang="Édition d'un article" menu="false">edit</page>
 		<page lang="Suppression d'un article" menu="false">del</page>
