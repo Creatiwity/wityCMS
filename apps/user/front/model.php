@@ -116,7 +116,12 @@ class UserModel {
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->fetchAll();
+		$data = array();
+		while ($row = $prep->fetch()) {
+			$row['access'] = explode(',', $row['access']);
+			$data[] = $row;
+		}
+		return $data;
 	}
 	
 	public function getUserData($userid) {

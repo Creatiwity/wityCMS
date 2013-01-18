@@ -33,27 +33,23 @@ class UserController extends WController {
 		
 		include 'view.php';
 		$this->view = new UserView();
+		
+		$this->session = WSystem::getSession();
 	}
 	
 	public function launch() {
-		$this->session = WSystem::getSession();
-		
 		switch ($this->getAskedAction()) {
 			case 'login':
 			case 'connexion':
-				$action = 'login';
+			default:
+				$this->forward('login');
 				break;
 			
 			case 'logout':
 			case 'deconnexion':
-				$action = 'logout';
-				break;
-			
-			default:
-				$action = 'login';
+				$this->forward('logout');
 				break;
 		}
-		$this->forward($action);
 	}
 	
 	/**
@@ -107,7 +103,7 @@ class UserController extends WController {
 		}
 		
 		$this->view->connexion($data['redirect']);
-		$this->render('connexion');
+		$this->view->render();
 	}
 	
 	/**

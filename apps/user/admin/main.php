@@ -8,18 +8,6 @@
  */
 
 class UserAdminController extends WController {
-	/*
-	 * Les opérations du module
-	 */
-	protected $actionList = array(
-		'liste' => "Liste des membres",
-		'add' => "Ajouter un utilisateur",
-		'edit' => "\Edition d'un utilisateur",
-		'del' => "\Suppression d'un utilisateur",
-		'cat' => "Gestion des groupes",
-		'cat_del' => "\\"
-	);
-	
 	public function __construct() {
 		// Chargement des modèles
 		include 'model.php';
@@ -29,14 +17,6 @@ class UserAdminController extends WController {
 		$this->setView(new UserAdminView($this->model));
 	}
 	
-	public function launch() {
-		// Les notes
-		WNote::treatNoteSession();
-		
-		$action = $this->getAskedAction();
-		$this->forward($action, 'liste');
-	}
-	
 	/**
 	 * Récupération de l'id de l'utilisateur fourni en Url
 	 * @param void
@@ -44,7 +24,7 @@ class UserAdminController extends WController {
 	 */
 	private function getId() {
 		$args = WRoute::getArgs();
-		if (empty($args[1])) {
+		if (!isset($args[1])) {
 			return -1;
 		} else {
 			list ($id) = explode('-', $args[1]);
@@ -64,7 +44,7 @@ class UserAdminController extends WController {
 		$filtres = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
 		
 		$this->view->liste($sortBy, $sens, $page, $filtres);
-		$this->render('liste');
+		$this->view->render('liste');
 	}
 	
 	protected function add() {
@@ -159,7 +139,7 @@ Ceci est un message automatique.";
 			}
 		} else {
 			$this->view->add();
-			$this->render('add');
+			$this->view->render('add');
 		}
 	}
 	
@@ -228,7 +208,7 @@ Ceci est un message automatique.";
 			if (!empty($erreurs)) {
 				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
 				$this->view->edit($userid);
-				$this->render('edit');
+				$this->view->render('edit');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->updateUser($userid, $data)) {
@@ -237,7 +217,7 @@ Ceci est un message automatique.";
 				} else {
 					WNote::error("Erreur lors de l'édition", "Une erreur inconnue s'est produite.", 'assign');
 					$this->view->edit($userid);
-					$this->render('add');
+					$this->view->render('add');
 				}
 			}
 		} else {
@@ -246,7 +226,7 @@ Ceci est un message automatique.";
 				$this->liste();
 			} else {
 				$this->view->edit($userid);
-				$this->render('edit');
+				$this->view->render('edit');
 			}
 		}
 	}
@@ -260,7 +240,7 @@ Ceci est un message automatique.";
 				header('location: '.WRoute::getDir().'admin/user/');
 			} else {
 				$this->view->del($userid);
-				$this->render('del');
+				$this->view->render('del');
 			}
 		} else {
 			$this->liste();
@@ -362,11 +342,8 @@ Ceci est un message automatique.";
 			}
 		}
 		
-		// Les notes
-		WNote::treatNoteSession();
-		
 		$this->view->cat($sortBy, $sens);
-		$this->render('cat');
+		$this->view->render('cat');
 	}
 	
 	protected function cat_del() {
