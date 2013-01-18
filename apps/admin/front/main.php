@@ -95,7 +95,7 @@ class AdminController extends WController {
 			if ($this->hasAccess($default[0])) {
 				WRoute::setRoute($default);
 			} else {
-				// Le user est forcément admin
+				// Le user est forcément admin mais n'a pas accès à l'appli par défaut
 				// On charge la première application à laquelle il a accès
 				/*$cp = $_SESSION['access'];
 				WRoute::setRoute(array(array_shift(array_keys($cp)), array()));*/
