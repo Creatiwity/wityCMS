@@ -73,7 +73,10 @@ abstract class WController {
 		}
 		
 		// Parse the manifest
-		$this->loadManifest();
+		$this->manifest = $this->loadManifest($this->getAppName());
+		if (empty($this->manifest)) {
+			WNote::error('app_no_manifest', 'The manifest of the application '.$this->getAppName().' cannot be found', 'assign');
+		}
 	}
 	
 	public function launch() {
@@ -90,10 +93,12 @@ abstract class WController {
 	protected function forward($action) {
 		if (empty($action)) {
 			// Default action
-			if (isset($this->manifest['default'])) {
+			if (!$this->getAdminContext() && isset($this->manifest['default'])) {
 				$action = $this->manifest['default'];
+			} else if ($this->getAdminContext() && isset($this->manifest['default_admin'])) {
+				$action = $this->manifest['default_admin'];
 			} else {
-				WNote::error('controller_no_default_action', "The application ".$this->getAppName()." has no default action.", 'display');
+				WNote::error('app_no_default_action', 'The application '.$this->getAppName().' has no default action.', 'display');
 			}
 		}
 		
@@ -103,7 +108,7 @@ abstract class WController {
 			if (isset($this->manifest['default'])) {
 				$this->execAction($this->manifest['default']);
 			} else {
-				WNote::error('controller_no_suitable_action', "The application ".$this->getAppName()." does not know any action named ".$action.".", 'display');
+				WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' does not know any action named '.$action.'.', 'display');
 			}
 		}
 	}
@@ -119,7 +124,7 @@ abstract class WController {
 			$this->action = $action;
 			$this->$action();
 		} else {
-			WNote::error('controller_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in the application '.$this->getAppName().'.', 'display');
+			WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
 		}
 	}
 	
@@ -189,19 +194,13 @@ abstract class WController {
 	 * @param string $app_name name of the application owning the manifest
 	 * @return array manifest asked
 	 */
-	public function loadManifest($app_name = '') {
-		if (empty($app_name)) {
-			$app_name = $this->getAppName();
+	public function loadManifest($app_name) {
+		$manifest = WConfig::get('manifest.'.$app_name);
+		if (is_null($manifest)) {
+			$manifest = $this->parseManifest(APPS_DIR.$app_name.DS.'manifest.xml');
+			WConfig::set('manifest.'.$app_name, $manifest);
 		}
-		
-		if ($app_name == $this->getAppName()) {
-			if (empty($this->manifest)) {
-				$this->manifest = $this->parseManifest(APPS_DIR.$app_name.DS.'manifest.xml');
-			}
-			return $this->manifest;
-		} else {
-			return $this->parseManifest(APPS_DIR.$app_name.DS.'manifest.xml');
-		}
+		return $manifest;
 	}
 	
 	public function getManifest() {
@@ -265,6 +264,9 @@ abstract class WController {
 											'menu' => isset($attributes['menu']) ? $attributes['menu']->__toString() == 'true' : true
 										);
 									}
+								}
+								if (isset($attributes['default']) && empty($manifest['default_admin'])) {
+									$manifest['default_admin'] = $key;
 								}
 							}
 						}
