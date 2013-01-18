@@ -57,7 +57,7 @@ class WSystem {
 			try {
 				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
 			} catch (Exception $e) {
-				WNote::error('system_template_instanciation', $e->getMessage(), 'die');
+				WNote::error('system_template_instantiation', $e->getMessage(), 'die');
 			}
 		}
 		
