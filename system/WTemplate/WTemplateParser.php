@@ -68,18 +68,20 @@ class WTemplateParser {
 					break;
 				
 				case '{':
-					// Check whether { is backslashed
-					if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $string[$i+1] != "\r\n" && $last_char != '\\') {
-						$level++;
-					}
-					
-					// Are we in a node?
-					if ($level > 0) {
-						if ($level > 1) {
-							$tmp .= '{';
+					if (!$comment) {
+						// Check whether { is backslashed
+						if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $last_char != '\\') {
+							$level++;
 						}
-					} else {
-						$code .= '{';
+						
+						// Are we in a node?
+						if ($level > 0) {
+							if ($level > 1) {
+								$tmp .= '{';
+							}
+						} else {
+							$code .= '{';
+						}
 					}
 					break;
 				
@@ -112,7 +114,7 @@ class WTemplateParser {
 				
 				default:
 					if ($char == "\n" && $level > 0 && !$comment) {
-						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node.");
+						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node (".$tmp.").");
 					}
 					
 					if ($level > 0) {
