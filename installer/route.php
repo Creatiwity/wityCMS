@@ -44,6 +44,8 @@ class Route {
 
         // Loading URL config
         $routage = self::parseURL(self::$query);
+        
+        return $routage;
     }
 
     /**

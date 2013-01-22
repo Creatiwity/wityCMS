@@ -19,7 +19,7 @@ define('WITY_VERSION', '0.3.0');
 /**
  * Installer section
  */
-if(file_exists("installer")) {
+if(file_exists("installer/installer.php")) {
     require 'installer/installer.php';
     $installer = new Installer();
     return;
