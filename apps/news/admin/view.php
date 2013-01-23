@@ -38,8 +38,8 @@ class NewsAdminView extends WView {
 	private function loadMainForm() {
 		// JS / CSS
 		$this->assign('js', '/apps/news/admin/js/add.js');
-		$this->assign('js', '/helpers/ckeditor/ckeditor.js');
-		$this->assign('js', '/helpers/ckfinder/ckfinder.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
+		$this->assign('js', '/libraries/ckfinder/ckfinder.js');
 		
 		$this->assign('baseDir', WRoute::getDir());
 		

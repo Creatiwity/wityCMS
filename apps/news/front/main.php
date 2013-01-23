@@ -8,10 +8,6 @@
  */
 
 class NewsController extends WController {
-	protected $actionList = array(
-		'index' => "Liste des articles",
-	);
-	
 	/*
 	 * Chargement du modèle et de la view
 	 */
