@@ -6,8 +6,8 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WRoute
- * This class calculates the route given in the URL to find out the right application to execute.
+ * WRoute calculates the route given in the URL to find out the right application to execute.
+ * 
  * Traditionnally, Apache URL Rewriting is used in Wity.
  * Example: the URL "http://mysite.fr/news/see/4" would be translated like this :
  * - app = "news"
