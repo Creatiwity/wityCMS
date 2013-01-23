@@ -36,7 +36,7 @@ class PageAdminView extends WView {
 		$this->assign('baseDir', WRoute::getDir());
 		
 		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', $_SERVER['SERVER_NAME'].WRoute::getDir());
+		$this->assign('siteURL', WRoute::getBase());
 		
 		/**
 		 * VALEURS DE CONTENU
@@ -83,7 +83,7 @@ class PageAdminView extends WView {
 		$this->assign('baseDir', WRoute::getDir());
 		
 		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', $_SERVER['SERVER_NAME'].WRoute::getDir());
+		$this->assign('siteURL', WRoute::getBase());
 		
 		$data = $this->model->loadPage($id);
 		

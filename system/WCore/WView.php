@@ -273,8 +273,8 @@ class WView {
 			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
 		}
 		
-		$base = WRoute::getDir();
-		if ($base == '/') {
+		$dir = WRoute::getDir();
+		if (empty($dir)) {
 			// Direct render
 			try {
 				$this->tpl->display($themeMainFile);
@@ -284,12 +284,12 @@ class WView {
 			}
 		} else {
 			// Absolute links fix
-			// If $base is not the root file, then change links
+			// If $dir is not the root file, then change links
 			try {
 				$html = $this->tpl->parse($themeMainFile);
 				echo str_replace(
 					array('src="/', 'href="/', 'action="/'),
-					array('src="'.$base, 'href="'.$base, 'action="'.$base),
+					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/'),
 					$html
 				);
 			} catch (Exception $e) {

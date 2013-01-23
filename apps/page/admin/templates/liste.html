@@ -16,7 +16,7 @@
 			<th class="sort {$edit_time_class}"><a href="/admin/page/edit_time-{$edit_time_sort}/">Dernière édition</a></th>
 			<th>Actions</th>
 		</tr>
-		{for $page in $pages}
+		{for $count, $page in $pages}
 			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
 				<td>{$page.id}</td>
 				<td><strong>{$page.title}</strong></td>

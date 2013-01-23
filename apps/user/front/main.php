@@ -125,7 +125,7 @@ class UserController extends WController {
 		
 		// Redirection
 		WNote::success('user_disconnected', "Vous êtes maintenant déconnecté.");
-		header('location: '.WRoute::getDir());
+		header('location: '.WRoute::getBase());
 	}
 	
 	protected function register() {
@@ -168,7 +168,7 @@ class UserController extends WController {
 			// Affichage des éventuelles erreurs
 			if (!empty($erreur)) {
 				WNote::error('data_errors', implode("<br />\n", $erreur));
-				header('location: '.WRoute::getDir());
+				header('location: '.WRoute::getBase());
 			} else {
 				// Création de l'utilisateur
 				if ($this->model->createUser($data)) {
@@ -202,11 +202,11 @@ Profitez de l'upload gagnante !<br /><br />
 					WNote::success('user_registered', "Votre compte a été créé avec succès.<br /><br />Vous venez de recevoir un email à l'adresse que vous nous avez indiquée pour valider votre compte.", 'display');
 				} else {
 					WNote::error('user_registration_failure', "Une erreur inconnue s'est produite lors de la création de votre compte.");
-					header('location: '.WRoute::getDir());
+					header('location: '.WRoute::getBase());
 				}
 			}
 		} else {
-			header('location: '.WRoute::getDir());
+			header('location: '.WRoute::getBase());
 		}
 	}
 	
@@ -218,7 +218,7 @@ Profitez de l'upload gagnante !<br /><br />
 			<br /><br />
 			Vous pouvez maintenant vous connecter à votre compte et commencer à uploader des fichiers.", 'display');
 		} else {
-			header('location: '.WRoute::getDir());
+			header('location: '.WRoute::getBase());
 		}
 	}
 }

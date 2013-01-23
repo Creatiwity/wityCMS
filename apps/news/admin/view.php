@@ -44,7 +44,7 @@ class NewsAdminView extends WView {
 		$this->assign('baseDir', WRoute::getDir());
 		
 		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', $_SERVER['SERVER_NAME'].WRoute::getDir().'news/');
+		$this->assign('siteURL', WRoute::getBase().'/news/');
 		
 		// Chargement des catégories
 		$data = $this->model->getCatList("name", "ASC");

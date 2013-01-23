@@ -130,7 +130,7 @@ Ceci est un message automatique.";
 						unset($mail);
 					}
 					WNote::success('user_created', "L'utilisateur <strong>".$data['nickname']."</strong> a été ajouté avec succès.");
-					header('location: '.WRoute::getDir().'admin/user/');
+					header('location: '.WRoute::getDir().'/admin/user/');
 				} else {
 					WNote::error('user_not_created', "Une erreur inconnue s'est produite.");
 					$this->view->add();
@@ -213,7 +213,7 @@ Ceci est un message automatique.";
 				// Mise à jour des infos
 				if ($this->model->updateUser($userid, $data)) {
 					WNote::success('user_edited', "L'utilisateur <strong>".$data['nickname']."</strong> a été mis à jour avec succès.");
-					header('location: '.WRoute::getDir().'admin/user/edit/'.$userid);
+					header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
 				} else {
 					WNote::error('user_not_edited', "Une erreur inconnue s'est produite.");
 					$this->view->edit($userid);
@@ -237,7 +237,7 @@ Ceci est un message automatique.";
 			if (WRequest::get('confirm', null, 'POST') === '1') {
 				$this->model->deleteUser($userid);
 				WNote::success('user_deleted', "L'utilisateur a été supprimé avec succès.");
-				header('location: '.WRoute::getDir().'admin/user/');
+				header('location: '.WRoute::getDir().'/admin/user/');
 			} else {
 				$this->view->del($userid);
 				$this->view->render('del');
@@ -350,7 +350,7 @@ Ceci est un message automatique.";
 		$id = $this->getId();
 		$this->model->deleteCat($id);
 		WNote::success('cat_deleted', "La catégorie a été supprimée avec succès.");
-		header('location: '.WRoute::getDir().'admin/user/cat/');
+		header('location: '.WRoute::getDir().'/admin/user/cat/');
 	}
 }
 

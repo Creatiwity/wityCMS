@@ -71,7 +71,7 @@ class PageAdminController extends WController {
 					WRoute::defineCustomRoute($data['pUrl'], array('page', array($this->model->getLastId())));
 					
 					WNote::success('page_created', "La page <strong>".$data['pTitle']."</strong> a été créée avec succès.");
-					header('location: '.WRoute::getDir().'admin/page/');
+					header('location: '.WRoute::getDir().'/admin/page/');
 				} else {
 					WNote::success('page_not_created', "Un problème d'origine inconnue est survenu lors de la création de la page <strong>".$data['pTitle']."</strong>");
 					$this->view->add($data);
@@ -90,7 +90,7 @@ class PageAdminController extends WController {
 		// Vérification de la validité de l'id
 		if (!$this->model->validId($id)) {
 			WNote::error('page_not_found', "La page que vous tentez de modifier n'existe pas.");
-			header('location: '.WRoute::getDir().'admin/page/');
+			header('location: '.WRoute::getDir().'/admin/page/');
 			return;
 		}
 		
@@ -140,7 +140,7 @@ class PageAdminController extends WController {
 					}
 					
 					WNote::success('page_edited', "La page <strong>".$data['pTitle']."</strong> a été modifiée avec succès.");
-					header('location: '.WRoute::getDir().'admin/page/');
+					header('location: '.WRoute::getDir().'/admin/page/');
 				} else {
 					WNote::success('page_not_edited', "Un problème d'origine inconnue est survenu lors de l'édition de la page <strong>".$data['pTitle']."</strong>");
 					$this->view->edit($id, $data);
@@ -166,14 +166,14 @@ class PageAdminController extends WController {
 				WRoute::deleteCustomRoute($data['url']);
 				
 				WNote::success('page_deleted', 'La page "<strong>'.$data['title'].'</strong>" a été supprimée avec succès.');
-				header('location: '.WRoute::getDir().'admin/page/');
+				header('location: '.WRoute::getDir().'/admin/page/');
 			} else {
 				$this->view->del($id);
 				$this->view->render('del');
 			}
 		} else {
 			WNote::error('page_not_found', "La page que vous tentez de supprimer n'existe pas.");
-			header('location: '.WRoute::getDir().'admin/page/');
+			header('location: '.WRoute::getDir().'/admin/page/');
 		}
 	}
 	

@@ -22,7 +22,7 @@ class WSession {
     /**
      * Minimum time betwen two POST requests
      */
-	const FLOOD_TIME = 15;
+	const FLOOD_TIME = 2;
 	
     /**
      * Time before the session expires (seconds)
@@ -259,7 +259,7 @@ class WSession {
 			
 			// Referer checking
 			if (empty($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
-				header('location: '.WRoute::getDir());
+				header('location: '.WRoute::getBase());
 				$flood = false;
 			}
 			// Last request checking

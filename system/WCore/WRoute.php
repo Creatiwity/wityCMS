@@ -7,10 +7,29 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * WRoute
+ * This class calculates the route given in the URL to find out the right application to execute.
+ * Traditionnally, Apache URL Rewriting is used in Wity.
+ * Example: the URL "http://mysite.fr/news/see/4" would be translated like this :
+ * - app = "news"
+ * - arg1 = "see" - in this case, this argument is called the action of the application)
+ * - arg2 = "4" - in this case, it may be the id of the news to display)
+ * 
+ * WRoute can provide several informations about the URL of the page.
+ * If we keep the example URL = http://mysite.fr/news/see/4
+ * - Base = "http://mysite.fr"
+ * - Dir = "" - it is the directory in which Wity is installed
+ * - Query = "/news/see/4"
+ *     _ App = "news"
+ *     _ Args = array("see", "4")
+ * - URL = Base + Query - full URL of the page
+ *       = "http://mysite.fr/wity/news/see/4"
+ * 
+ * Notice that every route information given by WRoute is formated with the slash provided in the begining,
+ * not in the end of the variables (except for the query if there is one "/" in the end).
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-29-09-2012
+ * @version 0.3-23-01-2013
  */
 class WRoute {
 	/**
@@ -30,12 +49,8 @@ class WRoute {
      * Initializes WRoute
      */
 	public static function init() {
-		$dir = self::getDir();
-		if ($dir != '/') {
-			self::$query = str_replace($dir, '', $_SERVER['REQUEST_URI']);
-		} else {
-			self::$query = $_SERVER['REQUEST_URI'];
-		}
+		// $_SERVER['REQUEST_URI'] contains the full URL of the page
+		self::$query = str_replace(self::getDir(), '', $_SERVER['REQUEST_URI']);
 		
         // Loading route config values
 		WConfig::load('route', SYS_DIR.'config'.DS.'route.php', 'php');
@@ -67,24 +82,40 @@ class WRoute {
 	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php
 	 * 
      * If the website adress is http://mysite.fr/wity/user/login,
-	 * it should return http://mysite.fr/wity/
+	 * it should return http://mysite.fr/wity
      * 
      * @return string the full root location of WityCMS
 	 */
 	public static function getBase() {
-		return rtrim(WConfig::get('config.base'), '/').'/';
+		return rtrim(WConfig::get('config.base'), '/');
 	}
 	
 	/**
      * Returns the partial WityCMS root directory
      * 
 	 * If the website adress is http://mysite.fr/wity/user/login
-	 * it will return /wity/
+	 * it will return /wity
      * 
      * @return string the partial root location of WityCMS
 	 */
 	public static function getDir() {
-		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
+		// Remove the working directory of the script
+		// $_SERVER['SCRIPT_NAME'] = http://mysite.fr/wity/index.php
+		$dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
+		$dir = rtrim($dir, '/');
+		return $dir;
+	}
+	
+	/**
+     * Returns the query asked to Wity in the URL
+     * 
+	 * If the request URL is http://mysite.fr/wity/user/login
+	 * it will return /user/login
+     * 
+     * @return string the partial root location of WityCMS
+	 */
+	public static function getQuery() {
+		return self::$query;
 	}
 	
 	/**
