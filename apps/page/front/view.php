@@ -17,7 +17,7 @@ class PageView extends WView {
 	
 	public function see($id) {
 		$data = $this->model->loadPage($id);
-		$this->assign('pageTitle', WConfig::get('config.siteName')." | ".$data['title']);
+		$this->assign('page_title', $data['title'].' - '.WConfig::get('config.site_name'));
 		$this->assign($data);
 	}
 }

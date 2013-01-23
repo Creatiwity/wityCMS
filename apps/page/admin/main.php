@@ -7,13 +7,6 @@
  */
 
 class PageAdminController extends WController {
-	protected $actionList = array(
-		'index' => "Liste des pages",
-		'add' => "Ajouter une page",
-		'edit' => "\Edition d'une page",
-		'del' => "\Suppression d'une page"
-	);
-	
 	public function __construct() {
 		// Chargement des modèles
 		include 'model.php';
@@ -23,12 +16,7 @@ class PageAdminController extends WController {
 		$this->setView(new PageAdminView($this->model));
 	}
 	
-	public function launch() {
-		$action = $this->getAskedAction();
-		$this->forward($action, 'index');
-	}
-	
-	protected function index() {
+	protected function liste() {
 		$args = WRoute::getArgs();
 		$sortData = explode('-', array_shift($args));
 		if (empty($sortData)) {
@@ -39,11 +27,8 @@ class PageAdminController extends WController {
 			$sens = !empty($sortData) ? $sortData[0] : '';
 		}
 		
-		// Les notes
-		WNote::treatNoteSession();
-		
-		$this->view->index($sortBy, $sens);
-		$this->render('index');
+		$this->view->liste($sortBy, $sens);
+		$this->view->render('liste');
 	}
 	
 	protected function add() {
@@ -76,24 +61,26 @@ class PageAdminController extends WController {
 			 */
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs));
 				$this->view->add($data);
-				$this->render('add');
+				$this->vieww->render('add');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->createPage($data)) {
 					// Mettre à jour le routage custom
 					WRoute::defineCustomRoute($data['pUrl'], array('page', array($this->model->getLastId())));
 					
-					WNote::success("Page créée", "La page <strong>".$data['pTitle']."</strong> a été créée avec succès.", 'session');
+					WNote::success('page_created', "La page <strong>".$data['pTitle']."</strong> a été créée avec succès.");
 					header('location: '.WRoute::getDir().'admin/page/');
 				} else {
-					echo 'Error';
+					WNote::success('page_not_created', "Un problème d'origine inconnue est survenu lors de la création de la page <strong>".$data['pTitle']."</strong>");
+					$this->view->add($data);
+					$this->view->render('add');
 				}
 			}
 		} else {
 			$this->view->add();
-			$this->render('add');
+			$this->view->render('add');
 		}
 	}
 	
@@ -102,12 +89,12 @@ class PageAdminController extends WController {
 		
 		// Vérification de la validité de l'id
 		if (!$this->model->validId($id)) {
-			WNote::error("Page introuvable", "La page que vous tentez de modifier n'existe pas.", 'session');
+			WNote::error('page_not_found', "La page que vous tentez de modifier n'existe pas.");
 			header('location: '.WRoute::getDir().'admin/page/');
 			return;
 		}
 		
-		$data = WRequest::get(array('pAuthor', 'pKeywords', 'pTitle', 'pUrl', 'pContent'), null, 'POST', false);
+		$data = WRequest::getAssoc(array('pAuthor', 'pKeywords', 'pTitle', 'pUrl', 'pContent'));
 		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
 		if (!in_array(null, $data, true)) {
 			$erreurs = array();
@@ -140,7 +127,7 @@ class PageAdminController extends WController {
 			}
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
 				$this->view->edit($id, $data);
 				$this->render('edit');
 			} else {
@@ -152,15 +139,17 @@ class PageAdminController extends WController {
 						WRoute::defineCustomRoute($data['pUrl'], array('page', array($id)));
 					}
 					
-					WNote::success("Page éditée", "La page <strong>".$data['pTitle']."</strong> a été modifiée avec succès.", 'session');
+					WNote::success('page_edited', "La page <strong>".$data['pTitle']."</strong> a été modifiée avec succès.");
 					header('location: '.WRoute::getDir().'admin/page/');
 				} else {
-					echo 'Error';
+					WNote::success('page_not_edited', "Un problème d'origine inconnue est survenu lors de l'édition de la page <strong>".$data['pTitle']."</strong>");
+					$this->view->edit($id, $data);
+					$this->view->render('edit');
 				}
 			}
 		} else {
 			$this->view->edit($id);
-			$this->render('edit');
+			$this->view->render('edit');
 		}
 	}
 	
@@ -169,16 +158,21 @@ class PageAdminController extends WController {
 		if ($this->model->validId($id)) {
 			if (WRequest::get('confirm', null, 'POST') === '1') {
 				$data = $this->model->loadPage($id);
+				
+				// Delete from DB
 				$this->model->deletePage($id);
+				
+				// Delete custom route
 				WRoute::deleteCustomRoute($data['url']);
-				WNote::success("Suppression d'une page", "La page \"<strong>".$data['title']."</strong>\" a été supprimée avec succès.", 'session');
+				
+				WNote::success('page_deleted', 'La page "<strong>'.$data['title'].'</strong>" a été supprimée avec succès.');
 				header('location: '.WRoute::getDir().'admin/page/');
 			} else {
 				$this->view->del($id);
-				$this->render('del');
+				$this->view->render('del');
 			}
 		} else {
-			WNote::error("Page introuvable", "La page que vous tentez de supprimer n'existe pas.", 'session');
+			WNote::error('page_not_found', "La page que vous tentez de supprimer n'existe pas.");
 			header('location: '.WRoute::getDir().'admin/page/');
 		}
 	}

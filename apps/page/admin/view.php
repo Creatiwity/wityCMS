@@ -12,31 +12,26 @@ class PageAdminView extends WView {
 		$this->model = $model;
 	}
 	
-	public function index($sortBy, $sens) {
-		// AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
+	public function liste($sortBy, $sens) {
+		// sortingHelper Helper
 		$dispFields = array('id', 'title', 'author', 'creation_time', 'edit_time');
-		$adminStyle = new AdminStyle($dispFields, 'title');
+		$sortingHelper = WHelper::load('SortingHelper', array($dispFields, 'title'));
 		
 		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
+		$sort = $sortingHelper->getSorting($sortBy, $sens);
 		
 		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
+		$this->assign($sortingHelper->getTplVars());
 		
 		$data = $this->model->getPageList(0, 20, $sort[0], $sort[1] == 'ASC');
-		foreach ($data as $values) {
-			$values['creation_time'] = "le ".date('d/m/Y à H:i', intval($values['creation_time']));
-			$values['edit_time'] = "le ".date('d/m/Y à H:i', intval($values['edit_time']));
-			$this->tpl->assignBlockVars('pages', $values);
-		}
+		$this->assign('pages', $data);
 	}
 	
 	public function add($data = array()) {
 		// JS / CSS
 		$this->assign('css', '/apps/page/admin/css/add.css');
-		$this->assign('js', '/helpers/ckeditor/ckeditor.js');
-		$this->assign('js', '/helpers/ckfinder/ckfinder.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
+		$this->assign('js', '/libraries/ckfinder/ckfinder.js');
 		$this->assign('js', '/apps/page/admin/js/add.js');
 		$this->assign('baseDir', WRoute::getDir());
 		
@@ -82,8 +77,8 @@ class PageAdminView extends WView {
 	
 	public function edit($id, $formData = array()) {
 		$this->assign('css', '/apps/page/admin/css/edit.css');
-		$this->assign('js', '/helpers/ckeditor/ckeditor.js');
-		$this->assign('js', '/helpers/ckfinder/ckfinder.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
+		$this->assign('js', '/libraries/ckfinder/ckfinder.js');
 		$this->assign('js', '/apps/page/admin/js/add.js');
 		$this->assign('baseDir', WRoute::getDir());
 		

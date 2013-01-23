@@ -8,10 +8,6 @@
  */
 
 class PageController extends WController {
-	protected $actionList = array(
-		'index' => "Lecture d'une page",
-	);
-	
 	/*
 	 * Chargement du modèle et de la view
 	 */
@@ -41,13 +37,13 @@ class PageController extends WController {
 		$this->forward($action, 'index');
 	}
 	
-	protected function index() {
+	protected function display() {
 		$id = $this->getId();
 		if (!empty($id)) {
 			$this->view->see($id);
-			$this->render('see');
+			$this->view->render('see');
 		} else {
-			WNote::error("Page inexistante", "La page que vous avez demandée n'existe pas", 'display');
+			WNote::error("page_not_found", "La page que vous avez demandée n'existe pas.", 'display');
 		}
 	}
 }
