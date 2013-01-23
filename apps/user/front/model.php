@@ -149,11 +149,11 @@ class UserModel {
 	
 	public function createUser($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, groupe, access, ip)
-			VALUES (:nick, :pass, :confirm, :email, :firstname, :lastname, :groupe, :access, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, adresse, code_postal, ville, groupe, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :adresse, :code_postal, :ville, :groupe, :ip)
 		');
-		$prep->bindParam(':nick', $data['nickname']);
-		$prep->bindParam(':pass', $data['pass']);
+		$prep->bindParam(':nickname', $data['nickname']);
+		$prep->bindParam(':password', $data['password']);
 		$confirm = isset($data['confirm']) ? $data['confirm'] : '';
 		$prep->bindParam(':confirm', $confirm);
 		$prep->bindParam(':email', $data['email']);
@@ -161,11 +161,12 @@ class UserModel {
 		$prep->bindParam(':firstname', $firstname);
 		$lastname = isset($data['lastname']) ? $data['lastname'] : '';
 		$prep->bindParam(':lastname', $lastname);
-		$access = isset($data['access']) ? $data['access'] : '';
-		$prep->bindParam(':access', $access);
+		$prep->bindParam(':adresse', $data['adresse']);
+		$prep->bindParam(':code_postal', $data['code_postal']);
+		$prep->bindParam(':ville', $data['ville']);
 		$prep->bindParam(':groupe', $data['groupe']);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		return $prep->execute();
+		return $prep->execute() or die($prep->errorInfo());
 	}
 	
 	public function updateUser($id, $data) {
@@ -192,6 +193,16 @@ class UserModel {
 			WHERE id = :userid
 		');
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+		return $prep->execute();
+	}
+	
+	public function validateAccount($confirm) {
+		$prep = $this->db->prepare('
+			UPDATE users
+			SET confirm = ""
+			WHERE confirm = :confirm
+		');
+		$prep->bindParam(':confirm', $confirm);
 		return $prep->execute();
 	}
 }

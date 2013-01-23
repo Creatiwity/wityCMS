@@ -16,8 +16,10 @@
 		  0 - Public
 		  1 - User connected required
 		  2 - Require specific access -->
-	<page restriction="1" default="1">login</page>
+	<page default="1">login</page>
 	<page restriction="1">logout</page>
+	<page>register</page>
+	<page>confirm</page>
 	
 	<!-- Admin pages -->
 	<admin>
