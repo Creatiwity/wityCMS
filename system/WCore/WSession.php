@@ -51,19 +51,21 @@ class WSession {
 		// Start sessions
 		session_start();
 		
-		if ($this->isConnected()) {
-			// Token expiration checking
-			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
-				if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
-					$this->closeSession();
+		if (!empty($_COOKIE['hash'])) {
+			if ($this->isConnected()) {
+				// Token expiration checking
+				if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
+					if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
+						$this->closeSession();
+					}
 				}
 			}
-		}
-		// Attempt to load a user based on its cookies
-		else if (!empty($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
-			// Hash => unique connection
-			if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
-				$this->closeSession();
+			// Attempt to reload the user session based on its cookies
+			else if (!empty($_COOKIE['userid'])) {
+				// Hash => unique connection
+				if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
+					$this->closeSession();
+				}
 			}
 		}
 	}
