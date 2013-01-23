@@ -98,7 +98,8 @@ class UserController extends WController {
 					
 					// Redirect
 					WNote::success('login_success', 'Connexion réussie');
-					break;
+					header('location: '.$data['redirect']);
+					return;
 				
 				case WSession::LOGIN_MAX_ATTEMPT_REACHED:
 					WNote::error('login_max_attempt', "Vous avez atteint le nombre maximum de tentatives de connexion autorisées.\nMerci d'attendre un instant avant de réessayer.");
@@ -107,16 +108,10 @@ class UserController extends WController {
 				case 0:
 					WNote::error('login_error', "Le couple <em>nom d'utilisateur / mot de passe</em> est erroné.");
 					break;
-				
-				default:
-					break;
 			}
 		}
-		header('location: '.$data['redirect']);
-		/*
 		$this->view->connexion($data['redirect']);
 		$this->view->render();
-		*/
 	}
 	
 	/**
