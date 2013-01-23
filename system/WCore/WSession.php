@@ -60,7 +60,7 @@ class WSession {
 			}
 		}
 		// Attempt to load a user based on its cookies
-		else if (isset($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
+		else if (!empty($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
 			// Hash => unique connection
 			if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
 				$this->closeSession();
@@ -83,14 +83,14 @@ class WSession {
      * @param string $nickname nickname
      * @param string $password password
      * @param string $remember true if auto-log in of the user enabled for the next time
-     * @return int session life time (-1 = N/A)
+     * @return int State of the request (LOGIN_SUCCESS | 0 = error)
      */
 	public function createSession($nickname, $password, $remember) {
         // In case of multiple errors of login, return an error
 		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
 			$_SESSION['login_try'] = 0;
-		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
+		} else if ($_SESSION['login_try'] >= self::LOGIN_MAX_ATTEMPT_REACHED) {
 			return self::LOGIN_MAX_ATTEMPT_REACHED;
 		}
 		
@@ -105,7 +105,7 @@ class WSession {
 		// Search a matching couple (nickname, password_hash) in DB
 		$db = WSystem::getDB();
 		$prep = $db->prepare('
-			SELECT id, nickname, email, groupe, access
+			SELECT id, nickname, password, email, groupe, access
 			FROM '.self::USERS_TABLE.'
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
 		');
@@ -123,7 +123,7 @@ class WSession {
 				$lifetime = time() + $remember;
 				// Cookie setup
 				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
-				setcookie('hash', $this->generate_hash($nickname, $password_hash), $lifetime, '/');
+				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, '/');
 			}
 			
 			return self::LOGIN_SUCCESS; 
