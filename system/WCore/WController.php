@@ -91,24 +91,19 @@ abstract class WController {
      * @param type $default optional default page value
      */
 	protected function forward($action) {
-		if (empty($action)) {
-			// Default action
-			if (!$this->getAdminContext() && isset($this->manifest['default'])) {
-				$action = $this->manifest['default'];
-			} else if ($this->getAdminContext() && isset($this->manifest['default_admin'])) {
-				$action = $this->manifest['default_admin'];
-			} else {
-				WNote::error('app_no_default_action', 'The application '.$this->getAppName().' has no default action.', 'display');
-			}
-		}
-		
-		if ($this->hasAccess($this->getAppName(), $action)) {
+		if (!empty($action) && $this->hasAccess($this->getAppName(), $action)) {
 			$this->execAction($action);
 		} else {
-			if (isset($this->manifest['default'])) {
+			if (!$this->getAdminContext() && isset($this->manifest['default'])) {
 				$this->execAction($this->manifest['default']);
+			} else if ($this->getAdminContext() && isset($this->manifest['default_admin'])) {
+				$this->execAction($this->manifest['default_admin']);
 			} else {
-				WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' does not know any action named '.$action.'.', 'display');
+				if (empty($action)) {
+					WNote::error('app_no_default_action', 'The application '.$this->getAppName().' has no default action.', 'display');
+				} else {
+					WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' does not know any action named '.$action.'.', 'display');
+				}
 			}
 		}
 	}
