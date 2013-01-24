@@ -46,7 +46,7 @@ class WTemplateFile {
 	private $compilationTime = 0;
 	
 	public function __construct($href, $baseDir, $compDir) {
-		if (!file_exists($href)) {
+		if (!file_exists($baseDir.$href)) {
 			throw new Exception("WTemplateFile::__construct(): File \"".$href."\" does not exist.");
 		}
 		
@@ -54,7 +54,7 @@ class WTemplateFile {
 		$this->baseDir = $baseDir;
 		$this->compilationDir = $compDir;
 		$this->compilationHref = $this->createCompilationHref();
-		$this->creationTime = filemtime($href);
+		$this->creationTime = filemtime($baseDir.$href);
 	}
 	
 	/**
@@ -109,7 +109,7 @@ class WTemplateFile {
 			$start = microtime(true);
 			
 			// Read template file
-			if (($string = file_get_contents($this->href)) === false) {
+			if (($string = file_get_contents($this->baseDir.$this->href)) === false) {
 				throw new Exception("WTemplateFile::compile(): Unable to read file \"".$this->href."\".");
 			}
 			

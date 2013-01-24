@@ -13,6 +13,9 @@ class WNote {
 	const INFO    = 'info';
 	const SUCCESS = 'success';
 	
+	// Notes to be displayed in a custom error page
+	private static $custom_stack = array();
+	
 	/**
 	 * Crée une nouvelle note
 	 * 
@@ -27,7 +30,7 @@ class WNote {
 		$note = array(
 			'level'   => $level,
 			'code'    => $code,
-			'message' => nl2br($message)
+			'message' => $message
 		);
 		
 		$function = 'handle_'.$handler;
@@ -37,7 +40,7 @@ class WNote {
 			return $note;
 		} else {
 			// On évite de laisser l'écran vide
-			die("WNote::raise() : Unfound handler <strong>\"".$handler."\"</strong><br />Triggering note : Level: ".$level."<br />Code: ".$code."<br />Message: ".$message);
+			die("WNote::raise() : Unfound handler <strong>\"".$handler."\"</strong><br /><u>Triggering note:</u>\n".self::handle_html($note));
 		}
 	}
 	
@@ -67,13 +70,20 @@ class WNote {
 		// do nothing...
 	}
 	
+	public static function handle_html($note) {
+		return "<ul><li><strong>level:</strong> ".$note['level']."</li>\n"
+			."<li><strong>code:</strong> ".$note['code']."</li>\n"
+			."<li><strong>message:</strong> ".$note['message']."</li>\n"
+			."</ul><br />\n";
+	}
+	
 	/**
 	 * Display the note dying the whole execution
 	 * 
 	 * @param array $note
 	 */
 	public static function handle_die($note) {
-		die("<p>".strtoupper($note['level'])." - <strong>".$note['code'].":</strong> ".$note['message']."</p>\n");
+		die(self::handle_html($note));
 	}
 	
 	/**
@@ -102,6 +112,10 @@ class WNote {
 		$view->assign('css', '/themes/system/note/note.css');
 		$view->assign('notes_data', array($note));
 		$view->render();
+	}
+	
+	public static function handle_custom($note) {
+		self::$custom_stack[] = $note;
 	}
 	
 	/**
@@ -137,6 +151,9 @@ class WNote {
 		return $count;
 	}
 	
+	/**
+	 * Parses a set of notes and returns the html response
+	 */
 	public static function parse(array $notes) {
 		if (empty($notes)) {
 			return "";
@@ -152,29 +169,20 @@ class WNote {
 	/**
 	 * Display a set of notes in a dedicated view
 	 */
-	public static function displayFull(array $notes) {
-		static $mutex = false;
-		if ($mutex) {
-			self::error('wnote_critical_section', "WNote::diplay_full(): tried to enter into a critical section. Probably nesting.\n
-			Triggering notes :\n".serialize($notes), 'die');
-		}
-		$mutex = true;
-		
-		// If no notes found, display a custom message
-		if (empty($notes)) {
-			$notes = array(self::info("There is no note to display.", '', 'ignore'));
-		}
-		
+	public static function displayCustomView() {
 		// Generate view
-		$view = new WView();
-		$view->setTheme('_blank');
-		$view->setResponse('themes/system/note/note_full_view.html');
-		$view->assign('notes', $notes);
-		$view->render();
-		
-		$mutex = false;
+		if (!empty(self::$custom_stack)) {
+			$view = new WView();
+			$view->setTheme('_blank');
+			$view->setResponse('themes/system/note/note_full_view.html');
+			$view->assign('notes_data', self::$custom_stack);
+			if (!$view->render()) {
+				self::error("note_display_custom_view", "WView did not manage to display the custom error page (themes/system/note/note_full_view.html).<br />\n"
+					."<u>Triggering notes:</u>\n"
+					.implode('', array_map('WNote::handle_html', self::$custom_stack)), 'die');
+			}
+		}
 	}
 }
-
 
 ?>
