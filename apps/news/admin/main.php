@@ -217,7 +217,7 @@ class NewsAdminController extends WController {
 				header('location: '.WRoute::getDir().'/admin/news/');
 			} else {
 				$this->view->del($id);
-				$this->render();
+				$this->view->render();
 			}
 		} else {
 			WNote::error('article_not_found', "L'article que vous tentez de supprimer n'existe pas.");
