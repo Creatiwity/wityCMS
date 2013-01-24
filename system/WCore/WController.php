@@ -89,23 +89,31 @@ abstract class WController {
      * 
      * @param type $action  action under execution
      * @param type $default optional default page value
+	 * @return boolean Action forwarding success
      */
 	protected function forward($action) {
-		if (!empty($action) && $this->hasAccess($this->getAppName(), $action)) {
-			$this->execAction($action);
+		// Find a fine $action
+		if ($this->getAdminContext()) {
+			// $action exists in admin ? Otherwise, default_admin action exists?
+			if (!isset($this->manifest['admin'][$action]) && isset($this->manifest['default_admin'])) {
+				$action = $this->manifest['default_admin'];
+			}
 		} else {
-			if (!$this->getAdminContext() && isset($this->manifest['default'])) {
-				$this->execAction($this->manifest['default']);
-			} else if ($this->getAdminContext() && isset($this->manifest['default_admin'])) {
-				$this->execAction($this->manifest['default_admin']);
-			} else {
-				if (empty($action)) {
-					WNote::error('app_no_default_action', 'The application '.$this->getAppName().' has no default action.', 'display');
-				} else {
-					WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' does not know any action named '.$action.'.', 'display');
-				}
+			// $action exists ? Otherwise, default action exists?
+			if (!isset($this->manifest['pages'][$action]) && isset($this->manifest['default'])) {
+				$action = $this->manifest['default'];
 			}
 		}
+		
+		if (!empty($action)) {
+			if ($this->hasAccess($this->getAppName(), $action)) {
+				$this->execAction($action);
+				return true;
+			}
+		} else {
+			WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' couldn\'t answer to your request.', 'display');
+		}
+		return false;
 	}
 	
 	/**
@@ -217,13 +225,13 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('title', 'version', 'date', 'icone', 'service', 'page', 'admin');
+		$nodes = array('title', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'service':
-					foreach ($xml->service as $page) {
+					// foreach ($xml->service as $page) {
 						
-					}
+					// }
 					break;
 				
 				case 'page':
@@ -235,7 +243,7 @@ abstract class WController {
 								if (!isset($manifest['pages'][$key])) {
 									$manifest['pages'][$key] = array(
 										'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
-										'restriction' => isset($attributes['restriction']) ? intval($attributes['restriction']) : 0
+										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
 								if (isset($attributes['default']) && empty($manifest['default'])) {
@@ -256,12 +264,26 @@ abstract class WController {
 									if (!isset($manifest['admin'][$key])) {
 										$manifest['admin'][$key] = array(
 											'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
-											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true
+											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
+											'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 										);
 									}
 								}
 								if (isset($attributes['default']) && empty($manifest['default_admin'])) {
 									$manifest['default_admin'] = $key;
+								}
+							}
+						}
+					}
+					break;
+				
+				case 'permission':
+					if (property_exists($xml, 'permission')) {
+						foreach ($xml->admin->page as $permission) {
+							if (!empty($permission)) {
+								$attributes = $page->attributes();
+								if (!empty($attributes['name'])) {
+									$manifest['permissions'][] = (string) $attributes['name'];
 								}
 							}
 						}
@@ -292,45 +314,57 @@ abstract class WController {
 			return false;
 		}
 		
-		// Admin action?
-		if ($this->getAdminContext()) {
-			if (empty($action)) {
-				// Asking for admin application access
-				return in_array('all', $_SESSION['access']) || isset($_SESSION['access'][$app]);
-			} else if (isset($manifest['admin'][$action])) {
-				if (in_array('all', $_SESSION['access'])) {
+		// Administrator supreme case
+		if (!empty($_SESSION['access']) && in_array('all', $_SESSION['access'])) {
+			return true;
+		}
+		
+		if ($this->getAdminContext()) { // Admin mode ON
+			if (isset($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
+				if (empty($action)) { // Asking for application access
 					return true;
-				} else if (isset($_SESSION['access'][$app])) {
-					if ($_SESSION['access'][$app] === 0 || in_array($action, $_SESSION['access'][$app])) {
-						return true;
+				} else if (isset($manifest['admin'][$action])) {
+					// Check permissions
+					foreach ($manifest['admin'][$action]['requires'] as $req) {
+						switch ($req) {
+							case 'connected':
+							case 'admin':
+								break;
+							
+							default:
+								if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
+									WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
+									return false;
+								}
+								break;
+						}
 					}
+					return true;
 				}
 			}
-		} else {
-			if (empty($action)) {
-				// Asking for application access
+		} else { // Admin mode OFF
+			if (empty($action)) { // Asking for application access
 				return true;
 			} else if (isset($manifest['pages'][$action])) {
-				switch ($manifest['pages'][$action]['restriction']) {
-					case 0:
-						return true;
-					
-					case 1:
-						if (WSession::isConnected()) {
-							return true;
-						}
-						break;
-					
-					case 2:
-						if (in_array('all', $_SESSION['access'])) {
-							return true;
-						} else if (isset($_SESSION['access'][$app])) {
-							if ($_SESSION['access'][$app] === 0 || in_array($action, $_SESSION['access'][$app])) {
-								return true;
+				// Check permissions
+				foreach ($manifest['pages'][$action]['requires'] as $req) {
+					switch ($req) {
+						case 'connected':
+							if (!WSession::isConnected()) {
+								WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.', 'display');
+								return false;
 							}
-						}
-						break;
+							break;
+						
+						default:
+							if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
+								WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
+								return false;
+							}
+							break;
+					}
 				}
+				return true;
 			}
 		}
 		return false;
