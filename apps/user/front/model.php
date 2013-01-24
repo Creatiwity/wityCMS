@@ -189,10 +189,11 @@ class UserModel {
 	public function updateLastActivity($userid) {
 		$prep = $this->db->prepare('
 			UPDATE users
-			SET last_activity = NOW()
+			SET last_activity = NOW(), ip = :ip
 			WHERE id = :userid
 		');
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
 		return $prep->execute();
 	}
 	
