@@ -5,8 +5,6 @@
 
 defined('IN_WITY') or die('Access denied');
 
-require 'route.php';
-
 /**
  * Installer installs Wity on the server (configuration files and MySQL tables)
  *
@@ -25,7 +23,6 @@ class Installer {
 */
     
 public function __construct() {
-   $route = new Route();
    
 }
 }
