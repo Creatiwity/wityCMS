@@ -1,0 +1,210 @@
+<?php 
+/**
+ * Request.php
+ */
+
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * Request manages all requests
+ *
+ * @package Installer
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-29-12-2011
+ */
+class Request {
+	
+    /**
+     *
+     * @var array Contains all checked variables to avoid infinite loop
+     */
+	private static $checked = array();
+	
+    /**
+     * Returns the values of all variables with name in $names sent by $hash method
+     * 
+     * You can use the following hashes :
+     * - "GET"
+     * - "POST"
+     * - "FILES"
+     * - "COOKIE"
+     * - "REQUEST" (default)
+     * 
+     * The following syntax IS allowed :
+     * <code>list($v1, ...) = Request::get(array('v1', 'v2'));</code>
+     * 
+     * @param string|array  $names      variable names
+     * @param mixed         $default    optional default values
+     * @param string        $hash       name of the method used to send
+     * @return mixed    array of values or the value
+     */
+	public static function get($names, $default = null, $hash = 'REQUEST') {
+		// Data hash
+		switch (strtoupper($hash)) {
+			case 'GET':
+				$data = &$_GET;
+				break;
+			case 'POST':
+				$data = &$_POST;
+				break;
+			case 'FILES':
+				$data = &$_FILES;
+				break;
+			case 'COOKIE':
+				$data = &$_COOKIE;
+				break;
+			default:
+				$data = &$_REQUEST;
+				$hash = 'REQUEST';
+				break;
+		}
+		
+		if (is_array($names)) {
+			// Going through the asked values in order to returns the array
+			$result = array();
+			foreach ($names as $name) {
+				$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
+				$result[] = $value;
+				$result[$name] = $value;
+			}
+			return $result;
+		} else {
+			return self::getValue($data, $names, $default, $hash);
+		}
+	}
+	
+    /**
+     * Returns an associative array of values in which keys are the $names
+     * 
+     * @see Request::get()
+     * @param array     $names      variable names
+     * @param type      $default    optional default values
+     * @param string    $hash       name of the method used to send
+     * @return array array of values in which keys are the $names
+     */
+	public static function getAssoc(array $names, $default = null, $hash = 'REQUEST') {
+		// Data hash
+		switch (strtoupper($hash)) {
+			case 'GET':
+				$data = &$_GET;
+				break;
+			case 'POST':
+				$data = &$_POST;
+				break;
+			case 'FILES':
+				$data = &$_FILES;
+				break;
+			case 'COOKIE':
+				$data = &$_COOKIE;
+				break;
+			default:
+				$data = &$_REQUEST;
+				$hash = 'REQUEST';
+				break;
+		}
+		
+		// Going through the asked values in order to returns the array
+		$result = array();
+		foreach ($names as $name) {
+			$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
+			$result[$name] = $value;
+		}
+		return $result;
+	}
+	
+    /**
+     * Returns the checked value associated to $name
+     * 
+     * @param &array $data      request array
+     * @param string $name      variable name
+     * @param string $default   optional default value
+     * @param string $hash      name of the method used to send
+     * @return mixed the checked value associated to $name or null if not exists
+     */
+	public static function getValue(&$data, $name, $default, $hash) {
+		if (isset(self::$checked[$hash.$name])) {
+			// On récupère la variable vérifiée des données
+			return $data[$name];
+		} else {
+			if (isset($data[$name]) && !is_null($data[$name])) {
+				// On filtre la variable requête pour la première fois
+				$data[$name] = self::filter($data[$name]);
+			} else if (!is_null($default)) {
+				// On utilise la valeur par défaut
+				$data[$name] = self::filter($default);
+			} else {
+				$data[$name] = null;
+			}
+			
+			// La variable est vérifiée
+			self::$checked[$hash.$name] = true;
+			
+			return $data[$name];
+		}
+	}
+	
+    /**
+     * Sets a request value
+     * 
+     * @param string    $name       variable name
+     * @param mixed     $value      the value that will be set
+     * @param string    $hash       name of the method used to initially send
+     * @param boolean   $overwrite  optional overwrite command, true by default
+     * @return mixed previous value, may be null
+     */
+	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
+		// Check if overwriting is allowed
+		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
+			return $_REQUEST[$name];
+		}
+		
+		// Stores previous value
+		$previous = array_key_exists($name, $_REQUEST) ? $_REQUEST[$name] : null;
+		
+		switch (strtoupper($hash)) {
+			case 'GET':
+				$_GET[$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'POST':
+				$_POST[$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'COOKIE':
+				$_COOKIE[$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'FILES':
+				$_FILES[$name] = $value;
+				break;
+			default:
+				$_REQUEST[$name] = $value;
+				break;
+		}
+		
+		self::$checked[$hash.$name] = true;
+		
+		return $previous;
+	}
+	
+    /**
+     * Returns the filtered variable after a tiny security check
+     * 
+     * @param mixed $variable variable that we want to filter
+     * @return mixed the filtered variable
+     */
+	public static function filter($variable) {
+		if (is_array($variable)) {
+			foreach ($variable as $key => $val) {
+				$variable[$key] = self::filter($val);
+			}
+		} else {
+			// On fait les manipulations de sécurité ici
+			$variable = stripslashes($variable);
+		}
+		
+		return $variable;
+	}
+}
+
+?>
