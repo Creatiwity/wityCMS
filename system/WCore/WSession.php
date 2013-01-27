@@ -13,21 +13,22 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-12-2012
  */
 class WSession {
-    
-    /**
-     * SQL Table
-     */
+	
+	/**
+	 * SQL Table
+	 */
 	const USERS_TABLE = 'users';
 	
-    /**
-     * Minimum time betwen two POST requests
-     */
-	const FLOOD_TIME = 15;
+	/**
+	 * Minimum time betwen two POST requests
+	 */
+	const FLOOD_TIME = 2;
 	
-    /**
-     * Time before the session expires
-     */
+	/**
+	 * Time before the session expires (seconds)
+	 */
 	const TOKEN_EXPIRATION = 120;
+	
 	/*
 	 * Inactivity time (minuts)
 	 */
@@ -39,9 +40,9 @@ class WSession {
 	const LOGIN_SUCCESS = 1;
 	const LOGIN_MAX_ATTEMPT_REACHED = 2;
 	
-    /**
-     * Session setup
-     */
+	/**
+	 * Session setup
+	 */
 	public function __construct() {
 		// No sid in HTML links
 		ini_set('session.use_trans_sid', '0');
@@ -50,46 +51,48 @@ class WSession {
 		// Start sessions
 		session_start();
 		
-		if ($this->isConnected()) {
-			// Token expiration checking
-			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
-				if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
+		if (!empty($_COOKIE['hash'])) {
+			if ($this->isConnected()) {
+				// Token expiration checking
+				if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
+					if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
+						$this->closeSession();
+					}
+				}
+			}
+			// Attempt to reload the user session based on its cookies
+			else if (!empty($_COOKIE['userid'])) {
+				// Hash => unique connection
+				if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
 					$this->closeSession();
 				}
 			}
 		}
-		// Attempt to load a user based on its cookies
-		else if (isset($_COOKIE['userid']) && !empty($_COOKIE['hash'])) {
-			// Hash => unique connection
-			if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
-				$this->closeSession();
-			}
-		}
 	}
 	
-    /**
-     * Returns if the user is logged in
-     * 
-     * @return boolean true if the user is logged in, false otherwise
-     */
+	/**
+	 * Returns if the user is logged in
+	 * 
+	 * @return boolean true if the user is logged in, false otherwise
+	 */
 	public static function isConnected() {
 		return isset($_SESSION['userid']);
 	}
 	
-    /**
-     * Creates a session for the user
-     * 
-     * @param string $nickname nickname
-     * @param string $password password
-     * @param string $remember true if auto-log in of the user enabled for the next time
-     * @return int session life time (-1 = N/A)
-     */
+	/**
+	 * Creates a session for the user
+	 * 
+	 * @param string $nickname nickname
+	 * @param string $password password
+	 * @param string $remember true if auto-log in of the user enabled for the next time
+	 * @return int State of the request (LOGIN_SUCCESS | 0 = error)
+	 */
 	public function createSession($nickname, $password, $remember) {
-        // In case of multiple errors of login, return an error
+		// In case of multiple errors of login, return an error
 		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
 			$_SESSION['login_try'] = 0;
-		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
+		} else if ($_SESSION['login_try'] >= self::LOGIN_MAX_ATTEMPT_REACHED) {
 			return self::LOGIN_MAX_ATTEMPT_REACHED;
 		}
 		
@@ -104,7 +107,7 @@ class WSession {
 		// Search a matching couple (nickname, password_hash) in DB
 		$db = WSystem::getDB();
 		$prep = $db->prepare('
-			SELECT id, nickname, email, groupe, access
+			SELECT id, nickname, password, email, groupe, access
 			FROM '.self::USERS_TABLE.'
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
 		');
@@ -122,7 +125,7 @@ class WSession {
 				$lifetime = time() + $remember;
 				// Cookie setup
 				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
-				setcookie('hash', $this->generate_hash($nickname, $password_hash), $lifetime, '/');
+				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, '/');
 			}
 			
 			return self::LOGIN_SUCCESS; 
@@ -133,13 +136,13 @@ class WSession {
 		}
 	}
 	
-    /**
-     * Reloads a user based on cookies
-     * 
-     * @param string $userid        current user id
-     * @param string $cookie_hash   cookie hash for security checking
-     * @return boolean true if successfully reloaded, false otherwise
-     */
+	/**
+	 * Reloads a user based on cookies
+	 * 
+	 * @param string $userid        current user id
+	 * @param string $cookie_hash   cookie hash for security checking
+	 * @return boolean true if successfully reloaded, false otherwise
+	 */
 	private function reloadSession($userid, $cookie_hash) {
 		$db = WSystem::getDB();
 		$prep = $db->prepare('
@@ -178,9 +181,12 @@ class WSession {
 		$_SESSION['access'] = array();
 		foreach (explode(',', $data['access']) as $access) {
 			if (!empty($access)) {
-				if (strpos($access, '|') !== false) {
-					$split = explode('|', $access);
-					$_SESSION['access'][$split[0]] = $split[1];
+				$pages_begin = strpos($access, '[');
+				if ($pages_begin !== false) {
+					$app_name = substr($access, 0, $pages_begin);
+					$pages = substr($access, $pages_begin+1, -1);
+					
+					$_SESSION['access'][$app_name] = explode('|', $pages);
 				} else {
 					$_SESSION['access'][$access] = 0;
 				}
@@ -221,17 +227,17 @@ class WSession {
 		session_destroy();
 		
 		// Reset cookies
-    	setcookie(session_name(), '', time()-3600, '/');
+		setcookie(session_name(), '', time()-3600, '/');
 	}
 	
-    /**
-     * Generates a user-and-computer specific hash that will be stored in a cookie
+	/**
+	 * Generates a user-and-computer specific hash that will be stored in a cookie
 
-     * @param string $nick nickname
-     * @param string $pass password
-     * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
-     * @return string the generated hash
-     */
+	 * @param string $nick nickname
+	 * @param string $pass password
+	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
+	 * @return string the generated hash
+	 */
 	public function generate_hash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
 		// Rajout de quelques valeurs rendant le hash lié à l'environnement de l'utilisateur
@@ -242,20 +248,20 @@ class WSession {
 		return sha1($string);
 	}
 	
-    /**
-     * Antiflood method
-     * 
-     * Checking the $_POST content to avoid multiple and repeating similar sending
-     * 
-     * @return boolean true if flood detected, false otherwise
-     */
+	/**
+	 * Antiflood method
+	 * 
+	 * Checking the $_POST content to avoid multiple and repeating similar sending
+	 * 
+	 * @return boolean true if flood detected, false otherwise
+	 */
 	public function check_flood() {
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$flood = true;
 			
 			// Referer checking
 			if (empty($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
-				header('location: '.WRoute::getDir());
+				header('location: '.WRoute::getBase());
 				$flood = false;
 			}
 			// Last request checking
@@ -275,13 +281,13 @@ class WSession {
 			
 			// Updating flood variables
 			$_SESSION['last_query'] = md5(serialize($_POST));
-		
-            // Updating flood time at shutdown to let less priorized script using this variable
+			
+			// Updating flood time at shutdown to let less priorized script using this variable
 			register_shutdown_function(array($this, 'upgrade_flood'), time() + self::FLOOD_TIME + 1);
 			
 			return $flood;
 		} else {
-            // Creating SESSION variable $flood_time
+			// Creating SESSION variable $flood_time
 			if (!isset($_SESSION['flood_time'])) {
 				$_SESSION['flood_time'] = 0;
 			}
@@ -293,11 +299,11 @@ class WSession {
 		return true;
 	}
 	
-    /**
-     * Updates flood time
-     * 
-     * @param int $limit tiestamp limit
-     */
+	/**
+	 * Updates flood time
+	 * 
+	 * @param int $limit tiestamp limit
+	 */
 	public function upgrade_flood($limit) {
 		$_SESSION['flood_time'] = $limit;
 	}

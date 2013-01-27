@@ -17,19 +17,23 @@ class UserAdminView extends WView {
 		$this->assign('css', '/apps/user/admin/css/user.css');
 	}
 	
+	/**
+	 * Setting up the users listing view
+	 */
 	public function liste($sortBy, $sens, $currentPage, $filtres) {
-		// -- AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$adminStyle = new AdminStyle(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC');
-		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
-		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
+		$n = 40; // 40 users per page
 		
-		// Traitement des filtres
+		// SortingHelper Helper
+		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
+		$sort = $sortingHelper->getSorting($sortBy, $sens);
+		
+		// Register sorting vars to be displayed in the head of the sorting table
+		$this->assign($sortingHelper->getTplVars());
+		
+		// Treat filters
 		$subURL = "";
 		foreach ($filtres as $k => $v) {
-			// Nettoyage des filtres
+			// Cleanup filters
 			if (!empty($v)) {
 				$subURL .= $k."=".$v."&";
 			}
@@ -37,30 +41,20 @@ class UserAdminView extends WView {
 		if (!empty($subURL)) {
 			$subURL = '?'.substr($subURL, 0, -1);
 		}
-		$this->tpl->assign('subURL', $subURL);
-		$this->tpl->assign($filtres);
+		$this->assign('subURL', $subURL);
+		$this->assign($filtres);
 		
-		// -- Récupération des groupes
-		$groups = $this->model->getCatList();
-		foreach ($groups as $g) {
-			$this->tpl->assignBlockVars('groups', $g);
-		}
+		// Get the user groups
+		$this->assign('groups', $this->model->getCatList());
 		
-		$n = 40; // 40 utilisateurs par page
+		// Assign main data
 		$data = $this->model->getUserList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filtres);
-		foreach ($data as $values) {
-			// if ($values['factivity'] == '00/00/0000 00:00') {
-				// $values['factivity'] = 'N/A';
-			// }
-			$values['access'] = explode(',', $values['access']);
-			$this->tpl->assignBlockVars('users', $values);
-		}
+		$this->assign('users', $data);
 		
-		// -- Génération de la numérotation
+		// Generate the pagination to navigate data
 		$count = $this->model->countUsersWithFilters($filtres);
-		include HELPERS_DIR.'pagination'.DS.'pagination.php';
-		$page = new Pagination($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL);
-		$this->assign('pagination', $page->getHtml());
+		$pagination = WHelper::load('pagination', array($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
+		$this->assign('pagination', $pagination->getHtml());
 		$this->assign('total', $count);
 	}
 	
@@ -77,14 +71,9 @@ class UserAdminView extends WView {
 		$this->assign('js', '/apps/user/admin/js/catChange.js');
 		$this->assign('cats', $this->model->getCatList());
 		
-		$adminModel = new AdminModel();
-		foreach($adminModel->getAdminAppList() as $mod) {
-			$levels = $adminModel->getLevels($mod); // level = array('id' => 0, 'title' => 'nom du niveau')
-			$this->tpl->assignBlockVars('module', array(
-				'name' => $mod,
-				'levels' => $levels
-			));
-		}
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminAppList());
 		
 		$this->fillForm(
 			array(
@@ -97,16 +86,12 @@ class UserAdminView extends WView {
 	}
 	
 	public function edit($id) {
+		$this->assign('userid', $id);
 		$this->assign('cats', $this->model->getCatList());
 		
-		$adminModel = new AdminModel();
-		foreach($adminModel->getAdminAppList() as $mod) {
-			$levels = $adminModel->getLevels($mod); // level = array('id' => 0, 'title' => 'nom du niveau')
-			$this->tpl->assignBlockVars('module', array(
-				'name' => $mod,
-				'levels' => $levels
-			));
-		}
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminAppList());
 		
 		$data = $this->model->getUserData($id);
 		$data['accessArray'] = explode(',', $data['access']);
@@ -122,31 +107,20 @@ class UserAdminView extends WView {
 		$this->assign('js', '/apps/user/admin/js/cat.js');
 		$this->assign('css', '/apps/user/admin/css/user.css');
 		
-		$adminModel = new AdminModel();
-		foreach($adminModel->getAdminAppList() as $mod) {
-			$levels = $adminModel->getLevels($mod); // level = array('id' => 0, 'title' => 'nom du niveau')
-			$this->tpl->assignBlockVars('module', array(
-				'name' => $mod,
-				'levels' => $levels
-			));
-		}
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminAppList());
 		
 		// AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
 		$dispFields = array('name');
-		$adminStyle = new AdminStyle($dispFields, 'name');
-		
-		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
+		$adminStyle = WHelper::load('SortingHelper', array($dispFields, 'name'));
+		$sort = $adminStyle->getSorting($sortBy, $sens); // sorting vars
 		
 		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
+		$this->assign($adminStyle->getTplVars());
 		
 		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
-		foreach ($data as $values) {
-			//$values['access'] = explode(',', $values['access']);
-			$this->tpl->assignBlockVars('cat', $values);
-		}
+		$this->assign('cats', $data);
 	}
 }
 

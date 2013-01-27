@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app>
+	<!-- Application name -->
+	<title>Page</title>
+	
+	<version>0.1</version>
+	
+	<!-- Last update date -->
+	<date>20-01-2013</date>
+	
+	<!-- Tiny icone to be displayed in the admin board -->
+	<icone></icone>
+	
+	<!-- Front pages
+		Restriction rules :
+		  0 - Public
+		  1 - User connected required
+		  2 - Require specific access -->
+	<page default="1">display</page>
+	
+	<!-- Admin pages -->
+	<admin>
+		<page lang="Liste des pages" default="1">liste</page>
+		<page lang="Ajouter une page">add</page>
+		<page lang="Éditer une page" menu="false">edit</page>
+		<page lang="Supprimer une page" menu="false">del</page>
+	</admin>
+</app>

@@ -10,211 +10,359 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-28-09-2012
+ * @version 0.3-17-01-2013
  */
 abstract class WController {
 
-    /**
-     *
-     * @var WMain main Wity instance of WMain 
-     */
+	/**
+	 * @var WMain main Wity instance of WMain 
+	 */
 	protected $wity;
 	
-    /**
-     *
-     * @var string the full application directory
-     */
-	protected $app_dir;
+	/**
+	 * @var array Context of the application describing app's name, app's directory and app's main class
+	 */
+	protected $context;
 	
-    /**
-     *
-     * @var WView view object corresponding to this controller instance
-     */
+	/**
+	 * @var array Manifest of the application
+	 */
+	private $manifest;
+	
+	/**
+	 * @var WView view object corresponding to this controller instance
+	 */
 	protected $view;
 	
-    /**
-     *
-     * @var string action that will be performed in this application (default: 'index')
-     */
-	private $action = 'index';
+	/**
+	 * @var string action that will be performed in this application (default: 'index')
+	 */
+	private $action = '';
 	
-    /**
-     * Application initialization
-     * 
-     * @param WMain $wity main Wity instance of WMain
-     * @param type $app_dir directory of the application inheriting this Controller
-     */
-	public function init(WMain $wity, $app_dir) {
+	/**
+	 * Application initialization
+	 * 
+	 * @param WMain  $wity     main Wity instance of WMain
+	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
+	 */
+	public function init(WMain $wity, $context) {
 		$this->wity = $wity;
-		$this->app_dir = $app_dir;
+		$this->context = $context;
 		
 		// Initialize view if the app's constructor did not do it
 		if (is_null($this->view)) {
-			$this->view = new WView();
+			$this->setView(new WView());
 		}
+		
+		// Forward the context to the View
+		$this->view->setContext($this->context);
 		
 		// Default theme configuration
 		if ($this->view->getTheme() == '') {
 			$this->view->setTheme(WConfig::get('config.theme'));
 		}
 		
-		// Parse the manifest
-		$this->loadManifest($this->getAppName());
-		
 		// Automaticly declare the language directory
-		if (is_dir($app_dir.DS.'lang')) {
-			WLang::declareLangDir($app_dir.DS.'lang');
+		if (is_dir($context['directory'].DS.'lang')) {
+			WLang::declareLangDir($context['directory'].DS.'lang');
+		}
+		
+		// Parse the manifest
+		$this->manifest = $this->loadManifest($this->getAppName());
+		if (empty($this->manifest)) {
+			WNote::error('app_no_manifest', 'The manifest of the application '.$this->getAppName().' cannot be found', 'assign');
 		}
 	}
 	
-    /**
-     * Application's launcher method
-     */
-	abstract public function launch();
+	public function launch() {
+		// Trigger proper method
+		$this->forward($this->getAskedAction());
+	}
 	
-    /**
-     * Calls the application's method which is associated to the $action value
-     * 
-     * @param type $action action that we try to execute
-     * @param type $default optional default action value
-     * @throws Exception
-     */
-	protected function forward($action, $default = '') {
+	/**
+	 * Calls the application's method which is associated to the $action value
+	 * 
+	 * @param type $action  action under execution
+	 * @param type $default optional default page value
+	 * @return boolean Action forwarding success
+	 */
+	protected function forward($action) {
+		// Find a fine $action
+		if ($this->getAdminContext()) {
+			// $action exists in admin ? Otherwise, default_admin action exists?
+			if (!isset($this->manifest['admin'][$action]) && isset($this->manifest['default_admin'])) {
+				$action = $this->manifest['default_admin'];
+			}
+		} else {
+			// $action exists ? Otherwise, default action exists?
+			if (!isset($this->manifest['pages'][$action]) && isset($this->manifest['default'])) {
+				$action = $this->manifest['default'];
+			}
+		}
+		
+		if (!empty($action)) {
+			if ($this->hasAccess($this->getAppName(), $action)) {
+				$this->execAction($action);
+				return true;
+			}
+		} else {
+			WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' couldn\'t answer to your request.', 'display');
+		}
+		return false;
+	}
+	
+	/**
+	 * Triggers the method corresponding to the action
+	 * 
+	 * @param string $action Name of the method to execute
+	 * @throws Exception
+	 */
+	protected function execAction($action) {
 		if (method_exists($this, $action)) {
 			$this->action = $action;
 			$this->$action();
-		} else if (!empty($default)) {
-			$this->forward($default);
 		} else {
-			throw new Exception("L'action \"".$action."\" est inconnue de l'application ".$this->getAppName().".");
+			WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
 		}
 	}
 	
-    /**
-     * Returns the application's name
-     * 
-     * @return string application's name
-     */
+	/**
+	 * Returns the application's name
+	 * 
+	 * @return string application's name
+	 */
 	public function getAppName() {
-		$className = str_replace('_', '-', get_class($this));
-		if (strpos($className, 'Admin') === 0) {
-			$appName = 'admin';
-		} else {
-			$appName = strtolower(str_replace(array('AdminController', 'Controller'), '', $className));
-		}
-		return $appName;
+		return $this->context['name'];
 	}
 	
-    /**
-     * Returns the first asked action which was the first parameter of the forward method
-     * 
-     * @return string action name
-     */
-	public function getAskedAction() {
-		$args = WRoute::getArgs();
-		if (isset($args[0])) {
-			return $args[0];
-		} else {
-			return 'index';
-		}
-	}
-
-    /**
-     * Returns the real executed action
-     * 
-     * @return string real executed action name
-     */
-	public function getTriggeredAction() {
-		return $this->action;
+	/**
+	 * Returns if the application is in admin mode or not
+	 * 
+	 * @return bool true if admin mode loaded, false otherwise
+	 */
+	public function getAdminContext() {
+		return $this->context['admin'];
 	}
 	
-    /**
-     * Sets the private view property to $view
-     * 
-     * @param WView $view the view that will be associated to this instance of the controller
-     */
+	/**
+	 * Sets the private view property to $view
+	 * 
+	 * @param WView $view the view that will be associated to this instance of the controller
+	 */
 	public function setView(WView $view) {
 		unset($this->view);
 		$this->view = $view;
 	}
 	
-    /**
-     * Returns the current view
-     * 
-     * @return WView the current view
-     */
+	/**
+	 * Returns the current view
+	 * 
+	 * @return WView the current view
+	 */
 	public function getView() {
 		return $this->view;
 	}
 	
-    /**
-     * Returns a list of available actions in this application
-     * 
-     * @return array(string) a list of available actions in this application
-     */
-	public function getActionList() {
-		if (!empty($this->actionList) && is_array($this->actionList)) {
-			return $this->actionList;
+	/**
+	 * Returns action's name which is the first parameter given in the URL, right after the app's name
+	 * 
+	 * @return string page's name asked in the URL
+	 */
+	public function getAskedAction() {
+		$args = WRoute::getArgs();
+		if (isset($args[0])) {
+			return $args[0];
 		} else {
-			return array();
+			return '';
 		}
-	}
-	
-    /**
-     * Returns if the application is in admin mode or not
-     * 
-     * @return bool true if admin mode loaded, false otherwise
-     */
-	public function adminLoaded() {
-		return strpos(get_class($this), 'Admin') !== false;
 	}
 	
 	/**
-	 * Load the manifest file of a given application
+	 * Returns the real executed action
 	 * 
-	 * @param string $app_name name of the application owning the manifest
+	 * @return string real executed action name
 	 */
-	public function loadManifest($app_name) {
-		$manifest_href = APPS_DIR.$app_name.'/manifest.xml';
-		if (file_exists($manifest_href)) {
-			$xml = simplexml_load_file($manifest_href);
-			$manifest = array();
-			
-			// Nodes to look for
-			$nodes = array('title', 'version', 'date', 'icone', 'services', 'operations', 'adminOperations');
-			foreach ($nodes as $node) {
-				switch ($node) {
-					case 'services':
-						break;
-					
-					case 'operations':
-						break;
-					
-					case 'adminOperations':
-						break;
-					
-					default:
-						$manifest[$node] = property_exists($xml, $node) ? $xml->$node : '';
-						break;
-				}
-			}
-			
-			//var_dump($manifest);
-		}
+	public function getTriggeredAction() {
+		return $this->action;
 	}
 	
-    /**
-     * Renders the application with the right view
-     * 
-     * @param string $action name of the file that will be used for rendering this application
-     */
-	protected function render($action) {
-		$this->view->assign('actionForwarded', $this->action);
+	/**
+	 * Loads the manifest file of a given application
+	 * 
+	 * @param string $app_name name of the application owning the manifest
+	 * @return array manifest asked
+	 */
+	public function loadManifest($app_name) {
+		$manifest = WConfig::get('manifest.'.$app_name);
+		if (is_null($manifest)) {
+			$manifest = $this->parseManifest(APPS_DIR.$app_name.DS.'manifest.xml');
+			WConfig::set('manifest.'.$app_name, $manifest);
+		}
+		return $manifest;
+	}
+	
+	public function getManifest() {
+		return $this->manifest;
+	}
+	
+	/**
+	 * Parses a manifest file
+	 * 
+	 * @param string $manifest_href Href of the manifest file desired
+	 * @return array manifest parsed into an array representation
+	 */
+	private function parseManifest($manifest_href) {
+		if (!file_exists($manifest_href)) {
+			return null;
+		}
 		
-		// View: find response and render it
-		$action = str_replace(array('.html', '.tpl'), '', $action);
-		$this->view->findResponse($this->getAppName(), $action, $this->adminLoaded());
-		$this->view->render();
+		$xml = simplexml_load_file($manifest_href);
+		$manifest = array();
+		
+		// Nodes to look for
+		$nodes = array('title', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
+		foreach ($nodes as $node) {
+			switch ($node) {
+				case 'service':
+					// foreach ($xml->service as $page) {
+						
+					// }
+					break;
+				
+				case 'page':
+					if (property_exists($xml, 'page')) {
+						foreach ($xml->page as $page) {
+							$attributes = $page->attributes();
+							$key = (string) $page;
+							if (!empty($key)) {
+								if (!isset($manifest['pages'][$key])) {
+									$manifest['pages'][$key] = array(
+										'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
+										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+									);
+								}
+								if (isset($attributes['default']) && empty($manifest['default'])) {
+									$manifest['default'] = $key;
+								}
+							}
+						}
+					}
+					break;
+				
+				case 'admin':
+					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'page')) {
+						foreach ($xml->admin->page as $page) {
+							if (!empty($page)) {
+								$attributes = $page->attributes();
+								$key = (string) $page;
+								if (!empty($key)) {
+									if (!isset($manifest['admin'][$key])) {
+										$manifest['admin'][$key] = array(
+											'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
+											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
+											'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+										);
+									}
+								}
+								if (isset($attributes['default']) && empty($manifest['default_admin'])) {
+									$manifest['default_admin'] = $key;
+								}
+							}
+						}
+					}
+					break;
+				
+				case 'permission':
+					if (property_exists($xml, 'permission')) {
+						foreach ($xml->admin->page as $permission) {
+							if (!empty($permission)) {
+								$attributes = $page->attributes();
+								if (!empty($attributes['name'])) {
+									$manifest['permissions'][] = (string) $attributes['name'];
+								}
+							}
+						}
+					}
+					break;
+				
+				default:
+					$manifest[$node] = property_exists($xml, $node) ? (string) $xml->$node : '';
+					break;
+			}
+		}
+		return $manifest;
+	}
+	
+	/**
+	 * Checks whether the user has access to an application, or a precise action of an application
+	 * hasAccess('news') = does the user have access to news app?
+	 * hasAccess('news', 'detail') = access to action detail in news app?
+	 * 
+	 * @param string $app    Name of the app
+	 * @param string $action action in the app to be checked (can be empty '')
+	 * @return boolean
+	 */
+	public function hasAccess($app, $action = '', $admin = false) {
+		// Check manifest
+		$manifest = $this->loadManifest($app);
+		if (is_null($manifest)) {
+			return false;
+		}
+		
+		// Administrator supreme case
+		if (!empty($_SESSION['access']) && in_array('all', $_SESSION['access'])) {
+			return true;
+		}
+		
+		if ($this->getAdminContext()) { // Admin mode ON
+			if (isset($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
+				if (empty($action)) { // Asking for application access
+					return true;
+				} else if (isset($manifest['admin'][$action])) {
+					// Check permissions
+					foreach ($manifest['admin'][$action]['requires'] as $req) {
+						switch ($req) {
+							case 'connected':
+							case 'admin':
+								break;
+							
+							default:
+								if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
+									WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
+									return false;
+								}
+								break;
+						}
+					}
+					return true;
+				}
+			}
+		} else { // Admin mode OFF
+			if (empty($action)) { // Asking for application access
+				return true;
+			} else if (isset($manifest['pages'][$action])) {
+				// Check permissions
+				foreach ($manifest['pages'][$action]['requires'] as $req) {
+					switch ($req) {
+						case 'connected':
+							if (!WSession::isConnected()) {
+								WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.', 'display');
+								return false;
+							}
+							break;
+						
+						default:
+							if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
+								WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
+								return false;
+							}
+							break;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

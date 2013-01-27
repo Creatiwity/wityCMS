@@ -20,9 +20,9 @@
 					<td>
 						<select id="cParent" name="cParent">
 							<option value="0">Aucune</option>
-							{block name=cat}
-								<option value="{$cat.cid}">{$cat.name}</option>
-							{/block}
+							{for $c in $cat}
+								<option value="{$c.cid}">{$c.name}</option>
+							{/for}
 						</select>
 					</td>
 				</tr>
@@ -55,9 +55,9 @@
 					<td>
 						<select id="cParentEdit" name="cParentEdit">
 							<option value="0">Aucune</option>
-							{block name=cat}
-								<option value="{$cat.cid}">{$cat.name}</option>
-							{/block}
+							{for $c in $cat}
+								<option value="{$c.cid}">{$c.name}</option>
+							{/for}
 						</select>
 					</td>
 				</tr>
@@ -87,23 +87,23 @@
 			<th># Parent</th>
 			<th>Actions</th>
 		</tr>
-		{block name="cat"}
+		{for $count, $c in $cat}
 			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
-				<td>{$cat.cid}</td>
-				<td><strong>{$cat.name}</strong></td>
-				<td>{$cat.shortname}</td>
-				<td>{$cat.parent}</td>
+				<td>{$c.cid}</td>
+				<td><strong>{$c.name}</strong></td>
+				<td>{$c.shortname}</td>
+				<td>{$c.parent}</td>
 				<td>
-					<a href="#" title="Editer" onclick="return editCat({$cat.cid}, '{$cat.name}', '{$cat.shortname}', {$cat.parent});"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
-					<a href="/admin/news/cat_del/{$cat.cid}/" title="Supprimer" onclick="return checkDel('{$cat.name}');"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
+					<a href="#" title="Editer" onclick="return editCat({$c.cid}, '{$c.name}', '{$c.shortname}', {$c.parent});"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
+					<a href="/admin/news/cat_del/{$c.cid}/" title="Supprimer" onclick="return checkDel('{$c.name}');"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
 				</td>
 			</tr>
-		{/block}
-		{if {$count} == 0}
+			{empty}
 			<tr>
 				<td colspan="6" class="tcenter">Aucune catégorie n'a été ajoutée.</td>
 			</tr>
-		{/if}
+			{/empty}
+		{/for}
 	</table>
 </div>
 <div class="clear"></div>

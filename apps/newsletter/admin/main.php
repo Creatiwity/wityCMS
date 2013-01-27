@@ -162,7 +162,7 @@ class NewsletterAdminController extends WController {
 				
 				WNote::success("Courriel envoyé", "La newsletter a été envoyée avec succès.", 'session');
 				// Redirection
-				header('location: '.WRoute::getDir().'admin/newsletter/');
+				header('location: '.WRoute::getDir().'/admin/newsletter/');
 			}
 		} else {
 			$this->view->write();

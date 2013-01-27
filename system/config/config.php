@@ -6,8 +6,8 @@
  */
 
 $config = array(
-    'base' => 'http://localhost/Wity-Lite/',
-	'site_name' => 'Wity Lite',
+	'base' => 'http://localhost/Wity-Lite/',
+	'site_name' => 'WityCMS',
 	'theme' => '_blank',
 	'lang' => 'fr-FR',
 );

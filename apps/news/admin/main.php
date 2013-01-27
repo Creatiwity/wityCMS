@@ -8,14 +8,6 @@
  */
 
 class NewsAdminController extends WController {
-	protected $actionList = array(
-		'index' => "Liste des articles",
-		'add' => "Ajouter un article",
-		'edit' => "\Edition d'une news",
-		'del' => "\Suppression d'une news",
-		'cat' => "Gestion des catégories"
-	);
-	
 	/*
 	 * Chargement du modèle et de la view
 	 */
@@ -25,11 +17,6 @@ class NewsAdminController extends WController {
 		
 		include 'view.php';
 		$this->setView(new NewsAdminView($this->model));
-	}
-	
-	public function launch() {
-		$action = $this->getAskedAction();
-		$this->forward($action, 'index');
 	}
 	
 	/**
@@ -57,14 +44,14 @@ class NewsAdminController extends WController {
 		}
 		
 		$this->view->index($sortBy, $sens);
-		$this->render('index');
+		$this->view->render();
 	}
 	
 	/*
 	 * Ajout d'une news
 	 */
 	protected function add() {
-		$data = WRequest::getAssoc(array('nAuthor', 'nKeywords', 'nTitle', 'nUrl', 'nContent', 'nCat'));
+		$data = WRequest::getAssoc(array('nAuthor', 'nKeywords', 'nTitle', 'nUrl', 'nContent'));
 		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
 		if (!in_array(null, $data, true)) {
 			$erreurs = array();
@@ -89,6 +76,9 @@ class NewsAdminController extends WController {
 			$data['nUrl'] = preg_replace('#-{2,}#', '-', $data['nUrl']);
 			$data['nUrl'] = trim($data['nUrl'], '-');
 			
+			// Categories
+			$data['nCat'] = WRequest::get('nCat');
+			
 			// Traitement l'image à la une
 			if (!empty($_FILES['image']['name'])) {
 				include HELPERS_DIR.'upload/upload.php';
@@ -105,9 +95,8 @@ class NewsAdminController extends WController {
 			}
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
 				$this->view->add($data);
-				$this->render('add');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->createNews($data)) {
@@ -120,17 +109,15 @@ class NewsAdminController extends WController {
 						}
 					}
 					
-					WNote::success("Article ajouté", "L'article <strong>".$data['nTitle']."</strong> a été créé avec succès.", 'session');
-					header('location: '.WRoute::getDir().'admin/news/');
+					WNote::success('article_added', "L'article <strong>".$data['nTitle']."</strong> a été créé avec succès.");
+					header('location: '.WRoute::getDir().'/admin/news/');
 				} else {
-					WNote::error("Erreur lors de l'ajout", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('article_not_added', "Une erreur inconnue s'est produite.");
 					$this->view->add($data);
-					$this->render('add');
 				}
 			}
 		} else {
 			$this->view->add();
-			$this->render('add');
 		}
 	}
 	
@@ -139,12 +126,12 @@ class NewsAdminController extends WController {
 		
 		// Vérification de la validité de l'id
 		if (!$this->model->validId($id)) {
-			WNote::error("News introuvable", "L'article que vous tentez de modifier n'existe pas.", 'session');
-			header('location: '.WRoute::getDir().'admin/news/');
+			WNote::error('article_not_found', "L'article que vous tentez de modifier n'existe pas.", 'session');
+			header('location: '.WRoute::getDir().'/admin/news/');
 			return;
 		}
 		
-		$data = WRequest::getAssoc(array('nAuthor', 'nKeywords', 'nTitle', 'nUrl', 'nContent', 'nCat'));
+		$data = WRequest::getAssoc(array('nAuthor', 'nKeywords', 'nTitle', 'nUrl', 'nContent'));
 		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
 		if (!in_array(null, $data, true)) {
 			$erreurs = array();
@@ -171,6 +158,9 @@ class NewsAdminController extends WController {
 				$data['nUrl'] = preg_replace('#-{2,}#', '-', $data['nUrl']);
 				$data['nUrl'] = trim($data['nUrl'], '-');
 			}
+			
+			// Categories
+			$data['nCat'] = WRequest::get('nCat');
 			
 			// Traitement l'image à la une
 			if (!empty($_FILES['image']['name'])) {
@@ -199,23 +189,20 @@ class NewsAdminController extends WController {
 			$data['nEditor_id'] = $_SESSION['nickname'];
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
 				$this->view->edit($id, $data);
-				$this->render('edit');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->updateNews($id, $data)) {
-					WNote::success("News éditée", "L'article <strong>".$data['nTitle']."</strong> a été modifié avec succès.", 'session');
-					header('location: '.WRoute::getDir().'admin/news/');
+					WNote::success('article_edited', "L'article <strong>".$data['nTitle']."</strong> a été modifié avec succès.");
+					header('location: '.WRoute::getDir().'/admin/news/');
 				} else {
-					WNote::error("Erreur lors de l'édition", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('article_not_edited', "Une erreur inconnue s'est produite.");
 					$this->view->edit($id, $data);
-					$this->render('edit');
 				}
 			}
 		} else {
 			$this->view->edit($id);
-			$this->render('edit');
 		}
 	}
 	
@@ -226,15 +213,15 @@ class NewsAdminController extends WController {
 				$data = $this->model->loadNews($id);
 				$this->model->deleteNews($id);
 				$this->model->newsDestroyCats($id);
-				WNote::success("Suppression d'un article", "L'article \"<strong>".$data['title']."</strong>\" a été supprimé avec succès.", 'session');
-				header('location: '.WRoute::getDir().'admin/news/');
+				WNote::success('article_deleted', "L'article \"<strong>".$data['title']."</strong>\" a été supprimé avec succès.");
+				header('location: '.WRoute::getDir().'/admin/news/');
 			} else {
 				$this->view->del($id);
-				$this->render('del');
+				$this->view->render();
 			}
 		} else {
-			WNote::error("Article introuvable", "L'article que vous tentez de supprimer n'existe pas.", 'session');
-			header('location: '.WRoute::getDir().'admin/news/');
+			WNote::error('article_not_found', "L'article que vous tentez de supprimer n'existe pas.");
+			header('location: '.WRoute::getDir().'/admin/news/');
 		}
 	}
 	
@@ -281,12 +268,12 @@ class NewsAdminController extends WController {
 			$data['cShortname'] = trim($data['cShortname'], '-');
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
 			} else {
 				if ($this->model->createCat($data)) {
-					WNote::success("Catégorie ajoutée", "La catégorie <strong>".$data['cName']."</strong> a été ajoutée avec succès.", 'assign');
+					WNote::success('cat_added', "La catégorie <strong>".$data['cName']."</strong> a été ajoutée avec succès.");
 				} else {
-					WNote::error("Erreur lors de l'ajout", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('cat_not_added', "Une erreur inconnue s'est produite.");
 				}
 			}
 		}
@@ -314,28 +301,25 @@ class NewsAdminController extends WController {
 			$data['cShortnameEdit'] = trim($data['cShortnameEdit'], '-');
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
 			} else {
 				if ($this->model->updateCat(intval($data['cIdEdit']), $data)) {
-					WNote::success("Catégorie éditée", "La catégorie <strong>".$data['cNameEdit']."</strong> a été éditée avec succès.", 'assign');
+					WNote::success('cat_edited', "La catégorie <strong>".$data['cNameEdit']."</strong> a été éditée avec succès.");
 				} else {
-					WNote::error("Erreur lors de l'édition", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('cat_not_edited', "Une erreur inconnue s'est produite.");
 				}
 			}
 		}
 		
-		// Les notes
-		WNote::treatNoteSession();
-		
 		$this->view->cat($sortBy, $sens);
-		$this->render('cat');
+		$this->view->render();
 	}
 	
 	protected function cat_del() {
 		$id = $this->getId();
 		$this->model->deleteCat($id);
-		WNote::success("Suppression d'une catégorie", "La catégorie a été supprimée avec succès.", 'session');
-		header('location: '.WRoute::getDir().'admin/news/cat/');
+		WNote::success('cat_deleted', "La catégorie a été supprimée avec succès.");
+		header('location: '.WRoute::getDir().'/admin/news/cat/');
 	}
 }
 

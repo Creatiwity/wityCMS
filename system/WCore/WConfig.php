@@ -15,21 +15,21 @@ defined('IN_WITY') or die('Access denied');
  */
 class WConfig {
 	
-    /**
-     * @var array() Multidimensionnal array containing configurations sorted by type
-     * 
-     * No '.' in keys because it's a reserved character
-     */
+	/**
+	 * @var array() Multidimensionnal array containing configurations sorted by type
+	 * 
+	 * No '.' in keys because it's a reserved character
+	 */
 	private static $configs = array();
 	
-    /**
-     * @var array() List of loaded configuration files
-     */
+	/**
+	 * @var array() List of loaded configuration files
+	 */
 	private static $files = array();
 
-    /**
-     * @var array() Stores modified configurations 
-     */
+	/**
+	 * @var array() Stores modified configurations 
+	 */
 	private static $modified = array();
 	
 	/**
@@ -65,7 +65,7 @@ class WConfig {
 	}
 	
 	/**
-     * Assign a configuration value to a path
+	 * Assign a configuration value to a path
 	 * 
 	 * @param  string $path   configuration path
 	 * @param  mixed  $value  configuration value
@@ -90,7 +90,7 @@ class WConfig {
 	}
 	
 	/**
-     * Adds configurations from a file
+	 * Adds configurations from a file
 	 * 
 	 * @param  string  $field configuration name
 	 * @param  string  $file  configuration file

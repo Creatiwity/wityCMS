@@ -1,6 +1,5 @@
 <div id="content" class="large">
 	<div class="item">
-		{if !empty({$note})}{$note}{/if}
 		<form action="" method="post">
 			<table cellpadding="5" cellspacing="0">
 				<tr>
@@ -27,16 +26,16 @@
 						<script type="text/javascript">
 							var apps = {
 								0: '',
-								{foreach item={$cats} as={$c}}
-									{$c.value.id}: '{$c.value.access}',
-								{/foreach}
+								{for $cat in $cats}
+									{$cat.id}: '{$cat.access}',
+								{/for}
 							};
 						</script>
 						<select id="groupe" name="groupe" onchange="catChange(this);">
 							<option value="0">Aucun groupe</option>
-							{foreach item={$cats} as={$c}}
-								<option value="{$c.value.id}">{$c.value.name}</option>
-							{/foreach}
+							{for $cat in $cats}
+								<option value="{$cat.id}">{$cat.name}</option>
+							{/for}
 						</select>
 					</td>
 				</tr>
@@ -58,19 +57,19 @@
 							<option value="perso">Mode personnalisé</option>
 						</select><br />
 						<ul id="access" class="hidden">
-							{block name="module"}
+							{for $app in $admin_apps}
 							<li>
-								<input class="access" id="{$module.name}" type="checkbox" name="access[{$module.name}]" />
-								<label for="{$module.name}">{$module.name|ucfirst}</label>
-								{if count({$module.levels}) > 0}
-								<select name="level[{$module.name}]">
-									{foreach item={$module.levels} as={$level}}
-									<option value="{$level.value.id}">{$level.value.name}</option>
-									{/foreach}
+								<input class="access" id="{$app.name}" type="checkbox" name="access[{$app.name}]" />
+								<label for="{$app.name}">{$app.name|ucfirst}</label>
+								<!--\{if count(\{$app.levels}) > 0}
+								<select name="level[\{$app.name}]">
+									\{foreach item=\{$module.levels} as=\{$level}}
+									<option value="\{$level.value.id}">\{$level.value.name}</option>
+									\{/foreach}
 								</select>
-								{/if}
+								\{/if}-->
 							</li>
-							{/block}
+							{/for}
 						</ul>
 					</td>
 				</tr>

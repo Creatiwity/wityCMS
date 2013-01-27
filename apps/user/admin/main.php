@@ -8,18 +8,6 @@
  */
 
 class UserAdminController extends WController {
-	/*
-	 * Les opérations du module
-	 */
-	protected $actionList = array(
-		'liste' => "Liste des membres",
-		'add' => "Ajouter un utilisateur",
-		'edit' => "\Edition d'un utilisateur",
-		'del' => "\Suppression d'un utilisateur",
-		'cat' => "Gestion des groupes",
-		'cat_del' => "\\"
-	);
-	
 	public function __construct() {
 		// Chargement des modèles
 		include 'model.php';
@@ -29,14 +17,6 @@ class UserAdminController extends WController {
 		$this->setView(new UserAdminView($this->model));
 	}
 	
-	public function launch() {
-		// Les notes
-		WNote::treatNoteSession();
-		
-		$action = $this->getAskedAction();
-		$this->forward($action, 'liste');
-	}
-	
 	/**
 	 * Récupération de l'id de l'utilisateur fourni en Url
 	 * @param void
@@ -44,7 +24,7 @@ class UserAdminController extends WController {
 	 */
 	private function getId() {
 		$args = WRoute::getArgs();
-		if (empty($args[1])) {
+		if (!isset($args[1])) {
 			return -1;
 		} else {
 			list ($id) = explode('-', $args[1]);
@@ -64,7 +44,7 @@ class UserAdminController extends WController {
 		$filtres = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
 		
 		$this->view->liste($sortBy, $sens, $page, $filtres);
-		$this->render('liste');
+		$this->view->render('liste');
 	}
 	
 	protected function add() {
@@ -119,7 +99,7 @@ class UserAdminController extends WController {
 			
 			// Affichage des éventuelles erreurs
 			if (!empty($erreur)) {
-				WNote::error("Informations invalides", implode("<br />\n", $erreur), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreur));
 				$this->view->add($data);
 				$this->render('add');
 			} else {
@@ -149,17 +129,17 @@ Ceci est un message automatique.";
 						$mail->Send();
 						unset($mail);
 					}
-					WNote::success("Ajout d'utilisateur", "L'utilisateur <strong>".$data['nickname']."</strong> a été ajouté avec succès.", 'session');
-					header('location: '.WRoute::getDir().'admin/user/');
+					WNote::success('user_created', "L'utilisateur <strong>".$data['nickname']."</strong> a été ajouté avec succès.");
+					header('location: '.WRoute::getDir().'/admin/user/');
 				} else {
-					WNote::error("Erreur lors de l'ajout", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('user_not_created', "Une erreur inconnue s'est produite.");
 					$this->view->add();
 					$this->render('add');
 				}
 			}
 		} else {
 			$this->view->add();
-			$this->render('add');
+			$this->view->render('add');
 		}
 	}
 	
@@ -226,27 +206,27 @@ Ceci est un message automatique.";
 			
 			// En cas d'erreur
 			if (!empty($erreurs)) {
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs));
 				$this->view->edit($userid);
-				$this->render('edit');
+				$this->view->render('edit');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->updateUser($userid, $data)) {
-					WNote::success("Edition d'utilisateur", "L'utilisateur <strong>".$data['nickname']."</strong> a été mis à jour avec succès.", 'session');
-					header('location: '.WRoute::getDir().'admin/user/edit/'.$userid);
+					WNote::success('user_edited', "L'utilisateur <strong>".$data['nickname']."</strong> a été mis à jour avec succès.");
+					header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
 				} else {
-					WNote::error("Erreur lors de l'édition", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('user_not_edited', "Une erreur inconnue s'est produite.");
 					$this->view->edit($userid);
-					$this->render('add');
+					$this->view->render('add');
 				}
 			}
 		} else {
 			if (!$this->model->validId($userid)) {
-				WNote::error("Utilisateur inexistant", "L'utilisateur recherché n'existe pas ou plus.", 'assign');
+				WNote::error('user_not_found', "L'utilisateur recherché n'existe pas ou plus.");
 				$this->liste();
 			} else {
 				$this->view->edit($userid);
-				$this->render('edit');
+				$this->view->render('edit');
 			}
 		}
 	}
@@ -256,11 +236,11 @@ Ceci est un message automatique.";
 		if ($this->model->validId($userid)) {
 			if (WRequest::get('confirm', null, 'POST') === '1') {
 				$this->model->deleteUser($userid);
-				WNote::success("Suppression d'utilisateur", "L'utilisateur a été supprimé avec succès.", 'session');
-				header('location: '.WRoute::getDir().'admin/user/');
+				WNote::success('user_deleted', "L'utilisateur a été supprimé avec succès.");
+				header('location: '.WRoute::getDir().'/admin/user/');
 			} else {
 				$this->view->del($userid);
-				$this->render('del');
+				$this->view->render('del');
 			}
 		} else {
 			$this->liste();
@@ -309,12 +289,12 @@ Ceci est un message automatique.";
 			}
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs));
 			} else {
 				if ($this->model->createCat($data)) {
-					WNote::success("Catégorie ajoutée", "La catégorie <strong>".$data['name']."</strong> a été ajoutée avec succès.", 'assign');
+					WNote::success('cat_added', "La catégorie <strong>".$data['name']."</strong> a été ajoutée avec succès.");
 				} else {
-					WNote::error("Erreur lors de l'ajout", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('cat_not_added', "Une erreur inconnue s'est produite.");
 				}
 			}
 		}
@@ -352,28 +332,25 @@ Ceci est un message automatique.";
 			}
 			
 			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error("Informations invalides", implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $erreurs));
 			} else {
 				if ($this->model->updateCat($id, $data)) {
-					WNote::success("Catégorie éditée", "La catégorie <strong>".$data['nameEdit']."</strong> a été éditée avec succès.", 'assign');
+					WNote::success('cat_edited', "La catégorie <strong>".$data['nameEdit']."</strong> a été éditée avec succès.");
 				} else {
-					WNote::error("Erreur lors de l'édition", "Une erreur inconnue s'est produite.", 'assign');
+					WNote::error('cat_not_edited', "Une erreur inconnue s'est produite.");
 				}
 			}
 		}
 		
-		// Les notes
-		WNote::treatNoteSession();
-		
 		$this->view->cat($sortBy, $sens);
-		$this->render('cat');
+		$this->view->render('cat');
 	}
 	
 	protected function cat_del() {
 		$id = $this->getId();
 		$this->model->deleteCat($id);
-		WNote::success("Suppression d'une catégorie", "La catégorie a été supprimée avec succès.", 'session');
-		header('location: '.WRoute::getDir().'admin/user/cat/');
+		WNote::success('cat_deleted', "La catégorie a été supprimée avec succès.");
+		header('location: '.WRoute::getDir().'/admin/user/cat/');
 	}
 }
 
