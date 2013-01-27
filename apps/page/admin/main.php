@@ -63,7 +63,7 @@ class PageAdminController extends WController {
 			if (!empty($erreurs)) { // Il y a un problème
 				WNote::error('data_errors', implode("<br />\n", $erreurs));
 				$this->view->add($data);
-				$this->vieww->render('add');
+				$this->view->render('add');
 			} else {
 				// Mise à jour des infos
 				if ($this->model->createPage($data)) {

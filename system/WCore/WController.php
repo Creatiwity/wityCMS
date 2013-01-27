@@ -14,42 +14,37 @@ defined('IN_WITY') or die('Access denied');
  */
 abstract class WController {
 
-    /**
-     *
-     * @var WMain main Wity instance of WMain 
-     */
+	/**
+	 * @var WMain main Wity instance of WMain 
+	 */
 	protected $wity;
 	
-    /**
-     *
-     * @var array Context of the application describing app's name, app's directory and app's main class
-     */
+	/**
+	 * @var array Context of the application describing app's name, app's directory and app's main class
+	 */
 	protected $context;
 	
 	/**
-	 * 
 	 * @var array Manifest of the application
 	 */
 	private $manifest;
 	
-    /**
-     *
-     * @var WView view object corresponding to this controller instance
-     */
+	/**
+	 * @var WView view object corresponding to this controller instance
+	 */
 	protected $view;
 	
-    /**
-     *
-     * @var string action that will be performed in this application (default: 'index')
-     */
+	/**
+	 * @var string action that will be performed in this application (default: 'index')
+	 */
 	private $action = '';
 	
-    /**
-     * Application initialization
-     * 
-     * @param WMain  $wity     main Wity instance of WMain
-     * @param array  $context  Context of the application describing app's name, app's directory and app's main class
-     */
+	/**
+	 * Application initialization
+	 * 
+	 * @param WMain  $wity     main Wity instance of WMain
+	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
+	 */
 	public function init(WMain $wity, $context) {
 		$this->wity = $wity;
 		$this->context = $context;
@@ -85,12 +80,12 @@ abstract class WController {
 	}
 	
 	/**
-     * Calls the application's method which is associated to the $action value
-     * 
-     * @param type $action  action under execution
-     * @param type $default optional default page value
+	 * Calls the application's method which is associated to the $action value
+	 * 
+	 * @param type $action  action under execution
+	 * @param type $default optional default page value
 	 * @return boolean Action forwarding success
-     */
+	 */
 	protected function forward($action) {
 		// Find a fine $action
 		if ($this->getAdminContext()) {
@@ -131,48 +126,48 @@ abstract class WController {
 		}
 	}
 	
-    /**
-     * Returns the application's name
-     * 
-     * @return string application's name
-     */
+	/**
+	 * Returns the application's name
+	 * 
+	 * @return string application's name
+	 */
 	public function getAppName() {
 		return $this->context['name'];
 	}
 	
 	/**
-     * Returns if the application is in admin mode or not
-     * 
-     * @return bool true if admin mode loaded, false otherwise
-     */
+	 * Returns if the application is in admin mode or not
+	 * 
+	 * @return bool true if admin mode loaded, false otherwise
+	 */
 	public function getAdminContext() {
 		return $this->context['admin'];
 	}
 	
-    /**
-     * Sets the private view property to $view
-     * 
-     * @param WView $view the view that will be associated to this instance of the controller
-     */
+	/**
+	 * Sets the private view property to $view
+	 * 
+	 * @param WView $view the view that will be associated to this instance of the controller
+	 */
 	public function setView(WView $view) {
 		unset($this->view);
 		$this->view = $view;
 	}
 	
-    /**
-     * Returns the current view
-     * 
-     * @return WView the current view
-     */
+	/**
+	 * Returns the current view
+	 * 
+	 * @return WView the current view
+	 */
 	public function getView() {
 		return $this->view;
 	}
 	
 	/**
-     * Returns action's name which is the first parameter given in the URL, right after the app's name
-     * 
-     * @return string page's name asked in the URL
-     */
+	 * Returns action's name which is the first parameter given in the URL, right after the app's name
+	 * 
+	 * @return string page's name asked in the URL
+	 */
 	public function getAskedAction() {
 		$args = WRoute::getArgs();
 		if (isset($args[0])) {
@@ -182,11 +177,11 @@ abstract class WController {
 		}
 	}
 	
-    /**
-     * Returns the real executed action
-     * 
-     * @return string real executed action name
-     */
+	/**
+	 * Returns the real executed action
+	 * 
+	 * @return string real executed action name
+	 */
 	public function getTriggeredAction() {
 		return $this->action;
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  * Wity CMS
- * Système de gestion de contenu pour tous.
+ * SystÃ¨me de gestion de contenu pour tous.
  *
  * @author Fofif
  * @version	$Id: main.php 0001 10-04-2011 Fofif $
@@ -9,7 +9,7 @@
 
 class PageController extends WController {
 	/*
-	 * Chargement du modèle et de la view
+	 * Chargement du modÃ¨le et de la view
 	 */
 	public function __construct() {
 		include 'model.php';
@@ -20,7 +20,7 @@ class PageController extends WController {
 	}
 	
 	/**
-	 * Récupère un id fourni dans l'url
+	 * RÃ©cupÃ¨re un id fourni dans l'url
 	 */
 	private function getId() {
 		$args = WRoute::getArgs();
@@ -43,7 +43,7 @@ class PageController extends WController {
 			$this->view->see($id);
 			$this->view->render('see');
 		} else {
-			WNote::error("page_not_found", "La page que vous avez demandée n'existe pas.", 'display');
+			WNote::error("page_not_found", "La page que vous avez demandÃ©e n'existe pas.", 'display');
 		}
 	}
 }

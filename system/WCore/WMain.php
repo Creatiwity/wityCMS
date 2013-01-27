@@ -14,17 +14,16 @@ require SYS_DIR.'WCore'.DS.'WView.php';
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-17-01-2013
- 
  */
 class WMain {
-    /**
-     * @var array(string)|null Stores all the accessible applications
-     */
+	/**
+	 * @var array(string)|null Stores all the accessible applications
+	 */
 	private $apps = null;
 	
-    /**
-     * Initializes config, route, session, lang and then exec the application
-     */
+	/**
+	 * Initializes config, route, session, lang and then exec the application
+	 */
 	public function __construct() {
 		// Loading config
 		$this->loadConfigs();
@@ -52,11 +51,11 @@ class WMain {
 		WNote::displayCustomView();
 	}
 	
-    /**
-     * If found, execute the application in the apps/$app_name directory
-     * 
-     * @param string $app_name name of the application that will be launched
-     */
+	/**
+	 * If found, execute the application in the apps/$app_name directory
+	 * 
+	 * @param string $app_name name of the application that will be launched
+	 */
 	public function exec($app_name) {
 		// App asked exists?
 		if ($this->isApp($app_name)) {
@@ -103,34 +102,34 @@ class WMain {
 		return $this->apps;
 	}
 	
-    /**
-     * Returns application existence
-     * 
-     * @param string $app
-     * @return bool true if $app exists, false otherwise
-     */
+	/**
+	 * Returns application existence
+	 * 
+	 * @param string $app
+	 * @return bool true if $app exists, false otherwise
+	 */
 	public function isApp($app) {
 		return !empty($app) && in_array($app, $this->getAppsList());
 	}
 	
-    /**
-     * Loads WConfig
-     */
+	/**
+	 * Loads WConfig
+	 */
 	private function loadConfigs() {
 		WConfig::load('config', SYS_DIR.'config'.DS.'config.php', 'php');
 	}
 	
-    /**
-     * Loads WRoute
-     */
+	/**
+	 * Loads WRoute
+	 */
 	private function route() {
 		WRoute::init();
 		WRoute::route();
 	}
 	
-    /**
-     * Initializes session and check the flood condition
-     */
+	/**
+	 * Initializes session and check the flood condition
+	 */
 	private function setupSession() {
 		// Instanciates it
 		$session = WSystem::getSession();
@@ -141,18 +140,18 @@ class WMain {
 		}
 	}
 	
-    /**
-     * Loads lang config
-     */
+	/**
+	 * Loads lang config
+	 */
 	private function setupLang() {
 		$lang_config = WConfig::get('config.lang');
 		WLang::init();
 		WLang::selectLang($lang_config);
 	}
 	
-    /**
-     * Log activity in a file, DEBUG ONLY
-     */
+	/**
+	 * Log activity in a file, DEBUG ONLY
+	 */
 	private function log() {
 		$file = fopen(WT_PATH.'log', 'a+');
 		fwrite($file, "\n".@$_SESSION['userid']." - Route : ".$_SERVER['REQUEST_URI']." / ".date('d/m/Y H:i:s', time()));

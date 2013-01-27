@@ -11,17 +11,10 @@
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
 	
-	<permission name="test" />
-	<permission name="test2" />
-	
-	<!-- Front pages
-		Restriction rules :
-		  0 - Public
-		  1 - User connected required
-		  2 - Require specific access -->
+	<!-- Front pages -->
 	<page default="default">login</page>
 	<page requires="connected">logout</page>
-	<page requires="connected, test">register</page>
+	<page>register</page>
 	<page>confirm</page>
 	
 	<!-- Admin pages -->

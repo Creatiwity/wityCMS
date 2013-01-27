@@ -14,17 +14,17 @@ defined('IN_WITY') or die('Access denied');
  */
 class WTemplateParser {
 	
-    /**
-     * Replaces all nodes found in $string by the callback result
-     * 
-     * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
-     * 
-     * @param string    $string     a string to parse
-     * @param string    $callback   the callback to call to replace the node
-     * @param type      $nodes      optional and unused
-     * @return string the parsed string on which all callback results are in it
-     * @throws Exception
-     */
+	/**
+	 * Replaces all nodes found in $string by the callback result
+	 * 
+	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+	 * 
+	 * @param string    $string     a string to parse
+	 * @param string    $callback   the callback to call to replace the node
+	 * @param type      $nodes      optional and unused
+	 * @return string the parsed string on which all callback results are in it
+	 * @throws Exception
+	 */
 	public static function replaceNodes($string, $callback) {
 		$length = strlen($string);
 		$level = 0;

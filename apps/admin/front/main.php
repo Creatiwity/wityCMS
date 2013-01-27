@@ -114,6 +114,7 @@ class AdminController extends WController {
 	
 	/**
 	 * Récupère la liste des applis administrables
+	 * 
 	 * @return array
 	 */
 	public function getAdminAppList() {

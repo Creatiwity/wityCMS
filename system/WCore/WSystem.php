@@ -19,9 +19,9 @@ defined('IN_WITY') or die('Access denied');
  */
 class WSystem {
 	
-    /**
-     * @var WSession Session object
-     */
+	/**
+	 * @var WSession Session object
+	 */
 	private static $sessionInstance;
 	
 	/**
@@ -34,10 +34,10 @@ class WSystem {
 	 */
 	private static $dbInstance;
 	
-    /**
-     * Returns current session or creates it if it doesn't exist yet
-     * @return WSession returns current session
-     */
+	/**
+	 * Returns current session or creates it if it doesn't exist yet
+	 * @return WSession returns current session
+	 */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
 			include SYS_DIR.'WCore/WSession.php';
@@ -47,10 +47,10 @@ class WSystem {
 		return self::$sessionInstance;
 	}
 	
-    /**
-     * Returns current template or creates it if it doesn't exist yet
-     * @return WSession returns current template
-     */
+	/**
+	 * Returns current template or creates it if it doesn't exist yet
+	 * @return WSession returns current template
+	 */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
 			include SYS_DIR.'WTemplate/WTemplate.php';
@@ -64,10 +64,10 @@ class WSystem {
 		return self::$templateInstance;
 	}
 	
-    /**
-     * Returns current database manager or creates it if it doesn't exist yet
-     * @return WSession returns current database manager
-     */
+	/**
+	 * Returns current database manager or creates it if it doesn't exist yet
+	 * @return WSession returns current database manager
+	 */
 	public static function getDB() {
 		if (!is_object(self::$dbInstance)) {
 			// Chargement des infos db

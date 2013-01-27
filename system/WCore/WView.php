@@ -14,56 +14,49 @@ defined('IN_WITY') or die('Access denied');
  */
 class WView {
 	
-    /**
-     *
-     * @var boolean State variable telling whether the view was already rendered
-     */
+	/**
+	 * @var boolean State variable telling whether the view was already rendered
+	 */
 	private static $response_sent = false;
 	
 	/**
-	 * 
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
 	private $context;
 	
-    /**
-     *
-     * @var WTemplate Instance of WTemplate
-     */
+	/**
+	 * @var WTemplate Instance of WTemplate
+	 */
 	public $tpl;
 	
-    /**
-     *
-     * @var string Theme name to be loaded
-     */
+	/**
+	 * @var string Theme name to be loaded
+	 */
 	private $themeName = '';
-    /**
-     *
-     * @var string Theme directory
-     */
+	
+	/**
+	 * @var string Theme directory
+	 */
 	private $themeDir = '';
 	
-    /**
-     *
-     * @var string Template response file to display as output
-     */
+	/**
+	 * @var string Template response file to display as output
+	 */
 	private $responseFile = '';
 	
-    /**
-     *
-     * @var array Variables with a special treatment like "css" and "js"
-     */
+	/**
+	 * @var array Variables with a special treatment like "css" and "js"
+	 */
 	private $specialVars = array('css', 'js');
 	
-    /**
-     *
-     * @var array Template variables
-     */
+	/**
+	 * @var array Template variables
+	 */
 	private $vars = array();
 	
-    /**
-     * Setup template
-     */
+	/**
+	 * Setup template
+	 */
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
 		
@@ -84,11 +77,11 @@ class WView {
 		}
 	}
 	
-    /**
-     * Assigns a theme
-     * 
-     * @param string $theme theme name (must a be an existing directory in /themes/)
-     */
+	/**
+	 * Assigns a theme
+	 * 
+	 * @param string $theme theme name (must a be an existing directory in /themes/)
+	 */
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
 			$this->themeName = '_blank';
@@ -100,20 +93,20 @@ class WView {
 		}
 	}
 	
-    /**
-     * Returns current theme name
-     * 
-     * @return string current theme name
-     */
+	/**
+	 * Returns current theme name
+	 * 
+	 * @return string current theme name
+	 */
 	public function getTheme() {
 		return $this->themeName;
 	}
 	
-    /**
-     * Sets the file that will be used for template compiling
-     * 
-     * @param string $file file that will be used for template compiling
-     */
+	/**
+	 * Sets the file that will be used for template compiling
+	 * 
+	 * @param string $file file that will be used for template compiling
+	 */
 	public function setResponse($file) {
 		// Format the file asked
 		if (strpos($file, '/') === false) {
@@ -129,12 +122,12 @@ class WView {
 		}
 	}
 	
-    /**
-     * Assigns a variable whose name is $name to a $value
-     * 
-     * @param mixed $name   variable name 
-     * @param mixed $value  variable value
-     */
+	/**
+	 * Assigns a variable whose name is $name to a $value
+	 * 
+	 * @param mixed $name   variable name 
+	 * @param mixed $value  variable value
+	 */
 	public function assignOne($name, $value) {
 		// Is $name a Special var?
 		if (in_array($name, $this->specialVars)) {
@@ -148,12 +141,12 @@ class WView {
 		}
 	}
 	
-    /**
-     * Assigns a list of variables whose names are in $names to their $values
-     * 
-     * @param mixed $names  variable names
-     * @param mixed $values variable values
-     */
+	/**
+	 * Assigns a list of variables whose names are in $names to their $values
+	 * 
+	 * @param mixed $names  variable names
+	 * @param mixed $values variable values
+	 */
 	public function assign($names, $values = null) {
 		if (is_string($names)) {
 			$this->assignOne($names, $values);
@@ -164,8 +157,8 @@ class WView {
 		}
 	}
 	
-    /**
-     * Some variables may be considered as "special vars" in a way that they will have a
+	/**
+	 * Some variables may be considered as "special vars" in a way that they will have a
 	 * particular treatment when they will be assigned in the template compilator.
 	 * This treatment is defined in this function.
 	 * Special vars are not erased. If two different values are assigned to a same special var,
@@ -175,10 +168,10 @@ class WView {
 	 * inserted in a <script> or <link> html tag.
 	 * $this->assign('css', 'style.css');
 	 * {$css} will be replaced by <link href="THEMES_DIR/style.css" rel="stylesheet" type="text/css" />
-     * 
-     * @param string $stack_name stack name
-     * @return string variable value
-     */
+	 * 
+	 * @param string $stack_name stack name
+	 * @return string variable value
+	 */
 	public function getSpecialVar($stack_name) {
 		if (empty($this->vars[$stack_name])) {
 			return '';
@@ -215,12 +208,12 @@ class WView {
 		}
 	}
 	
-    /**
-     * Renders the view
-     * 
+	/**
+	 * Renders the view
+	 * 
 	 * @param  string  $response  Template file to be displayed
-     * @return boolean true if view successfully loaded, false otherwise
-     */
+	 * @return boolean true if view successfully loaded, false otherwise
+	 */
 	public function render($response = '') {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
