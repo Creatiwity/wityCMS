@@ -30,13 +30,13 @@ class Installer {
      *  
      */
     public static function launch() {
-        Installer::$view = new View();
+        self::$view = new View();
 
-        $data = Request::getAssoc(array('state'), 'START', 'POST');
+        $data = Request::getAssoc(array('state'), array('state'=>'START'), 'POST');
 
-        switch ($data) {
+        switch ($data['state']) {
             case 'START':
-                Installer::$view->render();
+                self::$view->render();
                 break;
 
             case 'GENERALITIES':

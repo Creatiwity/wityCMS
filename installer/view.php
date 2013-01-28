@@ -40,8 +40,8 @@ class View {
     }
 	
 	public function render() {
-		if(file_exists("view/view.html")) {
-			$content = file_get_contents("view/view.html");
+		if(file_exists("installer/view/view.html")) {
+			$content = file_get_contents("installer/view/view.html");
 			echo $content;
 		}
 	}
