@@ -57,7 +57,7 @@ class WHelper {
 		
 		// Check params number
 		$params_given = count($params);
-		if ($params_given != self::$helpers_loaded[$helper_name]['params_expected']) {
+		if ($params_given < self::$helpers_loaded[$helper_name]['params_expected']) {
 			throw new Exception("Missing arguments to instantiate helper \"".$helper_name."\": "
 				.$params_given." given / "
 				.self::$helpers_loaded[$helper_name]['params_expected']." expected.");

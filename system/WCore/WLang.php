@@ -15,44 +15,40 @@ defined('IN_WITY') or die('Access denied');
  */
 class WLang {
 
-    /**
-     *
-     * @var string current language
-     */
+	/**
+	 * @var string current language
+	 */
 	public static $language;
 	
-    /**
-     *
-     * @var array(string) list of all language directories 
-     */
+	/**
+	 * @var array(string) list of all language directories 
+	 */
 	private static $lang_dirs = array();
-    
-    /**
-     *
-     * @var array(string) list of all loaded language directories 
-     */
+	
+	/**
+	 * @var array(string) list of all loaded language directories 
+	 */
 	private static $lang_dirs_loaded = array();
 
-    /**
-     *
-     * @var array(string) list of all key (name)=>value (in current language) pairs 
-     */
+	/**
+	 * @var array(string) list of all key (name)=>value (in current language) pairs 
+	 */
 	private static $values = array();
 	
-    /**
-     * Declaration of new compiler's handlers
-     */
+	/**
+	 * Declaration of new compiler's handlers
+	 */
 	public static function init() {
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
 		WTemplateCompiler::registerCompiler('lang_close', array('WLang', 'compile_lang_close'));
 	}
 	
-    /**
-     * Stores the choosen language $lang in the private property $language
-     * 
-     * @param string $lang choosen language
-     */
+	/**
+	 * Stores the choosen language $lang in the private property $language
+	 * 
+	 * @param string $lang choosen language
+	 */
 	public static function selectLang($lang) {
 		// todo: check if $lang is a correct language
 		self::$language = strtolower(substr($lang, 0, 2));
@@ -74,7 +70,7 @@ class WLang {
 	 * Returns the value in the current language associated to the $name key
 	 *
 	 * @param  string $name name as it is in the template file
-     * @return string value as it is after compiling the template file
+	 * @return string value as it is after compiling the template file
 	 */
 	public static function get($name) {
 		// Try to load lang files
@@ -88,27 +84,27 @@ class WLang {
 		if (isset(self::$values[$name])) {
 			return self::$values[$name];
 		}
-		return '';
+		return $name;
 	}
 
-    /**
-     * get($name) alias
-     * 
-     * Example : <code>WLang::_('LANG_ID');</code>
-     * 
-     * @param string $name name as it is in the template file
-     * @return string value as it is after compiling the template file
-     */
+	/**
+	 * get($name) alias
+	 * 
+	 * Example : <code>WLang::_('LANG_ID');</code>
+	 * 
+	 * @param string $name name as it is in the template file
+	 * @return string value as it is after compiling the template file
+	 */
 	public static function _($name) {
 		return self::get($name);
 	}
 	
-    /**
-     * Declares a directory in which there are language files
-     * 
-     * @param string $dir language directory
-     * @return boolean true if $dir is a directory, false otherwise
-     */
+	/**
+	 * Declares a directory in which there are language files
+	 * 
+	 * @param string $dir language directory
+	 * @return boolean true if $dir is a directory, false otherwise
+	 */
 	public static function declareLangDir($dir) {
 		if (is_dir($dir)) {
 			// Save lang directory
@@ -118,11 +114,11 @@ class WLang {
 		return false;
 	}
 	
-    /**
-     * Loads a language file
-     * 
-     * @param string $dir language file path without its extension and without the locale identifier
-     */
+	/**
+	 * Loads a language file
+	 * 
+	 * @param string $dir language file path without its extension and without the locale identifier
+	 */
 	private static function loadLangFile($dir) {
 		$file = $dir.self::$language.'.xml';
 		if (file_exists($file)) {
@@ -139,22 +135,19 @@ class WLang {
 	 * WTemplateCompiler's new handlers part *
 	 *****************************************/
 	
-    /**
-     *
-     * @var boolean true if a node is open 
-     */
+	/**
+	 *
+	 * @var boolean true if a node is open 
+	 */
 	private static $short_node = false;
 	
 	/**
 	 * Handles the {lang} opening node in WTemplate
+	 * 
+	 * @todo Remove syntax choice
+	 * @param string $args optional language identifier if no closing node in template file
+	 * @return string php string that calls the WLang::get()
 	 */
-    /**
-     * Handles the {lang} opening node in WTemplate
-     * 
-     * @todo Remove syntax choice
-     * @param string $args optional language identifier if no closing node in template file
-     * @return string php string that calls the WLang::get()
-     */
 	public static function compile_lang($args) {
 		if (empty($args)) {
 			self::$short_node = true;
@@ -166,11 +159,11 @@ class WLang {
 		}
 	}
 	
-    /**
-     * Handles the {/lang} closing node in WTemplate
-     * 
-     * @return string php string that closes the 
-     */
+	/**
+	 * Handles the {/lang} closing node in WTemplate
+	 * 
+	 * @return string php string that closes the 
+	 */
 	public static function compile_lang_close() {
 		if (self::$short_node) {
 			self::$short_node = false;

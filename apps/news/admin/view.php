@@ -29,6 +29,7 @@ class NewsAdminView extends WView {
 		
 		$data = $this->model->getNewsList(0, 20, $sort[0], $sort[1] == 'ASC');
 		$this->assign('news', $data);
+		$this->setResponse('index');
 	}
 	
 	/**
@@ -37,19 +38,17 @@ class NewsAdminView extends WView {
 	private function loadMainForm() {
 		// JS / CSS
 		$this->assign('js', '/apps/news/admin/js/add.js');
-		$this->assign('js', '/helpers/ckeditor/ckeditor.js');
-		$this->assign('js', '/helpers/ckfinder/ckfinder.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
+		$this->assign('js', '/libraries/ckfinder/ckfinder.js');
 		
 		$this->assign('baseDir', WRoute::getDir());
 		
 		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', $_SERVER['SERVER_NAME'].WRoute::getDir().'news/');
+		$this->assign('siteURL', WRoute::getBase().'/news/');
 		
 		// Chargement des catégories
 		$data = $this->model->getCatList("name", "ASC");
-		foreach ($data as $values) {
-			$this->tpl->assignBlockVars('cat', $values);
-		}
+		$this->assign('cat', $data);
 	}
 	
 	/**
@@ -79,6 +78,9 @@ class NewsAdminView extends WView {
 			),
 			$data
 		);
+		
+		$this->setResponse('add');
+		$this->render();
 	}
 	
 	public function edit($id, $formData = array()) {
@@ -108,11 +110,16 @@ class NewsAdminView extends WView {
 			), 
 			$formData
 		);
+		
+		$this->setResponse('edit');
+		$this->render();
 	}
 	
 	public function del($id) {
 		$data = $this->model->loadNews($id);
 		$this->assign('nTitle', $data['title']);
+		
+		$this->setResponse('del');
 	}
 	
 	public function cat($sortBy, $sens) {
@@ -120,9 +127,8 @@ class NewsAdminView extends WView {
 		$this->assign('js', '/apps/news/admin/js/cat.js');
 		
 		// AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$dispFields = array('name', 'shortname');
-		$adminStyle = new AdminStyle($dispFields, 'name');
+		$orderingFields = array('name', 'shortname');
+		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'name'));
 		
 		// Sorting vars
 		$sort = $adminStyle->getSorting($sortBy, $sens);
@@ -131,9 +137,9 @@ class NewsAdminView extends WView {
 		$this->tpl->assign($adminStyle->getTplVars());
 		
 		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
-		foreach ($data as $values) {
-			$this->tpl->assignBlockVars('cat', $values);
-		}
+		$this->assign('cat', $data);
+		
+		$this->setResponse('cat');
 	}
 }
 

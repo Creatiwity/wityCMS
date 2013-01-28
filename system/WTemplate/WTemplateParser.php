@@ -14,17 +14,17 @@ defined('IN_WITY') or die('Access denied');
  */
 class WTemplateParser {
 	
-    /**
-     * Replaces all nodes found in $string by the callback result
-     * 
-     * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
-     * 
-     * @param string    $string     a string to parse
-     * @param string    $callback   the callback to call to replace the node
-     * @param type      $nodes      optional and unused
-     * @return string the parsed string on which all callback results are in it
-     * @throws Exception
-     */
+	/**
+	 * Replaces all nodes found in $string by the callback result
+	 * 
+	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+	 * 
+	 * @param string    $string     a string to parse
+	 * @param string    $callback   the callback to call to replace the node
+	 * @param type      $nodes      optional and unused
+	 * @return string the parsed string on which all callback results are in it
+	 * @throws Exception
+	 */
 	public static function replaceNodes($string, $callback) {
 		$length = strlen($string);
 		$level = 0;
@@ -68,18 +68,20 @@ class WTemplateParser {
 					break;
 				
 				case '{':
-					// Check whether { is backslashed
-					if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $string[$i+1] != "\r\n" && $last_char != '\\') {
-						$level++;
-					}
-					
-					// Are we in a node?
-					if ($level > 0) {
-						if ($level > 1) {
-							$tmp .= '{';
+					if (!$comment) {
+						// Check whether { is backslashed
+						if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $last_char != '\\') {
+							$level++;
 						}
-					} else {
-						$code .= '{';
+						
+						// Are we in a node?
+						if ($level > 0) {
+							if ($level > 1) {
+								$tmp .= '{';
+							}
+						} else {
+							$code .= '{';
+						}
 					}
 					break;
 				
@@ -112,7 +114,7 @@ class WTemplateParser {
 				
 				default:
 					if ($char == "\n" && $level > 0 && !$comment) {
-						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node.");
+						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node (".$tmp.").");
 					}
 					
 					if ($level > 0) {

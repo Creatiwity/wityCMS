@@ -18,7 +18,7 @@ define('WITY_VERSION', '0.3.0');
 
 /**
  * Error reporting level = MAXIMUM
-*/
+ */
 error_reporting(E_ALL);
 
 /**

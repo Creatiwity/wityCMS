@@ -1,93 +1,80 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author	Fofif <Johan Dufau>
- * @version	$Id: apps/admin/front/main.php 0003 17-09-2011 Fofif $
+ * admin/front/main.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * AdminController handles admin applications
+ * 
+ * @package Apps\Admin
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-17/01/2013
+ */
 class AdminController extends WController {
 	/**
-	 * Instance de la classe Session
-	 */
-	private $session;
-	/**
-	 * Instance du modèle
+	 * @var Model of admin app
 	 */
 	private $model;
+	
 	/**
-	 * Nom de l'application à administrer
+	 * @var Name of the admin application asked
 	 */
 	private $appAsked;
+	
 	/**
-	 * Instance du controller de l'application administrée
+	 * @var Instance of the admin app beeing executed
 	 */
 	private $appController = null;
 	
 	public function __construct() {
-		$this->session = WSystem::getSession();
-		
-		// Inclusion du modèle
-		include 'model.php';
-		$this->model = new AdminModel();
+		// Change admin context
+		$this->context['admin'] = true;
 	}
 	
 	/**
-	 * Launcher de l'admin
-	 * Vérifie si on y a accès, quelle app charger...
-	 * 
-	 * @return void
+	 * Main method
 	 */
 	public function launch() {
-		if (!$this->session->isConnected()) {
+		if (!WSession::isConnected()) {
 			// Affichage du formulaire d'autentification
 			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
 			$this->wity->exec('user');
 		} else if ($this->checkAdminAccess()) {
 			$this->routeAdmin();
-			
 			$this->appAsked = WRoute::getApp();
-			if ($this->isAdminApp($this->appAsked) && $this->checkAccess($this->appAsked)) {
-				// Chargement de la partie admin de l'appli
+			
+			if ($this->hasAccess($this->appAsked)) {
+				// Load admin controller of the app
 				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
 				include $app_dir.'main.php';
-				$class = ucfirst($this->appAsked).'AdminController';
-				$this->appController = new $class();
-				$this->appController->init($this->wity, $app_dir);
+				$app_class = ucfirst($this->appAsked).'AdminController';
 				
-				// Config du template
+				// Create context
+				$context = array(
+					'name'       => $this->appAsked,
+					'directory'  => $app_dir,
+					'controller' => $app_class,
+					'admin'      => true
+				);
+				
+				$this->appController = new $app_class();
+				$this->appController->init($this->wity, $context);
+				
+				// Config Template
 				$this->configTheme();
 				
-				// Execution
+				// Execute
 				$this->appController->launch();
 			} else {
 				// Config du template
 				$this->configTheme();
-				WNote::error('admin_access_denied', "Vous n'avez pas accès à la zone <strong>".$this->appAsked."</strong> de l'administration.", 'display');
+				WNote::error('admin_access_denied', "Vous n'avez pas accès à l'application <strong>".$this->appAsked."</strong> de l'administration.", 'display');
 			}
 		} else {
 			WNote::error('admin_access_forbidden', "Vous n'avez pas accès à l'administration.", 'display');
 		}
-	}
-	
-	/**
-	 * Vérifie si l'utilisateur a accès à l'administration
-	 * 
-	 * @return bool
-	 */
-	private function checkAdminAccess() {
-		return !empty($_SESSION['access']);
-	}
-	
-	/**
-	 * Vérifie si l'utilisateur a accès à l'administration de l'app demandée
-	 * 
-	 * @param $app nom de l'appli
-	 * @return bool
-	 */
-	public static function checkAccess($app) {
-		return $_SESSION['accessString'] == 'all' || array_key_exists($app, $_SESSION['access']);
 	}
 	
 	/**
@@ -105,15 +92,43 @@ class AdminController extends WController {
 			WRoute::updateArgs($args); // Nettoyage des arguments
 		} else {
 			$default = WConfig::get('route.admin');
-			if ($this->checkAccess($default[0]) && $this->isAdminApp($default[0])) {
+			if ($this->hasAccess($default[0])) {
 				WRoute::setRoute($default);
 			} else {
-				// Le user est forcément admin
+				// Le user est forcément admin mais n'a pas accès à l'appli par défaut
 				// On charge la première application à laquelle il a accès
-				$cp = $_SESSION['access'];
-				WRoute::setRoute(array(array_shift(array_keys($cp)), array()));
+				/*$cp = $_SESSION['access'];
+				WRoute::setRoute(array(array_shift(array_keys($cp)), array()));*/
 			}
 		}
+	}
+	
+	/**
+	 * Vérifie si l'utilisateur a accès à l'administration
+	 * 
+	 * @return bool
+	 */
+	private function checkAdminAccess() {
+		return !empty($_SESSION['access']);
+	}
+	
+	/**
+	 * Récupère la liste des applis administrables
+	 * 
+	 * @return array
+	 */
+	public function getAdminAppList() {
+		static $adminApps = array();
+		if (empty($adminApps)) {
+			$apps = glob(APPS_DIR.'*', GLOB_ONLYDIR);
+			foreach ($apps as $app) {
+				$appName = strtolower(basename($app));
+				if (file_exists($app.DS.'admin'.DS.'main.php') && $this->hasAccess($appName)) {
+					$adminApps[] = $appName;
+				}
+			}
+		}
+		return $adminApps;
 	}
 	
 	/**
@@ -123,29 +138,7 @@ class AdminController extends WController {
 	 * @return bool
 	 */
 	private function isAdminApp($app) {
-		return in_array($app, $this->model->getAdminAppList());
-	}
-	
-	/**
-	 * Traitement des actions d'une application
-	 * Si la description d'une action débute par un antislash (\),
-	 * elle ne doit pas s'afficher dans la liste des opérations
-	 * 
-	 * @param $actions Liste des actions
-	 * @param $toDisplay bool détermine si les actions sont à afficher ou non
-	 */
-	private function treatActionList($actions, $toDisplay) {
-		$final = array();
-		foreach ($actions as $k => $v) {
-			if ($toDisplay) {
-				if (substr($v, 0, 1) != '\\') {
-					$final[$k] = $v;
-				}
-			} else {
-				$final[$k] = trim($v, '\\');
-			}
-		}
-		return $final;
+		return in_array($app, $this->getAdminAppList());
 	}
 	
 	/**
@@ -154,19 +147,19 @@ class AdminController extends WController {
 	 * @void
 	 */
 	private function configTheme() {
-		// On fait coïncider les Views
+		// Matching the views
 		if (!is_null($this->appController)) {
 			$this->setView($this->appController->getView());
 		}
 		
-		// Configuration du thème
+		// Config theme
 		WConfig::set('config.theme', 'admin');
 		$this->view->setTheme('admin');
 		
 		// Ce sont des variables de template et non de view
 		// Il est donc nécessaire des les assigner directement dans le moteur
 		$tpl = WSystem::getTemplate();
-		$tpl->assign('appList', $this->model->getAdminAppList());
+		$tpl->assign('appList', $this->getAdminAppList());
 		
 		// Pseudonyme de l'utilisateur
 		$tpl->assign('userNickname', $_SESSION['nickname']);
@@ -174,15 +167,17 @@ class AdminController extends WController {
 		// Aucune application n'a été chargée
 		// On est donc sur la page d'accueil de l'admin
 		if (!is_null($this->appController)) {
-			$appActions = $this->appController->getActionList();
+			$manifest = $this->appController->getManifest();
+			$actionAsked = $this->appController->getAskedAction();
+			
 			$tpl->assign(array(
 				'appSelected' => $this->appAsked,
-				'actionList' => $this->treatActionList($appActions, false),
-				'actionShownList' => $this->treatActionList($appActions, true),
+				'actionsList' => $manifest['admin'],
+				'actionAsked' => $actionAsked
 			));
 			$this->view->assign('page_title', sprintf('Administration &raquo; %s%s',
 				ucwords($this->appAsked),
-				isset($appActions[$this->appController->getAskedAction()]) ? ' &raquo; '.trim($appActions[$this->appController->getAskedAction()], '\\') : ''
+				isset($manifest['admin'][$actionAsked]) ? ' &raquo; '.$manifest['admin'][$actionAsked]['lang'] : ''
 			));
 		} else {
 			$tpl->assign('appSelected', '');

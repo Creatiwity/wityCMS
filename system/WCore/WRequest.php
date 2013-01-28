@@ -22,30 +22,29 @@ defined('IN_WITY') or die('Access denied');
  */
 class WRequest {
 	
-    /**
-     *
-     * @var array Contains all checked variables to avoid infinite loop
-     */
+	/**
+	 * @var array Contains all checked variables to avoid infinite loop
+	 */
 	private static $checked = array();
 	
-    /**
-     * Returns the values of all variables with name in $names sent by $hash method
-     * 
-     * You can use the following hashes :
-     * - "GET"
-     * - "POST"
-     * - "FILES"
-     * - "COOKIE"
-     * - "REQUEST" (default)
-     * 
-     * The following syntax IS allowed :
-     * <code>list($v1, ...) = WRequest::get(array('v1', 'v2'));</code>
-     * 
-     * @param string|array  $names      variable names
-     * @param mixed         $default    optional default values
-     * @param string        $hash       name of the method used to send
-     * @return mixed    array of values or the value
-     */
+	/**
+	 * Returns the values of all variables with name in $names sent by $hash method
+	 * 
+	 * You can use the following hashes :
+	 * - "GET"
+	 * - "POST"
+	 * - "FILES"
+	 * - "COOKIE"
+	 * - "REQUEST" (default)
+	 * 
+	 * The following syntax IS allowed :
+	 * <code>list($v1, ...) = WRequest::get(array('v1', 'v2'));</code>
+	 * 
+	 * @param string|array  $names      variable names
+	 * @param mixed         $default    optional default values
+	 * @param string        $hash       name of the method used to send
+	 * @return mixed    array of values or the value
+	 */
 	public static function get($names, $default = null, $hash = 'REQUEST') {
 		// Data hash
 		switch (strtoupper($hash)) {
@@ -81,15 +80,15 @@ class WRequest {
 		}
 	}
 	
-    /**
-     * Returns an associative array of values in which keys are the $names
-     * 
-     * @see WRequest::get()
-     * @param array     $names      variable names
-     * @param type      $default    optional default values
-     * @param string    $hash       name of the method used to send
-     * @return array array of values in which keys are the $names
-     */
+	/**
+	 * Returns an associative array of values in which keys are the $names
+	 * 
+	 * @see WRequest::get()
+	 * @param array     $names      variable names
+	 * @param type      $default    optional default values
+	 * @param string    $hash       name of the method used to send
+	 * @return array array of values in which keys are the $names
+	 */
 	public static function getAssoc(array $names, $default = null, $hash = 'REQUEST') {
 		// Data hash
 		switch (strtoupper($hash)) {
@@ -120,15 +119,15 @@ class WRequest {
 		return $result;
 	}
 	
-    /**
-     * Returns the checked value associated to $name
-     * 
-     * @param &array $data      request array
-     * @param string $name      variable name
-     * @param string $default   optional default value
-     * @param string $hash      name of the method used to send
-     * @return mixed the checked value associated to $name or null if not exists
-     */
+	/**
+	 * Returns the checked value associated to $name
+	 * 
+	 * @param &array $data      request array
+	 * @param string $name      variable name
+	 * @param string $default   optional default value
+	 * @param string $hash      name of the method used to send
+	 * @return mixed the checked value associated to $name or null if not exists
+	 */
 	public static function getValue(&$data, $name, $default, $hash) {
 		if (isset(self::$checked[$hash.$name])) {
 			// On récupère la variable vérifiée des données
@@ -151,15 +150,15 @@ class WRequest {
 		}
 	}
 	
-    /**
-     * Sets a request value
-     * 
-     * @param string    $name       variable name
-     * @param mixed     $value      the value that will be set
-     * @param string    $hash       name of the method used to initially send
-     * @param boolean   $overwrite  optional overwrite command, true by default
-     * @return mixed previous value, may be null
-     */
+	/**
+	 * Sets a request value
+	 * 
+	 * @param string    $name       variable name
+	 * @param mixed     $value      the value that will be set
+	 * @param string    $hash       name of the method used to initially send
+	 * @param boolean   $overwrite  optional overwrite command, true by default
+	 * @return mixed previous value, may be null
+	 */
 	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
 		// Check if overwriting is allowed
 		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
@@ -195,12 +194,12 @@ class WRequest {
 		return $previous;
 	}
 	
-    /**
-     * Returns the filtered variable after a tiny security check
-     * 
-     * @param mixed $variable variable that we want to filter
-     * @return mixed the filtered variable
-     */
+	/**
+	 * Returns the filtered variable after a tiny security check
+	 * 
+	 * @param mixed $variable variable that we want to filter
+	 * @return mixed the filtered variable
+	 */
 	public static function filter($variable) {
 		if (is_array($variable)) {
 			foreach ($variable as $key => $val) {

@@ -14,9 +14,9 @@
 			<label for="groupe">Groupe :</label>
 			<select id="groupe" name="groupe">
 				<option value=""></option>
-				{block name="groups"}
-				<option value="{$groups.id}"{if {$groupe} == {$groups.id}} selected="selected"{/if}>{$groups.name}</option>
-				{/block}
+				{for $group in $groups}
+				<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
+				{/for}
 			</select><br />
 			<div class="tcenter"><input type="submit" value="Filtrer" /></div>
 		</form>
@@ -30,7 +30,6 @@
 	</div>
 </div>
 <div id="content">
-	{if !empty({$note})}{$note}{/if}
 	{$pagination}
 	<table id="liste" class="liste sorted" cellpadding="0" cellspacing="0">
 		<colgroup>
@@ -49,24 +48,24 @@
 			<th class="sort {$last_activity_class}"><a href="/admin/user/last_activity-{$last_activity_sort}/{$subURL}">Dernière connexion</a></th>
 			<th>Actions</th>
 		</tr>
-		{block name="users"}
+		{for $count, $user in $users}
 			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
-				<td>{$users.id}</td>
-				<td><strong>{$users.nickname}</strong></td>
-				<td>{$users.groupe}</td>
-				<td>{$users.fdate}</td>
-				<td>{$users.factivity}</td>
+				<td>{$user.id}</td>
+				<td><strong>{$user.nickname}</strong></td>
+				<td>{$user.groupe}</td>
+				<td>{$user.fdate}</td>
+				<td>{$user.factivity}</td>
 				<td>
-					<a href="/admin/user/edit/{$users.id}/" title="Editer"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
-					<a href="/admin/user/del/{$users.id}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
+					<a href="/admin/user/edit/{$user.id}/" title="Editer"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
+					<a href="/admin/user/del/{$user.id}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
 				</td>
 			</tr>
-		{/block}
-		{if {$count} == 0}
+			{empty}
 			<tr>
 				<td colspan="6" class="tcenter">Aucun utilisateur trouvé</td>
 			</tr>
-		{/if}
+			{/empty}
+		{/for}
 	</table>
 	{$pagination}
 </div>

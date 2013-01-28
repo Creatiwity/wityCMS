@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app>
+	<!-- Application name -->
+	<title>User</title>
+	
+	<version>0.1</version>
+	
+	<!-- Last update date -->
+	<date>18-01-2013</date>
+	
+	<!-- Tiny icone to be displayed in the admin board -->
+	<icone></icone>
+	
+	<!-- Front pages -->
+	<page default="default">login</page>
+	<page requires="connected">logout</page>
+	<page>register</page>
+	<page>confirm</page>
+	
+	<!-- Admin pages -->
+	<admin>
+		<page lang="Liste des membres" default="1">liste</page>
+		<page lang="Ajouter un utilisateur">add</page>
+		<page lang="Éditer un utilisateur" menu="false">edit</page>
+		<page lang="Supprimer un utilisateur" menu="false">del</page>
+		<page lang="Gestion des catégories">cat</page>
+		<page lang="Suprimer une catégorie" menu="false">cat_del</page>
+	</admin>
+</app>

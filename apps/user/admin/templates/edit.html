@@ -1,13 +1,12 @@
 <div id="content" class="large">
 	<div class="item">
 		<h3></h3>
-		{if !empty({$note})}{$note}{/if}
 		<form action="" method="post">
 			<table cellpadding="5" cellspacing="0">
 				<tr>
 					<td><label for="nickname">Pseudonyme :</label></td>
 					<td>
-						<input type="hidden" name="id" value="{$id}" />
+						<input type="hidden" name="id" value="{$userid}" />
 						<input id="nickname" type="text" name="nickname" value="{$nickname}" maxlength="30" size="20" />
 					</td>
 				</tr>
@@ -29,9 +28,9 @@
 					<td>
 						<select id="groupe" name="groupe">
 							<option value="0">Aucun groupe</option>
-							{foreach item={$cats} as={$c}}
-								<option value="{$c.value.id}"{if {$c.value.id} == {$groupe}} selected="selected"{/if}>{$c.value.name}</option>
-							{/foreach}
+							{for $cat in $cats}
+								<option value="{$cat.id}"{if {$cat.id} == {$groupe}} selected="selected"{/if}>{$cat.name}</option>
+							{/for}
 						</select>
 					</td>
 				</tr>
@@ -53,11 +52,12 @@
 							<option value="perso"{if !empty({$access}) && {$access} != 'all'} selected="selected"{/if}>Mode personnalisé</option>
 						</select><br />
 						<ul id="access"{if empty({$access}) || {$access} == 'all'} class="hidden"{/if}>
-							{block name="module"}
+							{for $app in $admin_apps}
 							<li>
-								<input id="{$module.name}" type="checkbox" name="access[{$module.name}]"
-									{if strstr({$access}, {$module.name}) !== false} checked="checked"{/if}/>
-								<label for="{$module.name}">{$module.name|ucfirst}</label>
+								<input id="{$app.name}" type="checkbox" name="access[{$app.name}]"
+									{if strstr({$access}, {$app.name}) !== false} checked="checked"{/if}/>
+								<label for="{$app.name}">{$app.name|ucfirst}</label>
+								{%
 								{if count({$module.levels}) > 0}
 								<select name="level[{$module.name}]">
 									{foreach item={$module.levels} as={$level}}
@@ -65,8 +65,9 @@
 									{/foreach}
 								</select>
 								{/if}
+								%}
 							</li>
-							{/block}
+							{/for}
 						</ul>
 					</td>
 				</tr>

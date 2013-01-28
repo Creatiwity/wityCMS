@@ -17,6 +17,8 @@ class UserView extends WView {
 	 */
 	public function connexion($redirect) {
 		$this->assign('redirect', $redirect);
+		
+		$this->setResponse('connexion_form');
 	}
 }
 

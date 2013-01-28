@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wityApp>
-	<!-- Public application name -->
+<app>
+	<!-- Application name -->
 	<title>News</title>
+	
 	<version>0.1</version>
+	
 	<!-- Last update date -->
-	<date>28-09-2012</date>
+	<date>17-01-2013</date>
+	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
-	<services>
-		<block>
-			<name>last_news</name>
-			<view>block_last_news.html</view>
-		</block>
-	</services>
-	<!-- List of the operations reachable -->
-	<operations>
-		<op method="index">Liste des news</op>
-	</operations>
-	<adminOperations>
-		<op method="index">Liste des news</op>
-		<op method="del" menu="false">Supprimer une news</op>
-	</adminOperations>
-</wityApp>
+	
+	<!-- Services available to communicate with the application -->
+	<!--<service>
+		<name>last_news</name>
+		<view>block_last_news.html</view>
+	</service>-->
+	
+	<!-- Front pages
+		Restriction rules :
+		  0 - Public
+		  1 - User connected required
+		  2 - Require specific access -->
+	<page restriction="1" default="1">index</page>
+	<page lang="Affichage d'un article">detail</page>
+	
+	<!-- Admin pages -->
+	<admin>
+		<page lang="Liste des articles" default="1">index</page>
+		<page lang="Ajouter un article">add</page>
+		<page lang="Édition d'un article" menu="false">edit</page>
+		<page lang="Suppression d'un article" menu="false">del</page>
+		<page lang="Gestion des catégories">cat</page>
+	</admin>
+</app>

@@ -37,14 +37,16 @@
 						{/for}
 					</ul>
 					<ul id="actions">
-						{for $action, $desc in $actionShownList}
-							<li class="{if {$action} == @{$actionForwarded}}on{/if}">
-								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc}</a></li>
+						{for $action, $desc in $actionsList}
+							{if {$desc.menu}}
+							<li class="{if {$action} == {$actionAsked}}on{/if}">
+								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc.lang}</a></li>
+							{/if}
 						{/for}
 					</ul>
 					<div class="sub">
 						<p>Votre position actuelle est : <span class="app">{$appSelected}</span>
-						{if @isset({$actionList}[{$actionForwarded}])} . <span class="action">{$actionList.{$actionForwarded}}</span>{/if}</p>
+						{if isset({$actionList.{$actionAsked}})} . <span class="action">{$actionList.{$actionAsked}}</span>{/if}</p>
 						<!--<form id="search" action="" method="post"><div>
 							<input type="text" name="search" value="recherche" onclick="this.value = '';" size="15" />
 							<input class="img" type="image" src="/themes/admin/images/search.jpg" alt="Rechercher" />
@@ -58,8 +60,7 @@
 				{include {$include}}
 			</div>
 			<div id="footer" class="tcenter">
-				<br />Merci de rapporter tout dysfonctionnement au pôle informatique<br />
-				Réalisation 2011<br /><br />
+				<span>Wity© Administration 2013</span>
 			</div>
 		</div>
 	</body>
