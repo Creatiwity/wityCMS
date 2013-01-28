@@ -36,7 +36,7 @@ class Installer {
 
         switch ($data) {
             case 'START':
-                //echo view.html
+                Installer::$view->render();
                 break;
 
             case 'GENERALITIES':

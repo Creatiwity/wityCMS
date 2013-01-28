@@ -38,6 +38,13 @@ class View {
     public function info() {
         
     }
+	
+	public function render() {
+		if(file_exists("view/view.html")) {
+			$content = file_get_contents("view/view.html");
+			echo $content;
+		}
+	}
 }
 
 ?>
