@@ -6,10 +6,12 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WTemplateCompiler
+ * WTemplateCompiler compiles the nodes used in templates parsed by WTemplate
  * 
- * Nodes
- * -----
+ * It replaces a node by its PHP equivalent.
+ * WTemplateCompiler is composed by several handlers, one for each node known by WTemplate.
+ * 
+ * What is a node?
  * Each <code>{exemple}</code> is called a "node".
  * In this case, "exemple" is the name of the node.
  * For a closing node, such as <code>{/exemple}</code>, the node name is "exemple_close".
@@ -21,12 +23,12 @@ defined('IN_WITY') or die('Access denied');
 class WTemplateCompiler {
 	
 	/**
-	 * @var array List of tags opened so that we can check there is no jam in opening and closing the nodes
+	 * @var array List of nodes opened to check whether they are properly closed
 	 */
 	private $openNodes = array();
 	
 	/**
-	 * @var array List of all datas used in the compiled file
+	 * @var array Some useful information to help the compilation (such as file src, template directory, ...)
 	 */
 	private $data = array();
 	
@@ -38,8 +40,11 @@ class WTemplateCompiler {
 	/**
 	 * Registers an external compiler
 	 * 
-	 * @param string $node_name a node name (without brackets)
-	 * @param string $callback  the compiler to call
+	 * An external compiler is a node handler which belongs to an external class than WTemplateCompiler.
+	 * It may be called by WTemplateCompiler whenever the node is found.
+	 * 
+	 * @param string $node_name Node's name to handle (without brackets)
+	 * @param string $callback  The compiler to call
 	 * @throws Exception
 	 */
 	public static function registerCompiler($node_name, $callback) {
@@ -57,7 +62,8 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compiles an entire file using the parser
+	 * Compiles an entire string containing nodes.
+	 * This method is called when WTemplate is asked to parse a file.
 	 * 
 	 * @param string    $string the string that will be compiled
 	 * @param array     $data   datas that will be used in the compiled file
@@ -84,7 +90,7 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compiles a node
+	 * Compiles a single node
 	 * 
 	 * @param string $node a node that will be compiled
 	 * @return string the compiled node
@@ -160,9 +166,10 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compile vars having this format {$var.index1[.index2...]|func1[|func2...]} into php format
+	 * Parses a variable node into PHP code
+	 * Vars have this format: {$var.index1.index2...|function1|function2...}
 	 * 
-	 * Several levels of vars are managed (for instance: {$var1.{$var2.x}}
+	 * Nesting vars are managed such as: {$var1.{$var2.x}}
 	 * 
 	 * @param string $string a string that will be compiled
 	 * @return string the compiled string
@@ -212,7 +219,8 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Replaces all variable names by their values
+	 * Replaces all variable nodes in a given string by their PHP values
+	 * For each node, it calls WTemplateCompiler::parseVar()
 	 * 
 	 * @see WTemplateParser::replaceNodes()
 	 * @param string $string a string in which variable names will be replaced by their values
@@ -223,9 +231,9 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compile variables
+	 * Compiles a variable displaying it
 	 * 
-	 * <code>{$var.index1[.index2...]|func1[|func2...]}</code>
+	 * <code>{$array.index1.index2...|func1|func2...}</code>
 	 * 
 	 * @param string $args a string of variables that will be compiled
 	 * @return string the compiled variables
@@ -241,6 +249,8 @@ class WTemplateCompiler {
 	
 	/**
 	 * Compiles {include} node to include sub template files
+	 * 
+	 * <code>{include file_href}</code>
 	 * 
 	 * @todo Add a recursive compiler to be able to include multiple application in one page
 	 * @param string $file the file to include
@@ -265,7 +275,7 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compiles {if ...}
+	 * Compiles {if condition}
 	 * 
 	 * @param string $args if arguments
 	 * @return string the php-if code
@@ -357,9 +367,11 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compiles empty in case of emptiness of last for's array being iterated
+	 * Compiles {empty}
 	 * 
-	 * @todo Write a better comment because I don't understand when this method is used
+	 * {empty} is to use in a {for} node.
+	 * Its content is displayed when the array iterated in the loop is empty.
+	 * 
 	 * @return string php-empty code
 	 */
 	public function compile_empty() {
@@ -367,7 +379,7 @@ class WTemplateCompiler {
 	}
 	
 	/**
-	 * Compiles empty_close
+	 * Compiles {/empty}
 	 * 
 	 * @return string php-empty_close code
 	 */
@@ -379,7 +391,7 @@ class WTemplateCompiler {
 	 * Compiles an assignement
 	 * 
 	 * <code>{set $a = 5}
-	 * {set {$a} = {$b} + 1}</code>
+	 * {set {$a} = {$a} + 1}</code>
 	 * 
 	 * @param string $args an assignement <code>var=value</code>
 	 * @return string the php-assignement code

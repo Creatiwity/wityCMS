@@ -17,7 +17,7 @@ class WTemplateParser {
 	/**
 	 * Replaces all nodes found in $string by the callback result
 	 * 
-	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+	 * If the char '{' is backslashed or directly followed by a carriage return, it will be ignored.
 	 * 
 	 * @param string    $string     a string to parse
 	 * @param string    $callback   the callback to call to replace the node

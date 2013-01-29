@@ -150,9 +150,6 @@ class WTemplateFile {
 	}
 	
 	/**
-	 * Write output string into the cache file
-	 */
-	/**
 	 * Writes output string into the cache file
 	 * 
 	 * @param string $data the output string
