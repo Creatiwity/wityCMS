@@ -42,7 +42,7 @@ class UserController extends WController {
 		$this->model = new UserModel();
 		
 		include 'view.php';
-		$this->view = new UserView();
+		$this->setView(new UserView($this->model));
 		
 		$this->session = WSystem::getSession();
 	}

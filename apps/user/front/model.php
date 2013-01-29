@@ -159,7 +159,7 @@ class UserModel {
 		
 		// Format data
 		$data = array();
-		while ($row = $prep->fetch()) {
+		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$row['access'] = explode(',', $row['access']);
 			$data[] = $row;
 		}
@@ -182,7 +182,7 @@ class UserModel {
 		');
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->fetch();
+		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**
@@ -201,7 +201,7 @@ class UserModel {
 		$prep->bindParam(':nickname', $nickname);
 		$prep->bindParam(':password', $password);
 		$prep->execute();
-		return $prep->fetch();
+		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**

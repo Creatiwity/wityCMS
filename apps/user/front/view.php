@@ -13,8 +13,11 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-12-05-2011
  */
 class UserView extends WView {
-	public function __construct() {
+	private $model;
+	
+	public function __construct(UserView $model) {
 		parent::__construct();
+		$this->model = $model;
 	}
 	
 	/**
