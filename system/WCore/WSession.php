@@ -118,6 +118,7 @@ class WSession {
 		
 		// User found
 		if (!empty($data)) {
+			unset($_SESSION['login_try']); // cleanup
 			$this->setupSession($data['id'], $data);
 			
 			// Cookie setup
@@ -127,7 +128,6 @@ class WSession {
 				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
 				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, '/');
 			}
-			
 			return self::LOGIN_SUCCESS; 
 		} else {
 			// Attempt + 1

@@ -53,24 +53,24 @@ class WLang {
 		// todo: check if $lang is a correct language
 		self::$language = strtolower(substr($lang, 0, 2));
 	}
-
+	
 	/**
 	 * Assign a new language constant
 	 *
-	 * @param string $name  name as it is in the template file
-	 * @param string $value value as it is after compiling the template file
+	 * @param string $name  name as it is in the lang file
+	 * @param string $value value as it is after compiling the lang file
 	 */
 	public static function assign($name, $value) {
 		if (!empty($name) && !empty($value)) {
 			self::$values[$name] = $value;
 		}
 	}
-
+	
 	/**
 	 * Returns the value in the current language associated to the $name key
 	 *
-	 * @param  string $name name as it is in the template file
-	 * @return string value as it is after compiling the template file
+	 * @param  string $name name as it is in the lang file
+	 * @return string value as it is after compiling the lang file
 	 */
 	public static function get($name) {
 		// Try to load lang files
@@ -86,7 +86,7 @@ class WLang {
 		}
 		return $name;
 	}
-
+	
 	/**
 	 * get($name) alias
 	 * 
