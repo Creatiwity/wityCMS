@@ -7,7 +7,7 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * UserController is the front Controller of the User Application
- *
+ * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-29-01-2013
@@ -41,7 +41,7 @@ class UserController extends WController {
 		include_once 'model.php';
 		$this->model = new UserModel();
 		
-		include 'view.php';
+		include_once 'view.php';
 		$this->setView(new UserView($this->model));
 		
 		$this->session = WSystem::getSession();
@@ -118,7 +118,7 @@ class UserController extends WController {
 						break;
 				}
 			} else {
-				WNote::error('login_bad_data', "Please, fill in all the required fields.");
+				WNote::error('bad_data', "Please, fill in all the required fields.");
 			}
 			
 			// Login process triggered from an external application
@@ -171,7 +171,6 @@ class UserController extends WController {
 				// Matching passwords
 				if (!empty($data['password'])) {
 					if ($data['password'] === $data['password_conf']) {
-						$password_save = $data['password'];
 						$data['password'] = sha1($data['password']);
 					} else {
 						$errors[] = "The password given is not the same as the password confirmation.";
@@ -181,8 +180,8 @@ class UserController extends WController {
 				}
 				
 				// Email availabililty
-				if (!empty($data['email']) && !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
-					$errorss[] = "The email given is not valid.";
+				if (empty($data['email']) || !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
+					$errors[] = "The email given is not valid.";
 				} else if (!$this->model->emailAvailable($data['email'])) {
 					$errors[] = "The email given is already in use.";
 				}
@@ -191,11 +190,7 @@ class UserController extends WController {
 				$data['confirm'] = uniqid();
 				$data['groupe'] = 0;
 				
-				// Display errors if any
-				if (!empty($errors)) {
-					WNote::error('data_errors', implode("<br />\n", $errors));
-					header('location: '.WRoute::getReferer());
-				} else {
+				if (empty($errors)) {
 					// Create the user
 					if ($this->model->createUser($data)) {
 						// Send a validation email
@@ -210,7 +205,7 @@ Vous venez de vous inscrire sur le site ".WConfig::get('config.site_name').".<br
 
 Veuillez trouver ci-dessous vos données de connexion :<br />
 Identifiant : ".$data['nickname']."<br />
-Password : ".$password_save."<br /><br />
+Password : ".$data['password_conf']."<br /><br />
 
 Pour finaliser votre demande, veuillez cliquer sur le lien ci-dessous :<br /><br />
 <a href=\"".WRoute::getBase()."/user/confirm/".$data['confirm']."\">Valider la demande</a><br /><br />
@@ -229,10 +224,15 @@ Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navi
 						WNote::error('user_registration_failure', "An unknown error occured when trying to create your account in the database.");
 						header('location: '.WRoute::getBase());
 					}
+				} else {
+					WNote::error('data_errors', implode("<br />\n", $errors));
+					header('location: '.WRoute::getReferer());
 				}
 			} else {
 				header('location: '.WRoute::getBase());
 			}
+		} else {
+			// @todo Display a registration form
 		}
 	}
 	

@@ -19,11 +19,11 @@
 	
 	<!-- Admin pages -->
 	<admin>
-		<page lang="Liste des membres" default="1">liste</page>
+		<page lang="Liste des membres" default="1">listing</page>
 		<page lang="Ajouter un utilisateur">add</page>
 		<page lang="Éditer un utilisateur" menu="false">edit</page>
 		<page lang="Supprimer un utilisateur" menu="false">del</page>
-		<page lang="Gestion des catégories">cat</page>
-		<page lang="Suprimer une catégorie" menu="false">cat_del</page>
+		<page lang="Gestion des groupes">groups</page>
+		<page lang="Suprimer un groupe" menu="false">group_del</page>
 	</admin>
 </app>

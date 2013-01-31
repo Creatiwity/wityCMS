@@ -7,7 +7,7 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * UserModel is the front Model of the User Application
- *
+ * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-29-01-2013
@@ -93,7 +93,7 @@ class UserModel {
 			$cond = '';
 			$allowed = array('nickname', 'email', 'firstname', 'lastname');
 			foreach ($filters as $name => $value) {
-				if (!empty($value) && in_array($name, $allowed)) {
+				if (in_array($name, $allowed)) {
 					$cond .= $name." LIKE '%".$value."%' AND ";
 				}
 			}
@@ -101,7 +101,7 @@ class UserModel {
 				$cond = 'LEFT JOIN users_groups
 				ON groupe = users_groups.id
 				WHERE '.$cond.'groupe = '.intval($filters['groupe']);
-			} else {
+			} else if (!empty($cond)) {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
 			
@@ -120,7 +120,7 @@ class UserModel {
 	 * 
 	 * @param int    $from     Position of the first user to return
 	 * @param int    $number   Number of users
-	 * @param string $order    Order column critera
+	 * @param string $order    Name of the ordering column
 	 * @param bool   $asc      Ascendent or descendent?
 	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and group)
 	 * @return array A list of information about the users found
@@ -129,12 +129,14 @@ class UserModel {
 		// Add filters
 		$cond = '';
 		if (!empty($filters)) {
-			$cond = 'WHERE ';
 			$allowed = array('nickname', 'email', 'firstname', 'lastname');
 			foreach ($filters as $name => $value) {
-				if (!empty($value) && in_array($name, $allowed)) {
+				if (in_array($name, $allowed)) {
 					$cond .= $name.' LIKE "%'.$value.'%" AND ';
 				}
+			}
+			if (!empty($cond)) {
+				$cond = 'WHERE '.$cond;
 			}
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']);
@@ -145,7 +147,7 @@ class UserModel {
 		
 		// Prepare request
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, users.access, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip
+			SELECT users.id, nickname, email, firstname, lastname, country, users.access, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip, name AS groupe
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -174,11 +176,11 @@ class UserModel {
 	 */
 	public function getUser($userid) {
 		$prep = $this->db->prepare('
-			SELECT nickname, email, firstname, lastname, country, groupe, users_groups.name, users.access
+			SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
-			WHERE id = :userid
+			WHERE users.id = :userid
 		');
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
 		$prep->execute();
@@ -212,8 +214,8 @@ class UserModel {
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, adresse, code_postal, ville, groupe, ip)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :adresse, :code_postal, :ville, :groupe, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :ip)
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);
@@ -224,12 +226,11 @@ class UserModel {
 		$prep->bindParam(':firstname', $firstname);
 		$lastname = isset($data['lastname']) ? $data['lastname'] : '';
 		$prep->bindParam(':lastname', $lastname);
-		$prep->bindParam(':adresse', $data['adresse']);
-		$prep->bindParam(':code_postal', $data['code_postal']);
-		$prep->bindParam(':ville', $data['ville']);
+		$country = isset($data['country']) ? $data['country'] : '';
+		$prep->bindParam(':country', $country);
 		$prep->bindParam(':groupe', $data['groupe']);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		return $prep->execute() or die($prep->errorInfo());
+		return $prep->execute();
 	}
 	
 	/**
@@ -240,6 +241,9 @@ class UserModel {
 	 * @return boolean Request success
 	 */
 	public function updateUser($userid, array $data) {
+		if (empty($data)) {
+			return true;
+		}
 		$string = '';
 		foreach ($data as $key => $value) {
 			$string .= $key.' = '.$this->db->quote($value).', ';

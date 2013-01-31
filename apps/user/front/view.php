@@ -7,7 +7,7 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * UserView is the front View of the User Application
- *
+ * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
  * @version 0.3-12-05-2011
@@ -15,7 +15,7 @@ defined('IN_WITY') or die('Access denied');
 class UserView extends WView {
 	private $model;
 	
-	public function __construct(UserView $model) {
+	public function __construct(UserModel $model) {
 		parent::__construct();
 		$this->model = $model;
 	}

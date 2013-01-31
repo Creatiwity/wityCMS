@@ -1,12 +1,17 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author	Fofif
- * @version	$Id: apps/user/admin/view.php 0004 02-02-2012 Fofif $
+ * User Application - Admin View - /apps/user/admin/view.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * UserAdminView is the Admin View of the User Application
+ * 
+ * @package Apps
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-02-02-2012
+ */
 class UserAdminView extends WView {
 	private $model;
 	
@@ -20,7 +25,7 @@ class UserAdminView extends WView {
 	/**
 	 * Setting up the users listing view
 	 */
-	public function liste($sortBy, $sens, $currentPage, $filtres) {
+	public function listing($sortBy, $sens, $currentPage, $filters) {
 		$n = 40; // 40 users per page
 		
 		// SortingHelper Helper
@@ -32,7 +37,7 @@ class UserAdminView extends WView {
 		
 		// Treat filters
 		$subURL = "";
-		foreach ($filtres as $k => $v) {
+		foreach ($filters as $k => $v) {
 			// Cleanup filters
 			if (!empty($v)) {
 				$subURL .= $k."=".$v."&";
@@ -42,17 +47,17 @@ class UserAdminView extends WView {
 			$subURL = '?'.substr($subURL, 0, -1);
 		}
 		$this->assign('subURL', $subURL);
-		$this->assign($filtres);
+		$this->assign($filters);
 		
 		// Get the user groups
-		$this->assign('groups', $this->model->getCatList());
+		$this->assign('groups', $this->model->getGroupsList());
 		
 		// Assign main data
-		$data = $this->model->getUserList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filtres);
+		$data = $this->model->getUsersList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters);
 		$this->assign('users', $data);
 		
 		// Generate the pagination to navigate data
-		$count = $this->model->countUsersWithFilters($filtres);
+		$count = $this->model->countUsers($filters);
 		$pagination = WHelper::load('pagination', array($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
 		$this->assign('pagination', $pagination->getHtml());
 		$this->assign('total', $count);
@@ -61,7 +66,12 @@ class UserAdminView extends WView {
 	/**
 	 * Définition des valeurs de contenu du formulaire
 	 */
-	private function fillForm($model, $data) {
+	private function fillForm($data) {
+		$model = array(
+			'nickname' => '', 
+			'email' => '',
+			'access' => array()
+		);
 		foreach ($model as $item => $default) {
 			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
 		}
@@ -69,37 +79,30 @@ class UserAdminView extends WView {
 	
 	public function add($data = array()) {
 		$this->assign('js', '/apps/user/admin/js/catChange.js');
-		$this->assign('cats', $this->model->getCatList());
+		$this->assign('cats', $this->model->getGroupsList());
 		
 		// Get admin apps
 		$adminModel = new AdminController();
 		$this->assign('admin_apps', $adminModel->getAdminAppList());
 		
-		$this->fillForm(
-			array(
-				'nickname' => '', 
-				'email' => '',
-				'access' => array(),
-			),
-			$data
-		);
+		$this->fillForm($data);
 	}
 	
-	public function edit($id) {
-		$this->assign('userid', $id);
-		$this->assign('cats', $this->model->getCatList());
+	public function edit($userid) {
+		$this->assign('userid', $userid);
+		$this->assign('cats', $this->model->getGroupsList());
 		
 		// Get admin apps
 		$adminModel = new AdminController();
 		$this->assign('admin_apps', $adminModel->getAdminAppList());
 		
-		$data = $this->model->getUserData($id);
+		$data = $this->model->getUser($userid);
 		$data['accessArray'] = explode(',', $data['access']);
 		$this->assign($data);
 	}
 	
-	public function del($id) {
-		$data = $this->model->getUserData($id);
+	public function del($userid) {
+		$data = $this->model->getUser($userid);
 		$this->assign('nickname', $data['nickname']);
 	}
 	
