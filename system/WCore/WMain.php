@@ -61,7 +61,7 @@ class WMain {
 		if ($this->isApp($app_name)) {
 			// App controller file
 			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
-			include $app_dir.'main.php';
+			include_once $app_dir.'main.php';
 			$app_class = str_replace('-', '_', ucfirst($app_name)).'Controller';
 			
 			// App's controller must inherit WController

@@ -102,28 +102,19 @@ abstract class WController {
 		
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
-				$this->execAction($action);
+				// Execute action
+				if (method_exists($this, $action)) {
+					$this->action = $action;
+					$this->$action();
+				} else {
+					WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
+				}
 				return true;
 			}
 		} else {
 			WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' couldn\'t answer to your request.', 'display');
 		}
 		return false;
-	}
-	
-	/**
-	 * Triggers the method corresponding to the action
-	 * 
-	 * @param string $action Name of the method to execute
-	 * @throws Exception
-	 */
-	protected function execAction($action) {
-		if (method_exists($this, $action)) {
-			$this->action = $action;
-			$this->$action();
-		} else {
-			WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
-		}
 	}
 	
 	/**
