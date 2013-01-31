@@ -31,9 +31,9 @@
 			<div id="nav">
 				<div class="inner">
 					<ul id="modules">
-						{for $app in $appList}
+						{for $app, $details in $appsList}
 							<li{if {$app} == {$appSelected}} class="hover"{/if}>
-								<div><a href="/admin/{$app}/">{$app}</a></div></li>
+								<div><a href="/admin/{$app}/">{$details.name}</a></div></li>
 						{/for}
 					</ul>
 					<ul id="actions">

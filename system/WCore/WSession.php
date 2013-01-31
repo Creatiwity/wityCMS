@@ -27,7 +27,7 @@ class WSession {
 	/**
 	 * Time before the session expires (seconds)
 	 */
-	const TOKEN_EXPIRATION = 120;
+	const TOKEN_EXPIRATION = 5;
 	
 	/*
 	 * Inactivity time (minuts)
@@ -177,18 +177,19 @@ class WSession {
 		$_SESSION['email']    = $data['email'];
 		$_SESSION['groupe']   = $data['groupe'];
 		
-		$_SESSION['accessString'] = $data['access'];
+		$_SESSION['access_string'] = $data['access'];
 		$_SESSION['access'] = array();
 		foreach (explode(',', $data['access']) as $access) {
-			if (!empty($access)) {
-				$pages_begin = strpos($access, '[');
-				if ($pages_begin !== false) {
-					$app_name = substr($access, 0, $pages_begin);
-					$pages = substr($access, $pages_begin+1, -1);
-					
-					$_SESSION['access'][$app_name] = explode('|', $pages);
-				} else {
-					$_SESSION['access'][$access] = 0;
+			if ($access == 'all') {
+				$_SESSION['access'] = array('all' => 1);
+				break;
+			}
+			$first_bracket = strpos($access, '[');
+			if ($first_bracket !== false) {
+				$app_name = substr($access, 0, $first_bracket);
+				$permissions = substr($access, $first_bracket+1, -1);
+				if (!empty($permissions)) {
+					$_SESSION['access'][$app_name] = explode('|', $permissions);
 				}
 			}
 		}
@@ -207,7 +208,7 @@ class WSession {
 			$_SESSION['nickname'], 
 			$_SESSION['email'], 
 			$_SESSION['groupe'], 
-			$_SESSION['accessString'], 
+			$_SESSION['access_string'], 
 			$_SESSION['access'],
 			$_SESSION['token_expiration']
 		);

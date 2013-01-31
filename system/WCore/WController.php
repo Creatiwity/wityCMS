@@ -90,12 +90,12 @@ abstract class WController {
 		// Find a fine $action
 		if ($this->getAdminContext()) {
 			// $action exists in admin ? Otherwise, default_admin action exists?
-			if (!isset($this->manifest['admin'][$action]) && isset($this->manifest['default_admin'])) {
+			if ((empty($action) || !isset($this->manifest['admin'][$action])) && isset($this->manifest['default_admin'])) {
 				$action = $this->manifest['default_admin'];
 			}
 		} else {
 			// $action exists ? Otherwise, default action exists?
-			if (!isset($this->manifest['pages'][$action]) && isset($this->manifest['default'])) {
+			if ((empty($action) || !isset($this->manifest['pages'][$action])) && isset($this->manifest['default'])) {
 				$action = $this->manifest['default'];
 			}
 		}
@@ -110,6 +110,8 @@ abstract class WController {
 					WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
 				}
 				return true;
+			} else {
+				WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.', 'display');
 			}
 		} else {
 			WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' couldn\'t answer to your request.', 'display');
@@ -211,7 +213,7 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('title', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'service':
@@ -289,11 +291,16 @@ abstract class WController {
 	 * hasAccess('news') = does the user have access to news app?
 	 * hasAccess('news', 'detail') = access to action detail in news app?
 	 * 
-	 * @param string $app    Name of the app
-	 * @param string $action action in the app to be checked (can be empty '')
+	 * @param string  $app    Name of the app
+	 * @param string  $action Action in the app to be checked (can be empty '' to check overall app access)
+	 * @param boolean $admin  Admin context (default to Wity admin context)
 	 * @return boolean
 	 */
-	public function hasAccess($app, $action = '', $admin = false) {
+	public function hasAccess($app, $action = '', $admin = null) {
+		if (is_null($admin)) {
+			$admin = $this->getAdminContext();
+		}
+		
 		// Check manifest
 		$manifest = $this->loadManifest($app);
 		if (is_null($manifest)) {
@@ -301,11 +308,11 @@ abstract class WController {
 		}
 		
 		// Administrator supreme case
-		if (!empty($_SESSION['access']) && in_array('all', $_SESSION['access'])) {
+		if (!empty($_SESSION['access']) && array_key_exists('all', $_SESSION['access'])) {
 			return true;
 		}
 		
-		if ($this->getAdminContext()) { // Admin mode ON
+		if ($admin) { // Admin mode ON
 			if (isset($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
 				if (empty($action)) { // Asking for application access
 					return true;
