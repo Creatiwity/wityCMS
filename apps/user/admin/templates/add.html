@@ -3,7 +3,7 @@
 		<form action="" method="post">
 			<table cellpadding="5" cellspacing="0">
 				<tr>
-					<td><label for="nickname"><strong>Pseudonyme :</strong></label></td>
+					<td><label for="nickname"><strong>Pseudo :</strong></label></td>
 					<td>
 						<input id="nickname" type="text" name="nickname" value="{$nickname}" maxlength="30" size="20" autocomplete="off" />
 					</td>
@@ -17,7 +17,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label for="email">Adresse email :</label></td>
+					<td><label for="email">Email :</label></td>
 					<td><input id="email" type="text" name="email" value="{$email}" size="35" /></td>
 				</tr>
 				<tr>
@@ -26,15 +26,15 @@
 						<script type="text/javascript">
 							var apps = {
 								0: '',
-								{for $cat in $cats}
-									{$cat.id}: '{$cat.access}',
+								{for $group in $groups}
+									{$group.id}: '{$group.access}',
 								{/for}
 							};
 						</script>
 						<select id="groupe" name="groupe" onchange="catChange(this);">
 							<option value="0">Aucun groupe</option>
-							{for $cat in $cats}
-								<option value="{$cat.id}">{$cat.name}</option>
+							{for $group in $groups}
+								<option value="{$group.id}">{$group.name}</option>
 							{/for}
 						</select>
 					</td>
@@ -58,10 +58,10 @@
 						</select>
 						<br />
 						<ul id="access" class="hidden">
-							{for $app in $admin_apps}
+							{for $app, $details in $admin_apps}
 							<li>
-								<input class="access" id="{$app.name}" type="checkbox" name="access[{$app.name}]" />
-								<label for="{$app.name}">{$app.name|ucfirst}</label>
+								<input class="access" id="{$app}" type="checkbox" name="access[{$app}]" />
+								<label for="{$app}">{$details.name}</label>
 								{%
 								{if count({$app.levels}) > 0}
 								<select name="level[{$app.name}]">

@@ -64,12 +64,21 @@ class UserAdminView extends WView {
 	}
 	
 	/**
-	 * Définition des valeurs de contenu du formulaire
+	 * Setup the add/edit form
 	 */
 	private function fillForm($data) {
+		$this->assign('js', '/apps/user/admin/js/catChange.js');
+		$this->assign('groups', $this->model->getGroupsList());
+		
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminApps());
+		
 		$model = array(
+			'id' => 0,
 			'nickname' => '', 
 			'email' => '',
+			'groupe' => 0,
 			'access' => array()
 		);
 		foreach ($model as $item => $default) {
@@ -78,27 +87,11 @@ class UserAdminView extends WView {
 	}
 	
 	public function add($data = array()) {
-		$this->assign('js', '/apps/user/admin/js/catChange.js');
-		$this->assign('cats', $this->model->getGroupsList());
-		
-		// Get admin apps
-		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminAppList());
-		
 		$this->fillForm($data);
 	}
 	
 	public function edit($userid) {
-		$this->assign('userid', $userid);
-		$this->assign('cats', $this->model->getGroupsList());
-		
-		// Get admin apps
-		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminAppList());
-		
-		$data = $this->model->getUser($userid);
-		$data['accessArray'] = explode(',', $data['access']);
-		$this->assign($data);
+		$this->fillForm($this->model->getUser($userid));
 	}
 	
 	public function del($userid) {
@@ -106,13 +99,13 @@ class UserAdminView extends WView {
 		$this->assign('nickname', $data['nickname']);
 	}
 	
-	public function cat($sortBy, $sens) {
+	public function groups_listing($sortBy, $sens) {
 		$this->assign('js', '/apps/user/admin/js/cat.js');
 		$this->assign('css', '/apps/user/admin/css/user.css');
 		
 		// Get admin apps
 		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminAppList());
+		$this->assign('admin_apps', $adminModel->getAdminApps());
 		
 		// AdminStyle Helper
 		$dispFields = array('name');
@@ -122,7 +115,7 @@ class UserAdminView extends WView {
 		// Enregistrement des variables de classement
 		$this->assign($adminStyle->getTplVars());
 		
-		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
+		$data = $this->model->getGroupsList($sort[0], $sort[1] == 'ASC');
 		$this->assign('cats', $data);
 	}
 }

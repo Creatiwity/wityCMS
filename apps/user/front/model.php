@@ -35,33 +35,51 @@ class UserModel {
 	}
 	
 	/**
-	 * Checks whether a nickname is available
+	 * Checks whether a nickname is valid and available
 	 * 
 	 * @param string $nikcname
-	 * @return boolean
+	 * @return mixed true if valid or error string
 	 */
-	public function nicknameAvailable($nickname) {
+	public function checkNickname($nickname) {
+		if (empty($nickname)) {
+			return "No nickname given.";
+		} else if (strlen($nickname) < 3) {
+			return "Nickname must contain at least 3 chars.";
+		} else if (preg_match('#[\.]+#', $nickname)) {
+			return "Nickname contains invalid char (.)";
+		}
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE nickname LIKE :nickname
 		');
 		$prep->bindParam(':nickname', $nickname);
 		$prep->execute();
-		return $prep->rowCount() == 0;
+		if ($prep->rowCount() == 0) {
+			return true;
+		} else {
+			return "Nickname already in use.";
+		}
 	}
 	
 	/**
-	 * Checks whether an email is available
+	 * Checks whether an email is valid and available
 	 * 
 	 * @param string $email
-	 * @return boolean
+	 * @return mixed true if valid or error string
 	 */
-	public function emailAvailable($email) {
+	public function checkEmail($email) {
+		if (empty($email) || !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $email)) {
+			return "The email given is not valid.";
+		}
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE email LIKE :email
 		');
 		$prep->bindParam(':email', $email);
 		$prep->execute();
-		return $prep->rowCount() == 0;
+		if ($prep->rowCount() == 0) {
+			return true;
+		} else {
+			return "The email given is already in use.";
+		}
 	}
 	
 	/**
@@ -176,7 +194,7 @@ class UserModel {
 	 */
 	public function getUser($userid) {
 		$prep = $this->db->prepare('
-			SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access
+			SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -184,7 +202,8 @@ class UserModel {
 		');
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->fetch(PDO::FETCH_ASSOC);
+		$data = $prep->fetch(PDO::FETCH_ASSOC);
+		return $data;
 	}
 	
 	/**

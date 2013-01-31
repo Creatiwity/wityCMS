@@ -69,7 +69,7 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Updates a group
+	 * Updates a group in the database
 	 * 
 	 * @param int    $gid   Group id
 	 * @param array  $data  Columns to update
@@ -83,15 +83,15 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Updates a group in the database
+	 * Deletes a group in the database
 	 * 
 	 * @param int    $gid   Group id
 	 */
-	public function deleteCat($gid) {
+	public function deleteGroup($gid) {
 		$prep = $this->db->prepare('
 			DELETE FROM users_groups WHERE id = :id
 		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
+		$prep->bindParam(':id', $gid, PDO::PARAM_INT);
 		return $prep->execute();
 	}
 }

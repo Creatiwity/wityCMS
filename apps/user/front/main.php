@@ -105,7 +105,7 @@ class UserController extends WController {
 						$this->model->updateLastActivity($_SESSION['userid']);
 						
 						// Redirect
-						WNote::success('login_success', sprintf('Welcom %s! You were loged in successfully.', $_SESSION['nickname']));
+						WNote::success('login_success', sprintf('Welcome %s!', $_SESSION['nickname']));
 						header('location: '.$redirect);
 						return;
 					
@@ -162,10 +162,8 @@ class UserController extends WController {
 				$errors = array();
 				
 				// Check nickname availabililty
-				if (empty($data['nickname'])) {
-					$errors[] = "No nickname given.";
-				} else if (!$this->model->nicknameAvailable($data['nickname'])) {
-					$errors[] = "Nickname already in use.";
+				if ($e = $this->model->checkNickname($data['nickname']) !== true) {
+					$errors[] = $e;
 				}
 				
 				// Matching passwords
@@ -180,10 +178,8 @@ class UserController extends WController {
 				}
 				
 				// Email availabililty
-				if (empty($data['email']) || !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
-					$errors[] = "The email given is not valid.";
-				} else if (!$this->model->emailAvailable($data['email'])) {
-					$errors[] = "The email given is already in use.";
+				if ($e = $this->model->checkEmail($data['email']) !== true) {
+					$errors[] = $e;
 				}
 				
 				// Confirmation hash + group

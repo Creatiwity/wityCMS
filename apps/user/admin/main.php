@@ -175,80 +175,80 @@ Ceci est un message automatique.";
 			return;
 		}
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'email', 'groupe'));
-			if (!in_array(null, $data, true)) {
-				$data = array_merge($data, WRequest::getAssoc(array('password', 'password_confirm', 'access')));
-				$update_data = array();
-				$errors = array();
-				
-				// Get old user data
-				$db_data = $this->model->getUser($userid);
-				
-				// Nickname change
-				if ($data['nickname'] != $db_data['nickname']) {
-					if (empty($data['nickname'])) {
-						$errors[] = "No nickname given.";
-					} else if (!$this->model->nicknameAvailable($data['nickname'])) {
-						$errors[] = "Nickname already in use.";
-					}
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe', 'access'));
+			$update_data = array();
+			$errors = array();
+			
+			// Get old user data
+			$db_data = $this->model->getUser($userid);
+			
+			// Nickname change
+			if ($data['nickname'] != $db_data['nickname']) {
+				if ($e = $this->model->checkNickname($data['nickname']) !== true) {
+					$errors[] = $e;
+				} else {
+					$update_data['nickname'] = $data['nickname'];
 				}
-				
-				// Password
-				$password_hash = sha1($data['password']);
-				if ($password_hash != $db_data['password']) {
-					if ($data['password'] == $data['password_confirm']) {
-						$update['password'] = $password_hash;
-					} else {
-						$errors[] = "The password given is not the same as the password confirmation.";
-					}
+			}
+			
+			// Password
+			$password_hash = sha1($data['password']);
+			if ($password_hash != $db_data['password']) {
+				if ($data['password'] == $data['password_conf']) {
+					$update['password'] = $password_hash;
+				} else {
+					$errors[] = "The password given is not the same as the password confirmation.";
 				}
-				
-				// Email
-				if ($data['email'] != $db_data['email']) {
-					if (empty($data['email']) || !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
-						$errors[] = "The email given is not valid.";
-					} else if (!$this->model->emailAvailable($data['email'])) {
-						$errors[] = "The email given is already in use.";
-					} else {
-						$update['email'] = $data['email'];
-					}
+			}
+			
+			// Email
+			if ($data['email'] != $db_data['email']) {
+				if ($e = $this->model->checkEmail($data['email']) !== true) {
+					$errors[] = $e;
+				} else {
+					$update_data['email'] = $data['emai'];
 				}
-				
-				// Amin access
-				/*list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-				if ($type == 'all') {
-					$data['access'] = 'all';
-				} else if ($type == 'perso') {
-					$a = array();
-					if (is_array($access)) {
-						foreach ($access as $key => $v) {
-							if (isset($level[$key])) {
-								$a[] = $key.'|'.intval($level[$key]);
-							} else {
-								$a[] = $key.'|0';
-							}
+			}
+			
+			// Group
+			if ($data['groupe'] != $db_data['groupe']) {
+				$update_data['groupe'] = intval($data['groupe']);
+			}
+			
+			// Amin access
+			/*list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
+			if ($type == 'all') {
+				$data['access'] = 'all';
+			} else if ($type == 'perso') {
+				$a = array();
+				if (is_array($access)) {
+					foreach ($access as $key => $v) {
+						if (isset($level[$key])) {
+							$a[] = $key.'|'.intval($level[$key]);
+						} else {
+							$a[] = $key.'|0';
 						}
 					}
-					$data['access'] = implode(',', $a);
-				} else {
-					$data['access'] = '';
-				}*/
-				
-				if (empty($errors)) {
-					// Update database
-					if ($this->model->updateUser($userid, $update_data)) {
-						WNote::success('user_edited', sprintf("The user <strong>%s</strong> was edited successfully.", $data['nickname']));
-						header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
-					} else {
-						WNote::error('user_not_edited', "An unknown error occured.");
-						$this->view->edit($userid);
-						$this->view->render('add');
-					}
-				} else {
-					WNote::error('data_errors', implode("<br />\n", $errors));
-					$this->view->edit($userid);
-					$this->view->render('edit');
 				}
+				$data['access'] = implode(',', $a);
+			} else {
+				$data['access'] = '';
+			}*/
+			
+			if (empty($errors)) {
+				// Update database
+				if ($this->model->updateUser($userid, $update_data)) {
+					WNote::success('user_edited', sprintf("The user <strong>%s</strong> was edited successfully.", $data['nickname']));
+					header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
+				} else {
+					WNote::error('user_not_edited', "An unknown error occured.");
+					$this->view->edit($userid);
+					$this->view->render('add');
+				}
+			} else {
+				WNote::error('data_errors', implode("<br />\n", $errors));
+				$this->view->edit($userid);
+				$this->view->render('edit');
 			}
 		} else {
 			$this->view->edit($userid);
@@ -370,15 +370,15 @@ Ceci est un message automatique.";
 			}
 		}
 		
-		$this->view->cat($sortBy, $sens);
-		$this->view->render('cat');
+		$this->view->groups_listing($sortBy, $sens);
+		$this->view->render('groups_listing');
 	}
 	
 	protected function group_del() {
 		$id = $this->getId();
 		$this->model->deleteGroup($id);
-		WNote::success('cat_deleted', "La catégorie a été supprimée avec succès.");
-		header('location: '.WRoute::getDir().'/admin/user/cat/');
+		WNote::success('group_deleted', "The group selected was deleted successfully.");
+		header('location: '.WRoute::getDir().'/admin/user/groups/');
 	}
 }
 
