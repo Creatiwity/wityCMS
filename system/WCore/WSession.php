@@ -27,7 +27,7 @@ class WSession {
 	/**
 	 * Time before the session expires (seconds)
 	 */
-	const TOKEN_EXPIRATION = 5;
+	const TOKEN_EXPIRATION = 120;
 	
 	/*
 	 * Inactivity time (minuts)

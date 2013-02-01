@@ -114,7 +114,7 @@ abstract class WController {
 				WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.', 'display');
 			}
 		} else {
-			WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' couldn\'t answer to your request.', 'display');
+			WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.', 'display');
 		}
 		return false;
 	}
@@ -239,6 +239,8 @@ abstract class WController {
 								}
 							}
 						}
+					} else {
+						$manifest['pages'] = array();
 					}
 					break;
 				
@@ -262,19 +264,23 @@ abstract class WController {
 								}
 							}
 						}
+					} else {
+						$manifest['admin'] = array();
 					}
 					break;
 				
 				case 'permission':
 					if (property_exists($xml, 'permission')) {
-						foreach ($xml->admin->page as $permission) {
+						foreach ($xml->permission as $permission) {
 							if (!empty($permission)) {
-								$attributes = $page->attributes();
+								$attributes = $permission->attributes();
 								if (!empty($attributes['name'])) {
 									$manifest['permissions'][] = (string) $attributes['name'];
 								}
 							}
 						}
+					} else {
+						$manifest['permissions'] = !empty($manifest['admin']) ? array('admin') : array();
 					}
 					break;
 				

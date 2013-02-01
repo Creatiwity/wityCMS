@@ -369,13 +369,13 @@ class WTemplateCompiler {
 	/**
 	 * Compiles {empty}
 	 * 
-	 * {empty} is to use in a {for} node.
+	 * {empty} is to use right after a {for} node.
 	 * Its content is displayed when the array iterated in the loop is empty.
 	 * 
 	 * @return string php-empty code
 	 */
 	public function compile_empty() {
-		return "<?php if (isset(\$hidden_counter".($this->for_count).") && intval(\$hidden_counter".($this->for_count).") == 0): ?>";
+		return "<?php if (isset(\$hidden_counter".($this->for_count+1).") && intval(\$hidden_counter".($this->for_count+1).") == 0): ?>";
 	}
 	
 	/**
