@@ -1,8 +1,8 @@
 <div id="content" class="large">
 	<div class="item">
-		<h3></h3>
 		<form action="" method="post">
-			<table cellpadding="5" cellspacing="0">
+			<table id="user-form" cellpadding="5" cellspacing="0">
+				<colgroup><col width="20%" /></colgroup>
 				<tr>
 					<td><label for="nickname">Pseudo :</label></td>
 					<td>
@@ -28,8 +28,8 @@
 					<td>
 						<select id="groupe" name="groupe">
 							<option value="0">Aucun groupe</option>
-							{for $cat in $cats}
-								<option value="{$cat.id}"{if {$cat.id} == {$groupe}} selected="selected"{/if}>{$cat.name}</option>
+							{for $group in $groups}
+								<option value="{$group.id}"{if {$group.id} == {$groupe}} selected="selected"{/if}>{$group.name}</option>
 							{/for}
 						</select>
 					</td>
@@ -56,6 +56,29 @@
 				<tr>
 					<td><strong>Droits d'accès</strong></td>
 					<td>
+						<table id="user-rights" cellpadding="0" cellspacing="0">
+							<colgroup><col width="25%" /></colgroup>
+							{for $app, $details in $admin_apps}
+							<tr>
+								<td class="tcenter"><strong>{$details.name}</strong></td>
+								<td>
+									<table class="permissions" cellpadding="0" cellspacing="0">
+										<tr class="tcenter">
+										{for $perm in {$details.permissions}}
+											<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$perm}]" checked="" /></label></td>
+										{/for}
+										{empty}
+											<td><em>Neither specific permissions, nor admin zone for this app</em></td>
+										{/empty}
+										</tr>
+									</table>
+								</td>
+							</tr>
+							{/for}
+						</table>
+						
+						
+						
 						<ul id="access"{if empty({$access}) || {$access} == 'all'} class="hidden"{/if}>
 							{for $app, $details in $admin_apps}
 							<li>

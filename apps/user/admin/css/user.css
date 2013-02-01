@@ -1,4 +1,40 @@
 
+/**
+ * User form
+ */
+
+#user-form {
+	width: 100%;
+}
+
+#user-rights {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#user-rights td {
+	border-top: 1px solid black;
+}
+
+#user-rights .permissions {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#user-rights .permissions td {
+	border-top: none;
+	border-left: 1px solid black;
+	padding: 8px;
+}
+
+#user-rights .permissions label {
+	display: block;
+}
+
+/**
+ * Groups
+ */
 #edition {
 	display: none;
 }

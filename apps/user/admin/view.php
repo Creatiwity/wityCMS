@@ -18,7 +18,7 @@ class UserAdminView extends WView {
 	public function __construct(UserAdminModel $model) {
 		parent::__construct();
 		$this->model = $model;
-		
+		// CSS for all views
 		$this->assign('css', '/apps/user/admin/css/user.css');
 	}
 	
@@ -56,10 +56,10 @@ class UserAdminView extends WView {
 		$data = $this->model->getUsersList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters);
 		$this->assign('users', $data);
 		
-		// Generate the pagination to navigate data
+		// Generate the pagination to browse data
 		$count = $this->model->countUsers($filters);
 		$pagination = WHelper::load('pagination', array($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
-		$this->assign('pagination', $pagination->getHtml());
+		$this->assign('pagination', $pagination->getHTML());
 		$this->assign('total', $count);
 	}
 	
@@ -101,7 +101,6 @@ class UserAdminView extends WView {
 	
 	public function groups_listing($sortBy, $sens) {
 		$this->assign('js', '/apps/user/admin/js/cat.js');
-		$this->assign('css', '/apps/user/admin/css/user.css');
 		
 		// Get admin apps
 		$adminModel = new AdminController();

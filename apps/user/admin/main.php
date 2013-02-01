@@ -215,7 +215,8 @@ Ceci est un message automatique.";
 				$update_data['groupe'] = intval($data['groupe']);
 			}
 			
-			// Amin access
+			// User access rights
+			
 			/*list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
 			if ($type == 'all') {
 				$data['access'] = 'all';
