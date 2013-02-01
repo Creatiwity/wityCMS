@@ -46,7 +46,7 @@
 					</ul>
 					<div class="sub">
 						<p>Votre position actuelle est : <span class="app">{$appSelected}</span>
-						{if isset({$actionList.{$actionAsked}})} . <span class="action">{$actionList.{$actionAsked}}</span>{/if}</p>
+						{if isset({$actionsList.{$actionAsked}})} . <span class="action">{$actionsList.{$actionAsked}.lang}</span>{/if}</p>
 						<!--<form id="search" action="" method="post"><div>
 							<input type="text" name="search" value="recherche" onclick="this.value = '';" size="15" />
 							<input class="img" type="image" src="/themes/admin/images/search.jpg" alt="Rechercher" />

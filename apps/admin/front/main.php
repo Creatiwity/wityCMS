@@ -124,6 +124,12 @@ class AdminController extends WController {
 			$action = isset($default[1][0]) ? $default[1][0] : '';
 			if ($this->hasAccess($default[0], $action, true)) {
 				WRoute::setRoute($default);
+			} else {
+				// Select a random app to display
+				$apps = $this->getAdminApps();
+				if (!empty($apps)) {
+					WRoute::setRoute(array(array_shift(array_keys($apps)), array()));
+				}
 			}
 		}
 	}
@@ -155,16 +161,16 @@ class AdminController extends WController {
 		// On est donc sur la page d'accueil de l'admin
 		if (!is_null($this->appController)) {
 			$manifest = $this->appController->getManifest();
-			$actionAsked = $this->appController->getAskedAction();
+			$action_asked = $this->appController->getAskedAction();
 			
 			$tpl->assign(array(
 				'appSelected' => $this->appAsked,
 				'actionsList' => $manifest['admin'],
-				'actionAsked' => $actionAsked
+				'actionAsked' => $action_asked
 			));
-			$this->view->assign('page_title', sprintf('Administration &raquo; %s%s',
-				ucwords($this->appAsked),
-				isset($manifest['admin'][$actionAsked]) ? ' &raquo; '.$manifest['admin'][$actionAsked]['lang'] : ''
+			$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
+				ucwords($manifest['name']),
+				isset($manifest['admin'][$action_asked]) ? ' &raquo; '.$manifest['admin'][$action_asked]['lang'] : ''
 			));
 		} else {
 			$tpl->assign(array(
