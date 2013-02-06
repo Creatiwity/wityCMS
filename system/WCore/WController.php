@@ -223,6 +223,7 @@ abstract class WController {
 					break;
 				
 				case 'page':
+					$manifest['pages'] = array();
 					if (property_exists($xml, 'page')) {
 						foreach ($xml->page as $page) {
 							$attributes = $page->attributes();
@@ -239,12 +240,11 @@ abstract class WController {
 								}
 							}
 						}
-					} else {
-						$manifest['pages'] = array();
 					}
 					break;
 				
 				case 'admin':
+					$manifest['admin'] = array();
 					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'page')) {
 						foreach ($xml->admin->page as $page) {
 							if (!empty($page)) {
@@ -264,12 +264,11 @@ abstract class WController {
 								}
 							}
 						}
-					} else {
-						$manifest['admin'] = array();
 					}
 					break;
 				
 				case 'permission':
+					$manifest['permissions'] = !empty($manifest['admin']) ? array('admin') : array();
 					if (property_exists($xml, 'permission')) {
 						foreach ($xml->permission as $permission) {
 							if (!empty($permission)) {
@@ -279,8 +278,6 @@ abstract class WController {
 								}
 							}
 						}
-					} else {
-						$manifest['permissions'] = !empty($manifest['admin']) ? array('admin') : array();
 					}
 					break;
 				
