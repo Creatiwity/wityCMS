@@ -56,14 +56,14 @@
 			</td>
 		</tr>
 		<tr>
-			<th class="sort {$name_class}"><a href="/admin/users/groups/name-{$name_sort}/">Nom du groupe</a></th>
-			<th>Utilisateurs dans le groupe</th>
+			<th class="sort {$name_class}"><a href="/admin/user/groups/name-{$name_sort}/">Nom du groupe</a></th>
+			<th class="sort {$users_count_class}"><a href="/admin/user/groups/users_count-{$users_count_sort}/">Utilisateurs dans le groupe</a></th>
 			<th>Actions</th>
 		</tr>
 {for $count, $group in $groups}
 		<tr id="group-{$group.id}" class="{if {$count} % 2 == 0}pair{else}impair{/if}">
 			<td><strong>{$group.name}</strong></td>
-			<td>{$group.access}</td>
+			<td>{$group.users_count}</td>
 			<td>
 				<a href="#edit" title="Editer" onclick="showEditForm({$group.id}, '{$group.name}', '{$group.access}'); return false;"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
 				<a href="/admin/user/group_del/{$group.id}/" title="Supprimer" onclick="return checkDel('{$group.name}');"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>

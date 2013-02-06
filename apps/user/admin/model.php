@@ -79,7 +79,34 @@ class UserAdminModel extends UserModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
-		return $prep->fetchAll();
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Retrieves the list of user groups with users_count row
+	 * 
+	 * @param string $order Name of the ordering column
+	 * @param string $asc   Ascendent or descendent?
+	 */
+	public function getGroupsListWithCount($order = 'name', $asc = true) {
+		$prep = $this->db->prepare('
+			SELECT users_groups.id, name, users_groups.access, COUNT(*) AS users_count, groupe
+			FROM users
+			RIGHT JOIN users_groups
+			ON groupe = users_groups.id
+			GROUP BY users_groups.id
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
+		);
+		$prep->execute();
+		$data = array();
+		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
+			if ($row['groupe'] == 0) {
+				$row['users_count'] = 0;
+			}
+			unset($row['groupe']);
+			$data[] = $row;
+		}
+		return $data;
 	}
 	
 	/**

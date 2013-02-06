@@ -132,4 +132,13 @@ $(document).ready(function() {
 			changeType('user-access', 'custom');
 		}
 	});
+	
+	if (typeof user_access != 'undefined') {
+		if (user_access != '') {
+			assignPermissions('user-access', user_access);
+		} else {
+			var select = document.getElementById('groupe');
+			accessGroup(select.options[select.selectedIndex].value);
+		}
+	}
 });

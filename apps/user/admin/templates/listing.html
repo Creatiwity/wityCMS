@@ -2,7 +2,7 @@
 	<div id="search" class="block">
 		<div class="top"></div>
 		<h2>Rechercher</h2>
-		<form action="/admin/user/liste/" method="get">
+		<form action="/admin/user/listing/" method="get">
 			<label for="nickname"><strong>Pseudo :</strong></label>
 			<input id="nickname" type="text" name="nickname" value="{$nickname}" /><br />
 			<label for="email">Email :</label>
@@ -41,11 +41,11 @@
 			<col width="5%" />
 		</colgroup>
 		<tr>
-			<th class="sort {$id_class}"><a href="/admin/user/id-{$id_sort}/{$subURL}">#</a></th>
-			<th class="sort {$nickname_class}"><a href="/admin/user/nickname-{$nickname_sort}/{$subURL}">Pseudonyme</a></th>
-			<th class="sort {$groupe_class}"><a href="/admin/user/groupe-{$groupe_sort}/{$subURL}">Groupe</a></th>
-			<th class="sort {$date_class}"><a href="/admin/user/date-{$date_sort}/{$subURL}">Date d'inscription</a></th>
-			<th class="sort {$last_activity_class}"><a href="/admin/user/last_activity-{$last_activity_sort}/{$subURL}">Dernière connexion</a></th>
+			<th class="sort {$id_class}"><a href="/admin/user/listing/id-{$id_sort}/{$subURL}">#</a></th>
+			<th class="sort {$nickname_class}"><a href="/admin/user/listing/nickname-{$nickname_sort}/{$subURL}">Pseudonyme</a></th>
+			<th class="sort {$groupe_class}"><a href="/admin/user/listing/groupe-{$groupe_sort}/{$subURL}">Groupe</a></th>
+			<th class="sort {$date_class}"><a href="/admin/user/listing/date-{$date_sort}/{$subURL}">Date d'inscription</a></th>
+			<th class="sort {$last_activity_class}"><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}">Dernière connexion</a></th>
 			<th>Actions</th>
 		</tr>
 		{for $count, $user in $users}

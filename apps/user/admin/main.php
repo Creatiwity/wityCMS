@@ -48,7 +48,11 @@ class UserAdminController extends WController {
 	protected function listing() {
 		// Sorting criterias given by URL
 		$args = WRoute::getArgs();
-		$sortData = explode('-', array_shift($args));
+		$firstArg = array_shift($args);
+		if ($firstArg == 'listing') {
+			$firstArg = array_shift($args);
+		}
+		$sortData = explode('-', $firstArg);
 		$sortBy = empty($sortData) ? '' : array_shift($sortData);
 		$sens = empty($sortData) ? '' : array_shift($sortData);
 		$page = empty($sortData) ? 1 : $sortData[0];
@@ -76,7 +80,7 @@ class UserAdminController extends WController {
 				}
 				
 				// Matching passwords
-				if (!empty($data['password'])) {
+				if (!empty($data['password']) || !empty($data['password_conf'])) {
 					if ($data['password'] === $data['password_conf']) {
 						$data['password'] = sha1($data['password']);
 					} else {
@@ -186,10 +190,12 @@ Ceci est un message automatique.";
 			}
 			
 			// Password
-			$password_hash = sha1($data['password']);
-			if ($password_hash != $db_data['password']) {
+			if (!empty($data['password']) || !empty($data['password_conf'])) {
 				if ($data['password'] == $data['password_conf']) {
-					$update_data['password'] = $password_hash;
+					$password_hash = sha1($data['password']);
+					if ($password_hash != $db_data['password']) {
+						$update_data['password'] = $password_hash;
+					}
 				} else {
 					$errors[] = "The password given is not the same as the password confirmation.";
 				}

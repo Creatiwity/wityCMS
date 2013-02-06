@@ -170,7 +170,7 @@ class UserModel {
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
 			'.$cond.'
-			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC').'
+			ORDER BY users.'.$order.' '.($asc ? 'ASC' : 'DESC').'
 			LIMIT :start, :number
 		');
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);

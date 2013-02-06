@@ -26,6 +26,7 @@
 					<td><label for="groupe">Groupe :</label></td>
 					<td>
 						<script type="text/javascript">
+							var user_access = '{$access}';
 							var group_access = {
 {for $group in $groups}
 								{$group.id}: '{$group.access}',
@@ -61,8 +62,7 @@
 									<table class="permissions" cellpadding="0" cellspacing="0">
 										<tr class="tcenter">
 										{for $perm in {$details.permissions}}
-											<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]"
-												{if !empty({$access}) && preg_match("#".{$app}."\[[a-z0-9_|-]*".{$perm}."[a-z0-9_|-]*\]#i", {$access})} checked="checked"{/if} /></label></td>
+											<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></td>
 										{/for}
 										{empty}
 											<td><em>Neither specific permissions, nor admin zone for this app</em></td>

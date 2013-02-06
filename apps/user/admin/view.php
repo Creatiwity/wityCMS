@@ -26,7 +26,7 @@ class UserAdminView extends WView {
 	 * Setting up the users listing view
 	 */
 	public function listing($sortBy, $sens, $currentPage, $filters) {
-		$n = 40; // 40 users per page
+		$n = 30; // number of users per page
 		
 		// SortingHelper Helper
 		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
@@ -112,14 +112,14 @@ class UserAdminView extends WView {
 		$this->assign('admin_apps', $adminModel->getAdminApps());
 		
 		// AdminStyle Helper
-		$dispFields = array('name');
+		$dispFields = array('name', 'users_count');
 		$adminStyle = WHelper::load('SortingHelper', array($dispFields, 'name'));
 		$sort = $adminStyle->getSorting($sortBy, $sens); // sorting vars
 		
 		// Enregistrement des variables de classement
 		$this->assign($adminStyle->getTplVars());
 		
-		$data = $this->model->getGroupsList($sort[0], $sort[1] == 'ASC');
+		$data = $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC');
 		$this->assign('groups', $data);
 	}
 }
