@@ -87,19 +87,6 @@ abstract class WController {
 	 * @return boolean Action forwarding success
 	 */
 	protected function forward($action) {
-		// Find a fine $action
-		if ($this->getAdminContext()) {
-			// $action exists in admin ? Otherwise, default_admin action exists?
-			if ((empty($action) || !isset($this->manifest['admin'][$action])) && isset($this->manifest['default_admin'])) {
-				$action = $this->manifest['default_admin'];
-			}
-		} else {
-			// $action exists ? Otherwise, default action exists?
-			if ((empty($action) || !isset($this->manifest['pages'][$action])) && isset($this->manifest['default'])) {
-				$action = $this->manifest['default'];
-			}
-		}
-		
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
 				// Execute action
@@ -163,11 +150,21 @@ abstract class WController {
 	 */
 	public function getAskedAction() {
 		$args = WRoute::getArgs();
-		if (isset($args[0])) {
-			return $args[0];
+		$action = isset($args[0]) ? $args[0] : '';
+		
+		// Find a fine $action
+		if ($this->getAdminContext()) {
+			// $action exists in admin ? Otherwise, default_admin action exists?
+			if ((empty($action) || !isset($this->manifest['admin'][$action])) && isset($this->manifest['default_admin'])) {
+				$action = $this->manifest['default_admin'];
+			}
 		} else {
-			return '';
+			// $action exists ? Otherwise, default action exists?
+			if ((empty($action) || !isset($this->manifest['pages'][$action])) && isset($this->manifest['default'])) {
+				$action = $this->manifest['default'];
+			}
 		}
+		return $action;
 	}
 	
 	/**

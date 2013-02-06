@@ -40,7 +40,7 @@
 						{for $action, $desc in $actionsList}
 							{if {$desc.menu}}
 							<li class="{if {$action} == {$actionAsked}}on{/if}">
-								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc.lang}</a></li>
+								<a href="/admin/{$appSelected}/{$action}/">{$desc.lang}</a></li>
 							{/if}
 						{/for}
 					</ul>
