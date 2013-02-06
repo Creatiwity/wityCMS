@@ -51,22 +51,16 @@ class WSession {
 		// Start sessions
 		session_start();
 		
-		if (!empty($_COOKIE['hash'])) {
-			if ($this->isConnected()) {
-				// Token expiration checking
-				if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
-					if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
-						$this->closeSession();
-					}
-				}
+		if ($this->isConnected()) {
+			// Token expiration checking
+			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
+				$this->reloadSession($_SESSION['userid']);
 			}
-			// Attempt to reload the user session based on its cookies
-			else if (!empty($_COOKIE['userid'])) {
-				// Hash => unique connection
-				if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
-					$this->closeSession();
-				}
-			}
+		}
+		// Attempt to reload the user session based on its cookies
+		else if (!empty($_COOKIE['userid'])) {
+			// Hash => unique connection
+			$this->reloadSession(intval($_COOKIE['userid']));
 		}
 	}
 	
@@ -137,35 +131,6 @@ class WSession {
 	}
 	
 	/**
-	 * Reloads a user based on cookies
-	 * 
-	 * @param string $userid        current user id
-	 * @param string $cookie_hash   cookie hash for security checking
-	 * @return boolean true if successfully reloaded, false otherwise
-	 */
-	private function reloadSession($userid, $cookie_hash) {
-		$db = WSystem::getDB();
-		$prep = $db->prepare('
-			SELECT id, nickname, password, email, groupe, access
-			FROM '.self::USERS_TABLE.'
-			WHERE id = :userid
-		');
-		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
-		$prep->execute();
-		$data = $prep->fetch();
-		
-		if (!empty($data)) {
-			// Check hash
-			if ($cookie_hash == $this->generate_hash($data['nickname'], $data['password'])) {
-				$this->setupSession($userid, $data);
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
 	 * Setup session variables for the user
 	 * 
 	 * @param string $userid current user id
@@ -179,17 +144,19 @@ class WSession {
 		
 		$_SESSION['access_string'] = $data['access'];
 		$_SESSION['access'] = array();
-		foreach (explode(',', $data['access']) as $access) {
-			if ($access == 'all') {
-				$_SESSION['access'] = array('all' => 1);
-				break;
-			}
-			$first_bracket = strpos($access, '[');
-			if ($first_bracket !== false) {
-				$app_name = substr($access, 0, $first_bracket);
-				$permissions = substr($access, $first_bracket+1, -1);
-				if (!empty($permissions)) {
-					$_SESSION['access'][$app_name] = explode('|', $permissions);
+		if (empty($data['access']) || $data['access'] == 'none') {
+			// let access = array();
+		} else if ($data['access'] == 'all') {
+			$_SESSION['access'] = array('all' => 1);
+		} else {
+			foreach (explode(',', $data['access']) as $access) {
+				$first_bracket = strpos($access, '[');
+				if ($first_bracket !== false) {
+					$app_name = substr($access, 0, $first_bracket);
+					$permissions = substr($access, $first_bracket+1, -1);
+					if (!empty($permissions)) {
+						$_SESSION['access'][$app_name] = explode('|', $permissions);
+					}
 				}
 			}
 		}
@@ -229,6 +196,38 @@ class WSession {
 		
 		// Reset cookies
 		setcookie(session_name(), '', time()-3600, '/');
+	}
+	
+	/**
+	 * Reloads a user based on cookies
+	 * 
+	 * @param string $userid        current user id
+	 * @param string $cookie_hash   cookie hash for security checking
+	 * @return boolean true if successfully reloaded, false otherwise
+	 */
+	public function reloadSession($userid) {
+		if (empty($_COOKIE['hash'])) {
+			return false;
+		}
+		$db = WSystem::getDB();
+		$prep = $db->prepare('
+			SELECT id, nickname, password, email, groupe, access
+			FROM '.self::USERS_TABLE.'
+			WHERE id = :userid
+		');
+		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+		$prep->execute();
+		$data = $prep->fetch();
+		
+		if (!empty($data)) {
+			// Check hash
+			if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
+				$this->setupSession($userid, $data);
+				return true;
+			}
+		}
+		$this->closeSession();
+		return false;
 	}
 	
 	/**
