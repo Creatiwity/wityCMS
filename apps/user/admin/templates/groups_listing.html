@@ -1,141 +1,80 @@
-<div id="blocks">
-	<div class="block">
-		<div class="top"></div>
-		<h2>Ajouter une catégorie</h2>
-		<form action="" method="post">
-			<table style="width: 100%;">
-				<tr>
-					<td><label for="name">Nom :</label></td>
-					<td><input id="name" type="text" name="name" value="" /></td>
-				</tr>
-				<tr>
-					<td><label for="type">Type d'utilisateur :</label></td>
-					<td>
-						<script type="text/javascript">
-							function changeType(type) {
-								if (type == 'perso') {
-									$('#access').show();
-								} else {
-									$('#access').hide();
-								}
-							}
-						</script>
-						<select id="type" name="type" onchange="changeType(this.options[this.selectedIndex].value);">
-							<option value="none">Simple utilisateur</option>
-							<option value="all">Administrateur suprême</option>
-							<option value="perso">Mode personnalisé</option>
-						</select><br />
-						<ul id="access" class="hidden">
-							{for $app in $admin_apps}
-							<li>
-								<input id="{$app.name}" type="checkbox" name="access[{$app.name}]" />
-								<label for="{$app.name}">{$app.name|ucfirst}</label>
-								{%
-								{if count({$module.levels}) > 0}
-								<select name="level[{$module.name}]">
-									{foreach item={$module.levels} as={$level}}
-									<option value="{$level.value.id}">{$level.value.name}</option>
-									{/foreach}
-								</select>
-								{/if}
-								%}
-							</li>
-							{/for}
-						</ul>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="tcenter">
-						<input type="submit" value="Ajouter" />
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-	<div id="edition" class="block">
-		<div class="top"></div>
-		<h2>Editer une catégorie</h2>
-		<form action="" method="post">
-			<table style="width: 100%;">
-				<tr>
-					<td><label for="nameEdit">Nom :</label></td>
-					<td>
-						<input id="idEdit" type="hidden" name="idEdit" value="" />
-						<input id="nameEdit" type="text" name="nameEdit" value="" />
-					</td>
-				</tr>
-				<tr>
-					<td><label for="typeEdit">Type d'utilisateur :</label></td>
-					<td>
-						<script type="text/javascript">
-							function changeTypeEdit(type) {
-								if (type == 'perso') {
-									$('#accessEdit').show();
-								} else {
-									$('#accessEdit').hide();
-								}
-							}
-						</script>
-						<select id="typeEdit" name="typeEdit" onchange="changeTypeEdit(this.options[this.selectedIndex].value);">
-							<option value="none">Simple utilisateur</option>
-							<option value="all">Administrateur suprême</option>
-							<option value="perso">Mode personnalisé</option>
-						</select><br />
-						<ul id="accessEdit" class="hidden">
-							{for $app in $admin_apps}
-							<li>
-								<input id="{$app.name}Edit" class="accessEdit" type="checkbox" name="accessEdit[{$app.name}]" />
-								<label for="{$app.name}Edit">{$app.name|ucfirst}</label>
-								{%
-								{if count({$module.levels}) > 0}
-								<select id="level{$module.name}" name="levelEdit[{$module.name}]">
-									{foreach item={$module.levels} as={$level}}
-									<option value="{$level.value.id}">{$level.value.name}</option>
-									{/foreach}
-								</select>
-								{/if}
-								%}
-							</li>
-							{/for}
-						</ul>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="tcenter">
-						<input type="submit" value="Editer" />
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-</div>
-<div id="content">
-	<table class="liste sorted" cellpadding="0" cellspacing="0">
+<div id="content" class="large">
+	<table id="groups-list" class="liste sorted" cellpadding="0" cellspacing="0">
 		<colgroup>
 			<col style="width: 45%;" />
 			<col style="width: 45%;" />
 			<col style="width: 10%;" />
 		</colgroup>
 		<tr>
-			<th class="sort {$name_class}"><a href="/admin/users/cat/name-{$name_sort}/">Nom de la catégorie</a></th>
-			<th>Accès par défaut</th>
+			<td colspan="3" class="tcenter">
+				<a href="#group-add" onclick="showAddForm(); return false;"><strong>Ajouter une catégorie</strong></a>
+			</td>
+		</tr>
+		<tr id="group-add" class="group-form impair">
+			<td colspan="3">
+				<form action="" method="post" class="hidden">
+					<div>
+						<input type="hidden" name="id" />
+						<input class="group-name" type="text" name="name" placeholder="Group name" />
+						<h2>Accès par défaut des utilisateurs du groupe</h2>
+						<label><input class="access-type none" type="radio" name="type" value="none" checked="checked" /> Simple utilisateur</label>
+						<label><input class="access-type all" type="radio" name="type" value="all" /> Administrateur suprême</label>
+						<label><input class="access-type custom" type="radio" name="type" value="custom" /> Mode personnalisé</label>
+						
+						<div class="custom-controls tright">
+							<a href="#" class="check-all" onclick="return false;">Check all</a> - <a href="#" class="uncheck-all" onclick="return false;">Uncheck all</a>
+						</div>
+						<table class="rights" cellpadding="0" cellspacing="0">
+							<colgroup><col width="25%" /></colgroup>
+							{for $app, $details in $admin_apps}
+							<tr>
+								<td class="tcenter"><strong>{$details.name}</strong></td>
+								<td>
+									<table class="permissions" cellpadding="0" cellspacing="0">
+										<tr class="tcenter">
+										{for $perm in {$details.permissions}}
+											<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></td>
+										{/for}
+										{empty}
+											<td><em>Neither specific permissions, nor admin zone for this app</em></td>
+										{/empty}
+										</tr>
+									</table>
+								</td>
+							</tr>
+							{/for}
+						</table>
+						<div class="custom-controls tright">
+							<a href="#" class="check-all" onclick="return false;">Check all</a> - <a href="#" class="uncheck-all" onclick="return false;">Uncheck all</a>
+						</div>
+						<div class="tcenter">
+							<input type="submit" value="Apply" />
+							<input type="button" value="Cancel" onclick="resetGroupForms();" />
+						</div>
+					</div>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<th class="sort {$name_class}"><a href="/admin/users/groups/name-{$name_sort}/">Nom du groupe</a></th>
+			<th>Utilisateurs dans le groupe</th>
 			<th>Actions</th>
 		</tr>
-		{for $count, $cat in $cats}
-			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
-				<td><strong>{$cat.name}</strong></td>
-				<td>{$cat.access}</td>
-				<td>
-					<a href="#edition" title="Editer" onclick="return editCat({$cat.id}, '{$cat.name}', '{$cat.access}');"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
-					<a href="/admin/user/group_del/{$cat.id}/" title="Supprimer" onclick="return checkDel('{$cat.name}');"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
-				</td>
-			</tr>
-			{empty}
-			<tr>
-				<td colspan="3" class="tcenter">Aucune catégorie disponible.</td>
-			</tr>
-			{/empty}
-		{/for}
+{for $count, $group in $groups}
+		<tr id="group-{$group.id}" class="{if {$count} % 2 == 0}pair{else}impair{/if}">
+			<td><strong>{$group.name}</strong></td>
+			<td>{$group.access}</td>
+			<td>
+				<a href="#edit" title="Editer" onclick="showEditForm({$group.id}, '{$group.name}', '{$group.access}'); return false;"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
+				<a href="/admin/user/group_del/{$group.id}/" title="Supprimer" onclick="return checkDel('{$group.name}');"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
+			</td>
+		</tr>
+{/for}
+{empty}
+		<tr>
+			<td colspan="3" class="tcenter">Aucune catégorie disponible.</td>
+		</tr>
+{/empty}
 	</table>
 </div>
 <div class="clear"></div>

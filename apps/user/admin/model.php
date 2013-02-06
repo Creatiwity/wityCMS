@@ -24,6 +24,35 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
+	 * Creates a user in the database
+	 * This is a admin version able to change users.access
+	 * 
+	 * @param array $data
+	 * @return boolean Request success
+	 */
+	public function createUser(array $data) {
+		$prep = $this->db->prepare('
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, access, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :access, :ip)
+		');
+		$prep->bindParam(':nickname', $data['nickname']);
+		$prep->bindParam(':password', $data['password']);
+		$confirm = isset($data['confirm']) ? $data['confirm'] : '';
+		$prep->bindParam(':confirm', $confirm);
+		$prep->bindParam(':email', $data['email']);
+		$firstname = isset($data['firstname']) ? $data['firstname'] : '';
+		$prep->bindParam(':firstname', $firstname);
+		$lastname = isset($data['lastname']) ? $data['lastname'] : '';
+		$prep->bindParam(':lastname', $lastname);
+		$country = isset($data['country']) ? $data['country'] : '';
+		$prep->bindParam(':country', $country);
+		$prep->bindParam(':groupe', $data['groupe']);
+		$prep->bindParam(':access', $data['access']);
+		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
+		return $prep->execute();
+	}
+	
+	/**
 	 * Deletes a user
 	 * 
 	 * @param int $userid
@@ -71,27 +100,31 @@ class UserAdminModel extends UserModel {
 	/**
 	 * Updates a group in the database
 	 * 
-	 * @param int    $gid   Group id
-	 * @param array  $data  Columns to update
+	 * @param int    $groupid  Group id
+	 * @param array  $data     Columns to update
 	 */
-	public function updateGroup($gid, $data) {
-		return $this->db->query('
+	public function updateGroup($groupid, $data) {
+		$prep = $this->db->prepare('
 			UPDATE users_groups
-			SET name = '.$this->db->quote($data['nameEdit']).', access = '.$this->db->quote($data['accessEdit']).'
-			WHERE id = '.$gid
-		);
+			SET name = :name, access = :access
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':name', $data['name']);
+		$prep->bindParam(':access', $data['access']);
+		return $prep->execute();
 	}
 	
 	/**
 	 * Deletes a group in the database
 	 * 
-	 * @param int    $gid   Group id
+	 * @param int    $groupid  Group id
 	 */
-	public function deleteGroup($gid) {
+	public function deleteGroup($groupid) {
 		$prep = $this->db->prepare('
 			DELETE FROM users_groups WHERE id = :id
 		');
-		$prep->bindParam(':id', $gid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
 		return $prep->execute();
 	}
 }

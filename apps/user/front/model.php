@@ -43,8 +43,8 @@ class UserModel {
 	public function checkNickname($nickname) {
 		if (empty($nickname)) {
 			return "No nickname given.";
-		} else if (strlen($nickname) < 3) {
-			return "Nickname must contain at least 3 chars.";
+		} else if (strlen($nickname) < 3 || strlen($nickname) > 30) {
+			return "Nickname lenght must be between 3 and 30 characters.";
 		} else if (preg_match('#[\.]+#', $nickname)) {
 			return "Nickname contains invalid char (.)";
 		}

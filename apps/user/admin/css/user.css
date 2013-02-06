@@ -1,39 +1,14 @@
-
 /**
- * User form
+ * Users listing
  */
-
-#user-form {
-	width: 100%;
-}
-
-#user-rights {
-	width: 100%;
-	border-collapse: collapse;
-	border: 1px solid black;
-}
-
-#user-rights td {
-	border-top: 1px solid black;
-}
-
-#user-rights .permissions {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-#user-rights .permissions td {
-	border-top: none;
-	border-left: 1px solid black;
-	padding: 8px;
-}
-
-#user-rights .permissions label {
+#search label {
 	display: block;
+	float: left;
+	width: 80px;
 }
 
 /**
- * Groups
+ * Groups listing
  */
 #edition {
 	display: none;
@@ -45,8 +20,48 @@ ul#access, ul#accessEdit {
 	padding: 0;
 }
 
-#search label {
+#groups-list .group-form td {
+	padding: 0;
+}
+
+#groups-list .group-form form {
+	padding: 8px;
+}
+
+/**
+ * User form
+ */
+#user-form {
+	width: 100%;
+}
+
+#user-form .nickname, #groups-list .group-name {
+	width: 100%;
+	font-size: 1.7em;
+}
+
+#content .rights {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#content .rights td {
+	border-top: 1px solid black;
+	padding: 0;
+}
+
+#content .rights .permissions {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#content .rights .permissions td {
+	border-top: none;
+	border-left: 1px solid black;
+	padding: 8px;
+}
+
+#content .rights .permissions label {
 	display: block;
-	float: left;
-	width: 80px;
 }

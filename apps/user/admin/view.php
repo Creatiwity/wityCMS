@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-02-02-2012
+ * @version 0.3-06-02-2013
  */
 class UserAdminView extends WView {
 	private $model;
@@ -67,7 +67,7 @@ class UserAdminView extends WView {
 	 * Setup the add/edit form
 	 */
 	private function fillForm($data) {
-		$this->assign('js', '/apps/user/admin/js/catChange.js');
+		$this->assign('js', '/apps/user/admin/js/access_form.js');
 		$this->assign('groups', $this->model->getGroupsList());
 		
 		// Get admin apps
@@ -79,7 +79,7 @@ class UserAdminView extends WView {
 			'nickname' => '', 
 			'email' => '',
 			'groupe' => 0,
-			'access' => array()
+			'access' => ''
 		);
 		foreach ($model as $item => $default) {
 			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
@@ -88,9 +88,13 @@ class UserAdminView extends WView {
 	
 	public function add($data = array()) {
 		$this->fillForm($data);
+		$this->assign('add_form', true);
 	}
 	
 	public function edit($userid) {
+		if ($userid == $_SESSION['userid']) {
+			WNote::info('user_edit_own', 'Notice: you are editing your own account. Changes will immediately take effect.');
+		}
 		$this->fillForm($this->model->getUser($userid));
 	}
 	
@@ -100,7 +104,8 @@ class UserAdminView extends WView {
 	}
 	
 	public function groups_listing($sortBy, $sens) {
-		$this->assign('js', '/apps/user/admin/js/cat.js');
+		$this->assign('js', '/apps/user/admin/js/access_form.js');
+		$this->assign('js', '/apps/user/admin/js/groups.js');
 		
 		// Get admin apps
 		$adminModel = new AdminController();
@@ -115,7 +120,7 @@ class UserAdminView extends WView {
 		$this->assign($adminStyle->getTplVars());
 		
 		$data = $this->model->getGroupsList($sort[0], $sort[1] == 'ASC');
-		$this->assign('cats', $data);
+		$this->assign('groups', $data);
 	}
 }
 

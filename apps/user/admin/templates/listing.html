@@ -60,12 +60,12 @@
 					<a href="/admin/user/del/{$user.id}/" title="Supprimer"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
 				</td>
 			</tr>
-			{empty}
+		{/for}
+		{empty}
 			<tr>
 				<td colspan="6" class="tcenter">Aucun utilisateur trouvé</td>
 			</tr>
-			{/empty}
-		{/for}
+		{/empty}
 	</table>
 	{$pagination}
 </div>

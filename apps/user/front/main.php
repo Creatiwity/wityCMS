@@ -74,11 +74,6 @@ class UserController extends WController {
 	 * @param string $redirect URL to redirect the request
 	 */
 	protected function login($redirect = '') {
-		if ($this->session->isConnected()) {
-			WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.', 'display');
-			return;
-		}
-		
 		// Find redirect URL
 		$referer = WRoute::getReferer();
 		$redirect_request = WRequest::get('redirect');
@@ -89,6 +84,12 @@ class UserController extends WController {
 				// Login form may be loaded from an external application
 				$redirect = (WRoute::getApp() != 'user') ? WRoute::getURL() : $referer;
 			}
+		}
+		
+		if ($this->session->isConnected()) {
+			// WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.', 'display');
+			header('location: '.$redirect);
+			return;
 		}
 		
 		// Vars given to trigger login process?

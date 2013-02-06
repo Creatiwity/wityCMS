@@ -1,0 +1,91 @@
+<div id="content" class="large">
+	<div class="item">
+		<form action="" method="post">
+			<table id="user-form" cellpadding="5" cellspacing="0">
+				<colgroup><col width="20%" /></colgroup>
+				<tr>
+					<td colspan="2">
+						<input type="hidden" name="id" value="{$id}" />
+						<label><span class="hidden">Pseudo :</span>
+						<input class="nickname" type="text" name="nickname" value="{$nickname}" placeholder="Nickname" maxlength="30" size="20" /></label>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="password">Mot de passe :</label><br />
+						<em>Laisser vide pour ne pas effectuer de modification.</em></td>
+					<td>
+						<input id="password" type="password" name="password" size="20" /><br />
+						<label><input id="password_confirm" type="password" name="password_conf" size="20" /> <em>(confirmation)</em></label>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="email">Email :</label></td>
+					<td><input id="email" type="email" name="email" value="{$email}" size="30" /></td>
+				</tr>
+				<tr>
+					<td><label for="groupe">Groupe :</label></td>
+					<td>
+						<script type="text/javascript">
+							var group_access = {
+{for $group in $groups}
+								{$group.id}: '{$group.access}',
+{/for}
+							};
+						</script>
+						<select id="groupe" name="groupe" onchange="accessGroup(this.options[this.selectedIndex].value);">
+							<option value="0">Aucun groupe</option>
+							{for $group in $groups}
+								<option value="{$group.id}"{if {$group.id} == {$groupe}} selected="selected"{/if}>{$group.name}</option>
+							{/for}
+						</select>
+					</td>
+				</tr>
+				<tr id="user-access">
+					<td><strong>Droits d'accès</strong></td>
+					<td>
+						<label><input class="access-type none" type="radio" name="type" value="none"
+							{if empty({$access})} checked="checked"{/if} onchange="changeType('user-access', 'none');" /> Simple utilisateur</label>
+						<label><input class="access-type all" type="radio" name="type" value="all"
+							{if {$access} == 'all'} checked="checked"{/if} onchange="changeType('user-access', 'all');" /> Administrateur suprême</label>
+						<label><input class="access-type custom" type="radio" name="type" value="custom"
+							{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} onchange="changeType('user-access', 'custom');" /> Mode personnalisé</label>
+						<div class="custom-controls tright">
+							<a href="#" onclick="changeType('user-access', 'custom'); accessSelectAll('user-access'); return false;">Check all</a> - <a href="#" onclick="changeType('user-access', 'none'); return false;">Uncheck all</a>
+						</div>
+						<table class="rights" cellpadding="0" cellspacing="0">
+							<colgroup><col width="25%" /></colgroup>
+							{for $app, $details in $admin_apps}
+							<tr>
+								<td class="tcenter"><strong>{$details.name}</strong></td>
+								<td>
+									<table class="permissions" cellpadding="0" cellspacing="0">
+										<tr class="tcenter">
+										{for $perm in {$details.permissions}}
+											<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]"
+												{if !empty({$access}) && preg_match("#".{$app}."\[[a-z0-9_|-]*".{$perm}."[a-z0-9_|-]*\]#i", {$access})} checked="checked"{/if} /></label></td>
+										{/for}
+										{empty}
+											<td><em>Neither specific permissions, nor admin zone for this app</em></td>
+										{/empty}
+										</tr>
+									</table>
+								</td>
+							</tr>
+							{/for}
+						</table>
+						<div class="custom-controls tright">
+							<a href="#" onclick="changeType('user-access', 'custom'); accessSelectAll('user-access'); return false;">Check all</a> - <a href="#" onclick="changeType('user-access', 'none'); return false;">Uncheck all</a>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="tcenter">
+						<br />
+						<input type="submit" value="{if isset({$add_form})}Créer l'utilisateur{else}Modifier l'utilisateur{/if}" />
+						<input type="button" value="Annuler" onclick="history.back();" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-02-02-2012
+ * @version 0.3-06-02-2013
  */
 class UserAdminController extends WController {
 	/**
@@ -66,15 +66,13 @@ class UserAdminController extends WController {
 	protected function add() {
 		$data = array();
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe', 'type', 'access'));
 			if (!in_array(null, $data, true)) {
 				$errors = array();
 				
 				// Check nickname availabililty
-				if (empty($data['nickname'])) {
-					$errors[] = "No nickname given.";
-				} else if (!$this->model->nicknameAvailable($data['nickname'])) {
-					$errors[] = "Nickname already in use.";
+				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
+					$errors[] = $e;
 				}
 				
 				// Matching passwords
@@ -89,31 +87,27 @@ class UserAdminController extends WController {
 				}
 				
 				// Email availabililty
-				if (!empty($data['email']) && !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
-					$errorss[] = "The email given is not valid.";
-				} else if (!$this->model->emailAvailable($data['email'])) {
-					$errors[] = "The email given is already in use.";
+				if (($e = $this->model->checkEmail($data['email'])) !== true) {
+					$errors[] = $e;
 				}
 				
-				// Niveaux admin
-				/*
-				list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-				if ($type == 'all') {
+				// User access rights
+				if ($data['type'] == 'all') {
 					$data['access'] = 'all';
-				} else if ($type == 'perso') {
-					$a = array();
-					foreach ($access as $key => $v) {
-						if (isset($level[$key])) {
-							$a[] = $key.'|'.intval($level[$key]);
-						} else {
-							$a[] = $key.'|0';
+				} else if ($data['type'] == 'none') {
+					$data['access'] = '';
+				} else { // Custom access
+					$access = '';
+					foreach ($data['access'] as $app => $perms) {
+						$perms = array_keys($perms);
+						if (!empty($perms)) {
+							$access .= $app.'['.implode('|', $perms).'],';
 						}
 					}
-					$data['access'] = implode(',', $a);
-				} else {
-					$data['access'] = '';
+					$access = substr($access, 0, -1);
+					$data['access'] = $access;
 				}
-				*/
+				unset($data['type']);
 				
 				if (empty($errors)) {
 					// User creation
@@ -161,7 +155,7 @@ Ceci est un message automatique.";
 			}
 		}
 		$this->view->add($data);
-		$this->view->render('add');
+		$this->view->render('user_form');
 	}
 	
 	/**
@@ -175,7 +169,7 @@ Ceci est un message automatique.";
 			return;
 		}
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe', 'access'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe', 'type', 'access'));
 			$update_data = array();
 			$errors = array();
 			
@@ -184,7 +178,7 @@ Ceci est un message automatique.";
 			
 			// Nickname change
 			if ($data['nickname'] != $db_data['nickname']) {
-				if ($e = $this->model->checkNickname($data['nickname']) !== true) {
+				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
 					$errors[] = $e;
 				} else {
 					$update_data['nickname'] = $data['nickname'];
@@ -195,7 +189,7 @@ Ceci est un message automatique.";
 			$password_hash = sha1($data['password']);
 			if ($password_hash != $db_data['password']) {
 				if ($data['password'] == $data['password_conf']) {
-					$update['password'] = $password_hash;
+					$update_data['password'] = $password_hash;
 				} else {
 					$errors[] = "The password given is not the same as the password confirmation.";
 				}
@@ -203,7 +197,7 @@ Ceci est un message automatique.";
 			
 			// Email
 			if ($data['email'] != $db_data['email']) {
-				if ($e = $this->model->checkEmail($data['email']) !== true) {
+				if (($e = $this->model->checkEmail($data['email'])) !== true) {
 					$errors[] = $e;
 				} else {
 					$update_data['email'] = $data['emai'];
@@ -216,45 +210,44 @@ Ceci est un message automatique.";
 			}
 			
 			// User access rights
-			
-			/*list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-			if ($type == 'all') {
-				$data['access'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				if (is_array($access)) {
-					foreach ($access as $key => $v) {
-						if (isset($level[$key])) {
-							$a[] = $key.'|'.intval($level[$key]);
-						} else {
-							$a[] = $key.'|0';
-						}
+			if ($data['type'] == 'all') {
+				$access = 'all';
+			} else if ($data['type'] == 'none') {
+				$access = '';
+			} else { // Custom access
+				$access = '';
+				foreach ($data['access'] as $app => $perms) {
+					$perms = array_keys($perms);
+					if (!empty($perms)) {
+						$access .= $app.'['.implode('|', $perms).'],';
 					}
 				}
-				$data['access'] = implode(',', $a);
-			} else {
-				$data['access'] = '';
-			}*/
+				$access = substr($access, 0, -1);
+			}
+			if ($access != $db_data['access']) {
+				$update_data['access'] = $access;
+			}
 			
 			if (empty($errors)) {
 				// Update database
 				if ($this->model->updateUser($userid, $update_data)) {
+					// Reload session if account was auto-edited
+					if ($userid == $_SESSION['userid']) {
+						WSystem::getSession()->reloadSession($userid);
+					}
+					
 					WNote::success('user_edited', sprintf("The user <strong>%s</strong> was edited successfully.", $data['nickname']));
 					header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
+					return;
 				} else {
 					WNote::error('user_not_edited', "An unknown error occured.");
-					$this->view->edit($userid);
-					$this->view->render('add');
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
-				$this->view->edit($userid);
-				$this->view->render('edit');
 			}
-		} else {
-			$this->view->edit($userid);
-			$this->view->render('edit');
 		}
+		$this->view->edit($userid);
+		$this->view->render('user_form');
 	}
 	
 	/**
@@ -287,90 +280,49 @@ Ceci est un message automatique.";
 		$sortBy = empty($sortData) ? '' : array_shift($sortData);
 		$sens = empty($sortData) ? '' : $sortData[0];
 		
-		/**
-		 * Formulaire pour l'AJOUT d'une catégorie
-		 */
-		$data = WRequest::getAssoc(array('name'));
-		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
-		if (!in_array(null, $data, true)) {
-			$erreurs = array();
+		if (!empty($_POST)) {
+			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
+			$errors = array();
 			
 			if (empty($data['name'])) {
-				$erreurs[] = "Il manque un nom à la catégorie.";
+				$errors[] = "Le nom du groupe est vide.";
 			}
 			
-			// Niveaux admin
-			list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-			if ($type == 'all') {
+			// User access rights
+			if ($data['type'] == 'all') {
 				$data['access'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				foreach ($access as $key => $v) {
-					if (isset($level[$key])) {
-						$a[] = $key.'|'.intval($level[$key]);
-					} else {
-						$a[] = $key.'|0';
-					}
-				}
-				$data['access'] = implode(',', $a);
-			} else {
+			} else if ($data['type'] == 'none') {
 				$data['access'] = '';
-			}
-			
-			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error('data_errors', implode("<br />\n", $erreurs));
-			} else {
-				if ($this->model->createGroup($data)) {
-					WNote::success('cat_added', "La catégorie <strong>".$data['name']."</strong> a été ajoutée avec succès.");
-				} else {
-					WNote::error('cat_not_added', "Une erreur inconnue s'est produite.");
-				}
-			}
-		}
-		
-		/**
-		 * Formulaire pour l'EDITION d'une catégorie
-		 */
-		$data = WRequest::getAssoc(array('idEdit', 'nameEdit', 'accessEdit'));
-		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
-		if (!in_array(null, $data, true)) {
-			$id = intval($data['idEdit']);
-			unset($data['idEdit']);
-			$erreurs = array();
-			
-			if (empty($data['nameEdit'])) {
-				$erreurs[] = "Le nom de la catégorie est vide.";
-			}
-			
-			// Niveaux admin
-			list($type, $access, $level) = WRequest::get(array('typeEdit', 'accessEdit', 'levelEdit'));
-			if ($type == 'all') {
-				$data['accessEdit'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				foreach ($access as $key => $v) {
-					if (isset($level[$key])) {
-						$a[] = $key.'|'.intval($level[$key]);
-					} else {
-						$a[] = $key.'|0';
+			} else { // Custom access
+				$access = '';
+				foreach ($data['access'] as $app => $perms) {
+					$perms = array_keys($perms);
+					if (!empty($perms)) {
+						$access .= $app.'['.implode('|', $perms).'],';
 					}
 				}
-				$data['accessEdit'] = implode(',', $a);
-			} else {
-				$data['accessEdit'] = '';
+				$access = substr($access, 0, -1);
+				$data['access'] = $access;
 			}
 			
-			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error('data_errors', implode("<br />\n", $erreurs));
-			} else {
-				if ($this->model->updateGroup($id, $data)) {
-					WNote::success('cat_edited', "La catégorie <strong>".$data['nameEdit']."</strong> a été éditée avec succès.");
-				} else {
-					WNote::error('cat_not_edited', "Une erreur inconnue s'est produite.");
+			if (empty($errors)) {
+				$db_success = false;
+				if (empty($data['id'])) { // Adding a group
+					if ($this->model->createGroup($data)) {
+						WNote::success('group_added', "Le groupe <strong>".$data['name']."</strong> a été ajouté avec succès.");
+						$db_success = true;
+					}
+				} else if ($this->model->updateGroup($data['id'], $data)) { // Editing a group
+					WNote::success('group_edited', "Le groupe <strong>".$data['name']."</strong> a été édité avec succès.");
+					$db_success = true;
 				}
+				if (!$db_success) {
+					WNote::error('group_not_added', "Une erreur inconnue s'est produite.");
+				}
+			} else {
+				WNote::error('data_errors', implode("<br />\n", $errors));
 			}
 		}
-		
 		$this->view->groups_listing($sortBy, $sens);
 		$this->view->render('groups_listing');
 	}
