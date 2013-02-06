@@ -19,7 +19,7 @@
 			<div id="header">
 				<div id="title">
 					<h1><a href="/">{$site_name}</a></h1>
-					<p>Wity <span>CMS</span><br />
+					<p>Wity<span>CMS</span><br />
 					<em>Bienvenue {$userNickname}</em></p>
 				</div>
 				<div id="logout">
@@ -45,7 +45,7 @@
 						{/for}
 					</ul>
 					<div class="sub">
-						<p>Votre position actuelle est : <span class="app">{$appSelected}</span>
+						<p>Votre position actuelle est : <span class="app">{$appsList.{$appSelected}.name}</span>
 						{if isset({$actionsList.{$actionAsked}})} . <span class="action">{$actionsList.{$actionAsked}.lang}</span>{/if}</p>
 						<!--<form id="search" action="" method="post"><div>
 							<input type="text" name="search" value="recherche" onclick="this.value = '';" size="15" />
