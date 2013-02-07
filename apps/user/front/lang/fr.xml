@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang value="fr">
+	<item id="login_success">Bienvenue %s !</item>
+	<item id="login_max_attempt">Vous avez atteint le nombre maximum d'essais d'autentification possible.
+Merci de bien vouloir patienter un moment avant de réessayer.</item>
+	<item id="login_error"><![CDATA[Le couple <em>identifiant / mot de passe</em> fourni ne correspond pas.]]></item>
+	<item id="bad_data">Merci de compléter tous les champs requis.</item>
+	<item id="user_disconnected">Vous avez été déconnecté avec succès.</item>
+	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
+	<item id="error_no_password">Pas de mot de passe fourni.</item>
+	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_register_confirmation">Votre compte utilisateur sur %s a été créé avec succès.
+
+Vous allez bientôt recevoir sur votre boîte email un nouveau message pour confirmer votre compte.</item>
+	<item id="user_register_failure">Une erreur inconnue s'est produite lors de la création de votre compte dans la base de données.</item>
+	<item id="user_validated">Votre compte vient d'être validé avec succès. Vous pouvez maintenant vous connecter avec celui-ci.</item>
+	
+	<!-- Login form -->
+	<item id="login">Connexion</item>
+	<item id="nickname">Identifiant</item>
+	<item id="password">Mot de passe</item>
+	<item id="remain_connected_for">Rester connecté pendant...</item>
+	<item id="minuts">minutes</item>
+	<item id="always_remain_connected">Toujours rester connecté</item>
+	<item id="password_lost">Mot de passe perdu ?</item>
+	<item id="login_button">Connexion</item>
+</lang>

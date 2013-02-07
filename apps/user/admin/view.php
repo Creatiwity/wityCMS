@@ -78,6 +78,8 @@ class UserAdminView extends WView {
 			'id' => 0,
 			'nickname' => '', 
 			'email' => '',
+			'firstname' => '',
+			'lastname' => '',
 			'groupe' => 0,
 			'access' => ''
 		);

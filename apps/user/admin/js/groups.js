@@ -54,10 +54,6 @@ function bindEvents(id) {
 	});
 }
 
-function checkDel(catName) {
-	return confirm("Voulez-vous vraiment supprimer la catégorie \""+catName+"\" ?");
-}
-
 $(document).ready(function() {
 	bindEvents('group-add');
 });

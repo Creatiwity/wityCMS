@@ -106,20 +106,20 @@ class UserController extends WController {
 						$this->model->updateLastActivity($_SESSION['userid']);
 						
 						// Redirect
-						WNote::success('login_success', sprintf('Welcome %s!', $_SESSION['nickname']));
+						WNote::success('login_success', WLang::get('login_success', $_SESSION['nickname']));
 						header('location: '.$redirect);
 						return;
 					
 					case WSession::LOGIN_MAX_ATTEMPT_REACHED:
-						WNote::error('login_max_attempt', "You reached the maximum of login attempt authorized.\nPlease, wait a moment before trying again.");
+						WNote::error('login_max_attempt', WLang::get('login_max_attempt'));
 						break;
 					
 					case 0:
-						WNote::error('login_error', "The <em>nickname / password</em> given do not match.");
+						WNote::error('login_error', WLang::get('login_error'));
 						break;
 				}
 			} else {
-				WNote::error('bad_data', "Please, fill in all the required fields.");
+				WNote::error('bad_data', WLang::get('bad_data'));
 			}
 			
 			// Login process triggered from an external application
@@ -144,7 +144,7 @@ class UserController extends WController {
 			// Destroy the session of the user
 			$this->session->closeSession();
 		}
-		WNote::success('user_disconnected', "You were loged out successfully.");
+		WNote::success('user_disconnected', WLang::get('user_disconnected'));
 		header('location: '.WRoute::getBase());
 	}
 	
@@ -172,10 +172,10 @@ class UserController extends WController {
 					if ($data['password'] === $data['password_conf']) {
 						$data['password'] = sha1($data['password']);
 					} else {
-						$errors[] = "The password given is not the same as the password confirmation.";
+						$errors[] = WLang::get('error_password_not_matching');
 					}
 				} else {
-					$errors[] = "No password given.";
+					$errors[] = WLang::get('error_no_password');
 				}
 				
 				// Email availabililty
@@ -195,7 +195,7 @@ class UserController extends WController {
 						$mail->CharSet = 'utf-8';
 						$mail->From = WConfig::get('config.email');
 						$mail->FromName = WConfig::get('config.site_name');
-						$mail->Subject = sprintf('Your account registration on %s', WConfig::get('config.site_name'));
+						$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_name'));
 						$mail->Body = 
 "Bonjour,<br /><br />
 Vous venez de vous inscrire sur le site ".WConfig::get('config.site_name').".<br /><br />
@@ -216,9 +216,9 @@ Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navi
 						$mail->Send();
 						unset($mail);
 						
-						WNote::success('user_registered', "Your account on %s was created successfully.\n\nYou are going to receive in your mailbox a new message to validate your account.", 'display');
+						WNote::success('user_register_confirmation', WLang::get('user_register_confirmation'), 'display');
 					} else {
-						WNote::error('user_registration_failure', "An unknown error occured when trying to create your account in the database.");
+						WNote::error('user_register_failure', WLang::get('user_register_failure'));
 						header('location: '.WRoute::getBase());
 					}
 				} else {
@@ -242,7 +242,7 @@ Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navi
 		list(, $confirm_code) = WRoute::getArgs();
 		if (!empty($confirm_code)) {
 			$this->model->validateAccount($confirm_code);
-			WNote::success('user_validated', "Your account got validated successfully. You can now login with it.", 'display');
+			WNote::success('user_validated', WLang::get('user_validated'), 'display');
 		} else {
 			header('location: '.WRoute::getBase());
 		}

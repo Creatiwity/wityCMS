@@ -70,7 +70,7 @@ class UserAdminController extends WController {
 	protected function add() {
 		$data = array();
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe', 'type', 'access'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
 			if (!in_array(null, $data, true)) {
 				$errors = array();
 				
@@ -84,10 +84,10 @@ class UserAdminController extends WController {
 					if ($data['password'] === $data['password_conf']) {
 						$data['password'] = sha1($data['password']);
 					} else {
-						$errors[] = "The password given is not the same as the password confirmation.";
+						$errors[] = WLang::_('error_password_not_matching');
 					}
 				} else {
-					$errors[] = "No password given.";
+					$errors[] = WLang::_('error_no_password');
 				}
 				
 				// Email availabililty
@@ -122,7 +122,7 @@ class UserAdminController extends WController {
 							$mail->CharSet = 'utf-8';
 							$mail->From = WConfig::get('config.email');
 							$mail->FromName = WConfig::get('config.site_name');
-							$mail->Subject = sprintf("Account creation on %s", WConfig::get('config.site_name'));
+							$mail->Subject = WLang::get('email_account_creation', WConfig::get('config.site_name'));
 							$mail->Body = 
 "Bonjour,
 <br /><br />
@@ -145,17 +145,17 @@ Ceci est un message automatique.";
 							$mail->Send();
 							unset($mail);
 						}
-						WNote::success('user_created', sprintf("The user %s was created successfully.", $data['nickname']));
+						WNote::success('user_created', WLang::get('user_created', $data['nickname']));
 						header('location: '.WRoute::getDir().'/admin/user/');
 						return;
 					} else {
-						WNote::error('user_not_created', "An unknown error occured when trying to create your account in the database.");
+						WNote::error('user_not_created', WLang::get('user_not_created', $data['nickname']));
 					}
 				} else {
 					WNote::error('data_errors', implode("<br />\n", $errors));
 				}
 			} else {
-				WNote::error('bad_data', "Please, fill in all the required fields.");
+				WNote::error('bad_data', WLang::get('bad_data'));
 			}
 		}
 		$this->view->add($data);
@@ -173,7 +173,7 @@ Ceci est un message automatique.";
 			return;
 		}
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'groupe', 'type', 'access'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
 			$update_data = array();
 			$errors = array();
 			
@@ -197,7 +197,7 @@ Ceci est un message automatique.";
 						$update_data['password'] = $password_hash;
 					}
 				} else {
-					$errors[] = "The password given is not the same as the password confirmation.";
+					$errors[] = WLang::get('error_password_not_matching');
 				}
 			}
 			
@@ -208,6 +208,14 @@ Ceci est un message automatique.";
 				} else {
 					$update_data['email'] = $data['emai'];
 				}
+			}
+			
+			// Firstname and Lastname
+			if ($data['firstname'] != $db_data['firstname']) {
+				$update_data['firstname'] = $data['firstname'];
+			}
+			if ($data['lastname'] != $db_data['lastname']) {
+				$update_data['lastname'] = $data['lastname'];
 			}
 			
 			// Group
@@ -242,11 +250,11 @@ Ceci est un message automatique.";
 						WSystem::getSession()->reloadSession($userid);
 					}
 					
-					WNote::success('user_edited', sprintf("The user <strong>%s</strong> was edited successfully.", $data['nickname']));
+					WNote::success('user_edited', WLang::get('user_edited', $data['nickname']));
 					header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
 					return;
 				} else {
-					WNote::error('user_not_edited', "An unknown error occured.");
+					WNote::error('user_not_edited', WLang::get('user_not_edited', $data['nickname']));
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
@@ -262,12 +270,12 @@ Ceci est un message automatique.";
 	protected function del() {
 		$userid = $this->getId();
 		if (!$this->model->validId($userid)) {
-			WNote::error('user_not_found', "The user requested does not exist.");
+			WNote::error('user_not_found', WLang::get('user_not_found'));
 			return;
 		}
 		if (WRequest::get('confirm', null, 'POST') === '1') {
 			$this->model->deleteUser($userid);
-			WNote::success('user_deleted', "L'utilisateur a été supprimé avec succès.");
+			WNote::success('user_deleted', WLang::get('user_deleted'));
 			header('location: '.WRoute::getDir().'/admin/user/');
 		} else {
 			$this->view->del($userid);
@@ -275,6 +283,9 @@ Ceci est un message automatique.";
 		}
 	}
 	
+	/**
+	 * Groups listing/add/edit action
+	 */
 	protected function groups() {
 		// Préparation tri colonnes
 		$args = WRoute::getArgs();
@@ -291,7 +302,7 @@ Ceci est un message automatique.";
 			$errors = array();
 			
 			if (empty($data['name'])) {
-				$errors[] = "Le nom du groupe est vide.";
+				$errors[] = WLang::get('group_name_empty');
 			}
 			
 			// User access rights
@@ -315,15 +326,15 @@ Ceci est un message automatique.";
 				$db_success = false;
 				if (empty($data['id'])) { // Adding a group
 					if ($this->model->createGroup($data)) {
-						WNote::success('group_added', "Le groupe <strong>".$data['name']."</strong> a été ajouté avec succès.");
+						WNote::success('group_added', WLang::get('group_added', $data['name']));
 						$db_success = true;
 					}
 				} else if ($this->model->updateGroup($data['id'], $data)) { // Editing a group
-					WNote::success('group_edited', "Le groupe <strong>".$data['name']."</strong> a été édité avec succès.");
+					WNote::success('group_edited', WLang::get('group_edited', $data['name']));
 					$db_success = true;
 				}
 				if (!$db_success) {
-					WNote::error('group_not_added', "Une erreur inconnue s'est produite.");
+					WNote::error('group_not_added', WLang::get('group_not_added'));
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
@@ -333,10 +344,15 @@ Ceci est un message automatique.";
 		$this->view->render('groups_listing');
 	}
 	
+	/**
+	 * Deletes a group
+	 * 
+	 * @todo remove from the group deleted all the users who belonged to it
+	 */
 	protected function group_del() {
 		$id = $this->getId();
 		$this->model->deleteGroup($id);
-		WNote::success('group_deleted', "The group selected was deleted successfully.");
+		WNote::success('group_deleted', WLang::get('group_deleted'));
 		header('location: '.WRoute::getDir().'/admin/user/groups/');
 	}
 }
