@@ -63,8 +63,8 @@ abstract class WController {
 		}
 		
 		// Automaticly declare the language directory
-		if (is_dir($context['directory'].DS.'lang')) {
-			WLang::declareLangDir($context['directory'].DS.'lang');
+		if (is_dir($context['directory'].'lang')) {
+			WLang::declareLangDir($context['directory'].'lang');
 		}
 		
 		// Parse the manifest

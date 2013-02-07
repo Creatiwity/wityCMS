@@ -35,7 +35,7 @@ class WMain {
 		$this->setupSession();
 		
 		// Initializing lang
-		$this->setupLang();
+		WLang::init();
 		
 		// $this->log();
 		
@@ -138,15 +138,6 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
-	}
-	
-	/**
-	 * Loads lang config
-	 */
-	private function setupLang() {
-		$lang_config = WConfig::get('config.lang');
-		WLang::init();
-		WLang::selectLang($lang_config);
 	}
 	
 	/**
