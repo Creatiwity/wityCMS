@@ -160,7 +160,10 @@ class WLang {
 	public static function compile_lang($args) {
 		if (!empty($args)) {
 			$data = explode('|', $args);
-			$id = trim(array_shift($data));
+			$id = trim(array_shift($data), ' {}');
+			$id_parsed = WTemplateCompiler::parseVar($id);
+			// if $id is a string, encapsulate it inside quotes
+			$id = !empty($id_parsed) ? $id_parsed : "'".$id."'";
 			if (!empty($data)) {
 				$args = '';
 				foreach ($data as $var) {
@@ -169,9 +172,9 @@ class WLang {
 						$args .= $var_parsed.', ';
 					}
 				}
-				return "<?php echo WLang::get('".$id."', array(".$args.")); ?>";
+				return "<?php echo WLang::get(".$id.", array(".$args.")); ?>";
 			} else {
-				return "<?php echo WLang::get('".$id."'); ?>";
+				return "<?php echo WLang::get(".$id."); ?>";
 			}
 		}
 		return '';
