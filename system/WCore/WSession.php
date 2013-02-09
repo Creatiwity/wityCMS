@@ -144,10 +144,10 @@ class WSession {
 		
 		$_SESSION['access_string'] = $data['access'];
 		$_SESSION['access'] = array();
-		if (empty($data['access']) || $data['access'] == 'none') {
+		if (empty($data['access'])) {
 			// let access = array();
 		} else if ($data['access'] == 'all') {
-			$_SESSION['access'] = array('all' => 1);
+			$_SESSION['access'] = 'all';
 		} else {
 			foreach (explode(',', $data['access']) as $access) {
 				$first_bracket = strpos($access, '[');

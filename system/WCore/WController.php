@@ -86,7 +86,7 @@ abstract class WController {
 	 * @param type $default optional default page value
 	 * @return boolean Action forwarding success
 	 */
-	protected function forward($action) {
+	protected final function forward($action) {
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
 				// Execute action
@@ -308,7 +308,7 @@ abstract class WController {
 		}
 		
 		// Administrator supreme case
-		if (!empty($_SESSION['access']) && array_key_exists('all', $_SESSION['access'])) {
+		if (!empty($_SESSION['access']) && $_SESSION['access'] == 'all') {
 			return true;
 		}
 		

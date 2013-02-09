@@ -45,7 +45,7 @@ class AdminController extends WController {
 		} else if ($this->checkAdminAccess()) {
 			$this->routeAdmin();
 			$this->appAsked = WRoute::getApp();
-			if ($this->appAsked != 'admin') {
+			if (!empty($this->appAsked) && $this->appAsked != 'admin') {
 				// Load admin controller of the app
 				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
 				include $app_dir.'main.php';
@@ -83,7 +83,17 @@ class AdminController extends WController {
 	 * @return bool
 	 */
 	private function checkAdminAccess() {
-		return !empty($_SESSION['access']);
+		if (!empty($_SESSION['access'])) {
+			if ($_SESSION['access'] == 'all') {
+				return true;
+			}
+			foreach ($_SESSION['access'] as $app => $perms) {
+				if (in_array('admin', $perms) && in_array($app, $this->getAdminApps())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
