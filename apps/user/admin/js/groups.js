@@ -1,10 +1,22 @@
+/**
+ * group.js
+ * 
+ * This file needs access_form.js to work properly.
+ * It handles the javascript animations for group management.
+ */
 
+/**
+ * Resets all the forms opened
+ */
 function resetGroupForms() {
 	$('.group-form form').each(function(index, form) {
 		$(form).slideUp();
 	});
 }
 
+/**
+ * Opens the group adding form
+ */
 function showAddForm() {
 	resetGroupForms();
 	if ($('#group-add form').css('display') == 'none') {
@@ -12,6 +24,12 @@ function showAddForm() {
 	}
 }
 
+/**
+ * Opens the group editing form
+ * 
+ * @param int groupid Id of the group
+ * @param string access  List of accesses to assign to the form
+ */
 function showEditForm(groupid, name, access) {
 	// Form creation by clonage
 	if ($('#group-edit-'+groupid).size() == 0) {
@@ -34,10 +52,17 @@ function showEditForm(groupid, name, access) {
 	}
 }
 
+/**
+ * Binds the events of a new group editing form
+ * 
+ * @param int id Id of the div to be affected containing the form
+ */
 function bindEvents(id) {
+	// Whenever the user type is changed
 	$('#'+id+' .access-type').change(function() {
 		changeType(id, $(this).val());
 	});
+	// Whenever the check or uncheck buttons are used
 	$('#'+id+' .check-all').click(function() {
 		changeType(id, 'custom');
 		accessSelectAll(id);
@@ -45,6 +70,7 @@ function bindEvents(id) {
 	$('#'+id+' .uncheck-all').click(function() {
 		changeType(id, 'none');
 	});
+	// Whenever a checkbox is changed
 	$('#'+id+' input[type="checkbox"]').change(function() {
 		if ($('#'+id+' .rights input:checked').size() == 0) {
 			changeType(id, 'none');

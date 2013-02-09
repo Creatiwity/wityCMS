@@ -52,16 +52,16 @@ function changeType(id, type) {
 }
 
 /**
- * This function configures the input base on an access string
+ * This function configures the acces form based on the access string
  * 
  * @param string id      Id of the table-row containing the access form
- * @param string access  Access to assign to the inputs
+ * @param string access  List of accesses to assign to the form
  */
 function assignPermissions(id, access) {
-	if (access == 'all') {
-		changeType(id, 'all');
-	} else if (access == 'none') {
+	if (access == '') {
 		changeType(id, 'none');
+	} else if (access == 'all') {
+		changeType(id, 'all');
 	} else {
 		changeType(id, 'custom'); // Change to custom access type
 		// Convert the acces_string into an array
@@ -104,10 +104,10 @@ function assignPermissions(id, access) {
 }
 
 /**
- * Changes a user access type
- * Triggers Checkers and Activators for input if needed
+ * This function is triggered whenever the group selector changes.
+ * It updates the access in the form according to the group selected access.
  * 
- * @param string type User access type: none|all|custom
+ * @param string group_id Id of a group
  */
 function accessGroup(group_id) {
 	if (group_id == 0) {
@@ -125,14 +125,15 @@ $(document).ready(function() {
 	}
 	
 	// Bind change event to every inputs
-	$('#user-access .user-rights input').change(function() {
-		if ($('#user-access .user-rights input:checked').size() == 0) {
+	$('#user-access .rights input').change(function() {
+		if ($('#user-access .rights input:checked').size() == 0) {
 			changeType('user-access', 'none');
 		} else {
 			changeType('user-access', 'custom');
 		}
 	});
 	
+	// If user accesses are given, use them to update the form
 	if (typeof user_access != 'undefined') {
 		if (user_access != '') {
 			assignPermissions('user-access', user_access);
