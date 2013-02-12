@@ -24,4 +24,5 @@ Vous allez bientôt recevoir sur votre boîte email un nouveau message pour conf
 	<item id="always_remain_connected">Toujours rester connecté</item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>
+	<item id="cookie_not_accepted">Votre navigateur n'accepte pas les cookies. Vous risquez d'être déconnecté dans quelques minutes.</item>
 </lang>

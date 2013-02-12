@@ -24,4 +24,5 @@ You are going to receive in your mailbox a new message to validate your account.
 	<item id="always_remain_connected">Always remain connected</item>
 	<item id="password_lost">Password lost?</item>
 	<item id="login_button">Connexion</item>
+	<item id="cookie_not_accepted">Your browser does not accepte cookies. You may be disconnected at any moment.</item>
 </lang>
