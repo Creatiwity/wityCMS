@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
+	<!-- Errors -->
+	<item id="bad_data">Merci de compléter tous les champs requis.</item>
+	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
+	<item id="error_no_password">Pas de mot de passe fourni.</item>
+	<item id="nickname_bad_length">Le pseudo doit contenir entre 3 et 30 caractères.</item>
+	<item id="nickname_invalid_char">Le pseudo contient des caractères non valides (.)</item>
+	<item id="nickname_already_used">Ce pseudo est déjà en utilisation.</item>
+	<item id="email_not_valid">Cet email n'est pas valide.</item>
+	<item id="email_already_used">Cet email est déjà utilisé.</item>
+	
+	<!-- Connection -->
 	<item id="login_success">Bienvenue %s !</item>
 	<item id="login_max_attempt">Vous avez atteint le nombre maximum d'essais d'autentification possible.
 Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="login_error"><![CDATA[Le couple <em>identifiant / mot de passe</em> fourni ne correspond pas.]]></item>
-	<item id="bad_data">Merci de compléter tous les champs requis.</item>
 	<item id="user_disconnected">Vous avez été déconnecté avec succès.</item>
-	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
-	<item id="error_no_password">Pas de mot de passe fourni.</item>
+	<item id="cookie_not_accepted">Votre navigateur n'accepte pas les cookies. Vous risquez d'être déconnecté dans quelques minutes.</item>
+	
+	<!-- User registering -->
 	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
 	<item id="user_register_confirmation">Votre compte utilisateur sur %s a été créé avec succès.
 
@@ -24,5 +35,4 @@ Vous allez bientôt recevoir sur votre boîte email un nouveau message pour conf
 	<item id="always_remain_connected">Toujours rester connecté</item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>
-	<item id="cookie_not_accepted">Votre navigateur n'accepte pas les cookies. Vous risquez d'être déconnecté dans quelques minutes.</item>
 </lang>

@@ -161,8 +161,8 @@ class UserController extends WController {
 				$errors = array();
 				
 				// Check nickname availabililty
-				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
-					$errors[] = $e;
+				if ($e = $this->model->checkNickname($data['nickname']) !== true) {
+					$errors[] = WLang::_($e);
 				}
 				
 				// Matching passwords
@@ -177,8 +177,8 @@ class UserController extends WController {
 				}
 				
 				// Email availabililty
-				if (($e = $this->model->checkEmail($data['email'])) !== true) {
-					$errors[] = $e;
+				if ($e = $this->model->checkEmail($data['email']) !== true) {
+					$errors[] = WLang::_($e);
 				}
 				
 				// Confirmation hash + group

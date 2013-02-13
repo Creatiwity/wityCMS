@@ -76,7 +76,7 @@ class UserAdminController extends WController {
 				
 				// Check nickname availabililty
 				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
-					$errors[] = $e;
+					$errors[] = WLang::_($e);
 				}
 				
 				// Matching passwords
@@ -92,7 +92,7 @@ class UserAdminController extends WController {
 				
 				// Email availabililty
 				if (($e = $this->model->checkEmail($data['email'])) !== true) {
-					$errors[] = $e;
+					$errors[] = WLang::_($e);
 				}
 				
 				// User access rights
@@ -122,7 +122,7 @@ class UserAdminController extends WController {
 							$mail->CharSet = 'utf-8';
 							$mail->From = WConfig::get('config.email');
 							$mail->FromName = WConfig::get('config.site_name');
-							$mail->Subject = WLang::get('email_account_creation', WConfig::get('config.site_name'));
+							$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_name'));
 							$mail->Body = 
 "Bonjour,
 <br /><br />
@@ -183,7 +183,7 @@ Ceci est un message automatique.";
 			// Nickname change
 			if ($data['nickname'] != $db_data['nickname']) {
 				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
-					$errors[] = $e;
+					$errors[] = WLang::_($e);
 				} else {
 					$update_data['nickname'] = $data['nickname'];
 				}
@@ -204,7 +204,7 @@ Ceci est un message automatique.";
 			// Email
 			if ($data['email'] != $db_data['email']) {
 				if (($e = $this->model->checkEmail($data['email'])) !== true) {
-					$errors[] = $e;
+					$errors[] = WLang::_($e);
 				} else {
 					$update_data['email'] = $data['emai'];
 				}

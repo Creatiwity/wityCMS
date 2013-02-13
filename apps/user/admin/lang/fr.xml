@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
-	<!-- Notes -->
+	<!-- Errors -->
+	<item id="bad_data">Veuillez remplir tous les champs requis.</item>
 	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
 	<item id="error_no_password">Pas de mot de passe fourni.</item>
-	<item id="email_account_creation">%s - Création de votre compte utilisateur</item>
-	<item id="user_created">L'utilisateur %s a été créé avec succès.</item>
-	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
-	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
-	<item id="bad_data">Veuillez remplir tous les champs requis.</item>
-	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="user_not_found">L'utilisateur demandé n'existe pas.</item>
-	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
+	<item id="nickname_bad_length">Le pseudo doit contenir entre 3 et 30 caractères.</item>
+	<item id="nickname_invalid_char">Le pseudo contient des caractères non valides (.)</item>
+	<item id="nickname_already_used">Ce pseudo est déjà en utilisation.</item>
+	<item id="email_not_valid">Cet email n'est pas valide.</item>
+	<item id="email_already_used">Cet email est déjà utilisé.</item>
 	
 	<!-- General -->
 	<item id="search">Rechercher</item>
@@ -42,6 +41,14 @@
 	<item id="no_permissions">Cette application ne possède ni permission spéciale, ni zone d'administration.</item>
 	<item id="add_user">Créer l'utilisateur</item>
 	<item id="edit_user">Modifier l'utilisateur</item>
+	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_created">L'utilisateur %s a été créé avec succès.</item>
+	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
+	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
+	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
+	
+	<!-- User deletion -->
+	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
 	
 	<!-- Group form -->
 	<item id="add_a_group">Ajouter un groupe</item>

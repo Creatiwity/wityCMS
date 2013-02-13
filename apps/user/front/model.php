@@ -41,12 +41,10 @@ class UserModel {
 	 * @return mixed true if valid or error string
 	 */
 	public function checkNickname($nickname) {
-		if (empty($nickname)) {
-			return "No nickname given.";
-		} else if (strlen($nickname) < 3 || strlen($nickname) > 30) {
-			return "Nickname lenght must be between 3 and 30 characters.";
+		if (empty($nickname) || strlen($nickname) < 3 || strlen($nickname) > 30) {
+			return 'nickname_bad_length';
 		} else if (preg_match('#[\.]+#', $nickname)) {
-			return "Nickname contains invalid char (.)";
+			return 'nickname_invalid_char';
 		}
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE nickname LIKE :nickname
@@ -56,7 +54,7 @@ class UserModel {
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
-			return "Nickname already in use.";
+			return 'nickname_already_used';
 		}
 	}
 	
@@ -68,7 +66,7 @@ class UserModel {
 	 */
 	public function checkEmail($email) {
 		if (empty($email) || !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $email)) {
-			return "The email given is not valid.";
+			return 'email_not_valid';
 		}
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE email LIKE :email
@@ -78,7 +76,7 @@ class UserModel {
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
-			return "The email given is already in use.";
+			return 'email_already_used';
 		}
 	}
 	

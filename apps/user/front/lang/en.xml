@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
+	<!-- Errors -->
+	<item id="bad_data">Please, fill in all the required fields.</item>
+	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
+	<item id="error_no_password">No password given.</item>
+	<item id="nickname_bad_length">Nickname length must be between 3 and 30 characters.</item>
+	<item id="nickname_invalid_char">Nickname contains invalid char (.)</item>
+	<item id="nickname_already_used">Nickname already in use.</item>
+	<item id="email_not_valid">The email given is not valid.</item>
+	<item id="email_already_used">The email given is already in use.</item>
+	
+	<!-- Connection -->
 	<item id="login_success">Welcome %s!</item>
 	<item id="login_max_attempt">You reached the maximum of login attempt authorized.
 Please, wait a moment before trying again.</item>
 	<item id="login_error"><![CDATA[The <em>nickname / password</em> given do not match.]]></item>
-	<item id="bad_data">Please, fill in all the required fields.</item>
 	<item id="user_disconnected">You were loged out successfully.</item>
-	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
-	<item id="error_no_password">No password given.</item>
+	<item id="cookie_not_accepted">Your browser does not accepte cookies. You may be disconnected at any moment.</item>
+	
+	<!-- User registering -->
 	<item id="user_register_email_subject">%s - Your user account creation</item>
 	<item id="user_register_confirmation">Your account on %s was created successfully.
 
@@ -24,5 +35,4 @@ You are going to receive in your mailbox a new message to validate your account.
 	<item id="always_remain_connected">Always remain connected</item>
 	<item id="password_lost">Password lost?</item>
 	<item id="login_button">Connexion</item>
-	<item id="cookie_not_accepted">Your browser does not accepte cookies. You may be disconnected at any moment.</item>
 </lang>
