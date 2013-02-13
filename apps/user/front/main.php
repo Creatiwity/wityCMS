@@ -19,11 +19,6 @@ class UserController extends WController {
 	const REMEMBER_TIME = 604800;
 	
 	/*
-	 * Maximum login attempts
-	 */
-	const MAX_LOGIN_ATTEMPT = 3;
-	
-	/*
 	 * @var Instance of WSession
 	 */
 	private $session;
@@ -51,18 +46,20 @@ class UserController extends WController {
 	 * Custom launch method
 	 */
 	public function launch() {
-		$action = $this->getAskedAction();
+		$action = $this->getAskedAction(false);
 		switch ($action) {
+			case 'login':
 			case 'connexion':
 				$this->forward('login');
 				break;
 			
+			case 'logout':
 			case 'deconnexion':
 				$this->forward('logout');
 				break;
 			
 			default:
-				$this->forward($action);
+				$this->forward($this->getAskedAction());
 				break;
 		}
 	}
@@ -151,6 +148,7 @@ class UserController extends WController {
 	/**
 	 * Register action handler
 	 * 
+	 * @todo Display a registration form
 	 * @todo Send an email or not
 	 * @todo Account auto validation (no need to ask confirmation by mail)
 	 * @todo Account validated by admin
@@ -158,12 +156,12 @@ class UserController extends WController {
 	 */
 	protected function register() {
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'adress', 'zipcode', 'city'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'country'));
 			if (!in_array(null, $data, true)) {
 				$errors = array();
 				
 				// Check nickname availabililty
-				if ($e = $this->model->checkNickname($data['nickname']) !== true) {
+				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
 					$errors[] = $e;
 				}
 				
@@ -179,7 +177,7 @@ class UserController extends WController {
 				}
 				
 				// Email availabililty
-				if ($e = $this->model->checkEmail($data['email']) !== true) {
+				if (($e = $this->model->checkEmail($data['email'])) !== true) {
 					$errors[] = $e;
 				}
 				
@@ -216,7 +214,7 @@ Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navi
 						$mail->Send();
 						unset($mail);
 						
-						WNote::success('user_register_confirmation', WLang::get('user_register_confirmation'), 'display');
+						WNote::success('user_register_confirmation', WLang::get('user_register_confirmation', WConfig::get('config.site_name')), 'display');
 					} else {
 						WNote::error('user_register_failure', WLang::get('user_register_failure'));
 						header('location: '.WRoute::getBase());
@@ -229,7 +227,7 @@ Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navi
 				header('location: '.WRoute::getBase());
 			}
 		} else {
-			// @todo Display a registration form
+			
 		}
 	}
 	

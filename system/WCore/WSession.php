@@ -30,6 +30,11 @@ class WSession {
 	const TOKEN_EXPIRATION = 120;
 	
 	/*
+	 * Maximum login attempts
+	 */
+	const MAX_LOGIN_ATTEMPT = 3;
+	
+	/*
 	 * Inactivity time (minuts)
 	 */
 	//const ACTIVITY = 3;
@@ -86,7 +91,7 @@ class WSession {
 		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
 			$_SESSION['login_try'] = 0;
-		} else if ($_SESSION['login_try'] >= self::LOGIN_MAX_ATTEMPT_REACHED) {
+		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
 			return self::LOGIN_MAX_ATTEMPT_REACHED;
 		}
 		

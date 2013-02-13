@@ -153,13 +153,11 @@ class UserModel {
 					$cond .= $name.' LIKE "%'.$value.'%" AND ';
 				}
 			}
-			if (!empty($cond)) {
-				$cond = 'WHERE '.$cond;
-			}
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']);
-			} else {
-				$cond = substr($cond, 0, -5);
+			}
+			if (!empty($cond)) {
+				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
 		}
 		
@@ -202,8 +200,7 @@ class UserModel {
 		');
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
 		$prep->execute();
-		$data = $prep->fetch(PDO::FETCH_ASSOC);
-		return $data;
+		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**
