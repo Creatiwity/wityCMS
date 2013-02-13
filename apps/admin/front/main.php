@@ -51,22 +51,26 @@ class AdminController extends WController {
 				include $app_dir.'main.php';
 				$app_class = ucfirst($this->appAsked).'AdminController';
 				
-				// Create context
-				$context = array(
-					'name'       => $this->appAsked,
-					'directory'  => $app_dir,
-					'controller' => $app_class,
-					'admin'      => true
-				);
-				
-				$this->appController = new $app_class();
-				$this->appController->init($this->wity, $context);
-				
-				// Config Template
-				$this->configTheme();
-				
-				// Execute
-				$this->appController->launch();
+				if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
+					// Create context
+					$context = array(
+						'name'       => $this->appAsked,
+						'directory'  => $app_dir,
+						'controller' => $app_class,
+						'admin'      => true
+					);
+					
+					$this->appController = new $app_class();
+					$this->appController->init($this->wity, $context);
+					
+					// Config Template
+					$this->configTheme();
+					
+					// Execute
+					$this->appController->launch();
+				} else {
+					WNote::error('app_structure', "The application \"".$this->appAsked."\" has to have a main class inheriting from WController abstract class.", 'display');
+				}
 			} else {
 				// Config du template
 				$this->configTheme();

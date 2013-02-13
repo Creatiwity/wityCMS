@@ -77,7 +77,7 @@ class WMain {
 				$controller->init($this, $context);
 				$controller->launch();
 			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting WController abstract class.", 'display');
+				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
 			}
 		} else {
 			WNote::error(404, "The page requested was not found.", 'display');
