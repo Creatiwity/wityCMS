@@ -152,13 +152,11 @@ class UserModel {
 				}
 			}
 			if (!empty($filters['groupe'])) {
-				$cond .= 'groupe = '.intval($filters['groupe']);
-			}
-			if (!empty($cond)) {
+				$cond = 'WHERE '.$cond.'groupe = '.intval($filters['groupe']);
+			} else if (!empty($cond)) {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
 		}
-		
 		// Prepare request
 		$prep = $this->db->prepare('
 			SELECT users.id, nickname, email, firstname, lastname, country, users.access, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip, name AS groupe
@@ -167,8 +165,8 @@ class UserModel {
 			ON groupe = users_groups.id
 			'.$cond.'
 			ORDER BY users.'.$order.' '.($asc ? 'ASC' : 'DESC').'
-			LIMIT :start, :number
-		');
+			'.($from != 0 && $number != 0 ? 'LIMIT :start, :number' : '')
+		);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();

@@ -117,7 +117,7 @@ class UserAdminController extends WController {
 					// User creation
 					if ($this->model->createUser($data)) {
 						// Send email if requested
-						if (!empty($data['email']) && WRequest::get('emailwarning') == 'on') {
+						if (WRequest::get('email_confirmation') == 'on') {
 							$mail = WHelper::load('phpmailer');
 							$mail->CharSet = 'utf-8';
 							$mail->From = WConfig::get('config.email');
@@ -346,12 +346,13 @@ Ceci est un message automatique.";
 	
 	/**
 	 * Deletes a group
-	 * 
-	 * @todo remove from the group deleted all the users who belonged to it
 	 */
 	protected function group_del() {
 		$id = $this->getId();
-		$this->model->deleteGroup($id);
+		if (!empty($id)) {
+			$this->model->deleteGroup($id);
+			$this->model->resetUsersInGroup($id);
+		}
 		WNote::success('group_deleted', WLang::get('group_deleted'));
 		header('location: '.WRoute::getDir().'/admin/user/groups/');
 	}

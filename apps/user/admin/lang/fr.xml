@@ -46,6 +46,7 @@
 	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
 	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
+	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>

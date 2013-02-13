@@ -83,6 +83,22 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
+	 * Retrieves details of a group
+	 * 
+	 * @param int $groupid
+	 */
+	public function getGroup($groupid) {
+		$prep = $this->db->prepare('
+			SELECT id, name, access
+			FROM users_groups
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	/**
 	 * Retrieves the list of user groups with users_count row
 	 * 
 	 * @param string $order Name of the ordering column
@@ -150,6 +166,21 @@ class UserAdminModel extends UserModel {
 	public function deleteGroup($groupid) {
 		$prep = $this->db->prepare('
 			DELETE FROM users_groups WHERE id = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Removes all users who belonged to an obsolete group
+	 * 
+	 * @param int    $groupid  Group id
+	 */
+	public function resetUsersInGroup($groupid) {
+		$prep = $this->db->prepare('
+			UPDATE users
+			SET groupe = 0
+			WHERE groupe = :id
 		');
 		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
 		return $prep->execute();

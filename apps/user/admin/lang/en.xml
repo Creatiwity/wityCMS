@@ -46,6 +46,7 @@
 	<item id="user_not_created">An unknown error occured when trying to create your account in the database.</item>
 	<item id="user_edited"><![CDATA[The user <strong>%s</strong> was edited successfully.]]></item>
 	<item id="user_not_edited">An unknown error occured when trying to edit the account %s in the database.</item>
+	<item id="send_email_confirmation">Send an account creation confirmation by mail</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">The user was deleted successfully</item>
