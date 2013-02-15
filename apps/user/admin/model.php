@@ -13,7 +13,7 @@ include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-29-01-2013
+ * @version 0.3-15-02-2013
  */
 class UserAdminModel extends UserModel {
 	private $db;
@@ -184,6 +184,148 @@ class UserAdminModel extends UserModel {
 		');
 		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
 		return $prep->execute();
+	}
+	
+	/**
+	 * Updates an array of users matching filters
+	 * 
+	 * @param array $data     Columns to update in users table
+	 * @param array $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 */
+	public function updateUsers(array $data, array $filters) {
+		if (empty($data)) {
+			return true;
+		}
+		// Add filters
+		$cond = '';
+		if (!empty($filters)) {
+			$allowed = array('groupe', 'access');
+			foreach ($filters as $name => $value) {
+				if (in_array($name, $allowed)) {
+					if (strpos($value, 'NOT:') === 0) {
+						$cond .= $name." != ".$this->db->quote(substr($value, 4))." AND ";
+					} else {
+						$cond .= $name." = ".$this->db->quote($value)." AND ";
+					}
+				}
+			}
+		}
+		if (empty($cond)) {
+			return true;
+		} else {
+			$cond = substr($cond, 0, -5);
+		}
+		$string = '';
+		foreach ($data as $key => $value) {
+			$string .= $key.' = '.$this->db->quote($value).', ';
+		}
+		$string = substr($string, 0, -2);
+		$prep = $this->db->prepare('
+			UPDATE users
+			SET '.$string.'
+			WHERE '.$cond
+		);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Transforms access data obtained from the admin form into an access string
+	 * 
+	 * @param string $type    Type of the user (none|all|custom)
+	 * @param array  $access  List of app and perms whose user have access
+	 * @return string Access string formated
+	 */
+	public function treatAccessData($type, $access) {
+		if ($type == 'all') {
+			return 'all';
+		} else if ($type == 'none' || empty($access)) {
+			return '';
+		} else { // Custom access
+			$access_string = '';
+			foreach ($access as $app => $perms) {
+				$perms = array_keys($perms);
+				if (!empty($perms)) {
+					$access_string .= $app.'['.implode('|', $perms).'],';
+				}
+			}
+			return substr($access_string, 0, -1);
+		}
+	}
+	
+	/**
+	 * Counts the users in the database having access different from their group's access
+	 * 
+	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @return array A list of information about the users found
+	 */
+	public function countUsersWithCustomAccess(array $filters = array()) {
+		$cond = '';
+		if (!empty($filters)) {
+			$allowed = array('nickname', 'email', 'firstname', 'lastname');
+			foreach ($filters as $name => $value) {
+				if (in_array($name, $allowed)) {
+					if (strpos($value, 'REGEXP:') === 0) {
+						$cond .= $name." REGEXP ".$this->db->quote(substr($value, 7))." AND ";
+					} else {
+						if (strpos($value, '%') === false) {
+							$value = '%'.$value.'%';
+						}
+						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+					}
+				}
+			}
+			if (!empty($filters['groupe'])) {
+				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
+			}
+		}
+		
+		$prep = $this->db->prepare('
+			SELECT COUNT(*)
+			FROM users
+			LEFT JOIN users_groups
+			ON groupe = users_groups.id
+			WHERE '.$cond.'users.access != users_groups.access
+		');
+		$prep->execute();
+		return intval($prep->fetchColumn());
+	}
+	
+	/**
+	 * Retrieves a list of users having access different from their group's access
+	 * 
+	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @return array A list of information about the users found
+	 */
+	public function getUsersWithCustomAccess(array $filters = array()) {
+		$cond = '';
+		if (!empty($filters)) {
+			$allowed = array('nickname', 'email', 'firstname', 'lastname');
+			foreach ($filters as $name => $value) {
+				if (in_array($name, $allowed)) {
+					if (strpos($value, 'REGEXP:') === 0) {
+						$cond .= $name." REGEXP ".$this->db->quote(substr($value, 7))." AND ";
+					} else {
+						if (strpos($value, '%') === false) {
+							$value = '%'.$value.'%';
+						}
+						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+					}
+				}
+			}
+			if (!empty($filters['groupe'])) {
+				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
+			}
+		}
+		
+		$prep = $this->db->prepare('
+			SELECT users.id, nickname, email, firstname, lastname, users.access, groupe, name AS groupe_name, ip
+			FROM users
+			LEFT JOIN users_groups
+			ON groupe = users_groups.id
+			WHERE '.$cond.'users.access != users_groups.access
+		');
+		$prep->execute();
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 }
 

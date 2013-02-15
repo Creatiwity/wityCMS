@@ -65,3 +65,67 @@ ul#access, ul#accessEdit {
 #content .rights .permissions label {
 	display: block;
 }
+
+/**
+ * Group dif
+ */
+#group-dif .listing-wrapper {
+	margin: 1em;
+	display: none;
+}
+
+#group-dif .alphabet {
+	width: 15%;
+	margin: 0 2% 0 0;
+	padding: 0;
+	float: left;
+	line-height: 35px;
+}
+
+#group-dif .alphabet a {
+	background: #28b8f7;
+	font-size: 15px;
+	padding: 5px;
+	margin-right: 5px;
+	color: white;
+}
+
+#group-dif .alphabet a:hover, #group-dif .alphabet a.current {
+	background: #1aa4e0;
+}
+
+#group-dif .users-list-container {
+	width: 80%;
+	float: left;
+}
+
+#group-dif .users-list-container dl {
+	margin: 0;
+}
+
+#group-dif dl dt {
+	background: #28b8f7;
+	padding: 5px;
+	margin-bottom: 1em;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#group-dif dl dd {
+	margin-bottom: 1em;
+	display: none;
+}
+
+#group-dif .pattern {
+	display: none;
+}
+
+#group-dif .same {
+	color: blue;
+}
+#group-dif .minus {
+	color: red;
+}
+#group-dif .plus {
+	color: green;
+}

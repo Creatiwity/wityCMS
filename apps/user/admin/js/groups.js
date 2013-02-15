@@ -52,34 +52,6 @@ function showEditForm(groupid, name, access) {
 	}
 }
 
-/**
- * Binds the events of a new group editing form
- * 
- * @param int id Id of the div to be affected containing the form
- */
-function bindEvents(id) {
-	// Whenever the user type is changed
-	$('#'+id+' .access-type').change(function() {
-		changeType(id, $(this).val());
-	});
-	// Whenever the check or uncheck buttons are used
-	$('#'+id+' .check-all').click(function() {
-		changeType(id, 'custom');
-		accessSelectAll(id);
-	});
-	$('#'+id+' .uncheck-all').click(function() {
-		changeType(id, 'none');
-	});
-	// Whenever a checkbox is changed
-	$('#'+id+' input[type="checkbox"]').change(function() {
-		if ($('#'+id+' .rights input:checked').size() == 0) {
-			changeType(id, 'none');
-		} else {
-			changeType(id, 'custom');
-		}
-	});
-}
-
 $(document).ready(function() {
 	bindEvents('group-add');
 });

@@ -52,14 +52,12 @@
 				<tr id="user-access">
 					<td><strong>{lang user_rights} :</strong></td>
 					<td>
-						<label><input class="access-type none" type="radio" name="type" value="none"
-							{if empty({$access})} checked="checked"{/if} onchange="changeType('user-access', 'none');" /> {lang access_none}</label>
+						<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
 						<label><input class="access-type all" type="radio" name="type" value="all"
-							{if {$access} == 'all'} checked="checked"{/if} onchange="changeType('user-access', 'all');" /> {lang access_all}</label>
-						<label><input class="access-type custom" type="radio" name="type" value="custom"
-							{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} onchange="changeType('user-access', 'custom');" /> {lang access_custom}</label>
+							{if {$access} == 'all'} checked="checked"{/if} /> {lang access_all}</label>
+						<label><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang access_custom}</label>
 						<div class="custom-controls tright">
-							<a href="#" onclick="changeType('user-access', 'custom'); accessSelectAll('user-access'); return false;">{lang check_all}</a> - <a href="#" onclick="changeType('user-access', 'none'); return false;">{lang uncheck_all}</a>
+							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
 						</div>
 						<table class="rights" cellpadding="0" cellspacing="0">
 							<colgroup><col width="25%" /></colgroup>
@@ -82,7 +80,7 @@
 							{/for}
 						</table>
 						<div class="custom-controls tright">
-							<a href="#" onclick="changeType('user-access', 'custom'); accessSelectAll('user-access'); return false;">{lang check_all}</a> - <a href="#" onclick="changeType('user-access', 'none'); return false;">{lang uncheck_all}</a>
+							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
 						</div>
 					</td>
 				</tr>

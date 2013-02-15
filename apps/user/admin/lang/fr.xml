@@ -46,7 +46,8 @@
 	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
 	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
-	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email</item>
+	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email?</item>
+	<item id="user_edit_own">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
@@ -59,7 +60,8 @@
 	<item id="actions">Actions</item>
 	<item id="no_group_found">Aucun groupe trouvé</item>
 	<item id="apply">Appliquer</item>
-	<item id="groupe_del_confirm">Voulez-vous vraiment supprimer la catégorie %s ?</item>
+	<item id="group_del_confirm">Voulez-vous vraiment supprimer la catégorie %s ?</item>
+	<item id="group_not_modified">Une erreur inconnue s'est produite lors du traitement du groupe dans la base de données.</item>
 	
 	<!-- Group treatment -->
 	<item id="group_name_empty">Le nom du groupe est vide.</item>

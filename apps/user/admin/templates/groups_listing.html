@@ -22,7 +22,7 @@
 						<label><input class="access-type custom" type="radio" name="type" value="custom" /> {lang access_custom}</label>
 						
 						<div class="custom-controls tright">
-							<a href="#" class="check-all" onclick="return false;">{lang check_all}</a> - <a href="#" class="uncheck-all" onclick="return false;">{lang uncheck_all}</a>
+							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
 						</div>
 						<table class="rights" cellpadding="0" cellspacing="0">
 							<colgroup><col width="25%" /></colgroup>
@@ -45,7 +45,7 @@
 							{/for}
 						</table>
 						<div class="custom-controls tright">
-							<a href="#" class="check-all" onclick="return false;">{lang check_all}</a> - <a href="#" class="uncheck-all" onclick="return false;">{lang uncheck_all}</a>
+							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
 						</div>
 						<div class="tcenter">
 							<input type="submit" value="{lang apply}" />
@@ -66,7 +66,7 @@
 			<td>{$group.users_count}</td>
 			<td>
 				<a href="#edit" title="{lang edit}" onclick="showEditForm({$group.id}, '{$group.name}', '{$group.access}'); return false;"><img src="/themes/system/images/icones/edit.png" alt="{lang edit}" /></a>
-				<a href="/admin/user/group_del/{$group.id}/" title="{lang delete}" onclick="if (!confirm('{lang groupe_del_confirm|{$group.name}}')) return false;"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>
+				<a href="/admin/user/group_del/{$group.id}/" title="{lang delete}" onclick="if (!confirm('{lang group_del_confirm|{$group.name}}')) return false;"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>
 			</td>
 		</tr>
 {/for}

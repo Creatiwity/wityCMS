@@ -52,6 +52,26 @@ function changeType(id, type) {
 }
 
 /**
+ * Converts the acces_string into an array
+ */
+function parseAccess(access_string) {
+	var access_split = access_string.split(',');
+	var access_array = {};
+	for (key in access_split) {
+		app_access = access_split[key];
+		first_bracket = app_access.indexOf('[');
+		if (first_bracket != -1) {
+			app_name = app_access.substring(0, first_bracket);
+			permissions = app_access.substring(first_bracket+1, app_access.length-1);
+			if (permissions != '') {
+				access_array[app_name] = permissions.split('|');
+			}
+		}
+	}
+	return access_array;
+}
+
+/**
  * This function configures the acces form based on the access string
  * 
  * @param string id      Id of the table-row containing the access form
@@ -65,19 +85,7 @@ function assignPermissions(id, access) {
 	} else {
 		changeType(id, 'custom'); // Change to custom access type
 		// Convert the acces_string into an array
-		var access_split = access.split(',');
-		var access_array = {};
-		for (key in access_split) {
-			app_access = access_split[key];
-			first_bracket = app_access.indexOf('[');
-			if (first_bracket != -1) {
-				app_name = app_access.substring(0, first_bracket);
-				permissions = app_access.substring(first_bracket+1, app_access.length-1);
-				if (permissions != '') {
-					access_array[app_name] = permissions.split('|');
-				}
-			}
-		}
+		var access_array = parseAccess(access);
 		
 		// Iterates every acces input to check whether they match with the group access
 		$('#'+id+' .permissions input').each(function(index, input) {
@@ -104,6 +112,34 @@ function assignPermissions(id, access) {
 }
 
 /**
+ * Binds the events of a new group editing form
+ * 
+ * @param int id Id of the div to be affected containing the form
+ */
+function bindEvents(id) {
+	// Whenever the user type is changed
+	$('#'+id+' .access-type').change(function() {
+		changeType(id, $(this).val());
+	});
+	// Whenever the check or uncheck buttons are used
+	$('#'+id+' .check-all').click(function() {
+		changeType(id, 'custom');
+		accessSelectAll(id);
+	});
+	$('#'+id+' .uncheck-all').click(function() {
+		changeType(id, 'none');
+	});
+	// Whenever a checkbox is changed
+	$('#'+id+' input[type="checkbox"]').change(function() {
+		if ($('#'+id+' .rights input:checked').size() == 0) {
+			changeType(id, 'none');
+		} else {
+			changeType(id, 'custom');
+		}
+	});
+}
+
+/**
  * This function is triggered whenever the group selector changes.
  * It updates the access in the form according to the group selected access.
  * 
@@ -118,28 +154,30 @@ function accessGroup(group_id) {
 }
 
 $(document).ready(function() {
-	if ($('#user-access .access-type .none').attr('checked')) {
-		changeType('user-access', 'none');
-	} else if ($('#user-access .access-type .all').attr('checked')) {
-		changeType('user-access', 'all');
-	}
+	bindEvents('user-access');
+	
+	// if ($('#user-access .access-type .none').attr('checked')) {
+		// changeType('user-access', 'none');
+	// } else if ($('#user-access .access-type .all').attr('checked')) {
+		// changeType('user-access', 'all');
+	// }
 	
 	// Bind change event to every inputs
-	$('#user-access .rights input').change(function() {
-		if ($('#user-access .rights input:checked').size() == 0) {
-			changeType('user-access', 'none');
-		} else {
-			changeType('user-access', 'custom');
-		}
-	});
+	// $('#user-access .rights input').change(function() {
+		// if ($('#user-access .rights input:checked').size() == 0) {
+			// changeType('user-access', 'none');
+		// } else {
+			// changeType('user-access', 'custom');
+		// }
+	// });
 	
 	// If user accesses are given, use them to update the form
 	if (typeof user_access != 'undefined') {
 		if (user_access != '') {
 			assignPermissions('user-access', user_access);
 		} else {
-			var select = document.getElementById('groupe');
-			accessGroup(select.options[select.selectedIndex].value);
+			// var select = document.getElementById('groupe');
+			// accessGroup(select.options[select.selectedIndex].value);
 		}
 	}
 });

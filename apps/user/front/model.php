@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-29-01-2013
+ * @version 0.3-15-02-2013
  */
 class UserModel {
 	private $db;
@@ -97,7 +97,7 @@ class UserModel {
 	/**
 	 * Counts the users in the database
 	 * 
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and group)
+	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function countUsers(array $filters = array()) {
@@ -110,7 +110,10 @@ class UserModel {
 			$allowed = array('nickname', 'email', 'firstname', 'lastname');
 			foreach ($filters as $name => $value) {
 				if (in_array($name, $allowed)) {
-					$cond .= $name." LIKE '%".$value."%' AND ";
+					if (strpos($value, '%') === false) {
+						$value = '%'.$value.'%';
+					}
+					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
 			if (!empty($filters['groupe'])) {
@@ -138,7 +141,7 @@ class UserModel {
 	 * @param int    $number   Number of users
 	 * @param string $order    Name of the ordering column
 	 * @param bool   $asc      Ascendent or descendent?
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and group)
+	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function getUsersList($from, $number, $order = 'nickname', $asc = true, array $filters = array()) {
@@ -148,7 +151,10 @@ class UserModel {
 			$allowed = array('nickname', 'email', 'firstname', 'lastname');
 			foreach ($filters as $name => $value) {
 				if (in_array($name, $allowed)) {
-					$cond .= $name.' LIKE "%'.$value.'%" AND ';
+					if (strpos($value, '%') === false) {
+						$value = '%'.$value.'%';
+					}
+					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
 			if (!empty($filters['groupe'])) {
@@ -157,9 +163,9 @@ class UserModel {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
 		}
-		// Prepare request
+		
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, users.access, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip, name AS groupe
+			SELECT users.id, nickname, email, firstname, lastname, country, users.access, groupe, name AS groupe_name, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -170,14 +176,7 @@ class UserModel {
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
-		
-		// Format data
-		$data = array();
-		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
-			$row['access'] = explode(',', $row['access']);
-			$data[] = $row;
-		}
-		return $data;
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	/**

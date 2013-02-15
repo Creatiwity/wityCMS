@@ -45,8 +45,9 @@
 	<item id="user_created">The user %s was created successfully.</item>
 	<item id="user_not_created">An unknown error occured when trying to create your account in the database.</item>
 	<item id="user_edited"><![CDATA[The user <strong>%s</strong> was edited successfully.]]></item>
-	<item id="user_not_edited">An unknown error occured when trying to edit the account %s in the database.</item>
-	<item id="send_email_confirmation">Send an account creation confirmation by mail</item>
+	<item id="user_not_edited">An unknown error occured while trying to edit the account %s in the database.</item>
+	<item id="send_email_confirmation">Send an account creation confirmation by mail?</item>
+	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">The user was deleted successfully</item>
@@ -59,7 +60,8 @@
 	<item id="actions">Actions</item>
 	<item id="no_group_found">No group found</item>
 	<item id="apply">Apply</item>
-	<item id="groupe_del_confirm">Do you really want to delete the group %s?</item>
+	<item id="group_del_confirm">Do you really want to delete the group %s?</item>
+	<item id="group_not_modified">An unknow error occured while trying to apply changes to the group.</item>
 	
 	<!-- Group treatment -->
 	<item id="group_name_empty">No group name given</item>

@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-06-02-2013
+ * @version 0.3-15-02-2013
  */
 class UserAdminController extends WController {
 	/**
@@ -27,35 +27,20 @@ class UserAdminController extends WController {
 	}
 	
 	/**
-	 * Gets the Id given in the URL
-	 * 
-	 * @return int
-	 */
-	private function getId() {
-		$args = WRoute::getArgs();
-		if (!isset($args[1])) {
-			return -1;
-		} else {
-			list ($id) = explode('-', $args[1]);
-			return intval($id);
-		}
-	}
-	
-	/**
 	 * List action handler
 	 * Displays a list of users in the database
 	 */
 	protected function listing() {
 		// Sorting criterias given by URL
 		$args = WRoute::getArgs();
-		$firstArg = array_shift($args);
-		if ($firstArg == 'listing') {
-			$firstArg = array_shift($args);
+		$criterias = array_shift($args);
+		if ($criterias == 'listing') {
+			$criterias = array_shift($args);
 		}
-		$sortData = explode('-', $firstArg);
-		$sortBy = empty($sortData) ? '' : array_shift($sortData);
-		$sens = empty($sortData) ? '' : array_shift($sortData);
-		$page = empty($sortData) ? 1 : $sortData[0];
+		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sortBy, $sens, $page);
+		if (empty($page) || $page <= 0) {
+			$page = 1;
+		}
 		
 		// Filters
 		$filters = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
@@ -96,21 +81,7 @@ class UserAdminController extends WController {
 				}
 				
 				// User access rights
-				if ($data['type'] == 'all') {
-					$data['access'] = 'all';
-				} else if ($data['type'] == 'none') {
-					$data['access'] = '';
-				} else { // Custom access
-					$access = '';
-					foreach ($data['access'] as $app => $perms) {
-						$perms = array_keys($perms);
-						if (!empty($perms)) {
-							$access .= $app.'['.implode('|', $perms).'],';
-						}
-					}
-					$access = substr($access, 0, -1);
-					$data['access'] = $access;
-				}
+				$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
 				unset($data['type']);
 				
 				if (empty($errors)) {
@@ -166,7 +137,7 @@ Ceci est un message automatique.";
 	 * Edits a user in the database
 	 */
 	protected function edit() {
-		$userid = $this->getId();
+		$userid = intval(WRoute::getArg(1));
 		if (!$this->model->validId($userid)) {
 			WNote::error('user_not_found', "The user requested does not exist.");
 			header('location: '.WRoute::getDir().'/admin/user/');
@@ -224,20 +195,7 @@ Ceci est un message automatique.";
 			}
 			
 			// User access rights
-			if ($data['type'] == 'all') {
-				$access = 'all';
-			} else if ($data['type'] == 'none') {
-				$access = '';
-			} else { // Custom access
-				$access = '';
-				foreach ($data['access'] as $app => $perms) {
-					$perms = array_keys($perms);
-					if (!empty($perms)) {
-						$access .= $app.'['.implode('|', $perms).'],';
-					}
-				}
-				$access = substr($access, 0, -1);
-			}
+			$access = $this->model->treatAccessData($data['type'], $data['access']);
 			if ($access != $db_data['access']) {
 				$update_data['access'] = $access;
 			}
@@ -266,9 +224,11 @@ Ceci est un message automatique.";
 	
 	/**
 	 * Deletes a user
+	 * 
+	 * @todo Prevent from deleting its own account
 	 */
 	protected function del() {
-		$userid = $this->getId();
+		$userid = intval(WRoute::getArg(1));
 		if (!$this->model->validId($userid)) {
 			WNote::error('user_not_found', WLang::get('user_not_found'));
 			return;
@@ -288,14 +248,8 @@ Ceci est un message automatique.";
 	 */
 	protected function groups() {
 		// Préparation tri colonnes
-		$args = WRoute::getArgs();
-		if (isset($args[1])) {
-			$sortData = explode('-', $args[1]);
-		} else {
-			$sortData = array();
-		}
-		$sortBy = empty($sortData) ? '' : array_shift($sortData);
-		$sens = empty($sortData) ? '' : $sortData[0];
+		$args = WRoute::getArg(1);
+		$count = sscanf(str_replace('-', ' ', $args), '%s %s', $sortBy, $sens);
 		
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
@@ -306,21 +260,7 @@ Ceci est un message automatique.";
 			}
 			
 			// User access rights
-			if ($data['type'] == 'all') {
-				$data['access'] = 'all';
-			} else if ($data['type'] == 'none') {
-				$data['access'] = '';
-			} else { // Custom access
-				$access = '';
-				foreach ($data['access'] as $app => $perms) {
-					$perms = array_keys($perms);
-					if (!empty($perms)) {
-						$access .= $app.'['.implode('|', $perms).'],';
-					}
-				}
-				$access = substr($access, 0, -1);
-				$data['access'] = $access;
-			}
+			$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
 			
 			if (empty($errors)) {
 				$db_success = false;
@@ -329,12 +269,21 @@ Ceci est un message automatique.";
 						WNote::success('group_added', WLang::get('group_added', $data['name']));
 						$db_success = true;
 					}
-				} else if ($this->model->updateGroup($data['id'], $data)) { // Editing a group
-					WNote::success('group_edited', WLang::get('group_edited', $data['name']));
-					$db_success = true;
+				} else { // Editing a group
+					$db_data = $this->model->getGroup($data['id']);
+					if (!empty($db_data)) {
+						// There will be a change in default group access
+						if ($data['access'] != $db_data['access']) {
+							$this->view->group_dif($data['id'], $data['name'], $data['access']);
+							return;
+						} else if ($this->model->updateGroup($data['id'], $data)) {
+							WNote::success('group_edited', WLang::get('group_edited', $data['name']));
+							$db_success = true;
+						}
+					}
 				}
 				if (!$db_success) {
-					WNote::error('group_not_added', WLang::get('group_not_added'));
+					WNote::error('group_not_modified', WLang::get('group_not_modified'));
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
@@ -348,13 +297,82 @@ Ceci est un message automatique.";
 	 * Deletes a group
 	 */
 	protected function group_del() {
-		$id = $this->getId();
+		$id = intval(WRoute::getArg(1));
 		if (!empty($id)) {
 			$this->model->deleteGroup($id);
 			$this->model->resetUsersInGroup($id);
 		}
 		WNote::success('group_deleted', WLang::get('group_deleted'));
 		header('location: '.WRoute::getDir().'/admin/user/groups/');
+	}
+	
+	/**
+	 * Makes the dif between old and new access to a group
+	 */
+	protected function group_dif() {
+		if (empty($_POST)) {
+			header('location: '.WRoute::getDir().'/admin/user/groups');
+			return;
+		}
+		// Retrieve post data
+		$data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access', 'apply_to_regular', 'apply_to_custom', 'user', 'type', 'access'));
+		if ($data['apply_to_regular'] == 'on' && $data['apply_to_custom'] == 'on') {
+			$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid']));
+		} else {
+			// Update all users having the old group access
+			if ($data['apply_to_regular'] == 'on') {
+				$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => $data['old_access']));
+			}
+			// Update all users having custom group access
+			if ($data['apply_to_custom'] == 'on') {
+				$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => 'NOT:'.$data['old_access']));
+			} else { // Custom update
+				foreach ($data['type'] as $userid => $type) {
+					if (array_key_exists($userid, $data['user'])) {
+						// Set new group access
+						$this->model->updateUser($userid, array('access' => $data['new_access']));
+					} else {
+						// Update with given access
+						$access = $this->model->treatAccessData($data['type'][$userid], $data['access'][$userid]);
+						$this->model->updateUser($userid, array('access' => $access));
+					}
+				}
+			}
+		}
+		
+		// Update group with new access
+		if ($this->model->updateGroup($data['groupid'], array('name' => $data['group_name'], 'access' => $data['new_access']))) {
+			WNote::success('group_edited', WLang::get('group_edited', $data['groupid']));
+		} else {
+			WNote::error('group_not_modified', WLang::get('group_not_modified'));
+		}
+		header('location: '.WRoute::getDir().'/admin/user/groups');
+	}
+	
+	/**
+	 * Display in a JSON format all the users whose nickname starts with a given letter.
+	 * 
+	 * Used for ajax method in group_dif action.
+	 */
+	protected function load_users_with_letter() {
+		$letter = WRequest::get('letter');
+		$groupid = intval(WRequest::get('groupe'));
+		$json = '{';
+		if (!empty($letter) && !empty($groupid)) {
+			if ($letter == '#') {
+				$users = $this->model->getUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]'));
+			} else {
+				$users = $this->model->getUsersWithCustomAccess(array('nickname' => $letter.'%'));
+			}
+			foreach ($users as $user) {
+				$json .= '"'.$user['id'].'": {"nickname": "'.addslashes($user['nickname']).'", "access": "'.$user['access'].'"},';
+			}
+			if (strlen($json) > 1) {
+				$json = substr($json, 0, -1);
+			}
+		}
+		$json .= '}';
+		echo $json;
 	}
 }
 

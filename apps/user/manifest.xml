@@ -31,5 +31,7 @@
 		<page lang="Supprimer un utilisateur" menu="false" requires="delete">del</page>
 		<page lang="Gestion des groupes" requires="groups">groups</page>
 		<page lang="Suprimer un groupe" menu="false" requires="groups,delete">group_del</page>
+		<page lang="" menu="false" requires="groups,edit">group_dif</page>
+		<page lang="" menu="false" requires="groups,edit">load_users_with_letter</page>
 	</admin>
 </app>
