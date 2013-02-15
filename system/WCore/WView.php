@@ -180,24 +180,28 @@ class WView {
 		switch ($stack_name) {
 			case 'css':
 				$css = $this->tpl->getVar('css');
-				foreach ($this->vars['css'] as $file) {
-					$css .= sprintf(
-						'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
-						(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
-						$file
-					);
+				if (is_array($this->vars['css'])) {
+					foreach ($this->vars['css'] as $file) {
+						$css .= sprintf(
+							'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
+							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
+							$file
+						);
+					}
 				}
 				return $css;
 				break;
 			
 			case 'js':
 				$script = $this->tpl->getVar('js');
-				foreach ($this->vars['js'] as $file) {
-					$script .= sprintf(
-						'<script type="text/javascript" src="%s%s"></script>'."\n", 
-						(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
-						$file
-					);
+				if (is_array($this->vars['js'])) {
+					foreach ($this->vars['js'] as $file) {
+						$script .= sprintf(
+							'<script type="text/javascript" src="%s%s"></script>'."\n", 
+							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
+							$file
+						);
+					}
 				}
 				return $script;
 				break;
