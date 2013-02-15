@@ -99,8 +99,12 @@ class WTemplateParser {
 							
 							// We arrived at the end of the node => compile it
 							if ($level == 0) {
-								$code .= call_user_func($callback, $tmp);
-								$tmp = "";
+								if (!empty($tmp)) {
+									$code .= call_user_func($callback, $tmp);
+									$tmp = "";
+								} else {
+									$code .= '{}';
+								}
 							}
 						} else if ($last_char == '%') {
 							$comment = false;
