@@ -92,7 +92,7 @@ class AdminController extends WController {
 				return true;
 			}
 			foreach ($_SESSION['access'] as $app => $perms) {
-				if (in_array('admin', $perms) && in_array($app, $this->getAdminApps())) {
+				if (in_array('admin', $perms) && array_key_exists($app, $this->getAdminApps())) {
 					return true;
 				}
 			}
@@ -103,7 +103,7 @@ class AdminController extends WController {
 	/**
 	 * Récupère la liste des applis administrables
 	 * 
-	 * @return array
+	 * @return array array(app_name => manifest)
 	 */
 	public function getAdminApps() {
 		static $admin_apps = array();
@@ -142,7 +142,8 @@ class AdminController extends WController {
 				// Select a random app to display
 				$apps = $this->getAdminApps();
 				if (!empty($apps)) {
-					WRoute::setRoute(array(array_shift(array_keys($apps)), array()));
+					$apps_keys = array_keys($apps);
+					WRoute::setRoute(array(array_shift($apps_keys), array()));
 				}
 			}
 		}

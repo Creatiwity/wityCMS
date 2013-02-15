@@ -211,24 +211,23 @@ class WSession {
 	 * @return boolean true if successfully reloaded, false otherwise
 	 */
 	public function reloadSession($userid) {
-		if (empty($_COOKIE['hash'])) {
-			return false;
-		}
-		$db = WSystem::getDB();
-		$prep = $db->prepare('
-			SELECT id, nickname, password, email, groupe, access
-			FROM '.self::USERS_TABLE.'
-			WHERE id = :userid
-		');
-		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
-		$prep->execute();
-		$data = $prep->fetch();
-		
-		if (!empty($data)) {
-			// Check hash
-			if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
-				$this->setupSession($userid, $data);
-				return true;
+		if (!empty($_COOKIE['hash'])) {
+			$db = WSystem::getDB();
+			$prep = $db->prepare('
+				SELECT id, nickname, password, email, groupe, access
+				FROM '.self::USERS_TABLE.'
+				WHERE id = :userid
+			');
+			$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+			$prep->execute();
+			$data = $prep->fetch();
+			
+			if (!empty($data)) {
+				// Check hash
+				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
+					$this->setupSession($userid, $data);
+					return true;
+				}
 			}
 		}
 		$this->closeSession();
