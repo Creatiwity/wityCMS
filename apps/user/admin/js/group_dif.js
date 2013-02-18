@@ -79,56 +79,68 @@ function loadUsersBeginingBy(letter, groupid) {
 	var base = window.location.toString();
 	base = base.substring(0, base.length-1); // make sure to remove last '/'
 	base = base.substring(0, base.lastIndexOf('groups'));
+	var letter_encoded = letter.replace('#', 'sharp');
 	
-	// Hide elements + display loading
-	$.ajax({
-		url: base+'load_users_with_letter/',
-		type: 'POST',
-		data: 'letter='+letter+'&groupe='+groupid,
-		dataType: 'json'
-	}).done(function(data) {
-		$('dl.users-list dt, dl.users-list dd').each(function(index, el) {
-			if ($(el).attr('class') != 'pattern') {
-				$(this).remove();
+	// Hide elements
+	$('dl.users-list dt, dl.users-list dd').hide();
+	
+	if ($('dt.letter-'+letter_encoded).size() != 0) {
+		$('dt.letter-'+letter_encoded).each(function(index, el) {
+			$(el).show();
+			if (!$(this).find('input').attr('checked')) {
+				var classes = $(el).attr('class');
+				var id = classes.split(' ')[0];
+				$('#'+id).show();
 			}
 		});
-		
-		for (userid in data) {
-			// Clone pattern
-			var dt_clone = $('dt.pattern').clone().removeClass('pattern').addClass('user-'+userid);
-			var dd_clone = $('dd.pattern').clone().removeClass('pattern').addClass('user-'+userid);
+		$('.users-list-container p').removeClass('loading');
+		$('dl.users-list').fadeIn();
+	} else {
+		$.ajax({
+			url: base+'load_users_with_letter/',
+			type: 'POST',
+			data: 'letter='+letter+'&groupe='+groupid,
+			dataType: 'json'
+		}).done(function(data) {
+			for (userid in data) {
+				// Clone pattern
+				var dt_clone = $('dt.pattern').clone().removeClass('pattern').addClass('user-'+userid+' letter-'+letter_encoded);
+				var dd_clone = $('dd.pattern').clone().removeClass('pattern').addClass('user-'+userid+' letter-'+letter_encoded);
+				
+				// Config
+				dt_clone.show();
+				dd_clone.attr('id', 'user-'+userid);
+				dt_clone.find('input').attr('name', 'user['+userid+']');
+				dd_clone.find('input').each(function(index, el) {
+					$(el).attr('name', $(el).attr('name').replace('[]', '['+userid+']'));
+				});
+				dt_clone.find('span.nickname').html(data[userid].nickname);
+				
+				dt_clone.appendTo('dl.users-list');
+				dd_clone.appendTo('dl.users-list');
+				
+				// Event checkbox toggle
+				dt_clone.find('input').change(function() {
+					var classes = $(this).parent().parent().attr('class');
+					var id = classes.split(' ')[0];
+					$('#'+id).slideToggle();
+				});
+				
+				// Bind change events to every inputs
+				bindEvents('user-'+userid);
+				$('#user-'+userid+' a.reset').click(function() {
+					var el_id = $(this).parent().attr('id');
+					var id = el_id.substring(5);
+					assignDifPermissions(el_id, group_access, data[id].access);
+				});
+				// Assign group permissions to inputs
+				assignDifPermissions('user-'+userid, group_access, data[userid].access);
+			}
 			
-			// Config
-			dt_clone.attr('class', 'user-'+userid);
-			dd_clone.attr('class', 'user-'+userid);
-			dd_clone.attr('id', 'user-'+userid);
-			dt_clone.find('input').attr('name', 'user['+userid+']');
-			dd_clone.find('input').each(function(index, el) {
-				$(el).attr('name', $(el).attr('name').replace('[]', '['+userid+']'));
-			});
-			// dd_clone.find('input').attr('name', 'user['+userid+']');
-			dt_clone.find('span.nickname').html(data[userid].nickname);
-			
-			dt_clone.appendTo('dl.users-list');
-			dd_clone.appendTo('dl.users-list');
-			
-			// Event
-			dt_clone.find('input').change(function() {
-				var id = $(this).parent().parent().attr('class');
-				$('#'+id).slideToggle();
-			});
-			
-			// Bind change events to every inputs
-			bindEvents('user-'+userid);
-			$('#user-'+userid+' a.reset').click(function() {
-				var el_id = $(this).parent().attr('id');
-				var id = el_id.substring(5);
-				assignDifPermissions(el_id, group_access, data[id].access);
-			});
-			// Assign group permissions to inputs
-			assignDifPermissions('user-'+userid, group_access, data[userid].access);
-		}
-	});
+			$('.users-list-container p').removeClass('loading');
+			$('dl.users-list').fadeIn();
+		});
+	}
 }
 
 $(document).ready(function() {
@@ -147,8 +159,13 @@ $(document).ready(function() {
 				if ($(el).html().indexOf('(') != -1) {
 					// Add event handler on <a> el
 					$(el).click(function() {
+						var letter = $(this).html().substring(0, 1);
 						if (!$(this).hasClass('current')) {
-							loadUsersBeginingBy($(this).html().substring(0, 1), groupid);
+							// Display loading gif
+							$('.users-list-container p').addClass('loading');
+							$('dl.users-list').fadeOut(400, function() {
+								loadUsersBeginingBy(letter, groupid);
+							});
 							$('.alphabet a').removeClass('current');
 							$(this).addClass('current');
 						}

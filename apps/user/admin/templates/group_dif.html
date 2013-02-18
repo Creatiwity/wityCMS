@@ -9,12 +9,17 @@
 			<input type="hidden" name="old_access" value="{$group.access}" />
 			<input type="hidden" name="new_name" value="{$new_name}" />
 			<input type="hidden" name="new_access" value="{$new_access}" />
-			<h1>Application des nouveaux droits d'accès au groupe</h1>
-			<p>Les accès par défaut du groupe <strong>{$group_name}</strong> vont être modifiés.</p>
-			<label><input type="checkbox" name="apply_to_regular" checked="checked" /> Appliquer les nouveaux droits aux utilisateurs qui héritaient des mêmes accès que ceux du groupe</label>
-			<br />
-			<label><input id="display-custom" type="checkbox" name="apply_to_custom" checked="checked" /> Appliquer les nouveaux droits aux utilisateurs ayant des accès personnalisés</label>
-			<br />
+			<h1>Application des nouveaux droits d'accès au groupe {$group.name} ({$count_total} utilisateurs)</h1>
+			<p>
+				{if {$count_regular} > 0}
+				<label><input type="checkbox" name="apply_to_regular" checked="checked" /> Appliquer les nouveaux droits aux utilisateurs qui héritent des accès du groupe ({$count_regular} utilisateurs)</label>
+				<br />
+				{/if}
+				{if {$count_custom} > 0}
+				<label><input id="display-custom" type="checkbox" name="apply_to_custom" checked="checked" /> Appliquer les nouveaux droits aux utilisateurs ayant des accès personnalisés ({$count_custom} utilisateurs)</label>
+				{/if}
+			</p>
+			{if {$count_custom} > 0}
 			<div class="listing-wrapper">
 				<div class="alphabet">
 				{for $letter, $users_count in $alphabet}<a href="javascript:void(0)">{$letter}{if {$users_count} > 0} ({$users_count}){/if}</a> {/for}
@@ -57,9 +62,15 @@
 							</div>
 						</dd>
 					</dl>
+					<ul class="legende">
+						<li><span class="same">Permission commune au groupe</span></li>
+						<li><span class="plus">Permission en plus du groupe</span></li>
+						<li><span class="minus">Permission en moins du groupe</span></li>
+					</ul>
 				</div>
 				<div class="clear"></div>
 			</div>
+			{/if}
 			<p class="tcenter">
 				<input type="submit" value="{lang apply}" class="button-submit" />
 				<input type="button" value="{lang cancel}" class="button-submit" onclick="history.back();" />

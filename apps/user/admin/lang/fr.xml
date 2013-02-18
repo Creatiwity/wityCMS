@@ -69,4 +69,7 @@
 	<item id="group_edited"><![CDATA[Le groupe <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="group_not_added">Une erreur inconnue s'est produite lors du traitement du groupe par la base de données.</item>
 	<item id="group_deleted">Le groupe a été supprimé avec succès.</item>
+	
+	<!-- Group dif -->
+	<item id="reset">Réinitialiser</item>
 </lang>

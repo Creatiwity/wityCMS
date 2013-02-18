@@ -69,6 +69,7 @@ class UserAdminView extends WView {
 	private function fillForm($data) {
 		$this->assign('js', '/apps/user/admin/js/access_form.js');
 		$this->assign('groups', $this->model->getGroupsList());
+		$this->assign('user_home', WRoute::getBase().'/admin/user/');
 		
 		// Get admin apps
 		$adminModel = new AdminController();
@@ -154,14 +155,20 @@ class UserAdminView extends WView {
 		
 		$chars = array('#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 		$alphabet = array();
+		$count_custom = 0;
 		foreach ($chars as $c) {
 			if ($c == '#') {
 				$alphabet['#'] = $this->model->countUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $groupid));
 			} else {
 				$alphabet[$c] = $this->model->countUsersWithCustomAccess(array('nickname' => $c.'%', 'groupe' => $groupid));
 			}
+			$count_custom += $alphabet[$c];
 		}
 		$this->assign('alphabet', $alphabet);
+		$count_total = $this->model->countUsers(array('groupe' => $groupid));
+		$this->assign('count_total', $count_total);
+		$this->assign('count_custom', $count_custom);
+		$this->assign('count_regular', $count_total-$count_custom);
 		
 		$this->render('group_dif');
 	}

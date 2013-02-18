@@ -88,10 +88,17 @@ ul#access, ul#accessEdit {
 	padding: 5px;
 	margin-right: 5px;
 	color: white;
+	white-space: nowrap;
 }
 
 #group-dif .alphabet a:hover, #group-dif .alphabet a.current {
 	background: #1aa4e0;
+}
+
+#group-dif .legende {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 #group-dif .users-list-container {
@@ -101,6 +108,11 @@ ul#access, ul#accessEdit {
 
 #group-dif .users-list-container dl {
 	margin: 0;
+}
+
+#group-dif .users-list-container p.loading {
+	padding-left: 25px;
+	background: url('../../../../themes/system/images/icones/loader.gif') no-repeat;
 }
 
 #group-dif dl dt {
@@ -121,11 +133,14 @@ ul#access, ul#accessEdit {
 }
 
 #group-dif .same {
+	font-weight: bold;
 	color: blue;
 }
 #group-dif .minus {
+	font-weight: bold;
 	color: red;
 }
 #group-dif .plus {
+	font-weight: bold;
 	color: green;
 }
