@@ -241,33 +241,28 @@ class WView {
 			return false;
 		}
 		
-		// Handle notes
-		$notes = WNote::parse(WNote::get('*'));
-		if ($this->getTheme() != '_blank') {
-			$this->assign('notes', $notes);
-		} else {
-			echo $notes;
-		}
-		
 		// Treat "special vars"
 		foreach ($this->specialVars as $stack) {
-			if (!empty($this->vars[$stack])) {
-				$this->vars[$stack] = $this->getSpecialVar($stack);
-			} else {
-				unset($this->vars[$stack]);
-			}
+			$this->vars[$stack] = $this->getSpecialVar($stack);
 		}
 		
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		if ($this->themeName == '_blank') {
-			$themeMainFile = $this->responseFile;
-		} else {
+		if ($this->getTheme() != '_blank') {
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $this->responseFile);
 			
 			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
+			
+			// Handle notes
+			$notes = WNote::parse(WNote::get('*'));
+			$this->tpl->assign('notes', $notes);
+		} else {
+			$themeMainFile = $this->responseFile;
+			
+			// Trigger notes debug handler for remaining notes
+			echo WNote::parse(WNote::get('*'));
 		}
 		
 		$dir = WRoute::getDir();
