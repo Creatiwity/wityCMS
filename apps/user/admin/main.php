@@ -228,22 +228,25 @@ Ceci est un message automatique.";
 	
 	/**
 	 * Deletes a user
-	 * 
-	 * @todo Prevent from deleting its own account
 	 */
 	protected function del() {
 		$userid = intval(WRoute::getArg(1));
-		if (!$this->model->validId($userid)) {
-			WNote::error('user_not_found', WLang::get('user_not_found'));
-			return;
-		}
-		if (WRequest::get('confirm', null, 'POST') === '1') {
-			$this->model->deleteUser($userid);
-			WNote::success('user_deleted', WLang::get('user_deleted'));
-			header('location: '.WRoute::getDir().'/admin/user/');
+		if ($userid != $_SESSION['userid']) {
+			if (!$this->model->validId($userid)) {
+				WNote::error('user_not_found', WLang::get('user_not_found'));
+				return;
+			}
+			if (WRequest::get('confirm', null, 'POST') === '1') {
+				$this->model->deleteUser($userid);
+				WNote::success('user_deleted', WLang::get('user_deleted'));
+				header('location: '.WRoute::getDir().'/admin/user/');
+			} else {
+				$this->view->del($userid);
+				$this->view->render('del');
+			}
 		} else {
-			$this->view->del($userid);
-			$this->view->render('del');
+			WNote::error('user_self_delete', WLang::get('user_self_delete'));
+			header('location: '.WRoute::getDir().'/admin/user/');
 		}
 	}
 	

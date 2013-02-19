@@ -57,7 +57,7 @@
 				<td>{$user.last_activity}</td>
 				<td>
 					<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><img src="/themes/system/images/icones/edit.png" alt="{lang edit}" /></a>
-					<a href="/admin/user/del/{$user.id}/" title="{lang delete}"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>
+					{if {$user.id} != $_SESSION['userid']}<a href="/admin/user/del/{$user.id}/" title="{lang delete}"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>{/if}
 				</td>
 			</tr>
 		{/for}

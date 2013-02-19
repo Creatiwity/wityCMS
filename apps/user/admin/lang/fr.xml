@@ -51,6 +51,7 @@
 	
 	<!-- User deletion -->
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
+	<item id="user_self_delete">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
 	
 	<!-- Group form -->
 	<item id="add_a_group">Ajouter un groupe</item>

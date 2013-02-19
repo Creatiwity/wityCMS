@@ -50,7 +50,8 @@
 	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
 	
 	<!-- User deletion -->
-	<item id="user_deleted">The user was deleted successfully</item>
+	<item id="user_deleted">The user was deleted successfully.</item>
+	<item id="user_self_delete">You cannot delete your own account.</item>
 	
 	<!-- Group form -->
 	<item id="add_a_group">Add a group</item>
