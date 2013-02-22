@@ -117,7 +117,7 @@ class SortingHelper {
 		$vars = array();
 		foreach ($this->fields as $field) {
 			if ($field == $this->sortBy) {
-				$vars[$field.'_class'] = ($this->sens == 'ASC') ? 'sortAsc' : 'sortDesc';
+				$vars[$field.'_class'] = ($this->sens == 'ASC') ? 'icon-chevron-up' : 'icon-chevron-down';
 				$vars[$field.'_sort'] = ($this->sens == 'ASC') ? 'desc' : 'asc';
 			} else {
 				$vars[$field.'_class'] = '';
