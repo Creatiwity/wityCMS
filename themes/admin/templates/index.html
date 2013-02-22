@@ -1,67 +1,86 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<!DOCTYPE html>
+<html>
 	<head>
-		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta charset="utf-8"/>
 		
 		<title>{$page_title}</title>
 		
 		<meta name="Language" content="fr" />
 		<meta name="Robots" content="nofollow" />
 		<meta http-equiv="Pragma" content="no-cache" />
-		<link href="/themes/admin/styles/style.css" rel="stylesheet" title="admin style" type="text/css" media="screen" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="/themes/admin/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/themes/admin/css/style.css" rel="stylesheet">
+		<link href="/themes/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+		
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		  <script src="/themes/admin/js/html5shiv.js"></script>
+		<![endif]-->
+		
 		{if isset({$css})}{$css}{/if}
-		<script type="text/javascript" src="/themes/admin/javascript/jquery-1.5.2.js"></script> 
-		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
-		<div class="wrapper">
-			<div id="header">
-				<div id="title">
-					<h1><a href="/">{$site_name}</a></h1>
-					<p>Wity <span>CMS</span><br />
-					<em>Bienvenue {$userNickname}</em></p>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+		    <div class="navbar-inner">
+				<div class="container-fluid">
+					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="brand" href="/">{$site_name}</a>
+					<div class="nav-collapse collapse">
+						<p class="navbar-text pull-right">
+							Bienvenue <a href="#" class="navbar-link">{$userNickname}</a>
+							&nbsp;|&nbsp;
+							<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
+						</p>
+						<ul class="nav">
+							{for $app, $details in $appsList}
+								<li {if {$app} == {$appSelected}} class="active"{/if}>
+									<a href="/admin/{$app}/">{lang {$details.name}}</a>
+								</li>
+							{/for}
+						</ul>
+					</div><!--/.nav-collapse -->
 				</div>
-				<div id="logout">
-					<a href="/user/deconnexion/" title="déconnexion">déconnexion</a>
-					<img class="hidden" src="/themes/admin/images/logout-on.jpg" alt="déconnexion" />
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div id="nav">
-				<div class="inner">
-					<ul id="modules">
-						{for $app in $appList}
-							<li{if {$app} == {$appSelected}} class="hover"{/if}>
-								<div><a href="/admin/{$app}/">{$app}</a></div></li>
-						{/for}
-					</ul>
-					<ul id="actions">
-						{for $action, $desc in $actionsList}
-							{if {$desc.menu}}
-							<li class="{if {$action} == {$actionAsked}}on{/if}">
-								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc.lang}</a></li>
-							{/if}
-						{/for}
-					</ul>
-					<div class="sub">
-						<p>Votre position actuelle est : <span class="app">{$appSelected}</span>
-						{if isset({$actionList.{$actionAsked}})} . <span class="action">{$actionList.{$actionAsked}}</span>{/if}</p>
-						<!--<form id="search" action="" method="post"><div>
-							<input type="text" name="search" value="recherche" onclick="this.value = '';" size="15" />
-							<input class="img" type="image" src="/themes/admin/images/search.jpg" alt="Rechercher" />
-						</div></form>-->
-					</div>
-				</div>
-				<div class="bottom"></div>
-			</div>
-			<div id="body">
-				{$notes}
-				{include {$include}}
-			</div>
-			<div id="footer" class="tcenter">
-				<span>Wity© Administration 2013</span>
-			</div>
+		    </div>
 		</div>
+		
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<div class="well sidebar-nav">
+						<ul class="nav nav-list">
+							<li class="nav-header">{$appSelected}</li>
+							{for $action, $desc in $actionsList}
+								{if {$desc.menu}}
+								<li class="{if {$action} == {$actionAsked}}active{/if}">
+									<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.lang}}</a>
+								</li>
+								{/if}
+							{/for}
+						</ul>
+					</div><!--/.well -->
+				</div><!--/span-->
+				<div class="span10">
+					{$notes}
+					{include {$include}}
+				</div><!--/span-->
+			</div><!--/row-->
+
+			<hr>
+
+			<footer>
+				<p>&copy; WityCMS Administration 2013</p>
+			</footer>
+
+		</div><!--/.fluid-container-->
+		
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="/themes/admin/js/bootstrap.min.js"></script>
+		{if isset({$js})}{$js}{/if}
 	</body>
 </html>
