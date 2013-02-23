@@ -148,12 +148,12 @@ class WSession {
 		$_SESSION['groupe']   = $data['groupe'];
 		
 		$_SESSION['access_string'] = $data['access'];
-		$_SESSION['access'] = array();
 		if (empty($data['access'])) {
-			// let access = array();
+			$_SESSION['access'] = '';
 		} else if ($data['access'] == 'all') {
 			$_SESSION['access'] = 'all';
 		} else {
+			$_SESSION['access'] = array();
 			foreach (explode(',', $data['access']) as $access) {
 				$first_bracket = strpos($access, '[');
 				if ($first_bracket !== false) {
