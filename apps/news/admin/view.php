@@ -38,8 +38,6 @@ class NewsAdminView extends WView {
 	private function loadMainForm() {
 		// JS / CSS
 		$this->assign('js', '/apps/news/admin/js/add.js');
-		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
-		$this->assign('js', '/libraries/ckfinder/ckfinder.js');
 		
 		$this->assign('baseDir', WRoute::getDir());
 		
@@ -61,20 +59,27 @@ class NewsAdminView extends WView {
 	}
 	
 	public function add($data = array()) {
-		$this->assign('css', '/apps/news/admin/css/add.css');
 		$this->loadMainForm();
 		
 		// Id pour simuler le permalien
 		$this->assign('lastId', $this->model->getLastNewsId()+1);
 		
+		$ids = array();
+		if(!empty($data)) {
+			foreach ($data['nCat'] as $row => $val) {
+				$ids[] = $row;
+			}
+		}
+		$this->assign('ncat', $ids);
+		
 		$this->fillMainForm(
 			array(
 				'nAuthor' => $_SESSION['nickname'],
 				'nKeywords' => '',
-				'nTitle' => "Le titre de votre article",
+				'nTitle' => '',
 				'nTitleClass' => 'empty',
 				'nUrl' => '',
-				'nContent' => ''
+				'nContent' => '',
 			),
 			$data
 		);
@@ -84,7 +89,6 @@ class NewsAdminView extends WView {
 	}
 	
 	public function edit($id, $formData = array()) {
-		$this->assign('css', '/apps/news/admin/css/edit.css');
 		$this->loadMainForm();
 		
 		// Chargement des données
@@ -111,7 +115,7 @@ class NewsAdminView extends WView {
 			$formData
 		);
 		
-		$this->setResponse('edit');
+		$this->setResponse('add');
 		$this->render();
 	}
 	

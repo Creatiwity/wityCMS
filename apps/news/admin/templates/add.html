@@ -1,61 +1,55 @@
-<form action="" method="post">
-	<div id="blocks">
-		<div class="block">
-			<div class="top"></div>
-			<h2 class="hidden">Informations</h2>
-			<table>
-				<tr>
-					<td><label for="nAuthor">Auteur :</label></td>
-					<td><input id="nAuthor" type="text" name="nAuthor" value="{$nAuthor}" /></td>
-				</tr>
-				<tr>
-					<td><label for="nKeywords">Mots clés :</label></td>
-					<td><input id="nKeywords" type="text" name="nKeywords" value="{$nKeywords}" /></td>
-				</tr>
-			</table>
-			<h3>Catégorie de l'article</h3>
-			{for $c in $cat}
-				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]" />
-				<label for="cat{$c.cid}">{$c.name}</label><br />
-			{/for}
+<form action="" method="post" enctype="multipart/form-data">
+	<div class="span9">
+		{if !empty({$note})}{$note}{/if}
+	
+		<input id="nTitle" class="input-block-level" name="nTitle" size="40" value="{$nTitle}" type="text" onkeyup="updatePermalien(this.value);" placeholder="Titre"/>
+		<br/>
+		<div class="input-prepend">
+			<span class="add-on">{$siteURL}{$lastId}-</span>
+			<!--span id="permalienInnerView" class="add-on">{$nUrl}</span-->
+			<input class="span2" id="permalienInnerInput" type="text" value="{$nUrl}">
+			<!--button id="editPermalien" class="btn" type="button" disabled="disabled"><i class="icon-pencil"></i></button-->
 		</div>
-		<div class="block">
-			<div class="top"></div>
-			<h2>Image à la une</h2>
-			<input type="file" name="image" />
-		</div>
+		<br/>
+		<label for="nContent" class="hide">Contenu de la news :</label><br />
+		<textarea id="nContent" class="input-block-level" name="nContent" rows="20" cols="80">{$nContent}</textarea><br />
 	</div>
-	<div id="content">
-		<div class="item">
-			{if !empty({$note})}{$note}{/if}
-			<label for="nTitle" class="hide">Titre :</label>
-			<input id="nTitle" class="{$nTitleClass}" type="text" name="nTitle" size="40" value="{$nTitle}" onclick="check(this, 'Le titre de votre article')" onblur="check(this, 'Le titre de votre article')" onkeyup="updatePermalien(this.value);" /><br />
-			<div id="permalien">
-				<strong>URL :</strong>
-				<span id="permalienShow" onclick="">
-					<span onclick="permalienClick();">
-						{$siteURL}{$lastId}-<span id="permalienInnerShow">{$nUrl}</span><input id="permalienInnerInput" type="text" name="nUrl" value="{$nUrl}" />
-					</span>
-					<input id="modifButton" type="button" value="Modifier" onclick="permalienClick();" />
-					<span id="modifCommands">
-						<input id="okButton" type="button" value="OK" onclick="updatePermalien(document.getElementById('permalienInnerInput').value); return false;" /> - 
-						<a href="#" onclick="permalienCancel(); return false;">Annuler</a>
-					</span>
-				</span>
-			</div><br />
-			
-			<label for="nContent" class="hide">Contenu de la news :</label><br />
-			<textarea id="nContent" name="nContent" rows="15" cols="80">{$nContent}</textarea><br />
-			<script type="text/javascript">
-				var editor = CKEDITOR.replace('nContent');
-				CKFinder.setupCKEditor(editor, '{$baseDir}/libraries/ckfinder/') ;
-			</script>
-			
-			<div class="tcenter">
-				<input type="submit" value="Envoyer" />
-				<input type="button" value="Annuler" onclick="history.back();" />
+	<div class="span3">
+		<div class="well well-small">
+			<div class="control-group">
+				<label class="control-label" for="nAuthor">Auteur</label>
+				<div class="controls">
+					<input type="text" id="nAuthor" class="input-block-level" name="nAuthor" value="{$nAuthor}" placeholder="Auteur">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="nKeywords">Mots clés</label>
+				<div class="controls">
+					<input type="text" id="nKeywords" class="input-block-level" name="nKeywords" value="{$nKeywords}" placeholder="Mots clés">
+				</div>
 			</div>
 		</div>
+		{if isset({$date})}
+		<div class="well">
+			<h3>Infos</h3>
+			<ul>
+				<li><strong>News créée</strong> le {$date}</li>
+				<li><strong>Dernière édition</strong> le  {$modified}</li>
+			</ul>
+		</div>
+		{/if}
+		<div class="well">
+			<h3>Catégorie de l'article</h3>
+			{for $c in $cat}
+			<label class="checkbox">
+				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]" {if in_array({$c.cid}, {$ncat})} checked="checked"{/if}>
+				{$c.name}
+			</label>
+			{/for}
+		</div>
+		<div class="well">
+			<button type="submit" class="btn btn-large btn-block btn-primary" type="button">Enregistrer</button>
+			<button class="btn btn-large btn-block" type="button" onclick="history.back();">Annuler</button>
+		</div>
 	</div>
-	<div class="clear"></div>
 </form>
