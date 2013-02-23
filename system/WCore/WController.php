@@ -317,13 +317,13 @@ abstract class WController {
 			return false;
 		}
 		
-		// Administrator supreme case
-		if (!empty($_SESSION['access']) && $_SESSION['access'] == 'all') {
-			return true;
-		}
-		
 		if ($admin) { // Admin mode ON
-			if (isset($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
+			if (empty($_SESSION['access'])) {
+				return false;
+			}
+			if ($_SESSION['access'] == 'all') {
+				return true;
+			} else if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
 				if (empty($action)) { // Asking for application access
 					return true;
 				} else if (isset($manifest['admin'][$action])) {
@@ -352,6 +352,13 @@ abstract class WController {
 				// Check permissions
 				foreach ($manifest['pages'][$action]['requires'] as $req) {
 					switch ($req) {
+						case 'not-connected':
+							if (WSession::isConnected()) {
+								WNote::error('app_logout_required', 'The '.$action.' action of the application '.$app.' requires to be loged out.', 'display');
+								return false;
+							}
+							break;
+						
 						case 'connected':
 							if (!WSession::isConnected()) {
 								WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.', 'display');
