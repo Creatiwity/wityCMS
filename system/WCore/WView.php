@@ -241,14 +241,6 @@ class WView {
 			return false;
 		}
 		
-		// Treat "special vars"
-		foreach ($this->specialVars as $stack) {
-			$this->vars[$stack] = $this->getSpecialVar($stack);
-		}
-		
-		// Assign View variables
-		$this->tpl->assign($this->vars);
-		
 		if ($this->getTheme() != '_blank') {
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $this->responseFile);
@@ -264,6 +256,14 @@ class WView {
 			// Trigger notes debug handler for remaining notes
 			echo WNote::parse(WNote::get('*'));
 		}
+		
+		// Treat "special vars"
+		foreach ($this->specialVars as $stack) {
+			$this->vars[$stack] = $this->getSpecialVar($stack);
+		}
+		
+		// Assign View variables
+		$this->tpl->assign($this->vars);
 		
 		$dir = WRoute::getDir();
 		if (empty($dir)) {
