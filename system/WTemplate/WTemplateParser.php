@@ -70,7 +70,8 @@ class WTemplateParser {
 				case '{':
 					if (!$comment) {
 						// Check whether { is backslashed
-						if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $last_char != '\\') {
+						// List of authorized chars to start a node (alphanum, / for closing nodes and $ for var displaying nodes
+						if (preg_match('#[a-zA-Z0-9/$]#', $string[$i+1]) && $last_char != '\\') {
 							$level++;
 						}
 						
@@ -122,7 +123,8 @@ class WTemplateParser {
 					}
 					
 					if ($level > 0) {
-						// add the last backslash which was skipped
+						// We are in a node. Special chars may be used
+						// so add them back
 						if ($last_char == '\\') {
 							$tmp .= '\\';
 						} else if ($last_char == '%') {
