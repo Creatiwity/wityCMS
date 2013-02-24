@@ -1,70 +1,331 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author	Fofif
- * @version	$Id: apps/user/admin/model.php 0003 22-08-2011 Fofif $
+ * User Application - Admin Model - /apps/user/admin/model.php
  */
 
-// Inclusion du modèle principal pour héritage
-if (!class_exists('UserModel')) {
-	include APPS_DIR.'user'.DS.'front'.DS.'model.php';
-}
+defined('IN_WITY') or die('Access denied');
 
+// Include Front Model for inheritance
+include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
+
+/**
+ * UserAdminModel is the admin Model of the User Application
+ * 
+ * @package Apps
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-15-02-2013
+ */
 class UserAdminModel extends UserModel {
 	private $db;
 	
 	public function __construct() {
+		parent::__construct();
 		$this->db = WSystem::getDB();
-		parent::__construct($this->db);
 	}
 	
-	public function deleteUser($id) {
+	/**
+	 * Creates a user in the database
+	 * This is a admin version able to change users.access
+	 * 
+	 * @param array $data
+	 * @return boolean Request success
+	 */
+	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			DELETE FROM users WHERE id = :id
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, access, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :access, :ip)
 		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
+		$prep->bindParam(':nickname', $data['nickname']);
+		$prep->bindParam(':password', $data['password']);
+		$confirm = isset($data['confirm']) ? $data['confirm'] : '';
+		$prep->bindParam(':confirm', $confirm);
+		$prep->bindParam(':email', $data['email']);
+		$firstname = isset($data['firstname']) ? $data['firstname'] : '';
+		$prep->bindParam(':firstname', $firstname);
+		$lastname = isset($data['lastname']) ? $data['lastname'] : '';
+		$prep->bindParam(':lastname', $lastname);
+		$country = isset($data['country']) ? $data['country'] : '';
+		$prep->bindParam(':country', $country);
+		$prep->bindParam(':groupe', $data['groupe']);
+		$prep->bindParam(':access', $data['access']);
+		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
 		return $prep->execute();
 	}
 	
 	/**
-	 * Récupère la liste complète des pages
+	 * Deletes a user
+	 * 
+	 * @param int $userid
+	 * @todo Move this method to UserModel to propose account deletion by user
 	 */
-	public function getCatList($order = 'name', $asc = true) {
+	public function deleteUser($userid) {
 		$prep = $this->db->prepare('
-			SELECT id, name, access
-			FROM users_cats
-			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC').'
+			DELETE FROM users WHERE id = :id
 		');
-		$prep->execute();
-		return $prep->fetchAll();
+		$prep->bindParam(':id', $userid, PDO::PARAM_INT);
+		return $prep->execute();
 	}
 	
-	public function createCat($data) {
+	/**
+	 * Retrieves the list of user groups
+	 * 
+	 * @param string $order Name of the ordering column
+	 * @param string $asc   Ascendent or descendent?
+	 */
+	public function getGroupsList($order = 'name', $asc = true) {
 		$prep = $this->db->prepare('
-			INSERT INTO users_cats(name, access)
+			SELECT id, name, access
+			FROM users_groups
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
+		);
+		$prep->execute();
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Retrieves details of a group
+	 * 
+	 * @param int $groupid
+	 */
+	public function getGroup($groupid) {
+		$prep = $this->db->prepare('
+			SELECT id, name, access
+			FROM users_groups
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Retrieves the list of user groups with users_count row
+	 * 
+	 * @param string $order Name of the ordering column
+	 * @param string $asc   Ascendent or descendent?
+	 */
+	public function getGroupsListWithCount($order = 'name', $asc = true) {
+		$prep = $this->db->prepare('
+			SELECT users_groups.id, name, users_groups.access, COUNT(*) AS users_count, groupe
+			FROM users
+			RIGHT JOIN users_groups
+			ON groupe = users_groups.id
+			GROUP BY users_groups.id
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
+		);
+		$prep->execute();
+		$data = array();
+		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
+			if ($row['groupe'] == 0) {
+				$row['users_count'] = 0;
+			}
+			unset($row['groupe']);
+			$data[] = $row;
+		}
+		return $data;
+	}
+	
+	/**
+	 * Creates a new group in the database
+	 * 
+	 * @param array $data array(nickname, access)
+	 */
+	public function createGroup($data) {
+		$prep = $this->db->prepare('
+			INSERT INTO users_groups(name, access)
 			VALUES (:name, :access)
 		');
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
-		return $prep->execute() or die (var_dump($prep->errorInfo()));
-	}
-	
-	public function updateCat($id, $data) {
-		return $this->db->query('
-			UPDATE users_cats
-			SET name = '.$this->db->quote($data['nameEdit']).', access = '.$this->db->quote($data['accessEdit']).'
-			WHERE id = '.$id
-		);
-	}
-	
-	public function deleteCat($id) {
-		$prep = $this->db->prepare('
-			DELETE FROM users_cats WHERE id = :id
-		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
 		return $prep->execute();
+	}
+	
+	/**
+	 * Updates a group in the database
+	 * 
+	 * @param int    $groupid  Group id
+	 * @param array  $data     Columns to update
+	 */
+	public function updateGroup($groupid, $data) {
+		$prep = $this->db->prepare('
+			UPDATE users_groups
+			SET name = :name, access = :access
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':name', $data['name']);
+		$prep->bindParam(':access', $data['access']);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Deletes a group in the database
+	 * 
+	 * @param int    $groupid  Group id
+	 */
+	public function deleteGroup($groupid) {
+		$prep = $this->db->prepare('
+			DELETE FROM users_groups WHERE id = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Removes all users who belonged to an obsolete group
+	 * 
+	 * @param int    $groupid  Group id
+	 */
+	public function resetUsersInGroup($groupid) {
+		$prep = $this->db->prepare('
+			UPDATE users
+			SET groupe = 0
+			WHERE groupe = :id
+		');
+		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Updates an array of users matching filters
+	 * 
+	 * @param array $data     Columns to update in users table
+	 * @param array $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 */
+	public function updateUsers(array $data, array $filters) {
+		if (empty($data)) {
+			return true;
+		}
+		// Add filters
+		$cond = '';
+		if (!empty($filters)) {
+			$allowed = array('groupe', 'access');
+			foreach ($filters as $name => $value) {
+				if (in_array($name, $allowed)) {
+					if (strpos($value, 'NOT:') === 0) {
+						$cond .= $name." != ".$this->db->quote(substr($value, 4))." AND ";
+					} else {
+						$cond .= $name." = ".$this->db->quote($value)." AND ";
+					}
+				}
+			}
+		}
+		if (empty($cond)) {
+			return true;
+		} else {
+			$cond = substr($cond, 0, -5);
+		}
+		$string = '';
+		foreach ($data as $key => $value) {
+			$string .= $key.' = '.$this->db->quote($value).', ';
+		}
+		$string = substr($string, 0, -2);
+		$prep = $this->db->prepare('
+			UPDATE users
+			SET '.$string.'
+			WHERE '.$cond
+		);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Transforms access data obtained from the admin form into an access string
+	 * 
+	 * @param string $type    Type of the user (none|all|custom)
+	 * @param array  $access  List of app and perms whose user have access
+	 * @return string Access string formated
+	 */
+	public function treatAccessData($type, $access) {
+		if ($type == 'all') {
+			return 'all';
+		} else if ($type == 'none' || empty($access)) {
+			return '';
+		} else { // Custom access
+			$access_string = '';
+			foreach ($access as $app => $perms) {
+				$perms = array_keys($perms);
+				if (!empty($perms)) {
+					$access_string .= $app.'['.implode('|', $perms).'],';
+				}
+			}
+			return substr($access_string, 0, -1);
+		}
+	}
+	
+	/**
+	 * Counts the users in the database having access different from their group's access
+	 * 
+	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @return array A list of information about the users found
+	 */
+	public function countUsersWithCustomAccess(array $filters = array()) {
+		$cond = '';
+		if (!empty($filters)) {
+			$allowed = array('nickname', 'email', 'firstname', 'lastname');
+			foreach ($filters as $name => $value) {
+				if (in_array($name, $allowed)) {
+					if (strpos($value, 'REGEXP:') === 0) {
+						$cond .= $name." REGEXP ".$this->db->quote(substr($value, 7))." AND ";
+					} else {
+						if (strpos($value, '%') === false) {
+							$value = '%'.$value.'%';
+						}
+						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+					}
+				}
+			}
+			if (!empty($filters['groupe'])) {
+				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
+			}
+		}
+		
+		$prep = $this->db->prepare('
+			SELECT COUNT(*)
+			FROM users
+			LEFT JOIN users_groups
+			ON groupe = users_groups.id
+			WHERE '.$cond.'users.access != users_groups.access
+		');
+		$prep->execute();
+		return intval($prep->fetchColumn());
+	}
+	
+	/**
+	 * Retrieves a list of users having access different from their group's access
+	 * 
+	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @return array A list of information about the users found
+	 */
+	public function getUsersWithCustomAccess(array $filters = array()) {
+		$cond = '';
+		if (!empty($filters)) {
+			$allowed = array('nickname', 'email', 'firstname', 'lastname');
+			foreach ($filters as $name => $value) {
+				if (in_array($name, $allowed)) {
+					if (strpos($value, 'REGEXP:') === 0) {
+						$cond .= $name." REGEXP ".$this->db->quote(substr($value, 7))." AND ";
+					} else {
+						if (strpos($value, '%') === false) {
+							$value = '%'.$value.'%';
+						}
+						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+					}
+				}
+			}
+			if (!empty($filters['groupe'])) {
+				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
+			}
+		}
+		
+		$prep = $this->db->prepare('
+			SELECT users.id, nickname, email, firstname, lastname, users.access, groupe, name AS groupe_name, ip
+			FROM users
+			LEFT JOIN users_groups
+			ON groupe = users_groups.id
+			WHERE '.$cond.'users.access != users_groups.access
+		');
+		$prep->execute();
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 }
 

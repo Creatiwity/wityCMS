@@ -39,9 +39,13 @@ class WLang {
 	 * Declaration of new compiler's handlers
 	 */
 	public static function init() {
+		// Init template handler
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
-		WTemplateCompiler::registerCompiler('lang_close', array('WLang', 'compile_lang_close'));
+		
+		// Default lang
+		$lang_config = WConfig::get('config.lang');
+		WLang::selectLang($lang_config);
 	}
 	
 	/**
@@ -53,50 +57,17 @@ class WLang {
 		// todo: check if $lang is a correct language
 		self::$language = strtolower(substr($lang, 0, 2));
 	}
-
+	
 	/**
 	 * Assign a new language constant
 	 *
-	 * @param string $name  name as it is in the template file
-	 * @param string $value value as it is after compiling the template file
+	 * @param string $name  name as it is in the lang file
+	 * @param string $value value as it is after compiling the lang file
 	 */
 	public static function assign($name, $value) {
 		if (!empty($name) && !empty($value)) {
 			self::$values[$name] = $value;
 		}
-	}
-
-	/**
-	 * Returns the value in the current language associated to the $name key
-	 *
-	 * @param  string $name name as it is in the template file
-	 * @return string value as it is after compiling the template file
-	 */
-	public static function get($name) {
-		// Try to load lang files
-		while (!isset(self::$values[$name]) && !empty(self::$lang_dirs)) {
-			$dir = array_shift(self::$lang_dirs);
-			self::loadLangFile($dir);
-			// Mark as loaded
-			self::$lang_dirs_loaded[] = $dir;
-		}
-		
-		if (isset(self::$values[$name])) {
-			return self::$values[$name];
-		}
-		return $name;
-	}
-
-	/**
-	 * get($name) alias
-	 * 
-	 * Example : <code>WLang::_('LANG_ID');</code>
-	 * 
-	 * @param string $name name as it is in the template file
-	 * @return string value as it is after compiling the template file
-	 */
-	public static function _($name) {
-		return self::get($name);
 	}
 	
 	/**
@@ -108,7 +79,7 @@ class WLang {
 	public static function declareLangDir($dir) {
 		if (is_dir($dir)) {
 			// Save lang directory
-			self::$lang_dirs[] = rtrim($dir, '/').'/';
+			self::$lang_dirs[] = rtrim($dir, DS).DS;
 			return true;
 		}
 		return false;
@@ -124,53 +95,89 @@ class WLang {
 		if (file_exists($file)) {
 			$string = file_get_contents($file);
 			$xml = new SimpleXMLElement($string);
-			
 			foreach ($xml->item as $lang_item) {
 				self::assign((string) $lang_item->attributes()->id, (string) $lang_item);
 			}
+			
+			// Mark as loaded
+			self::$lang_dirs_loaded[] = $dir;
 		}
+	}
+	
+	/**
+	 * Returns the value in the current language associated to the $name key
+	 *
+	 * @param  string $name name as it is in the lang file
+	 * @return string value as it is after compiling the lang file
+	 */
+	public static function get($name, $params = null) {
+		if (!empty($name)) {
+			// Try to load lang files
+			while (!isset(self::$values[$name]) && !empty(self::$lang_dirs)) {
+				self::loadLangFile(array_shift(self::$lang_dirs));
+			}
+			
+			if (isset(self::$values[$name])) {
+				if (!empty($params)) {
+					if (!is_array($params)) {
+						$params = array(self::$values[$name], $params);
+					} else {
+						array_unshift($params, self::$values[$name]);
+					}
+					return call_user_func_array('sprintf', $params);
+				} else {
+					return self::$values[$name];
+				}
+			}
+		}
+		return $name;
+	}
+	
+	/**
+	 * get($name) alias
+	 * 
+	 * Example : <code>WLang::_('LANG_ID');</code>
+	 * 
+	 * @param string $name name as it is in the lang file
+	 * @return string value as it is after compiling the lang file
+	 */
+	public static function _($name, $params = null) {
+		return self::get($name, $params);
 	}
 	
 	/*****************************************
 	 * WTemplateCompiler's new handlers part *
 	 *****************************************/
-	
 	/**
-	 *
-	 * @var boolean true if a node is open 
-	 */
-	private static $short_node = false;
-	
-	/**
-	 * Handles the {lang} opening node in WTemplate
+	 * Handles the {lang} node in WTemplate
+	 * {lang} gives access to translation variables
+	 * sprintf format (such as %s) may be use in language files like this :
+	 * {lang index|{$arg1}} = sprintf(WLang::_('index'), {$arg1})
 	 * 
-	 * @todo Remove syntax choice
-	 * @param string $args optional language identifier if no closing node in template file
+	 * @param string $args language identifier if no closing node in template file
 	 * @return string php string that calls the WLang::get()
 	 */
 	public static function compile_lang($args) {
-		if (empty($args)) {
-			self::$short_node = true;
-			return "<?php echo WLang::get('";
-		} else {
-			return "<?php \$lang = WLang::get('".$args."');\n"
-				."if (!empty(\$lang)): echo \$lang;\n"
-				."else: ?>";
+		if (!empty($args)) {
+			$data = explode('|', $args);
+			$id = trim(array_shift($data), ' {}');
+			$id_parsed = WTemplateCompiler::parseVar($id);
+			// if $id is a string, encapsulate it inside quotes
+			$id = !empty($id_parsed) ? $id_parsed : "'".$id."'";
+			if (!empty($data)) {
+				$args = '';
+				foreach ($data as $var) {
+					$var_parsed = WTemplateCompiler::parseVar(trim($var, '{}'));
+					if (!empty($var_parsed)) {
+						$args .= $var_parsed.', ';
+					}
+				}
+				return "<?php echo WLang::get(".$id.", array(".$args.")); ?>";
+			} else {
+				return "<?php echo WLang::get(".$id."); ?>";
+			}
 		}
-	}
-	
-	/**
-	 * Handles the {/lang} closing node in WTemplate
-	 * 
-	 * @return string php string that closes the 
-	 */
-	public static function compile_lang_close() {
-		if (self::$short_node) {
-			self::$short_node = false;
-			return "'); ?>";
-		} else {
-			return "<?php endif; ?>";
-		}
+		return '';
 	}
 }
 

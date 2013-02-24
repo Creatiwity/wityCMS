@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang value="en">
+	<!-- Errors -->
+	<item id="bad_data">Please, fill in all the required fields.</item>
+	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
+	<item id="error_no_password">No password given.</item>
+	<item id="user_not_found">The user requested does not exist.</item>
+	<item id="nickname_bad_length">Nickname length must be between 3 and 30 characters.</item>
+	<item id="nickname_invalid_char">Nickname contains invalid char (.)</item>
+	<item id="nickname_already_used">Nickname already in use.</item>
+	<item id="email_not_valid">The email given is not valid.</item>
+	<item id="email_already_used">The email given is already in use.</item>
+	
+	<!-- General -->
+	<item id="search">Search</item>
+	<item id="nickname">Nickname</item>
+	<item id="password">Mot de passe</item>
+	<item id="email">Email</item>
+	<item id="firstname">Firstname</item>
+	<item id="lastname">Lastname</item>
+	<item id="group">Group</item>
+	<item id="statistics">Statistics</item>
+	<item id="register_time">Registering time</item>
+	<item id="last_connection">Last connection</item>
+	<item id="edit">Edit</item>
+	<item id="delete">Delete</item>
+	<item id="cancel">Cancel</item>
+	
+	<!-- User add/edit form -->
+	<item id="users_found">%s users found</item>
+	<item id="no_user_found">No user found</item>
+	<item id="leave_empty_to_leave_unchanged">Leave empty to let the password unchanged.</item>
+	<item id="confirmation">(confirmation)</item>
+	<item id="group_default">No group</item>
+	<item id="user_rights">Access rights</item>
+	<item id="access_none">Regular user</item>
+	<item id="access_all">Supreme Administrator</item>
+	<item id="access_custom">Custom access</item>
+	<item id="check_all">Check all</item>
+	<item id="uncheck_all">Uncheck all</item>
+	<item id="no_permissions">Neither specific permissions, nor admin zone for this app.</item>
+	<item id="add_user">Create user</item>
+	<item id="edit_user">Edit user</item>
+	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_created">The user %s was created successfully.</item>
+	<item id="user_not_created">An unknown error occured when trying to create your account in the database.</item>
+	<item id="user_edited"><![CDATA[The user <strong>%s</strong> was edited successfully.]]></item>
+	<item id="user_not_edited">An unknown error occured while trying to edit the account %s in the database.</item>
+	<item id="send_email_confirmation">Send an account creation confirmation by mail?</item>
+	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
+	
+	<!-- User deletion -->
+	<item id="user_deleted">The user was deleted successfully.</item>
+	<item id="user_self_delete">You cannot delete your own account.</item>
+	
+	<!-- Group form -->
+	<item id="add_a_group">Add a group</item>
+	<item id="group_name">Group name</item>
+	<item id="group_default_access_for_users">Default access for users belonging to the group</item>
+	<item id="group_users_count">Users count in the group</item>
+	<item id="actions">Actions</item>
+	<item id="no_group_found">No group found</item>
+	<item id="apply">Apply</item>
+	<item id="group_del_confirm">Do you really want to delete the group %s?</item>
+	<item id="group_not_modified">An unknow error occured while trying to apply changes to the group.</item>
+	
+	<!-- Group treatment -->
+	<item id="group_name_empty">No group name given</item>
+	<item id="group_added"><![CDATA[The group <strong>%s</strong> was edited successfully.]]></item>
+	<item id="group_edited"><![CDATA[The group <strong>%s</strong> was added successfully.]]></item>
+	<item id="group_not_added">An unknown error occured while trying to apply changes to the group in the database.</item>
+	<item id="group_deleted">The group selected was deleted successfully.</item>
+	
+	<!-- Group dif -->
+	<item id="reset">Reset</item>
+</lang>

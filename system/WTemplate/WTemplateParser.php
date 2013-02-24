@@ -17,7 +17,7 @@ class WTemplateParser {
 	/**
 	 * Replaces all nodes found in $string by the callback result
 	 * 
-	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+	 * If the char '{' is backslashed or directly followed by a carriage return, it will be ignored.
 	 * 
 	 * @param string    $string     a string to parse
 	 * @param string    $callback   the callback to call to replace the node
@@ -70,7 +70,8 @@ class WTemplateParser {
 				case '{':
 					if (!$comment) {
 						// Check whether { is backslashed
-						if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $last_char != '\\') {
+						// List of authorized chars to start a node (alphanum, / for closing nodes and $ for var displaying nodes
+						if (preg_match('#[a-zA-Z0-9/$]#', $string[$i+1]) && $last_char != '\\') {
 							$level++;
 						}
 						
@@ -99,8 +100,12 @@ class WTemplateParser {
 							
 							// We arrived at the end of the node => compile it
 							if ($level == 0) {
-								$code .= call_user_func($callback, $tmp);
-								$tmp = "";
+								if (!empty($tmp)) {
+									$code .= call_user_func($callback, $tmp);
+									$tmp = "";
+								} else {
+									$code .= '{}';
+								}
 							}
 						} else if ($last_char == '%') {
 							$comment = false;
@@ -118,7 +123,8 @@ class WTemplateParser {
 					}
 					
 					if ($level > 0) {
-						// add the last backslash which was skipped
+						// We are in a node. Special chars may be used
+						// so add them back
 						if ($last_char == '\\') {
 							$tmp .= '\\';
 						} else if ($last_char == '%') {

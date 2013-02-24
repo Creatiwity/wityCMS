@@ -1,34 +1,34 @@
-<div class="box-center fleft">
-	<h1><span>Connexion</span></h1>
+<div id="login-form">
+	<h1><span>{lang login}</span></h1>
 	<form action="/user/" method="post">
-		<table class="users">
+		<table>
 			<tr>
-				<td class="tright"><label for="nickname">Identifiant :</label></td>
+				<td class="tright"><label for="nickname">{lang nickname} :</label></td>
 				<td><input id="nickname" type="text" name="nickname" /></td>
 			</tr>
 			<tr>
-				<td class="tright"><label for="password">Mot de passe :</label></td>
+				<td class="tright"><label for="password">{lang password} :</label></td>
 				<td><input id="password" type="password" name="password" /></td>
 			</tr>
 			<tr>
-				<td class="tright"><label for="minutes">Rester connecté pendant :</label></td>
-				<td><input id="minutes" type="text" name="time" value="60" size="3" /> <em>minutes</em></td>
+				<td class="tright"><label for="minutes">{lang remain_connected_for} :</label></td>
+				<td><input id="minutes" type="text" name="time" value="60" size="3" /> <em>{lang minuts}</em></td>
 			</tr>
 			<tr>
-				<td class="tright"><label for="always">Toujours rester connecté :</label></td>
+				<td class="tright"><label for="always">{lang always_remain_connected} :</label></td>
 				<td><input id="always" type="checkbox" name="remember" 
 					onclick="document.getElementById('minutes').disabled = document.getElementById('minutes').disabled == true ? false : true;" /></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="tcenter">
 					<input type="hidden" name="redirect" value="{$redirect}" />
-					<input type="submit" value="Connexion" />
+					<input type="submit" value="{lang login_button}" />
 				</td>
 			</tr>
 			<!--<tr>
-				<td colspan="2" class="centre"><a href="">Mot de passe perdu ?</a></td>
+				<td colspan="2" class="centre"><a href="">{lang password_lost}</a></td>
 			</tr>-->
 		</table>
 	</form>
 </div>
-<div class="spacer"></div>
+<div class="clear"></div>

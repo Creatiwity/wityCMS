@@ -63,8 +63,8 @@ abstract class WController {
 		}
 		
 		// Automaticly declare the language directory
-		if (is_dir($context['directory'].DS.'lang')) {
-			WLang::declareLangDir($context['directory'].DS.'lang');
+		if (is_dir($context['directory'].'lang')) {
+			WLang::declareLangDir($context['directory'].'lang');
 		}
 		
 		// Parse the manifest
@@ -86,44 +86,24 @@ abstract class WController {
 	 * @param type $default optional default page value
 	 * @return boolean Action forwarding success
 	 */
-	protected function forward($action) {
-		// Find a fine $action
-		if ($this->getAdminContext()) {
-			// $action exists in admin ? Otherwise, default_admin action exists?
-			if (!isset($this->manifest['admin'][$action]) && isset($this->manifest['default_admin'])) {
-				$action = $this->manifest['default_admin'];
-			}
-		} else {
-			// $action exists ? Otherwise, default action exists?
-			if (!isset($this->manifest['pages'][$action]) && isset($this->manifest['default'])) {
-				$action = $this->manifest['default'];
-			}
-		}
-		
+	protected final function forward($action) {
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
-				$this->execAction($action);
+				// Execute action
+				if (method_exists($this, $action)) {
+					$this->action = $action;
+					$this->$action();
+				} else {
+					WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
+				}
 				return true;
+			} else {
+				WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.', 'display');
 			}
 		} else {
-			WNote::error('app_no_suitable_action', 'The application '.$this->getAppName().' couldn\'t answer to your request.', 'display');
+			WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.', 'display');
 		}
 		return false;
-	}
-	
-	/**
-	 * Triggers the method corresponding to the action
-	 * 
-	 * @param string $action Name of the method to execute
-	 * @throws Exception
-	 */
-	protected function execAction($action) {
-		if (method_exists($this, $action)) {
-			$this->action = $action;
-			$this->$action();
-		} else {
-			WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
-		}
 	}
 	
 	/**
@@ -165,16 +145,32 @@ abstract class WController {
 	
 	/**
 	 * Returns action's name which is the first parameter given in the URL, right after the app's name
+	 * If the $check param is set to true, the method will check if the action
+	 * found is declared in the manifest. Otherwise, it will retun the default
+	 * application action.
 	 * 
+	 * @param bool $check Check if the action found is correct (default to true)
 	 * @return string page's name asked in the URL
 	 */
-	public function getAskedAction() {
+	public function getAskedAction($check = true) {
 		$args = WRoute::getArgs();
-		if (isset($args[0])) {
-			return $args[0];
-		} else {
-			return '';
+		$action = isset($args[0]) ? $args[0] : '';
+		
+		// Find a fine $action
+		if ($check) {
+			if ($this->getAdminContext()) {
+				// $action exists in admin ? Otherwise, default_admin action exists?
+				if ((empty($action) || !isset($this->manifest['admin'][$action])) && isset($this->manifest['default_admin'])) {
+					$action = $this->manifest['default_admin'];
+				}
+			} else {
+				// $action exists ? Otherwise, default action exists?
+				if ((empty($action) || !isset($this->manifest['pages'][$action])) && isset($this->manifest['default'])) {
+					$action = $this->manifest['default'];
+				}
+			}
 		}
+		return $action;
 	}
 	
 	/**
@@ -220,7 +216,7 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('title', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'service':
@@ -230,6 +226,7 @@ abstract class WController {
 					break;
 				
 				case 'page':
+					$manifest['pages'] = array();
 					if (property_exists($xml, 'page')) {
 						foreach ($xml->page as $page) {
 							$attributes = $page->attributes();
@@ -250,6 +247,7 @@ abstract class WController {
 					break;
 				
 				case 'admin':
+					$manifest['admin'] = array();
 					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'page')) {
 						foreach ($xml->admin->page as $page) {
 							if (!empty($page)) {
@@ -273,16 +271,21 @@ abstract class WController {
 					break;
 				
 				case 'permission':
+					$manifest['permissions'] = !empty($manifest['admin']) ? array('admin') : array();
 					if (property_exists($xml, 'permission')) {
-						foreach ($xml->admin->page as $permission) {
+						foreach ($xml->permission as $permission) {
 							if (!empty($permission)) {
-								$attributes = $page->attributes();
+								$attributes = $permission->attributes();
 								if (!empty($attributes['name'])) {
 									$manifest['permissions'][] = (string) $attributes['name'];
 								}
 							}
 						}
 					}
+					break;
+				
+				case 'name':
+					$manifest['name'] = property_exists($xml, 'name') ? (string) $xml->name : basename(dirname($manifest_href));
 					break;
 				
 				default:
@@ -298,24 +301,29 @@ abstract class WController {
 	 * hasAccess('news') = does the user have access to news app?
 	 * hasAccess('news', 'detail') = access to action detail in news app?
 	 * 
-	 * @param string $app    Name of the app
-	 * @param string $action action in the app to be checked (can be empty '')
+	 * @param string  $app    Name of the app
+	 * @param string  $action Action in the app to be checked (can be empty '' to check overall app access)
+	 * @param boolean $admin  Admin context (default to Wity admin context)
 	 * @return boolean
 	 */
-	public function hasAccess($app, $action = '', $admin = false) {
+	public function hasAccess($app, $action = '', $admin = null) {
+		if (is_null($admin)) {
+			$admin = $this->getAdminContext();
+		}
+		
 		// Check manifest
 		$manifest = $this->loadManifest($app);
 		if (is_null($manifest)) {
 			return false;
 		}
 		
-		// Administrator supreme case
-		if (!empty($_SESSION['access']) && in_array('all', $_SESSION['access'])) {
-			return true;
-		}
-		
-		if ($this->getAdminContext()) { // Admin mode ON
-			if (isset($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
+		if ($admin) { // Admin mode ON
+			if (empty($_SESSION['access'])) {
+				return false;
+			}
+			if ($_SESSION['access'] == 'all') {
+				return true;
+			} else if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
 				if (empty($action)) { // Asking for application access
 					return true;
 				} else if (isset($manifest['admin'][$action])) {
@@ -344,6 +352,13 @@ abstract class WController {
 				// Check permissions
 				foreach ($manifest['pages'][$action]['requires'] as $req) {
 					switch ($req) {
+						case 'not-connected':
+							if (WSession::isConnected()) {
+								WNote::error('app_logout_required', 'The '.$action.' action of the application '.$app.' requires to be loged out.', 'display');
+								return false;
+							}
+							break;
+						
 						case 'connected':
 							if (!WSession::isConnected()) {
 								WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.', 'display');

@@ -180,24 +180,28 @@ class WView {
 		switch ($stack_name) {
 			case 'css':
 				$css = $this->tpl->getVar('css');
-				foreach ($this->vars['css'] as $file) {
-					$css .= sprintf(
-						'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
-						(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
-						$file
-					);
+				if (is_array($this->vars['css'])) {
+					foreach ($this->vars['css'] as $file) {
+						$css .= sprintf(
+							'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
+							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
+							$file
+						);
+					}
 				}
 				return $css;
 				break;
 			
 			case 'js':
 				$script = $this->tpl->getVar('js');
-				foreach ($this->vars['js'] as $file) {
-					$script .= sprintf(
-						'<script type="text/javascript" src="%s%s"></script>'."\n", 
-						(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
-						$file
-					);
+				if (is_array($this->vars['js'])) {
+					foreach ($this->vars['js'] as $file) {
+						$script .= sprintf(
+							'<script type="text/javascript" src="%s%s"></script>'."\n", 
+							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
+							$file
+						);
+					}
 				}
 				return $script;
 				break;
@@ -237,34 +241,29 @@ class WView {
 			return false;
 		}
 		
-		// Handle notes
-		$notes = WNote::parse(WNote::get('*'));
 		if ($this->getTheme() != '_blank') {
-			$this->assign('notes', $notes);
-		} else {
-			echo $notes;
-		}
-		
-		// Treat "special vars"
-		foreach ($this->specialVars as $stack) {
-			if (!empty($this->vars[$stack])) {
-				$this->vars[$stack] = $this->getSpecialVar($stack);
-			} else {
-				unset($this->vars[$stack]);
-			}
-		}
-		
-		// Assign View variables
-		$this->tpl->assign($this->vars);
-		
-		if ($this->themeName == '_blank') {
-			$themeMainFile = $this->responseFile;
-		} else {
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $this->responseFile);
 			
 			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
+			
+			// Handle notes
+			$notes = WNote::parse(WNote::get('*'));
+			$this->tpl->assign('notes', $notes);
+		} else {
+			$themeMainFile = $this->responseFile;
+			
+			// Trigger notes debug handler for remaining notes
+			echo WNote::parse(WNote::get('*'));
 		}
+		
+		// Treat "special vars"
+		foreach ($this->specialVars as $stack) {
+			$this->vars[$stack] = $this->getSpecialVar($stack);
+		}
+		
+		// Assign View variables
+		$this->tpl->assign($this->vars);
 		
 		$dir = WRoute::getDir();
 		if (empty($dir)) {

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang value="fr">
+	<!-- Errors -->
+	<item id="bad_data">Please, fill in all the required fields.</item>
+	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
+	<item id="error_no_password">No password given.</item>
+	<item id="nickname_bad_length">Nickname length must be between 3 and 30 characters.</item>
+	<item id="nickname_invalid_char">Nickname contains invalid char (.)</item>
+	<item id="nickname_already_used">Nickname already in use.</item>
+	<item id="email_not_valid">The email given is not valid.</item>
+	<item id="email_already_used">The email given is already in use.</item>
+	
+	<!-- Connection -->
+	<item id="login_success">Welcome %s!</item>
+	<item id="login_max_attempt">You reached the maximum of login attempt authorized.
+Please, wait a moment before trying again.</item>
+	<item id="login_error"><![CDATA[The <em>nickname / password</em> given do not match.]]></item>
+	<item id="user_disconnected">You were loged out successfully.</item>
+	<item id="cookie_not_accepted">Your browser does not accepte cookies. You may be disconnected at any moment.</item>
+	
+	<!-- User registering -->
+	<item id="user_register_email_subject">%s - Your user account creation</item>
+	<item id="user_register_confirmation">Your account on %s was created successfully.
+
+You are going to receive in your mailbox a new message to validate your account.</item>
+	<item id="user_register_failure">An unknown error occured when trying to create your account in the database.</item>
+	<item id="user_validated">Your account got validated successfully. You can now login with it.</item>
+	
+	<!-- Login form -->
+	<item id="login">Connexion</item>
+	<item id="nickname">Identifier</item>
+	<item id="password">Password</item>
+	<item id="remain_connected_for">Remain connected for...</item>
+	<item id="minuts">minuts</item>
+	<item id="always_remain_connected">Always remain connected</item>
+	<item id="password_lost">Password lost?</item>
+	<item id="login_button">Connexion</item>
+</lang>

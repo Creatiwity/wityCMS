@@ -66,7 +66,7 @@ class WTemplateFile {
 		$this->baseDir = $baseDir;
 		$this->compilationDir = $compDir;
 		$this->compilationHref = $this->createCompilationHref();
-		$this->creationTime = filemtime($baseDir.$href);
+		$this->creationTime = @filemtime($baseDir.$href);
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class WTemplateFile {
 		
 		// Cached file is too old
 		$cacheDate = @filemtime($this->compilationHref);
-		if ($cacheDate < $this->creationTime) {
+		if (empty($this->compilationHref) || $cacheDate < $this->creationTime) {
 			return false;
 		}
 		
@@ -149,9 +149,6 @@ class WTemplateFile {
 		}
 	}
 	
-	/**
-	 * Write output string into the cache file
-	 */
 	/**
 	 * Writes output string into the cache file
 	 * 

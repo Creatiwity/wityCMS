@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <app>
 	<!-- Application name -->
-	<title>User</title>
+	<name>User</name>
 	
 	<version>0.1</version>
 	
@@ -17,13 +17,21 @@
 	<page>register</page>
 	<page>confirm</page>
 	
+	<!-- Permissions -->
+	<permission name="add" />
+	<permission name="edit" />
+	<permission name="delete" />
+	<permission name="groups" />
+	
 	<!-- Admin pages -->
 	<admin>
-		<page lang="Liste des membres" default="1">liste</page>
-		<page lang="Ajouter un utilisateur">add</page>
-		<page lang="Éditer un utilisateur" menu="false">edit</page>
-		<page lang="Supprimer un utilisateur" menu="false">del</page>
-		<page lang="Gestion des catégories">cat</page>
-		<page lang="Suprimer une catégorie" menu="false">cat_del</page>
+		<page lang="Liste des membres" default="1">listing</page>
+		<page lang="Ajouter un utilisateur" requires="add">add</page>
+		<page lang="Éditer un utilisateur" menu="false" requires="edit">edit</page>
+		<page lang="Supprimer un utilisateur" menu="false" requires="delete">del</page>
+		<page lang="Gestion des groupes" requires="groups">groups</page>
+		<page lang="Suprimer un groupe" menu="false" requires="groups,delete">group_del</page>
+		<page lang="" menu="false" requires="groups,edit">group_dif</page>
+		<page lang="" menu="false" requires="groups,edit">load_users_with_letter</page>
 	</admin>
 </app>

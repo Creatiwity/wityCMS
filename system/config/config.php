@@ -10,6 +10,7 @@ $config = array(
 	'site_name' => 'WityCMS',
 	'theme' => '_blank',
 	'lang' => 'fr-FR',
+	'email' => 'contact@site.fr'
 );
 
 ?>

@@ -47,7 +47,7 @@ class WHelper {
 			);
 			
 			// Include helper main file containing the class to instantiate
-			include HELPERS_DIR.$helper_name.DS.$helper['file'];
+			include_once HELPERS_DIR.$helper_name.DS.$helper['file'];
 			
 			// Check helper class existency
 			if (!class_exists($helper['class'])) {

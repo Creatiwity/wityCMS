@@ -1,0 +1,81 @@
+<div id="content" class="large">
+	<form action="/admin/user/group_dif/" method="post">
+		<div id="group-dif" class="item">
+			<script type="text/javascript">
+				var groupid = {$group.id};
+				var group_access = '{$group.access}';
+			</script>
+			<input type="hidden" name="groupid" value="{$group.id}" />
+			<input type="hidden" name="old_access" value="{$group.access}" />
+			<input type="hidden" name="new_name" value="{$new_name}" />
+			<input type="hidden" name="new_access" value="{$new_access}" />
+			<h1>Application des nouveaux droits d'accès au groupe {$group.name} ({$count_total} utilisateurs)</h1>
+			<p>
+				{if {$count_regular} > 0}
+				<label><input type="checkbox" name="apply_to_regular" checked="checked" /> Appliquer les nouveaux droits aux utilisateurs qui héritent des accès du groupe ({$count_regular} utilisateurs)</label>
+				<br />
+				{/if}
+				{if {$count_custom} > 0}
+				<label><input id="display-custom" type="checkbox" name="apply_to_custom" checked="checked" /> Appliquer les nouveaux droits aux utilisateurs ayant des accès personnalisés ({$count_custom} utilisateurs)</label>
+				{/if}
+			</p>
+			{if {$count_custom} > 0}
+			<div class="listing-wrapper">
+				<div class="alphabet">
+				{for $letter, $users_count in $alphabet}<a href="javascript:void(0)">{$letter}{if {$users_count} > 0} ({$users_count}){/if}</a> {/for}
+				</div>
+				<div class="users-list-container">
+					<p>Sélectionnez les utilisateurs auxquels vous voulez appliquer les nouveaux droits.</p>
+					<dl class="users-list">
+						<dt class="pattern"><label><input type="checkbox" name="user[]" checked="checked" /> <span class="nickname"></span></label></dt>
+						<dd class="pattern">
+							<label><input class="access-type none" type="radio" name="type[]" value="none" checked="checked" /> {lang access_none}</label>
+							<label><input class="access-type all" type="radio" name="type[]" value="all" /> {lang access_all}</label>
+							<label><input class="access-type custom" type="radio" name="type[]" value="custom" /> {lang access_custom}</label>
+							- [<a href="javascript:void(0)" class="reset">{lang reset}</a>]
+							
+							<div class="custom-controls tright">
+								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+							</div>
+							<table class="rights" cellpadding="0" cellspacing="0">
+								<colgroup><col width="25%" /></colgroup>
+								{for $app, $details in $admin_apps}
+								<tr>
+									<td class="tcenter"><strong>{$details.name}</strong></td>
+									<td>
+										<table class="permissions" cellpadding="0" cellspacing="0">
+											<tr class="tcenter">
+											{for $perm in {$details.permissions}}
+												<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[][{$app}][{$perm}]" /></label></td>
+											{/for}
+											{empty}
+												<td><em>{lang no_permissions}</em></td>
+											{/empty}
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{/for}
+							</table>
+							<div class="custom-controls tright">
+								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+							</div>
+						</dd>
+					</dl>
+					<ul class="legende">
+						<li><span class="same">Permission commune au groupe</span></li>
+						<li><span class="plus">Permission en plus du groupe</span></li>
+						<li><span class="minus">Permission en moins du groupe</span></li>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
+			{/if}
+			<p class="tcenter">
+				<input type="submit" value="{lang apply}" class="button-submit" />
+				<input type="button" value="{lang cancel}" class="button-submit" onclick="history.back();" />
+			</p>
+		</div>
+	</form>
+</div>
+<div class="clear"></div>

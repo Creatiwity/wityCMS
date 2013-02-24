@@ -35,7 +35,7 @@ class WMain {
 		$this->setupSession();
 		
 		// Initializing lang
-		$this->setupLang();
+		WLang::init();
 		
 		// $this->log();
 		
@@ -61,7 +61,7 @@ class WMain {
 		if ($this->isApp($app_name)) {
 			// App controller file
 			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
-			include $app_dir.'main.php';
+			include_once $app_dir.'main.php';
 			$app_class = str_replace('-', '_', ucfirst($app_name)).'Controller';
 			
 			// App's controller must inherit WController
@@ -77,7 +77,7 @@ class WMain {
 				$controller->init($this, $context);
 				$controller->launch();
 			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting WController abstract class.", 'display');
+				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
 			}
 		} else {
 			WNote::error(404, "The page requested was not found.", 'display');
@@ -138,15 +138,6 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
-	}
-	
-	/**
-	 * Loads lang config
-	 */
-	private function setupLang() {
-		$lang_config = WConfig::get('config.lang');
-		WLang::init();
-		WLang::selectLang($lang_config);
 	}
 	
 	/**

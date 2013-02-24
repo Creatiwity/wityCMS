@@ -132,15 +132,17 @@ class WRoute {
 	/**
 	 * Return the referer (the previous address)
 	 * 
+	 * @param bool $default true: if the referer is empty, returns the URL base; false: return ''
 	 * @return string the referer
 	 */
-	public static function getReferer() {
+	public static function getReferer($default = true) {
 		$base = self::getBase();
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $base) !== false) {
 			return $_SERVER['HTTP_REFERER'];
-		} else {
+		} else if ($default) {
 			return $base;
 		}
+		return '';
 	}
 	
 	/**
@@ -278,6 +280,17 @@ class WRoute {
 	 */
 	public static function getArgs() {
 		return WConfig::get('route.args');
+	}
+	
+	/**
+	 * Returns the arguments of the current application
+	 * 
+	 * @param int $index Argument index
+	 * @return array Argument corresponding to the index (null if not found)
+	 */
+	public static function getArg($index) {
+		$args = self::getArgs();
+		return isset($args[$index]) ? $args[$index] : null;
 	}
 	
 	/**

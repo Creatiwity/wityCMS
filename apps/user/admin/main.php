@@ -1,356 +1,389 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author	Fofif
- * @version	$Id: apps/user/admin/main.php 0003 02-02-2012 Fofif $
+ * User Application - Admin Controller - /apps/user/admin/main.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * UserAdminController is the Admin Controller of the User Application
+ * 
+ * @package Apps
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-15-02-2013
+ */
 class UserAdminController extends WController {
+	/**
+	 * @var Instance of UserAdminModel
+	 */
+	private $model;
+	
 	public function __construct() {
-		// Chargement des modèles
-		include 'model.php';
+		include_once 'model.php';
 		$this->model = new UserAdminModel();
 		
-		include 'view.php';
+		include_once 'view.php';
 		$this->setView(new UserAdminView($this->model));
 	}
 	
 	/**
-	 * Récupération de l'id de l'utilisateur fourni en Url
-	 * @param void
-	 * @return int
+	 * List action handler
+	 * Displays a list of users in the database
 	 */
-	private function getId() {
+	protected function listing() {
+		// Sorting criterias given by URL
 		$args = WRoute::getArgs();
-		if (!isset($args[1])) {
-			return -1;
-		} else {
-			list ($id) = explode('-', $args[1]);
-			return intval($id);
+		$criterias = array_shift($args);
+		if ($criterias == 'listing') {
+			$criterias = array_shift($args);
 		}
+		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sortBy, $sens, $page);
+		if (empty($page) || $page <= 0) {
+			$page = 1;
+		}
+		
+		// Filters
+		$filters = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
+		
+		$this->view->listing($sortBy, $sens, $page, $filters);
+		$this->view->render('listing');
 	}
 	
-	protected function liste() {
-		// Options de tri
-		$args = WRoute::getArgs();
-		$sortData = explode('-', array_shift($args));
-		$sortBy = empty($sortData) ? '' : array_shift($sortData);
-		$sens = empty($sortData) ? '' : array_shift($sortData);
-		$page = empty($sortData) ? 1 : $sortData[0];
-		
-		// Filtres
-		$filtres = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
-		
-		$this->view->liste($sortBy, $sens, $page, $filtres);
-		$this->view->render('liste');
-	}
-	
+	/**
+	 * Create a user
+	 */
 	protected function add() {
-		$data = WRequest::getAssoc(array('nickname', 'pass', 'pass_confirm', 'email', 'groupe'));
-		// Le formulaire a-t-il été envoyé ?
-		if (!in_array(null, $data, true)) {
-			// Liste des erreurs
-			$erreur = array();
-			
-			// Vérifie la disponibilité du pseudo
-			if (empty($data['nickname'])) {
-				$erreur[] = "Pseudonyme manquant.";
-			} else if (!$this->model->nicknameAvailable($data['nickname'])) {
-				$erreur[] = "Ce pseudonyme est déjà pris.";
-			}
-			
-			// Passwords identiques
-			if (!empty($data['pass'])) {
-				if ($data['pass'] === $data['pass_confirm']) {
-					$data['pass'] = sha1($data['pass']);
-				} else {
-					$erreur[] = "Les mots de passe sont différents.";
+		$data = array();
+		if (!empty($_POST)) {
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
+			if (!in_array(null, $data, true)) {
+				$errors = array();
+				
+				// Check nickname availabililty
+				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
+					$errors[] = WLang::get($e);
 				}
-			} else {
-				$erreur[] = "Aucun mot de passe n'a été fourni.";
-			}
-			
-			// Email
-			if (!empty($data['email']) && !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
-				$erreurs[] = "L'email fourni est invalide.";
-			} else if (!$this->model->emailAvailable($data['email'])) {
-				$erreur[] = "Cet email est déjà pris.";
-			}
-			
-			// Niveaux admin
-			list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-			if ($type == 'all') {
-				$data['access'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				foreach ($access as $key => $v) {
-					if (isset($level[$key])) {
-						$a[] = $key.'|'.intval($level[$key]);
+				
+				// Matching passwords
+				if (!empty($data['password']) || !empty($data['password_conf'])) {
+					if ($data['password'] === $data['password_conf']) {
+						$data['password'] = sha1($data['password']);
 					} else {
-						$a[] = $key.'|0';
+						$errors[] = WLang::get('error_password_not_matching');
 					}
+				} else {
+					$errors[] = WLang::get('error_no_password');
 				}
-				$data['access'] = implode(',', $a);
-			} else {
-				$data['access'] = '';
-			}
-			
-			// Affichage des éventuelles erreurs
-			if (!empty($erreur)) {
-				WNote::error('data_errors', implode("<br />\n", $erreur));
-				$this->view->add($data);
-				$this->render('add');
-			} else {
-				// Création de l'utilisateur
-				if ($this->model->createUser($data)) {
-					// Envoi des infos par email
-					if (!empty($data['email']) && WRequest::get('emailwarning') == 'on') {
-						include LIBS_DIR.'phpmailer'.DS.'class.phpmailer.php';
-						$mail = new PHPMailer();
-						$mail->CharSet = 'utf-8';
-						$mail->From = "forum@mines.inpl-nancy.fr";
-						$mail->FromName = "Forum Est-Horizon";
-						$mail->Subject = "Données de connexion au site Forum Est-Horizon";
-						$mail->Body = "Bonjour,<br /><br />
-Un compte utilisateur vient de vous être créé sur le site www.est-horizon.com.<br /><br />
-Pour vous connecter, rendez-vous à l'adresse <a href=\"http://www.est-horizon.com/admin/\">www.est-horizon.com/admin/</a>.<br /><br />
+				
+				// Email availabililty
+				if (($e = $this->model->checkEmail($data['email'])) !== true) {
+					$errors[] = WLang::get($e);
+				}
+				
+				// User access rights
+				$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
+				unset($data['type']);
+				
+				if (empty($errors)) {
+					// User creation
+					if ($this->model->createUser($data)) {
+						// Send email if requested
+						if (WRequest::get('email_confirmation') == 'on') {
+							$mail = WHelper::load('phpmailer');
+							$mail->CharSet = 'utf-8';
+							$mail->From = WConfig::get('config.email');
+							$mail->FromName = WConfig::get('config.site_name');
+							$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_name'));
+							$mail->Body = 
+"Bonjour,
+<br /><br />
+Un compte utilisateur vient de vous être créé sur le site ".WConfig::get('config.site_name').".<br /><br />
+Pour vous connecter, rendez-vous à l'adresse <a href=\"".WRoute::getBase()."/user/login/\">".WRoute::getBase()."/user/login/</a>.
+<br /><br />
 Voici vos données de connexion :<br />
 <strong>Identifiant :</strong> ".$data['nickname']."<br />
-<strong>Mot de passe :</strong> ".$data['pass_confirm']."<br /><br />
+<strong>Mot de passe :</strong> ".$data['password_conf']."
+<br /><br />
 Ces informations sont personnelles.<br />
-Pour tout changement, merci de contacter le pôle informatique.<br /><br />
-L'administrateur du site du Forum Est-Horizon<br /><br />
+Pour tout changement, rendez-vous sur l'espace membre.
+<br /><br />
+".WConfig::get('config.site_name')."
+<br /><br />
 --------------<br />
 Ceci est un message automatique.";
-						$mail->IsHTML(true);
-						$mail->AddAddress($data['email']);
-						$mail->Send();
-						unset($mail);
-					}
-					WNote::success('user_created', "L'utilisateur <strong>".$data['nickname']."</strong> a été ajouté avec succès.");
-					header('location: '.WRoute::getDir().'/admin/user/');
-				} else {
-					WNote::error('user_not_created', "Une erreur inconnue s'est produite.");
-					$this->view->add();
-					$this->render('add');
-				}
-			}
-		} else {
-			$this->view->add();
-			$this->view->render('add');
-		}
-	}
-	
-	protected function edit() {
-		$userid = $this->getId();
-		
-		$data = WRequest::getAssoc(array('nickname', 'email', 'groupe'));
-		// Le formulaire a-t-il été envoyé ?
-		if (!in_array(null, $data, true)) {
-			$data = array_merge($data, WRequest::getAssoc(array('password', 'password_confirm', 'access')));
-			$erreurs = array();
-			
-			// Chargement des données actuelles
-			$dbData = $this->model->getUserData($userid);
-			
-			// Vérification du pseudo
-			if (empty($data['nickname'])) {
-				$erreurs[] = "Pseudonyme manquant.";
-			} else if ($data['nickname'] != $dbData['nickname'] && !$this->model->nicknameAvailable($data['nickname'])) {
-				// On a vérifié que le pseudo a été changé
-				$erreurs[] = "Ce pseudonyme est déjà réservé.";
-			}
-			
-			// Passwords identiques
-			if (!empty($data['password'])) {
-				if ($data['password'] === $data['password_confirm']) {
-					// Hashage
-					$data['password'] = sha1($data['password']);
-					unset($data['password_confirm']);
-				} else {
-					$erreurs[] = "Les mots de passe sont différents.";
-				}
-			} else {
-				unset($data['password']);
-			}
-			unset($data['password_confirm']);
-			
-			// Email
-			if (!empty($data['email']) && !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $data['email'])) {
-				$erreurs[] = "L'email fourni est invalide.";
-			} else if ($data['email'] != $dbData['email'] && !$this->model->emailAvailable($data['email'])) {
-				$erreurs[] = "Cet email est déjà pris.";
-			}
-			
-			// Niveaux admin
-			list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-			if ($type == 'all') {
-				$data['access'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				if (is_array($access)) {
-					foreach ($access as $key => $v) {
-						if (isset($level[$key])) {
-							$a[] = $key.'|'.intval($level[$key]);
-						} else {
-							$a[] = $key.'|0';
+							$mail->IsHTML(true);
+							$mail->AddAddress($data['email']);
+							$mail->Send();
+							unset($mail);
 						}
+						WNote::success('user_created', WLang::get('user_created', $data['nickname']));
+						header('location: '.WRoute::getDir().'/admin/user/');
+						return;
+					} else {
+						WNote::error('user_not_created', WLang::get('user_not_created', $data['nickname']));
 					}
-				}
-				$data['access'] = implode(',', $a);
-			} else {
-				$data['access'] = '';
-			}
-			
-			// En cas d'erreur
-			if (!empty($erreurs)) {
-				WNote::error('data_errors', implode("<br />\n", $erreurs));
-				$this->view->edit($userid);
-				$this->view->render('edit');
-			} else {
-				// Mise à jour des infos
-				if ($this->model->updateUser($userid, $data)) {
-					WNote::success('user_edited', "L'utilisateur <strong>".$data['nickname']."</strong> a été mis à jour avec succès.");
-					header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
 				} else {
-					WNote::error('user_not_edited', "Une erreur inconnue s'est produite.");
-					$this->view->edit($userid);
-					$this->view->render('add');
+					WNote::error('data_errors', implode("<br />\n", $errors));
 				}
-			}
-		} else {
-			if (!$this->model->validId($userid)) {
-				WNote::error('user_not_found', "L'utilisateur recherché n'existe pas ou plus.");
-				$this->liste();
 			} else {
-				$this->view->edit($userid);
-				$this->view->render('edit');
+				WNote::error('bad_data', WLang::get('bad_data'));
 			}
 		}
+		$this->view->add($data);
+		$this->view->render('user_form');
 	}
 	
+	/**
+	 * Edits a user in the database
+	 */
+	protected function edit() {
+		$userid = intval(WRoute::getArg(1));
+		if (!$this->model->validId($userid)) {
+			WNote::error('user_not_found', WLang::get('user_not_found'));
+			header('location: '.WRoute::getDir().'/admin/user/');
+			return;
+		}
+		if (!empty($_POST)) {
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
+			if (!in_array(null, $data, true)) {
+				$update_data = array();
+				$errors = array();
+				
+				// Get old user data
+				$db_data = $this->model->getUser($userid);
+				
+				// Nickname change
+				if ($data['nickname'] != $db_data['nickname']) {
+					if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
+						$errors[] = WLang::get($e);
+					} else {
+						$update_data['nickname'] = $data['nickname'];
+					}
+				}
+				
+				// Password
+				if (!empty($data['password']) || !empty($data['password_conf'])) {
+					if ($data['password'] == $data['password_conf']) {
+						$password_hash = sha1($data['password']);
+						if ($password_hash != $db_data['password']) {
+							$update_data['password'] = $password_hash;
+						}
+					} else {
+						$errors[] = WLang::get('error_password_not_matching');
+					}
+				}
+				
+				// Email
+				if ($data['email'] != $db_data['email']) {
+					if (($e = $this->model->checkEmail($data['email'])) !== true) {
+						$errors[] = WLang::get($e);
+					} else {
+						$update_data['email'] = $data['emai'];
+					}
+				}
+				
+				// Firstname and Lastname
+				if ($data['firstname'] != $db_data['firstname']) {
+					$update_data['firstname'] = $data['firstname'];
+				}
+				if ($data['lastname'] != $db_data['lastname']) {
+					$update_data['lastname'] = $data['lastname'];
+				}
+				
+				// Group
+				if ($data['groupe'] != $db_data['groupe']) {
+					$update_data['groupe'] = intval($data['groupe']);
+				}
+				
+				// User access rights
+				$access = $this->model->treatAccessData($data['type'], $data['access']);
+				if ($access != $db_data['access']) {
+					$update_data['access'] = $access;
+				}
+				
+				if (empty($errors)) {
+					// Update database
+					if ($this->model->updateUser($userid, $update_data)) {
+						// Reload session if account was auto-edited
+						if ($userid == $_SESSION['userid']) {
+							WSystem::getSession()->reloadSession($userid);
+						}
+						
+						WNote::success('user_edited', WLang::get('user_edited', $data['nickname']));
+						header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
+						return;
+					} else {
+						WNote::error('user_not_edited', WLang::get('user_not_edited', $data['nickname']));
+					}
+				} else {
+					WNote::error('data_errors', implode("<br />\n", $errors));
+				}
+			} else {
+				WNote::error('bad_data', WLang::get('bad_data'));
+			}
+		}
+		$this->view->edit($userid);
+		$this->view->render('user_form');
+	}
+	
+	/**
+	 * Deletes a user
+	 */
 	protected function del() {
-		$userid = $this->getId();
-		if ($this->model->validId($userid)) {
+		$userid = intval(WRoute::getArg(1));
+		if ($userid != $_SESSION['userid']) {
+			if (!$this->model->validId($userid)) {
+				WNote::error('user_not_found', WLang::get('user_not_found'));
+				return;
+			}
 			if (WRequest::get('confirm', null, 'POST') === '1') {
 				$this->model->deleteUser($userid);
-				WNote::success('user_deleted', "L'utilisateur a été supprimé avec succès.");
+				WNote::success('user_deleted', WLang::get('user_deleted'));
 				header('location: '.WRoute::getDir().'/admin/user/');
 			} else {
 				$this->view->del($userid);
 				$this->view->render('del');
 			}
 		} else {
-			$this->liste();
+			WNote::error('user_self_delete', WLang::get('user_self_delete'));
+			header('location: '.WRoute::getDir().'/admin/user/');
 		}
 	}
 	
-	protected function cat() {
+	/**
+	 * Groups listing/add/edit action
+	 */
+	protected function groups() {
 		// Préparation tri colonnes
-		$args = WRoute::getArgs();
-		if (isset($args[1])) {
-			$sortData = explode('-', $args[1]);
-		} else {
-			$sortData = array();
-		}
-		$sortBy = empty($sortData) ? '' : array_shift($sortData);
-		$sens = empty($sortData) ? '' : $sortData[0];
+		$args = WRoute::getArg(1);
+		$count = sscanf(str_replace('-', ' ', $args), '%s %s', $sortBy, $sens);
 		
-		/**
-		 * Formulaire pour l'AJOUT d'une catégorie
-		 */
-		$data = WRequest::getAssoc(array('name'));
-		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
-		if (!in_array(null, $data, true)) {
-			$erreurs = array();
+		if (!empty($_POST)) {
+			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
+			$errors = array();
 			
 			if (empty($data['name'])) {
-				$erreurs[] = "Il manque un nom à la catégorie.";
+				$errors[] = WLang::get('group_name_empty');
 			}
 			
-			// Niveaux admin
-			list($type, $access, $level) = WRequest::get(array('type', 'access', 'level'));
-			if ($type == 'all') {
-				$data['access'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				foreach ($access as $key => $v) {
-					if (isset($level[$key])) {
-						$a[] = $key.'|'.intval($level[$key]);
-					} else {
-						$a[] = $key.'|0';
+			// User access rights
+			$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
+			
+			if (empty($errors)) {
+				$db_success = false;
+				if (empty($data['id'])) { // Adding a group
+					if ($this->model->createGroup($data)) {
+						WNote::success('group_added', WLang::get('group_added', $data['name']));
+						$db_success = true;
+					}
+				} else { // Editing a group
+					$db_data = $this->model->getGroup($data['id']);
+					if (!empty($db_data)) {
+						$count_users = $this->model->countUsers(array('groupe' => $data['id']));
+						// There will be a change in default group access affecting users
+						if ($data['access'] != $db_data['access'] && $count_users > 0) {
+							$this->view->group_dif($data['id'], $data['name'], $data['access']);
+							return;
+						} else if ($this->model->updateGroup($data['id'], $data)) {
+							WNote::success('group_edited', WLang::get('group_edited', $data['name']));
+							$db_success = true;
+						}
 					}
 				}
-				$data['access'] = implode(',', $a);
-			} else {
-				$data['access'] = '';
-			}
-			
-			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error('data_errors', implode("<br />\n", $erreurs));
-			} else {
-				if ($this->model->createCat($data)) {
-					WNote::success('cat_added', "La catégorie <strong>".$data['name']."</strong> a été ajoutée avec succès.");
-				} else {
-					WNote::error('cat_not_added', "Une erreur inconnue s'est produite.");
+				if (!$db_success) {
+					WNote::error('group_not_modified', WLang::get('group_not_modified'));
 				}
+			} else {
+				WNote::error('data_errors', implode("<br />\n", $errors));
 			}
 		}
-		
-		/**
-		 * Formulaire pour l'EDITION d'une catégorie
-		 */
-		$data = WRequest::getAssoc(array('idEdit', 'nameEdit', 'accessEdit'));
-		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
-		if (!in_array(null, $data, true)) {
-			$id = intval($data['idEdit']);
-			unset($data['idEdit']);
-			$erreurs = array();
-			
-			if (empty($data['nameEdit'])) {
-				$erreurs[] = "Le nom de la catégorie est vide.";
-			}
-			
-			// Niveaux admin
-			list($type, $access, $level) = WRequest::get(array('typeEdit', 'accessEdit', 'levelEdit'));
-			if ($type == 'all') {
-				$data['accessEdit'] = 'all';
-			} else if ($type == 'perso') {
-				$a = array();
-				foreach ($access as $key => $v) {
-					if (isset($level[$key])) {
-						$a[] = $key.'|'.intval($level[$key]);
-					} else {
-						$a[] = $key.'|0';
-					}
-				}
-				$data['accessEdit'] = implode(',', $a);
-			} else {
-				$data['accessEdit'] = '';
-			}
-			
-			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error('data_errors', implode("<br />\n", $erreurs));
-			} else {
-				if ($this->model->updateCat($id, $data)) {
-					WNote::success('cat_edited', "La catégorie <strong>".$data['nameEdit']."</strong> a été éditée avec succès.");
-				} else {
-					WNote::error('cat_not_edited', "Une erreur inconnue s'est produite.");
-				}
-			}
-		}
-		
-		$this->view->cat($sortBy, $sens);
-		$this->view->render('cat');
+		$this->view->groups_listing($sortBy, $sens);
+		$this->view->render('groups_listing');
 	}
 	
-	protected function cat_del() {
-		$id = $this->getId();
-		$this->model->deleteCat($id);
-		WNote::success('cat_deleted', "La catégorie a été supprimée avec succès.");
-		header('location: '.WRoute::getDir().'/admin/user/cat/');
+	/**
+	 * Deletes a group
+	 */
+	protected function group_del() {
+		$id = intval(WRoute::getArg(1));
+		if (!empty($id)) {
+			$this->model->deleteGroup($id);
+			$this->model->resetUsersInGroup($id);
+		}
+		WNote::success('group_deleted', WLang::get('group_deleted'));
+		header('location: '.WRoute::getDir().'/admin/user/groups/');
+	}
+	
+	/**
+	 * Makes the dif between old and new access to a group
+	 */
+	protected function group_dif() {
+		// Retrieve post data
+		$data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
+		if (!in_array(null, $data, true)) {
+			$data = array_merge($data, WRequest::getAssoc(array('apply_to_regular', 'apply_to_custom', 'user', 'type', 'access')));
+			if ($data['apply_to_regular'] == 'on' && $data['apply_to_custom'] == 'on') {
+				$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid']));
+			} else {
+				// Update all users having the old group access
+				if ($data['apply_to_regular'] == 'on') {
+					$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => $data['old_access']));
+				}
+				// Update all users having custom group access
+				if ($data['apply_to_custom'] == 'on' || sizeof($data['user']) == sizeof($data['type'])) {
+					$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => 'NOT:'.$data['old_access']));
+				} else { // Custom update
+					// Retrieve all custom users belonging to this group
+					$users = $this->model->getUsersWithCustomAccess(array('groupe' => $data['groupid']));
+					foreach ($users as $user) {
+						$userid = $user['id'];
+						if (array_key_exists($userid, $data['user'])) {
+							$this->model->updateUser($userid, array('access' => $data['new_access']));
+						} else if (!empty($data['type'][$userid])) {
+							// Update with given access
+							$access = $this->model->treatAccessData($data['type'][$userid], isset($data['access'][$userid]) ? $data['access'][$userid] : array());
+							if ($user['access'] != $access) {
+								$this->model->updateUser($userid, array('access' => $access));
+							}
+						}
+					}
+				}
+			}
+			
+			// Update group with new access
+			if ($this->model->updateGroup($data['groupid'], array('name' => $data['new_name'], 'access' => $data['new_access']))) {
+				WNote::success('group_edited', WLang::get('group_edited', $data['new_name']));
+			} else {
+				WNote::error('group_not_modified', WLang::get('group_not_modified'));
+			}
+		}
+		header('location: '.WRoute::getDir().'/admin/user/groups');
+	}
+	
+	/**
+	 * Display in a JSON format all the users whose nickname starts with a given letter.
+	 * 
+	 * Used for ajax method in group_dif action.
+	 */
+	protected function load_users_with_letter() {
+		$letter = WRequest::get('letter');
+		$groupid = intval(WRequest::get('groupe'));
+		$json = '{';
+		if (!empty($letter) && !empty($groupid)) {
+			if ($letter == '#') {
+				$users = $this->model->getUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $groupid));
+			} else {
+				$users = $this->model->getUsersWithCustomAccess(array('nickname' => $letter.'%', 'groupe' => $groupid));
+			}
+			foreach ($users as $user) {
+				$json .= '"'.$user['id'].'": {"nickname": "'.addslashes($user['nickname']).'", "access": "'.$user['access'].'"},';
+			}
+			if (strlen($json) > 1) {
+				$json = substr($json, 0, -1);
+			}
+		}
+		$json .= '}';
+		echo $json;
 	}
 }
 

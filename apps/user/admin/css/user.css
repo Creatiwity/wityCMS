@@ -1,4 +1,15 @@
+/**
+ * Users listing
+ */
+#search label {
+	display: block;
+	float: left;
+	width: 80px;
+}
 
+/**
+ * Groups listing
+ */
 #edition {
 	display: none;
 }
@@ -9,8 +20,127 @@ ul#access, ul#accessEdit {
 	padding: 0;
 }
 
-#search label {
+#groups-list .group-form td {
+	padding: 0;
+}
+
+#groups-list .group-form form {
+	padding: 8px;
+}
+
+/**
+ * User form
+ */
+#user-form {
+	width: 100%;
+}
+
+#user-form .nickname, #groups-list .group-name {
+	width: 100%;
+	font-size: 1.7em;
+}
+
+#content .rights {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#content .rights td {
+	border-top: 1px solid black;
+	padding: 0;
+}
+
+#content .rights .permissions {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#content .rights .permissions td {
+	border-top: none;
+	border-left: 1px solid black;
+	padding: 8px;
+}
+
+#content .rights .permissions label {
 	display: block;
+}
+
+/**
+ * Group dif
+ */
+#group-dif .listing-wrapper {
+	margin: 1em;
+	display: none;
+}
+
+#group-dif .alphabet {
+	width: 15%;
+	margin: 0 2% 0 0;
+	padding: 0;
 	float: left;
-	width: 80px;
+	line-height: 35px;
+}
+
+#group-dif .alphabet a {
+	background: #28b8f7;
+	font-size: 15px;
+	padding: 5px;
+	margin-right: 5px;
+	color: white;
+	white-space: nowrap;
+}
+
+#group-dif .alphabet a:hover, #group-dif .alphabet a.current {
+	background: #1aa4e0;
+}
+
+#group-dif .legende {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#group-dif .users-list-container {
+	width: 80%;
+	float: left;
+}
+
+#group-dif .users-list-container dl {
+	margin: 0;
+}
+
+#group-dif .users-list-container p.loading {
+	padding-left: 25px;
+	background: url('../../../../themes/system/images/icones/loader.gif') no-repeat;
+}
+
+#group-dif dl dt {
+	background: #28b8f7;
+	padding: 5px;
+	margin-bottom: 1em;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#group-dif dl dd {
+	margin-bottom: 1em;
+	display: none;
+}
+
+#group-dif .pattern {
+	display: none;
+}
+
+#group-dif .same {
+	font-weight: bold;
+	color: blue;
+}
+#group-dif .minus {
+	font-weight: bold;
+	color: red;
+}
+#group-dif .plus {
+	font-weight: bold;
+	color: green;
 }
