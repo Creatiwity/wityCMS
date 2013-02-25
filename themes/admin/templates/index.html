@@ -38,10 +38,10 @@
 							<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
 						</p>
 						<ul class="nav">
-							{for $app, $details in $appsList}
-								<li {if {$app} == {$appSelected}} class="active"{/if}>
-									<a href="/admin/{$app}/">{lang {$details.name}}</a>
-								</li>
+                                                        {for $app, $details in $appsList}
+                                                        <li {if {$app} == {$appSelected}} class="active"{/if}>
+                                                                <a href="/admin/{$app}/">{lang {$details.name}}</a>
+                                                        </li>
 							{/for}
 						</ul>
 					</div><!--/.nav-collapse -->
