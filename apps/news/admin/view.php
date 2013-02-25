@@ -63,6 +63,10 @@ class NewsAdminView extends WView {
 		
 		// Id pour simuler le permalien
 		$this->assign('lastId', $this->model->getLastNewsId()+1);
+                
+                $this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
+                $this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
+                $this->assign('js',"/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
 		
 		$ids = array();
 		if(!empty($data)) {

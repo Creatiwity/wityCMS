@@ -13,9 +13,13 @@
 		<br/>
 		<label for="nContent" class="hide">Contenu de la news :</label><br />
 		<textarea id="nContent" class="input-block-level" name="nContent" rows="20" cols="80">{$nContent}</textarea><br />
+                <script type="text/javascript">
+                        $('#nContent').wysihtml5();
+                </script>
 	</div>
 	<div class="span3">
-		<div class="well well-small">
+		<div class="well">
+                        <h4>Metadonnées</h4>
 			<div class="control-group">
 				<label class="control-label" for="nAuthor">Auteur</label>
 				<div class="controls">
@@ -28,24 +32,25 @@
 					<input type="text" id="nKeywords" class="input-block-level" name="nKeywords" value="{$nKeywords}" placeholder="Mots clés">
 				</div>
 			</div>
-		</div>
-		{if isset({$date})}
-		<div class="well">
-			<h3>Infos</h3>
-			<ul>
+                        {if isset({$date})}
+                        <hr/>
+                        <ul>
 				<li><strong>News créée</strong> le {$date}</li>
 				<li><strong>Dernière édition</strong> le  {$modified}</li>
 			</ul>
+                        {/if}
 		</div>
-		{/if}
 		<div class="well">
-			<h3>Catégorie de l'article</h3>
+			<h4>Catégorie de l'article</h4>
 			{for $c in $cat}
 			<label class="checkbox">
 				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]" {if in_array({$c.cid}, {$ncat})} checked="checked"{/if}>
 				{$c.name}
 			</label>
 			{/for}
+                        {empty}
+                        <p>Aucune catégorie définie</p>
+                        {/empty}
 		</div>
 		<div class="well">
 			<button type="submit" class="btn btn-large btn-block btn-primary" type="button">Enregistrer</button>
