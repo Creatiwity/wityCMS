@@ -20,6 +20,10 @@
 		<![endif]-->
 		
 		{if isset({$css})}{$css}{/if}
+                
+                <script src="/themes/admin/js/jquery-1.9.1.min.js"></script>
+		<script src="/themes/admin/js/bootstrap.min.js"></script>
+		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top">
@@ -78,9 +82,5 @@
 			</footer>
 
 		</div><!--/.fluid-container-->
-		
-		<script src="http://code.jquery.com/jquery.js"></script>
-		<script src="/themes/admin/js/bootstrap.min.js"></script>
-		{if isset({$js})}{$js}{/if}
 	</body>
 </html>
