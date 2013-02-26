@@ -55,7 +55,7 @@ class UserAdminController extends WController {
 	protected function add() {
 		$data = array();
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type'));
 			if (!in_array(null, $data, true)) {
 				$errors = array();
 				
@@ -81,7 +81,7 @@ class UserAdminController extends WController {
 				}
 				
 				// User access rights
-				$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
+				$data['access'] = $this->model->treatAccessData($data['type'], WRequest::get('access'));
 				unset($data['type']);
 				
 				if (empty($errors)) {
@@ -123,10 +123,10 @@ Ceci est un message automatique.";
 						WNote::error('user_not_created', WLang::get('user_not_created', $data['nickname']));
 					}
 				} else {
-					WNote::error('data_errors', implode("<br />\n", $errors));
+					WNote::error('user_data_errors', implode("<br />\n", $errors));
 				}
 			} else {
-				WNote::error('bad_data', WLang::get('bad_data'));
+				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
 		}
 		$this->view->add($data);
@@ -144,7 +144,7 @@ Ceci est un message automatique.";
 			return;
 		}
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type'));
 			if (!in_array(null, $data, true)) {
 				$update_data = array();
 				$errors = array();
@@ -178,7 +178,7 @@ Ceci est un message automatique.";
 					if (($e = $this->model->checkEmail($data['email'])) !== true) {
 						$errors[] = WLang::get($e);
 					} else {
-						$update_data['email'] = $data['emai'];
+						$update_data['email'] = $data['email'];
 					}
 				}
 				
@@ -196,7 +196,7 @@ Ceci est un message automatique.";
 				}
 				
 				// User access rights
-				$access = $this->model->treatAccessData($data['type'], $data['access']);
+				$access = $this->model->treatAccessData($data['type'], WRequest::get('access'));
 				if ($access != $db_data['access']) {
 					$update_data['access'] = $access;
 				}
@@ -216,10 +216,10 @@ Ceci est un message automatique.";
 						WNote::error('user_not_edited', WLang::get('user_not_edited', $data['nickname']));
 					}
 				} else {
-					WNote::error('data_errors', implode("<br />\n", $errors));
+					WNote::error('user_data_errors', implode("<br />\n", $errors));
 				}
 			} else {
-				WNote::error('bad_data', WLang::get('bad_data'));
+				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
 		}
 		$this->view->edit($userid);
@@ -273,7 +273,7 @@ Ceci est un message automatique.";
 				$db_success = false;
 				if (empty($data['id'])) { // Adding a group
 					if ($this->model->createGroup($data)) {
-						WNote::success('group_added', WLang::get('group_added', $data['name']));
+						WNote::success('user_group_added', WLang::get('group_added', $data['name']));
 						$db_success = true;
 					}
 				} else { // Editing a group
@@ -285,16 +285,16 @@ Ceci est un message automatique.";
 							$this->view->group_dif($data['id'], $data['name'], $data['access']);
 							return;
 						} else if ($this->model->updateGroup($data['id'], $data)) {
-							WNote::success('group_edited', WLang::get('group_edited', $data['name']));
+							WNote::success('user_group_edited', WLang::get('group_edited', $data['name']));
 							$db_success = true;
 						}
 					}
 				}
 				if (!$db_success) {
-					WNote::error('group_not_modified', WLang::get('group_not_modified'));
+					WNote::error('user_group_not_modified', WLang::get('group_not_modified'));
 				}
 			} else {
-				WNote::error('data_errors', implode("<br />\n", $errors));
+				WNote::error('user_data_errors', implode("<br />\n", $errors));
 			}
 		}
 		$this->view->groups_listing($sortBy, $sens);
@@ -310,7 +310,7 @@ Ceci est un message automatique.";
 			$this->model->deleteGroup($id);
 			$this->model->resetUsersInGroup($id);
 		}
-		WNote::success('group_deleted', WLang::get('group_deleted'));
+		WNote::success('user_group_deleted', WLang::get('group_deleted'));
 		header('location: '.WRoute::getDir().'/admin/user/groups/');
 	}
 	
@@ -352,9 +352,9 @@ Ceci est un message automatique.";
 			
 			// Update group with new access
 			if ($this->model->updateGroup($data['groupid'], array('name' => $data['new_name'], 'access' => $data['new_access']))) {
-				WNote::success('group_edited', WLang::get('group_edited', $data['new_name']));
+				WNote::success('user_group_edited', WLang::get('group_edited', $data['new_name']));
 			} else {
-				WNote::error('group_not_modified', WLang::get('group_not_modified'));
+				WNote::error('user_group_not_modified', WLang::get('group_not_modified'));
 			}
 		}
 		header('location: '.WRoute::getDir().'/admin/user/groups');

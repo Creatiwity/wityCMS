@@ -6,22 +6,23 @@
 	<version>0.1</version>
 	
 	<!-- Last update date -->
-	<date>18-01-2013</date>
+	<date>25-02-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
-	
-	<!-- Front pages -->
-	<page default="default">login</page>
-	<page requires="connected">logout</page>
-	<page>register</page>
-	<page>confirm</page>
 	
 	<!-- Permissions -->
 	<permission name="add" />
 	<permission name="edit" />
 	<permission name="delete" />
 	<permission name="groups" />
+	
+	<!-- Front pages -->
+	<page default="default">login</page>
+	<page requires="connected">logout</page>
+	<page requires="not-connected">register</page>
+	<page requires="not-connected">confirm</page>
+	<page requires="not-connected">password_lost</page>
 	
 	<!-- Admin pages -->
 	<admin>

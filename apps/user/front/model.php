@@ -116,6 +116,11 @@ class UserModel {
 					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
+			if (isset($filters['valid'])) {
+				$cond .= 'valid = '.intval($filters['valid']).' AND ';
+			} else {
+				$cond .= 'valid = 1 AND ';
+			}
 			if (!empty($filters['groupe'])) {
 				$cond = 'LEFT JOIN users_groups
 				ON groupe = users_groups.id
@@ -157,9 +162,15 @@ class UserModel {
 					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
+			if (isset($filters['valid'])) {
+				$cond .= 'valid = '.intval($filters['valid']).' AND ';
+			} else {
+				$cond .= 'valid = 1 AND ';
+			}
 			if (!empty($filters['groupe'])) {
-				$cond = 'WHERE '.$cond.'groupe = '.intval($filters['groupe']);
-			} else if (!empty($cond)) {
+				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
+			}
+			if (!empty($cond)) {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
 		}
@@ -209,7 +220,7 @@ class UserModel {
 		$prep = $this->db->prepare('
 			SELECT id, nickname, email, firstname, lastname, country, groupe, access
 			FROM users
-			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
+			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
 		');
 		$prep->bindParam(':nickname', $nickname);
 		$prep->bindParam(':password', $password);
@@ -225,8 +236,8 @@ class UserModel {
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, ip)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, valid, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :valid, :ip)
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);
@@ -239,7 +250,10 @@ class UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
-		$prep->bindParam(':groupe', $data['groupe']);
+		$groupe = isset($data['groupe']) ? $data['groupe'] : 0;
+		$prep->bindParam(':groupe', $groupe);
+		$valid = isset($data['valid']) ? $data['valid'] : 1;
+		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
 		return $prep->execute();
 	}
@@ -286,19 +300,76 @@ class UserModel {
 	}
 	
 	/**
-	 * Validates an account in the database
+	 * Find a user with its confirm code
 	 * 
 	 * @param string $confirm The confirm code of the user
-	 * @return boolean Request success
+	 * @return array User data (array() if not found)
 	 */
-	public function validateAccount($confirm) {
+	public function findUserWithConfirmCode($confirm) {
 		$prep = $this->db->prepare('
-			UPDATE users
-			SET confirm = ""
-			WHERE confirm = :confirm
+			SELECT id, nickname, email, firstname, lastname, country, groupe, access
+			FROM users
+			WHERE confirm = :confirm AND valid = 0
 		');
 		$prep->bindParam(':confirm', $confirm);
-		return $prep->execute();
+		$prep->execute();
+		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Find a user with its email
+	 * 
+	 * @param string $email Email of the user desired
+	 * @return array User data (array() if not found)
+	 */
+	public function findUserWithEmail($email) {
+		$prep = $this->db->prepare('
+			SELECT id, nickname, email, firstname, lastname, country, groupe, access
+			FROM users
+			WHERE email = :email AND valid = 1
+		');
+		$prep->bindParam(':email', $email);
+		$prep->execute();
+		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Find a user with its email and confirm code
+	 * 
+	 * @param string $email    Email of the user desired
+	 * @param string $confirm  Confirm code
+	 * @return array User data (array() if not found)
+	 */
+	public function findUserWithEmailAndConfirmCode($email, $confirm) {
+		$prep = $this->db->prepare('
+			SELECT id, nickname, email, firstname, lastname, country, groupe, access
+			FROM users
+			WHERE email = :email AND confirm = :confirm AND valid = 1
+		');
+		$prep->bindParam(':email', $email);
+		$prep->bindParam(':confirm', $confirm);
+		$prep->execute();
+		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Send an email in html for user app purpose
+	 * 
+	 * @param string $to
+	 * @param string $subject
+	 * @param string $body
+	 */
+	public function sendEmail($to, $subject, $body) {
+		$mail = WHelper::load('phpmailer');
+		$mail->CharSet = 'utf-8';
+		$mail->From = WConfig::get('config.email');
+		$mail->FromName = WConfig::get('config.site_name');
+		$mail->Subject = $subject;
+		$mail->Body = $body;
+		$mail->IsHTML(true);
+		$mail->AddAddress($to);
+		$mail->Send();
+		unset($mail);
 	}
 }
 

@@ -1,0 +1,6 @@
+
+#login-form label, #register-form label {
+	width: 200px;
+	float: left;
+	display: block;
+}

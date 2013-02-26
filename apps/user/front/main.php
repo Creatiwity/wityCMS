@@ -58,6 +58,10 @@ class UserController extends WController {
 				$this->forward('logout');
 				break;
 			
+			case 'password-lost':
+				$this->forward('password_lost');
+				break;
+			
 			default:
 				$this->forward($this->getAskedAction());
 				break;
@@ -103,20 +107,20 @@ class UserController extends WController {
 						$this->model->updateLastActivity($_SESSION['userid']);
 						
 						// Redirect
-						WNote::success('login_success', WLang::get('login_success', $_SESSION['nickname']));
+						WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
 						header('location: '.$redirect);
 						return;
 					
 					case WSession::LOGIN_MAX_ATTEMPT_REACHED:
-						WNote::error('login_max_attempt', WLang::get('login_max_attempt'));
+						WNote::error('user_login_max_attempt', WLang::get('login_max_attempt'));
 						break;
 					
 					case 0:
-						WNote::error('login_error', WLang::get('login_error'));
+						WNote::error('user_login_error', WLang::get('login_error'));
 						break;
 				}
 			} else {
-				WNote::error('bad_data', WLang::get('bad_data'));
+				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
 			
 			// Login process triggered from an external application
@@ -148,10 +152,6 @@ class UserController extends WController {
 	/**
 	 * Register action handler
 	 * 
-	 * @todo Display a registration form
-	 * @todo Send an email or not
-	 * @todo Account auto validation (no need to ask confirmation by mail)
-	 * @todo Account validated by admin
 	 * @todo Captcha security
 	 */
 	protected function register() {
@@ -161,8 +161,8 @@ class UserController extends WController {
 				$errors = array();
 				
 				// Check nickname availabililty
-				if ($e = $this->model->checkNickname($data['nickname']) !== true) {
-					$errors[] = WLang::_($e);
+				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
+					$errors[] = WLang::get($e);
 				}
 				
 				// Matching passwords
@@ -177,72 +177,199 @@ class UserController extends WController {
 				}
 				
 				// Email availabililty
-				if ($e = $this->model->checkEmail($data['email']) !== true) {
-					$errors[] = WLang::_($e);
+				if (($e = $this->model->checkEmail($data['email'])) !== true) {
+					$errors[] = WLang::get($e);
 				}
 				
-				// Confirmation hash + group
-				$data['confirm'] = uniqid();
+				// Default group (0: simple user)
 				$data['groupe'] = 0;
 				
 				if (empty($errors)) {
-					// Create the user
+					$send_email_confirmation = false;
+					$validate_by_email = true;
+					$validate_by_admin = true;
+					$admin_emails = WConfig::get('config.email');
+					
+					// Configure user
+					if ($validate_by_email) {
+						$data['confirm'] = uniqid(); // Set a confirm code
+						$data['valid'] = 0; // account not valid
+					} else if ($validate_by_admin) {
+						$data['valid'] = 2; // value to require admin check
+					}
+					
 					if ($this->model->createUser($data)) {
-						// Send a validation email
-						$mail = WHelper::load('phpmailer');
-						$mail->CharSet = 'utf-8';
-						$mail->From = WConfig::get('config.email');
-						$mail->FromName = WConfig::get('config.site_name');
-						$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_name'));
-						$mail->Body = 
-"Bonjour,<br /><br />
-Vous venez de vous inscrire sur le site ".WConfig::get('config.site_name').".<br /><br />
-
-Veuillez trouver ci-dessous vos données de connexion :<br />
-Identifiant : ".$data['nickname']."<br />
-Password : ".$data['password_conf']."<br /><br />
-
-Pour finaliser votre demande, veuillez cliquer sur le lien ci-dessous :<br /><br />
-<a href=\"".WRoute::getBase()."/user/confirm/".$data['confirm']."\">Valider la demande</a><br /><br />
-
-Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navigateur :<br />
-".WRoute::getBase()."/user/confirm/".$data['confirm']."<br /><br />
-
-<strong>".WConfig::get('config.site_name')."</strong>";
-						$mail->IsHTML(true);
-						$mail->AddAddress($data['email']);
-						$mail->Send();
-						unset($mail);
-						
-						WNote::success('user_register_confirmation', WLang::get('user_register_confirmation', WConfig::get('config.site_name')), 'display');
+						if ($validate_by_email) {
+							// Send a validation email
+							$this->model->sendEmail(
+								$data['email'],
+								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+								str_replace(
+									array('{site_name}', '{nickname}', '{password}', '{base}', '{confirm}'),
+									array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $data['confirm']),
+									WLang::get('user_register_email_confirm')
+								)
+							);
+							
+							WNote::success('user_register_confirm', WLang::get('user_register_confirm'), 'display');
+						} else if ($validate_by_admin) {
+							// Send an email to the user to remind him its login data
+							$this->model->sendEmail(
+								$data['email'],
+								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+								str_replace(
+									array('{site_name}', '{nickname}', '{password}'),
+									array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf']),
+									WLang::get('user_register_email_admin')
+								)
+							);
+							
+							// Send email to the administrators to warn them
+							if (!empty($admin_emails)) {
+								$userid = $this->model->getLastUserId();
+								$this->model->sendEmail(
+									$admin_emails,
+									WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+									str_replace(
+										array('{site_name}', '{nickname}', '{base}', '{userid}'),
+										array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $userid),
+										WLang::get('user_register_admin_warning')
+									)
+								);
+							}
+							WNote::success('user_register_admin', WLang::get('user_register_admin'), 'display');
+						} else {
+							if ($send_email_confirmation) {
+								// Send a validation email
+								$this->model->sendEmail(
+									$data['email'],
+									WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+									str_replace(
+										array('{site_name}', '{nickname}', '{password}', '{base}'),
+										array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf'], WRoute::getBase()),
+										WLang::get('user_register_email')
+									)
+								);
+							}
+							WNote::success('user_register_success', WLang::get('user_register_success'), 'display');
+						}
+						return;
 					} else {
 						WNote::error('user_register_failure', WLang::get('user_register_failure'));
-						header('location: '.WRoute::getBase());
 					}
 				} else {
-					WNote::error('data_errors', implode("<br />\n", $errors));
-					header('location: '.WRoute::getReferer());
+					WNote::error('user_data_errors', implode("<br />\n", $errors));
 				}
 			} else {
-				header('location: '.WRoute::getBase());
+				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
+			$this->view->register($data);
 		} else {
-			
+			$this->view->register();
 		}
 	}
 	
 	/**
 	 * Confirm action handler
-	 * Triggered when a user wants to validate his account
+	 * Allows the user to validate its account after registering
 	 */
 	protected function confirm() {
+		$validate_by_admin = true;
 		// Retrieve the confirm code
-		list(, $confirm_code) = WRoute::getArgs();
-		if (!empty($confirm_code)) {
-			$this->model->validateAccount($confirm_code);
-			WNote::success('user_validated', WLang::get('user_validated'), 'display');
-		} else {
+		$confirm_code = WRoute::getArg(1);
+		if (empty($confirm_code)) {
 			header('location: '.WRoute::getBase());
+			return;
+		}
+		$data = $this->model->findUserWithConfirmCode($confirm_code);
+		if (empty($data)) {
+			WNote::error('user_invalid_confirm_code', WLang::get('user_invalid_confirm_code'), 'display');
+			return;
+		}
+		if ($validate_by_admin) {
+			if ($this->model->updateUser($data['id'], array('confirm' => '', 'valid' => 2))) {
+				// Send email to the administrators to warn them
+				if (!empty($admin_emails)) {
+					$userid = $this->model->getLastUserId();
+					$this->model->sendEmail(
+						$admin_emails,
+						WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+						str_replace(
+							array('{site_name}', '{nickname}', '{password}', '{base}', '{userid}'),
+							array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $userid),
+							WLang::get('user_register_admin_warning')
+						)
+					);
+				}
+				WNote::success('user_validated_admin', WLang::get('user_validated_admin'), 'display');
+			} else {
+				WNote::error('user_register_failure', WLang::get('user_register_failure'));
+			}
+		} else {
+			if ($this->model->updateUser($data['id'], array('confirm' => '', 'valid' => 1))) {
+				WNote::success('user_validated', WLang::get('user_validated'), 'display');
+			} else {
+				WNote::error('user_register_failure', WLang::get('user_register_failure'));
+			}
+		}
+	}
+	
+	/**
+	 * Password-lost action handler
+	 * Triggered when a user wants to recover its password
+	 */
+	protected function password_lost() {
+		$data = WRequest::getAssoc(array('email', 'confirm'));
+		if (empty($data['email']) || empty($data['confirm'])) { // Step 1 - Ask for email
+			$email = WRequest::get('email', null, 'POST');
+			if (!empty($email)) {
+				$user_data = $this->model->findUserWithEmail($email);
+				if (!empty($user_data)) {
+					// Create a uniq confirm code
+					$confirm = uniqid();
+					if ($this->model->updateUser($user_data['id'], array('confirm' => $confirm))) {
+						// Send it by email
+						$this->model->sendEmail(
+							$data['email'],
+							WLang::get('user_password_lost_subject', WConfig::get('config.site_name')),
+							str_replace(
+								array('{site_name}', '{email}', '{confirm}'),
+								array(WConfig::get('config.site_name'), $user_data['email'], $confirm),
+								WLang::get('user_password_lost_email')
+							)
+						);
+						WNote::success('user_password_lost_email_sent', WLang::get('user_password_lost_email_sent'), 'display');
+						return;
+					} else {
+						WNote::error('user_password_lost_failure', WLang::get('user_password_lost_failure'));
+					}
+				} else {
+					WNote::error('user_password_lost_not_found', WLang::get('user_password_lost_not_found'));
+				}
+			}
+			$this->view->password_lost();
+		} else { // Step 2 - Reset password
+			$user_data = $this->model->findUserWithEmailAndConfirmCode($data['email'], $data['confirm']);
+			if (!empty($user_data)) {
+				$pass = WRequest::getAssoc(array('new_password', 'new_password_conf'));
+				// Check passwords
+				if (!empty($pass['new_password'])) {
+					if ($pass['new_password'] === $pass['new_password_conf']) {
+						// Reset password in the database
+						$password = sha1($pass['new_password']);
+						if ($this->model->updateUser($user_data['id'], array('password' => $password, 'confirm' => ''))) {
+							WNote::success('user_password_lost_success', WLang::get('user_password_lost_success'), 'display');
+						} else {
+							WNote::error('user_password_lost_failure', WLang::get('user_password_lost_failure'));
+						}
+					} else {
+						WNote::error('error_password_not_matching', WLang::get('error_password_not_matching'));
+					}
+				}
+				$this->view->reset_password($data['email'], $data['confirm']);
+			} else {
+				header('location: '.WRoute::getBase());
+			}
 		}
 	}
 }

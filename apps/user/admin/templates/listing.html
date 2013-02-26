@@ -3,15 +3,15 @@
 		<div class="top"></div>
 		<h2>{lang search}</h2>
 		<form action="/admin/user/listing/" method="get">
-			<label for="nickname"><strong>{lang nickname} :</strong></label>
+			<label for="nickname"><strong>{lang nickname}:</strong></label>
 			<input id="nickname" type="text" name="nickname" value="{$nickname}" /><br />
-			<label for="email">{lang email} :</label>
+			<label for="email">{lang email}:</label>
 			<input id="email" type="text" name="email" value="{$email}" /><br />
-			<label for="firstname">{lang firstname} :</label>
+			<label for="firstname">{lang firstname}:</label>
 			<input id="firstname" type="text" name="firstname" value="{$firstname}" /><br />
-			<label for="lastname">{lang lastname} :</label>
+			<label for="lastname">{lang lastname}:</label>
 			<input id="lastname" type="text" name="lastname" value="{$lastname}" /><br />
-			<label for="groupe">{lang group} :</label>
+			<label for="groupe">{lang group}:</label>
 			<select id="groupe" name="groupe">
 				<option value=""></option>
 				{for $group in $groups}

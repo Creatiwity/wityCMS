@@ -32,8 +32,8 @@ class UserAdminModel extends UserModel {
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, access, ip)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :access, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, access, valid, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :access, :valid, :ip)
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);
@@ -48,6 +48,8 @@ class UserAdminModel extends UserModel {
 		$prep->bindParam(':country', $country);
 		$prep->bindParam(':groupe', $data['groupe']);
 		$prep->bindParam(':access', $data['access']);
+		$valid = isset($data['valid']) ? $data['valid'] : 1;
+		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
 		return $prep->execute();
 	}
@@ -56,7 +58,6 @@ class UserAdminModel extends UserModel {
 	 * Deletes a user
 	 * 
 	 * @param int $userid
-	 * @todo Move this method to UserModel to propose account deletion by user
 	 */
 	public function deleteUser($userid) {
 		$prep = $this->db->prepare('

@@ -18,21 +18,117 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="user_disconnected">Vous avez été déconnecté avec succès.</item>
 	<item id="cookie_not_accepted">Votre navigateur n'accepte pas les cookies. Vous risquez d'être déconnecté dans quelques minutes.</item>
 	
-	<!-- User registering -->
-	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
-	<item id="user_register_confirmation">Votre compte utilisateur sur %s a été créé avec succès.
-
-Vous allez bientôt recevoir sur votre boîte email un nouveau message pour confirmer votre compte.</item>
-	<item id="user_register_failure">Une erreur inconnue s'est produite lors de la création de votre compte dans la base de données.</item>
-	<item id="user_validated">Votre compte vient d'être validé avec succès. Vous pouvez maintenant vous connecter avec celui-ci.</item>
-	
 	<!-- Login form -->
-	<item id="login">Connexion</item>
-	<item id="nickname">Identifiant</item>
-	<item id="password">Mot de passe</item>
-	<item id="remain_connected_for">Rester connecté pendant...</item>
+	<item id="login_form_title">Connexion</item>
+	<item id="nickname">Identifiant </item>
+	<item id="password">Mot de passe </item>
+	<item id="remain_connected_for">Rester connecté pendant... </item>
 	<item id="minuts">minutes</item>
-	<item id="always_remain_connected">Toujours rester connecté</item>
+	<item id="always_remain_connected">Toujours rester connecté </item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>
+	
+	<!-- Register form -->
+	<item id="register_form_title">Création d'un nouveau compte</item>
+	<item id="password_conf">Confirmation </item>
+	<item id="email">Email </item>
+	<item id="firstname">Prénom </item>
+	<item id="lastname">Nom </item>
+	<item id="country">Pays </item>
+	<item id="register">Inscription</item>
+	<item id="user_register_failure">Une erreur inconnue s'est produite lors de la création de votre compte dans la base de données.</item>
+	
+	<!-- Register - EMAIL CONFIRMATION -->
+	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_register_email_confirm"><![CDATA[
+Bonjour,<br /><br />
+
+Vous venez de vous inscrire sur le site {site_name}.<br /><br />
+
+Voici un rappel de vos données de connexion :<br />
+Identifiant : {nickname}<br />
+Mot de passe : {password}<br /><br />
+
+Pour finaliser votre demande, veuillez cliquer sur le lien ci-dessous :<br /><br />
+<a href="{base}/user/confirm/{confirm}">Valider la demande</a><br /><br />
+
+Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navigateur :<br />
+{base}/user/confirm/{confirm}<br /><br />
+
+<strong>{site_name}</strong>]]></item>
+	<item id="user_register_confirm">Pour terminer la création de votre compte, vous devez cliquer sur le lien de confirmation dans l'email que vous allez recevoir.</item>
+	<item id="user_validated"><![CDATA[Votre compte vient d'être validé avec succès.<br /><br />
+Vous pouvez vous connecter en <a href="/user/login/">cliquant ici</a>.]]></item>
+	
+	<!-- Register: ADMIN CHECK -->
+	<item id="user_register_email_admin"><![CDATA[
+Bonjour,<br /><br />
+
+Vous venez de vous inscrire sur le site {site_name}.<br /><br />
+
+Voici un rappel de vos données de connexion :<br />
+Identifiant : {nickname}<br />
+Mot de passe : {password}<br /><br />
+
+Votre compte <strong>requiert la validation d'un administrateur</strong> avant de pouvoir être utilisé.<br />
+Vous serez notifié par email lorsque cela sera fait.<br /><br />
+
+<strong>{site_name}</strong>]]></item>
+	<item id="user_register_admin_warning"><![CDATA[
+Bonjour,<br /><br />
+
+L'utilisateur <strong>{nickname}</strong> vient de demander la création d'un compte sur le site {site_name}.<br />
+Pour l'étudier, <a href="{base}/admin/user/edit/{userid}">cliquez ici</a>.<br /><br />
+
+<strong>{site_name}</strong>]]></item>
+	<item id="user_register_admin"><![CDATA[Votre compte a bien été enregistrée.<br />
+Son activation nécessite l'intervention d'un administrateur.<br />
+Vous serez notifié par email lorsqu'il sera validé.]]></item>
+	<item id="user_validated_admin"><![CDATA[Votre email a bien été validé.<br />
+L'activation de votre compte nécessite l'intervention d'un administrateur.<br />
+Vous serez notifié par email lorsqu'il sera validé.]]></item>
+	<item id="user_invalid_confirm_code">Ce code de confirmation ne correspond à aucun compte dans la base de données.</item>
+	
+	<!-- Register - AUTO -->
+	<item id="user_register_email"><![CDATA[
+Bonjour,<br /><br />
+
+Vous venez de vous inscrire sur le site {site_name}.<br /><br />
+
+Voici un rappel de vos données de connexion :<br />
+Identifiant : {nickname}<br />
+Password : {password}<br /><br />
+
+Vous pouvez vous connecter à l'adresse suivante :<br /><br />
+<a href="{base}/user/connexion/">Se connecter</a><br /><br />
+
+Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
+{base}/user/connexion/<br /><br />
+
+<strong>{site_name}</strong>]]></item>
+	<item id="user_register_success"><![CDATA[Votre compte utilisateur a été créé avec succès.<br /><br />
+Vous pouvez vous connecter en <a href="/user/login/">cliquant ici</a>.]]></item>
+	
+	<!-- Password lost -->
+	<item id="reset_password">Réinitialisation de mot de passe</item>
+	<item id="enter_your_email">Afin de récupérer votre mot de passe, veuillez spécifier l'adresse email de votre compte.</item>
+	<item id="submit">Envoyer</item>
+	<item id="user_password_lost_not_found">Cet email n'existe pas dans la base de données.</item>
+	<item id="user_password_lost_failure">Une erreur inconnue s'est produite lors de l'enregistrement de votre demande de changement de mot de passe dans la base de données.</item>
+	<item id="user_password_lost_email_sent">Un email vient de vous être envoyé. Il contient un lien pour passer à l'étape suivante pour la réinitialisation de votre mot de passe.</item>
+	<item id="user_password_lost_subject">%s - Réinitialisation de votre mot de passe</item>
+	<item id="user_password_lost_email"><![CDATA[
+Bonjour,<br /><br />
+
+Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_name}.<br /><br />
+
+Pour passer à l'étape suivante, suivez ce lien :<br /><br />
+<a href="{base}/user/password-lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a><br /><br />
+
+Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
+{base}/user/password-lost/?email={email}&amp;confirm={confirm}<br /><br />
+
+<strong>{site_name}</strong>]]></item>
+	<item id="user_password_lost_success"><![CDATA[Votre mot de passe a été réinitialisé avec succès.<br /><br />
+Vous pouvez vous connecter en l'utlisant à <a href="/user/login/">cette adresse</a>.]]></item>
 </lang>

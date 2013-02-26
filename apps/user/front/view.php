@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-12-05-2011
+ * @version 0.3-26-02-2013
  */
 class UserView extends WView {
 	private $model;
@@ -18,6 +18,7 @@ class UserView extends WView {
 	public function __construct(UserModel $model) {
 		parent::__construct();
 		$this->model = $model;
+		$this->assign('css', '/apps/user/front/css/user.css');
 	}
 	
 	/**
@@ -26,11 +27,27 @@ class UserView extends WView {
 	 * @param string $redirect The redirect value to set in the input form
 	 */
 	public function connexion($redirect = '') {
-		if (empty($_COOKIE['wsid'])) {
-			WNote::info('cookie_not_accepted', WLang::get('cookie_not_accepted'));
-		}
 		$this->assign('redirect', $redirect);
 		$this->render('connexion_form');
+	}
+	
+	public function register(array $data = array()) {
+		$this->assign('base', WRoute::getBase());
+		$inputs = array('nickname', 'email', 'firstname', 'lastname', 'country');
+		foreach ($inputs as $name) {
+			$this->assign($name, isset($data[$name]) ? $data[$name] : '');
+		}
+		$this->render('register');
+	}
+	
+	public function password_lost() {
+		$this->render('password_lost');
+	}
+	
+	public function reset_password($email, $confirm) {
+		$this->assign('email', $email);
+		$this->assign('confirm', $confirm);
+		$this->render('reset_password');
 	}
 }
 
