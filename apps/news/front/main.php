@@ -19,7 +19,7 @@ class NewsController extends WController {
 		$this->setView(new NewsView($this->model));
 	}
 	
-	public function index() {
+	public function listing() {
 		$newsid = $this->getId();
 		if (!empty($newsid) && $this->model->validId($newsid)) {
 			$this->displayItem($newsid);

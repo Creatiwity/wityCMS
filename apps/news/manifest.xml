@@ -6,31 +6,26 @@
 	<version>0.1</version>
 	
 	<!-- Last update date -->
-	<date>17-01-2013</date>
+	<date>27-02-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
 	
-	<!-- Services available to communicate with the application -->
-	<!--<service>
-		<name>last_news</name>
-		<view>block_last_news.html</view>
-	</service>-->
+	<!-- Permissions -->
+	<permission name="news_editor" />
+	<permission name="global_editor" />
+	<permission name="deletor" />
 	
-	<!-- Front pages
-		Restriction rules :
-		  0 - Public
-		  1 - User connected required
-		  2 - Require specific access -->
-	<page restriction="1" default="1">index</page>
+	<!-- Front pages -->
+	<page default="1">listing</page>
 	<page lang="Affichage d'un article">detail</page>
 	
 	<!-- Admin pages -->
 	<admin>
-		<page lang="Liste des articles" default="1">index</page>
-		<page lang="Ajouter un article">add</page>
-		<page lang="Édition d'un article" menu="false">edit</page>
-		<page lang="Suppression d'un article" menu="false">del</page>
-		<page lang="Gestion des catégories">cat</page>
+		<page lang="Liste des articles" default="1">news_listing</page>
+		<page lang="Ajouter un article" requires="news_editor">news_add_or_edit</page>
+		<page lang="Suppression d'un article" menu="false" requires="news_editor,deletor">news_delete</page>
+		<page lang="Gestion des catégories" requires="global_editor">categories_manager</page>
+                <page lang="Suppression d'une catégorie" menu="false" requires="global_editor,deletor">category_delete</page>
 	</admin>
 </app>

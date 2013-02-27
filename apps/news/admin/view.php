@@ -15,7 +15,7 @@ class NewsAdminView extends WView {
 		$this->model = $model;
 	}
 	
-	public function index($sortBy, $sens) {
+	public function listing($sortBy, $sens) {
 		// AdminStyle Helper
 		include HELPERS_DIR.'SortingHelper'.DS.'SortingHelper.php';
 		$dispFields = array('id', 'title', 'author', 'cat', 'date', 'views');
@@ -29,24 +29,7 @@ class NewsAdminView extends WView {
 		
 		$data = $this->model->getNewsList(0, 20, $sort[0], $sort[1] == 'ASC');
 		$this->assign('news', $data);
-		$this->setResponse('index');
-	}
-	
-	/**
-	 * Fonction de chargement de la page principale du formulaire de news
-	 */
-	private function loadMainForm() {
-		// JS / CSS
-		$this->assign('js', '/apps/news/admin/js/add.js');
-		
-		$this->assign('baseDir', WRoute::getDir());
-		
-		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', WRoute::getBase().'/news/');
-		
-		// Chargement des catégories
-		$data = $this->model->getCatList("name", "ASC");
-		$this->assign('cat', $data);
+		$this->setResponse('listing');
 	}
 	
 	/**
@@ -58,8 +41,18 @@ class NewsAdminView extends WView {
 		}
 	}
 	
-	public function add($data = array()) {
-		$this->loadMainForm();
+	public function news_add_or_edit($data = array()) {
+		// JS / CSS
+		$this->assign('js', '/apps/news/admin/js/add.js');
+		
+		$this->assign('baseDir', WRoute::getDir());
+		
+		// Assignation de l'adresse du site pour le permalien
+		$this->assign('siteURL', WRoute::getBase().'/news/');
+		
+		// Chargement des catégories
+		$data = $this->model->getCatList("name", "ASC");
+		$this->assign('cat', $data);
 		
 		// Id pour simuler le permalien
 		$this->assign('lastId', $this->model->getLastNewsId()+1);
@@ -89,49 +82,11 @@ class NewsAdminView extends WView {
 			$data
 		);
 		
-		$this->setResponse('add');
+		$this->setResponse('news_add_or_edit');
 		$this->render();
 	}
 	
-	public function edit($id, $formData = array()) {
-		$this->loadMainForm();
-		
-		// Chargement des données
-		$data = $this->model->loadNews($id);
-		
-		$this->assign('lastId', $id);
-		$this->assign('date', $data['date']);
-		$this->assign('modified', $data['modified']);
-		$this->assign('image', $data['image']);
-		$ids = array();
-		foreach ($this->model->findNewsCats($id) as $row) {
-			$ids[] = $row['cat_id'];
-		}
-		$this->assign('ncat', $ids);
-		
-		$this->fillMainForm(array(
-				'nAuthor' => $data['author'],
-				'nKeywords' => $data['keywords'],
-				'nTitle' => $data['title'],
-				'nTitleClass' => '',
-				'nUrl' => $data['url'],
-				'nContent' => $data['content']
-			), 
-			$formData
-		);
-		
-		$this->setResponse('add');
-		$this->render();
-	}
-	
-	public function del($id) {
-		$data = $this->model->loadNews($id);
-		$this->assign('nTitle', $data['title']);
-		
-		$this->setResponse('del');
-	}
-	
-	public function cat($sortBy, $sens) {
+	public function categories_manager($sortBy, $sens, $data = array()) {
 		$this->assign('css', '/apps/news/admin/css/cat.css');
 		$this->assign('js', '/apps/news/admin/js/cat.js');
 		
@@ -148,7 +103,7 @@ class NewsAdminView extends WView {
 		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
 		$this->assign('cat', $data);
 		
-		$this->setResponse('cat');
+		$this->setResponse('category_manager');
 	}
 }
 

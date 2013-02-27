@@ -50,19 +50,18 @@ class NewsAdminModel {
 	/**
 	 * Création d'une news
 	 */
-	public function createNews($data) {
+	public function createNews($data,$data_model) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, keywords, date, editor_id, image)
-			VALUES (:permalien, :title, :author, :content, :keywords, NOW(), :editor_id, :image)
+			INSERT INTO news(url, title, author, content, keywords, date, image)
+			VALUES (:url, :title, :author, :content, :keywords, NOW(), :image)
 		');
-		$prep->bindParam(':permalien', $data['nUrl']);
-		$prep->bindParam(':title', $data['nTitle']);
-		$prep->bindParam(':author', $data['nAuthor']);
-		$prep->bindParam(':content', $data['nContent']);
-		$prep->bindParam(':keywords', $data['nKeywords']);
-		$prep->bindParam(':editor_id', $_SESSION['userid']);
-		$prep->bindParam(':image', $data['nImage']);
-		return $prep->execute() or die (var_dump($prep->errorInfo()));
+		$prep->bindParam(':url', $data[$data_model['fromDB']['url']]);
+		$prep->bindParam(':title', $data[$data_model['fromDB']['title']]);
+		$prep->bindParam(':author', $data[$data_model['fromDB']['author']]);
+		$prep->bindParam(':content', $data[$data_model['fromDB']['content']]);
+		$prep->bindParam(':keywords', $data[$data_model['fromDB']['keywords']]);
+		$prep->bindParam(':image', $data[$data_model['fromDB']['image']]);
+		return $prep->execute();
 	}
 	
 	/**
@@ -80,7 +79,7 @@ class NewsAdminModel {
 	/**
 	 * Récupération des données d'une news
 	 */
-	public function loadNews($id) {
+	public function loadNews($id,$data_model) {
 		$prep = $this->db->prepare('
 			SELECT url, title, author, content, keywords, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(modified, "%d/%m/%Y %H:%i") AS modified, image
 			FROM news
@@ -88,25 +87,35 @@ class NewsAdminModel {
 		');
 		$prep->bindParam(':id', $id, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->fetch();
+		$result = $prep->fetch();
+                
+                foreach ($result as $key => $val) {
+                        if(!empty($data_model['fromDB'][$key])) {
+                                unset($result[$key]);
+                                $result[$data_model['fromDB'][$key]] = $val;
+                        }
+                }
+                
+                return $result;
 	}
 	
 	/**
 	 * Mise à jour d'une news
 	 */
-	public function updateNews($id, $data) {
-		$string = '';
-		foreach ($data as $key => $value) {
-			$string .= strtolower(substr($key, 1)).' = '.$this->db->quote($value).', ';
-		}
-		$string = substr($string, 0, -2);
-		
-		return $this->db->query('
-			UPDATE news
-			SET '.$string.',
-				modified = NOW()
-			WHERE id = '.$id
-		);
+	public function updateNews($data,$data_model) {
+                $prep = $this->db->prepare('
+                        UPDATE news
+                        SET url = :url, title = :title, content = :content, keywords = :keywords, modified = NOW(), editor_id = :editor_id, image = :image 
+			WHERE id = :id
+		');
+                $prep->bindParam(':id', $data[$data_model['fromDB']['id']]);
+		$prep->bindParam(':url', $data[$data_model['fromDB']['url']]);
+		$prep->bindParam(':title', $data[$data_model['fromDB']['title']]);		
+		$prep->bindParam(':content', $data[$data_model['fromDB']['content']]);
+		$prep->bindParam(':keywords', $data[$data_model['fromDB']['keywords']]);
+		$prep->bindParam(':editor_id', $_SESSION[$data_model['fromDB']['editor_id']]);
+		$prep->bindParam(':image', $data[$data_model['fromDB']['image']]);
+		return $prep->execute();
 	}
 	
 	/**
@@ -123,11 +132,23 @@ class NewsAdminModel {
 	/**
 	 * Vérifie l'existence d'une news pour un id donné
 	 */
-	public function validId($id) {
+	public function validExistingNewsId($id) {
 		$prep = $this->db->prepare('
 			SELECT * FROM news WHERE id = :id
 		');
 		$prep->bindParam(':id', $id, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->rowCount() == 1;
+	}
+        
+        /**
+	 * Vérifie l'existence d'une catégorie pour un id donné
+	 */
+	public function validExistingCatId($cid) {
+		$prep = $this->db->prepare('
+			SELECT * FROM news_cats WHERE cid = :cid
+		');
+		$prep->bindParam(':cid', $cid, PDO::PARAM_INT);
 		$prep->execute();
 		return $prep->rowCount() == 1;
 	}
@@ -155,9 +176,20 @@ class NewsAdminModel {
 		$prep->bindParam(':nid', $nid, PDO::PARAM_INT);
 		return $prep->execute();
 	}
+        
+        /**
+	 * Destruction des relations news/cats d'une catégorie
+	 */
+	public function catsDestroyNews($cid) {
+		$prep = $this->db->prepare('
+			DELETE FROM news_cats_relations WHERE cat_id = :cid
+		');
+		$prep->bindParam(':cid', $cid, PDO::PARAM_INT);
+		return $prep->execute();
+	}
 	
 	/**
-	 * Récupère la liste complète des pages
+	 * Récupère la liste complète des catégories
 	 */
 	public function getCatList($order = 'name', $asc = true) {
 		$prep = $this->db->prepare('
