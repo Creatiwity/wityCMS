@@ -3,22 +3,24 @@
 		<div class="top"></div>
 		<h2>{lang search}</h2>
 		<form action="/admin/user/listing/" method="get">
-			<label for="nickname"><strong>{lang nickname}:</strong></label>
-			<input id="nickname" type="text" name="nickname" value="{$nickname}" /><br />
-			<label for="email">{lang email}:</label>
-			<input id="email" type="text" name="email" value="{$email}" /><br />
-			<label for="firstname">{lang firstname}:</label>
-			<input id="firstname" type="text" name="firstname" value="{$firstname}" /><br />
-			<label for="lastname">{lang lastname}:</label>
-			<input id="lastname" type="text" name="lastname" value="{$lastname}" /><br />
-			<label for="groupe">{lang group}:</label>
-			<select id="groupe" name="groupe">
-				<option value=""></option>
-				{for $group in $groups}
-				<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
-				{/for}
-			</select><br />
-			<div class="tcenter"><input type="submit" value="Filtrer" /></div>
+			<div>
+				<label for="nickname"><strong>{lang nickname}:</strong></label>
+				<input id="nickname" type="text" name="nickname" value="{$nickname}" /><br />
+				<label for="email">{lang email}:</label>
+				<input id="email" type="text" name="email" value="{$email}" /><br />
+				<label for="firstname">{lang firstname}:</label>
+				<input id="firstname" type="text" name="firstname" value="{$firstname}" /><br />
+				<label for="lastname">{lang lastname}:</label>
+				<input id="lastname" type="text" name="lastname" value="{$lastname}" /><br />
+				<label for="groupe">{lang group}:</label>
+				<select id="groupe" name="groupe">
+					<option value=""></option>
+					{for $group in $groups}
+					<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
+					{/for}
+				</select><br />
+				<p class="tcenter"><input type="submit" value="Filtrer" /></p>
+			</div>
 		</form>
 	</div>
 	<div class="block">
@@ -48,6 +50,19 @@
 			<th class="sort {$last_activity_class}"><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}">{lang last_connection}</a></th>
 			<th>Actions</th>
 		</tr>
+		{for $count, $user in $users_waiting}
+			<tr class="waiting {if {$count} % 2 == 0}pair{else}impair{/if}">
+				<td>{$user.id}</td>
+				<td><em>{lang waiting}</em> <strong>{$user.nickname}</strong></td>
+				<td>{$user.groupe_name}</td>
+				<td>{$user.date}</td>
+				<td>{$user.last_activity}</td>
+				<td>
+					<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><img src="/themes/system/images/icones/edit.png" alt="{lang edit}" /></a>
+					{if {$user.id} != $_SESSION['userid']}<a href="/admin/user/del/{$user.id}/" title="{lang delete}"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>{/if}
+				</td>
+			</tr>
+		{/for}
 		{for $count, $user in $users}
 			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
 				<td>{$user.id}</td>

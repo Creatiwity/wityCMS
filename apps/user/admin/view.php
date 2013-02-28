@@ -56,6 +56,10 @@ class UserAdminView extends WView {
 		$data = $this->model->getUsersList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters);
 		$this->assign('users', $data);
 		
+		// Get users waiting for validation
+		$users_waiting = $this->model->getUsersList(0, 0, $sort[0], $sort[1] == 'ASC', array('valid' => 2));
+		$this->assign('users_waiting', $users_waiting);
+		
 		// Generate the pagination to browse data
 		$count = $this->model->countUsers($filters);
 		$pagination = WHelper::load('pagination', array($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
@@ -102,9 +106,13 @@ class UserAdminView extends WView {
 	 */
 	public function edit($userid) {
 		if ($userid == $_SESSION['userid']) {
-			WNote::info('user_edit_own', WLang::_('user_edit_own'));
+			WNote::info('user_edit_own', WLang::get('user_edit_own'));
 		}
-		$this->fillForm($this->model->getUser($userid));
+		$data = $this->model->getUser($userid);
+		if ($data['valid'] == 2) {
+			WNote::info('user_validating_account', WLang::get('user_validating_account'));
+		}
+		$this->fillForm($data);
 	}
 	
 	/**

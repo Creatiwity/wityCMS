@@ -16,7 +16,7 @@
 Please, wait a moment before trying again.</item>
 	<item id="login_error"><![CDATA[The <em>nickname / password</em> given do not match.]]></item>
 	<item id="user_disconnected">You were loged out successfully.</item>
-	<item id="cookie_not_accepted">Your browser does not accepte cookies. You may be disconnected at any moment.</item>
+	<item id="cookie_not_accepted">To login, your browser needs to accept the cookies.</item>
 	
 	<!-- Login form -->
 	<item id="login_form_title">Connexion</item>

@@ -96,6 +96,7 @@ class UserController extends WController {
 		// Vars given to trigger login process?
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('nickname', 'password', 'remember', 'time'));
+			$cookie = true; // cookies accepted by browser?
 			if (!empty($data['nickname']) && !empty($data['password'])) {
 				// User asks to be auto loged in => change the cookie lifetime to self::REMEMBER_TIME
 				$remember_time = !empty($data['remember']) ? self::REMEMBER_TIME : abs(intval($data['time'])) * 60;
@@ -106,10 +107,16 @@ class UserController extends WController {
 						// Update activity
 						$this->model->updateLastActivity($_SESSION['userid']);
 						
-						// Redirect
-						WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
-						header('location: '.$redirect);
-						return;
+						if (empty($_COOKIE['wsid'])) {
+							WNote::info('user_cookie_not_accepted', WLang::get('cookie_not_accepted'));
+							$cookie = false;
+						} else {
+							// Redirect
+							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
+							header('location: '.$redirect);
+							return;
+						}
+						break;
 					
 					case WSession::LOGIN_MAX_ATTEMPT_REACHED:
 						WNote::error('user_login_max_attempt', WLang::get('login_max_attempt'));
@@ -124,7 +131,7 @@ class UserController extends WController {
 			}
 			
 			// Login process triggered from an external application
-			if (strpos($referer, 'user') === false) {
+			if ($cookie && strpos($referer, 'user') === false) {
 				// Redirect to it
 				header('location: '.$referer);
 			} else {

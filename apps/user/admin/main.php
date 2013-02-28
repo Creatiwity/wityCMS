@@ -201,6 +201,11 @@ Ceci est un message automatique.";
 					$update_data['access'] = $access;
 				}
 				
+				// Valid
+				if ($db_data['valid'] == 2) {
+					$update_data['valid'] = 1;
+				}
+				
 				if (empty($errors)) {
 					// Update database
 					if ($this->model->updateUser($userid, $update_data)) {

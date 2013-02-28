@@ -16,7 +16,7 @@
 Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="login_error"><![CDATA[Le couple <em>identifiant / mot de passe</em> fourni ne correspond pas.]]></item>
 	<item id="user_disconnected">Vous avez été déconnecté avec succès.</item>
-	<item id="cookie_not_accepted">Votre navigateur n'accepte pas les cookies. Vous risquez d'être déconnecté dans quelques minutes.</item>
+	<item id="cookie_not_accepted">Pour vous connecter, votre navigateur doit accepter les cookies.</item>
 	
 	<!-- Login form -->
 	<item id="login_form_title">Connexion</item>

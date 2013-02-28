@@ -25,6 +25,7 @@
 	<item id="edit">Edit</item>
 	<item id="delete">Delete</item>
 	<item id="cancel">Cancel</item>
+	<item id="waiting">En attente de validation :</item>
 	
 	<!-- User add/edit form -->
 	<item id="users_found">%s users found</item>
@@ -48,6 +49,7 @@
 	<item id="user_not_edited">An unknown error occured while trying to edit the account %s in the database.</item>
 	<item id="send_email_confirmation">Send an account creation confirmation by mail?</item>
 	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
+	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">The user was deleted successfully.</item>

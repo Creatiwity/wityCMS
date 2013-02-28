@@ -25,6 +25,7 @@
 	<item id="edit">Editer</item>
 	<item id="delete">Supprimer</item>
 	<item id="cancel">Annuler</item>
+	<item id="waiting">Waiting for validation:</item>
 	
 	<!-- User add/edit form -->
 	<item id="users_found">%s utilisateurs trouvés</item>
@@ -48,6 +49,7 @@
 	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
 	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email?</item>
 	<item id="user_edit_own">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
+	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>

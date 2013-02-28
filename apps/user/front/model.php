@@ -198,7 +198,7 @@ class UserModel {
 	 */
 	public function getUser($userid) {
 		$prep = $this->db->prepare('
-			SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access
+			SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -278,7 +278,7 @@ class UserModel {
 		return $this->db->query('
 			UPDATE users
 			SET '.$string.'
-			WHERE id = '.$userid
+			WHERE valid != 0 AND id = '.$userid
 		);
 	}
 	
