@@ -17,22 +17,22 @@
 	<permission name="delete" />
 	<permission name="groups" />
 	
-	<!-- Front pages -->
-	<page default="default">login</page>
-	<page requires="connected">logout</page>
-	<page requires="not-connected">register</page>
-	<page requires="not-connected">confirm</page>
-	<page requires="not-connected">password_lost</page>
+	<!-- Front actions -->
+	<action default="default" alias="connexion">login</action>
+	<action requires="connected" alias="deconnexion">logout</action>
+	<action requires="not-connected">register</action>
+	<action requires="not-connected">confirm</action>
+	<action requires="not-connected" alias="password-lost">password_lost</action>
 	
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
-		<page lang="Liste des membres" default="1">listing</page>
-		<page lang="Ajouter un utilisateur" requires="add">add</page>
-		<page lang="Éditer un utilisateur" menu="false" requires="edit">edit</page>
-		<page lang="Supprimer un utilisateur" menu="false" requires="delete">del</page>
-		<page lang="Gestion des groupes" requires="groups">groups</page>
-		<page lang="Suprimer un groupe" menu="false" requires="groups,delete">group_del</page>
-		<page lang="" menu="false" requires="groups,edit">group_dif</page>
-		<page lang="" menu="false" requires="groups,edit">load_users_with_letter</page>
+		<action desc="Liste des membres" default="1">listing</action>
+		<action desc="Ajouter un utilisateur" requires="add">add</action>
+		<action desc="Éditer un utilisateur" menu="false" requires="edit">edit</action>
+		<action desc="Supprimer un utilisateur" menu="false" requires="delete">del</action>
+		<action desc="Gestion des groupes" requires="groups">Groups</action>
+		<action desc="Suprimer un groupe" menu="false" requires="groups,delete">group_del</action>
+		<action desc="" menu="false" requires="groups,edit">group_dif</action>
+		<action desc="" menu="false" requires="groups,edit">load_users_with_letter</action>
 	</admin>
 </app>

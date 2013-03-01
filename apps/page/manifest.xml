@@ -11,18 +11,18 @@
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
 	
-	<!-- Front pages
+	<!-- Front actions
 		Restriction rules :
 		  0 - Public
 		  1 - User connected required
 		  2 - Require specific access -->
-	<page default="1">display</page>
+	<action default="default">display</action>
 	
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
-		<page lang="Liste des pages" default="1">liste</page>
-		<page lang="Ajouter une page">add</page>
-		<page lang="Éditer une page" menu="false">edit</page>
-		<page lang="Supprimer une page" menu="false">del</page>
+		<action desc="Liste des actions" default="1">liste</action>
+		<action desc="Ajouter une action">add</action>
+		<action desc="Éditer une action" menu="false">edit</action>
+		<action desc="Supprimer une action" menu="false">del</action>
 	</admin>
 </app>

@@ -17,20 +17,20 @@
 		<view>block_last_news.html</view>
 	</service>-->
 	
-	<!-- Front pages
+	<!-- Front actions
 		Restriction rules :
 		  0 - Public
 		  1 - User connected required
 		  2 - Require specific access -->
-	<page restriction="1" default="1">index</page>
-	<page lang="Affichage d'un article">detail</page>
+	<action restriction="1" default="default">index</action>
+	<action desc="Affichage d'un article">detail</action>
 	
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
-		<page lang="Liste des articles" default="1">index</page>
-		<page lang="Ajouter un article">add</page>
-		<page lang="Édition d'un article" menu="false">edit</page>
-		<page lang="Suppression d'un article" menu="false">del</page>
-		<page lang="Gestion des catégories">cat</page>
+		<action desc="Liste des articles" default="1">index</action>
+		<action desc="Ajouter un article">add</action>
+		<action desc="Édition d'un article" menu="false">edit</action>
+		<action desc="Suppression d'un article" menu="false">del</action>
+		<action desc="Gestion des catégories">cat</action>
 	</admin>
 </app>

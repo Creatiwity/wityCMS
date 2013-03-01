@@ -185,7 +185,7 @@ class AdminController extends WController {
 			));
 			$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
 				ucwords($manifest['name']),
-				isset($manifest['admin'][$action_asked]) ? ' &raquo; '.$manifest['admin'][$action_asked]['lang'] : ''
+				isset($manifest['admin'][$action_asked]) ? ' &raquo; '.$manifest['admin'][$action_asked]['desc'] : ''
 			));
 		} else {
 			$tpl->assign(array(

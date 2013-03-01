@@ -83,7 +83,7 @@ abstract class WController {
 	 * Calls the application's method which is associated to the $action value
 	 * 
 	 * @param type $action  action under execution
-	 * @param type $default optional default page value
+	 * @param type $default optional default action value
 	 * @return boolean Action forwarding success
 	 */
 	protected final function forward($action) {
@@ -150,24 +150,38 @@ abstract class WController {
 	 * application action.
 	 * 
 	 * @param bool $check Check if the action found is correct (default to true)
-	 * @return string page's name asked in the URL
+	 * @return string action's name asked in the URL
 	 */
 	public function getAskedAction($check = true) {
 		$args = WRoute::getArgs();
-		$action = isset($args[0]) ? $args[0] : '';
+		$action = isset($args[0]) ? strtolower($args[0]) : '';
 		
 		// Find a fine $action
 		if ($check) {
 			if ($this->getAdminContext()) {
-				// $action exists in admin ? Otherwise, default_admin action exists?
-				if ((empty($action) || !isset($this->manifest['admin'][$action])) && isset($this->manifest['default_admin'])) {
-					$action = $this->manifest['default_admin'];
-				}
+				$actions_key = 'admin';
+				$alias_prefix = 'admin-';
+				$default = 'default_admin';
 			} else {
-				// $action exists ? Otherwise, default action exists?
-				if ((empty($action) || !isset($this->manifest['pages'][$action])) && isset($this->manifest['default'])) {
-					$action = $this->manifest['default'];
+				$actions_key = 'actions';
+				$alias_prefix = '';
+				$default = 'default';
+			}
+			
+			// $action exists ? Otherwise, check alias and finally, use default action if exists?
+			if (!empty($action) && !isset($this->manifest[$actions_key][$action])) {
+				// check alias
+				if (isset($this->manifest['alias'][$alias_prefix.$action])) {
+					$action = $this->manifest['alias'][$alias_prefix.$action];
+				} else { // try to guess
+					$action = str_replace('-', '_', $action);
+					if (!isset($this->manifest[$actions_key][$action])) {
+						$action = '';
+					}
 				}
+			}
+			if (empty($action) && isset($this->manifest[$default])) {
+				$action = $this->manifest[$default];
 			}
 		}
 		return $action;
@@ -216,7 +230,7 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('name', 'version', 'date', 'icone', 'service', 'page', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'service', 'action', 'admin', 'permission');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'service':
@@ -225,21 +239,30 @@ abstract class WController {
 					// }
 					break;
 				
-				case 'page':
-					$manifest['pages'] = array();
-					if (property_exists($xml, 'page')) {
-						foreach ($xml->page as $page) {
-							$attributes = $page->attributes();
-							$key = (string) $page;
+				case 'action':
+					$manifest['actions'] = array();
+					if (property_exists($xml, 'action')) {
+						foreach ($xml->action as $action) {
+							$attributes = $action->attributes();
+							$key = strtolower((string) $action);
 							if (!empty($key)) {
-								if (!isset($manifest['pages'][$key])) {
-									$manifest['pages'][$key] = array(
-										'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
+								if (!isset($manifest['actions'][$key])) {
+									$manifest['actions'][$key] = array(
+										'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : '',
 										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
 								if (isset($attributes['default']) && empty($manifest['default'])) {
 									$manifest['default'] = $key;
+								}
+								if (isset($attributes['alias']) && !empty($attributes['alias'])) {
+									$alias = explode(',', $attributes['alias']);
+									foreach ($alias as $al) {
+										$al = strtolower(trim($al));
+										if (!empty($al)) {
+											$manifest['alias'][$al] = $key;
+										}
+									}
 								}
 							}
 						}
@@ -248,15 +271,15 @@ abstract class WController {
 				
 				case 'admin':
 					$manifest['admin'] = array();
-					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'page')) {
-						foreach ($xml->admin->page as $page) {
-							if (!empty($page)) {
-								$attributes = $page->attributes();
-								$key = (string) $page;
+					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'action')) {
+						foreach ($xml->admin->action as $action) {
+							if (!empty($action)) {
+								$attributes = $action->attributes();
+								$key = strtolower((string) $action);
 								if (!empty($key)) {
 									if (!isset($manifest['admin'][$key])) {
 										$manifest['admin'][$key] = array(
-											'lang' => isset($attributes['lang']) ? (string) $attributes['lang'] : '',
+											'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : '',
 											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
 											'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 										);
@@ -264,6 +287,15 @@ abstract class WController {
 								}
 								if (isset($attributes['default']) && empty($manifest['default_admin'])) {
 									$manifest['default_admin'] = $key;
+								}
+								if (isset($attributes['alias']) && !empty($attributes['alias'])) {
+									$alias = explode(',', $attributes['alias']);
+									foreach ($alias as $al) {
+										$al = strtolower(trim($al));
+										if (!empty($al)) {
+											$manifest['alias']['admin-'.$al] = $key;
+										}
+									}
 								}
 							}
 						}
@@ -348,9 +380,9 @@ abstract class WController {
 		} else { // Admin mode OFF
 			if (empty($action)) { // Asking for application access
 				return true;
-			} else if (isset($manifest['pages'][$action])) {
+			} else if (isset($manifest['actions'][$action])) {
 				// Check permissions
-				foreach ($manifest['pages'][$action]['requires'] as $req) {
+				foreach ($manifest['actions'][$action]['requires'] as $req) {
 					switch ($req) {
 						case 'not-connected':
 							if (WSession::isConnected()) {

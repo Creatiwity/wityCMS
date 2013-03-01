@@ -43,32 +43,6 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Custom launch method
-	 */
-	public function launch() {
-		$action = $this->getAskedAction(false);
-		switch ($action) {
-			case 'login':
-			case 'connexion':
-				$this->forward('login');
-				break;
-			
-			case 'logout':
-			case 'deconnexion':
-				$this->forward('logout');
-				break;
-			
-			case 'password-lost':
-				$this->forward('password_lost');
-				break;
-			
-			default:
-				$this->forward($this->getAskedAction());
-				break;
-		}
-	}
-	
-	/**
 	 * Login action handler
 	 * Triggered whenever a user asks to be connected
 	 * 

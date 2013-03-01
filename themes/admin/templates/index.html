@@ -40,14 +40,14 @@
 						{for $action, $desc in $actionsList}
 							{if {$desc.menu}}
 							<li class="{if {$action} == {$actionAsked}}on{/if}">
-								<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.lang}}</a></li>
+								<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.desc}}</a></li>
 							{/if}
 						{/for}
 					</ul>
 					<div class="sub">
 						{if !empty({$appSelected})}
 						<p>Votre position actuelle est : <span class="app">{lang {$appsList.{$appSelected}.name}}</span>
-						{if isset({$actionsList.{$actionAsked}})} . <span class="action">{lang {$actionsList.{$actionAsked}.lang}}</span>{/if}</p>
+						{if isset({$actionsList.{$actionAsked}})} . <span class="action">{lang {$actionsList.{$actionAsked}.desc}}</span>{/if}</p>
 						{/if}
 						<!--<form id="search" action="" method="post"><div>
 							<input type="text" name="search" value="recherche" onclick="this.value = '';" size="15" />
