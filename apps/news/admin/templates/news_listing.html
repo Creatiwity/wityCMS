@@ -1,32 +1,32 @@
 <table class="table table-hover table-striped">
-	<colgroup>
+	<!--colgroup>
 		<col style="width: 35%;" />
 		<col style="width: 15%;" />
 		<col style="width: 15%;" />
 		<col style="width: 15%;" />
 		<col />
-	</colgroup>
+	</colgroup-->
 	<thead>
 		<tr>
-			<th><a href="/admin/news/title-{$title_sort}/"><i class="{$title_class}"></i> Titre</a></th>
-			<th><a href="/admin/news/author-{$author_sort}/"><i class="{$author_class}"></i> Auteur</a></th>
-			<th><a href="/admin/news/cat-{$cat_sort}/"><i class="{$cat_class}"></i> Catégorie</a></th>
-			<th><a href="/admin/news/date-{$date_sort}/"><i class="{$date_class}"></i> Date</a></th>
-			<th><a href="/admin/news/views-{$views_sort}/"><i class="{$views_class}"></i> Vues</a></th>
+			<th><a href="/admin/news/news_title-{$news_title_sort}/"><i class="{$news_title_class}"></i> Titre</a></th>
+			<th><a href="/admin/news/news_author-{$news_author_sort}/"><i class="{$news_author_class}"></i> Auteur</a></th>
+			<th><a href="/admin/news/news_cats-{$news_cats_sort}/"><i class="{$news_cats_class}"></i> Catégorie</a></th>
+			<th><a href="/admin/news/news_date-{$news_date_sort}/"><i class="{$news_date_class}"></i> Date</a></th>
+			<th><a href="/admin/news/news_views-{$news_views_sort}/"><i class="{$news_views_class}"></i> Vues</a></th>
 			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
-	{for $count, $n in $news}
+	{for $n in $news}
 		<tr>
-			<td><strong>{$n.title}</strong></td>
-			<td>{$n.author}</td>
+			<td><strong>{$n.news_title}</strong></td>
+			<td>{$n.news_author}</td>
 			<td></td>
-			<td>{$n.date}</td>
-			<td>{$n.views} lectures</td>
+			<td>{$n.news_date}</td>
+			<td>{$n.news_views} lectures</td>
 			<td>
-				<a href="/admin/news/edit/{$n.id}-{$n.url}/" title="Editer"><i class="icon-edit"></i></a>
-				<a href="/admin/news/del/{$n.id}-{$n.url}/" title="Supprimer"><i class="icon-trash"></i></a>
+				<a href="/admin/news/news_add_or_edit/{$n.id}-{$n.url}/" title="Editer"><i class="icon-edit"></i></a>
+				<a href="/admin/news/news_delete/{$n.id}-{$n.url}/" title="Supprimer"><i class="icon-trash"></i></a>
 			</td>
 		</tr>
 	{/for}

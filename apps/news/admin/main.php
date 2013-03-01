@@ -8,6 +8,10 @@
  * @version	$Id: apps/news/admin/main.php 0002 01-08-2011 Fofif $
  */
 class NewsAdminController extends WController {
+
+        protected $news_data_model = array();
+        protected $cats_data_model = array();
+
         /*
          * Chargement du modèle et de la view
          */
@@ -18,7 +22,7 @@ class NewsAdminController extends WController {
 
                 include 'view.php';
                 $this->setView(new NewsAdminView($this->model));
-                
+
                 $this->news_data_model = array(
                     'toDB' => array(
                         'news_id' => 'id',
@@ -27,6 +31,9 @@ class NewsAdminController extends WController {
                         'news_author' => 'author',
                         'news_content' => 'content',
                         'news_keywords' => 'keywords',
+                        'news_date' => 'date',
+                        'news_modified' => 'modified',
+                        'news_views' => 'views',
                         'news_cats' => 'cat',
                         'news_editor_id' => 'editor_id',
                         'news_image' => 'image'
@@ -38,12 +45,15 @@ class NewsAdminController extends WController {
                         'author' => 'news_author',
                         'content' => 'news_content',
                         'keywords' => 'news_keywords',
+                        'date' => 'news_date',
+                        'modified' => 'news_modified',
+                        'views' => 'news_views',
                         'cat' => 'news_cats',
                         'editor_id' => 'news_editor_id',
                         'image' => 'news_image'
                     )
                 );
-                
+
                 $this->cats_data_model = array(
                     'toDB' => array(
                         'news_cat_id' => 'cid',
@@ -77,14 +87,16 @@ class NewsAdminController extends WController {
                 $args = WRoute::getArgs();
                 $sortData = explode('-', array_shift($args));
                 if (empty($sortData)) {
-                        $sortBy = '';
-                        $sens = '';
+                        $sortBy = 'news_date';
+                        $sens = 'DESC';
                 } else {
                         $sortBy = array_shift($sortData);
-                        $sens = !empty($sortData) ? $sortData[0] : '';
+                        $sens = !empty($sortData) ? $sortData[0] : 'DESC';
                 }
-
-                $this->view->news_listing($sortBy, $sens);
+                var_dump($sortBy);
+                var_dump($this->news_data_model['toDB']);
+                $newsList = $this->model->getNewsList(0, 100, $this->news_data_model, $this->news_data_model['toDB'][$sortBy], $sens == 'ASC');
+                $this->view->news_listing($newsList, $sortBy, $sens);
                 $this->view->render();
         }
 
@@ -142,14 +154,22 @@ class NewsAdminController extends WController {
 
                         if (!empty($erreurs)) { // Il y a un problème
                                 WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
-                                $this->view->news_add_or_edit($data);
+                                $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
+
+                                $lastId = $this->getId();
+
+                                // Vérification de la validité de l'id
+                                if (!$this->model->validExistingNewsId($lastId)) {
+                                        $lastId = $this->model->getLastNewsId() + 1;
+                                }
+                                $this->view->news_add_or_edit($catList, $lastId, $data);
                         } else {
                                 $id = $this->getId();
 
                                 // Vérification de la validité de l'id
                                 if (!$this->model->validExistingNewsId($id)) {
                                         // Mise à jour des infos
-                                        if ($this->model->createNews($data,$this->news_data_model)) {
+                                        if ($this->model->createNews($data, $this->news_data_model)) {
                                                 // Traitement des catégories
                                                 if (!empty($data['news_cats'])) {
                                                         $nid = $this->model->getLastNewsId();
@@ -163,7 +183,9 @@ class NewsAdminController extends WController {
                                                 header('location: ' . WRoute::getDir() . '/admin/news/');
                                         } else {
                                                 WNote::error('article_not_added', "Une erreur inconnue s'est produite.");
-                                                $this->view->news_add_or_edit($data);
+                                                $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
+                                                $lastId = $this->model->getLastNewsId() + 1;
+                                                $this->view->news_add_or_edit($catList, $lastId, $data);
                                         }
                                 } else {
                                         $data['news_id'] = $id;
@@ -181,24 +203,28 @@ class NewsAdminController extends WController {
                                         $data['news_editor_id'] = $_SESSION['nickname'];
 
                                         // Mise à jour des infos
-                                        if ($this->model->updateNews($data,$this->news_data_model)) {
+                                        if ($this->model->updateNews($data, $this->news_data_model)) {
                                                 WNote::success('article_edited', "L'article <strong>" . $data['news_title'] . "</strong> a été modifié avec succès.");
                                                 header('location: ' . WRoute::getDir() . '/admin/news/');
                                         } else {
                                                 WNote::error('article_not_edited', "Une erreur inconnue s'est produite.");
-                                                $this->view->news_add_or_edit($data);
+                                                $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
+                                                $this->view->news_add_or_edit($catList, $id, $data);
                                         }
                                 }
                         }
                 } else {
                         $id = $this->getId();
-                        
+
+                        $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
+
                         if (!$this->model->validExistingNewsId($id)) {
-                                $data = $this->model->loadNews($id,$this->news_data_model);
+                                $data = $this->model->loadNews($id, $this->news_data_model);
                                 $data['news_cats'] = $this->model->findNewsCats($id);
-                                $this->view->news_add_or_edit($data);
+                                $this->view->news_add_or_edit($catList, $id, $data);
                         } else {
-                                $this->view->news_add_or_edit();
+                                $lastId = $this->model->getLastNewsId() + 1;
+                                $this->view->news_add_or_edit($catList, $lastId);
                         }
                 }
         }
@@ -206,7 +232,7 @@ class NewsAdminController extends WController {
         protected function news_delete() {
                 $id = $this->getId();
                 if ($this->model->validExistingNewsId($id)) {
-                        $data = $this->model->loadNews($id);
+                        $data = $this->model->loadNews($id, $this->news_data_model);
                         $this->model->deleteNews($id);
                         $this->model->newsDestroyCats($id);
                         WNote::success('article_deleted', "L'article \"<strong>" . $data['title'] . "</strong>\" a été supprimé avec succès.");
@@ -230,12 +256,14 @@ class NewsAdminController extends WController {
                 }
 
                 if (empty($sortData)) {
-                        $sortBy = '';
-                        $sens = '';
+                        $sortBy = 'news_cat_name';
+                        $sens = 'ASC';
                 } else {
                         $sortBy = array_shift($sortData);
-                        $sens = !empty($sortData) ? $sortData[0] : '';
+                        $sens = !empty($sortData) ? $sortData[0] : 'ASC';
                 }
+
+                $catList = $this->model->getCatList($this->cats_data_model, $this->cats_data_model['toDB'][$sortBy], $sens == 'ASC');
 
                 /**
                  * Formulaire pour l'AJOUT ou l'EDITION d'une catégorie
@@ -272,27 +300,26 @@ class NewsAdminController extends WController {
                                 WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
                         } else {
                                 if (edit) {
-                                        if ($this->model->updateCat($data,$this->cats_data_model)) {
+                                        if ($this->model->updateCat($data, $this->cats_data_model)) {
                                                 WNote::success('cat_edited', "La catégorie <strong>" . $data['news_cat_name'] . "</strong> a été éditée avec succès.");
                                         } else {
                                                 WNote::error('cat_not_edited', "Une erreur inconnue s'est produite.");
-                                                $this->view->categories_manager($sortBy, $sens, $data);
+                                                $this->view->categories_manager($catList, $sortBy, $sens, $data);
                                                 $this->view->render();
                                         }
                                 } else {
-                                        if ($this->model->createCat($data,$this->cats_data_model)) {
+                                        if ($this->model->createCat($data, $this->cats_data_model)) {
                                                 WNote::success('cat_added', "La catégorie <strong>" . $data['news_cat_name'] . "</strong> a été ajoutée avec succès.");
                                         } else {
                                                 WNote::error('cat_not_added', "Une erreur inconnue s'est produite.");
-                                                $this->view->categories_manager($sortBy, $sens, $data);
+                                                $this->view->categories_manager($catList, $sortBy, $sens, $data);
                                                 $this->view->render();
                                         }
                                 }
                         }
-                } else {
-                        $this->view->categories_manager($sortBy, $sens);
-                        $this->view->render();
                 }
+                $this->view->categories_manager($catList, $sortBy, $sens);
+                $this->view->render();
         }
 
         protected function category_delete() {

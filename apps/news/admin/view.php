@@ -15,21 +15,19 @@ class NewsAdminView extends WView {
 		$this->model = $model;
 	}
 	
-	public function listing($sortBy, $sens) {
+	public function news_listing($data = array(), $sortBy = 'news_date', $sens = 'DESC') {
 		// AdminStyle Helper
-		include HELPERS_DIR.'SortingHelper'.DS.'SortingHelper.php';
-		$dispFields = array('id', 'title', 'author', 'cat', 'date', 'views');
-		$adminStyle = new SortingHelper($dispFields, 'date', 'DESC');
+		$orderingFields = array('news_id', 'news_title', 'news_author', 'news_cats', 'news_date', 'news_views');
+                $adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_date', 'DESC'));
 		
 		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
+		$adminStyle->getSorting($sortBy, $sens);
 		
 		// Enregistrement des variables de classement
 		$this->assign($adminStyle->getTplVars());
 		
-		$data = $this->model->getNewsList(0, 20, $sort[0], $sort[1] == 'ASC');
 		$this->assign('news', $data);
-		$this->setResponse('listing');
+		$this->setResponse('news_listing');
 	}
 	
 	/**
@@ -41,9 +39,9 @@ class NewsAdminView extends WView {
 		}
 	}
 	
-	public function news_add_or_edit($data = array()) {
+	public function news_add_or_edit($catList = array(), $lastId = '0', $data = array()) {
 		// JS / CSS
-		$this->assign('js', '/apps/news/admin/js/add.js');
+		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
 		
 		$this->assign('baseDir', WRoute::getDir());
 		
@@ -51,11 +49,10 @@ class NewsAdminView extends WView {
 		$this->assign('siteURL', WRoute::getBase().'/news/');
 		
 		// Chargement des catégories
-		$data = $this->model->getCatList("name", "ASC");
-		$this->assign('cat', $data);
+		$this->assign('cat', $catList);
 		
 		// Id pour simuler le permalien
-		$this->assign('lastId', $this->model->getLastNewsId()+1);
+		$this->assign('lastId', $lastId);
                 
                 $this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
                 $this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
@@ -64,20 +61,19 @@ class NewsAdminView extends WView {
 		
 		$ids = array();
 		if(!empty($data)) {
-			foreach ($data['nCat'] as $row => $val) {
+			foreach ($data['news_cats'] as $row => $val) {
 				$ids[] = $row;
 			}
 		}
-		$this->assign('ncat', $ids);
+		$this->assign('news_cats', $ids);
 		
 		$this->fillMainForm(
 			array(
-				'nAuthor' => $_SESSION['nickname'],
-				'nKeywords' => '',
-				'nTitle' => '',
-				'nTitleClass' => 'empty',
-				'nUrl' => '',
-				'nContent' => '',
+				'news_author' => $_SESSION['nickname'],
+				'news_keywords' => '',
+				'news_title' => '',
+				'news_url' => '',
+				'news_content' => '',
 			),
 			$data
 		);
@@ -87,7 +83,6 @@ class NewsAdminView extends WView {
 	}
 	
 	public function categories_manager($sortBy, $sens, $data = array()) {
-		$this->assign('css', '/apps/news/admin/css/cat.css');
 		$this->assign('js', '/apps/news/admin/js/cat.js');
 		
 		// AdminStyle Helper
@@ -95,12 +90,11 @@ class NewsAdminView extends WView {
 		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'name'));
 		
 		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
+		$adminStyle->getSorting($sortBy, $sens);
 		
 		// Enregistrement des variables de classement
 		$this->tpl->assign($adminStyle->getTplVars());
 		
-		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
 		$this->assign('cat', $data);
 		
 		$this->setResponse('category_manager');

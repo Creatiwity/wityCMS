@@ -1,42 +1,38 @@
 <form action="" method="post" enctype="multipart/form-data">
-	<div class="span9">
-		{if !empty({$note})}{$note}{/if}
-	
-		<input id="nTitle" class="input-block-level" name="nTitle" size="40" value="{$nTitle}" type="text" onkeyup="updatePermalien(this.value);" placeholder="Titre"/>
+	<div class="span9">	
+		<input id="news_title" class="input-block-level" name="news_title" size="40" value="{$news_title}" type="text" onkeyup="updatePermalien(this.value);" placeholder="Titre de l'article"/>
 		<br/>
 		<div class="input-prepend">
 			<span class="add-on">{$siteURL}{$lastId}-</span>
-			<!--span id="permalienInnerView" class="add-on">{$nUrl}</span-->
 			<input class="span2" id="permalienInnerInput" type="text" value="{$nUrl}">
-			<!--button id="editPermalien" class="btn" type="button" disabled="disabled"><i class="icon-pencil"></i></button-->
 		</div>
 		<br/>
-		<label for="nContent" class="hide">Contenu de la news :</label><br />
-		<textarea id="nContent" class="input-block-level" name="nContent" rows="20" cols="80">{$nContent}</textarea><br />
+		<label for="news_content" class="hide">Contenu de la news :</label><br />
+		<textarea id="news_content" class="input-block-level" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
                 <script type="text/javascript">
-                        $('#nContent').wysihtml5(\{locale: "fr-FR"});
+                        $('#news_content').wysihtml5(\{locale: "fr-FR"});
                 </script>
 	</div>
 	<div class="span3">
 		<div class="well">
                         <h4>Metadonnées</h4>
 			<div class="control-group">
-				<label class="control-label" for="nAuthor">Auteur</label>
+				<label class="control-label" for="news_author">Auteur</label>
 				<div class="controls">
-					<input type="text" id="nAuthor" class="input-block-level" name="nAuthor" value="{$nAuthor}" placeholder="Auteur">
+					<input type="text" id="news_author" class="input-block-level" name="news_author" value="{$news_author}" placeholder="Auteur">
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="nKeywords">Mots clés</label>
+				<label class="control-label" for="news_keywords">Mots clés</label>
 				<div class="controls">
-					<input type="text" id="nKeywords" class="input-block-level" name="nKeywords" value="{$nKeywords}" placeholder="Mots clés">
+					<input type="text" id="news_keywords" class="input-block-level" name="news_keywords" value="{$news_keywords}" placeholder="Mots clés">
 				</div>
 			</div>
-                        {if isset({$date})}
+                        {if isset({$news_date})}
                         <hr/>
                         <ul>
-				<li><strong>News créée</strong> le {$date}</li>
-				<li><strong>Dernière édition</strong> le  {$modified}</li>
+				<li><strong>News créée</strong> le {$news_date}</li>
+				<li><strong>Dernière édition</strong> le  {$news_modified}</li>
 			</ul>
                         {/if}
 		</div>
@@ -44,7 +40,7 @@
 			<h4>Catégorie de l'article</h4>
 			{for $c in $cat}
 			<label class="checkbox">
-				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]" {if in_array({$c.cid}, {$ncat})} checked="checked"{/if}>
+				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]" {if in_array({$c.cid}, {$news_cats})} checked="checked"{/if}>
 				{$c.name}
 			</label>
 			{/for}
