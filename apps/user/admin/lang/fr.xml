@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
+	<!-- Actions -->
+	<item id="action_listing">Liste des membres</item>
+	<item id="action_add">Ajouter un utilisateur</item>
+	<item id="action_edit">Éditer un utilisateur</item>
+	<item id="action_delete">Supprimer un utilisateur</item>
+	<item id="action_groups">Gestion des groupes</item>
+	<item id="action_group_del">Suprimer un groupe</item>
+	
 	<!-- Errors -->
 	<item id="bad_data">Veuillez remplir tous les champs requis.</item>
 	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="en">
+	<!-- Actions -->
+	<item id="action_listing">Users listing</item>
+	<item id="action_add">Add a user</item>
+	<item id="action_edit">Edit a user</item>
+	<item id="action_delete">Delete a user</item>
+	<item id="action_groups">Manage groups</item>
+	<item id="action_group_del">Delete a group</item>
+	
 	<!-- Errors -->
 	<item id="bad_data">Please, fill in all the required fields.</item>
 	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>

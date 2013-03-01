@@ -26,13 +26,13 @@
 	
 	<!-- Admin actions -->
 	<admin>
-		<action desc="Liste des membres" default="1">listing</action>
-		<action desc="Ajouter un utilisateur" requires="add">add</action>
-		<action desc="Éditer un utilisateur" menu="false" requires="edit">edit</action>
-		<action desc="Supprimer un utilisateur" menu="false" requires="delete">del</action>
-		<action desc="Gestion des groupes" requires="groups">Groups</action>
-		<action desc="Suprimer un groupe" menu="false" requires="groups,delete">group_del</action>
-		<action desc="" menu="false" requires="groups,edit">group_dif</action>
-		<action desc="" menu="false" requires="groups,edit">load_users_with_letter</action>
+		<action desc="action_listing" default="1">listing</action>
+		<action desc="action_add" requires="add">add</action>
+		<action desc="action_edit" menu="false" requires="edit">edit</action>
+		<action desc="action_delete" menu="false" requires="delete">del</action>
+		<action desc="action_groups" requires="groups">Groups</action>
+		<action desc="action_group_del" menu="false" requires="groups,delete">group_del</action>
+		<action menu="false" requires="groups,edit">group_dif</action>
+		<action menu="false" requires="groups,edit">load_users_with_letter</action>
 	</admin>
 </app>
