@@ -248,7 +248,7 @@ abstract class WController {
 							if (!empty($key)) {
 								if (!isset($manifest['actions'][$key])) {
 									$manifest['actions'][$key] = array(
-										'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : '',
+										'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
 										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
@@ -279,7 +279,7 @@ abstract class WController {
 								if (!empty($key)) {
 									if (!isset($manifest['admin'][$key])) {
 										$manifest['admin'][$key] = array(
-											'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : '',
+											'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
 											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
 											'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 										);
