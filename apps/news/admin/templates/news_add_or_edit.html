@@ -4,7 +4,7 @@
 		<br/>
 		<div class="input-prepend">
 			<span class="add-on">{$siteURL}{$lastId}-</span>
-			<input class="span2" id="permalienInnerInput" type="text" value="{$nUrl}">
+			<input class="span9" id="news_url" name="news_url" type="text" value="{$news_url}">
 		</div>
 		<br/>
 		<label for="news_content" class="hide">Contenu de la news :</label><br />
@@ -29,19 +29,21 @@
 				</div>
 			</div>
                         {if isset({$news_date})}
+                        {if !empty({$news_date})}
                         <hr/>
                         <ul>
 				<li><strong>News créée</strong> le {$news_date}</li>
 				<li><strong>Dernière édition</strong> le  {$news_modified}</li>
 			</ul>
                         {/if}
+                        {/if}
 		</div>
 		<div class="well">
 			<h4>Catégorie de l'article</h4>
 			{for $c in $cat}
 			<label class="checkbox">
-				<input id="cat{$c.cid}" type="checkbox" name="nCat[{$c.cid}]" {if in_array({$c.cid}, {$news_cats})} checked="checked"{/if}>
-				{$c.name}
+				<input id="cat{$c.news_cat_id}" type="checkbox" name="news_cats[{$c.news_cat_id}]" {if in_array({$c.news_cat_id}, {$news_cats})} checked="checked"{/if}>
+				{$c.news_cat_name}
 			</label>
 			{/for}
                         {empty}

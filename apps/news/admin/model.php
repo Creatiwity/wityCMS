@@ -18,7 +18,7 @@ class NewsAdminModel {
         /**
          * Récupère la liste complète des pages
          */
-        public function getNewsList($from, $number, $data_model, $order = 'title', $asc = true) {
+        public function getNewsList($from, $number, $data_model, $order = 'title', $asc = true, $data_cats_model = array()) {
                 $prep = $this->db->prepare('
 			SELECT id, url, title, author, content, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
 				DATE_FORMAT(modified, "%d/%m/%Y %H:%i") AS modified, views, editor_id
@@ -32,6 +32,9 @@ class NewsAdminModel {
                 $result = $prep->fetchAll();
 
                 foreach ($result as $key => $news) {
+                        
+                        $result[$key][$data_model['fromDB']['cat']] = $this->findNewsCats($news['id'],$data_cats_model);
+                        
                         foreach ($news as $prop => $value) {
                                 if (!empty($data_model['fromDB'][$prop])) {
                                         unset($result[$key][$prop]);
@@ -39,14 +42,13 @@ class NewsAdminModel {
                                 }
                         }
                 }
-
                 return $result;
         }
 
         /**
          * Récupère les catégories liées à une news
          */
-        public function findNewsCats($nid) {
+        public function findNewsCats($nid, $data_model = array()) {
                 $prep = $this->db->prepare('
 			SELECT cat_id, name
 			FROM news_cats_relations
@@ -56,7 +58,17 @@ class NewsAdminModel {
 		');
                 $prep->bindParam(':nid', $nid, PDO::PARAM_INT);
                 $prep->execute();
-                return $prep->fetchAll();
+                $result = $prep->fetchAll();
+
+                foreach ($result as $key => $cat) {                        
+                        foreach ($cat as $prop => $value) {
+                                if (!empty($data_model['fromDB'][$prop])) {
+                                        unset($result[$key][$prop]);
+                                        $result[$key][$data_model['fromDB'][$prop]] = $value;
+                                }
+                        }
+                }
+                return $result;
         }
 
         /**

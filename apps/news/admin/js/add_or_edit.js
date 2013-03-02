@@ -3,7 +3,7 @@ $(document).ready( function() {
 		var value = $(this).val();
 		
 		if (value === '') {
-			$("#permalienInnerInput").val(value);
+			$("#news_url").val(value);
 			return;
 		}
 		
@@ -18,6 +18,6 @@ $(document).ready( function() {
 			return;
 		}
 		
-		$("#permalienInnerInput").val(value);
+		$("#news_url").val(value);
 	});
 });

@@ -1,31 +1,18 @@
-
-var first = true;
-
-function editCat(id, name, shortname, parent) {
-	// Affichage du bloc
-	if (first) {
-		document.getElementById('editCat').style.display = 'block';
-		first = false;
-	}
-	
+function editCat(id, name, shortname, parent) {	
 	// Remplissage des données
-	document.getElementById('cIdEdit').value = id;
-	document.getElementById('cNameEdit').value = name;
-	document.getElementById('cShortnameEdit').value = shortname;
+        $("#news_cat_id").val(id);
+        $("#news_cat_name").val(name);
+        $("#news_cat_shortname").val(shortname);
 	
 	// Catégorie parente
-	var select = document.getElementById('cParentEdit');
+	var select = $("#news_cat_parent");
 	var i, index = 0;
 	for (i = 0 ; i < select.length ; i++) {
 		if (select.options[i].value == parent) {
 			index = i;
 		}
 	}
-	document.getElementById('cParentEdit').selectedIndex = index;
+	select.val(index);
 	
 	return false;
-}
-
-function checkDel(catName) {
-	return confirm("Voulez-vous vraiment supprimer la catégorie \""+catName+"\" ?");
 }

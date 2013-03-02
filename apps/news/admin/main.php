@@ -62,7 +62,7 @@ class NewsAdminController extends WController {
                         'news_cat_parent' => 'parent'
                     ),
                     'fromDB' => array(
-                        'cid' => 'news_cat_',
+                        'cid' => 'news_cat_id',
                         'name' => 'news_cat_name',
                         'shortname' => 'news_cat_shortname',
                         'parent' => 'news_cat_parent'
@@ -92,10 +92,12 @@ class NewsAdminController extends WController {
                 } else {
                         $sortBy = array_shift($sortData);
                         $sens = !empty($sortData) ? $sortData[0] : 'DESC';
+
+                        if (empty($this->news_data_model['toDB'][$sortBy])) {
+                                $sortBy = 'news_date';
+                        }
                 }
-                var_dump($sortBy);
-                var_dump($this->news_data_model['toDB']);
-                $newsList = $this->model->getNewsList(0, 100, $this->news_data_model, $this->news_data_model['toDB'][$sortBy], $sens == 'ASC');
+                $newsList = $this->model->getNewsList(0, 100, $this->news_data_model, $this->news_data_model['toDB'][$sortBy], $sens == 'ASC', $this->cats_data_model);
                 $this->view->news_listing($newsList, $sortBy, $sens);
                 $this->view->render();
         }
@@ -175,7 +177,7 @@ class NewsAdminController extends WController {
                                                         $nid = $this->model->getLastNewsId();
                                                         // Récupération des id des catégories stockées dans les clés du tableau
                                                         foreach ($data['news_cats'] as $cid => $v) {
-                                                                $this->model->newsAddCat($nid, $cid);
+                                                                $this->model->newsAddCat($nid, intval($cid));
                                                         }
                                                 }
 
@@ -195,7 +197,7 @@ class NewsAdminController extends WController {
                                         if (!empty($data['news_cats'])) {
                                                 // Récupération des id des catégories stockées dans les clés du tableau
                                                 foreach ($data['news_cats'] as $cid => $v) {
-                                                        $this->model->newsAddCat($id, $cid);
+                                                        $this->model->newsAddCat($id, intval($cid));
                                                 }
                                         }
 
@@ -218,9 +220,12 @@ class NewsAdminController extends WController {
 
                         $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
 
-                        if (!$this->model->validExistingNewsId($id)) {
+                        if ($this->model->validExistingNewsId($id)) {
                                 $data = $this->model->loadNews($id, $this->news_data_model);
-                                $data['news_cats'] = $this->model->findNewsCats($id);
+                                $cats = $this->model->findNewsCats($id);
+                                foreach ($cats as $key => $cat_id) {
+                                        $data['news_cats'][strval($cat_id['cat_id'])] = 'on';
+                                }
                                 $this->view->news_add_or_edit($catList, $id, $data);
                         } else {
                                 $lastId = $this->model->getLastNewsId() + 1;

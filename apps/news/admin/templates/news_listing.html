@@ -1,11 +1,4 @@
 <table class="table table-hover table-striped">
-	<!--colgroup>
-		<col style="width: 35%;" />
-		<col style="width: 15%;" />
-		<col style="width: 15%;" />
-		<col style="width: 15%;" />
-		<col />
-	</colgroup-->
 	<thead>
 		<tr>
 			<th><a href="/admin/news/news_title-{$news_title_sort}/"><i class="{$news_title_class}"></i> Titre</a></th>
@@ -21,12 +14,18 @@
 		<tr>
 			<td><strong>{$n.news_title}</strong></td>
 			<td>{$n.news_author}</td>
-			<td></td>
+			<td>
+                                <ul class="unstyled">
+                                {for $c in {$n.news_cats}}
+                                <li>{$c.news_cat_name}</li>
+                                {/for}
+                                </ul>
+                        </td>
 			<td>{$n.news_date}</td>
 			<td>{$n.news_views} lectures</td>
 			<td>
-				<a href="/admin/news/news_add_or_edit/{$n.id}-{$n.url}/" title="Editer"><i class="icon-edit"></i></a>
-				<a href="/admin/news/news_delete/{$n.id}-{$n.url}/" title="Supprimer"><i class="icon-trash"></i></a>
+				<a href="/admin/news/news_add_or_edit/{$n.news_id}-{$n.news_url}/" title="Editer"><i class="icon-edit"></i></a>
+				<a href="#" title="Supprimer"><i class="icon-trash"></i></a>
 			</td>
 		</tr>
 	{/for}

@@ -1,109 +1,71 @@
-<div id="blocks">
-	<div class="block">
-		<div class="top"></div>
-		<h2>Ajouter une catégorie</h2>
-		<form action="" method="post">
-			<table>
-				<tr>
-					<td><label for="cName">Nom :</label></td>
-					<td><input id="cName" type="text" name="cName" value="" /></td>
-				</tr>
-				<tr>
-					<td><label for="cShortname">Nom racourci :</label></td>
-					<td><input id="cShortname" type="text" name="cShortname" /></td>
-				</tr>
-				<tr>
-					<td colspan="2"><em>facultatif : nom pour désigner plus simplement la catégorie</em></td>
-				</tr>
-				<tr>
-					<td><label for="cParent">Catégorie parente :</label></td>
-					<td>
-						<select id="cParent" name="cParent">
-							<option value="0">Aucune</option>
-							{for $c in $cat}
-								<option value="{$c.cid}">{$c.name}</option>
-							{/for}
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="tcenter">
-						<input type="submit" value="Ajouter" />
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-	<div id="editCat" class="block">
-		<div class="top"></div>
-		<h2>Editer une catégorie</h2>
-		<form action="" method="post">
-			<table>
-				<tr>
-					<td><label for="cNameEdit">Nom :</label></td>
-					<td>
-						<input id="cIdEdit" type="hidden" name="cIdEdit" value="" />
-						<input id="cNameEdit" type="text" name="cNameEdit" value="" />
-					</td>
-				</tr>
-				<tr>
-					<td><label for="cShortnameEdit">Nom racourci :</label></td>
-					<td><input id="cShortnameEdit" type="text" name="cShortnameEdit" /></td>
-				</tr>
-				<tr>
-					<td><label for="cParentEdit">Catégorie parente :</label></td>
-					<td>
-						<select id="cParentEdit" name="cParentEdit">
-							<option value="0">Aucune</option>
-							{for $c in $cat}
-								<option value="{$c.cid}">{$c.name}</option>
-							{/for}
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="tcenter">
-						<input type="submit" value="Editer" />
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
+<div class="span9">
+        <table class="table table-hover table-striped">
+                <thead>
+                        <tr>
+                                <th>#</th>
+                                <th><a href="/admin/news/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> Nom</a></th>
+                                <th><a href="/admin/news/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_name_class}"></i> Nom raccourci</a></th>
+                                <th># Parent</th>
+                                <th>Actions</th>
+                        </tr>
+                </thead>
+                <tbody>
+                        {for $c in $cats}
+                        <tr>
+                                <td><strong>{$c.news_cat_id}</strong></td>
+                                <td>{$c.news_cat_name}</td>
+                                <td>{$c.news_cat_shortname}</td>
+                                <td>{$c.news_cat_shortname}</td>
+                                <td>
+                                        <a href="#add_or_edit_form" title="Editer" onclick="return editCat({$c.news_cat_id}, '{$c.news_cat_name}', '{$c.news_cat_shortname}', {$c.news_cat_parent});"><i class="icon-edit"></i></a>
+                                        <a href="#" title="Supprimer"><i class="icon-trash"></i></a>
+                                </td>
+                        </tr>
+                        {/for}
+                        {empty}
+                        <tr>
+                                <td colspan="6"><p class="text-center">Aucune catégorie trouvée dans la base de données.</p></td>
+                        </tr>
+                        {/empty}
+                </tbody>
+        </table>
 </div>
-<div id="content">
-	{if !empty({$note})}{$note}{/if}
-	<table class="liste sorted" cellpadding="0" cellspacing="0">
-		<colgroup>
-			<col style="width: 10%;" />
-			<col style="width: 40%;" />
-			<col style="width: 30%;" />
-			<col style="width: 10%;" />
-			<col style="width: 10%;" />
-		</colgroup>
-		<tr>
-			<th>#</th>
-			<th class="sort {$name_class}"><a href="/admin/news/cat/name-{$name_sort}/">Nom de la catégorie</a></th>
-			<th class="sort {$shortname_class}"><a href="/admin/news/cat/shortname-{$shortname_sort}/">Nom racourci</a></th>
-			<th># Parent</th>
-			<th>Actions</th>
-		</tr>
-		{for $count, $c in $cat}
-			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
-				<td>{$c.cid}</td>
-				<td><strong>{$c.name}</strong></td>
-				<td>{$c.shortname}</td>
-				<td>{$c.parent}</td>
-				<td>
-					<a href="#" title="Editer" onclick="return editCat({$c.cid}, '{$c.name}', '{$c.shortname}', {$c.parent});"><img src="/themes/system/images/icones/edit.png" alt="Editer" /></a>
-					<a href="/admin/news/cat_del/{$c.cid}/" title="Supprimer" onclick="return checkDel('{$c.name}');"><img src="/themes/system/images/icones/del.png" alt="Supprimer" /></a>
-				</td>
-			</tr>
-			{empty}
-			<tr>
-				<td colspan="6" class="tcenter">Aucune catégorie n'a été ajoutée.</td>
-			</tr>
-			{/empty}
-		{/for}
-	</table>
+<div class="span3">
+        <div class="well">
+                <form id="add_or_edit_form" class="form-horizontal" action="" method="post">
+                        <h4 class="hidden">Editer une catégorie</h4>
+                        <h4>Ajouter une catégorie</h4>
+                        <input type="text" name="news_cat_id" id="news_cat_id" class="hidden" value="{$news_cat_id}"/>
+
+                        <div class="control-group">
+                                <label class="control-label" for="news_cat_name">Nom</label>
+                                <div class="controls">
+                                        <input type="text" id="news_cat_name" class="input-block-level" name="news_cat_name" value="{$news_cat_name}" placeholder="Nom">
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="news_cat_shortname">Nom raccourci</label>
+                                <div class="controls">
+                                        <input type="text" id="news_cat_shortname" class="input-block-level" name="news_cat_shortname" value="{$news_cat_shortname}" placeholder="Nom raccourci">
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <label class="control-label" for="news_cat_parent">Parent</label>
+                                <div class="controls">
+                                        <select id="news_cat_parent" name="news_cat_parent">
+                                                <option value="0">Aucune</option>
+                                                {for $c in $cats}
+                                                <option value="{$c.news_cat_id}" {if (isset({$news_cat_parent})) && ({$news_cat_parent}=={$c.news_cat_id})}selected="selected"{/if}>{$c.news_cat_name}</option>
+                                                {/for}
+                                        </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                                <div class="controls">
+                                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                                        <button type="cancel" class="btn">Annuler</button>
+                                </div>
+                        </div>
+                </form>
+        </div>
 </div>
-<div class="clear"></div>
