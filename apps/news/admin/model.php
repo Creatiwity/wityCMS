@@ -157,6 +157,10 @@ class NewsAdminModel {
          * Vérifie l'existence d'une news pour un id donné
          */
         public function validExistingNewsId($id) {
+                if(empty($id)) {
+                        return false;
+                }
+                
                 $prep = $this->db->prepare('
 			SELECT * FROM news WHERE id = :id
 		');
@@ -169,6 +173,10 @@ class NewsAdminModel {
          * Vérifie l'existence d'une catégorie pour un id donné
          */
         public function validExistingCatId($cid) {
+                if(empty($cid)) {
+                        return false;
+                }
+                
                 $prep = $this->db->prepare('
 			SELECT * FROM news_cats WHERE cid = :cid
 		');
@@ -222,7 +230,7 @@ class NewsAdminModel {
 			ORDER BY ' . $order . ' ' . ($asc ? 'ASC' : 'DESC')
                 );
                 $prep->execute();                
-                $result = $prep->fetchAll();
+                $result = $prep->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach ($result as $key => $cat) {
                         foreach ($cat as $prop => $value) {
@@ -232,7 +240,6 @@ class NewsAdminModel {
                                 }
                         }
                 }
-
                 return $result;
         }
 

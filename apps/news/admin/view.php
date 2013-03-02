@@ -9,16 +9,9 @@
  */
 class NewsAdminView extends WView {
 
-        private $model;
-
-        public function __construct(NewsAdminModel $model) {
-                parent::__construct();
-                $this->model = $model;
-        }
-
         public function news_listing($data = array(), $sortBy = 'news_date', $sens = 'DESC') {
                 // AdminStyle Helper
-                $orderingFields = array('news_id', 'news_title', 'news_author', 'news_cats', 'news_date', 'news_views');
+                $orderingFields = array('news_id', 'news_title', 'news_author', 'news_date', 'news_views');
                 $adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_date', 'DESC'));
 
                 // Sorting vars
@@ -26,7 +19,6 @@ class NewsAdminView extends WView {
 
                 // Enregistrement des variables de classement
                 $this->assign($adminStyle->getTplVars());
-                var_dump($data);
                 $this->assign('news', $data);
                 $this->setResponse('news_listing');
         }

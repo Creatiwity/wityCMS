@@ -4,7 +4,7 @@
                         <tr>
                                 <th>#</th>
                                 <th><a href="/admin/news/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> Nom</a></th>
-                                <th><a href="/admin/news/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_name_class}"></i> Nom raccourci</a></th>
+                                <th><a href="/admin/news/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_shortname_class}"></i> Nom raccourci</a></th>
                                 <th># Parent</th>
                                 <th>Actions</th>
                         </tr>
@@ -32,7 +32,7 @@
 </div>
 <div class="span3">
         <div class="well">
-                <form id="add_or_edit_form" class="form-horizontal" action="" method="post">
+                <form id="add_or_edit_form" action="/news/categories_manager" method="post">
                         <h4 class="hidden">Editer une catégorie</h4>
                         <h4>Ajouter une catégorie</h4>
                         <input type="text" name="news_cat_id" id="news_cat_id" class="hidden" value="{$news_cat_id}"/>

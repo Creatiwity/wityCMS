@@ -21,7 +21,7 @@ class NewsAdminController extends WController {
                 $this->model = new NewsAdminModel();
 
                 include 'view.php';
-                $this->setView(new NewsAdminView($this->model));
+                $this->setView(new NewsAdminView());
 
                 $this->news_data_model = array(
                     'toDB' => array(
@@ -323,7 +323,7 @@ class NewsAdminController extends WController {
                                 }
                         }
                 }
-                $this->view->categories_manager($catList, $sortBy, $sens);
+                $this->view->categories_manager($sortBy, $sens, $catList);
                 $this->view->render();
         }
 
