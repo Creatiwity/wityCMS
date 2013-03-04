@@ -246,21 +246,18 @@ class WView {
 			return false;
 		}
 		
-		if ($this->getTheme() != '_blank') {
-			// Define {$include} tpl's var
-			$this->tpl->assign('include', $this->responseFile);
-			
-			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
-			
-			// Handle notes
-			$notes = WNote::parse(WNote::get('*'));
-			$this->tpl->assign('notes', $notes);
+		// Select Theme main template
+		if ($this->getTheme() == '_blank') {
+			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).'system'.DS.'_blank.html';
 		} else {
-			$themeMainFile = $this->responseFile;
-			
-			// Trigger notes debug handler for remaining notes
-			echo WNote::parse(WNote::get('*'));
+			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
 		}
+		
+		// Define {$include} tpl's var
+		$this->tpl->assign('include', $this->responseFile);
+		
+		// Handle notes
+		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Treat "special vars"
 		foreach ($this->specialVars as $stack) {

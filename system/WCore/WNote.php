@@ -309,6 +309,10 @@ class WNote {
 			$view = new WView();
 			$view->setTheme('_blank');
 			$view->setResponse('themes/system/note/note_plain_view.html');
+			$view->assign('css', '/themes/system/note/note.css');
+			$view->assign('css', '/themes/system/note/note_plain.css');
+			$view->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
+			$view->assign('js', '/themes/system/note/note.js');
 			$view->assign('notes_data', $notes_data);
 			if (!$view->render()) {
 				die(
