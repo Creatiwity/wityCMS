@@ -41,8 +41,7 @@ class WDatabase extends PDO {
 			# Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
 			@parent::__construct($dsn, $user, $password);
 		} catch (PDOException $e) {
-			WNote::error('sql_conn_error', "Impossible to connect to MySQL.<br />".utf8_encode($e->getMessage()), 'plain');
-			die;
+			WNote::error('sql_conn_error', "Impossible to connect to MySQL.<br />".utf8_encode($e->getMessage()), 'debug, die');
 		}
 		$this->tablePrefix = WConfig::get('database.prefix');
 	}
