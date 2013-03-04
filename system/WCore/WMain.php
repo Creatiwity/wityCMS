@@ -37,18 +37,8 @@ class WMain {
 		// Initializing lang
 		WLang::init();
 		
-		// $this->log();
-		
 		// exec application
 		$this->exec(WRoute::getApp());
-	}
-	
-	/**
-	 * Flush the notes waiting for their own view, and then destroys WMain instance
-	 */
-	public function __destruct() {
-		// Flush the notes waiting for their own view
-		WNote::displayCustomView();
 	}
 	
 	/**
@@ -138,15 +128,6 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
-	}
-	
-	/**
-	 * Log activity in a file, DEBUG ONLY
-	 */
-	private function log() {
-		$file = fopen(WT_PATH.'log', 'a+');
-		fwrite($file, "\n".@$_SESSION['userid']." - Route : ".$_SERVER['REQUEST_URI']." / ".date('d/m/Y H:i:s', time()));
-		fclose($file);
 	}
 }
 

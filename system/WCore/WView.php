@@ -89,7 +89,7 @@ class WView {
 			$this->themeName = $theme;
 			$this->themeDir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
-			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'custom');
+			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
 		}
 	}
 	
@@ -118,7 +118,7 @@ class WView {
 			// WTemplate automatically adds the base directory defined in WSystem::getTemplate()
 			$this->responseFile = $file;
 		} else {
-			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'custom');
+			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'plain');
 		}
 	}
 	
@@ -174,7 +174,7 @@ class WView {
 	 */
 	public function getSpecialVar($stack_name) {
 		if (empty($this->vars[$stack_name])) {
-			return '';
+			return $this->tpl->getVar($stack_name);
 		}
 		
 		switch ($stack_name) {
@@ -232,12 +232,17 @@ class WView {
 		
 		// Check theme
 		if (empty($this->themeName) && WNote::count('view_theme') == 0) {
-			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'custom');
+			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
 			return false;
 		}
 		// Check response file
 		if (empty($this->responseFile) && WNote::count('view_response') == 0) {
-			WNote::error('view_response', "WView::render(): No response file given.", 'custom');
+			WNote::error('view_response', "WView::render(): No response file given.", 'plain');
+			return false;
+		}
+		
+		// Flush the notes waiting for their own view
+		if (WNote::displayPlainView()) {
 			return false;
 		}
 		
@@ -271,7 +276,7 @@ class WView {
 			try {
 				$this->tpl->display($themeMainFile);
 			} catch (Exception $e) {
-				WNote::error('view_tpl_display', $e->getMessage(), 'custom');
+				WNote::error('view_tpl_display', $e->getMessage(), 'die');
 				return false;
 			}
 		} else {
@@ -285,7 +290,7 @@ class WView {
 					$html
 				);
 			} catch (Exception $e) {
-				WNote::error('view_tpl_parse', $e->getMessage(), 'custom');
+				WNote::error('view_tpl_parse', $e->getMessage(), 'die');
 				return false;
 			}
 		}
