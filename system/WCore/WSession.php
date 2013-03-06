@@ -10,14 +10,9 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-19-12-2012
+ * @version 0.3-06-03-2013
  */
 class WSession {
-	
-	/**
-	 * SQL Table
-	 */
-	const USERS_TABLE = 'users';
 	
 	/**
 	 * Minimum time betwen two POST requests
@@ -104,16 +99,9 @@ class WSession {
 		$password_hash = sha1($password);
 		
 		// Search a matching couple (nickname, password_hash) in DB
-		$db = WSystem::getDB();
-		$prep = $db->prepare('
-			SELECT id, nickname, password, email, groupe, access
-			FROM '.self::USERS_TABLE.'
-			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
-		');
-		$prep->bindParam(':nickname', $nickname);
-		$prep->bindParam(':password', $password_hash);
-		$prep->execute();
-		$data = $prep->fetch();
+		include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
+		$userModel = new UserModel();
+		$data = $userModel->matchUser($nickname, $password_hash);
 		
 		// User found
 		if (!empty($data)) {
@@ -212,16 +200,9 @@ class WSession {
 	 */
 	public function reloadSession($userid) {
 		if (!empty($_COOKIE['hash'])) {
-			$db = WSystem::getDB();
-			$prep = $db->prepare('
-				SELECT id, nickname, password, email, groupe, access
-				FROM '.self::USERS_TABLE.'
-				WHERE id = :userid
-			');
-			$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
-			$prep->execute();
-			$data = $prep->fetch();
-			
+			include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
+			$userModel = new UserModel();
+			$data = $userModel->getUser($userid);
 			if (!empty($data)) {
 				// Check hash
 				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
