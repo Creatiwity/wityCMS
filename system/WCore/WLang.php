@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-28-09-2012
+ * @version 0.3-06-03-2013
  */
 class WLang {
 
@@ -160,10 +160,9 @@ class WLang {
 	public static function compile_lang($args) {
 		if (!empty($args)) {
 			$data = explode('|', $args);
-			$id = trim(array_shift($data), ' {}');
-			$id_parsed = WTemplateCompiler::parseVar($id);
-			// if $id is a string, encapsulate it inside quotes
-			$id = !empty($id_parsed) ? $id_parsed : "'".$id."'";
+			$id = array_shift($data);
+			$id = WTemplateParser::replaceNodes($id, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			// is there some data left in $data?
 			if (!empty($data)) {
 				$args = '';
 				foreach ($data as $var) {
@@ -172,9 +171,9 @@ class WLang {
 						$args .= $var_parsed.', ';
 					}
 				}
-				return "<?php echo WLang::get(".$id.", array(".$args.")); ?>";
+				return '<?php echo WLang::get("'.$id.'", array('.$args.')); ?>';
 			} else {
-				return "<?php echo WLang::get(".$id."); ?>";
+				return '<?php echo WLang::get("'.$id.'"); ?>';
 			}
 		}
 		return '';
