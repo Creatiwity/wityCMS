@@ -278,7 +278,7 @@ class UserModel {
 		return $this->db->query('
 			UPDATE users
 			SET '.$string.'
-			WHERE valid != 0 AND id = '.$userid
+			WHERE id = '.$userid
 		);
 	}
 	
@@ -370,6 +370,24 @@ class UserModel {
 		$mail->AddAddress($to);
 		$mail->Send();
 		unset($mail);
+	}
+	
+	/**
+	 * Retrieves the User app configuration stored in the database
+	 * 
+	 * @return array
+	 */
+	public function getConfig() {
+		$prep = $this->db->prepare('
+			SELECT name, value
+			FROM users_config
+		');
+		$prep->execute();
+		$config = array();
+		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
+			$config[$row['name']] = $row['value'];
+		}
+		return $config;
 	}
 }
 

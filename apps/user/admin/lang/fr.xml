@@ -7,6 +7,7 @@
 	<item id="action_delete">Supprimer un utilisateur</item>
 	<item id="action_groups">Gestion des groupes</item>
 	<item id="action_group_del">Suprimer un groupe</item>
+	<item id="action_config">Configuration</item>
 	
 	<!-- Errors -->
 	<item id="bad_data">Veuillez remplir tous les champs requis.</item>
@@ -83,4 +84,12 @@
 	
 	<!-- Group dif -->
 	<item id="reset">Réinitialiser</item>
+	
+	<!-- Config -->
+	<item id="config_register">Ouvrir les inscriptions</item>
+	<item id="config_email_conf">Demander une confirmation par email</item>
+	<item id="config_summary">Envoyer un récapitulatif par email</item>
+	<item id="config_admin_check">Valider les comptes par un administrateur</item>
+	<item id="submit">Envoyer</item>
+	<item id="user_config_updated">La configuration a été mise à jour avec succès.</item>
 </lang>

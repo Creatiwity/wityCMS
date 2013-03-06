@@ -390,6 +390,17 @@ Ceci est un message automatique.";
 		$json .= '}';
 		echo $json;
 	}
+	
+	protected function config() {
+		$data = WRequest::getAssoc(array('update', 'register', 'email_conf', 'summary', 'admin_check'));
+		if ($data['update'] == 'true') {
+			foreach ($data as $name => $value) {
+				$this->model->setConfig($name, intval(!empty($value)));
+			}
+			WNote::success('user_config_updated', WLang::get('user_config_updated'));
+		}
+		$this->view->config($this->model->getConfig());
+	}
 }
 
 ?>

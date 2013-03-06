@@ -180,6 +180,11 @@ class UserAdminView extends WView {
 		
 		$this->render('group_dif');
 	}
+	
+	public function config($config) {
+		$this->assign('config', $config);
+		$this->render('config');
+	}
 }
 
 ?>

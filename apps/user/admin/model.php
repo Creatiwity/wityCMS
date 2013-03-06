@@ -328,6 +328,20 @@ class UserAdminModel extends UserModel {
 		$prep->execute();
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
+	
+	public function setConfig($name, $value) {
+		static $prep;
+		if (empty($prep)) {
+			$prep = $this->db->prepare('
+				UPDATE users_config
+				SET value = :value
+				WHERE name = :name
+			');
+		}
+		$prep->bindParam(':name', $name);
+		$prep->bindParam(':value', $value);
+		return $prep->execute();
+	}
 }
 
 ?>

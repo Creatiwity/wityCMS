@@ -3,10 +3,10 @@
 	<!-- Application name -->
 	<name>User</name>
 	
-	<version>0.1</version>
+	<version>0.3</version>
 	
 	<!-- Last update date -->
-	<date>25-02-2013</date>
+	<date>05-03-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
@@ -16,6 +16,7 @@
 	<permission name="edit" />
 	<permission name="delete" />
 	<permission name="groups" />
+	<permission name="config" />
 	
 	<!-- Front actions -->
 	<action default="default" alias="connexion">login</action>
@@ -26,7 +27,7 @@
 	
 	<!-- Admin actions -->
 	<admin>
-		<action desc="action_listing" default="1">listing</action>
+		<action desc="action_listing" default="default">listing</action>
 		<action desc="action_add" requires="add">add</action>
 		<action desc="action_edit" menu="false" requires="edit">edit</action>
 		<action desc="action_delete" menu="false" requires="delete">del</action>
@@ -34,5 +35,6 @@
 		<action desc="action_group_del" menu="false" requires="groups,delete">group_del</action>
 		<action menu="false" requires="groups,edit">group_dif</action>
 		<action menu="false" requires="groups,edit">load_users_with_letter</action>
+		<action desc="action_config" requires="config">config</action>
 	</admin>
 </app>

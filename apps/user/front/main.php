@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-29-01-2013
+ * @version 0.3-06-03-2013
  */
 class UserController extends WController {
 	/*
@@ -55,9 +55,12 @@ class UserController extends WController {
 		if (empty($redirect)) {
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
+			} else if (WRoute::getApp() != 'user') { // Login form loaded from an external application
+				$redirect = WRoute::getURL();
+			} else if (strpos($referer, 'user') === false) {
+				$redirect = $referer;
 			} else {
-				// Login form may be loaded from an external application
-				$redirect = (WRoute::getApp() != 'user') ? WRoute::getURL() : $referer;
+				$redirect = WRoute::getBase();
 			}
 		}
 		
@@ -108,12 +111,10 @@ class UserController extends WController {
 			if ($cookie && strpos($referer, 'user') === false) {
 				// Redirect to it
 				header('location: '.$referer);
-			} else {
-				$this->view->connexion($redirect);
+				return;
 			}
-		} else {
-			$this->view->connexion($redirect);
 		}
+		$this->view->connexion($redirect);
 	}
 	
 	/**
@@ -136,6 +137,13 @@ class UserController extends WController {
 	 * @todo Captcha security
 	 */
 	protected function register() {
+		// Check if inscriptions are open
+		$config = $this->model->getConfig();
+		if (!$config['register']) {
+			WNote::info('user_inscription_closed', WLang::get('user_inscription_closed'), 'display');
+			return;
+		}
+		
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'country'));
 			if (!in_array(null, $data, true)) {
@@ -166,21 +174,16 @@ class UserController extends WController {
 				$data['groupe'] = 0;
 				
 				if (empty($errors)) {
-					$send_email_confirmation = false;
-					$validate_by_email = true;
-					$validate_by_admin = true;
-					$admin_emails = WConfig::get('config.email');
-					
 					// Configure user
-					if ($validate_by_email) {
+					if ($config['email_conf']) {
 						$data['confirm'] = uniqid(); // Set a confirm code
 						$data['valid'] = 0; // account not valid
-					} else if ($validate_by_admin) {
+					} else if ($config['admin_check']) {
 						$data['valid'] = 2; // value to require admin check
 					}
 					
 					if ($this->model->createUser($data)) {
-						if ($validate_by_email) {
+						if ($config['email_conf']) {
 							// Send a validation email
 							$this->model->sendEmail(
 								$data['email'],
@@ -193,7 +196,7 @@ class UserController extends WController {
 							);
 							
 							WNote::success('user_register_confirm', WLang::get('user_register_confirm'), 'display');
-						} else if ($validate_by_admin) {
+						} else if ($config['admin_check']) {
 							// Send an email to the user to remind him its login data
 							$this->model->sendEmail(
 								$data['email'],
@@ -206,6 +209,7 @@ class UserController extends WController {
 							);
 							
 							// Send email to the administrators to warn them
+							$admin_emails = WConfig::get('config.email');
 							if (!empty($admin_emails)) {
 								$userid = $this->model->getLastUserId();
 								$this->model->sendEmail(
@@ -220,7 +224,7 @@ class UserController extends WController {
 							}
 							WNote::success('user_register_admin', WLang::get('user_register_admin'), 'display');
 						} else {
-							if ($send_email_confirmation) {
+							if ($config['summary']) {
 								// Send a validation email
 								$this->model->sendEmail(
 									$data['email'],
@@ -255,29 +259,38 @@ class UserController extends WController {
 	 * Allows the user to validate its account after registering
 	 */
 	protected function confirm() {
-		$validate_by_admin = true;
+		// Check if inscriptions are open
+		$config = $this->model->getConfig();
+		if (!$config['register']) {
+			WNote::info('user_register_closed', WLang::get('user_register_closed'), 'display');
+			return;
+		}
+		
 		// Retrieve the confirm code
 		$confirm_code = WRoute::getArg(1);
 		if (empty($confirm_code)) {
 			header('location: '.WRoute::getBase());
 			return;
 		}
+		
 		$data = $this->model->findUserWithConfirmCode($confirm_code);
 		if (empty($data)) {
 			WNote::error('user_invalid_confirm_code', WLang::get('user_invalid_confirm_code'), 'display');
 			return;
 		}
-		if ($validate_by_admin) {
+		
+		if ($config['admin_check']) {
 			if ($this->model->updateUser($data['id'], array('confirm' => '', 'valid' => 2))) {
 				// Send email to the administrators to warn them
+				$admin_emails = WConfig::get('config.email');
 				if (!empty($admin_emails)) {
 					$userid = $this->model->getLastUserId();
 					$this->model->sendEmail(
 						$admin_emails,
 						WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
 						str_replace(
-							array('{site_name}', '{nickname}', '{password}', '{base}', '{userid}'),
-							array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $userid),
+							array('{site_name}', '{nickname}', '{base}', '{userid}'),
+							array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $userid),
 							WLang::get('user_register_admin_warning')
 						)
 					);
@@ -288,10 +301,11 @@ class UserController extends WController {
 			}
 		} else {
 			if ($this->model->updateUser($data['id'], array('confirm' => '', 'valid' => 1))) {
-				WNote::success('user_validated', WLang::get('user_validated'), 'display');
+				WNote::success('user_validated', WLang::get('user_validated'));
 			} else {
 				WNote::error('user_register_failure', WLang::get('user_register_failure'));
 			}
+			$this->view->connexion();
 		}
 	}
 	

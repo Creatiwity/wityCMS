@@ -1,0 +1,18 @@
+<div id="content" class="large">
+	<div id="user-config" class="item">
+		<form action="/admin/user/config" method="post" class="form-horizontal">
+			{for $name, $value in $config}
+			<p>
+				<input id="{$name}" type="checkbox" name="{$name}"{if {$value}} checked="checked"{/if} />
+				<label class="control-label" for="{$name}">{lang config_{$name}}</label>
+			</p>
+			{/for}
+			<div class="control-group">
+				<div class="controls">
+					<input type="hidden" name="update" value="true" />
+					<input class="btn" type="submit" value="{lang submit}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
