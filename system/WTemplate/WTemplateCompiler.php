@@ -331,8 +331,12 @@ class WTemplateCompiler {
 		$this->for_count++;
 		list(, , $key, $value, $array) = $matches;
 		
-		if (strpos($array, '$') === 0) {
-			$array = "\$this->tpl_vars['".substr($array, 1)."']";
+              if (strpos($array, '$') === 0) {
+                        $levelsInArray = explode(".", substr($array, 1));
+                        $array = "\$this->tpl_vars";
+                        foreach ($levelsInArray as $level) {
+                            $array .= "['" . $level . "']";
+                        }
 		} else if (strpos($array, '{') === 0) {
 			$array = $this->parseVar(substr($array, 1, -1));
 		}
