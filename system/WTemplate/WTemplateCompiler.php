@@ -329,17 +329,8 @@ class WTemplateCompiler {
 			$this->for_count = 0;
 		}
 		$this->for_count++;
-		list(, , $key, $value, $array) = $matches;
-		
-              if (strpos($array, '$') === 0) {
-                        $levelsInArray = explode(".", substr($array, 1));
-                        $array = "\$this->tpl_vars";
-                        foreach ($levelsInArray as $level) {
-                            $array .= "['" . $level . "']";
-                        }
-		} else if (strpos($array, '{') === 0) {
-			$array = $this->parseVar(substr($array, 1, -1));
-		}
+		list(,, $key, $value, $array) = $matches;
+		$array = $this->parseVar(trim($array, ' {}'));
 		
 		$s = "<?php \$hidden_counter".$this->for_count." = 0;\n";
 		if (empty($key)) {
