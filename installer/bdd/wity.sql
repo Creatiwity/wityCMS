@@ -116,18 +116,30 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nickname` varchar(100) CHARACTER SET latin1 NOT NULL,
   `password` varchar(50) CHARACTER SET utf8 NOT NULL,
-  `confirm` int(11) NOT NULL DEFAULT '0',
+  `confirm` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `email` varchar(100) CHARACTER SET latin1 NOT NULL,
   `firstname` varchar(100) CHARACTER SET utf8 NOT NULL,
   `lastname` varchar(100) CHARACTER SET utf8 NOT NULL,
   `country` varchar(25) CHARACTER SET utf8 NOT NULL,
   `groupe` int(4) NOT NULL,
   `access` text CHARACTER SET latin1 NOT NULL,
+  `valid` tinyint(4) NOT NULL DEFAULT '1',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_activity` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ip` varchar(50) CHARACTER SET utf8 NOT NULL,
   KEY `id` (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_config`
+--
+
+CREATE TABLE IF NOT EXISTS `users_config` (
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
