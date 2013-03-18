@@ -211,10 +211,10 @@ class WNote {
 		$mail->AddAddress(WConfig::get('config.email'));
 		$mail->Subject = "Debug - ".$note['code'];
 		$mail->Body = 
-"<p>Hello,</p>
+"<p>Dear developper,</p>
 <p>A new <strong>".$note['level']."</strong> note was triggered:</p>
 <ul>
-	<li>Userid: ".$_SESSION['userid']."</li>
+	<li>Userid: ".@$_SESSION['userid']."</li>
 	<li>Client ip: ".$_SERVER['REMOTE_ADDR']."</li>
 	<li>Route: ".$_SERVER['REQUEST_URI']."</li>
 	<li>Code: ".$note['code']."</li>

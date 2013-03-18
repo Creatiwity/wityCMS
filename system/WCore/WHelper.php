@@ -68,7 +68,7 @@ class WHelper {
 			$reflection_class = new ReflectionClass($helper['class']);
 			return $reflection_class->newInstanceArgs($params);
 		} else {
-			return new $helper['class']();
+			return new self::$helpers_loaded[$helper_name]['class']();
 		}
 	}
 }
