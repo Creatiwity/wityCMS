@@ -59,6 +59,10 @@ class UserAdminView extends WView {
 		// Get users waiting for validation
 		$users_waiting = $this->model->getUsersList(0, 0, $sort[0], $sort[1] == 'ASC', array('valid' => 2));
 		$this->assign('users_waiting', $users_waiting);
+		if (!empty($users_waiting)) {
+			$this->assign('js', '/apps/user/admin/js/admin_check.js');
+			// $this->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
+		}
 		
 		// Generate the pagination to browse data
 		$count = $this->model->countUsers($filters);
@@ -181,6 +185,9 @@ class UserAdminView extends WView {
 		$this->render('group_dif');
 	}
 	
+	/**
+	 * Prepares the config view
+	 */
 	public function config($config) {
 		$this->assign('config', $config);
 		$this->render('config');

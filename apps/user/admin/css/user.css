@@ -28,6 +28,34 @@ ul#access, ul#accessEdit {
 	padding: 8px;
 }
 
+#admin_check a {
+	filter:alpha(opacity=30);
+    -moz-opacity: 0.3;
+    -khtml-opacity: 0.3;
+    opacity: 0.3;
+}
+
+#admin_check a:hover, #admin_check a.checked {
+	filter:alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
+
+#admin-check {
+	width: 70%;
+	float: left;
+}
+
+#admin_check_buttons {
+	display: none;
+}
+
+#admin-check-details {
+	width: 28%;
+	float: right;
+}
+
 /**
  * User form
  */

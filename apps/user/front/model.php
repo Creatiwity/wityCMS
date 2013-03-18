@@ -197,13 +197,16 @@ class UserModel {
 	 * @return array Information about the user
 	 */
 	public function getUser($userid) {
-		$prep = $this->db->prepare('
-			SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
-			FROM users
-			LEFT JOIN users_groups
-			ON groupe = users_groups.id
-			WHERE users.id = :userid
-		');
+		static $prep;
+		if (empty($prep)) {
+			$prep = $this->db->prepare('
+				SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
+				FROM users
+				LEFT JOIN users_groups
+				ON groupe = users_groups.id
+				WHERE users.id = :userid
+			');
+		}
 		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
 		$prep->execute();
 		return $prep->fetch(PDO::FETCH_ASSOC);
@@ -218,7 +221,7 @@ class UserModel {
 	 */
 	public function matchUser($nickname, $password) {
 		$prep = $this->db->prepare('
-			SELECT id, nickname, email, firstname, lastname, country, groupe, access
+			SELECT id, nickname, password, email, firstname, lastname, country, groupe, access
 			FROM users
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
 		');
@@ -373,7 +376,7 @@ class UserModel {
 	}
 	
 	/**
-	 * Retrieves the User app configuration stored in the database
+	 * Retrieves the User app configuration stored in the users_config table
 	 * 
 	 * @return array
 	 */

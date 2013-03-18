@@ -31,6 +31,55 @@ class UserAdminController extends WController {
 	 * Displays a list of users in the database
 	 */
 	protected function listing() {
+		// Admin check
+		$admin_check = WRequest::get('admin_check');
+		if (!empty($admin_check)) {
+			$notify = WRequest::get('notify');
+			foreach ($admin_check as $userid => $action) {
+				$db_data = $this->model->getUser($userid);
+				if (isset($db_data['valid']) && $db_data['valid'] == 2) {
+					if ($action == 'validate') {
+						$this->model->updateUser($userid, array('valid' => 1));
+						// Send email notification
+						if ($notify) {
+							$this->model->sendEmail(
+								$db_data['email'],
+								WLang::get('user_account_validated_subject', WConfig::get('config.site_name')),
+								str_replace(
+									array('{site_name}', '{base}'),
+									array(WConfig::get('config.site_name'), WRoute::getBase()),
+									WLang::get('user_account_validated_email')
+								)
+							);
+						}
+						WNote::success('user_account_validated', WLang::get('user_account_validated', $db_data['nickname']));
+					} else if ($action == 'refuse') {
+						$config = $this->model->getConfig();
+						if ($config['keep_users']) {
+							$this->model->updateUser($userid, array('valid' => 0));
+						} else {
+							$this->model->deleteUser($userid);
+						}
+						// Send email notification
+						if ($notify) {
+							$this->model->sendEmail(
+								$db_data['email'],
+								WLang::get('user_account_refused_subject', WConfig::get('config.site_name')),
+								str_replace(
+									array('{site_name}', '{base}'),
+									array(WConfig::get('config.site_name'), WRoute::getBase()),
+									WLang::get('user_account_refused_email')
+								)
+							);
+						}
+						WNote::success('user_account_refused', WLang::get('user_account_refused', $db_data['nickname']));
+					}
+				} else {
+					WNote::success('user_account_invalid', WLang::get('user_account_invalid', $db_data['nickname']));
+				}
+			}
+		}
+		
 		// Sorting criterias given by URL
 		$args = WRoute::getArgs();
 		$criterias = array_shift($args);
@@ -199,11 +248,6 @@ Ceci est un message automatique.";
 				$access = $this->model->treatAccessData($data['type'], WRequest::get('access'));
 				if ($access != $db_data['access']) {
 					$update_data['access'] = $access;
-				}
-				
-				// Valid
-				if ($db_data['valid'] == 2) {
-					$update_data['valid'] = 1;
 				}
 				
 				if (empty($errors)) {
@@ -391,15 +435,20 @@ Ceci est un message automatique.";
 		echo $json;
 	}
 	
+	/**
+	 * Configuration handler
+	 */
 	protected function config() {
-		$data = WRequest::getAssoc(array('update', 'register', 'email_conf', 'summary', 'admin_check'));
+		$data = WRequest::getAssoc(array('update', 'config'));
+		$config = $this->model->getConfig();
 		if ($data['update'] == 'true') {
-			foreach ($data as $name => $value) {
-				$this->model->setConfig($name, intval(!empty($value)));
+			foreach ($config as $name => $value) {
+				$config[$name] = intval(!empty($data['config'][$name]));
+				$this->model->setConfig($name, $config[$name]);
 			}
 			WNote::success('user_config_updated', WLang::get('user_config_updated'));
 		}
-		$this->view->config($this->model->getConfig());
+		$this->view->config($config);
 	}
 }
 

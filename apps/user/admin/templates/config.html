@@ -3,8 +3,10 @@
 		<form action="/admin/user/config" method="post" class="form-horizontal">
 			{for $name, $value in $config}
 			<p>
-				<input id="{$name}" type="checkbox" name="{$name}"{if {$value}} checked="checked"{/if} />
-				<label class="control-label" for="{$name}">{lang config_{$name}}</label>
+				<label class="control-label">
+					<input type="checkbox" name="config[{$name}]"{if {$value}} checked="checked"{/if} />
+					<strong>{lang config_{$name}}</strong>
+				</label>
 			</p>
 			{/for}
 			<div class="control-group">

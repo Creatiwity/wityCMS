@@ -34,7 +34,30 @@
 	<item id="edit">Editer</item>
 	<item id="delete">Supprimer</item>
 	<item id="cancel">Annuler</item>
-	<item id="waiting">Waiting for validation:</item>
+	
+	<!-- Account Admin checking -->
+	<item id="waiting">En attente de validation</item>
+	<item id="validate">Valider</item>
+	<item id="refuse">Décliner</item>
+	<item id="notify_these_users">Notifier ces utilisateurs</item>
+	<item id="user_account_validated_subject">%s - Votre compte utilisateur a été validé</item>
+	<item id="user_account_validated_email"><![CDATA[
+<p>Bonjour,</p>
+<p>Votre compte sur le site {site_name} vient d'être validé par un administrateur.</p>
+<p>Vous pouvez vous connecter à l'adresse suivante :<br />
+<a href="{base}/user/connexion/">Se connecter</a></p>
+<p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
+{base}/user/connexion/</p>
+<p><strong>{site_name}</strong></p>]]></item>
+	<item id="user_account_validated">L'utilisateur %s a été validé.</item>
+	<item id="user_account_refused_subject">%s - Votre inscription a été refusée</item>
+	<item id="user_account_refused_email"><![CDATA[
+<p>Bonjour,</p>
+<p>Votre inscription sur le site {site_name} n'a pas été acceptée.</p>
+<p>Pour plus d'informations, merci de contacter un administrateur.</p>
+<p><strong>{site_name}</strong></p>]]></item>
+	<item id="user_account_refused">L'utilisateur %s a été refusé.</item>
+	<item id="user_account_invalid">L'utilisateur %s ne correspond pas au processus de validation.</item>
 	
 	<!-- User add/edit form -->
 	<item id="users_found">%s utilisateurs trouvés</item>
@@ -56,7 +79,7 @@
 	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
 	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
-	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email?</item>
+	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email ?</item>
 	<item id="user_edit_own">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
 	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
 	
@@ -87,9 +110,10 @@
 	
 	<!-- Config -->
 	<item id="config_register">Ouvrir les inscriptions</item>
-	<item id="config_email_conf">Demander une confirmation par email</item>
+	<item id="config_email_conf">Lors de l'inscription, demander une confirmation par email</item>
 	<item id="config_summary">Envoyer un récapitulatif par email</item>
-	<item id="config_admin_check">Valider les comptes par un administrateur</item>
+	<item id="config_admin_check">Valider les nouveaux inscrits par un administrateur</item>
+	<item id="config_keep_users">Conserver les comptes supprimés ou refusés dans la base de données en les désactivant</item>
 	<item id="submit">Envoyer</item>
-	<item id="user_config_updated">La configuration a été mise à jour avec succès.</item>
+	<item id="user_config_updated">La configuration de l'application User a été mise à jour avec succès.</item>
 </lang>

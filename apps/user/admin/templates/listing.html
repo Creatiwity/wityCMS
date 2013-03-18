@@ -1,3 +1,50 @@
+{if !empty({$users_waiting})}
+<div id="admin-check">
+	<h2>{lang waiting}</h2>
+	<form id="admin-check-form" action="/admin/user/listing/" method="post">
+		<table id="admin_check" class="liste" cellpadding="0" cellspacing="0" onmouseout="hideUserDetails();">
+			<colgroup>
+				<col width="5%" />
+				<col width="25%" />
+				<col width="20%" />
+				<col width="20%" />
+				<col width="20%" />
+				<col width="10%" />
+			</colgroup>
+			{for $count, $user in $users_waiting}
+			<tr class="waiting {if {$count} % 2 == 0}pair{else}impair{/if}" onmouseover="showUserDetails('{$user.nickname}', '{$user.email}', '{$user.firstname}', '{$user.lastname}');">
+				<td>{$user.id}</td>
+				<td><strong>{$user.nickname}</strong></td>
+				<td>{$user.groupe_name}</td>
+				<td>{$user.date}</td>
+				<td>{$user.last_activity}</td>
+				<td>
+					<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="validate" />
+					<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="refuse" />
+					<a class="validate" href="javascript:void(0)" title="{lang validate}"><img src="/themes/system/images/icones/juste.png" alt="{lang validate}" /></a>
+					<a class="refuse" href="javascript:void(0)" title="{lang refuse}"><img src="/themes/system/images/icones/del.png" alt="{lang refuse}" /></a>
+				</td>
+			</tr>
+			{/for}
+		</table>
+		<div id="admin_check_buttons" class="tright">
+			<label><input type="checkbox" name="notify" checked="checked" /> {lang notify_these_users}</label>
+			<input id="admin_check_button" type="submit" value="{lang submit}" />
+			<input id="cancel_button" type="button" value="{lang cancel}" />
+		</div>
+	</form>
+</div>
+<div id="admin-check-details" class="hidden">
+	<ul>
+		<li>{lang nickname}: <span id="ac-nickname"></span></li>
+		<li>{lang email}: <span id="ac-email"></span></li>
+		<li>{lang firstname}: <span id="ac-firstname"></span></li>
+		<li>{lang lastname}: <span id="ac-lastname"></span></li>
+	</ul>
+</div>
+<div class="clear"></div>
+{/if}
+
 <div id="blocks">
 	<div id="search" class="block">
 		<div class="top"></div>
@@ -36,11 +83,11 @@
 	<table id="liste" class="liste sorted" cellpadding="0" cellspacing="0">
 		<colgroup>
 			<col width="5%" />
-			<col width="30%" />
+			<col width="25%" />
 			<col width="20%" />
 			<col width="20%" />
 			<col width="20%" />
-			<col width="5%" />
+			<col width="10%" />
 		</colgroup>
 		<tr>
 			<th class="sort {$id_class}"><a href="/admin/user/listing/id-{$id_sort}/{$subURL}">#</a></th>
@@ -50,19 +97,6 @@
 			<th class="sort {$last_activity_class}"><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}">{lang last_connection}</a></th>
 			<th>Actions</th>
 		</tr>
-		{for $count, $user in $users_waiting}
-			<tr class="waiting {if {$count} % 2 == 0}pair{else}impair{/if}">
-				<td>{$user.id}</td>
-				<td><em>{lang waiting}</em> <strong>{$user.nickname}</strong></td>
-				<td>{$user.groupe_name}</td>
-				<td>{$user.date}</td>
-				<td>{$user.last_activity}</td>
-				<td>
-					<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><img src="/themes/system/images/icones/edit.png" alt="{lang edit}" /></a>
-					{if {$user.id} != $_SESSION['userid']}<a href="/admin/user/del/{$user.id}/" title="{lang delete}"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>{/if}
-				</td>
-			</tr>
-		{/for}
 		{for $count, $user in $users}
 			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
 				<td>{$user.id}</td>

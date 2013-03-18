@@ -197,16 +197,18 @@ class UserController extends WController {
 							
 							WNote::success('user_register_confirm', WLang::get('user_register_confirm'), 'display');
 						} else if ($config['admin_check']) {
-							// Send an email to the user to remind him its login data
-							$this->model->sendEmail(
-								$data['email'],
-								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
-								str_replace(
-									array('{site_name}', '{nickname}', '{password}'),
-									array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf']),
-									WLang::get('user_register_email_admin')
-								)
-							);
+							if ($config['summary']) {
+								// Send an email to the user to remind him its login data
+								$this->model->sendEmail(
+									$data['email'],
+									WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+									str_replace(
+										array('{site_name}', '{nickname}', '{password}'),
+										array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf']),
+										WLang::get('user_register_email_admin')
+									)
+								);
+							}
 							
 							// Send email to the administrators to warn them
 							$admin_emails = WConfig::get('config.email');

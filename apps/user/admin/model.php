@@ -60,9 +60,12 @@ class UserAdminModel extends UserModel {
 	 * @param int $userid
 	 */
 	public function deleteUser($userid) {
-		$prep = $this->db->prepare('
-			DELETE FROM users WHERE id = :id
-		');
+		static $prep;
+		if (empty($prep)) {
+			$prep = $this->db->prepare('
+				DELETE FROM users WHERE id = :id
+			');
+		}
 		$prep->bindParam(':id', $userid, PDO::PARAM_INT);
 		return $prep->execute();
 	}
@@ -329,6 +332,12 @@ class UserAdminModel extends UserModel {
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
+	/**
+	 * Defines a config in users_config table
+	 * 
+	 * @param string $name
+	 * @param string $value
+	 */
 	public function setConfig($name, $value) {
 		static $prep;
 		if (empty($prep)) {
