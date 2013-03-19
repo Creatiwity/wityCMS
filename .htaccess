@@ -9,7 +9,7 @@ RewriteEngine on
 AddDefaultCharset UTF-8
 
 # Rules
-#RewriteCond %{HTTP_HOST} ^site.com$
+#RewriteCond %{HTTP_HOST} ^site\.com$
 #RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
 
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -136,7 +136,7 @@ class WTemplate {
 	}
 	
 	/**
-	 * Get the resulting output of a compiled file without printing anything on screen
+	 * Gets the resulting output of a compiled file without printing anything on screen
 	 * 
 	 * @param string $href file's href
 	 * @return string output string
@@ -173,7 +173,7 @@ class WTemplate {
 	}
 	
 	/**
-	 * Displays a file on screen
+	 * Displays a file on the screen
 	 * 
 	 * @param string $href file's href
 	 */

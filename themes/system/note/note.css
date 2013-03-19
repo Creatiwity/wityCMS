@@ -44,30 +44,3 @@
 	color: #f3227b;
 	background: #f7f7f7 url(../images/icones/error.png) 10px center no-repeat;
 }
-
-/************************
- * Note display custom
- ************************/
-#full_note {
-	width: 100%;
-	font-family: Arial, Helvetica, FreeSans, sans-serif;
-	background: #ededed;
-	margin: 0;
-	padding-top: 2em;
-}
-
-#full_note #box {
-	width: 500px;
-	margin: auto;
-	padding: 1em 1em 0 1em;
-	background: white;
-	border: 1px solid #d7d7d7;
-}
-
-#full_note #box h1 {
-	margin-top: 0;
-}
-
-#full_note #box img {
-	vertical-align: middle;
-}

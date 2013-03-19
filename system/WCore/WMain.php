@@ -35,20 +35,10 @@ class WMain {
 		$this->setupSession();
 		
 		// Initializing lang
-		$this->setupLang();
-		
-		// $this->log();
+		WLang::init();
 		
 		// exec application
 		$this->exec(WRoute::getApp());
-	}
-	
-	/**
-	 * Flush the notes waiting for their own view, and then destroys WMain instance
-	 */
-	public function __destruct() {
-		// Flush the notes waiting for their own view
-		WNote::displayCustomView();
 	}
 	
 	/**
@@ -61,7 +51,7 @@ class WMain {
 		if ($this->isApp($app_name)) {
 			// App controller file
 			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
-			include $app_dir.'main.php';
+			include_once $app_dir.'main.php';
 			$app_class = str_replace('-', '_', ucfirst($app_name)).'Controller';
 			
 			// App's controller must inherit WController
@@ -77,7 +67,7 @@ class WMain {
 				$controller->init($this, $context);
 				$controller->launch();
 			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting WController abstract class.", 'display');
+				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
 			}
 		} else {
 			WNote::error(404, "The page requested was not found.", 'display');
@@ -138,24 +128,6 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
-	}
-	
-	/**
-	 * Loads lang config
-	 */
-	private function setupLang() {
-		$lang_config = WConfig::get('config.lang');
-		WLang::init();
-		WLang::selectLang($lang_config);
-	}
-	
-	/**
-	 * Log activity in a file, DEBUG ONLY
-	 */
-	private function log() {
-		$file = fopen(WT_PATH.'log', 'a+');
-		fwrite($file, "\n".@$_SESSION['userid']." - Route : ".$_SERVER['REQUEST_URI']." / ".date('d/m/Y H:i:s', time()));
-		fclose($file);
 	}
 }
 

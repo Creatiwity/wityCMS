@@ -10,14 +10,9 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-19-12-2012
+ * @version 0.3-06-03-2013
  */
 class WSession {
-	
-	/**
-	 * SQL Table
-	 */
-	const USERS_TABLE = 'users';
 	
 	/**
 	 * Minimum time betwen two POST requests
@@ -28,6 +23,11 @@ class WSession {
 	 * Time before the session expires (seconds)
 	 */
 	const TOKEN_EXPIRATION = 120;
+	
+	/*
+	 * Maximum login attempts
+	 */
+	const MAX_LOGIN_ATTEMPT = 3;
 	
 	/*
 	 * Inactivity time (minuts)
@@ -51,22 +51,16 @@ class WSession {
 		// Start sessions
 		session_start();
 		
-		if (!empty($_COOKIE['hash'])) {
-			if ($this->isConnected()) {
-				// Token expiration checking
-				if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
-					if (!$this->reloadSession($_SESSION['userid'], $_COOKIE['hash'])) {
-						$this->closeSession();
-					}
-				}
+		if ($this->isConnected()) {
+			// Token expiration checking
+			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
+				$this->reloadSession($_SESSION['userid']);
 			}
-			// Attempt to reload the user session based on its cookies
-			else if (!empty($_COOKIE['userid'])) {
-				// Hash => unique connection
-				if (!$this->reloadSession(intval($_COOKIE['userid']), $_COOKIE['hash'])) {
-					$this->closeSession();
-				}
-			}
+		}
+		// Attempt to reload the user session based on its cookies
+		else if (!empty($_COOKIE['userid'])) {
+			// Hash => unique connection
+			$this->reloadSession(intval($_COOKIE['userid']));
 		}
 	}
 	
@@ -92,7 +86,7 @@ class WSession {
 		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
 			$_SESSION['login_try'] = 0;
-		} else if ($_SESSION['login_try'] >= self::LOGIN_MAX_ATTEMPT_REACHED) {
+		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
 			return self::LOGIN_MAX_ATTEMPT_REACHED;
 		}
 		
@@ -105,19 +99,13 @@ class WSession {
 		$password_hash = sha1($password);
 		
 		// Search a matching couple (nickname, password_hash) in DB
-		$db = WSystem::getDB();
-		$prep = $db->prepare('
-			SELECT id, nickname, password, email, groupe, access
-			FROM '.self::USERS_TABLE.'
-			WHERE (nickname = :nickname OR email = :nickname) AND password = :password
-		');
-		$prep->bindParam(':nickname', $nickname);
-		$prep->bindParam(':password', $password_hash);
-		$prep->execute();
-		$data = $prep->fetch();
+		include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
+		$userModel = new UserModel();
+		$data = $userModel->matchUser($nickname, $password_hash);
 		
 		// User found
 		if (!empty($data)) {
+			unset($_SESSION['login_try']); // cleanup
 			$this->setupSession($data['id'], $data);
 			
 			// Cookie setup
@@ -127,42 +115,12 @@ class WSession {
 				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
 				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, '/');
 			}
-			
 			return self::LOGIN_SUCCESS; 
 		} else {
 			// Attempt + 1
 			$_SESSION['login_try']++;
 			return 0;
 		}
-	}
-	
-	/**
-	 * Reloads a user based on cookies
-	 * 
-	 * @param string $userid        current user id
-	 * @param string $cookie_hash   cookie hash for security checking
-	 * @return boolean true if successfully reloaded, false otherwise
-	 */
-	private function reloadSession($userid, $cookie_hash) {
-		$db = WSystem::getDB();
-		$prep = $db->prepare('
-			SELECT id, nickname, password, email, groupe, access
-			FROM '.self::USERS_TABLE.'
-			WHERE id = :userid
-		');
-		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
-		$prep->execute();
-		$data = $prep->fetch();
-		
-		if (!empty($data)) {
-			// Check hash
-			if ($cookie_hash == $this->generate_hash($data['nickname'], $data['password'])) {
-				$this->setupSession($userid, $data);
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	
 	/**
@@ -177,18 +135,21 @@ class WSession {
 		$_SESSION['email']    = $data['email'];
 		$_SESSION['groupe']   = $data['groupe'];
 		
-		$_SESSION['accessString'] = $data['access'];
-		$_SESSION['access'] = array();
-		foreach (explode(',', $data['access']) as $access) {
-			if (!empty($access)) {
-				$pages_begin = strpos($access, '[');
-				if ($pages_begin !== false) {
-					$app_name = substr($access, 0, $pages_begin);
-					$pages = substr($access, $pages_begin+1, -1);
-					
-					$_SESSION['access'][$app_name] = explode('|', $pages);
-				} else {
-					$_SESSION['access'][$access] = 0;
+		$_SESSION['access_string'] = $data['access'];
+		if (empty($data['access'])) {
+			$_SESSION['access'] = '';
+		} else if ($data['access'] == 'all') {
+			$_SESSION['access'] = 'all';
+		} else {
+			$_SESSION['access'] = array();
+			foreach (explode(',', $data['access']) as $access) {
+				$first_bracket = strpos($access, '[');
+				if ($first_bracket !== false) {
+					$app_name = substr($access, 0, $first_bracket);
+					$permissions = substr($access, $first_bracket+1, -1);
+					if (!empty($permissions)) {
+						$_SESSION['access'][$app_name] = explode('|', $permissions);
+					}
 				}
 			}
 		}
@@ -207,7 +168,7 @@ class WSession {
 			$_SESSION['nickname'], 
 			$_SESSION['email'], 
 			$_SESSION['groupe'], 
-			$_SESSION['accessString'], 
+			$_SESSION['access_string'], 
 			$_SESSION['access'],
 			$_SESSION['token_expiration']
 		);
@@ -228,6 +189,30 @@ class WSession {
 		
 		// Reset cookies
 		setcookie(session_name(), '', time()-3600, '/');
+	}
+	
+	/**
+	 * Reloads a user based on cookies
+	 * 
+	 * @param string $userid        current user id
+	 * @param string $cookie_hash   cookie hash for security checking
+	 * @return boolean true if successfully reloaded, false otherwise
+	 */
+	public function reloadSession($userid) {
+		if (!empty($_COOKIE['hash'])) {
+			include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
+			$userModel = new UserModel();
+			$data = $userModel->getUser($userid);
+			if (!empty($data)) {
+				// Check hash
+				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
+					$this->setupSession($userid, $data);
+					return true;
+				}
+			}
+		}
+		$this->closeSession();
+		return false;
 	}
 	
 	/**
