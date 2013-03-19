@@ -331,7 +331,7 @@ Ceci est un message automatique.";
 						$count_users = $this->model->countUsers(array('groupe' => $data['id']));
 						// There will be a change in default group access affecting users
 						if ($data['access'] != $db_data['access'] && $count_users > 0) {
-							$this->view->group_dif($data['id'], $data['name'], $data['access']);
+							$this->view->group_diff($data['id'], $data['name'], $data['access']);
 							return;
 						} else if ($this->model->updateGroup($data['id'], $data)) {
 							WNote::success('user_group_edited', WLang::get('group_edited', $data['name']));
@@ -366,7 +366,7 @@ Ceci est un message automatique.";
 	/**
 	 * Makes the dif between old and new access to a group
 	 */
-	protected function group_dif() {
+	protected function group_diff() {
 		// Retrieve post data
 		$data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
 		if (!in_array(null, $data, true)) {
@@ -412,7 +412,7 @@ Ceci est un message automatique.";
 	/**
 	 * Display in a JSON format all the users whose nickname starts with a given letter.
 	 * 
-	 * Used for ajax method in group_dif action.
+	 * Used for ajax method in group_diff action.
 	 */
 	protected function load_users_with_letter() {
 		$letter = WRequest::get('letter');

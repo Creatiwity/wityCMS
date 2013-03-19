@@ -104,7 +104,14 @@
 	<item id="group_not_added">An unknown error occured while trying to apply changes to the group in the database.</item>
 	<item id="group_deleted">The group selected was deleted successfully.</item>
 	
-	<!-- Group dif -->
+	<!-- Group diff -->
+	<item id="apply_access">Applying new access rights to the group %s</item>
+	<item id="apply_access_inheriting">Apply new access rights to all users having the previous group access</item>
+	<item id="apply_access_custom">Apply new access rights to all users having custom access</item>
+	<item id="select_users">Select the users to overwrite access with the new group access.</item>
+	<item id="gd_perm_shared">Permissions shared with the new group access</item>
+	<item id="gd_perm_plus">Permissions in addition to the new group access</item>
+	<item id="gd_perm_minus">Permissions missing compared to the new group access</item>
 	<item id="reset">Reset</item>
 	
 	<!-- Config -->

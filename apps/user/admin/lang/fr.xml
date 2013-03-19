@@ -105,8 +105,16 @@
 	<item id="group_not_added">Une erreur inconnue s'est produite lors du traitement du groupe par la base de données.</item>
 	<item id="group_deleted">Le groupe a été supprimé avec succès.</item>
 	
-	<!-- Group dif -->
+	<!-- Group diff -->
+	<item id="apply_access">Application des nouveaux droits d'accès au groupe %s</item>
+	<item id="apply_access_inheriting">Appliquer les nouveaux droits d'accès à tous les utilisateurs qui héritaient des précédents accès du groupe</item>
+	<item id="apply_access_custom">Appliquer les nouveaux droits à tous les utilisateurs ayant des accès personnalisés</item>
+	<item id="select_users">Sélectionnez les utilisateurs auxquels vous voulez appliquer les nouveaux droits.</item>
+	<item id="gd_perm_shared">Permission commune avec les nouveaux accès du groupe</item>
+	<item id="gd_perm_plus">Permission en plus des nouveaux accès du groupe</item>
+	<item id="gd_perm_minus">Permission en moins par rapport au nouveaux accès du groupe</item>
 	<item id="reset">Réinitialiser</item>
+	<item id="users">utilisateurs</item>
 	
 	<!-- Config -->
 	<item id="config_register">Ouvrir les inscriptions</item>

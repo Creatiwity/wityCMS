@@ -156,21 +156,6 @@ function accessGroup(group_id) {
 $(document).ready(function() {
 	bindEvents('user-access');
 	
-	// if ($('#user-access .access-type .none').attr('checked')) {
-		// changeType('user-access', 'none');
-	// } else if ($('#user-access .access-type .all').attr('checked')) {
-		// changeType('user-access', 'all');
-	// }
-	
-	// Bind change event to every inputs
-	// $('#user-access .rights input').change(function() {
-		// if ($('#user-access .rights input:checked').size() == 0) {
-			// changeType('user-access', 'none');
-		// } else {
-			// changeType('user-access', 'custom');
-		// }
-	// });
-	
 	// If user accesses are given, use them to update the form
 	if (typeof user_access != 'undefined') {
 		if (user_access != '') {

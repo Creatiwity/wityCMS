@@ -154,9 +154,9 @@ class UserAdminView extends WView {
 	 * Displays the group difference form
 	 * Allows to customize user access when modifying group access
 	 */
-	public function group_dif($groupid, $new_name, $new_access) {
+	public function group_diff($groupid, $new_name, $new_access) {
 		$this->assign('js', '/apps/user/admin/js/access_form.js');
-		$this->assign('js', '/apps/user/admin/js/group_dif.js');
+		$this->assign('js', '/apps/user/admin/js/group_diff.js');
 		
 		// Get admin apps
 		$adminModel = new AdminController();
@@ -182,7 +182,7 @@ class UserAdminView extends WView {
 		$this->assign('count_custom', $count_custom);
 		$this->assign('count_regular', $count_total-$count_custom);
 		
-		$this->render('group_dif');
+		$this->render('group_diff');
 	}
 	
 	/**

@@ -95,14 +95,14 @@ ul#access, ul#accessEdit {
 }
 
 /**
- * Group dif
+ * Group diff
  */
-#group-dif .listing-wrapper {
+#group-diff .listing-wrapper {
 	margin: 1em;
 	display: none;
 }
 
-#group-dif .alphabet {
+#group-diff .alphabet {
 	width: 15%;
 	margin: 0 2% 0 0;
 	padding: 0;
@@ -110,7 +110,7 @@ ul#access, ul#accessEdit {
 	line-height: 35px;
 }
 
-#group-dif .alphabet a {
+#group-diff .alphabet a, #group-diff .alphabet span {
 	background: #28b8f7;
 	font-size: 15px;
 	padding: 5px;
@@ -119,31 +119,35 @@ ul#access, ul#accessEdit {
 	white-space: nowrap;
 }
 
-#group-dif .alphabet a:hover, #group-dif .alphabet a.current {
+#group-diff .alphabet span {
+	background: gray;
+}
+
+#group-diff .alphabet a:hover, #group-diff .alphabet a.current {
 	background: #1aa4e0;
 }
 
-#group-dif .legende {
+#group-diff .legende {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-#group-dif .users-list-container {
+#group-diff .users-list-container {
 	width: 80%;
 	float: left;
 }
 
-#group-dif .users-list-container dl {
+#group-diff .users-list-container dl {
 	margin: 0;
 }
 
-#group-dif .users-list-container p.loading {
+#group-diff .users-list-container p.loading {
 	padding-left: 25px;
 	background: url('../../../../themes/system/images/icones/loader.gif') no-repeat;
 }
 
-#group-dif dl dt {
+#group-diff dl dt {
 	background: #28b8f7;
 	padding: 5px;
 	margin-bottom: 1em;
@@ -151,24 +155,24 @@ ul#access, ul#accessEdit {
 	font-size: 1.2em;
 }
 
-#group-dif dl dd {
+#group-diff dl dd {
 	margin-bottom: 1em;
 	display: none;
 }
 
-#group-dif .pattern {
+#group-diff .pattern {
 	display: none;
 }
 
-#group-dif .same {
+#group-diff .shared {
 	font-weight: bold;
 	color: blue;
 }
-#group-dif .minus {
+#group-diff .minus {
 	font-weight: bold;
 	color: red;
 }
-#group-dif .plus {
+#group-diff .plus {
 	font-weight: bold;
 	color: green;
 }

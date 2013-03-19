@@ -33,7 +33,7 @@
 		<action desc="action_delete" menu="false" requires="delete">del</action>
 		<action desc="action_groups" requires="groups">Groups</action>
 		<action desc="action_group_del" menu="false" requires="groups,delete">group_del</action>
-		<action menu="false" requires="groups,edit">group_dif</action>
+		<action menu="false" requires="groups,edit">group_diff</action>
 		<action menu="false" requires="groups,edit">load_users_with_letter</action>
 		<action desc="action_config" requires="config">config</action>
 	</admin>
