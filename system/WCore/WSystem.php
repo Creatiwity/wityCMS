@@ -40,7 +40,7 @@ class WSystem {
 	 */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
-			include SYS_DIR.'WCore/WSession.php';
+			include_once SYS_DIR.'WCore/WSession.php';
 			self::$sessionInstance = new WSession();
 		}
 		
@@ -53,7 +53,7 @@ class WSystem {
 	 */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
-			include SYS_DIR.'WTemplate/WTemplate.php';
+			include_once SYS_DIR.'WTemplate/WTemplate.php';
 			try {
 				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
 			} catch (Exception $e) {

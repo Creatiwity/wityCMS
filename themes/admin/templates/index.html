@@ -19,7 +19,7 @@
 			<div id="header">
 				<div id="title">
 					<h1><a href="/">{$site_name}</a></h1>
-					<p>Wity <span>CMS</span><br />
+					<p>Wity<span>CMS</span><br />
 					<em>Bienvenue {$userNickname}</em></p>
 				</div>
 				<div id="logout">
@@ -31,22 +31,24 @@
 			<div id="nav">
 				<div class="inner">
 					<ul id="modules">
-						{for $app in $appList}
+						{for $app, $details in $appsList}
 							<li{if {$app} == {$appSelected}} class="hover"{/if}>
-								<div><a href="/admin/{$app}/">{$app}</a></div></li>
+								<div><a href="/admin/{$app}/">{lang {$details.name}}</a></div></li>
 						{/for}
 					</ul>
 					<ul id="actions">
 						{for $action, $desc in $actionsList}
 							{if {$desc.menu}}
 							<li class="{if {$action} == {$actionAsked}}on{/if}">
-								<a href="/admin/{$appSelected}/{if {$action} != 'index'}{$action}/{/if}">{$desc.lang}</a></li>
+								<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.desc}}</a></li>
 							{/if}
 						{/for}
 					</ul>
 					<div class="sub">
-						<p>Votre position actuelle est : <span class="app">{$appSelected}</span>
-						{if isset({$actionList.{$actionAsked}})} . <span class="action">{$actionList.{$actionAsked}}</span>{/if}</p>
+						{if !empty({$appSelected})}
+						<p>Votre position actuelle est : <span class="app">{lang {$appsList.{$appSelected}.name}}</span>
+						{if isset({$actionsList.{$actionAsked}})} . <span class="action">{lang {$actionsList.{$actionAsked}.desc}}</span>{/if}</p>
+						{/if}
 						<!--<form id="search" action="" method="post"><div>
 							<input type="text" name="search" value="recherche" onclick="this.value = '';" size="15" />
 							<input class="img" type="image" src="/themes/admin/images/search.jpg" alt="Rechercher" />

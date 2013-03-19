@@ -1,0 +1,80 @@
+<div id="content" class="large">
+	<table id="groups-list" class="liste sorted" cellpadding="0" cellspacing="0">
+		<colgroup>
+			<col style="width: 45%;" />
+			<col style="width: 45%;" />
+			<col style="width: 10%;" />
+		</colgroup>
+		<tr>
+			<td colspan="3" class="tcenter">
+				<a href="#group-add" onclick="showAddForm(); return false;"><strong>{lang add_a_group}</strong></a>
+			</td>
+		</tr>
+		<tr id="group-add" class="group-form impair">
+			<td colspan="3">
+				<form action="" method="post" class="hidden">
+					<div>
+						<input type="hidden" name="id" />
+						<input class="group-name" type="text" name="name" placeholder="{lang group_name}" />
+						<h2>{lang group_default_access_for_users}</h2>
+						<label><input class="access-type none" type="radio" name="type" value="none" checked="checked" /> {lang access_none}</label>
+						<label><input class="access-type all" type="radio" name="type" value="all" /> {lang access_all}</label>
+						<label><input class="access-type custom" type="radio" name="type" value="custom" /> {lang access_custom}</label>
+						
+						<div class="custom-controls tright">
+							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+						</div>
+						<table class="rights" cellpadding="0" cellspacing="0">
+							<colgroup><col width="25%" /></colgroup>
+							{for $app, $details in $admin_apps}
+							<tr>
+								<td class="tcenter"><strong>{$details.name}</strong></td>
+								<td>
+									<table class="permissions" cellpadding="0" cellspacing="0">
+										<tr class="tcenter">
+										{for $perm in {$details.permissions}}
+											<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></td>
+										{/for}
+										{empty}
+											<td><em>{lang no_permissions}</em></td>
+										{/empty}
+										</tr>
+									</table>
+								</td>
+							</tr>
+							{/for}
+						</table>
+						<div class="custom-controls tright">
+							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+						</div>
+						<div class="tcenter">
+							<input type="submit" value="{lang apply}" />
+							<input type="button" value="{lang cancel}" onclick="resetGroupForms();" />
+						</div>
+					</div>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<th class="sort {$name_class}"><a href="/admin/user/groups/name-{$name_sort}/">{lang group_name}</a></th>
+			<th class="sort {$users_count_class}"><a href="/admin/user/groups/users_count-{$users_count_sort}/">{lang group_users_count}</a></th>
+			<th>{lang actions}</th>
+		</tr>
+{for $count, $group in $groups}
+		<tr id="group-{$group.id}" class="{if {$count} % 2 == 0}pair{else}impair{/if}">
+			<td><strong>{$group.name}</strong></td>
+			<td>{$group.users_count}</td>
+			<td>
+				<a href="#edit" title="{lang edit}" onclick="showEditForm({$group.id}, '{$group.name}', '{$group.access}'); return false;"><img src="/themes/system/images/icones/edit.png" alt="{lang edit}" /></a>
+				<a href="/admin/user/group_del/{$group.id}/" title="{lang delete}" onclick="if (!confirm('{lang group_del_confirm|{$group.name}}')) return false;"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>
+			</td>
+		</tr>
+{/for}
+{empty}
+		<tr>
+			<td colspan="3" class="tcenter">{lang no_group_found}</td>
+		</tr>
+{/empty}
+	</table>
+</div>
+<div class="clear"></div>
