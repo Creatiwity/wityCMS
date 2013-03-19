@@ -143,6 +143,13 @@ CREATE TABLE IF NOT EXISTS `users_config` (
 
 -- --------------------------------------------------------
 
+INSERT INTO `users_config` (`name`, `value`) VALUES
+('register', '1'),
+('email_conf', '1'),
+('admin_check', '1'),
+('summary', '1'),
+('keep_users', '1');
+
 --
 -- Table structure for table `users_groups`
 --
