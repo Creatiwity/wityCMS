@@ -38,8 +38,7 @@ class AdminController extends WController {
 	 * Main method
 	 */
 	public function launch() {
-		if (!WSession::isConnected()) {
-			// Affichage du formulaire d'autentification
+		if (!WSession::isConnected()) { // Display login form if not connected
 			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
 			$this->wity->exec('user');
 		} else if ($this->checkAdminAccess()) {
@@ -82,7 +81,7 @@ class AdminController extends WController {
 	}
 	
 	/**
-	 * Vérifie si l'utilisateur a accès à l'administration
+	 * Checks user access to the administration
 	 * 
 	 * @return bool
 	 */
@@ -101,7 +100,7 @@ class AdminController extends WController {
 	}
 	
 	/**
-	 * Récupère la liste des applis administrables
+	 * Retrieves app having an admin side
 	 * 
 	 * @return array array(app_name => manifest)
 	 */
@@ -120,9 +119,7 @@ class AdminController extends WController {
 	}
 	
 	/**
-	 * Met à jour le routage de l'appli admin
-	 * 
-	 * @return void
+	 * Updates the route for the admin app
 	 */
 	private function routeAdmin() {
 		// Le nom de l'appli à administrer se trouve dans les arguments
@@ -150,9 +147,7 @@ class AdminController extends WController {
 	}
 	
 	/**
-	 * Configuration du thème de l'admin
-	 * 
-	 * @void
+	 * Configurates the admin template
 	 */
 	private function configTheme() {
 		// Matching the views
@@ -164,16 +159,11 @@ class AdminController extends WController {
 		WConfig::set('config.theme', 'admin');
 		$this->view->setTheme('admin');
 		
-		// Ce sont des variables de template et non de view
-		// Il est donc nécessaire des les assigner directement dans le moteur
+		// These are template variables => direct assign in WTemplate
 		$tpl = WSystem::getTemplate();
 		$tpl->assign('appsList', $this->getAdminApps());
-		
-		// Pseudonyme de l'utilisateur
 		$tpl->assign('userNickname', $_SESSION['nickname']);
 		
-		// Aucune application n'a été chargée
-		// On est donc sur la page d'accueil de l'admin
 		if (!is_null($this->appController)) {
 			$manifest = $this->appController->getManifest();
 			$action_asked = $this->appController->getAskedAction();
@@ -187,7 +177,7 @@ class AdminController extends WController {
 				ucwords($manifest['name']),
 				isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['desc']) : ''
 			));
-		} else {
+		} else { // No admin app loaded: this is the admin homepage
 			$tpl->assign(array(
 				'appSelected' => '',
 				'actionsList' => array(),
