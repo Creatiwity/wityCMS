@@ -70,7 +70,7 @@ abstract class WController {
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
-			WNote::error('app_no_manifest', 'The manifest of the application '.$this->getAppName().' cannot be found', 'assign');
+			WNote::error('app_no_manifest', 'The manifest of the application '.$this->getAppName().' cannot be found');
 		}
 	}
 	
@@ -144,12 +144,13 @@ abstract class WController {
 	}
 	
 	/**
-	 * Returns action's name which is the first parameter given in the URL, right after the app's name
-	 * If the $check param is set to true, the method will check if the action
-	 * found is declared in the manifest. Otherwise, it will retun the default
-	 * application action.
+	 * Returns action's name which is the second parameter given in the URL, right after the app's name.
 	 * 
-	 * @param bool $check Check if the action found is correct (default to true)
+	 * If the $check param is set to true, the method will check if the action found is declared in 
+	 * the manifest. If it is not declared, it will retun the default application action.
+	 * If $check is set to false, it will return the action as it is asked in the URL.
+	 * 
+	 * @param bool $check Parameter to check if the action asked is defined (default to true)
 	 * @return string action's name asked in the URL
 	 */
 	public function getAskedAction($check = true) {
@@ -205,12 +206,44 @@ abstract class WController {
 	public function loadManifest($app_name) {
 		$manifest = WConfig::get('manifest.'.$app_name);
 		if (is_null($manifest)) {
-			$manifest = $this->parseManifest(APPS_DIR.$app_name.DS.'manifest.xml');
+			// Checks cache directory
+			if (!is_dir(CACHE_DIR.'manifests')) {
+				@mkdir(CACHE_DIR.'manifests', 0777);
+			}
+			
+			$manifest_file = APPS_DIR.$app_name.DS.'manifest.php';
+			if (!file_exists($manifest_file)) {
+				// WNote::error('controller_no_manifest', 'Unable to find the manifest "'.$manifest_file.'".', 'debug');
+				return null;
+			}
+			
+			// Is there a manifest parsed in cache?
+			$cache_file = CACHE_DIR.'manifests'.DS.$app_name.'.php';
+			if (file_exists($cache_file) && @filemtime($cache_file) > @filemtime($manifest_file)) {
+				include $cache_file;
+			}
+			if (!isset($manifest)) { // cache failed
+				$manifest = $this->parseManifest($manifest_file);
+				
+				// Opening
+				if (!($handler = fopen($cache_file, 'w'))) {
+					WNote::error('controller_create_manifest_cache', 'Unable to open the cache target "'.$cache_file.'".', 'debug');
+				}
+				
+				// Writing
+				fwrite($handler, "<?php\n\n\$manifest = ".var_export($manifest, true).";\n\n?>");
+				fclose($handler);
+			}
 			WConfig::set('manifest.'.$app_name, $manifest);
 		}
 		return $manifest;
 	}
 	
+	/**
+	 * Retrieves the manifest of the application running
+	 * 
+	 * @return array manifest
+	 */
 	public function getManifest() {
 		return $this->manifest;
 	}
@@ -226,19 +259,16 @@ abstract class WController {
 			return null;
 		}
 		
-		$xml = simplexml_load_file($manifest_href);
+		$manifest_string = file_get_contents($manifest_href);
+		$manifest_string = trim(preg_replace('#<\?php.+\?>#U', '', $manifest_string));
+		
+		$xml = simplexml_load_string($manifest_string);
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('name', 'version', 'date', 'icone', 'service', 'action', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission');
 		foreach ($nodes as $node) {
 			switch ($node) {
-				case 'service':
-					// foreach ($xml->service as $page) {
-						
-					// }
-					break;
-				
 				case 'action':
 					$manifest['actions'] = array();
 					if (property_exists($xml, 'action')) {
