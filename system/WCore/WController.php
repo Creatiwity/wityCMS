@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-17-01-2013
+ * @version 0.3-20-03-2013
  */
 abstract class WController {
 
