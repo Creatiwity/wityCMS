@@ -1,3 +1,4 @@
+<?php defined('IN_WITY') or die('Access denied'); ?>
 <?xml version="1.0" encoding="utf-8"?>
 <app>
 	<!-- Application name -->
@@ -10,11 +11,4 @@
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
-	
-	<!-- Front pages
-		Restriction rules :
-		  0 - Public
-		  1 - User connected required
-		  2 - Require specific access -->
-	<page restriction="0" default="1">launch</page>
 </app>
