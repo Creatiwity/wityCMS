@@ -208,9 +208,9 @@ class WNote {
 		if (!empty($email)) {
 			$mail = WHelper::load('phpmailer');
 			$mail->CharSet = 'utf-8';
-			$mail->From = WConfig::get('config.email');
+			$mail->From = $email;
 			$mail->FromName = WConfig::get('config.site_name');
-			$mail->AddAddress(WConfig::get('config.email'));
+			$mail->AddAddress($email);
 			$mail->Subject = "[".WConfig::get('config.site_name')."] ".$note['level']." note - ".$note['code'];
 			$mail->Body = 
 "<p>Dear developper,</p>
