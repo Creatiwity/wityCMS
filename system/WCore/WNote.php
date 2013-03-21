@@ -204,26 +204,29 @@ class WNote {
 	 * @param array $note a note as it is returned by WNote::raise()
 	 */
 	public static function handle_email($note) {
-		$mail = WHelper::load('phpmailer');
-		$mail->CharSet = 'utf-8';
-		$mail->From = WConfig::get('config.email');
-		$mail->FromName = WConfig::get('config.site_name');
-		$mail->AddAddress(WConfig::get('config.email'));
-		$mail->Subject = "Debug - ".$note['code'];
-		$mail->Body = 
+		$email = WConfig::get('config.email');
+		if (!empty($email)) {
+			$mail = WHelper::load('phpmailer');
+			$mail->CharSet = 'utf-8';
+			$mail->From = $email;
+			$mail->FromName = WConfig::get('config.site_name');
+			$mail->AddAddress($email);
+			$mail->Subject = "[".WConfig::get('config.site_name')."] ".$note['level']." note - ".$note['code'];
+			$mail->Body = 
 "<p>Dear developper,</p>
 <p>A new <strong>".$note['level']."</strong> note was triggered:</p>
 <ul>
 	<li>Userid: ".@$_SESSION['userid']."</li>
 	<li>Client ip: ".$_SERVER['REMOTE_ADDR']."</li>
 	<li>Route: ".$_SERVER['REQUEST_URI']."</li>
-	<li>Code: ".$note['code']."</li>
-	<li>Message: ".$note['message']."</li>
+	<li><strong>Code:</strong> ".$note['code']."</li>
+	<li><strong>Message:</strong> ".$note['message']."</li>
 </ul>
-<p><em>Wity Note</em></p>";
-		$mail->IsHTML(true);
-		$mail->Send();
-		unset($mail);
+<p><em>WityNote</em></p>";
+			$mail->IsHTML(true);
+			$mail->Send();
+			unset($mail);
+		}
 	}
 	
 	/**
