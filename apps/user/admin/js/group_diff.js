@@ -5,7 +5,7 @@
  * @param string id      Id of the table-row containing the access form
  * @param string access  List of accesses to assign to the form
  */
-function assignDifPermissions(id, group_access, user_access) {
+function assignDiffPermissions(id, group_access, user_access) {
 	var group_type, user_type;
 	if (group_access == '') {
 		group_type = 'none';
@@ -24,7 +24,7 @@ function assignDifPermissions(id, group_access, user_access) {
 	}
 	
 	if (user_type == group_type) {
-		$('#'+id+' .access-type.'+user_type).parent().addClass('same');
+		$('#'+id+' .access-type.'+user_type).parent().addClass('shared');
 	} else {
 		$('#'+id+' .access-type.'+user_type).parent().addClass('plus');
 		$('#'+id+' .access-type.'+group_type).parent().addClass('minus');
@@ -60,7 +60,7 @@ function assignDifPermissions(id, group_access, user_access) {
 			}
 			if (checked || user_access == 'all') {
 				if (group_checked || group_access == 'all') {
-					$(input).parent().addClass('same');
+					$(input).parent().addClass('shared');
 				} else {
 					$(input).parent().addClass('plus');
 				}
@@ -131,10 +131,10 @@ function loadUsersBeginingBy(letter, groupid) {
 				$('#user-'+userid+' a.reset').click(function() {
 					var el_id = $(this).parent().attr('id');
 					var id = el_id.substring(5);
-					assignDifPermissions(el_id, group_access, data[id].access);
+					assignDiffPermissions(el_id, group_access, data[id].access);
 				});
 				// Assign group permissions to inputs
-				assignDifPermissions('user-'+userid, group_access, data[userid].access);
+				assignDiffPermissions('user-'+userid, group_access, data[userid].access);
 			}
 			
 			$('.users-list-container p').removeClass('loading');
@@ -145,11 +145,11 @@ function loadUsersBeginingBy(letter, groupid) {
 
 $(document).ready(function() {
 	if ($('#display-custom').attr('checked') == '') {
-		$('#group-dif .listing-wrapper').slideDown();
+		$('#group-diff .listing-wrapper').slideDown();
 	}
 	
 	$('#display-custom').change(function() {
-		$('#group-dif .listing-wrapper').slideToggle();
+		$('#group-diff .listing-wrapper').slideToggle();
 		
 		// Load some users
 		if ($('dl.users-list dt').size() == 1) {

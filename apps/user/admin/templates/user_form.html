@@ -6,12 +6,12 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" name="id" value="{$id}" />
-						<label><span class="hidden"><strong>{lang nickname} :</strong></span>
+						<label><span class="hidden"><strong>{lang nickname}:</strong></span>
 						<input class="nickname" type="text" name="nickname" value="{$nickname}" placeholder="{lang nickname}" maxlength="30" size="20" /></label>
 					</td>
 				</tr>
 				<tr>
-					<td><label for="password"><strong>{lang password} :</strong></label><br />
+					<td><label for="password"><strong>{lang password}:</strong></label><br />
 						<em>{lang leave_empty_to_leave_unchanged}</em></td>
 					<td>
 						<input id="password" type="password" name="password" size="20" /><br />
@@ -19,19 +19,19 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label for="email"><strong>{lang email} :</strong></label></td>
+					<td><label for="email"><strong>{lang email}:</strong></label></td>
 					<td><input id="email" type="email" name="email" value="{$email}" size="30" /></td>
 				</tr>
 				<tr>
-					<td><label for="firstname"><strong>{lang firstname} :</strong></label></td>
+					<td><label for="firstname"><strong>{lang firstname}:</strong></label></td>
 					<td><input id="firstname" type="firstname" name="firstname" value="{$firstname}" size="30" /></td>
 				</tr>
 				<tr>
-					<td><label for="lastname"><strong>{lang lastname} :</strong></label></td>
+					<td><label for="lastname"><strong>{lang lastname}:</strong></label></td>
 					<td><input id="lastname" type="lastname" name="lastname" value="{$lastname}" size="30" /></td>
 				</tr>
 				<tr>
-					<td><label for="groupe"><strong>{lang group} :</strong></label></td>
+					<td><label for="groupe"><strong>{lang group}:</strong></label></td>
 					<td>
 						<script type="text/javascript">
 							var user_access = '{$access}';
@@ -50,7 +50,7 @@
 					</td>
 				</tr>
 				<tr id="user-access">
-					<td><strong>{lang user_rights} :</strong></td>
+					<td><strong>{lang user_rights}:</strong></td>
 					<td>
 						<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
 						<label><input class="access-type all" type="radio" name="type" value="all"

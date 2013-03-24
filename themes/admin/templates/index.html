@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		
+
 		<title>{$page_title}</title>
-		
+
 		<meta name="Language" content="fr" />
 		<meta name="Robots" content="nofollow" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -13,21 +13,21 @@
 		<link href="/themes/admin/css/bootstrap.min.css" rel="stylesheet">
 		<link href="/themes/admin/css/style.css" rel="stylesheet">
 		<link href="/themes/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
-		
+
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		  <script src="/themes/admin/js/html5shiv.js"></script>
 		<![endif]-->
-		
+
 		{if isset({$css})}{$css}{/if}
-                
-                <script src="/themes/admin/js/jquery-1.9.1.min.js"></script>
+
+		<script src="/themes/admin/js/jquery-1.9.1.min.js"></script>
 		<script src="/themes/admin/js/bootstrap.min.js"></script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top">
-		    <div class="navbar-inner">
+			<div class="navbar-inner">
 				<div class="container-fluid">
 					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 						<span class="icon-bar"></span>
@@ -42,17 +42,17 @@
 							<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
 						</p>
 						<ul class="nav">
-                                                        {for $app, $details in $appsList}
-                                                        <li {if {$app} == {$appSelected}} class="active"{/if}>
-                                                                <a href="/admin/{$app}/">{lang {$details.name}}</a>
-                                                        </li>
+							{for $app, $details in $appsList}
+							<li {if {$app} == {$appSelected}} class="active"{/if}>
+								<a href="/admin/{$app}/">{lang {$details.name}}</a>
+							</li>
 							{/for}
 						</ul>
 					</div><!--/.nav-collapse -->
 				</div>
-		    </div>
+			</div>
 		</div>
-		
+
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2">
@@ -60,11 +60,11 @@
 						<ul class="nav nav-list">
 							<li class="nav-header">{$appSelected}</li>
 							{for $action, $desc in $actionsList}
-								{if {$desc.menu}}
-								<li class="{if {$action} == {$actionAsked}}active{/if}">
-									<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.lang}}</a>
-								</li>
-								{/if}
+							{if {$desc.menu}}
+							<li class="{if {$action} == {$actionAsked}}active{/if}">
+								<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.lang}}</a>
+							</li>
+							{/if}
 							{/for}
 						</ul>
 					</div><!--/.well -->

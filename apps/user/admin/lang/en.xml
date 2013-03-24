@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="en">
+	<!-- Actions -->
+	<item id="action_listing">Users listing</item>
+	<item id="action_add">Add a user</item>
+	<item id="action_edit">Edit a user</item>
+	<item id="action_delete">Delete a user</item>
+	<item id="action_groups">Manage groups</item>
+	<item id="action_group_del">Delete a group</item>
+	
 	<!-- Errors -->
 	<item id="bad_data">Please, fill in all the required fields.</item>
 	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
@@ -26,6 +34,30 @@
 	<item id="delete">Delete</item>
 	<item id="cancel">Cancel</item>
 	
+	<!-- Account Admin checking -->
+	<item id="waiting">Waiting for validation</item>
+	<item id="validate">Validate</item>
+	<item id="refuse">Refuse</item>
+	<item id="notify_these_users">Notify these users</item>
+	<item id="user_account_validated_subject">%s - User account validated</item>
+	<item id="user_account_validated_email"><![CDATA[
+<p>Welcome on {site_name}!</p>
+<p>Your account on {site_name} got validated by an administrator.</p>
+<p>You can login with your account on the website:
+<a href="{base}/user/login/">Login</a></p>
+<p>If the link does not work, paste this link in your browser:<br />
+{base}/user/login/</p>
+<p><strong>{site_name}</strong></p>]]></item>
+	<item id="user_account_validated">The user %s was validated.</item>
+	<item id="user_account_refused_subject">%s - Your inscription has been refused</item>
+	<item id="user_account_refused_email"><![CDATA[
+<p>Dear user,</p>
+<p>Your inscription on {site_name} was not accepted.</p>
+<p>For further information, please, contact an administrator.</p>
+<p><strong>{site_name}</strong></p>]]></item>
+	<item id="user_account_refused">The user %s was refused.</item>
+	<item id="user_account_invalid">The user %s is not to be checked.</item>
+	
 	<!-- User add/edit form -->
 	<item id="users_found">%s users found</item>
 	<item id="no_user_found">No user found</item>
@@ -48,6 +80,7 @@
 	<item id="user_not_edited">An unknown error occured while trying to edit the account %s in the database.</item>
 	<item id="send_email_confirmation">Send an account creation confirmation by mail?</item>
 	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
+	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
 	
 	<!-- User deletion -->
 	<item id="user_deleted">The user was deleted successfully.</item>
@@ -71,6 +104,22 @@
 	<item id="group_not_added">An unknown error occured while trying to apply changes to the group in the database.</item>
 	<item id="group_deleted">The group selected was deleted successfully.</item>
 	
-	<!-- Group dif -->
+	<!-- Group diff -->
+	<item id="apply_access">Applying new access rights to the group %s</item>
+	<item id="apply_access_inheriting">Apply new access rights to all users having the previous group access</item>
+	<item id="apply_access_custom">Apply new access rights to all users having custom access</item>
+	<item id="select_users">Select the users to overwrite access with the new group access.</item>
+	<item id="gd_perm_shared">Permissions shared with the new group access</item>
+	<item id="gd_perm_plus">Permissions in addition to the new group access</item>
+	<item id="gd_perm_minus">Permissions missing compared to the new group access</item>
 	<item id="reset">Reset</item>
+	
+	<!-- Config -->
+	<item id="config_register">Allow registering</item>
+	<item id="config_email_conf">At registering, check user email by sending a mail</item>
+	<item id="config_summary">Send a user account summary by mail</item>
+	<item id="config_admin_check">Validate all new users by an administrator</item>
+	<item id="config_keep_users">Keep deleted and refused account in the database, inactiving them</item>
+	<item id="submit">Submit</item>
+	<item id="user_config_updated">The user configuration was updated successfully.</item>
 </lang>
