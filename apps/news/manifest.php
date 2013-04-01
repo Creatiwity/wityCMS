@@ -18,15 +18,15 @@
 	<permission name="deletor" />
 	
 	<!-- Front pages -->
-	<page default="1">listing</page>
-	<page lang="Affichage d'un article">detail</page>
+	<action default="default">listing</action>
+	<action>detail</action>
 	
 	<!-- Admin pages -->
 	<admin>
-		<page lang="Liste des articles" default="1">news_listing</page>
-		<page lang="Ajouter un article" requires="news_editor">news_add_or_edit</page>
-		<page lang="Suppression d'un article" menu="false" requires="news_editor,deletor">news_delete</page>
-		<page lang="Gestion des catégories" requires="global_editor">categories_manager</page>
-                <page lang="Suppression d'une catégorie" menu="false" requires="global_editor,deletor">category_delete</page>
+		<action desc="articles_listing" default="1">news_listing</action>
+		<action desc="article_add" requires="news_editor">news_add_or_edit</action>
+		<action desc="article_delete" menu="false" requires="news_editor,deletor">news_delete</action>
+		<action desc="categories_management" requires="global_editor">categories_manager</action>
+                <action desc="category_delete" menu="false" requires="global_editor,deletor">category_delete</action>
 	</admin>
 </app>

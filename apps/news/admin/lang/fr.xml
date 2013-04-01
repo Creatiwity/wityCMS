@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="fr">
+	<!-- Actions -->
+	<item id="articles_listing">Liste des articles</item>
+	<item id="article_add">Ajouter un article</item>
+	<item id="article_delete">Suppression d'un article</item>
+	<item id="categories_management">Gestion des catégories</item>
+	<item id="category_delete">Suppression d'une catégorie</item>
+
+	<item id="article_delete_confirmation">Suppresion de "%s" ?</item>
+	
+	<item id="category_delete_confirmation">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
+	
+	<item id="cancel">Annuler</item>
+	<item id="delete">Supprimer</item>
+</lang>

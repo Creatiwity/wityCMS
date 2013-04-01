@@ -75,6 +75,19 @@ class NewsAdminView extends WView {
                 $this->setResponse('news_add_or_edit');
                 $this->render();
         }
+	
+	public function news_delete($data = array()) {
+		$this->assign('title', $data['news_title']);
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/news_delete/".$data['news_id']."-confirm");
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/news/admin/templates/delete_news.html');
+	}
+	
+	public function category_delete($id) {
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/category_delete/".$id."-confirm");
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/news/admin/templates/delete_category.html');
+	}
 
         public function categories_manager($sortBy, $sens, $data = array(), $fields = array()) {
                 $this->assign('js', '/apps/news/admin/js/cat.js');

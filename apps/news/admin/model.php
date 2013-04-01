@@ -105,7 +105,7 @@ class NewsAdminModel {
          */
         public function loadNews($id, $data_model = array()) {
                 $prep = $this->db->prepare('
-			SELECT url, title, author, content, keywords, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(modified, "%d/%m/%Y %H:%i") AS modified, image
+			SELECT id, url, title, author, content, keywords, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(modified, "%d/%m/%Y %H:%i") AS modified, image
 			FROM news
 			WHERE id = :id
 		');

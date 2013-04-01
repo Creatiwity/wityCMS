@@ -2,24 +2,22 @@
         <table class="table table-hover table-striped">
                 <thead>
                         <tr>
-                                <th>#</th>
                                 <th><a href="/admin/news/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> Nom</a></th>
                                 <th><a href="/admin/news/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_shortname_class}"></i> Nom raccourci</a></th>
-                                <th># Parent</th>
+                                <th>Parent</th>
                                 <th>Actions</th>
                         </tr>
                 </thead>
                 <tbody>
                         {for $c in $cats}
                         <tr>
-                                <td><strong>{$c.news_cat_id}</strong></td>
                                 <td>{$c.news_cat_name}</td>
                                 <td>{$c.news_cat_shortname}</td>
                                 <td>{$c.news_cat_shortname}</td>
                                 <td>
                                         <a href="#add_or_edit_form" title="Editer" onclick="return editCat({$c.news_cat_id}, '{$c.news_cat_name}', '{$c.news_cat_shortname}', {$c.news_cat_parent});"><i class="icon-edit"></i></a>
-                                        <a href="#" title="Supprimer"><i class="icon-trash"></i></a>
-                                </td>
+					<span title="{lang category_delete}" class="link" data-link-modal="/admin/news/category_delete/{$c.news_cat_id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>
+				</td>
                         </tr>
                         {/for}
                         {empty}
@@ -69,3 +67,5 @@
                 </form>
         </div>
 </div>
+
+<div id="modal_delete" class="modal hide fade"></div>

@@ -235,13 +235,31 @@ class NewsAdminController extends WController {
         }
 
         protected function news_delete() {
-                $id = $this->getId();
-                if ($this->model->validExistingNewsId($id)) {
+		$args = WRoute::getArgs();
+		$id = -1;
+		$confirm = false;
+		
+		if(!empty($args[1])) {
+			$args = explode("-",$args[1]);
+			
+			$id = $args[0];
+			
+			if(!empty($args[1]) && $args[1] == "confirm") {
+				$confirm = true;
+			}
+		}
+
+		if ($this->model->validExistingNewsId($id)) {
                         $data = $this->model->loadNews($id, $this->news_data_model);
-                        $this->model->deleteNews($id);
-                        $this->model->newsDestroyCats($id);
-                        WNote::success('article_deleted', "L'article \"<strong>" . $data['title'] . "</strong>\" a été supprimé avec succès.");
-                        header('location: ' . WRoute::getDir() . '/admin/news/');
+			
+			if($confirm) {
+				$this->model->deleteNews($id);
+				$this->model->newsDestroyCats($id);
+				WNote::success('article_deleted', "L'article \"<strong>" . $data['news_title'] . "</strong>\" a été supprimé avec succès.");
+				header('location: ' . WRoute::getDir() . '/admin/news/');
+			} else {
+				$this->view->news_delete($data);
+			}
                 } else {
                         WNote::error('article_not_found', "L'article que vous tentez de supprimer n'existe pas.");
                         header('location: ' . WRoute::getDir() . '/admin/news/');
@@ -327,14 +345,30 @@ class NewsAdminController extends WController {
                 $this->view->render();
         }
 
-        protected function category_delete() {
-                $id = $this->getId();
+        protected function category_delete() {		
+		$args = WRoute::getArgs();
+		$id = -1;
+		$confirm = false;
+		
+		if(!empty($args[1])) {
+			$args = explode("-",$args[1]);
+			
+			$id = $args[0];
+			
+			if(!empty($args[1]) && $args[1] == "confirm") {
+				$confirm = true;
+			}
+		}
 
-                if (!empty($id) && $this->model->validExistingCatId(intval($id))) {
-                        $this->model->deleteCat($id);
-                        $this->model->catsDestroyNews($id);
-                        WNote::success('cat_deleted', "La catégorie a été supprimée avec succès.");
-                        header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+		if ($this->model->validExistingCatId($id)) {			
+			if($confirm) {
+				$this->model->deleteCat($id);
+				$this->model->catsDestroyNews($id);
+				WNote::success('category_deleted', "La catégorie a été supprimée avec succès.");
+				header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+			} else {
+				$this->view->category_delete($id);
+			}
                 } else {
                         WNote::error('category_not_found', "La catégorie que vous tentez de supprimer n'existe pas.");
                         header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');

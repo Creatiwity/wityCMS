@@ -25,7 +25,7 @@
 			<td>{$n.news_views} lectures</td>
 			<td>
 				<a href="/admin/news/news_add_or_edit/{$n.news_id}-{$n.news_url}/" title="Editer"><i class="icon-edit"></i></a>
-				<a href="#" title="Supprimer"><i class="icon-trash"></i></a>
+				<span title="{lang article_delete}" class="link" data-link-modal="/admin/news/news_delete/{$n.news_id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>
 			</td>
 		</tr>
 	{/for}
@@ -36,3 +36,5 @@
 	{/empty}
 	</tbody>
 </table>
+
+<div id="modal_delete" class="modal hide fade"></div>
