@@ -3,16 +3,16 @@
 	<form action="/user/register/" method="post">
 		<div>
 			<label for="nickname">{lang nickname}:</label>
-			<input id="nickname" type="text" name="nickname" placeholder="{lang nickname}" value="{$nickname}" />
+			<input id="nickname" type="text" name="nickname" placeholder="{lang nickname}" value="{$nickname}" /> <span class="mandatory">*</span>
 			<br />
 			<label for="password">{lang password}:</label>
-			<input id="password" type="password" name="password" placeholder="{lang password}" />
+			<input id="password" type="password" name="password" placeholder="{lang password}" /> <span class="mandatory">*</span>
 			<br />
 			<label for="password_conf">{lang password_conf}:</label>
-			<input id="password_conf" type="password" name="password_conf" placeholder="{lang password_conf}" />
+			<input id="password_conf" type="password" name="password_conf" placeholder="{lang password_conf}" /> <span class="mandatory">*</span>
 			<br />
 			<label for="email">{lang email}:</label>
-			<input id="email" type="email" name="email" placeholder="{lang email}" value="{$email}" />
+			<input id="email" type="email" name="email" placeholder="{lang email}" value="{$email}" /> <span class="mandatory">*</span>
 			<br />
 			<label for="firstname">{lang firstname}:</label>
 			<input id="firstname" type="text" name="firstname" placeholder="{lang firstname}" value="{$firstname}" />
@@ -33,6 +33,7 @@
 			<p class="text-center">
 				<input type="submit" value="{lang register}" />
 			</p>
+			<p><em><span class="mandatory">*</span> {lang mandatory_fields}</em></p>
 		</div>
 	</form>
 	<script type="text/javascript">

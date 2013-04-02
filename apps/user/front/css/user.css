@@ -4,3 +4,7 @@
 	float: left;
 	display: block;
 }
+
+.mandatory {
+	color: red;
+}

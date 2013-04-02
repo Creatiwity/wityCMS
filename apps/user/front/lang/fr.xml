@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
+	<item id="mandatory_fields">Les champs marqués d'une étoile sont obligatoires.</item>
+	
 	<!-- Errors -->
 	<item id="bad_data">Merci de compléter tous les champs requis.</item>
 	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>

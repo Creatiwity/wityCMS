@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
+	<item id="mandatory_fields">These fields are mandatory.</item>
+	
 	<!-- Errors -->
 	<item id="bad_data">Please, fill in all the required fields.</item>
 	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
