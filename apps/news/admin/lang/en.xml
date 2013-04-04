@@ -8,6 +8,26 @@
 	<item id="category_delete">Delete a category</item>
 	
 	<item id="article_delete_confirmation">Delete "%s" ?</item>
+	<item id="article_no_title">Title is missing</item>
+	<item id="article_no_author">Author is missing</item>
+	<item id="article_no_permalink">Permalink is missing</item>
+	<item id="article_image_error">Image upload error : %s</item>
+	<item id="article_added">The news "<strong>%s</strong>" was successfully created.</item>
+	<item id="article_not_added">An unknown error occurred.</item>
+	<item id="article_edited">The news "<strong>%s</strong>" was successfully edited.</item>
+	<item id="article_not_edited">An unknown error occurred.</item>
+	
+	<item id="article_deleted">The news "<strong>%s</strong>" was successfully deleted.</item>
+	<item id="article_not_found">The news that you try to delete doesn't exist.</item>
+	
+	<item id="category_no_name">Category name is missing.</item>
+	<item id="cat_edited">The category "<strong>%s</strong>" was successfully edited.</item>
+	<item id="cat_not_edited">An unknown error occurred.</item>
+	<item id="cat_added">The category "<strong>%s</strong>" was successfully created.</item>
+	<item id="cat_not_added">An unknown error occurred.</item>
+	
+	<item id="category_deleted">Category successfully deleted.</item>
+	<item id="category_not_found">The category that you try to delete doesn't exist.</item>
 	
 	<item id="category_delete_confirmation">Are you sure you want to delete this category ?</item>
 	<item id="category_add_button">Add a category</item>

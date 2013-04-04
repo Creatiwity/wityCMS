@@ -368,6 +368,7 @@ class NewsAdminController extends WController {
 			if($confirm) {
 				$this->model->deleteCat($id);
 				$this->model->catsDestroyNews($id);
+				$this->model->unlinkChildren($id);
 				WNote::success('category_deleted', WLang::get('category_deleted'));
 				header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
 			} else {

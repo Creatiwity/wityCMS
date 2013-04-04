@@ -219,6 +219,19 @@ class NewsAdminModel {
                 $prep->bindParam(':cid', $cid, PDO::PARAM_INT);
                 return $prep->execute();
         }
+	
+	/**
+	 * Défait les liens enfants->parents pour un parent donné
+	 */
+	public function unlinkChildren($cid) {
+		$prep = $this->db->prepare('
+			UPDATE news_cats
+                        SET parent = 0
+			WHERE parent = :cid
+		');
+                $prep->bindParam(':cid', $cid);
+                return $prep->execute();
+	}
 
         /**
          * Récupère la liste complète des catégories

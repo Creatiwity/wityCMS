@@ -14,9 +14,8 @@
 	<item id="article_image_error">Erreur lors de l'upload de l'image à la une : %s</item>
 	<item id="article_added">L'article <strong>%s</strong> a été créé avec succès.</item>
 	<item id="article_not_added">Une erreur inconnue s'est produite.</item>
-	<item id="article_edited">Erreur lors de l'upload de l'image à la une : %s</item>
-	<item id="article_not_edited">L'article <strong>%s</strong> a été modifié avec succès.</item>
-	<item id="article_image_error">Une erreur inconnue s'est produite.</item>
+	<item id="article_edited">L'article <strong>%s</strong> a été modifié avec succès.</item>
+	<item id="article_not_edited">Une erreur inconnue s'est produite.</item>
 	
 	<item id="article_deleted">L'article "<strong>%s</strong>" a été supprimé avec succès.</item>
 	<item id="article_not_found">L'article que vous tentez de supprimer n'existe pas.</item>
