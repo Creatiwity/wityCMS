@@ -122,6 +122,6 @@
 	<item id="config_summary">Envoyer un récapitulatif par email</item>
 	<item id="config_admin_check">Valider les nouveaux inscrits par un administrateur</item>
 	<item id="config_keep_users">Conserver les comptes supprimés ou refusés dans la base de données en les désactivant</item>
-	<item id="submit">Envoyer</item>
+	<item id="submit">Enregistrer</item>
 	<item id="user_config_updated">La configuration de l'application User a été mise à jour avec succès.</item>
 </lang>
