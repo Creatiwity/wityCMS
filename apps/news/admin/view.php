@@ -50,10 +50,9 @@ class NewsAdminView extends WView {
                 $this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
                 $this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
                 $this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
-                $this->assign('js', "/libraries/wysihtml5-bootstrap/locales/bootstrap-wysihtml5.fr-FR.js");
 
                 $ids = array();
-                if (!empty($data)) {
+                if (!empty($data) && is_array($data['news_cats'])) {
                         foreach ($data['news_cats'] as $row => $val) {
                                 $ids[] = $row;
                         }
@@ -90,7 +89,7 @@ class NewsAdminView extends WView {
 	}
 
         public function categories_manager($sortBy, $sens, $data = array(), $fields = array()) {
-                $this->assign('js', '/apps/news/admin/js/cat.js');
+                $this->assign('js', '/apps/news/admin/js/categories_manager.js');
 
                 // AdminStyle Helper
                 $orderingFields = array('news_cat_name', 'news_cat_shortname');
@@ -107,7 +106,8 @@ class NewsAdminView extends WView {
                     'news_cat_id' => '',
                     'news_cat_name' => '',
                     'news_cat_shortname' => '',
-                    'news_cat_parent' => 0
+                    'news_cat_parent' => 0,
+		    'news_cat_parent_name' => ""
                         ), $fields
                 );
 

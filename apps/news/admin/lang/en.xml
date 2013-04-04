@@ -10,7 +10,9 @@
 	<item id="article_delete_confirmation">Delete "%s" ?</item>
 	
 	<item id="category_delete_confirmation">Are you sure you want to delete this category ?</item>
+	<item id="category_add_button">Add a category</item>
 	
 	<item id="cancel">Cancel</item>
 	<item id="delete">Delete</item>
+	<item id="submit">Submit</item>
 </lang>

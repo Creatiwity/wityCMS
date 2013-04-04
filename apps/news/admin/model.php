@@ -231,6 +231,19 @@ class NewsAdminModel {
                 );
                 $prep->execute();                
                 $result = $prep->fetchAll(PDO::FETCH_ASSOC);
+		
+		foreach ($result as $key => $cat) {
+			if ($cat['parent'] != 0) {
+				foreach ($result as $k2 => $c2) {
+					if($c2['cid'] == $cat['parent']) {
+						$result[$key]['parent_name'] = $c2['name'];
+						break;
+					}
+				}
+			} else {
+				$result[$key]['parent_name'] = "";
+			}
+		}
 
                 foreach ($result as $key => $cat) {
                         foreach ($cat as $prop => $value) {
@@ -240,6 +253,7 @@ class NewsAdminModel {
                                 }
                         }
                 }
+
                 return $result;
         }
 

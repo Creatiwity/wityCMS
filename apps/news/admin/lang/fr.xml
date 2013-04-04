@@ -8,9 +8,32 @@
 	<item id="category_delete">Suppression d'une catégorie</item>
 
 	<item id="article_delete_confirmation">Suppresion de "%s" ?</item>
+	<item id="article_no_title">Il manque un titre à l'article.</item>
+	<item id="article_no_author">Il manque un auteur à l'article.</item>
+	<item id="article_no_permalink">Aucun permalien (lien vers la news) n'a été défini.</item>
+	<item id="article_image_error">Erreur lors de l'upload de l'image à la une : %s</item>
+	<item id="article_added">L'article <strong>%s</strong> a été créé avec succès.</item>
+	<item id="article_not_added">Une erreur inconnue s'est produite.</item>
+	<item id="article_edited">Erreur lors de l'upload de l'image à la une : %s</item>
+	<item id="article_not_edited">L'article <strong>%s</strong> a été modifié avec succès.</item>
+	<item id="article_image_error">Une erreur inconnue s'est produite.</item>
+	
+	<item id="article_deleted">L'article "<strong>%s</strong>" a été supprimé avec succès.</item>
+	<item id="article_not_found">L'article que vous tentez de supprimer n'existe pas.</item>
+	
+	<item id="category_no_name">Veuillez spécifier un nom pour la nouvelle catégorie.</item>
+	<item id="cat_edited">La catégorie <strong>%s</strong> a été éditée avec succès.</item>
+	<item id="cat_not_edited">Une erreur inconnue s'est produite.</item>
+	<item id="cat_added">La catégorie <strong>%s</strong> a été ajoutée avec succès.</item>
+	<item id="cat_not_added">Une erreur inconnue s'est produite.</item>
+	
+	<item id="category_deleted">La catégorie a été supprimée avec succès.</item>
+	<item id="category_not_found">La catégorie que vous tentez de supprimer n'existe pas.</item>
 	
 	<item id="category_delete_confirmation">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
+	<item id="category_add_button">Ajouter une catégorie</item>
 	
 	<item id="cancel">Annuler</item>
 	<item id="delete">Supprimer</item>
+	<item id="submit">Sauver</item>
 </lang>

@@ -1,6 +1,6 @@
 <form action="" method="post" enctype="multipart/form-data">
 	<div class="span9">	
-		<input id="news_title" class="input-block-level" name="news_title" size="40" value="{$news_title}" type="text" onkeyup="updatePermalien(this.value);" placeholder="Titre de l'article"/>
+		<input id="news_title" class="input-block-level input-big" name="news_title" size="40" value="{$news_title}" type="text" placeholder="Titre de l'article"/>
 		<br/>
 		<div class="input-prepend">
 			<span class="add-on">{$siteURL}{$lastId}-</span>
@@ -10,7 +10,7 @@
 		<label for="news_content" class="hide">Contenu de la news :</label><br />
 		<textarea id="news_content" class="input-block-level" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
                 <script type="text/javascript">
-                        $('#news_content').wysihtml5(\{locale: "fr-FR"});
+                        $('#news_content').wysihtml5();
                 </script>
 	</div>
 	<div class="span3">

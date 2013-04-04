@@ -59,13 +59,15 @@ class NewsAdminController extends WController {
                         'news_cat_id' => 'cid',
                         'news_cat_name' => 'name',
                         'news_cat_shortname' => 'shortname',
-                        'news_cat_parent' => 'parent'
+                        'news_cat_parent' => 'parent',
+			'news_cat_parent_name' => 'parent_name'
                     ),
                     'fromDB' => array(
                         'cid' => 'news_cat_id',
                         'name' => 'news_cat_name',
                         'shortname' => 'news_cat_shortname',
-                        'parent' => 'news_cat_parent'
+                        'parent' => 'news_cat_parent',
+			'parent_name' => 'news_cat_parent_name'
                     )
                 );
         }
@@ -116,16 +118,16 @@ class NewsAdminController extends WController {
                          * VERIFICATIONS
                          */
                         if (empty($data['news_title'])) {
-                                $erreurs[] = "Il manque un titre à l'article.";
+                                $erreurs[] = WLang::get("article_no_title");
                         }
 
                         if (empty($data['news_author'])) {
-                                $erreurs[] = "Il manque un auteur à l'article.";
+                                $erreurs[] = WLang::get("article_no_author");
                         }
 
                         // Traitement du permalien
                         if (empty($data['news_url'])) {
-                                $erreurs[] = "Aucun permalien (lien vers la news) n'a été défini.";
+                                $erreurs[] = WLang::get("article_no_permalink");
                         } else {
                                 $data['news_url'] = strtolower($data['news_url']);
                                 $data['news_url'] = preg_replace('#[^a-z0-9.]#', '-', $data['news_url']);
@@ -147,7 +149,7 @@ class NewsAdminController extends WController {
                                 $upload->file_overwrite = true;
                                 $upload->Process(WT_PATH . 'upload/news/');
                                 if (!$upload->processed) {
-                                        $erreurs[] = "Erreur lors de l'upload de l'image à la une : " . $upload->error;
+                                        $erreurs[] = WLang::get("article_image_error", $upload->error);
                                 }
                                 $data['news_image'] = $upload->file_dst_name;
                         } else {
@@ -181,10 +183,10 @@ class NewsAdminController extends WController {
                                                         }
                                                 }
 
-                                                WNote::success('article_added', "L'article <strong>" . $data['news_title'] . "</strong> a été créé avec succès.");
+                                                WNote::success('article_added', WLang::get('article_added', $data['news_title']));
                                                 header('location: ' . WRoute::getDir() . '/admin/news/');
                                         } else {
-                                                WNote::error('article_not_added', "Une erreur inconnue s'est produite.");
+                                                WNote::error('article_not_added', WLang::get('article_not_added'));
                                                 $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
                                                 $lastId = $this->model->getLastNewsId() + 1;
                                                 $this->view->news_add_or_edit($catList, $lastId, $data);
@@ -206,10 +208,10 @@ class NewsAdminController extends WController {
 
                                         // Mise à jour des infos
                                         if ($this->model->updateNews($data, $this->news_data_model)) {
-                                                WNote::success('article_edited', "L'article <strong>" . $data['news_title'] . "</strong> a été modifié avec succès.");
+                                                WNote::success('article_edited', WLang::get('article_edited', $data['news_title']));
                                                 header('location: ' . WRoute::getDir() . '/admin/news/');
                                         } else {
-                                                WNote::error('article_not_edited', "Une erreur inconnue s'est produite.");
+                                                WNote::error('article_not_edited', WLang::get('article_image_error'));
                                                 $catList = $this->model->getCatList($this->cats_data_model, "name", "ASC");
                                                 $this->view->news_add_or_edit($catList, $id, $data);
                                         }
@@ -255,13 +257,13 @@ class NewsAdminController extends WController {
 			if($confirm) {
 				$this->model->deleteNews($id);
 				$this->model->newsDestroyCats($id);
-				WNote::success('article_deleted', "L'article \"<strong>" . $data['news_title'] . "</strong>\" a été supprimé avec succès.");
+				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
 				header('location: ' . WRoute::getDir() . '/admin/news/');
 			} else {
 				$this->view->news_delete($data);
 			}
                 } else {
-                        WNote::error('article_not_found', "L'article que vous tentez de supprimer n'existe pas.");
+                        WNote::error('article_not_found', WLang::get('article_not_found'));
                         header('location: ' . WRoute::getDir() . '/admin/news/');
                 }
         }
@@ -297,7 +299,7 @@ class NewsAdminController extends WController {
                         $erreurs = array();
 
                         if (empty($data['news_cat_name'])) {
-                                $erreurs[] = "Veuillez spécifier un nom pour la nouvelle catégorie.";
+                                $erreurs[] = WLang::get('category_no_name');
                         }
 
                         // Formatage du nom racourci
@@ -322,19 +324,21 @@ class NewsAdminController extends WController {
                         if (!empty($erreurs)) { // Il y a un problème
                                 WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
                         } else {
-                                if (edit) {
+                                if ($edit) {
                                         if ($this->model->updateCat($data, $this->cats_data_model)) {
-                                                WNote::success('cat_edited', "La catégorie <strong>" . $data['news_cat_name'] . "</strong> a été éditée avec succès.");
+                                                WNote::success('cat_edited', WLang::get('cat_edited', $data['news_cat_name']));
+						header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
                                         } else {
-                                                WNote::error('cat_not_edited', "Une erreur inconnue s'est produite.");
+                                                WNote::error('cat_not_edited', WLang::get('cat_not_edited'));
                                                 $this->view->categories_manager($catList, $sortBy, $sens, $data);
                                                 $this->view->render();
                                         }
                                 } else {
                                         if ($this->model->createCat($data, $this->cats_data_model)) {
-                                                WNote::success('cat_added', "La catégorie <strong>" . $data['news_cat_name'] . "</strong> a été ajoutée avec succès.");
-                                        } else {
-                                                WNote::error('cat_not_added', "Une erreur inconnue s'est produite.");
+                                                WNote::success('cat_added', WLang::get('cat_added', $data['news_cat_name']));
+						header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+					} else {
+                                                WNote::error('cat_not_added', WLang::get('cat_not_added'));
                                                 $this->view->categories_manager($catList, $sortBy, $sens, $data);
                                                 $this->view->render();
                                         }
@@ -364,13 +368,13 @@ class NewsAdminController extends WController {
 			if($confirm) {
 				$this->model->deleteCat($id);
 				$this->model->catsDestroyNews($id);
-				WNote::success('category_deleted', "La catégorie a été supprimée avec succès.");
+				WNote::success('category_deleted', WLang::get('category_deleted'));
 				header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
 			} else {
 				$this->view->category_delete($id);
 			}
                 } else {
-                        WNote::error('category_not_found', "La catégorie que vous tentez de supprimer n'existe pas.");
+                        WNote::error('category_not_found', WLang::get('category_not_found'));
                         header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
                 }
         }

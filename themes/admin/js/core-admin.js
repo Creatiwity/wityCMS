@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	$('[data-link-modal]').on('click', function() {
+	$('body').on('click', '[data-link-modal]', function() {
 		var link, modalId, modal;
 		
 		// create the backdrop and wait for next modal to be triggered

@@ -1,5 +1,5 @@
 $(document).ready( function() {	
-	$("#news_title").keyup( function() {
+	$("#news_title").on('keyup blur', function() {
 		var value = $(this).val();
 		
 		if (value === '') {
