@@ -37,10 +37,12 @@ class UserAdminView extends WView {
 		
 		// Treat filters
 		$subURL = "";
+		$hasFilter = false;
 		foreach ($filters as $k => $v) {
 			// Cleanup filters
 			if (!empty($v)) {
 				$subURL .= $k."=".$v."&";
+				$hasFilter = true;
 			}
 		}
 		if (!empty($subURL)) {
@@ -61,14 +63,22 @@ class UserAdminView extends WView {
 		$this->assign('users_waiting', $users_waiting);
 		if (!empty($users_waiting)) {
 			$this->assign('js', '/apps/user/admin/js/admin_check.js');
-			// $this->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
 		}
 		
 		// Generate the pagination to browse data
-		$count = $this->model->countUsers($filters);
-		$pagination = WHelper::load('pagination', array($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
+		$stats = array();
+		$stats['total'] = $this->model->countUsers();
+		$stats['onScreen'] = $stats['total'];
+		
+		if($hasFilter) {
+			$stats['filtered'] = $this->model->countUsers($filters);
+			$stats['onScreen'] = $stats['filtered'];
+		}
+		
+		$this->assign('stats', $stats);
+
+		$pagination = WHelper::load('pagination', array($stats['onScreen'], $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
 		$this->assign('pagination', $pagination->getHTML());
-		$this->assign('total', $count);
 	}
 	
 	/**

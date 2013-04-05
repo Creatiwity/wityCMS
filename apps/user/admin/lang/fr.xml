@@ -60,6 +60,7 @@
 	<item id="user_account_invalid">L'utilisateur %s ne correspond pas au processus de validation.</item>
 	
 	<!-- User add/edit form -->
+	<item id="users_total">%s utilisateurs inscrits</item>
 	<item id="users_found">%s utilisateurs trouvés</item>
 	<item id="no_user_found">Aucun utilisateur trouvé</item>
 	<item id="leave_empty_to_leave_unchanged">Laisser vide pour ne pas effectuer de modification.</item>

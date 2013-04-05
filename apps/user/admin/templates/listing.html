@@ -1,16 +1,8 @@
 {if !empty({$users_waiting})}
-<div id="admin-check">
+<div class="span9">
 	<h2>{lang waiting}</h2>
 	<form id="admin-check-form" action="/admin/user/listing/" method="post">
-		<table id="admin_check" class="liste" cellpadding="0" cellspacing="0" onmouseout="hideUserDetails();">
-			<colgroup>
-				<col width="5%" />
-				<col width="25%" />
-				<col width="20%" />
-				<col width="20%" />
-				<col width="20%" />
-				<col width="10%" />
-			</colgroup>
+		<table id="admin_check" class="table table-hover table-striped" onmouseout="hideUserDetails();">
 			{for $count, $user in $users_waiting}
 			<tr class="waiting {if {$count} % 2 == 0}pair{else}impair{/if}" onmouseover="showUserDetails('{$user.nickname}', '{$user.email}', '{$user.firstname}', '{$user.lastname}');">
 				<td>{$user.id}</td>
@@ -34,7 +26,7 @@
 		</div>
 	</form>
 </div>
-<div id="admin-check-details" class="hidden">
+<div id="admin-check-details" class="hide">
 	<ul>
 		<li>{lang nickname}: <span id="ac-nickname"></span></li>
 		<li>{lang email}: <span id="ac-email"></span></li>
@@ -42,80 +34,96 @@
 		<li>{lang lastname}: <span id="ac-lastname"></span></li>
 	</ul>
 </div>
-<div class="clear"></div>
 {/if}
 
-<div id="blocks">
-	<div id="search" class="block">
-		<div class="top"></div>
-		<h2>{lang search}</h2>
-		<form action="/admin/user/listing/" method="get">
-			<div>
-				<label for="nickname"><strong>{lang nickname}:</strong></label>
-				<input id="nickname" type="text" name="nickname" value="{$nickname}" /><br />
-				<label for="email">{lang email}:</label>
-				<input id="email" type="text" name="email" value="{$email}" /><br />
-				<label for="firstname">{lang firstname}:</label>
-				<input id="firstname" type="text" name="firstname" value="{$firstname}" /><br />
-				<label for="lastname">{lang lastname}:</label>
-				<input id="lastname" type="text" name="lastname" value="{$lastname}" /><br />
-				<label for="groupe">{lang group}:</label>
-				<select id="groupe" name="groupe">
-					<option value=""></option>
-					{for $group in $groups}
-					<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
-					{/for}
-				</select><br />
-				<p class="tcenter"><input type="submit" value="Filtrer" /></p>
-			</div>
-		</form>
+<div class="span9">
+	<div class="span9">
+		<span class="label label-info">{lang users_total|{$stats.total}}</span>
+		{if isset({$stats.filtered})}
+		<span class="label label-warning">{lang users_found|{$stats.filtered}}</span>
+		{/if}
 	</div>
-	<div class="block">
-		<div class="top"></div>
-		<h2>{lang statistics}</h2>
-		<ul>
-			<li>{lang users_found|{$total}}</li>
-		</ul>
-	</div>
-</div>
-<div id="content">
-	{$pagination}
-	<table id="liste" class="liste sorted" cellpadding="0" cellspacing="0">
-		<colgroup>
-			<col width="5%" />
-			<col width="25%" />
-			<col width="20%" />
-			<col width="20%" />
-			<col width="20%" />
-			<col width="10%" />
-		</colgroup>
-		<tr>
-			<th class="sort {$id_class}"><a href="/admin/user/listing/id-{$id_sort}/{$subURL}">#</a></th>
-			<th class="sort {$nickname_class}"><a href="/admin/user/listing/nickname-{$nickname_sort}/{$subURL}">{lang nickname}</a></th>
-			<th class="sort {$groupe_class}"><a href="/admin/user/listing/groupe-{$groupe_sort}/{$subURL}">{lang group}</a></th>
-			<th class="sort {$date_class}"><a href="/admin/user/listing/date-{$date_sort}/{$subURL}">{lang register_time}</a></th>
-			<th class="sort {$last_activity_class}"><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}">{lang last_connection}</a></th>
-			<th>Actions</th>
-		</tr>
-		{for $count, $user in $users}
-			<tr class="{if {$count} % 2 == 0}pair{else}impair{/if}">
+	<table id="liste" class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th><a href="/admin/user/listing/id-{$id_sort}/{$subURL}"><i class="{$id_class}"></i> #</a></th>
+				<th><a href="/admin/user/listing/nickname-{$nickname_sort}/{$subURL}"><i class="{$nickname_class}"></i> {lang nickname}</a></th>
+				<th><a href="/admin/user/listing/groupe-{$groupe_sort}/{$subURL}"><i class="{$groupe_class}"></i> {lang group}</a></th>
+				<th><a href="/admin/user/listing/date-{$date_sort}/{$subURL}"><i class="{$date_class}"></i> {lang register_time}</a></th>
+				<th><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}"><i class="{$last_activity_class}"></i> {lang last_connection}</a></th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{for $count, $user in $users}
+			<tr>
 				<td>{$user.id}</td>
 				<td><strong>{$user.nickname}</strong></td>
 				<td>{$user.groupe_name}</td>
 				<td>{$user.date}</td>
 				<td>{$user.last_activity}</td>
 				<td>
-					<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><img src="/themes/system/images/icones/edit.png" alt="{lang edit}" /></a>
-					{if {$user.id} != $_SESSION['userid']}<a href="/admin/user/del/{$user.id}/" title="{lang delete}"><img src="/themes/system/images/icones/del.png" alt="{lang delete}" /></a>{/if}
+					<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><i class="icon-edit"></i></a>
+					{if {$user.id} != $_SESSION['userid']}<span title="{lang article_delete}" class="link" data-link-modal="/admin/user/del/{$user.id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>{/if}
 				</td>
 			</tr>
-		{/for}
-		{empty}
+			{/for}
+			{empty}
 			<tr>
-				<td colspan="6" class="tcenter">{lang no_user_found}</td>
+				<td colspan="6"><p class="text-center">{lang no_user_found}</p></td>
 			</tr>
-		{/empty}
+			{/empty}
+		</tbody>
 	</table>
 	{$pagination}
 </div>
-<div class="clear"></div>
+
+<div class="span3">
+	<div id="search" class="well">
+		<h4>{lang search}</h4>
+		<form action="/admin/user/listing/" method="get">
+			<div class="control-group">
+				<label class="control-label" for="nickname"><strong>{lang nickname}:</strong></label>
+				<div class="controls">
+					<input id="nickname" type="text" name="nickname" value="{$nickname}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="email">{lang email}:</label>
+				<div class="controls">
+					<input id="email" type="text" name="email" value="{$email}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="firstname">{lang firstname}:</label>
+				<div class="controls">
+					<input id="firstname" type="text" name="firstname" value="{$firstname}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="lastname">{lang lastname}:</label>
+				<div class="controls">
+					<input id="lastname" type="text" name="lastname" value="{$lastname}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="groupe">{lang group}:</label>
+				<div class="controls">
+					<select id="groupe" name="groupe">
+						<option value=""></option>
+						{for $group in $groups}
+						<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<input type="submit" class="btn btn-block" value="Filtrer" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div id="modal_delete" class="modal hide fade"></div>
