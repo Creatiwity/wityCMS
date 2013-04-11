@@ -30,7 +30,7 @@ class UserAdminView extends WView {
 		
 		// SortingHelper Helper
 		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
-		$sort = $sortingHelper->getSorting($sortBy, $sens);
+		$sort = $sortingHelper->findSorting($sortBy, $sens);
 		
 		// Register sorting vars to be displayed in the head of the sorting table
 		$this->assign($sortingHelper->getTplVars());
@@ -151,7 +151,7 @@ class UserAdminView extends WView {
 		// AdminStyle Helper
 		$dispFields = array('name', 'users_count');
 		$adminStyle = WHelper::load('SortingHelper', array($dispFields, 'name'));
-		$sort = $adminStyle->getSorting($sortBy, $sens); // sorting vars
+		$sort = $adminStyle->findSorting($sortBy, $sens); // sorting vars
 		
 		// Enregistrement des variables de classement
 		$this->assign($adminStyle->getTplVars());
