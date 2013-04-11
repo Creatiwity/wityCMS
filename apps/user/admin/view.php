@@ -135,6 +135,9 @@ class UserAdminView extends WView {
 	public function del($userid) {
 		$data = $this->model->getUser($userid);
 		$this->assign('nickname', $data['nickname']);
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/user/del/".$userid);
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/user/admin/templates/del.html');
 	}
 	
 	/**

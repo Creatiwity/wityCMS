@@ -84,6 +84,7 @@
 	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
 	
 	<!-- User deletion -->
+	<item id="user_delete_confirmation">Are you sure you want to delete the user %s</item>
 	<item id="user_deleted">The user was deleted successfully.</item>
 	<item id="user_self_delete">You cannot delete your own account.</item>
 	

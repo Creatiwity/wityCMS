@@ -291,7 +291,6 @@ Ceci est un message automatique.";
 				header('location: '.WRoute::getDir().'/admin/user/');
 			} else {
 				$this->view->del($userid);
-				$this->view->render('del');
 			}
 		} else {
 			WNote::error('user_self_delete', WLang::get('user_self_delete'));
