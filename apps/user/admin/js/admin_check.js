@@ -1,7 +1,6 @@
-
-var button_admin_check = false;
-
 $(document).ready(function() {
+	var button_admin_check = false;
+	
 	$('#admin_check a.validate').click(function() {
 		if (!button_admin_check) {
 			$('#admin_check_buttons').fadeIn();
@@ -20,7 +19,7 @@ $(document).ready(function() {
 		$(this).addClass('checked');
 		$(this).parent().find('input[value="refuse"]').attr('checked', true);
 	});
-	
+
 	$('#cancel_button').click(function() {
 		$('#admin_check input').attr('checked', false);
 		$('#admin_check a').removeClass('checked');
@@ -30,22 +29,15 @@ $(document).ready(function() {
 	$('#admin-check-form').submit(function() {
 		button_admin_check = false;
 	});
-});
 
-window.onbeforeunload = function() {
-	if (button_admin_check) {
-		return "If you leave this page without sending the form, users waiting for validation will remain unaffected.";
+	$(".waiting").popover({
+		html: true,
+		trigger: 'hover'
+	});
+
+	window.onbeforeunload = function() {
+		if (button_admin_check) {
+			return "If you leave this page without sending the form, users waiting for validation will remain unaffected.";
+		}
 	}
-}
-
-function showUserDetails(nickname, email, firstname, lastname) {
-	$('#ac-nickname').html(nickname);
-	$('#ac-email').html(email);
-	$('#ac-firstname').html(firstname);
-	$('#ac-lastname').html(lastname);
-	$('#admin-check-details').show();
-}
-
-function hideUserDetails() {
-	$('#admin-check-details').hide();
-}
+});

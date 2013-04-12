@@ -1,81 +1,77 @@
-{if !empty({$users_waiting})}
 <div class="span9">
-	<h2>{lang waiting}</h2>
-	<form id="admin-check-form" action="/admin/user/listing/" method="post">
-		<table id="admin_check" class="table table-hover table-striped" onmouseout="hideUserDetails();">
-			{for $count, $user in $users_waiting}
-			<tr class="waiting {if {$count} % 2 == 0}pair{else}impair{/if}" onmouseover="showUserDetails('{$user.nickname}', '{$user.email}', '{$user.firstname}', '{$user.lastname}');">
-				<td>{$user.id}</td>
-				<td><strong>{$user.nickname}</strong></td>
-				<td>{$user.groupe_name}</td>
-				<td>{$user.date}</td>
-				<td>{$user.last_activity}</td>
-				<td>
-					<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="validate" />
-					<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="refuse" />
-					<a class="validate" href="javascript:void(0)" title="{lang validate}"><img src="/themes/system/images/icones/juste.png" alt="{lang validate}" /></a>
-					<a class="refuse" href="javascript:void(0)" title="{lang refuse}"><img src="/themes/system/images/icones/del.png" alt="{lang refuse}" /></a>
-				</td>
-			</tr>
-			{/for}
-		</table>
-		<div id="admin_check_buttons" class="tright">
-			<label><input type="checkbox" name="notify" checked="checked" /> {lang notify_these_users}</label>
-			<input id="admin_check_button" type="submit" value="{lang submit}" />
-			<input id="cancel_button" type="button" value="{lang cancel}" />
-		</div>
-	</form>
-</div>
-<div id="admin-check-details" class="hide">
-	<ul>
-		<li>{lang nickname}: <span id="ac-nickname"></span></li>
-		<li>{lang email}: <span id="ac-email"></span></li>
-		<li>{lang firstname}: <span id="ac-firstname"></span></li>
-		<li>{lang lastname}: <span id="ac-lastname"></span></li>
-	</ul>
-</div>
-{/if}
+	{if !empty({$users_waiting})}
+	<div class="row-fluid">
+		<h2>{lang waiting}</h2>
+		<form id="admin-check-form" action="/admin/user/listing/" method="post">
+			<table id="admin_check" class="table table-hover table-striped">
+				{for $count, $user in $users_waiting}
+				<tr class="waiting" data-title="{$user.nickname}" data-content="<ul class='unstyled'> <li>{$user.firstname} {$user.lastname}</li> <li>{$user.email}</li> </ul>">
+					<td>{$user.id}</td>
+					<td><strong>{$user.nickname}</strong></td>
+					<td>{$user.groupe_name}</td>
+					<td>{$user.date}</td>
+					<td>{$user.last_activity}</td>
+					<td>
+						<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="validate" />
+						<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="refuse" />
+						<a class="validate" href="javascript:void(0)" title="{lang validate}"><img src="/themes/system/images/icones/juste.png" alt="{lang validate}" /></a>
+						<a class="refuse" href="javascript:void(0)" title="{lang refuse}"><img src="/themes/system/images/icones/del.png" alt="{lang refuse}" /></a>
+					</td>
+				</tr>
+				{/for}
+			</table>
+			<div id="admin_check_buttons" class="pull-right form-inline">
+				<label class="checkbox"><input type="checkbox" name="notify" checked="checked" /> {lang notify_these_users}</label>
+				<input id="cancel_button" class="btn" type="button" value="{lang cancel}" />
+				<input id="admin_check_button" class="btn btn-primary" type="submit" value="{lang submit}" />
+			</div>
+		</form>
+	</div>
+	<hr/>
+	{/if}
 
-<div class="span9">
-	<div class="span9">
+
+	<div class="row-fluid">
 		<span class="label label-info">{lang users_total|{$stats.total}}</span>
 		{if isset({$stats.filtered})}
 		<span class="label label-warning">{lang users_found|{$stats.filtered}}</span>
 		{/if}
 	</div>
-	<table id="liste" class="table table-striped table-hover">
-		<thead>
-			<tr>
-				<th><a href="/admin/user/listing/id-{$id_sort}/{$subURL}"><i class="{$id_class}"></i> #</a></th>
-				<th><a href="/admin/user/listing/nickname-{$nickname_sort}/{$subURL}"><i class="{$nickname_class}"></i> {lang nickname}</a></th>
-				<th><a href="/admin/user/listing/groupe-{$groupe_sort}/{$subURL}"><i class="{$groupe_class}"></i> {lang group}</a></th>
-				<th><a href="/admin/user/listing/date-{$date_sort}/{$subURL}"><i class="{$date_class}"></i> {lang register_time}</a></th>
-				<th><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}"><i class="{$last_activity_class}"></i> {lang last_connection}</a></th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{for $count, $user in $users}
-			<tr>
-				<td>{$user.id}</td>
-				<td><strong>{$user.nickname}</strong></td>
-				<td>{$user.groupe_name}</td>
-				<td>{$user.date}</td>
-				<td>{$user.last_activity}</td>
-				<td>
-					<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><i class="icon-edit"></i></a>
-					{if {$user.id} != $_SESSION['userid']}<span title="{lang article_delete}" class="link" data-link-modal="/admin/user/del/{$user.id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>{/if}
-				</td>
-			</tr>
-			{/for}
-			{empty}
-			<tr>
-				<td colspan="6"><p class="text-center">{lang no_user_found}</p></td>
-			</tr>
-			{/empty}
-		</tbody>
-	</table>
-	{$pagination}
+	<div class="row-fluid">
+		<table id="liste" class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th><a href="/admin/user/listing/id-{$id_sort}/{$subURL}"><i class="{$id_class}"></i> #</a></th>
+					<th><a href="/admin/user/listing/nickname-{$nickname_sort}/{$subURL}"><i class="{$nickname_class}"></i> {lang nickname}</a></th>
+					<th><a href="/admin/user/listing/groupe-{$groupe_sort}/{$subURL}"><i class="{$groupe_class}"></i> {lang group}</a></th>
+					<th><a href="/admin/user/listing/date-{$date_sort}/{$subURL}"><i class="{$date_class}"></i> {lang register_time}</a></th>
+					<th><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}"><i class="{$last_activity_class}"></i> {lang last_connection}</a></th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{for $count, $user in $users}
+				<tr>
+					<td>{$user.id}</td>
+					<td><strong>{$user.nickname}</strong></td>
+					<td>{$user.groupe_name}</td>
+					<td>{$user.date}</td>
+					<td>{$user.last_activity}</td>
+					<td>
+						<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><i class="icon-edit"></i></a>
+						{if {$user.id} != $_SESSION['userid']}<span title="{lang article_delete}" class="link" data-link-modal="/admin/user/del/{$user.id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>{/if}
+					</td>
+				</tr>
+				{/for}
+				{empty}
+				<tr>
+					<td colspan="6"><p class="text-center">{lang no_user_found}</p></td>
+				</tr>
+				{/empty}
+			</tbody>
+		</table>
+		{$pagination}
+	</div>
 </div>
 
 <div class="span3">
