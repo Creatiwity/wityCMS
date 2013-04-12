@@ -1,6 +1,8 @@
 {for $note in $notes_data}
-<div class="row-fluid alert alert-{$note.level}">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	{$note.message}
+<div class="row-fluid">
+	<div class="alert alert-{$note.level}">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{$note.message}
+	</div>
 </div>
 {/for}
