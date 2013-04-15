@@ -190,13 +190,13 @@ class NewsAdminModel {
 	/**
 	 * Mise à jour d'une news
 	 */
-	public function updateNews($data) {
+	public function updateNews($news_id, $data) {
 		$prep = $this->db->prepare('
 			UPDATE news
 			SET url = :url, title = :title, content = :content, keywords = :keywords, modified = NOW(), editor_id = :editor_id, image = :image 
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $data[$this->news_data_model['fromDB']['id']]);
+		$prep->bindParam(':id', $news_id);
 		$prep->bindParam(':url', $data[$this->news_data_model['fromDB']['url']]);
 		$prep->bindParam(':title', $data[$this->news_data_model['fromDB']['title']]);
 		$prep->bindParam(':content', $data[$this->news_data_model['fromDB']['content']]);

@@ -16,16 +16,16 @@
 			<td><strong>{$n.news_title}</strong></td>
 			<td>{$n.news_author}</td>
 			<td>
-                                <ul class="unstyled">
-                                {for $c in {$n.news_cats}}
-                                <li>{$c.news_cat_name}</li>
-                                {/for}
-                                </ul>
-                        </td>
+				<ul class="unstyled">
+				{for $c in {$n.news_cats}}
+					<li>{$c.news_cat_name}</li>
+				{/for}
+				</ul>
+			</td>
 			<td>{$n.news_date}</td>
 			<td>{$n.news_views} lectures</td>
 			<td>
-				<a href="/admin/news/news_add_or_edit/{$n.news_id}-{$n.news_url}/" title="Editer"><i class="icon-edit"></i></a>
+				<a href="/admin/news/edit/{$n.news_id}-{$n.news_url}/" title="Edit"><i class="icon-edit"></i></a>
 				<span title="{lang article_delete}" class="link" data-link-modal="/admin/news/news_delete/{$n.news_id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>
 			</td>
 		</tr>

@@ -35,7 +35,7 @@ class NewsAdminView extends WView {
 		}
 	}
 	
-	public function news_add_or_edit($catList = array(), $lastId = '0', $data = array()) {
+	public function news_form($catList = array(), $lastId = '0', $data = array()) {
 		// JS / CSS
 		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
 		
@@ -55,7 +55,7 @@ class NewsAdminView extends WView {
 		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
 		
 		$ids = array();
-		if (!empty($data) && is_array($data['news_cats'])) {
+		if (!empty($data['news_cats']) && is_array($data['news_cats'])) {
 			foreach ($data['news_cats'] as $row => $val) {
 				$ids[] = $row;
 			}
@@ -72,13 +72,12 @@ class NewsAdminView extends WView {
 			'news_modified' => ''
 		), $data);
 		
-		$this->setResponse('news_add_or_edit');
-		$this->render();
+		$this->render('news_form');
 	}
 	
 	public function news_delete($data = array()) {
 		$this->assign('title', $data['news_title']);
-		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/news_delete/".$data['news_id']."-confirm");
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/news_delete/".$data['news_id']."/confirm");
 		$this->tpl->assign($this->vars);
 		echo $this->tpl->parse('/apps/news/admin/templates/delete_news.html');
 	}

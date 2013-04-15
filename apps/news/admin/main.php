@@ -23,20 +23,23 @@ class NewsAdminController extends WController {
 	}
 	
 	/**
-	 * Récupère un id fourni dans l'url
+	 * Get the Id given in URL
 	 */
 	private function getId() {
 		$args = WRoute::getArgs();
 		if (empty($args[1])) {
-			return -1;
+			return null;
 		} else {
 			list ($id) = explode('-', $args[1]);
 			return intval($id);
 		}
 	}
 	
+	/**
+	 * Handle News Listing action
+	 */
 	protected function listing() {
-		$n = 30; // number of news per page
+		$n = 30; // Number of news per page
 		
 		// Sorting criterias given by URL
 		$args = WRoute::getArgs();
@@ -67,43 +70,40 @@ class NewsAdminController extends WController {
 		$this->view->news_listing($news, $adminStyle, $pagination);
 	}
 	
-	/*
-	 * Ajout d'une news
+	/**
+	 * - Handles Add action
+	 * - Prepares News form
 	 */
-	protected function news_add_or_edit() {
-		$data = WRequest::getAssoc(array('news_author', 'news_keywords', 'news_title', 'news_url', 'news_content'));
-		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
-		if (!in_array(null, $data, true)) {
-			$erreurs = array();
+	protected function news_form($news_id = null) {
+		if (!empty($_POST)) {
+			$data = WRequest::getAssoc(array('news_author', 'news_keywords', 'news_title', 'news_url', 'news_content', 'news_cats'));
+			$errors = array();
 			
 			/**
-			 * VERIFICATIONS
+			 * BEGING VARIABLES CHECKING
 			 */
 			if (empty($data['news_title'])) {
-				$erreurs[] = WLang::get("article_no_title");
+				$errors[] = WLang::get("article_no_title");
 			}
 			
 			if (empty($data['news_author'])) {
-				$erreurs[] = WLang::get("article_no_author");
+				$errors[] = WLang::get("article_no_author");
 			}
 			
-			// Traitement du permalien
+			// Treat custom news URL
 			if (empty($data['news_url'])) {
-				$erreurs[] = WLang::get("article_no_permalink");
+				$errors[] = WLang::get("article_no_permalink");
 			} else {
 				$data['news_url'] = strtolower($data['news_url']);
 				$data['news_url'] = preg_replace('#[^a-z0-9.]#', '-', $data['news_url']);
 				$data['news_url'] = preg_replace('#-{2,}#', '-', $data['news_url']);
 				$data['news_url'] = trim($data['news_url'], '-');
 			}
-			
 			/**
-			 * FIN VERIFICATIONS
+			 * END VARIABLES CHECKING
 			 */
-			// Categories
-			$data['news_cats'] = WRequest::get('news_cats');
 			
-			// Traitement l'image à la une
+			// Image on front page
 			if (!empty($_FILES['news_image']['name'])) {
 				include HELPERS_DIR . 'upload/upload.php';
 				$upload = new Upload($_FILES['news_image']);
@@ -111,122 +111,114 @@ class NewsAdminController extends WController {
 				$upload->file_overwrite = true;
 				$upload->Process(WT_PATH . 'upload/news/');
 				if (!$upload->processed) {
-					$erreurs[] = WLang::get("article_image_error", $upload->error);
+					$errors[] = WLang::get("article_image_error", $upload->error);
 				}
 				$data['news_image'] = $upload->file_dst_name;
 			} else {
 				$data['news_image'] = '';
 			}
 			
-			if (!empty($erreurs)) { // Il y a un problème
+			if (!empty($errors)) {
 				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
-				$catList = $this->model->getCatList("name", "ASC");
-				$lastId = $this->getId();
-				
-				// Vérification de la validité de l'id
-				if (!$this->model->validExistingNewsId($lastId)) {
-					$lastId = $this->model->getLastNewsId() + 1;
-				}
-				$this->view->news_add_or_edit($catList, $lastId, $data);
 			} else {
-				$id = $this->getId();
+				// Set userid as the editor
+				$data['news_editor_id'] = $_SESSION['nickname'];
 				
-				// Vérification de la validité de l'id
-				if (!$this->model->validExistingNewsId($id)) {
-					// Mise à jour des infos
+				if (is_null($news_id)) { // Add case
 					if ($this->model->createNews($data)) {
-						// Traitement des catégories
+						$news_id = $this->model->getLastNewsId();
+						
+						// Treat categories
 						if (!empty($data['news_cats'])) {
-							$nid = $this->model->getLastNewsId();
-							// Récupération des id des catégories stockées dans les clés du tableau
 							foreach ($data['news_cats'] as $cid => $v) {
-								$this->model->newsAddCat($nid, intval($cid));
+								$this->model->newsAddCat($news_id, intval($cid));
 							}
 						}
 						
 						WNote::success('article_added', WLang::get('article_added', $data['news_title']));
-						header('location: ' . WRoute::getDir() . '/admin/news/');
+						unset($data);
 					} else {
 						WNote::error('article_not_added', WLang::get('article_not_added'));
-						$catList = $this->model->getCatList("name", "ASC");
-						$lastId = $this->model->getLastNewsId() + 1;
-						$this->view->news_add_or_edit($catList, $lastId, $data);
 					}
-				} else {
-					$data['news_id'] = $id;
-					
-					// Traitement des catégories
-					$this->model->newsDestroyCats($id);
-					if (!empty($data['news_cats'])) {
-						// Récupération des id des catégories stockées dans les clés du tableau
-						foreach ($data['news_cats'] as $cid => $v) {
-							$this->model->newsAddCat($id, intval($cid));
+				} else { // Edit case
+					if ($this->model->updateNews($news_id, $data)) {
+						// Treat categories
+						$this->model->newsDestroyCats($news_id);
+						if (!empty($data['news_cats'])) {
+							foreach ($data['news_cats'] as $cid => $v) {
+								$this->model->newsAddCat($news_id, intval($cid));
+							}
 						}
-					}
-					
-					// Ajout du nom de l'éditeur
-					$data['news_editor_id'] = $_SESSION['nickname'];
-					
-					// Mise à jour des infos
-					if ($this->model->updateNews($data)) {
+						
 						WNote::success('article_edited', WLang::get('article_edited', $data['news_title']));
-						header('location: ' . WRoute::getDir() . '/admin/news/');
+						unset($data);
 					} else {
 						WNote::error('article_not_edited', WLang::get('article_image_error'));
-						$catList = $this->model->getCatList("name", "ASC");
-						$this->view->news_add_or_edit($catList, $id, $data);
 					}
 				}
 			}
-		} else {
-			$id = $this->getId();
-			$catList = $this->model->getCatList("name", "ASC");
-			
-			if ($this->model->validExistingNewsId($id)) {
-				$data = $this->model->loadNews($id);
-				$cats = $this->model->findNewsCats($id);
-				foreach ($cats as $key => $cat_id) {
-					$data['news_cats'][strval($cat_id['cat_id'])] = 'on';
-				}
-				$this->view->news_add_or_edit($catList, $id, $data);
+		}
+		
+		// Load form
+		$catsList = $this->model->getCatList("name", "ASC");
+		if (is_null($news_id)) { // Add case
+			$lastId = $this->model->getLastNewsId() + 1;
+			if (!isset($data)) {
+				$this->view->news_form($catsList, $lastId);
 			} else {
-				$lastId = $this->model->getLastNewsId() + 1;
-				$this->view->news_add_or_edit($catList, $lastId);
+				$this->view->news_form($catsList, $lastId, $data);
 			}
+		} else { // Edit case
+			if (!isset($data)) {
+				$data = $this->model->loadNews($news_id);
+			}
+			$cats = $this->model->findNewsCats($news_id);
+			foreach ($cats as $key => $cat_id) {
+				$data['news_cats'][$cat_id['cat_id']] = 'on';
+			}
+			$this->view->news_form($catsList, $news_id, $data);
 		}
 	}
 	
-	protected function news_delete() {
-		$args = WRoute::getArgs();
-		$id = -1;
-		$confirm = false;
+	/**
+	 * Handles Edit action
+	 */
+	protected function edit() {
+		$news_id = $this->getId();
 		
-		if(!empty($args[1])) {
-			$args = explode("-",$args[1]);
-			$id = $args[0];
-			
-			if(!empty($args[1]) && $args[1] == "confirm") {
-				$confirm = true;
-			}
+		// Check whether this news exist
+		if (empty($news_id) || !$this->model->validExistingNewsId($news_id)) {
+			WNote::error('bad_news_id', "No news matching id ".$news_id." was found.");
+			header('Location: '.WRoute::getDir().'/admin/news/');
+		} else {
+			$this->news_form($news_id);
 		}
-		
-		if ($this->model->validExistingNewsId($id)) {
-			$data = $this->model->loadNews($id);
-			
-			if($confirm) {
-				$this->model->deleteNews($id);
-				$this->model->newsDestroyCats($id);
+	}
+	
+	/**
+	 * Handles News Delete action
+	 * 
+	 * @todo Handle properly the article_not_found case with Bootstrap
+	 */
+	protected function news_delete() {
+		$news_id = $this->getId();
+		if ($this->model->validExistingNewsId($news_id)) {
+			$data = $this->model->loadNews($news_id);
+			$args = WRoute::getArgs();
+			$confirm = isset($args[2]) && $args[2] == "confirm";
+			if ($confirm) {
+				$this->model->newsDestroyCats($news_id);
+				$this->model->deleteNews($news_id);
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
-				header('location: ' . WRoute::getDir() . '/admin/news/');
+				header('Location: ' . WRoute::getDir() . '/admin/news/');
 			} else {
 				$this->view->news_delete($data);
 			}
 		} else {
-			WNote::error('article_not_found', WLang::get('article_not_found'));
-			header('location: ' . WRoute::getDir() . '/admin/news/');
+			WNote::error('article_not_found', WLang::get('article_not_found'), 'display');
 		}
 	}
-
+	
 	/**
 	 * Gestion des catégories
 	 */
