@@ -160,13 +160,13 @@ class NewsAdminController extends WController {
 		}
 		
 		// Load form
-		$catsList = $this->model->getCatList("name", "ASC");
+		$cats_list = $this->model->getCatList('news_cat_name', 'ASC');
 		if (is_null($news_id)) { // Add case
 			$lastId = $this->model->getLastNewsId() + 1;
 			if (!isset($data)) {
-				$this->view->news_form($catsList, $lastId);
+				$this->view->news_form($cats_list, $lastId);
 			} else {
-				$this->view->news_form($catsList, $lastId, $data);
+				$this->view->news_form($cats_list, $lastId, $data);
 			}
 		} else { // Edit case
 			if (!isset($data)) {
@@ -176,7 +176,7 @@ class NewsAdminController extends WController {
 			foreach ($cats as $key => $cat_id) {
 				$data['news_cats'][$cat_id['cat_id']] = 'on';
 			}
-			$this->view->news_form($catsList, $news_id, $data);
+			$this->view->news_form($cats_list, $news_id, $data);
 		}
 	}
 	
@@ -205,8 +205,7 @@ class NewsAdminController extends WController {
 		if ($this->model->validExistingNewsId($news_id)) {
 			$data = $this->model->loadNews($news_id);
 			$args = WRoute::getArgs();
-			$confirm = isset($args[2]) && $args[2] == "confirm";
-			if ($confirm) {
+			if (isset($args[2]) && $args[2] == "confirm") {
 				$this->model->newsDestroyCats($news_id);
 				$this->model->deleteNews($news_id);
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
@@ -295,35 +294,27 @@ class NewsAdminController extends WController {
 		}
 		$this->view->categories_manager($cats_list, $adminStyle, $data);
 	}
-
-	protected function category_delete() {	
-		$args = WRoute::getArgs();
-		$id = -1;
-		$confirm = false;
-		
-		if (!empty($args[1])) {
-			$args = explode("-",$args[1]);
-			
-			$id = $args[0];
-			
-			if (!empty($args[1]) && $args[1] == "confirm") {
-				$confirm = true;
-			}
-		}
-		
-		if ($this->model->validExistingCatId($id)) {		
-			if($confirm) {
-				$this->model->deleteCat($id);
-				$this->model->catsDestroyNews($id);
-				$this->model->unlinkChildren($id);
+	
+	/**
+	 * Handles Category_delete action
+	 * 
+	 * @todo Handle properly the cat_not_found case with Bootstrap
+	 */
+	protected function category_delete() {
+		$cat_id = $this->getId();
+		if ($this->model->validExistingCatId($cat_id)) {
+			$args = WRoute::getArgs();
+			if(isset($args[2]) && $args[2] == "confirm") {
+				$this->model->catsDestroyNews($cat_id);
+				$this->model->unlinkChildren($cat_id);
+				$this->model->deleteCat($cat_id);
 				WNote::success('category_deleted', WLang::get('category_deleted'));
-				header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+				header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
 			} else {
-				$this->view->category_delete($id);
+				$this->view->category_delete($cat_id);
 			}
 		} else {
 			WNote::error('category_not_found', WLang::get('category_not_found'));
-			header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
 		}
 	}
 }

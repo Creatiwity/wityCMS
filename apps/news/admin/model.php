@@ -300,7 +300,7 @@ class NewsAdminModel {
 	/**
 	 * Récupère la liste complète des catégories
 	 */
-	public function getCatList($order = 'name', $asc = true) {
+	public function getCatList($order = 'news_cat_name', $asc = true) {
 		$order = $this->cats_data_model['toDB'][$order];
 		$prep = $this->db->prepare('
 			SELECT cid, name, shortname, parent

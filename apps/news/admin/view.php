@@ -15,11 +15,7 @@ defined('IN_WITY') or die('Access denied');
  */
 class NewsAdminView extends WView {
 	public function news_listing($data = array(), $adminStyle, $pagination) {
-		$sorting = $adminStyle->getSorting();
-		
 		$this->assign('pagination', $pagination->getHTML());
-		
-		// Enregistrement des variables de classement
 		$this->assign($adminStyle->getTplVars());
 		$this->assign('news', $data);
 		
@@ -35,24 +31,19 @@ class NewsAdminView extends WView {
 		}
 	}
 	
-	public function news_form($catList = array(), $lastId = '0', $data = array()) {
+	public function news_form($cats_list = array(), $last_id = 0, $data = array()) {
 		// JS / CSS
 		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
-		
-		$this->assign('baseDir', WRoute::getDir());
-		
-		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', WRoute::getBase() . '/news/');
-		
-		// Chargement des catégories
-		$this->assign('cat', $catList);
-		
-		// Id pour simuler le permalien
-		$this->assign('lastId', $lastId);
-		
 		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
 		$this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
 		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
+		
+		// Assign site URL for permalink management
+		$this->assign('baseDir', WRoute::getDir());
+		$this->assign('siteURL', WRoute::getBase() . '/news/');
+		$this->assign('lastId', $last_id);
+		
+		$this->assign('cats_list', $cats_list);
 		
 		$ids = array();
 		if (!empty($data['news_cats']) && is_array($data['news_cats'])) {
@@ -83,7 +74,7 @@ class NewsAdminView extends WView {
 	}
 	
 	public function category_delete($id) {
-		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/category_delete/".$id."-confirm");
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/category_delete/".$id."/confirm");
 		$this->tpl->assign($this->vars);
 		echo $this->tpl->parse('/apps/news/admin/templates/delete_category.html');
 	}
