@@ -88,28 +88,18 @@ class NewsAdminView extends WView {
 		echo $this->tpl->parse('/apps/news/admin/templates/delete_category.html');
 	}
 	
-	public function categories_manager($sortBy, $sens, $data = array(), $fields = array()) {
+	public function categories_manager($cats_list, $adminStyle, $post_data = array()) {
 		$this->assign('js', '/apps/news/admin/js/categories_manager.js');
-		
-		// AdminStyle Helper
-		$orderingFields = array('news_cat_name', 'news_cat_shortname');
-		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name'));
-		
-		// Sorting vars
-		$adminStyle->findSorting($sortBy, $sens);
-		
-		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
-		
+		$this->assign($adminStyle->getTplVars());
 		$this->fillMainForm(array(
 			'news_cat_id' => '',
 			'news_cat_name' => '',
 			'news_cat_shortname' => '',
 			'news_cat_parent' => 0,
 			'news_cat_parent_name' => ""
-		), $fields);
-		$this->assign('cats', $data);
-		$this->setResponse('categories_manager');
+		), $post_data);
+		$this->assign('cats', $cats_list);
+		$this->render('categories_manager');
 	}
 }
 

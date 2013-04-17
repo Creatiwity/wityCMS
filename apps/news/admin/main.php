@@ -220,40 +220,38 @@ class NewsAdminController extends WController {
 	}
 	
 	/**
-	 * Gestion des catégories
+	 * Handles News categories_manager action
 	 */
 	protected function categories_manager() {
-		// Préparation tri colonnes
+		// Sorting criterias given by URL
 		$args = WRoute::getArgs();
-		if (isset($args[1])) {
-			$sortData = explode('-', $args[1]);
-		} else {
-			$sortData = array();
+		$criterias = array_shift($args);
+		if ($criterias == 'listing') {
+			$criterias = array_shift($args);
 		}
-		
-		if (empty($sortData)) {
+		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s', $sortBy, $sens);
+		if (!isset($this->model->cats_data_model['toDB'][$sortBy])) {
 			$sortBy = 'news_cat_name';
-			$sens = 'ASC';
-		} else {
-			$sortBy = array_shift($sortData);
-			$sens = !empty($sortData) ? $sortData[0] : 'ASC';
+		}
+		if (empty($page) || $page <= 0) {
+			$page = 1;
 		}
 		
-		$catList = $this->model->getCatList($this->model->cats_data_model['toDB'][$sortBy], $sens == 'ASC');
-		
-		/**
-		 * Formulaire pour l'AJOUT ou l'EDITION d'une catégorie
-		 */
-		$data = WRequest::getAssoc(array('news_cat_name', 'news_cat_shortname', 'news_cat_parent'));
-		// On vérifie que le formulaire a été envoyé par la non présence d'une valeur "null" cf WRequest
-		if (!in_array(null, $data, true)) {
-			$erreurs = array();
+		// Data was sent by form
+		if (!empty($_POST)) {
+			$data = WRequest::getAssoc(array('news_cat_id', 'news_cat_name', 'news_cat_shortname', 'news_cat_parent'));
+			$errors = array();
 			
-			if (empty($data['news_cat_name'])) {
-				$erreurs[] = WLang::get('category_no_name');
+			// Check existing category
+			if (!empty($data['news_cat_id']) && !$this->model->validExistingCatId(intval($data['news_cat_id']))) {
+				$errors[] = "The category you are trying to edit (#".$data['news_cat_id'].") does not exist in the database.";
 			}
 			
-			// Formatage du nom racourci
+			if (empty($data['news_cat_name'])) {
+				$errors[] = WLang::get('category_no_name');
+			}
+			
+			// Format short name
 			if (empty($data['news_cat_shortname'])) {
 				$data['news_cat_shortname'] = strtolower($data['news_cat_name']);
 			} else {
@@ -263,41 +261,39 @@ class NewsAdminController extends WController {
 			$data['news_cat_shortname'] = preg_replace('#-{2,}#', '-', $data['news_cat_shortname']);
 			$data['news_cat_shortname'] = trim($data['news_cat_shortname'], '-');
 			
-			$data['news_cat_id'] = WRequest::get("news_cat_id");
-			$edit = false;
-			
-			if (!empty($data['news_cat_id']) && $this->model->validExistingCatId(intval($data['news_cat_id']))) {
-				$edit = true;
+			if (!empty($errors)) {
+				WNote::error('data_errors', implode("<br />\n", $errors), 'assign');
 			} else {
-				unset($data['news_cat_id']);
-			}
-			
-			if (!empty($erreurs)) { // Il y a un problème
-				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
-			} else {
-				if ($edit) {
-					if ($this->model->updateCat($data)) {
-						WNote::success('cat_edited', WLang::get('cat_edited', $data['news_cat_name']));
-						header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
-					} else {
-						WNote::error('cat_not_edited', WLang::get('cat_not_edited'));
-						$this->view->categories_manager($catList, $sortBy, $sens, $data);
-						$this->view->render();
-					}
-				} else {
+				if (empty($data['news_cat_id'])) { // Add case
 					if ($this->model->createCat($data)) {
 						WNote::success('cat_added', WLang::get('cat_added', $data['news_cat_name']));
-						header('location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+						header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+						return;
 					} else {
 						WNote::error('cat_not_added', WLang::get('cat_not_added'));
-						$this->view->categories_manager($catList, $sortBy, $sens, $data);
-						$this->view->render();
+					}
+				} else { // Edit case
+					if ($this->model->updateCat($data)) {
+						WNote::success('cat_edited', WLang::get('cat_edited', $data['news_cat_name']));
+						header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
+						return;
+					} else {
+						WNote::error('cat_not_edited', WLang::get('cat_not_edited'));
 					}
 				}
 			}
 		}
-		$this->view->categories_manager($sortBy, $sens, $catList);
-		$this->view->render();
+		
+		// AdminStyle Helper
+		$orderingFields = array('news_cat_name', 'news_cat_shortname');
+		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name', 'ASC'));
+		$sorting = $adminStyle->findSorting($sortBy, $sens);
+		
+		$cats_list = $this->model->getCatList($sorting[0], $sorting[1]);
+		if (!isset($data)) {
+			$data = array();
+		}
+		$this->view->categories_manager($cats_list, $adminStyle, $data);
 	}
 
 	protected function category_delete() {	
