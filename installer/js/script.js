@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    //var Installer, Step, Group, Field;
 
     Installer = (function() {
 		var stepInstances;
@@ -30,7 +29,9 @@ $(document).ready(function() {
     })();
     
     Step = (function() {
-        function Step() {
+		var groupInstances;
+		
+        function Step(name) {
             //Build the group list
         }
         
@@ -54,17 +55,17 @@ $(document).ready(function() {
 		
 		Group.prototype.validate = function() {
 			//
-		}
+		};
 		
 		Group.prototype.clearErrors = function() {
 			//clear
-		}
+		};
 		
 		Group.prototype.displayErrors = function(errors) {
 			//Global group errors
 			//Dispatch fields error by name
 			//for() display
-		}
+		};
         
         return Group;
     })();
@@ -82,10 +83,10 @@ $(document).ready(function() {
 				type = element.attr('type');
 			}			
 			this.name = element.attr('name');
-			errorsContainer = element.attr('data-wity-errors-container') 
+			errorsContainer = element.attr('data-wity-errors-container') ;
 			
 			element.on('change', this.validate);
-        }
+        };
 		
 		Field.prototype.validate = function(withButton) {
 			var content, datas;
@@ -111,12 +112,12 @@ $(document).ready(function() {
 		
 		Field.prototype.clearErrors = function() {
 			//clear
-		}
+		};
 		
 		Field.prototype.displayErrors = function(errors) {
 			this.clearErrors();
 			//for() display
-		}
+		};
 		
 		Field.prototype.value = function(newValue) {
 			var oldValue;
@@ -140,8 +141,6 @@ $(document).ready(function() {
 			
 			return oldValue;
 		}
-		
-		//validate
         
         return Field;
     })();
