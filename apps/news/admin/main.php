@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-11-04-2013
+ * @version 0.3-19-04-2013
  */
 class NewsAdminController extends WController {
 	public function __construct() {
@@ -73,6 +73,8 @@ class NewsAdminController extends WController {
 	/**
 	 * - Handles Add action
 	 * - Prepares News form
+	 * 
+	 * @todo html_entity_encode(): pay attention to xss exploits
 	 */
 	protected function news_form($news_id = null) {
 		if (!empty($_POST)) {
@@ -121,17 +123,14 @@ class NewsAdminController extends WController {
 			if (!empty($errors)) {
 				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
 			} else {
-				// Set userid as the editor
-				$data['news_editor_id'] = $_SESSION['nickname'];
-				
 				if (is_null($news_id)) { // Add case
 					if ($this->model->createNews($data)) {
 						$news_id = $this->model->getLastNewsId();
 						
 						// Treat categories
 						if (!empty($data['news_cats'])) {
-							foreach ($data['news_cats'] as $cid => $v) {
-								$this->model->newsAddCat($news_id, intval($cid));
+							foreach ($data['news_cats'] as $cat_id => $v) {
+								$this->model->addCatToNews($news_id, intval($cat_id));
 							}
 						}
 						
@@ -143,10 +142,10 @@ class NewsAdminController extends WController {
 				} else { // Edit case
 					if ($this->model->updateNews($news_id, $data)) {
 						// Treat categories
-						$this->model->newsDestroyCats($news_id);
+						$this->model->removeCatsFromNews($news_id);
 						if (!empty($data['news_cats'])) {
-							foreach ($data['news_cats'] as $cid => $v) {
-								$this->model->newsAddCat($news_id, intval($cid));
+							foreach ($data['news_cats'] as $cat_id => $v) {
+								$this->model->addCatToNews($news_id, intval($cat_id));
 							}
 						}
 						
@@ -160,7 +159,7 @@ class NewsAdminController extends WController {
 		}
 		
 		// Load form
-		$cats_list = $this->model->getCatList('news_cat_name', 'ASC');
+		$cats_list = $this->model->getCatsList('news_cat_name', 'ASC');
 		if (is_null($news_id)) { // Add case
 			$lastId = $this->model->getLastNewsId() + 1;
 			if (!isset($data)) {
@@ -170,11 +169,7 @@ class NewsAdminController extends WController {
 			}
 		} else { // Edit case
 			if (!isset($data)) {
-				$data = $this->model->loadNews($news_id);
-			}
-			$cats = $this->model->findNewsCats($news_id);
-			foreach ($cats as $key => $cat_id) {
-				$data['news_cats'][$cat_id['cat_id']] = 'on';
+				$data = $this->model->getNews($news_id);
 			}
 			$this->view->news_form($cats_list, $news_id, $data);
 		}
@@ -203,10 +198,10 @@ class NewsAdminController extends WController {
 	protected function news_delete() {
 		$news_id = $this->getId();
 		if ($this->model->validExistingNewsId($news_id)) {
-			$data = $this->model->loadNews($news_id);
+			$data = $this->model->getNews($news_id);
 			$args = WRoute::getArgs();
 			if (isset($args[2]) && $args[2] == "confirm") {
-				$this->model->newsDestroyCats($news_id);
+				$this->model->removeCatsFromNews($news_id);
 				$this->model->deleteNews($news_id);
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
 				header('Location: ' . WRoute::getDir() . '/admin/news/');
@@ -214,7 +209,8 @@ class NewsAdminController extends WController {
 				$this->view->news_delete($data);
 			}
 		} else {
-			WNote::error('article_not_found', WLang::get('article_not_found'), 'display');
+			WNote::error('article_not_found', WLang::get('article_not_found'));
+			header('Location: ' . WRoute::getDir() . '/admin/news/');
 		}
 	}
 	
@@ -239,10 +235,11 @@ class NewsAdminController extends WController {
 		// Data was sent by form
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('news_cat_id', 'news_cat_name', 'news_cat_shortname', 'news_cat_parent'));
+			$cat_id = intval($data['news_cat_id']);
 			$errors = array();
 			
 			// Check existing category
-			if (!empty($data['news_cat_id']) && !$this->model->validExistingCatId(intval($data['news_cat_id']))) {
+			if (!empty($cat_id) && !$this->model->validExistingCatId($cat_id)) {
 				$errors[] = "The category you are trying to edit (#".$data['news_cat_id'].") does not exist in the database.";
 			}
 			
@@ -263,7 +260,7 @@ class NewsAdminController extends WController {
 			if (!empty($errors)) {
 				WNote::error('data_errors', implode("<br />\n", $errors), 'assign');
 			} else {
-				if (empty($data['news_cat_id'])) { // Add case
+				if (empty($cat_id)) { // Add case
 					if ($this->model->createCat($data)) {
 						WNote::success('cat_added', WLang::get('cat_added', $data['news_cat_name']));
 						header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
@@ -272,7 +269,7 @@ class NewsAdminController extends WController {
 						WNote::error('cat_not_added', WLang::get('cat_not_added'));
 					}
 				} else { // Edit case
-					if ($this->model->updateCat($data)) {
+					if ($this->model->updateCat($cat_id, $data)) {
 						WNote::success('cat_edited', WLang::get('cat_edited', $data['news_cat_name']));
 						header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
 						return;
@@ -288,7 +285,7 @@ class NewsAdminController extends WController {
 		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name', 'ASC'));
 		$sorting = $adminStyle->findSorting($sortBy, $sens);
 		
-		$cats_list = $this->model->getCatList($sorting[0], $sorting[1]);
+		$cats_list = $this->model->getCatsList($sorting[0], $sorting[1]);
 		if (!isset($data)) {
 			$data = array();
 		}
@@ -305,8 +302,8 @@ class NewsAdminController extends WController {
 		if ($this->model->validExistingCatId($cat_id)) {
 			$args = WRoute::getArgs();
 			if(isset($args[2]) && $args[2] == "confirm") {
-				$this->model->catsDestroyNews($cat_id);
-				$this->model->unlinkChildren($cat_id);
+				$this->model->removeCatsFromNews($cat_id);
+				$this->model->unlinkChildrenOfParentCat($cat_id);
 				$this->model->deleteCat($cat_id);
 				WNote::success('category_deleted', WLang::get('category_deleted'));
 				header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');

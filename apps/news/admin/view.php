@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-15-02-2013
+ * @version 0.3-19-04-2013
  */
 class NewsAdminView extends WView {
 	public function news_listing($data = array(), $adminStyle, $pagination) {
@@ -23,7 +23,7 @@ class NewsAdminView extends WView {
 	}
 
 	/**
-	 * Définition des valeurs de contenu du formulaire
+	 * Function to define template variable from a default array structure
 	 */
 	private function fillMainForm($model, $data) {
 		foreach ($model as $item => $default) {
@@ -31,7 +31,7 @@ class NewsAdminView extends WView {
 		}
 	}
 	
-	public function news_form($cats_list = array(), $last_id = 0, $data = array()) {
+	public function news_form($cats_list, $last_id = 0, $data = array()) {
 		// JS / CSS
 		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
 		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
@@ -43,15 +43,14 @@ class NewsAdminView extends WView {
 		$this->assign('siteURL', WRoute::getBase() . '/news/');
 		$this->assign('lastId', $last_id);
 		
-		$this->assign('cats_list', $cats_list);
-		
-		$ids = array();
+		$cat_ids = array();
 		if (!empty($data['news_cats']) && is_array($data['news_cats'])) {
-			foreach ($data['news_cats'] as $row => $val) {
-				$ids[] = $row;
+			foreach ($data['news_cats'] as $cat) {
+				$cat_ids[] = $cat['news_cat_id'];
 			}
 		}
-		$this->assign('news_cats', $ids);
+		$this->assign('cats_list', $cats_list);
+		$this->assign('news_cats', $cat_ids);
 		
 		$this->fillMainForm(array(
 			'news_author' => $_SESSION['nickname'],

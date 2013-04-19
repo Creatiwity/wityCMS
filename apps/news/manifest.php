@@ -4,10 +4,10 @@
 	<!-- Application name -->
 	<name>News</name>
 	
-	<version>0.1</version>
+	<version>0.3</version>
 	
 	<!-- Last update date -->
-	<date>27-02-2013</date>
+	<date>19-04-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
@@ -28,6 +28,6 @@
 		<action desc="article_edit" requires="news_editor" menu="false">edit</action>
 		<action desc="article_delete" menu="false" requires="news_editor,deletor">news_delete</action>
 		<action desc="categories_management" requires="global_editor">categories_manager</action>
-                <action desc="category_delete" menu="false" requires="global_editor,deletor">category_delete</action>
+		<action desc="category_delete" menu="false" requires="global_editor,deletor">category_delete</action>
 	</admin>
 </app>

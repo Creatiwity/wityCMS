@@ -6,7 +6,7 @@
 	<item id="article_delete">Suppression d'un article</item>
 	<item id="categories_management">Gestion des catégories</item>
 	<item id="category_delete">Suppression d'une catégorie</item>
-
+	
 	<item id="article_delete_confirmation">Suppresion de "%s" ?</item>
 	<item id="article_no_title">Il manque un titre à l'article.</item>
 	<item id="article_no_author">Il manque un auteur à l'article.</item>
