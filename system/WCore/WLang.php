@@ -93,10 +93,27 @@ class WLang {
 	private static function loadLangFile($dir) {
 		$file = $dir.self::$language.'.xml';
 		if (file_exists($file)) {
-			$string = file_get_contents($file);
-			$xml = new SimpleXMLElement($string);
-			foreach ($xml->item as $lang_item) {
-				self::assign((string) $lang_item->attributes()->id, (string) $lang_item);
+			$handle = @fopen($file, 'r');
+			if ($handle) {
+				while (($line = fgets($handle)) !== false) {
+					$line = trim($line);
+					if (substr($line, 0, 5) == '<item') {
+						// <item id="lang_id">lang_string</item>
+						// Find lang_id
+						$delimiter1 = strpos($line, '"');
+						$line = substr($line, $delimiter1 + 1);
+						$delimiter1 = strpos($line, '"');
+						$lang_id = substr($line, 0, $delimiter1);
+						
+						// Find lang_string
+						$delimiter1 = strpos($line, '>');
+						$delimiter2 = strrpos($line, '<');
+						$lang_string = substr($line, $delimiter1 + 1, $delimiter2 - $delimiter1 - 1);
+						
+						self::assign($lang_id, $lang_string);
+					}
+				}
+				fclose($handle);
 			}
 			
 			// Mark as loaded
