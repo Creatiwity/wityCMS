@@ -1,13 +1,13 @@
 $(document).ready(function() {
 
-    Installer = (function() {
+	Installer = (function() {
 		var stepInstances;
 		
-        function Installer() {
+		function Installer() {
 			var that;
 			
 			stepInstances = {};
-            //Create the global manager
+			//Create the global manager
 			that = this;
 			$('[data-wity-installer-step]').each(function(index, stepElement) {
 				var step;
@@ -15,44 +15,42 @@ $(document).ready(function() {
 				step = new Step(stepElement);
 				that.stepInstances[step.getName()] = step;
 			});
-        }
+		}
 
-        Installer.prototype.isValid = function() {
+		Installer.prototype.isValid = function() {
 			var valid = true;
 			$.each(stepInstances, function(index, step) {
 				return valid = step.isValid();
 			});
 			return valid;
-        };
+		};
 
-        return Installer;
-    })();
-    
-    Step = (function() {
+		return Installer;
+	})();
+
+	Step = (function() {
 		var groupInstances;
 		
-        function Step(name) {
-            //Build the group list
-        }
-        
-        return Step;
-    })();
-    
-    Group = (function() {
+		function Step(name) {
+
+		}
+
+		return Step;
+	})();
+
+	Group = (function() {
 		var fieldInstances;
-		
+
 		fieldInstances = {};
-        function Group(name) {
-            //Build the field list
+		function Group(name) {
 			$("[data-wity-group='"+name+"']").each(function(index, fieldElement) {
 				var field;
-				
+
 				field = new Field(fieldElement);
 				fieldInstances[field.name] = field;
 			});
-            //Stores url (command)
-        }
-		
+		}
+
 		Group.prototype.validate = function() {
 			//
 		};
@@ -66,16 +64,16 @@ $(document).ready(function() {
 			//Dispatch fields error by name
 			//for() display
 		};
-        
-        return Group;
-    })();
-    
-    Field = (function() {
+
+		return Group;
+	})();
+
+	Field = (function() {
 		var element, type, required, validated, errorsContainer;
 		
-        function Field(elem) {
+		function Field(elem) {
 			//element, name, validator, required
-            element = elem;
+			element = elem;
 			required = element.attr('data-wity-form-required') ? true : false;
 			if(element.is('select')) {
 				type = "select";
@@ -86,7 +84,7 @@ $(document).ready(function() {
 			errorsContainer = element.attr('data-wity-errors-container') ;
 			
 			element.on('change', this.validate);
-        };
+		};
 		
 		Field.prototype.validate = function(withButton) {
 			var content, datas;
@@ -141,9 +139,9 @@ $(document).ready(function() {
 			
 			return oldValue;
 		}
-        
-        return Field;
-    })();
+
+		return Field;
+	})();
 	
 	$(document).on('validate', '[data-wity-validate-regexp]', function(datas) {
 		var value, regexp, error;
