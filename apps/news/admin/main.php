@@ -73,8 +73,6 @@ class NewsAdminController extends WController {
 	/**
 	 * - Handles Add action
 	 * - Prepares News form
-	 * 
-	 * @todo html_entity_encode(): pay attention to xss exploits
 	 */
 	protected function news_form($news_id = null) {
 		if (!empty($_POST)) {
@@ -106,19 +104,19 @@ class NewsAdminController extends WController {
 			 */
 			
 			// Image on front page
-			if (!empty($_FILES['news_image']['name'])) {
-				include HELPERS_DIR . 'upload/upload.php';
-				$upload = new Upload($_FILES['news_image']);
-				$upload->file_new_name_body = preg_replace('#[^a-z0-9]#', '', strtolower($data['news_title']));
-				$upload->file_overwrite = true;
-				$upload->Process(WT_PATH . 'upload/news/');
-				if (!$upload->processed) {
-					$errors[] = WLang::get("article_image_error", $upload->error);
-				}
-				$data['news_image'] = $upload->file_dst_name;
-			} else {
-				$data['news_image'] = '';
-			}
+			// if (!empty($_FILES['news_image']['name'])) {
+				// include HELPERS_DIR . 'upload/upload.php';
+				// $upload = new Upload($_FILES['news_image']);
+				// $upload->file_new_name_body = preg_replace('#[^a-z0-9]#', '', strtolower($data['news_title']));
+				// $upload->file_overwrite = true;
+				// $upload->Process(WT_PATH . 'upload/news/');
+				// if (!$upload->processed) {
+					// $errors[] = WLang::get('article_image_error', $upload->error);
+				// }
+				// $data['news_image'] = $upload->file_dst_name;
+			// } else {
+				// $data['news_image'] = '';
+			// }
 			
 			if (!empty($errors)) {
 				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
@@ -135,7 +133,8 @@ class NewsAdminController extends WController {
 						}
 						
 						WNote::success('article_added', WLang::get('article_added', $data['news_title']));
-						unset($data);
+						header('Location: '.Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
+						return;
 					} else {
 						WNote::error('article_not_added', WLang::get('article_not_added'));
 					}
@@ -150,9 +149,10 @@ class NewsAdminController extends WController {
 						}
 						
 						WNote::success('article_edited', WLang::get('article_edited', $data['news_title']));
-						unset($data);
+						header('Location: '.Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
+						return;
 					} else {
-						WNote::error('article_not_edited', WLang::get('article_image_error'));
+						WNote::error('article_not_edited', WLang::get('article_not_edited'));
 					}
 				}
 			}
@@ -168,9 +168,7 @@ class NewsAdminController extends WController {
 				$this->view->news_form($cats_list, $lastId, $data);
 			}
 		} else { // Edit case
-			if (!isset($data)) {
-				$data = $this->model->getNews($news_id);
-			}
+			$data = $this->model->getNews($news_id);
 			$this->view->news_form($cats_list, $news_id, $data);
 		}
 	}
@@ -183,7 +181,7 @@ class NewsAdminController extends WController {
 		
 		// Check whether this news exist
 		if (empty($news_id) || !$this->model->validExistingNewsId($news_id)) {
-			WNote::error('bad_news_id', "No news matching id ".$news_id." was found.");
+			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 			header('Location: '.WRoute::getDir().'/admin/news/');
 		} else {
 			$this->news_form($news_id);
@@ -209,7 +207,7 @@ class NewsAdminController extends WController {
 				$this->view->news_delete($data);
 			}
 		} else {
-			WNote::error('article_not_found', WLang::get('article_not_found'));
+			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 			header('Location: ' . WRoute::getDir() . '/admin/news/');
 		}
 	}
@@ -227,9 +225,6 @@ class NewsAdminController extends WController {
 		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s', $sortBy, $sens);
 		if (!isset($this->model->cats_data_model['toDB'][$sortBy])) {
 			$sortBy = 'news_cat_name';
-		}
-		if (empty($page) || $page <= 0) {
-			$page = 1;
 		}
 		
 		// Data was sent by form
@@ -301,7 +296,7 @@ class NewsAdminController extends WController {
 		$cat_id = $this->getId();
 		if ($this->model->validExistingCatId($cat_id)) {
 			$args = WRoute::getArgs();
-			if(isset($args[2]) && $args[2] == "confirm") {
+			if (isset($args[2]) && $args[2] == "confirm") {
 				$this->model->removeCatsFromNews($cat_id);
 				$this->model->unlinkChildrenOfParentCat($cat_id);
 				$this->model->deleteCat($cat_id);

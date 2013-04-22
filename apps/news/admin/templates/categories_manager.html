@@ -3,10 +3,10 @@
 		<table class="table table-hover table-striped">
 			<thead>
 				<tr>
-					<th><a href="/admin/news/categories_manager/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> Nom</a></th>
-					<th><a href="/admin/news/categories_manager/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_shortname_class}"></i> Nom raccourci</a></th>
-					<th>Parent</th>
-					<th>Actions</th>
+					<th><a href="/admin/news/categories_manager/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> {lang Name}</a></th>
+					<th><a href="/admin/news/categories_manager/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_shortname_class}"></i> {lang Shortname}</a></th>
+					<th>{lang Parent}</th>
+					<th>{lang Actions}</th>
 				</tr>
 			</thead>
 			<tbody id="categories_body">
@@ -16,14 +16,14 @@
 					<td>{$c.news_cat_shortname}</td>
 					<td>{$c.news_cat_parent_name}</td>
 					<td>
-						<span title="Modifier" class="link wity_edit_category"><i class="icon-edit"></i></span>
+						<span title="{lang category_edit}" class="link wity_edit_category"><i class="icon-edit"></i></span>
 						<span title="{lang category_delete}" class="link" data-link-modal="/admin/news/category_delete/{$c.news_cat_id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>
 					</td>
 				</tr>
 				{/for}
 				{empty}
 				<tr>
-					<td colspan="6"><p class="text-center">Aucune catégorie trouvée dans la base de données.</p></td>
+					<td colspan="6"><p class="text-center">{lang no_category_in_database}</p></td>
 				</tr>
 				{/empty}
 			</tbody>
@@ -32,15 +32,15 @@
 	</form>
 </div>
 <div class="span3">
-        <div class="well">
-		<button id="add_cat_button" class="btn btn-block btn-large btn-success"><i class="icon-plus icon-white"></i> {lang category_add_button}</button>
-        </div>
+	<div class="well">
+	<button id="add_cat_button" class="btn btn-block btn-large btn-success"><i class="icon-plus icon-white"></i> {lang category_add_button}</button>
+	</div>
 </div>
 
 <div id="modal_delete" class="modal hide fade"></div>
 <div id="selectParent" class="hide">
 	<select id="news_cat_parent" name="news_cat_parent">
-		<option value="0">Aucune</option>
+		<option value="0">{lang None}</option>
 		{for $c in $cats}
 		<option value="{$c.news_cat_id}">{$c.news_cat_name}</option>
 		{/for}

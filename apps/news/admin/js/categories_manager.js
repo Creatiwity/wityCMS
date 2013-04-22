@@ -5,7 +5,7 @@ $(document).ready(function() {
 	selectParent = $("#selectParent").html();
 
 	function buildEditRow(existingRow) {
-		var row, datas, currentData;
+		var row, datas, currentData, dataName;
 
 		if (existingRow) {
 			datas = $.parseJSON(existingRow.attr('data-wity-category'));
@@ -23,7 +23,9 @@ $(document).ready(function() {
 				} else {
 					currentData = '';
 				}
-				row.append('<td><input type="text" name="' + model[ientry] + '" value="' + currentData + '" /></td>');
+				dataName = model[ientry].substring(9);
+				dataName = dataName.charAt(0).toUpperCase() + dataName.slice(1);
+				row.append('<td><input type="text" name="' + model[ientry] + '" placeholder="' + dataName + '" value="' + currentData + '" /></td>');
 			} else {
 				if (datas) {
 					currentData = datas[model[ientry]];
@@ -35,7 +37,7 @@ $(document).ready(function() {
 			}
 		}
 
-		row.append('<td><button type="submit" class="btn btn-mini btn-success"><i class="icon-ok icon-white"></i></button> <button type="button" class="btn btn-mini btn-danger cancel_cat_edit"><i class="icon-remove icon-white"></i></button></td>');
+		row.append('<td><button type="submit" class="btn btn-mini btn-success" title="Submit"><i class="icon-ok icon-white"></i></button> <button type="button" class="btn btn-mini btn-danger cancel_cat_edit" title="Cancel"><i class="icon-remove icon-white"></i></button></td>');
 		
 		if(datas) {
 			backupRow = existingRow;

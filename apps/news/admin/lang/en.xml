@@ -3,33 +3,56 @@
 	<!-- Actions -->
 	<item id="articles_listing">News list</item>
 	<item id="article_add">Add a news</item>
+	<item id="article_edit">Edit a news</item>
 	<item id="article_delete">Delete a news</item>
 	<item id="categories_management">Categories management</item>
+	<item id="category_edit">Edit a category</item>
 	<item id="category_delete">Delete a category</item>
 	
-	<item id="article_delete_confirmation">Delete "%s" ?</item>
+	<!-- News listing -->
+	<item id="actions">Actions</item>
+	<item id="title">Title</item>
+	<item id="author">Author</item>
+	<item id="category">Category</item>
+	<item id="date">Date</item>
+	<item id="views">Views</item>
+	<item id="number_of_views">%s views</item>
+	<item id="no_article_in_database">There is no news in the database.</item>
+	<item id="article_delete_confirmation">Delete "%s"?</item>
+	
+	<!-- News management -->
+	<item id="title_of_article">Article's title</item>
+	<item id="article_content">News content</item>
+	<item id="metadata">Metadata</item>
+	<item id="keywords">Keywords</item>
+	<item id="article_created_on"><strong>News created</strong> on %s</item>
+	<item id="article_modified_on"><strong>Last edition</strong> on %s</item>
+	<item id="category_of_article">Article's category</item>
+	<item id="article_not_found">The news #%s that you are trying to modify cannot be found.</item>
 	<item id="article_no_title">Title is missing</item>
 	<item id="article_no_author">Author is missing</item>
 	<item id="article_no_permalink">Permalink is missing</item>
 	<item id="article_image_error">Image upload error : %s</item>
 	<item id="article_added">The news "<strong>%s</strong>" was successfully created.</item>
-	<item id="article_not_added">An unknown error occurred.</item>
+	<item id="article_not_added">An unknown error occurred while creating the news in the database.</item>
 	<item id="article_edited">The news "<strong>%s</strong>" was successfully edited.</item>
-	<item id="article_not_edited">An unknown error occurred.</item>
-	
+	<item id="article_not_edited">An unknown error occurred while editing the news in the database.</item>
 	<item id="article_deleted">The news "<strong>%s</strong>" was successfully deleted.</item>
-	<item id="article_not_found">The news that you try to delete doesn't exist.</item>
 	
+	<!-- Categories management -->
+	<item id="Name">Name</item>
+	<item id="Shortname">Shortname</item>
+	<item id="None">None</item>
+	<item id="no_category_in_database">There is no category existing in the database.</item>
 	<item id="category_no_name">Category name is missing.</item>
-	<item id="cat_edited">The category "<strong>%s</strong>" was successfully edited.</item>
-	<item id="cat_not_edited">An unknown error occurred.</item>
 	<item id="cat_added">The category "<strong>%s</strong>" was successfully created.</item>
-	<item id="cat_not_added">An unknown error occurred.</item>
-	
+	<item id="cat_not_added">An unknown error occurred while adding the category in the database.</item>
+	<item id="cat_edited">The category "<strong>%s</strong>" was successfully edited.</item>
+	<item id="cat_not_edited">An unknown error occurred while editing the category in the database.</item>
 	<item id="category_deleted">Category successfully deleted.</item>
-	<item id="category_not_found">The category that you try to delete doesn't exist.</item>
+	<item id="category_not_found">The category you are trying to delete doesn't exist.</item>
 	
-	<item id="category_delete_confirmation">Are you sure you want to delete this category ?</item>
+	<item id="category_delete_confirmation">Are you sure you want to delete this category?</item>
 	<item id="category_add_button">Add a category</item>
 	
 	<item id="cancel">Cancel</item>

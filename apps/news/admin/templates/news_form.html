@@ -1,13 +1,13 @@
 <form action="" method="post" enctype="multipart/form-data">
 	<div class="span9">	
-		<input id="news_title" class="input-block-level input-big" name="news_title" size="40" value="{$news_title}" type="text" placeholder="Titre de l'article"/>
+		<input id="news_title" class="input-block-level input-big" name="news_title" size="40" value="{$news_title}" type="text" placeholder="{lang title_of_article}"/>
 		<br/>
 		<div class="input-prepend">
 			<span class="add-on">{$siteURL}{$lastId}-</span>
 			<input class="span9" id="news_url" name="news_url" type="text" value="{$news_url}">
 		</div>
 		<br/>
-		<label for="news_content" class="hide">Contenu de la news :</label><br />
+		<label for="news_content" class="hide">{lang article_content}:</label><br />
 		<textarea id="news_content" class="input-block-level" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
 		<script type="text/javascript">
 			$('#news_content').wysihtml5();
@@ -15,42 +15,42 @@
 	</div>
 	<div class="span3">
 		<div class="well">
-			<h4>Metadonnées</h4>
+			<h4>{lang metadata}</h4>
 			<div class="control-group">
-				<label class="control-label" for="news_author">Auteur</label>
+				<label class="control-label" for="news_author">{lang author}</label>
 				<div class="controls">
-					<input type="text" id="news_author" class="input-block-level" name="news_author" value="{$news_author}" placeholder="Auteur">
+					<input type="text" id="news_author" class="input-block-level" name="news_author" value="{$news_author}" placeholder="{lang author}">
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="news_keywords">Mots clés</label>
+				<label class="control-label" for="news_keywords">{lang keywords}</label>
 				<div class="controls">
-					<input type="text" id="news_keywords" class="input-block-level" name="news_keywords" value="{$news_keywords}" placeholder="Mots clés">
+					<input type="text" id="news_keywords" class="input-block-level" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}">
 				</div>
 			</div>
 			{if !empty({$news_date})}
 			<hr/>
 			<ul class="unstyled">
-				<li><strong>News créée</strong> le {$news_date}</li>
-				<li><strong>Dernière édition</strong> le  {$news_modified}</li>
+				<li>{lang article_created_on|{$news_date}}</li>
+				<li>{lang article_modified_on|{$news_modified}}</li>
 			</ul>
 			{/if}
 		</div>
 		<div class="well">
-			<h4>Catégorie de l'article</h4>
+			<h4>{lang category_of_article}</h4>
 			{for $cat in $cats_list}
 			<label class="checkbox">
-				<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]" {if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if}>
+				<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if}>
 				{$cat.news_cat_name}
 			</label>
 			{/for}
 			{empty}
-			<p>Aucune catégorie définie</p>
+			<p>{lang no_category_in_database}</p>
 			{/empty}
 		</div>
 		<div class="well">
-			<button type="submit" class="btn btn-large btn-block btn-primary" type="button">Enregistrer</button>
-			<button class="btn btn-large btn-block" type="button" onclick="history.back();">Annuler</button>
+			<button type="submit" class="btn btn-large btn-block btn-primary" type="button">{lang submit}</button>
+			<button class="btn btn-large btn-block" type="button" onclick="history.back();">{lang cancel}</button>
 		</div>
 	</div>
 </form>
