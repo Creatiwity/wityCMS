@@ -33,12 +33,11 @@ CREATE TABLE IF NOT EXISTS `news` (
   `author` varchar(30) CHARACTER SET latin1 NOT NULL,
   `content` text CHARACTER SET latin1 NOT NULL,
   `keywords` mediumtext CHARACTER SET latin1 NOT NULL,
-  `cat` tinytext CHARACTER SET utf8 NOT NULL,
-  `date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `editor_id` int(11) NOT NULL,
+  `creation_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `edited_by` int(11) NOT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
-  `publier` tinyint(1) NOT NULL DEFAULT '0',
+  `published` tinyint(1) NOT NULL DEFAULT '0',
   `image` tinytext CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
