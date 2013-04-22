@@ -206,8 +206,10 @@ class WRequest {
 				$variable[$key] = self::filter($val);
 			}
 		} else {
-			// On fait les manipulations de sécurité ici
-			$variable = stripslashes($variable);
+			// No special char direct input
+			$variable = str_replace('<>#', '', $variable);
+			// $variable = str_replace('&lt;script', '', $variable); // maybe XSS
+			$variable = stripslashes(htmlspecialchars($variable));
 		}
 		
 		return $variable;
