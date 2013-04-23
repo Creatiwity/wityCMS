@@ -68,7 +68,7 @@ class WTemplate {
 			if (@mkdir($compileDir, 0777)) {
 				$this->compileDir = $compileDir;
 			} else {
-				// throw new Exception("WTemplate::setCompileDir(): Impossible to create cache directory in ".$compileDir.".");
+				throw new Exception("WTemplate::setCompileDir(): Impossible to create cache directory in ".$compileDir.".");
 			}
 		}
 	}
