@@ -47,7 +47,7 @@ function changeType(id, type) {
 	// (because it was changed in the JS code), then update the input value
 	if (!$('#'+id+' .access-type.'+type).attr('checked')) {
 		$('#'+id+' .access-type').removeAttr('checked');
-		$('#'+id+' .access-type.'+type).attr('checked', true);
+		$('#'+id+' .access-type.'+type).attr('checked', 'checked');
 	}
 }
 
@@ -102,7 +102,7 @@ function assignPermissions(id, access) {
 					}
 				}
 				if (checked) {
-					$(input).attr('checked', true);
+					$(input).attr('checked', 'checked');
 				} else {
 					$(input).removeAttr('checked');
 				}
