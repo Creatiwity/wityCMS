@@ -63,11 +63,6 @@ ul#access, ul#accessEdit {
 	width: 100%;
 }
 
-#user-form .nickname, #groups-list .group-name {
-	width: 100%;
-	font-size: 1.7em;
-}
-
 #content .rights {
 	width: 100%;
 	border-collapse: collapse;
