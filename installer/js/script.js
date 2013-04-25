@@ -1,11 +1,13 @@
 $(document).ready(function() {
+	var Installer, Step, Group, Field, processAjax;
 
 	Installer = (function() {
-		var stepInstances;
+		var stepInstances, element;
 		
-		function Installer() {
+		function Installer(elem) {
 			var that;
 			
+			element = elem;
 			stepInstances = {};
 			//Create the global manager
 			that = this;
@@ -138,7 +140,7 @@ $(document).ready(function() {
 			}
 			
 			return oldValue;
-		}
+		};
 
 		return Field;
 	})();
@@ -157,6 +159,58 @@ $(document).ready(function() {
 				datas.errors.push(error);
 			}
 		}
+	});
+
+	/**
+	 * Some values initialisation
+	 **/
+	$('[name="base"]').val(document.location);
+
+	$('[data-wity-autocomplete]').typeahead({
+		source: function(query, process) {
+			var command, callback;
+			command = this.$element.attr('data-wity-autocomplete');
+
+			callback = function(data) {
+				var prepared = new Array();
+
+				for (var key in data[command]) {
+					prepared.push(data[command][key]);
+				}
+
+				process(prepared);
+			};
+
+			processAjax(document.location, {"command": command}, callback);			
+		}
+	});
+
+	processAjax = function (u, d, c) {
+		var realCallback, _that;
+
+		_that = this;
+
+		realCallback = function(data, textStatus, jqXHR ) {
+			var json;
+
+			json = $.parseJSON(data);
+			//TODO : process messages
+
+			if(c) {
+				return c.call(_that, json.content ? json.content : {});
+			}
+		};
+
+		$.ajax({
+			url: u,
+			data: d,
+			success: realCallback,
+			type: 'POST'
+		});
+	};
+
+	$('[data-wity-installer]').each( function() {
+		new Installer(this);
 	});
 });
 
