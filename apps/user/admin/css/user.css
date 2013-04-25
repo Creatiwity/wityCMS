@@ -94,6 +94,10 @@ ul#access, ul#accessEdit {
 	display: block;
 }
 
+#groupEditor form {
+	margin-bottom: 0px;
+}
+
 /**
  * Group diff
  */
