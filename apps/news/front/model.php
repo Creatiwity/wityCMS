@@ -127,7 +127,7 @@ class NewsModel {
 	 * @return bool
 	 */
 	public function validExistingNewsId($news_id) {
-		if(empty($news_id)) {
+		if (empty($news_id)) {
 			return false;
 		}
 		
