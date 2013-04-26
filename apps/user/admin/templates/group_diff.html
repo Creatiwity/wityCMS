@@ -1,4 +1,4 @@
-<div id="content" class="large">
+<div id="content" class="row-fluid">
 	<form action="/admin/user/group-diff/" method="post">
 		<div id="group-diff" class="item">
 			<script type="text/javascript">
@@ -41,15 +41,15 @@
 								<colgroup><col width="25%" /></colgroup>
 								{for $app, $details in $admin_apps}
 								<tr>
-									<td class="tcenter"><strong>{$details.name}</strong></td>
+									<td><p class="text-center"><strong>{$details.name}</strong></p></td>
 									<td>
 										<table class="permissions" cellpadding="0" cellspacing="0">
-											<tr class="tcenter">
+											<tr>
 											{for $perm in {$details.permissions}}
-												<td><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[][{$app}][{$perm}]" /></label></td>
+												<td><p class="text-center"><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[][{$app}][{$perm}]" /></label></p></td>
 											{/for}
 											{empty}
-												<td><em>{lang no_permissions}</em></td>
+												<td><p class="text-center"><em>{lang no_permissions}</em></p></td>
 											{/empty}
 											</tr>
 										</table>
@@ -71,11 +71,10 @@
 				<div class="clear"></div>
 			</div>
 			{/if}
-			<p class="tcenter">
-				<input type="submit" value="{lang apply}" class="button-submit" />
-				<input type="button" value="{lang cancel}" class="button-submit" onclick="history.back();" />
+			<p class="text-center">
+				<input type="submit" value="{lang apply}" class="btn btn-primary button-submit" />
+				<input type="button" value="{lang cancel}" class="btn button-submit" onclick="history.back();" />
 			</p>
 		</div>
 	</form>
 </div>
-<div class="clear"></div>

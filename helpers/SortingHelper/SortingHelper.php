@@ -82,13 +82,14 @@ class SortingHelper {
 	}
 	
     /**
-     * Returns the final sorting parameters after checking their existency in the initial values
+     * Finds the final sorting parameters after checking their existency in the initial values
+	 * and returns it.
      * 
      * @param string    $sortBy the asked sorting variable
      * @param string    $sens   the asked sorting direction
      * @return array the final pair sorting variable and direction
      */
-	public function getSorting($sortBy, $sens) {
+	public function findSorting($sortBy, $sens) {
 		if (in_array($sortBy, $this->fields)) {
 			$this->sortBy = $sortBy;
 		} else {
@@ -101,6 +102,15 @@ class SortingHelper {
 			$this->sens = $this->sensDef;
 		}
 		
+		return array($this->sortBy, $this->sens);
+	}
+	
+	/**
+     * Returns the final sorting parameters
+     * 
+     * @return array the final pair sorting variable and direction
+     */
+	public function getSorting() {
 		return array($this->sortBy, $this->sens);
 	}
 	
@@ -117,7 +127,7 @@ class SortingHelper {
 		$vars = array();
 		foreach ($this->fields as $field) {
 			if ($field == $this->sortBy) {
-				$vars[$field.'_class'] = ($this->sens == 'ASC') ? 'sortAsc' : 'sortDesc';
+				$vars[$field.'_class'] = ($this->sens == 'ASC') ? 'icon-chevron-up' : 'icon-chevron-down';
 				$vars[$field.'_sort'] = ($this->sens == 'ASC') ? 'desc' : 'asc';
 			} else {
 				$vars[$field.'_class'] = '';

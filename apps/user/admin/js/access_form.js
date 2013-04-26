@@ -18,7 +18,7 @@
  * @param string id Id of the table-row containing the access form
  */
 function accessSelectAll(id) {
-	$('#'+id+' .permissions input').attr('checked', true);
+	$('#'+id+' .permissions input').prop('checked', true);
 }
 
 /**
@@ -27,7 +27,7 @@ function accessSelectAll(id) {
  * @param string id Id of the table-row containing the access form
  */
 function accessDeselectAll(id) {
-	$('#'+id+' .permissions input').removeAttr('checked');
+	$('#'+id+' .permissions input').prop('checked', false);
 }
 
 /**
@@ -45,9 +45,9 @@ function changeType(id, type) {
 	}
 	// If the type does not match with the type selected in the input 
 	// (because it was changed in the JS code), then update the input value
-	if (!$('#'+id+' .access-type.'+type).attr('checked')) {
-		$('#'+id+' .access-type').removeAttr('checked');
-		$('#'+id+' .access-type.'+type).attr('checked', true);
+	if (!$('#'+id+' .access-type.'+type).prop('checked')) {
+		$('#'+id+' .access-type').prop('checked', false);
+		$('#'+id+' .access-type.'+type).prop('checked', true);
 	}
 }
 
@@ -101,11 +101,7 @@ function assignPermissions(id, access) {
 						}
 					}
 				}
-				if (checked) {
-					$(input).attr('checked', true);
-				} else {
-					$(input).removeAttr('checked');
-				}
+				$(input).prop('checked', checked);
 			}
 		});
 	}

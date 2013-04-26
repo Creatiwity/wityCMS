@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-15-02-2013
+ * @version 0.3-26-04-2013
  */
 class UserAdminView extends WView {
 	private $model;
@@ -18,6 +18,7 @@ class UserAdminView extends WView {
 	public function __construct(UserAdminModel $model) {
 		parent::__construct();
 		$this->model = $model;
+		
 		// CSS for all views
 		$this->assign('css', '/apps/user/admin/css/user.css');
 	}
@@ -30,24 +31,8 @@ class UserAdminView extends WView {
 		
 		// SortingHelper Helper
 		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
-		$sort = $sortingHelper->getSorting($sortBy, $sens);
-		
-		// Register sorting vars to be displayed in the head of the sorting table
+		$sort = $sortingHelper->findSorting($sortBy, $sens);
 		$this->assign($sortingHelper->getTplVars());
-		
-		// Treat filters
-		$subURL = "";
-		foreach ($filters as $k => $v) {
-			// Cleanup filters
-			if (!empty($v)) {
-				$subURL .= $k."=".$v."&";
-			}
-		}
-		if (!empty($subURL)) {
-			$subURL = '?'.substr($subURL, 0, -1);
-		}
-		$this->assign('subURL', $subURL);
-		$this->assign($filters);
 		
 		// Get the user groups
 		$this->assign('groups', $this->model->getGroupsList());
@@ -61,27 +46,68 @@ class UserAdminView extends WView {
 		$this->assign('users_waiting', $users_waiting);
 		if (!empty($users_waiting)) {
 			$this->assign('js', '/apps/user/admin/js/admin_check.js');
-			// $this->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
 		}
 		
+		// Treat filters
+		$subURL = "";
+		$hasFilter = false;
+		foreach ($filters as $k => $v) {
+			// Cleanup filters
+			if (!empty($v)) {
+				$subURL .= $k."=".$v."&";
+				$hasFilter = true;
+			}
+		}
+		if (!empty($subURL)) {
+			$subURL = '?'.substr($subURL, 0, -1);
+		}
+		$this->assign('subURL', $subURL);
+		$this->assign($filters);
+		
 		// Generate the pagination to browse data
-		$count = $this->model->countUsers($filters);
-		$pagination = WHelper::load('pagination', array($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
+		$stats = array();
+		$stats['total'] = $this->model->countUsers();
+		$stats['request'] = $stats['total'];
+		
+		if($hasFilter) {
+			$stats['filtered'] = $this->model->countUsers($filters);
+			$stats['request'] = $stats['filtered'];
+		}
+		
+		$this->assign('stats', $stats);
+		
+		$pagination = WHelper::load('pagination', array($stats['request'], $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
 		$this->assign('pagination', $pagination->getHTML());
-		$this->assign('total', $count);
+		
+		$this->render('listing');
 	}
 	
 	/**
-	 * Setup the add/edit form
+	 * Setup add form
 	 */
-	private function fillForm($data) {
-		$this->assign('js', '/apps/user/admin/js/access_form.js');
-		$this->assign('groups', $this->model->getGroupsList());
-		$this->assign('user_home', WRoute::getBase().'/admin/user/');
+	public function user_form($user_id = null, $data = array()) {
+		if (empty($user_id)) {
+			$this->assign('add_form', true); // ADD form
+		}
+		
+		// Display a warning message when user edits its own account
+		if ($user_id == $_SESSION['userid']) {
+			WNote::info('user_edit_own', WLang::get('user_edit_own'));
+		}
+		
+		// Displays a message for user under validation
+		if (isset($data['valid']) && $data['valid'] == 2) {
+			WNote::info('user_validating_account', WLang::get('user_validating_account'));
+		}
 		
 		// Get admin apps
 		$adminModel = new AdminController();
 		$this->assign('admin_apps', $adminModel->getAdminApps());
+		
+		// Setup the form
+		$this->assign('js', '/apps/user/admin/js/access_form.js');
+		$this->assign('groups', $this->model->getGroupsList());
+		$this->assign('user_home', WRoute::getBase().'/admin/user/');
 		
 		$model = array(
 			'id' => 0,
@@ -95,36 +121,19 @@ class UserAdminView extends WView {
 		foreach ($model as $item => $default) {
 			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
 		}
+		
+		$this->render('user_form');
 	}
 	
 	/**
-	 * Setup add form
-	 */
-	public function add($data = array()) {
-		$this->fillForm($data);
-		$this->assign('add_form', true);
-	}
-	
-	/**
-	 * Setup edit form
-	 */
-	public function edit($userid) {
-		if ($userid == $_SESSION['userid']) {
-			WNote::info('user_edit_own', WLang::get('user_edit_own'));
-		}
-		$data = $this->model->getUser($userid);
-		if ($data['valid'] == 2) {
-			WNote::info('user_validating_account', WLang::get('user_validating_account'));
-		}
-		$this->fillForm($data);
-	}
-	
-	/**
-	 * Verifies if the user really wanted to delete an account
+	 * Checks if the user really wanted to delete an account
 	 */
 	public function del($userid) {
 		$data = $this->model->getUser($userid);
 		$this->assign('nickname', $data['nickname']);
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/user/del/".$userid);
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/user/admin/templates/del.html');
 	}
 	
 	/**
@@ -141,13 +150,15 @@ class UserAdminView extends WView {
 		// AdminStyle Helper
 		$dispFields = array('name', 'users_count');
 		$adminStyle = WHelper::load('SortingHelper', array($dispFields, 'name'));
-		$sort = $adminStyle->getSorting($sortBy, $sens); // sorting vars
+		$sort = $adminStyle->findSorting($sortBy, $sens); // sorting vars
 		
 		// Enregistrement des variables de classement
 		$this->assign($adminStyle->getTplVars());
 		
 		$data = $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC');
 		$this->assign('groups', $data);
+		
+		$this->render('groups_listing');
 	}
 	
 	/**

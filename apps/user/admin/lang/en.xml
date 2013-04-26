@@ -59,6 +59,7 @@
 	<item id="user_account_invalid">The user %s is not to be checked.</item>
 	
 	<!-- User add/edit form -->
+	<item id="users_total">%s registered users</item>
 	<item id="users_found">%s users found</item>
 	<item id="no_user_found">No user found</item>
 	<item id="leave_empty_to_leave_unchanged">Leave empty to let the password unchanged.</item>
@@ -83,6 +84,7 @@
 	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
 	
 	<!-- User deletion -->
+	<item id="user_delete_confirmation">Are you sure you want to delete the user %s</item>
 	<item id="user_deleted">The user was deleted successfully.</item>
 	<item id="user_self_delete">You cannot delete your own account.</item>
 	

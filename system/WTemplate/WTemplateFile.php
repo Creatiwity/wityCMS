@@ -126,6 +126,7 @@ class WTemplateFile {
 	 * Compiles this file
 	 * 
 	 * @param WTemplateCompiler $compiler This object is a compiler which will compile each nodes
+	 * @return Output compiled code
 	 * @throws Exception
 	 */
 	public function compile(WTemplateCompiler $compiler) {
@@ -146,7 +147,10 @@ class WTemplateFile {
 			// Update data
 			$this->compilationTime = microtime(true) - $start; // ellapsed time
 			$this->compiled = true;
+			
+			return $code;
 		}
+		return file_get_contents($this->getCompilationHref());
 	}
 	
 	/**
@@ -156,16 +160,18 @@ class WTemplateFile {
 	 * @throws Exception
 	 */
 	private function saveFile($data) {
-		$handle = fopen($this->compilationHref, 'w');
-		if (!$handle) {
-			throw new Exception("WTemplateFile::saveFile(): Unable to open cache file \"".$this->compilationHref."\".");
+		if (is_writable($this->compilationDir)) {
+			$handle = fopen($this->compilationHref, 'w');
+			if (!$handle) {
+				throw new Exception("WTemplateFile::saveFile(): Unable to open cache file \"".$this->compilationHref."\".");
+			}
+			
+			// Write
+			fwrite($handle, $data);
+			fclose($handle);
+			
+			chmod($this->compilationHref, 0777);
 		}
-		
-		// Write
-		fwrite($handle, $data);
-		fclose($handle);
-		
-		chmod($this->compilationHref, 0777);
 	}
 }
 

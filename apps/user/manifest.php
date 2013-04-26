@@ -7,7 +7,7 @@
 	<version>0.3</version>
 	
 	<!-- Last update date -->
-	<date>05-03-2013</date>
+	<date>26-04-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>

@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-15-02-2013
+ * @version 0.3-26-04-2013
  */
 class UserAdminController extends WController {
 	/**
@@ -35,11 +35,11 @@ class UserAdminController extends WController {
 		$admin_check = WRequest::get('admin_check');
 		if (!empty($admin_check)) {
 			$notify = WRequest::get('notify');
-			foreach ($admin_check as $userid => $action) {
-				$db_data = $this->model->getUser($userid);
+			foreach ($admin_check as $user_id => $action) {
+				$db_data = $this->model->getUser($user_id);
 				if (isset($db_data['valid']) && $db_data['valid'] == 2) {
 					if ($action == 'validate') {
-						$this->model->updateUser($userid, array('valid' => 1));
+						$this->model->updateUser($user_id, array('valid' => 1));
 						// Send email notification
 						if ($notify) {
 							$this->model->sendEmail(
@@ -56,9 +56,9 @@ class UserAdminController extends WController {
 					} else if ($action == 'refuse') {
 						$config = $this->model->getConfig();
 						if ($config['keep_users']) {
-							$this->model->updateUser($userid, array('valid' => 0));
+							$this->model->updateUser($user_id, array('valid' => 0));
 						} else {
-							$this->model->deleteUser($userid);
+							$this->model->deleteUser($user_id);
 						}
 						// Send email notification
 						if ($notify) {
@@ -95,46 +95,72 @@ class UserAdminController extends WController {
 		$filters = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
 		
 		$this->view->listing($sortBy, $sens, $page, $filters);
-		$this->view->render('listing');
 	}
 	
 	/**
-	 * Create a user
+	 * Automatically creates the user or updates it depending on the data given
+	 * If needed, the User form is displayed
 	 */
-	protected function add() {
-		$data = array();
+	protected function user_form($user_id = null, $db_data = array()) {
+		$add_case = empty($user_id);
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type'));
-			if (!in_array(null, $data, true)) {
-				$errors = array();
-				
-				// Check nickname availabililty
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
+			$errors = array();
+			
+			// Check nickname availabililty
+			if ($add_case || $data['nickname'] != $db_data['nickname']) {
 				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
 					$errors[] = WLang::get($e);
 				}
-				
-				// Matching passwords
-				if (!empty($data['password']) || !empty($data['password_conf'])) {
-					if ($data['password'] === $data['password_conf']) {
-						$data['password'] = sha1($data['password']);
-					} else {
-						$errors[] = WLang::get('error_password_not_matching');
+			} else {
+				unset($data['nickname']);
+			}
+			
+			// Matching passwords
+			if (!empty($data['password']) || !empty($data['password_conf'])) {
+				if ($data['password'] === $data['password_conf']) {
+					$data['password'] = sha1($data['password']);
+					if (!$add_case && $data['password'] == $db_data['password']) {
+						unset($data['password']); // don't change password if it's the same
 					}
 				} else {
-					$errors[] = WLang::get('error_no_password');
+					$errors[] = WLang::get('error_password_not_matching');
 				}
-				
-				// Email availabililty
+			} else if ($add_case) {
+				$errors[] = WLang::get('error_no_password');
+			}
+			unset($data['password_conf']);
+			
+			// Email availabililty
+			if ($add_case || $data['email'] != $db_data['email']) {
 				if (($e = $this->model->checkEmail($data['email'])) !== true) {
 					$errors[] = WLang::get($e);
 				}
-				
-				// User access rights
-				$data['access'] = $this->model->treatAccessData($data['type'], WRequest::get('access'));
-				unset($data['type']);
-				
-				if (empty($errors)) {
-					// User creation
+			}
+			
+			// Firstname and Lastname
+			if (!$add_case && $data['firstname'] == $db_data['firstname']) {
+				unset($data['firstname']);
+			}
+			if (!$add_case && $data['lastname'] == $db_data['lastname']) {
+				unset($data['lastname']);
+			}
+			
+			// Groupe
+			$data['groupe'] = intval($data['groupe']);
+			if (!$add_case && $data['groupe'] == $db_data['groupe']) {
+				unset($data['groupe']);
+			}
+			
+			// User access rights
+			$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
+			if (!$add_case && $data['access'] == $db_data['access']) {
+				unset($data['access']);
+			}
+			unset($data['type']);
+			
+			if (empty($errors)) {
+				if ($add_case) { // ADD case
 					if ($this->model->createUser($data)) {
 						// Send email if requested
 						if (WRequest::get('email_confirmation') == 'on') {
@@ -165,137 +191,85 @@ Ceci est un message automatique.";
 							$mail->Send();
 							unset($mail);
 						}
+						
 						WNote::success('user_created', WLang::get('user_created', $data['nickname']));
-						header('location: '.WRoute::getDir().'/admin/user/');
+						header('Location: '.WRoute::getDir().'/admin/user/');
 						return;
 					} else {
 						WNote::error('user_not_created', WLang::get('user_not_created', $data['nickname']));
 					}
-				} else {
-					WNote::error('user_data_errors', implode("<br />\n", $errors));
+				} else { // EDIT case
+					if ($this->model->updateUser($user_id, $data)) {
+						// Reload session if account was auto-edited
+						if ($user_id == $_SESSION['userid']) {
+							WSystem::getSession()->reloadSession($user_id);
+						}
+						
+						WNote::success('user_edited', WLang::get('user_edited', $data['nickname']));
+						header('Location: '.WRoute::getDir().'/admin/user/edit/'.$user_id);
+						return;
+					} else {
+						WNote::error('user_not_edited', WLang::get('user_not_edited', $data['nickname']));
+					}
 				}
 			} else {
-				WNote::error('user_bad_data', WLang::get('bad_data'));
+				WNote::error('user_data_errors', implode("<br />\n", $errors));
 			}
 		}
-		$this->view->add($data);
-		$this->view->render('user_form');
+		
+		if ($add_case) {
+			if (empty($data)) {
+				$this->view->user_form();
+			} else {
+				$this->view->user_form(null, $data);
+			}
+		} else {
+			$this->view->user_form($user_id, $db_data);
+		}
+	}
+	
+	/**
+	 * Creates a user
+	 */
+	protected function add() {
+		$this->user_form();
 	}
 	
 	/**
 	 * Edits a user in the database
 	 */
 	protected function edit() {
-		$userid = intval(WRoute::getArg(1));
-		if (!$this->model->validId($userid)) {
+		$user_id = intval(WRoute::getArg(1));
+		var_dump($user_id);
+		die;
+		if ($this->model->validId($user_id)) {
+			$db_data = $this->model->getUser($user_id);
+			$this->user_form($user_id, $db_data);
+		} else {
 			WNote::error('user_not_found', WLang::get('user_not_found'));
-			header('location: '.WRoute::getDir().'/admin/user/');
-			return;
+			header('Location: '.WRoute::getDir().'/admin/user/');
 		}
-		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type'));
-			if (!in_array(null, $data, true)) {
-				$update_data = array();
-				$errors = array();
-				
-				// Get old user data
-				$db_data = $this->model->getUser($userid);
-				
-				// Nickname change
-				if ($data['nickname'] != $db_data['nickname']) {
-					if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
-						$errors[] = WLang::get($e);
-					} else {
-						$update_data['nickname'] = $data['nickname'];
-					}
-				}
-				
-				// Password
-				if (!empty($data['password']) || !empty($data['password_conf'])) {
-					if ($data['password'] == $data['password_conf']) {
-						$password_hash = sha1($data['password']);
-						if ($password_hash != $db_data['password']) {
-							$update_data['password'] = $password_hash;
-						}
-					} else {
-						$errors[] = WLang::get('error_password_not_matching');
-					}
-				}
-				
-				// Email
-				if ($data['email'] != $db_data['email']) {
-					if (($e = $this->model->checkEmail($data['email'])) !== true) {
-						$errors[] = WLang::get($e);
-					} else {
-						$update_data['email'] = $data['email'];
-					}
-				}
-				
-				// Firstname and Lastname
-				if ($data['firstname'] != $db_data['firstname']) {
-					$update_data['firstname'] = $data['firstname'];
-				}
-				if ($data['lastname'] != $db_data['lastname']) {
-					$update_data['lastname'] = $data['lastname'];
-				}
-				
-				// Group
-				if ($data['groupe'] != $db_data['groupe']) {
-					$update_data['groupe'] = intval($data['groupe']);
-				}
-				
-				// User access rights
-				$access = $this->model->treatAccessData($data['type'], WRequest::get('access'));
-				if ($access != $db_data['access']) {
-					$update_data['access'] = $access;
-				}
-				
-				if (empty($errors)) {
-					// Update database
-					if ($this->model->updateUser($userid, $update_data)) {
-						// Reload session if account was auto-edited
-						if ($userid == $_SESSION['userid']) {
-							WSystem::getSession()->reloadSession($userid);
-						}
-						
-						WNote::success('user_edited', WLang::get('user_edited', $data['nickname']));
-						header('location: '.WRoute::getDir().'/admin/user/edit/'.$userid);
-						return;
-					} else {
-						WNote::error('user_not_edited', WLang::get('user_not_edited', $data['nickname']));
-					}
-				} else {
-					WNote::error('user_data_errors', implode("<br />\n", $errors));
-				}
-			} else {
-				WNote::error('user_bad_data', WLang::get('bad_data'));
-			}
-		}
-		$this->view->edit($userid);
-		$this->view->render('user_form');
 	}
 	
 	/**
 	 * Deletes a user
 	 */
 	protected function del() {
-		$userid = intval(WRoute::getArg(1));
-		if ($userid != $_SESSION['userid']) {
-			if (!$this->model->validId($userid)) {
-				WNote::error('user_not_found', WLang::get('user_not_found'));
-				return;
-			}
-			if (WRequest::get('confirm', null, 'POST') === '1') {
-				$this->model->deleteUser($userid);
-				WNote::success('user_deleted', WLang::get('user_deleted'));
-				header('location: '.WRoute::getDir().'/admin/user/');
+		$user_id = intval(WRoute::getArg(1));
+		if ($user_id != $_SESSION['userid']) {
+			if ($this->model->validId($user_id)) {
+				if (WRequest::get('confirm', null, 'POST') === '1') {
+					$this->model->deleteUser($user_id);
+					WNote::success('user_deleted', WLang::get('user_deleted'));
+					header('Location: '.WRoute::getDir().'/admin/user/');
+				} else {
+					$this->view->del($user_id);
+				}
 			} else {
-				$this->view->del($userid);
-				$this->view->render('del');
+				WNote::error('user_not_found', WLang::get('user_not_found'), 'display');
 			}
 		} else {
-			WNote::error('user_self_delete', WLang::get('user_self_delete'));
-			header('location: '.WRoute::getDir().'/admin/user/');
+			WNote::error('user_self_delete', WLang::get('user_self_delete'), 'display');
 		}
 	}
 	
@@ -347,7 +321,6 @@ Ceci est un message automatique.";
 			}
 		}
 		$this->view->groups_listing($sortBy, $sens);
-		$this->view->render('groups_listing');
 	}
 	
 	/**
@@ -385,14 +358,14 @@ Ceci est un message automatique.";
 					// Retrieve all custom users belonging to this group
 					$users = $this->model->getUsersWithCustomAccess(array('groupe' => $data['groupid']));
 					foreach ($users as $user) {
-						$userid = $user['id'];
-						if (array_key_exists($userid, $data['user'])) {
-							$this->model->updateUser($userid, array('access' => $data['new_access']));
-						} else if (!empty($data['type'][$userid])) {
+						$user_id = $user['id'];
+						if (array_key_exists($user_id, $data['user'])) {
+							$this->model->updateUser($user_id, array('access' => $data['new_access']));
+						} else if (!empty($data['type'][$user_id])) {
 							// Update with given access
-							$access = $this->model->treatAccessData($data['type'][$userid], isset($data['access'][$userid]) ? $data['access'][$userid] : array());
+							$access = $this->model->treatAccessData($data['type'][$user_id], isset($data['access'][$user_id]) ? $data['access'][$user_id] : array());
 							if ($user['access'] != $access) {
-								$this->model->updateUser($userid, array('access' => $access));
+								$this->model->updateUser($user_id, array('access' => $access));
 							}
 						}
 					}

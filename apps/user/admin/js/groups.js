@@ -55,4 +55,3 @@ function showEditForm(groupid, name, access) {
 $(document).ready(function() {
 	bindEvents('group-add');
 });
-

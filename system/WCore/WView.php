@@ -52,7 +52,7 @@ class WView {
 	/**
 	 * @var array Template variables
 	 */
-	private $vars = array();
+	protected $vars = array();
 	
 	/**
 	 * Setup template
@@ -282,8 +282,8 @@ class WView {
 			try {
 				$html = $this->tpl->parse($themeMainFile);
 				echo str_replace(
-					array('src="/', 'href="/', 'action="/'),
-					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/'),
+					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
+					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
 					$html
 				);
 			} catch (Exception $e) {

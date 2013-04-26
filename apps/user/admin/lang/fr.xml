@@ -60,6 +60,7 @@
 	<item id="user_account_invalid">L'utilisateur %s ne correspond pas au processus de validation.</item>
 	
 	<!-- User add/edit form -->
+	<item id="users_total">%s utilisateurs inscrits</item>
 	<item id="users_found">%s utilisateurs trouvés</item>
 	<item id="no_user_found">Aucun utilisateur trouvé</item>
 	<item id="leave_empty_to_leave_unchanged">Laisser vide pour ne pas effectuer de modification.</item>
@@ -84,6 +85,7 @@
 	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
 	
 	<!-- User deletion -->
+	<item id="user_delete_confirmation">Êtes-vous sûr de vouloir supprimer l'utilisateur %s</item>
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
 	<item id="user_self_delete">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
 	
@@ -122,6 +124,6 @@
 	<item id="config_summary">Envoyer un récapitulatif par email</item>
 	<item id="config_admin_check">Valider les nouveaux inscrits par un administrateur</item>
 	<item id="config_keep_users">Conserver les comptes supprimés ou refusés dans la base de données en les désactivant</item>
-	<item id="submit">Envoyer</item>
+	<item id="submit">Enregistrer</item>
 	<item id="user_config_updated">La configuration de l'application User a été mise à jour avec succès.</item>
 </lang>

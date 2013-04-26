@@ -1,58 +1,29 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- * 
- * @author Fofif
- * @version	$Id: apps/news/admin/view.php 0002 01-08-2011 Fofif $
+ * News Application - Admin View - /apps/news/admin/view.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * NewsAdminView is the Admin View of the News Application
+ * 
+ * @package Apps
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @author Julien Blatecky <julien.blatecky@creatiwity.net>
+ * @version 0.3-19-04-2013
+ */
 class NewsAdminView extends WView {
-	private $model;
-	
-	public function __construct(NewsAdminModel $model) {
-		parent::__construct();
-		$this->model = $model;
-	}
-	
-	public function index($sortBy, $sens) {
-		// AdminStyle Helper
-		include HELPERS_DIR.'SortingHelper'.DS.'SortingHelper.php';
-		$dispFields = array('id', 'title', 'author', 'cat', 'date', 'views');
-		$adminStyle = new SortingHelper($dispFields, 'date', 'DESC');
-		
-		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
-		
-		// Enregistrement des variables de classement
+	public function news_listing($data = array(), $adminStyle, $pagination) {
+		$this->assign('pagination', $pagination->getHTML());
 		$this->assign($adminStyle->getTplVars());
-		
-		$data = $this->model->getNewsList(0, 20, $sort[0], $sort[1] == 'ASC');
 		$this->assign('news', $data);
-		$this->setResponse('index');
+		
+		$this->render('news_listing');
 	}
-	
+
 	/**
-	 * Fonction de chargement de la page principale du formulaire de news
-	 */
-	private function loadMainForm() {
-		// JS / CSS
-		$this->assign('js', '/apps/news/admin/js/add.js');
-		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
-		$this->assign('js', '/libraries/ckfinder/ckfinder.js');
-		
-		$this->assign('baseDir', WRoute::getDir());
-		
-		// Assignation de l'adresse du site pour le permalien
-		$this->assign('siteURL', WRoute::getBase().'/news/');
-		
-		// Chargement des catégories
-		$data = $this->model->getCatList("name", "ASC");
-		$this->assign('cat', $data);
-	}
-	
-	/**
-	 * Définition des valeurs de contenu du formulaire
+	 * Function to define template variable from a default array structure
 	 */
 	private function fillMainForm($model, $data) {
 		foreach ($model as $item => $default) {
@@ -60,86 +31,64 @@ class NewsAdminView extends WView {
 		}
 	}
 	
-	public function add($data = array()) {
-		$this->assign('css', '/apps/news/admin/css/add.css');
-		$this->loadMainForm();
+	public function news_form($cats_list, $last_id = 0, $data = array()) {
+		// JS / CSS
+		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
+		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
+		$this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
+		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
 		
-		// Id pour simuler le permalien
-		$this->assign('lastId', $this->model->getLastNewsId()+1);
+		// Assign site URL for permalink management
+		$this->assign('siteURL', WRoute::getBase() . '/news/');
+		$this->assign('lastId', $last_id);
 		
-		$this->fillMainForm(
-			array(
-				'nAuthor' => $_SESSION['nickname'],
-				'nKeywords' => '',
-				'nTitle' => "Le titre de votre article",
-				'nTitleClass' => 'empty',
-				'nUrl' => '',
-				'nContent' => ''
-			),
-			$data
-		);
-		
-		$this->setResponse('add');
-		$this->render();
-	}
-	
-	public function edit($id, $formData = array()) {
-		$this->assign('css', '/apps/news/admin/css/edit.css');
-		$this->loadMainForm();
-		
-		// Chargement des données
-		$data = $this->model->loadNews($id);
-		
-		$this->assign('lastId', $id);
-		$this->assign('date', $data['date']);
-		$this->assign('modified', $data['modified']);
-		$this->assign('image', $data['image']);
-		$ids = array();
-		foreach ($this->model->findNewsCats($id) as $row) {
-			$ids[] = $row['cat_id'];
+		$cat_ids = array();
+		if (!empty($data['news_cats']) && is_array($data['news_cats'])) {
+			foreach ($data['news_cats'] as $cat) {
+				$cat_ids[] = $cat['news_cat_id'];
+			}
 		}
-		$this->assign('ncat', $ids);
+		$this->assign('cats_list', $cats_list);
+		$this->assign('news_cats', $cat_ids);
 		
 		$this->fillMainForm(array(
-				'nAuthor' => $data['author'],
-				'nKeywords' => $data['keywords'],
-				'nTitle' => $data['title'],
-				'nTitleClass' => '',
-				'nUrl' => $data['url'],
-				'nContent' => $data['content']
-			), 
-			$formData
-		);
+			'news_author' => $_SESSION['nickname'],
+			'news_keywords' => '',
+			'news_title' => '',
+			'news_url' => '',
+			'news_content' => '',
+			'news_date' => '',
+			'news_modified' => ''
+		), $data);
 		
-		$this->setResponse('edit');
-		$this->render();
+		$this->render('news_form');
 	}
 	
-	public function del($id) {
-		$data = $this->model->loadNews($id);
-		$this->assign('nTitle', $data['title']);
-		
-		$this->setResponse('del');
+	public function news_delete($data = array()) {
+		$this->assign('title', $data['news_title']);
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/news_delete/".$data['news_id']."/confirm");
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/news/admin/templates/delete_news.html');
 	}
 	
-	public function cat($sortBy, $sens) {
-		$this->assign('css', '/apps/news/admin/css/cat.css');
-		$this->assign('js', '/apps/news/admin/js/cat.js');
-		
-		// AdminStyle Helper
-		$orderingFields = array('name', 'shortname');
-		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'name'));
-		
-		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
-		
-		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
-		
-		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
-		$this->assign('cat', $data);
-		
-		$this->setResponse('cat');
+	public function category_delete($id) {
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/news/category_delete/".$id."/confirm");
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/news/admin/templates/delete_category.html');
+	}
+	
+	public function categories_manager($cats_list, $adminStyle, $post_data = array()) {
+		$this->assign('js', '/apps/news/admin/js/categories_manager.js');
+		$this->assign($adminStyle->getTplVars());
+		$this->fillMainForm(array(
+			'news_cat_id' => '',
+			'news_cat_name' => '',
+			'news_cat_shortname' => '',
+			'news_cat_parent' => 0,
+			'news_cat_parent_name' => ""
+		), $post_data);
+		$this->assign('cats', $cats_list);
+		$this->render('categories_manager');
 	}
 }
 
