@@ -5,12 +5,10 @@
 		<form id="admin-check-form" action="/admin/user/listing/" method="post">
 			<table id="admin_check" class="table table-hover table-striped">
 				{for $count, $user in $users_waiting}
-				<tr class="waiting" data-title="{$user.nickname}" data-content="<ul class='unstyled'> <li>{$user.firstname} {$user.lastname}</li> <li>{$user.email}</li> </ul>">
+				<tr class="waiting" data-title="{$user.nickname}" data-content="&lt;ul class='unstyled'&gt;&lt;li&gt;{$user.firstname} {$user.lastname}&lt;/li&gt;&lt;li&gt;{$user.email}&lt;/li&gt;&lt;/ul&gt;">
 					<td>{$user.id}</td>
 					<td><strong>{$user.nickname}</strong></td>
-					<td>{$user.groupe_name}</td>
 					<td>{$user.date}</td>
-					<td>{$user.last_activity}</td>
 					<td>
 						<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="validate" />
 						<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="refuse" />
