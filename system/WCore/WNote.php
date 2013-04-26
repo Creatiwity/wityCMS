@@ -133,7 +133,9 @@ class WNote {
 		if (!$died) {
 			$died = true;
 			self::handle_plain($note);
-			self::displayPlainView();
+			if (!self::displayPlainView()) {
+				echo self::handle_html($note);
+			}
 			die;
 		}
 	}
@@ -306,17 +308,18 @@ class WNote {
 	 */
 	public static function displayPlainView() {
 		// Generate view
-		if (!empty(self::$plain_stack)) {
+		$tpl = WSystem::getTemplate(); // TPL must be OK
+		if (!is_null($tpl) && !empty(self::$plain_stack)) {
 			$notes_data = self::$plain_stack;
 			self::$plain_stack = array();
 			$view = new WView();
-			$view->setTheme('_blank');
-			$view->setResponse('themes/system/note/note_plain_view.html');
 			$view->assign('css', '/themes/system/note/note.css');
 			$view->assign('css', '/themes/system/note/note_plain.css');
 			$view->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
 			$view->assign('js', '/themes/system/note/note.js');
 			$view->assign('notes_data', $notes_data);
+			$view->setTheme('_blank');
+			$view->setResponse('themes/system/note/note_plain_view.html');
 			if (!$view->render()) {
 				die(
 					"WView did not manage to display the Note's Plain View (themes/system/note/note_plain_view.html).<br />\n"

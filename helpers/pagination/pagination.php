@@ -68,24 +68,20 @@ class Pagination {
 	public function getHTML() {
 		// CSS adding
 		$tpl = WSystem::getTemplate();
-		$tpl->assign('css', $tpl->getVar('css').'<link href="/helpers/pagination/pagination.css" rel="stylesheet" type="text/css" media="screen" />');
 		
 		// Beginning of the display-chain
-		$output = sprintf(
-			'<div class="pages">
-				<strong>Page %s sur %s</strong> ',
-			$this->currentPage, $this->n
-		);
-		
+		$output = "<div class='pagination pagination-centered'>
+						<ul>";
+						
 		$firstDone = false;
 		$lastDone = false;
 		for ($i = 1; $i <= $this->n; $i++) {
 			if ($i == $this->currentPage) {
-				$output .= sprintf('<span class="current">%d</span> ', $i);
+				$output .= sprintf('<li class="active"><span>%d</span></li> ', $i);
 			}
 			// We are around the current page : we display it
-			else if (abs($this->currentPage - $i) <= 3) {
-				$output .= sprintf('<a href="'.$this->urlPattern.'">%d</a> ', $i, $i);
+			else if (abs($this->currentPage - $i) <= 5) {
+				$output .= sprintf('<li><a href="'.$this->urlPattern.'">%d</a></li> ', $i, $i);
 			}
             // Displaying something before forgetting useless pages
 			else {
@@ -93,9 +89,8 @@ class Pagination {
 				if (!$firstDone && $i < $this->currentPage) {
 					$firstDone = true;
 					$output .= sprintf(
-						'<a href="%s">First</a> 
-						... 
-						<a href="%s" title="Page précédente">&laquo; Prev</a> ', 
+						'<li><a href="%s">First</a></li>
+						<li><a href="%s" title="Page précédente">&laquo;</a></li> ', 
 						sprintf($this->urlPattern, 1), sprintf($this->urlPattern, $this->currentPage-1)
 					);
 				}
@@ -103,9 +98,8 @@ class Pagination {
 				else if (!$lastDone && $i > $this->currentPage) {
 					$lastDone = true;
 					$output .= sprintf(
-						'<a href="%s" title="Page suivante">Next &raquo;</a> 
-						... 
-						<a href="%s">Last</a>', 
+						'<li><a href="%s" title="Page suivante">&raquo;</a></li>
+						<li><a href="%s">Last</a></li>', 
 						sprintf($this->urlPattern, $this->currentPage+1), sprintf($this->urlPattern, $this->n)
 					);
 				}
@@ -116,7 +110,7 @@ class Pagination {
 			}
 		}
 		
-		$output .= '</div>';
+		$output .= '</ul></div>';
 		return $output;
 	}
 	

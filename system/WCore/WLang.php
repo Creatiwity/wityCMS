@@ -96,7 +96,8 @@ class WLang {
 			$string = file_get_contents($file);
 			$xml = new SimpleXMLElement($string);
 			foreach ($xml->item as $lang_item) {
-				self::assign((string) $lang_item->attributes()->id, (string) $lang_item);
+				$lang_string = dom_import_simplexml($lang_item)->nodeValue;
+				self::assign((string) $lang_item->attributes()->id, $lang_string);
 			}
 			
 			// Mark as loaded

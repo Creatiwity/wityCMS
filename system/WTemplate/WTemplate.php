@@ -47,8 +47,6 @@ class WTemplate {
 			throw new Exception("WTemplate::__construct(): Directory \"".$baseDir."\" does not exist.");
 		}
 		
-		// Default value
-		$this->compileDir = '.'.DIRECTORY_SEPARATOR.'tpl_compiled'.DIRECTORY_SEPARATOR;
 		if (!empty($compileDir)) {
 			$this->setCompileDir($compileDir);
 		}
@@ -147,14 +145,14 @@ class WTemplate {
 		$file = new WTemplateFile($href, $this->baseDir, $this->compileDir);
 		
 		// Compilation (if needed)
-		$file->compile($this->compiler);
+		$code = $file->compile($this->compiler);
 		
 		// Buffer
 		ob_start();
 		
 		try { // Critical section
 			// Adds the php close balise at the begining because it is a whole php file being evaluated
-			$eval_result = eval('?>'.file_get_contents($file->getCompilationHref()));
+			$eval_result = eval('?>'.$code);
 		} catch (Exception $e) {
 			// Just stores the exception into $e to throw it later
 		}

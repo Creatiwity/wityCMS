@@ -4,34 +4,30 @@
 	<!-- Application name -->
 	<name>News</name>
 	
-	<version>0.1</version>
+	<version>0.3</version>
 	
 	<!-- Last update date -->
-	<date>17-01-2013</date>
+	<date>19-04-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
 	
-	<!-- Services available to communicate with the application -->
-	<!--<service>
-		<name>last_news</name>
-		<view>block_last_news.html</view>
-	</service>-->
+	<!-- Permissions -->
+	<permission name="news_editor" />
+	<permission name="global_editor" />
+	<permission name="deletor" />
 	
-	<!-- Front actions
-		Restriction rules :
-		  0 - Public
-		  1 - User connected required
-		  2 - Require specific access -->
-	<action restriction="1" default="default">index</action>
-	<action desc="Affichage d'un article">detail</action>
+	<!-- Front pages -->
+	<action default="default">listing</action>
+	<action>detail</action>
 	
-	<!-- Admin actions -->
+	<!-- Admin pages -->
 	<admin>
-		<action desc="Liste des articles" default="1">index</action>
-		<action desc="Ajouter un article">add</action>
-		<action desc="Édition d'un article" menu="false">edit</action>
-		<action desc="Suppression d'un article" menu="false">del</action>
-		<action desc="Gestion des catégories">cat</action>
+		<action desc="articles_listing" default="1">listing</action>
+		<action desc="article_add" requires="news_editor" alias="add">news_form</action>
+		<action desc="article_edit" requires="news_editor" menu="false">edit</action>
+		<action desc="article_delete" menu="false" requires="news_editor,deletor">news_delete</action>
+		<action desc="categories_management" requires="global_editor">categories_manager</action>
+		<action desc="category_delete" menu="false" requires="global_editor,deletor">category_delete</action>
 	</admin>
 </app>

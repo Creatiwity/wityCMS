@@ -64,12 +64,12 @@ function assignDiffPermissions(id, group_access, user_access) {
 				} else {
 					$(input).parent().addClass('plus');
 				}
-				$(input).attr('checked', true);
+				$(input).prop('checked', true);
 			} else {
 				if (group_checked) {
 					$(input).parent().addClass('minus');
 				}
-				$(input).removeAttr('checked');
+				$(input).prop('checked', false);
 			}
 		}
 	});
@@ -87,7 +87,7 @@ function loadUsersBeginingBy(letter, groupid) {
 	if ($('dt.letter-'+letter_encoded).size() != 0) {
 		$('dt.letter-'+letter_encoded).each(function(index, el) {
 			$(el).show();
-			if (!$(this).find('input').attr('checked')) {
+			if (!$(this).find('input').prop('checked')) {
 				var classes = $(el).attr('class');
 				var id = classes.split(' ')[0];
 				$('#'+id).show();
@@ -144,7 +144,7 @@ function loadUsersBeginingBy(letter, groupid) {
 }
 
 $(document).ready(function() {
-	if ($('#display-custom').attr('checked') == '') {
+	if (!$('#display-custom').prop('checked')) {
 		$('#group-diff .listing-wrapper').slideDown();
 	}
 	

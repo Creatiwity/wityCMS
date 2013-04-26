@@ -206,15 +206,15 @@ abstract class WController {
 	public function loadManifest($app_name) {
 		$manifest = WConfig::get('manifest.'.$app_name);
 		if (is_null($manifest)) {
-			// Checks cache directory
-			if (!is_dir(CACHE_DIR.'manifests')) {
-				@mkdir(CACHE_DIR.'manifests', 0777);
-			}
-			
 			$manifest_file = APPS_DIR.$app_name.DS.'manifest.php';
 			if (!file_exists($manifest_file)) {
 				// WNote::error('controller_no_manifest', 'Unable to find the manifest "'.$manifest_file.'".', 'debug');
 				return null;
+			}
+			
+			// Checks cache directory
+			if (!is_dir(CACHE_DIR.'manifests')) {
+				@mkdir(CACHE_DIR.'manifests', 0777);
 			}
 			
 			// Is there a manifest parsed in cache?
@@ -225,14 +225,16 @@ abstract class WController {
 			if (!isset($manifest)) { // cache failed
 				$manifest = $this->parseManifest($manifest_file);
 				
-				// Opening
-				if (!($handler = fopen($cache_file, 'w'))) {
-					WNote::error('controller_create_manifest_cache', 'Unable to open the cache target "'.$cache_file.'".', 'debug');
+				if (is_writable(CACHE_DIR.'manifests')) {
+					// Opening
+					if (!($handler = fopen($cache_file, 'w'))) {
+						WNote::error('controller_create_manifest_cache', 'Unable to open the cache target "'.$cache_file.'".', 'debug');
+					}
+					
+					// Writing
+					fwrite($handler, "<?php\n\n\$manifest = ".var_export($manifest, true).";\n\n?>");
+					fclose($handler);
 				}
-				
-				// Writing
-				fwrite($handler, "<?php\n\n\$manifest = ".var_export($manifest, true).";\n\n?>");
-				fclose($handler);
 			}
 			WConfig::set('manifest.'.$app_name, $manifest);
 		}
