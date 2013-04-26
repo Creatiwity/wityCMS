@@ -8,7 +8,7 @@ $(document).ready(function() {
 		}
 		$(this).parent().find('a').removeClass('checked');
 		$(this).addClass('checked');
-		$(this).parent().find('input[value="validate"]').attr('checked', true);
+		$(this).parent().find('input[value="validate"]').prop('checked', true);
 	});
 	$('#admin_check a.refuse').click(function() {
 		if (!button_admin_check) {
@@ -17,11 +17,11 @@ $(document).ready(function() {
 		}
 		$(this).parent().find('a').removeClass('checked');
 		$(this).addClass('checked');
-		$(this).parent().find('input[value="refuse"]').attr('checked', true);
+		$(this).parent().find('input[value="refuse"]').prop('checked', true);
 	});
 
 	$('#cancel_button').click(function() {
-		$('#admin_check input').attr('checked', false);
+		$('#admin_check input').prop('checked', false);
 		$('#admin_check a').removeClass('checked');
 		$('#admin_check_buttons').fadeOut();
 		button_admin_check = false;
