@@ -75,46 +75,22 @@
 	<div id="search" class="well">
 		<h4>{lang search}</h4>
 		<form action="/admin/user/listing/" method="get">
-			<div class="control-group">
-				<label class="control-label" for="nickname"><strong>{lang nickname}:</strong></label>
-				<div class="controls">
-					<input id="nickname" type="text" name="nickname" value="{$nickname}" />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="email">{lang email}:</label>
-				<div class="controls">
-					<input id="email" type="text" name="email" value="{$email}" />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="firstname">{lang firstname}:</label>
-				<div class="controls">
-					<input id="firstname" type="text" name="firstname" value="{$firstname}" />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="lastname">{lang lastname}:</label>
-				<div class="controls">
-					<input id="lastname" type="text" name="lastname" value="{$lastname}" />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="groupe">{lang group}:</label>
-				<div class="controls">
-					<select id="groupe" name="groupe">
-						<option value=""></option>
-						{for $group in $groups}
-						<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
-						{/for}
-					</select>
-				</div>
-			</div>
-			<div class="control-group">
-				<div class="controls">
-					<input type="submit" class="btn btn-block" value="Filtrer" />
-				</div>
-			</div>
+			<label for="nickname"><strong>{lang nickname}:</strong></label>
+			<input id="nickname" class="input-block-level" type="text" name="nickname" value="{$nickname}" />
+			<label for="email">{lang email}:</label>
+			<input id="email" class="input-block-level" type="text" name="email" value="{$email}" />
+			<label for="firstname">{lang firstname}:</label>
+			<input id="firstname" class="input-block-level" type="text" name="firstname" value="{$firstname}" />
+			<label for="lastname">{lang lastname}:</label>
+			<input id="lastname" class="input-block-level" type="text" name="lastname" value="{$lastname}" />
+			<label for="groupe">{lang group}:</label>
+			<select id="groupe" class="input-block-level" name="groupe">
+				<option value=""></option>
+				{for $group in $groups}
+				<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
+				{/for}
+			</select>
+			<input type="submit" class="btn btn-block" value="Filtrer" />
 		</form>
 	</div>
 </div>

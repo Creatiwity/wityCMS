@@ -19,9 +19,9 @@ input.input-big {
 }
 
 label.label-big {
-	font-size: 28px;
+	font-size: 24px;
 	font-weight: bold;
-	line-height: 40px;
+	line-height: 30px;
 }
 
 @media (max-width: 980px) {

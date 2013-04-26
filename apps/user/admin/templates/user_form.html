@@ -5,7 +5,7 @@
 			<div class="control-group">
 				<label for="nickname" class="control-label label-big">{lang nickname}</label>
 				<div class="controls">
-					<input class="input-big" type="text" name="nickname" value="{$nickname}" />
+					<input class="input-big input-block-level" type="text" name="nickname" value="{$nickname}" />
 				</div>
 			</div>
 			<div class="control-group">
@@ -14,7 +14,9 @@
 					<input type="password" name="password" />
 					<span class="help-inline">{lang leave_empty_to_leave_unchanged}</span>
 				</div>
-				<label for="password_conf" class="control-label">{lang confirmation}</label>
+			</div>
+			<div class="control-group">
+				<label for="password_conf" class="control-label"><em>{lang confirmation}</em></label>
 				<div class="controls">
 					<input type="password" name="password_conf" />
 				</div>
@@ -58,10 +60,10 @@
 			<div class="control-group">
 				<span class="control-label">{lang user_rights}</span>
 				<div id="user-access" class="controls">
-					<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
-					<label><input class="access-type all" type="radio" name="type" value="all"
+					<label class="radio"><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
+					<label class="radio"><input class="access-type all" type="radio" name="type" value="all"
 						      {if {$access} == 'all'} checked="checked"{/if} /> {lang access_all}</label>
-					<label><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang access_custom}</label>
+					<label class="radio"><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang access_custom}</label>
 					<div class="custom-controls tright">
 						<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
 					</div>
