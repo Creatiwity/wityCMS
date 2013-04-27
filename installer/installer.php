@@ -53,21 +53,7 @@ class Installer {
                 return;
 
             // Groups
-            case 'GENERALITIES':
-                //Test name, theme and configure config.php
-                break;
-
-            case 'DATABASE':
-                //Test database and configure Database.php
-                break;
-
-            case 'DEFAULT_CONFIG':
-                //Set default app for front and admin mode
-                break;
-
-            case 'FIRST_ADMIN':
-                //Configure the first user in the DB
-                break;
+            
 
             //Autocompletes
             case 'GET_THEMES':
@@ -101,51 +87,118 @@ class Installer {
     /**
      * Validators
      **/
-    private static function isURL($url) {
-
+    private static function isURL($url, $data,&$respond) {
+        return (!empty($url) && preg_match('/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?/i', $url));
     }
 
-    private static function isVerifiedString($string) {
-
+    private static function isVerifiedString($string, $data, &$respond) {
+        return (!empty($url) && preg_match("/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i", $string));
     }
 
-    private static function isFrontApp($app) {
-
+    private static function isFrontApp($app, $data, &$respond) {
+        return in_array(strtolower($app), getFrontApps());
     }
 
-    private static function isAdminApp($app) {
-
+    private static function isAdminApp($app, $data, &$respond) {
+        return in_array(strtolower($app), getAdminApps());
     }
 
-    private static function isSQLServer($credentials) {
-
+    private static function isTheme($theme, $data, &$respond) {
+        return in_array(strtolower($theme), getThemes());
     }
 
-    private static function isDatabase($credentials) {
-
-    }
-
-    private static function isPrefixExisting($prefix) {
-
-    }
-
-    private static function isEmail($email) {
-        
-    }
-
-    private static function verifyDatabaseCredentials() {
-        $data = Request::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), array('', '', '', '', '', ''), 'POST');
-
+    private static function isSQLServer($credentials, $data, &$respond) {
         if (!class_exists('PDO')) {
-            //Error PDO not found
+            self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
+            return $respond = false;
         }
+
+        $dsn = 'mysql:dbname=;host='.WConfig::get('database.server');
+        $dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']):'';
 
         try {
-            # Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
-            $db = new PDO($dsn, $user, $password);
+            new PDO($dsn, $credentials['user'], $$credentials['pw']);
         } catch (PDOException $e) {
-            //view.error("Impossible to connect to MySQL.<br />".utf8_encode($e->getMessage()));
+            if(strstr($e->getMessage(), 'SQLSTATE[')) { 
+                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+                if ($matches[2] == "1049") {
+                    return true;
+                } else if ($matches[2] == "1044") {
+                    self::$view->error('group', $data['group'], 'Unable to connect to the database', "Bad user/password.");
+                    return $respond = false;
+                } else {
+                    return false;
+                }
+            }
         }
+
+        return true;
+    }
+
+    private static function isDatabase($credentials, $data, &$respond) {
+        if (!class_exists('PDO')) {
+            self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
+            return $respond = false;
+        }
+
+        $dsn = 'mysql:dbname=;host='.WConfig::get('database.server');
+        $dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']):'';
+
+        try {
+            new PDO($dsn, $credentials['user'], $$credentials['pw']);
+        } catch (PDOException $e) {
+            if(strstr($e->getMessage(), 'SQLSTATE[')) { 
+                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+                if ($matches[2] == "1049") {
+                    self::$view->error('group', $data['group'], 'Unable to find the database', "The database you specified cannot be found.");
+                    return $respond = false;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private static function isPrefixNotExisting($credentials, $data, &$respond) {
+        if (!preg_match("/^[a-zA-Z0-9]$/", $credentials['prefix'])) {
+            self::$view->error('group', $data['group'], 'Malformed prefix', 'The prefix must be only alphanumeric.');
+            return $respond = false;
+        }
+
+        if (!class_exists('PDO')) {
+            self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
+            return $respond = false;
+        }
+
+        $dsn = 'mysql:dbname=;host='.WConfig::get('database.server');
+        $dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']):'';
+
+        try {
+            $db = new PDO($dsn, $credentials['user'], $$credentials['pw']);
+        } catch (PDOException $e) {
+            if(strstr($e->getMessage(), 'SQLSTATE[')) { 
+                preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+                if ($matches[2] == "1049") {
+                    self::$view->error('group', $data['group'], 'Unable to find the database', "The database you specified cannot be found.");
+                    return $respond = false;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        $prefix = (!empty($credentials['prefix'])) ? $credentials['prefix']."_":"";
+
+        $prep = $db->prepare("SHOW TABLES LIKE :prefixedTable");
+        $prep->bindParam(":prefixedTable", $prefix."user");
+        $prep->execute();
+        return $prep->fetch() ? false;true;
+    }
+
+    private static function isEmail($email, $data, &$respond) {
+        return (!empty($email) && preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $email));
     }
 
     /**
