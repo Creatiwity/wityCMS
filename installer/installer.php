@@ -110,8 +110,10 @@ class Installer {
                 $r = Request::getAssoc(array('site_name'), array('site_name'=>''), 'POST');
                 if(self::isVerifiedString($r['site_name'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Site name validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid site name", "The site name must be an alphanumeric string. (- and ' and spaces are allowed too)");
+                    return false;
                 }
                 break;
             
@@ -119,8 +121,10 @@ class Installer {
                 $r = Request::getAssoc(array('base'), array('base'=>''), 'POST');
                 if(self::isURL($r['base'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Base URL validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid base url", "The base url must be a valid URL representing the constant part of your site URL.");
+                    return false;
                 }
                 break;
 
@@ -128,22 +132,27 @@ class Installer {
                 $r = Request::getAssoc(array('theme'), array('theme'=>''), 'POST');
                 if(self::isTheme($r['theme'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Theme validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid theme", "Theme parameter must be an existing front theme, in 'themes' directory.");
+                    return false;
                 }
                 break;
 
             case 'language':
                 // TODO : auto-detect available languages and validate them
                 self::$view->success('group', $data['group'], "Validated !", "Theme validated.");
+                return true;
                 break;
 
             case 'front_app':
                 $r = Request::getAssoc(array('default'), array('default'=>''), 'POST');
                 if(self::isFrontApp($r['default'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Front application validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid front application", "Starting front application parameter must an existing front application, in 'apps' directory.");
+                    return false;
                 }
                 break;
 
@@ -151,8 +160,10 @@ class Installer {
                 $r = Request::getAssoc(array('admin'), array('admin'=>''), 'POST');
                 if(self::isAdminApp($r['admin'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Admin application validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid admin application", "Starting admin application parameter must an existing admin application, in 'apps' directory.");
+                    return false;
                 }
                 break;
 
@@ -160,8 +171,10 @@ class Installer {
                 $r = Request::getAssoc(array('server', 'port', 'user', 'pw'), array('server'=>'', 'port'=>'', 'user'=>'', '', 'pw'=>''), 'POST');
                 if(self::isSQLServer($r, $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Database credentials validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid database credentials", "Unable to connect to the database with the credentials you've just provided.");
+                    return false;
                 }
                 break;
 
@@ -169,8 +182,10 @@ class Installer {
                 $r = Request::getAssoc(array('server', 'port', 'user', 'pw', 'dbname'), array('server'=>'', 'port'=>'', 'user'=>'', '', 'pw'=>'', 'dbname'=>''), 'POST');
                 if(self::isDatabase($r, $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Database name validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid database name", "Unable to find the database with the name you've just provided.");
+                    return false;
                 }
                 break;
 
@@ -178,8 +193,10 @@ class Installer {
                 $r = Request::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), array('server'=>'', 'port'=>'', 'user'=>'', '', 'pw'=>'', 'dbname'=>'', 'prefix'=>''), 'POST');
                 if(self::isPrefixNotExisting($r, $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Tables prefix validated and not used.");
+                    return true;
                 } else if($respond) {
                     self::$view->warning('group', $data['group'], "Prefix already used", "Be careful, the prefix you provides is already used. Some existing tables will be overridden");
+                    return true;
                 }
                 break;
 
@@ -187,22 +204,27 @@ class Installer {
                 $r = Request::getAssoc(array('nickname'), array('nickname'=>''), 'POST');
                 if(self::isVerifiedString($r['nickname'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Nickname validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid nickname", "Your nickname must be an alphanumeric string. (- and ' and spaces are allowed too)");
+                    return false;
                 }
                 break;
 
             case 'user_password':
                 $r = Request::getAssoc(array('password'), array('password'=>''), 'POST');
                 self::$view->success('group', $data['group'], "Validated !", "Password validated.");
+                return true;
                 break;
 
             case 'user_email':
                 $r = Request::getAssoc(array('email'), array('email'=>''), 'POST');
                 if(self::isEmail($r['email'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Email validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid email", "This email is not valid.");
+                    return false;
                 }
                 break;
 
@@ -210,8 +232,10 @@ class Installer {
                 $r = Request::getAssoc(array('firstname'), array('firstname'=>''), 'POST');
                 if(self::isVerifiedString($r['firstname'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Firstname validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid firstname", "Your firstname must be an alphanumeric string. (- and ' and spaces are allowed too)");
+                    return false;
                 }
                 break;
 
@@ -219,8 +243,10 @@ class Installer {
                 $r = Request::getAssoc(array('lastname'), array('lastname'=>''), 'POST');
                 if(self::isVerifiedString($r['lastname'], $data, $respond)) {
                     self::$view->success('group', $data['group'], "Validated !", "Lastname validated.");
+                    return true;
                 } else if($respond) {
                     self::$view->error('group', $data['group'], "Invalid lastname", "Your lastname must be an alphanumeric string. (- and ' and spaces are allowed too)");
+                    return false;
                 }
                 break;
 
