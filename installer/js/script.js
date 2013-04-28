@@ -2,12 +2,14 @@ $(document).ready(function() {
 	var Installer, Step, Group, Field, processAjax;
 
 	Installer = (function() {
-		var stepInstances, element;
+		var stepInstances, element, id, summary;
 		
 		function Installer(elem) {
 			var that;
 			
 			element = elem;
+			id = element.attr('data-wity-installer');
+			summary = $('[data-wity-installer-summary="'+id+'"]');
 			stepInstances = {};
 			//Create the global manager
 			that = this;
@@ -182,7 +184,8 @@ $(document).ready(function() {
 			};
 
 			processAjax(document.location, {"command": command}, callback);			
-		}
+		},
+		minLength:0
 	});
 
 	processAjax = function (u, d, c) {
