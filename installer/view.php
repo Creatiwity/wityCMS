@@ -41,15 +41,15 @@ class View {
             $this->response = array();
         }
 
-        if(!isset($this->response[$state]) || empty($this->response[$state]) && !is_array(self::$this->response[$state])) {
-            $this->response[$state] = array();
+        if(!isset($this->response[$level]) || empty($this->response[$level]) && !is_array(self::$this->response[$level])) {
+            $this->response[$level] = array();
         }
 
-        if(!isset($this->response[$state][$level]) || empty($this->response[$state][$level]) && !is_array(self::$this->response[$state][$level])) {
-            $this->response[$state][$level] = array();
+        if(!isset($this->response[$level][$id]) || empty($this->response[$level][$id]) && !is_array(self::$this->response[$level][$id])) {
+            $this->response[$level][$id] = array();
         }
 
-        $this->response[$state][$level][$id] = array('head_message' => $head_message, 'message' => $message);
+        $this->response[$level][$id][$state] = array('head_message' => $head_message, 'message' => $message);
     }
 
     public function push_content($id, $data) {
