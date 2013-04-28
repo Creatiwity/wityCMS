@@ -21,7 +21,7 @@
     </head>
 
     <body>
-        <div class="container">
+        <div class="container" data-wity-installer="witycms">
             <div class="row-fluid">
                 <div class="span6 offset3">
                     <!-- WityCMS logo -->
@@ -33,7 +33,7 @@
                 <div class="span3 offset2">
                     <div class="well special-well">
                         <h4>Summary</h4>
-                        <ul class="unstyled" data-wity-installer-summary="true">
+                        <ul class="unstyled" data-wity-installer-summary="witycms">
 
                         </ul>
                     </div>
@@ -42,35 +42,35 @@
                 <div class="span5">
                     <div class="well special-well">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#site_configuration_tab" data-toggle="tab"><i class="icon-ok"></i> Site</a></li>
-                            <li><a href="#db_configuration_tab" data-toggle="tab"><i class="icon-remove"></i> Database</a></li>
-                            <li><a href="#admin_configuration_tab" data-toggle="tab"><i class="icon-remove"></i> Administrator</a></li>
+                            <li class="active"><a href="#site_configuration_tab" data-toggle="tab"><i data-wity-installer-step-status="site" class="icon-ok"></i> Site</a></li>
+                            <li><a href="#db_configuration_tab" data-toggle="tab"><i data-wity-installer-step-status="database" class="icon-remove"></i> Database</a></li>
+                            <li><a href="#admin_configuration_tab" data-toggle="tab"><i data-wity-installer-step-status="user" class="icon-remove"></i> Administrator</a></li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="site_configuration_tab">
+                            <div class="tab-pane active" id="site_configuration_tab" data-wity-installer-step="site">
                                 <fieldset class="form-horizontal">
                                     <div class="control-group">
                                         <label class="control-label" for="site_name">Site name</label>
                                         <div class="controls">
-                                            <input type="text" name="site_name"/>
+                                            <input type="text" name="site_name" data-wity-installer-group="site_name" data-wity-validate-regexp="/^[A-Z]?'?[- a-zA-Z0-9]( [a-zA-Z0-9])*$/i"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="base">Base URL</label>
                                         <div class="controls">
-                                            <input type="url" name="base"/>
+                                            <input type="url" name="base" data-wity-installer-group="base_url" data-wity-validate-regexp="/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?/i" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="theme">Theme</label>
                                         <div class="controls">
-                                            <input type="text" data-wity-autocomplete="GET_THEMES" name="site_name" autocomplete="off"/>
+                                            <input type="text" data-wity-autocomplete="GET_THEMES" name="site_name" autocomplete="off" data-wity-installer-group="theme" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="lang">Language</label>
                                         <div class="controls">
-                                            <select name="lang">
+                                            <select name="lang" data-wity-installer-group="language">
                                                 <option selected="selected">en-EN</option>
                                                 <option selected="selected">fr-FR</option>
                                             </select>
@@ -80,95 +80,95 @@
                                     <div class="control-group">
                                         <label class="control-label" for="default">Front app.</label>
                                         <div class="controls">
-                                            <input type="text" data-wity-autocomplete="GET_FRONT_APPS" name="default" autocomplete="off"/>
+                                            <input type="text" data-wity-autocomplete="GET_FRONT_APPS" name="default" autocomplete="off" data-wity-installer-group="front_app" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="admin">Admin app.</label>
                                         <div class="controls">
-                                            <input type="text" data-wity-autocomplete="GET_ADMIN_APPS" name="default" autocomplete="off"/>
+                                            <input type="text" data-wity-autocomplete="GET_ADMIN_APPS" name="default" autocomplete="off" data-wity-installer-group="admin_app" data-wity-required="true"/>
                                         </div>
                                     </div>
                                 </fieldset>
                             </div>
-                            <div class="tab-pane" id="db_configuration_tab">
+                            <div class="tab-pane" id="db_configuration_tab"  data-wity-installer-step="database">
                                 <fieldset class="form-horizontal">
                                     <div class="control-group">
                                         <label class="control-label" for="server">Server</label>
                                         <div class="controls">
-                                            <input type="text" name="server"/>
+                                            <input type="text" name="server" data-wity-installer-group="db_credentials" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="port">Port</label>
                                         <div class="controls">
-                                            <input type="text" name="port" placeholder="3306"/>
+                                            <input type="number" name="port" placeholder="3306" data-wity-installer-group="db_credentials" data-wity-validate-regexp="/^[0-9]*/"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="user">Login</label>
                                         <div class="controls">
-                                            <input type="text" name="user"/>
+                                            <input type="text" name="user" data-wity-installer-group="db_credentials" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="pw">Password</label>
                                         <div class="controls">
-                                            <input type="password" name="pw"/>
+                                            <input type="password" name="pw" data-wity-installer-group="db_credentials"/>
                                         </div>
                                     </div>
                                     <hr/>
                                     <div class="control-group">
                                         <label class="control-label" for="dbname">Database name</label>
                                         <div class="controls">
-                                            <input type="text" name="dbname"/>
+                                            <input type="text" name="dbname" data-wity-installer-group="db_name" data-wity-required="true" data-wity-require-group="db_credentials"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="prefix">Table prefix</label>
                                         <div class="controls">
-                                            <input type="text" name="prefix"/>
+                                            <input type="text" name="prefix" data-wity-installer-group="tables_prefix" data-wity-require-group="db_credentials db_name"/>
                                         </div>
                                     </div>
                                 </fieldset>
                             </div>
-                            <div class="tab-pane" id="admin_configuration_tab">
+                            <div class="tab-pane" id="admin_configuration_tab"  data-wity-installer-step="user">
                                 <fieldset class="form-horizontal">
                                     <div class="control-group">
                                         <label class="control-label" for="nickname">Pseudo</label>
                                         <div class="controls">
-                                            <input type="text" name="nickname"/>
+                                            <input type="text" name="nickname" data-wity-installer-group="nickname" data-wity-validate-regexp="/^[a-zA-Z0-9]([a-zA-Z0-9])*$/i" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="password">Password</label>
                                         <div class="controls">
-                                            <input type="password" name="password"/>
+                                            <input type="password" name="password" data-wity-installer-group="password" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="confirm"><em>Confirmation</em></label>
                                         <div class="controls">
-                                            <input type="password" name="confirm"/>
+                                            <input type="password" name="confirm" data-wity-installer-group="confirm" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="email">Email</label>
                                         <div class="controls">
-                                            <input type="email" name="email"/>
+                                            <input type="email" name="email" data-wity-installer-group="email" data-wity-validate-regexp="/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?/i" data-wity-required="true"/>
                                         </div>
                                     </div>
                                     <hr/>
                                     <div class="control-group">
                                         <label class="control-label" for="firstname">Firstname</label>
                                         <div class="controls">
-                                            <input type="text" name="firstname"/>
+                                            <input type="text" name="firstname" data-wity-installer-group="firstname" data-wity-validate-regexp="/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="lastname">Lastname</label>
                                         <div class="controls">
-                                            <input type="text" name="lastname"/>
+                                            <input type="text" name="lastname" data-wity-installer-group="lastname" data-wity-validate-regexp="/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i"/>
                                         </div>
                                     </div>
                                 </div>
