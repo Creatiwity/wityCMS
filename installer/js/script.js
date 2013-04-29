@@ -86,9 +86,7 @@ $(document).ready(function() {
 		
 		Installer.prototype.btnReset = function() {
 			this.button.button('reset');
-			this.button.removeClass('btn-info');
-			this.button.removeClass('btn-danger');
-			this.button.removeClass('btn-primary');
+			this.button.removeClass('btn-info btn-danger btn-primary');
 		};
 		
 		return Installer;
@@ -128,8 +126,7 @@ $(document).ready(function() {
 		};
 		
 		Step.prototype.showValid = function(isValid) {
-			this.stepStatus.removeClass('icon-ok');
-			this.stepStatus.removeClass('icon-remove');
+			this.stepStatus.removeClass('icon-ok icon-remove');
 			isValid ? this.stepStatus.addClass('icon-ok') : this.stepStatus.addClass('icon-remove');
 		};
 		
@@ -237,7 +234,7 @@ $(document).ready(function() {
 			}
 			
 			//true if changed, false otherwise
-			if(!((this.validated && oldValid) || (!this.validated && !oldValid))) {
+			if(this.validated != oldValid) {
 				this.element.trigger('validate-group');
 			}
 		};
@@ -333,9 +330,9 @@ $(document).ready(function() {
 				
 				if(newValue !== null && newValue !== undefined) {
 					if(newValue) {
-						this.element.attr('checked', 'checked');
+						this.element.prop('checked', true);
 					} else {
-						this.element.removeAttr('checked');
+						this.element.prop('checked', false);
 					}
 				}
 			} else {

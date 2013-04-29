@@ -36,15 +36,15 @@ class View {
 	}
 	
 	private function push_message($state, $level, $id, $head_message, $message) {
-		if(!isset($this->response) || empty($this->response) && !is_array(self::$this->response)) {
+		if(empty($this->response) || !is_array(self::$this->response)) {
 			$this->response = array();
 		}
 		
-		if(!isset($this->response[$level]) || empty($this->response[$level]) && !is_array(self::$this->response[$level])) {
+		if(empty($this->response[$level]) || !is_array(self::$this->response[$level])) {
 			$this->response[$level] = array();
 		}
 		
-		if(!isset($this->response[$level][$id]) || empty($this->response[$level][$id]) && !is_array(self::$this->response[$level][$id])) {
+		if(empty($this->response[$level][$id]) || !is_array(self::$this->response[$level][$id])) {
 			$this->response[$level][$id] = array();
 		}
 		
@@ -52,11 +52,11 @@ class View {
 	}
 	
 	public function push_content($id, $data) {
-		if(!isset($this->response) || empty($this->response) && !is_array(self::$this->response)) {
+		if(empty($this->response) || !is_array(self::$this->response)) {
 			$this->response = array();
 		}
 		
-		if(!isset($this->response['content']) || empty($this->response['content']) && !is_array(self::$this->response['content'])) {
+		if(empty($this->response['content']) || !is_array(self::$this->response['content'])) {
 			$this->response['content'] = array();
 		}
 		
