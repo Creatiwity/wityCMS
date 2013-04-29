@@ -15,21 +15,21 @@ defined('IN_WITY') or die('Access denied');
  */
 class WConfig {
 	
-    /**
-     * @var array() Multidimensionnal array containing configurations sorted by type
-     * 
-     * No '.' in keys because it's a reserved character
-     */
+	/**
+	 * @var array() Multidimensionnal array containing configurations sorted by type
+	 * 
+	 * No '.' in keys because it's a reserved character
+	 */
 	private static $configs = array();
 	
-    /**
-     * @var array() List of loaded configuration files
-     */
+	/**
+	 * @var array() List of loaded configuration files
+	 */
 	private static $files = array();
 
-    /**
-     * @var array() Stores modified configurations 
-     */
+	/**
+	 * @var array() Stores modified configurations 
+	 */
 	private static $modified = array();
 	
 	/**
@@ -65,7 +65,7 @@ class WConfig {
 	}
 	
 	/**
-     * Assign a configuration value to a path
+	 * Assign a configuration value to a path
 	 * 
 	 * @param  string $path   configuration path
 	 * @param  mixed  $value  configuration value
@@ -90,7 +90,7 @@ class WConfig {
 	}
 	
 	/**
-     * Adds configurations from a file
+	 * Adds configurations from a file
 	 * 
 	 * @param  string  $field configuration name
 	 * @param  string  $file  configuration file
@@ -169,88 +169,65 @@ class WConfig {
 	 * 
 	 * @param  string  $field configuration name
 	 */
-	public static function save($field) {
+	public static function save($field, $file = '') {
 		if (in_array($field, self::$modified)) {
-			list($file, $type) = self::$files[$field];
+			if (isset(self::$files[$field])) { // File already defined
+				list($file, $type) = self::$files[$field];
+			} else if (!empty($file)) { // File is given by argument
+				$type = substr($file, strrpos('.', $file)+1);
+			}
 			
+			if (empty($file) || !is_writable(dirname($file))) {
+				return false;
+			}
+			
+			// Opening
+			if (!($handle = fopen($file, 'w'))) {
+				return false;
+			}
+			
+			$data = "";
 			switch (strtolower($type)) {
 				case 'ini':
-					if (is_writable(dirname($file))) {
-						// Opening
-						if (!($handle = fopen($file, 'w'))) {
-							return false;
-						}
-						
-						foreach(self::$configs[$field] as $name => $value) {
-							$data .= $name . ' = ' . $value ."\n";
-						}
-						
-						// Writing
-						fwrite($handle, $data);
-						fclose($handle);
-						
-						// chmod editing
-						$chmod = chmod($file, 0777);
+					foreach(self::$configs[$field] as $name => $value) {
+						$data .= $name . ' = ' . $value ."\n";
 					}
 					break;
 				
 				case 'php':
-					if (is_writable(dirname($file))) {
-						// Opening
-						if (!($handle = fopen($file, 'w'))) {
-							return false;
-						}
-						
-						// Writing
-						fwrite($handle, "<?php\n\n$".$field." = ".var_export(self::$configs[$field], true).";\n\n?>");
-						fclose($handle);
-						
-						// chmod editing
-						$chmod = chmod($file, 0777);
-					}
+					$data = "<?php\n"
+						. "\n"
+						. "/**\n"
+						. " * ".$field." configuration file\n"
+						. " */\n"
+						. "\n"
+						. "$".$field." = ".var_export(self::$configs[$field], true).";\n"
+						. "\n"
+						. "?>";
 					break;
 				
 				case 'xml':
-					if (is_writable(dirname($file))) {
-						// Openning
-						if (!($handle = fopen($file, 'w'))) {
-							return false;
-						}
-						
-						$data = '<?xml version="1.0" encoding="utf-8"?>' ."\n"
-							  . '<configs>' ."\n";
-						
-						foreach(self::$configs[$field] as $name => $value) {
-							$data .= '	<config name="' . $name . '">' . $value . '</config>' ."\n";
-						}
-						
-						$data = '</configs>' ."\n";
-						
-						// Writing
-						fwrite($handle, $data);
-						fclose($handle);
-						
-						// chmod editing
-						$chmod = chmod($file, 0777);
+					$data = '<?xml version="1.0" encoding="utf-8"?>' ."\n"
+						  . '<configs>' ."\n";
+					
+					foreach(self::$configs[$field] as $name => $value) {
+						$data .= '	<config name="' . $name . '">' . $value . '</config>' ."\n";
 					}
+					
+					$data = '</configs>' ."\n";
 					break;
 				
 				case 'json':
-					if (is_writable(dirname($file))) {
-						// Openning
-						if (!($handle = fopen($file, 'w'))) {
-							return false;
-						}
-						
-						// Writing
-						fwrite($handle, json_encode(self::$configs[$field]));
-						fclose($handle);
-						
-						// chmod editing
-						$chmod = chmod($file, 0777);
-					}
+					$data = json_encode(self::$configs[$field]);
 					break;
 			}
+			
+			// Writing
+			fwrite($handle, $data);
+			fclose($handle);
+			
+			// Change Modification rights
+			$chmod = chmod($file, 0777);
 		}
 	}
 	
