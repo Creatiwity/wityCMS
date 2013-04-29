@@ -1,6 +1,8 @@
-$(document).ready(function() {
-	var Installer, Step, Group, Field, processAjax;
 
+$(document).ready(function() {
+	
+	var Installer, Step, Group, Field, processAjax;
+	
 	Installer = (function() {
 		
 		function Installer(elem) {
@@ -11,42 +13,43 @@ $(document).ready(function() {
 			this.summary = $('[data-wity-installer-summary="'+this.id+'"]');
 			this.button = $('[data-wity-installer-submit="'+this.id+'"]');
 			this.stepInstances = {};
-			//Create the global manager
+			
+			// Create the global manager
 			that = this;
 			$('[data-wity-installer-step]').each(function() {
 				var stepId;
-
-				stepId = $(this).attr('data-wity-installer-step');				
+				
+				stepId = $(this).attr('data-wity-installer-step');
 				that.stepInstances[stepId] = new Step(this, that.summary, that);
 			});
-
+			
 			$(this.element).on('', '[data-wity-installer-step]', function(event, memo) {
-
+				
 			});
-
+			
 			this.btnRemaining();
 		};
-
+		
 		Installer.prototype.processResponse = function(data) {
 			if(data && data.installer && data.installer[this.id]) {
 				if(data.installer[this.id].error) {
 					// display error && stop
 				}
-
+				
 				if(data.installer[this.id].success) {
 					// Installation finished
 				}
-
+				
 				if(data.installer[this.id].warning) {
 					// display warning
 				}
-
+				
 				if(data.installer[this.id].info) {
 					// display info
-				}				
-			}			
+				}
+			}
 		};
-
+		
 		Installer.prototype.isValid = function() {
 			var valid = true;
 			$.each(stepInstances, function(index, step) {
@@ -54,124 +57,124 @@ $(document).ready(function() {
 			});
 			return valid;
 		};
-
+		
 		Installer.prototype.btnLoading = function() {
 			this.btnReset();
 			this.button.button('loading');
 			this.button.button('toggle');
 			this.button.addClass('btn-info');
 		};
-
+		
 		Installer.prototype.btnRemaining = function() {
 			this.btnReset();
 			this.button.button('remaining');
 			this.button.button('toggle');
 			this.button.addClass('btn-info');
 		};
-
+		
 		Installer.prototype.btnReady = function() {
 			this.btnReset();
 			this.button.addClass('btn-primary');
 		};
-
+		
 		Installer.prototype.btnError = function() {
 			this.btnReset();
 			this.button.button('error');
 			this.button.button('toggle');
 			this.button.addClass('btn-danger');
 		};
-
+		
 		Installer.prototype.btnReset = function() {
 			this.button.button('reset');
 			this.button.removeClass('btn-info');
 			this.button.removeClass('btn-danger');
 			this.button.removeClass('btn-primary');
 		};
-
+		
 		return Installer;
 	})();
-
+	
 	Step = (function() {
-
+		
 		function Step(stepElement, summary, installer) {
 			var that;
-
+			
 			this.installer = installer;
 			this.element = $(stepElement);
 			this.name = this.element.attr('data-wity-installer-step');
 			this.groupInstances = {};
 			this.validated = false;
-
+			
 			that = this;
-
+			
 			this.stepSummary = $('<li><h4>'+this.element.attr('data-wity-name')+'</h4></li>').appendTo(summary);
 			this.stepStatus = $('[data-wity-installer-step-status="'+this.name+'"]');
-
+			
 			this.element.find('[data-wity-installer-group]').each(function() {
 				var groupId;
-
+				
 				groupId = $(this).attr('data-wity-installer-group');
-
+				
 				if(!that.groupInstances[groupId]) {
 					that.groupInstances[groupId] = new Group(groupId, summary, that.installer);
 				}
 			});
-
+			
 			$(this.element).on('validate-step', '[data-wity-installer-group]', function(event, memo) {
-
+				
 			});
-
-			this.showValid(false);		
+			
+			this.showValid(false);
 		};
-
+		
 		Step.prototype.showValid = function(isValid) {
 			this.stepStatus.removeClass('icon-ok');
 			this.stepStatus.removeClass('icon-remove');
 			isValid ? this.stepStatus.addClass('icon-ok') : this.stepStatus.addClass('icon-remove');
 		};
-
+		
 		return Step;
 	})();
-
+	
 	Group = (function() {
-
+		
 		function Group(name, summary, installer) {
 			var label, that;
-
+			
 			that = this;
-
+			
 			this.name = name;
 			this.installer = installer;
 			this.fieldInstances = {};
 			this.alerts = new Array();
 			this.required = false;
 			this.validated = false;
-
+			
 			$("[data-wity-installer-group='"+name+"']").each(function(index, fieldElement) {
 				var field, n;
-
+				
 				if(n = $(fieldElement).attr('data-wity-name')) {
 					label = n;
-				}				
-
+				}
+				
 				field = new Field(fieldElement);
 				that.fieldInstances[field.name] = field;
 				that.required = that.required || field.required;
 			});
-
+			
 			this.groupSummary = $('<li><em> '+label+'</em></li>').appendTo(summary);
 			this.alertContainer = $('[data-wity-group-alert="'+name+'"]');
-
+			
 			if(!that.required) {
 				this.groupSummary.addClass("muted");
 			} else {
 				this.groupSummary.addClass("text-info");
 			}
 		};
-
+		
 		Group.prototype.validate = function() {
 			var values = {};
-
+			
 			$.each(this.fieldInstances, function(index, field) {
 				if(field.validate()) {
 					values[field.name] = field.element.val();
@@ -180,7 +183,7 @@ $(document).ready(function() {
 					return false;
 				}
 			});
-
+			
 			processAjax(document.location, values, this.processResponse, this.installer);
 		};
 		
@@ -193,54 +196,52 @@ $(document).ready(function() {
 		
 		Group.prototype.processResponse = function(response) {
 			var displayNotes, oldValid;
-
+			
 			oldValid = this.validated;
 			this.validated = true;
 			this.clearErrors();
-
+			
 			response = response && response.group && response.group[this.name];
-
+			
 			displayNotes = function(notes, classes) {
 				$.each(notes, function(index, r) {
 					var alert = $('<div class="alert">'+
-	                '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
-	            '</div>');
+						'<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+					'</div>');
 					$('<strong>'+r.head_message+'</strong> '+r.message).appendTo(alert);
 					alert.appendTo(this.alertContainer);
 					alert.addClass(classes);
 					this.alerts.push(alert);
 				});
 			};
-
+			
 			if(response) {
-
 				if(response.success) {
 					showValid(true, this.required);
 				}
-
+				
 				if(response.warning) {
 					showValid(true, this.required);
 					displayNotes(response.warning, '');
 				}
-
+				
 				if(response.error) {
 					showValid(false, this.required);
 					displayNotes(response.error, 'alert-error');
 					this.validated = false;
 				}
-
+				
 				if(response.info) {
 					displayNotes(response.success, 'alert-info');
-				}	
-
+				}
 			}
-
+			
 			//true if changed, false otherwise
 			if(!((this.validated && oldValid) || (!this.validated && !oldValid))) {
 				this.element.trigger('validate-group');
 			}
 		};
-
+		
 		Group.prototype.showValid = function(isValid, isEmpty) {
 			this.groupSummary.find('i').remove();
 			if(isValid && !isEmpty) {
@@ -249,10 +250,10 @@ $(document).ready(function() {
 				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
 			}
 		};
-
+		
 		return Group;
 	})();
-
+	
 	Field = (function() {
 		
 		function Field(elem) {
@@ -266,7 +267,7 @@ $(document).ready(function() {
 			} else {
 				this.type = this.element.attr('type');
 				this.element.on('blur', function() {this.validate(false);});
-			}			
+			}
 			this.name = this.element.attr('name');
 			//this.errorsContainer = this.element.attr('data-wity-errors-container') ;
 			
@@ -275,7 +276,7 @@ $(document).ready(function() {
 		
 		Field.prototype.validate = function(withButton) {
 			var content, datas, oldValid;
-
+			
 			oldValid = this.validated;
 			//launch loading
 			content = this.value();
@@ -302,7 +303,7 @@ $(document).ready(function() {
 			this.chooseTrigger(oldValid, withButton);
 			return true;
 		};
-
+		
 		Field.prototype.chooseTrigger = function(oldValid, force) {
 			if(!force) {
 				if(oldValid != this.validated) {
@@ -343,7 +344,7 @@ $(document).ready(function() {
 			
 			return oldValue;
 		};
-
+		
 		return Field;
 	})();
 	
@@ -362,50 +363,50 @@ $(document).ready(function() {
 			}
 		}
 	});
-
+	
 	/**
 	 * Some values initialisation
 	 **/
 	$('[name="base"]').val(document.location);
-
+	
 	$('[data-wity-autocomplete]').typeahead({
 		source: function(query, process) {
 			var command, callback;
 			command = this.$element.attr('data-wity-autocomplete');
-
+			
 			callback = function(data) {
 				var prepared = new Array();
-
+				
 				data = (data && data.content) || {};
-
+				
 				for (var key in data[command]) {
 					prepared.push(data[command][key]);
 				}
-
+				
 				process(prepared);
 			};
-
+			
 			processAjax(document.location, {"command": command}, callback, WITY_INSTALLER);			
 		},
 		minLength:0
 	});
-
+	
 	processAjax = function (u, d, c, installer) {
 		var realCallback, _that;
-
+		
 		_that = this;
-
+		
 		realCallback = function(data, textStatus, jqXHR ) {
 			var json;
-
+			
 			json = $.parseJSON(data);
 			installer.processResponse(json);
-
+			
 			if(c) {
 				return c.call(_that, json);
 			}
 		};
-
+		
 		$.ajax({
 			url: u,
 			data: d,
@@ -413,7 +414,7 @@ $(document).ready(function() {
 			type: 'POST'
 		});
 	};
-
+	
 	$('[data-wity-installer]').each( function() {
 		WITY_INSTALLER = new Installer(this);
 	});

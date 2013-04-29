@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Config.php
  */
@@ -9,8 +8,8 @@ defined('IN_WITY') or die('Access denied');
  * Config loads all configuration files, manages all configuration values
  *
  * @package System\WCore
- * @author xpLosIve
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @author Thibault "xpLosIve" Vlacich
  * @version 0.3-22-11-2012
  */
 class Config {

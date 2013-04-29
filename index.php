@@ -7,7 +7,7 @@
  * @package System
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version	0.3
+ * @version 0.3
  */
 
 /**
@@ -17,18 +17,18 @@ define('IN_WITY', true);
 define('WITY_VERSION', '0.3.0');
 
 /**
- * Installer section
- */
-if(file_exists("installer/installer.php")) {
-    require 'installer/installer.php';
-    Installer::launch();
-    return;
-}
-
-/**
  * Error reporting level = MAXIMUM
 */
 error_reporting(E_ALL);
+
+/**
+ * Installer section
+ */
+if (file_exists('installer/installer.php')) {
+	require 'installer/installer.php';
+	Installer::launch();
+	return;
+}
 
 /**
  * Files paths
