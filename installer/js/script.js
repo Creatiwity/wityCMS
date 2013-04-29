@@ -257,21 +257,23 @@ $(document).ready(function() {
 	Field = (function() {
 		
 		function Field(elem) {
+			var that = this;
+			
 			//element, name, validator, required
 			this.element = $(elem);
 			this.validated = false;
 			this.required = this.element.attr('data-wity-required') ? true : false;
 			if(this.element.is('select')) {
 				this.type = "select";
-				this.element.on('change', function() {this.validate(false);});
+				this.element.on('change', function() {that.validate(false);});
 			} else {
 				this.type = this.element.attr('type');
-				this.element.on('blur', function() {this.validate(false);});
+				this.element.on('blur', function() {that.validate(false);});
 			}
 			this.name = this.element.attr('name');
 			//this.errorsContainer = this.element.attr('data-wity-errors-container') ;
 			
-			this.element.on('change', this.validate);
+			// this.element.on('change', function() {that.validate();});
 		};
 		
 		Field.prototype.validate = function(withButton) {
@@ -280,10 +282,11 @@ $(document).ready(function() {
 			oldValid = this.validated;
 			//launch loading
 			content = this.value();
+			
 			if(this.required && !content && (this.validated || withButton)) {
 				if((this.validated !== null && this.validated !== undefined) || withButton) {
 					this.displayErrors(false);
-					this.validated === false;
+					this.validated = false;
 				}
 				this.chooseTrigger(oldValid, withButton);
 				return false;
@@ -319,6 +322,7 @@ $(document).ready(function() {
 		
 		Field.prototype.displayErrors = function(errors) {
 			this.clearErrors();
+			var cg = this.element.closest('.control-group');
 			cg.addClass('error');
 		};
 		
@@ -352,8 +356,8 @@ $(document).ready(function() {
 		var value, regexp, error;
 		
 		value = datas.content;
-		regexp = this.attr('[data-wity-validate-regexp]');
-		error = this.attr('[data-wity-regexp-message]');
+		regexp = $(this).attr('[data-wity-validate-regexp]');
+		error = $(this).attr('[data-wity-regexp-message]');
 		
 		if(value && !regexp.test(value)) {
 			datas.valid = false;
