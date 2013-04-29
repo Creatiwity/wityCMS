@@ -58,10 +58,56 @@ class Installer {
 				break;
 			
 			case 'FINISH_INSTALLATION':
+				// Store the data in config files
 				if(self::installerValidation($data)) {
-					//save and success
-				} else {
+					// General configuration
+					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language'), '', 'POST');
+					WConfig::set('config.base', $config['base']);
+					WConfig::set('config.site_name', $config['site_name']);
+					WConfig::set('config.theme', $config['theme']);
+					WConfig::set('config.lang', $config['language']);
 					
+					WConfig::save('config', CONFIG_DIR.'config.php');
+					
+					// Database
+					$database = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
+					WConfig::set('database.server', $database['server']);
+					WConfig::set('database.port', $database['port']);
+					WConfig::set('database.user', $database['user']);
+					WConfig::set('database.pw', $database['pw']);
+					WConfig::set('database.dbname', $database['dbname']);
+					WConfig::set('database.prefix', $database['prefix']);
+					
+					WConfig::save('database', CONFIG_DIR.'database.php');
+					
+					// Route
+					$route = WRequest::getAssoc(array('default', 'admin'));
+					WConfig::set('route.default', array($route['default'], array()));
+					WConfig::set('route.admin', array($route['admin'], array()));
+					
+					WConfig::save('route', CONFIG_DIR.'route.php');
+					
+					// If success, Delete installer directory
+					if (file_exists(CONFIG_DIR.'config.php') && file_exists(CONFIG_DIR.'database.php') && file_exists(CONFIG_DIR.'route.php')) {
+						$dir = WITY_PATH.'installer';
+						$it = new RecursiveDirectoryIterator($dir);
+						$files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+						foreach($files as $file) {
+							if ($file->getFilename() === '.' || $file->getFilename() === '..') {
+								continue;
+							}
+							if ($file->isDir()) {
+								rmdir($file->getRealPath());
+							} else {
+								unlink($file->getRealPath());
+							}
+						}
+						rmdir($dir);
+					} else {
+						self::$view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
+					}
+				} else {
+					self::$view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
 				}
 				break;
 			
@@ -72,7 +118,7 @@ class Installer {
 			
 			// Autocompletes
 			case 'GET_THEMES':
-				if($themes = getThemes()) {
+				if($themes = self::getThemes()) {
 					self::$view->push_content("GET_THEMES", $themes);
 				} else {
 					self::$view->error('installer', $data['installer'], 'Fatal Error', 'Themes directory cannot be found.');
@@ -80,7 +126,7 @@ class Installer {
 				break;
 			
 			case 'GET_FRONT_APPS':
-				if($themes = getFrontApps()) {
+				if($themes = self::getFrontApps()) {
 					self::$view->push_content("GET_FRONT_APPS", $themes);
 				} else {
 					self::$view->error('installer', $data['installer'], 'Fatal Error', 'Applications directory cannot be found.');
@@ -100,7 +146,13 @@ class Installer {
 	}
 	
 	private static function installerValidation($data) {
-		return false;
+		$inputs = array('site_name', 'base', 'theme', 'language', 'server', 'port', 'user', 'pw', 'dbname', 'prefix', 'default', 'admin');
+		foreach ($inputs as $input_name) {
+			if (!groupValidation($input_name)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private static function groupValidation($data) {
@@ -269,15 +321,15 @@ class Installer {
 	}
 	
 	private static function isFrontApp($app, $data, &$respond) {
-		return in_array(strtolower($app), getFrontApps());
+		return in_array(strtolower($app), self::getFrontApps());
 	}
 	
 	private static function isAdminApp($app, $data, &$respond) {
-		return in_array(strtolower($app), getAdminApps());
+		return in_array(strtolower($app), self::getAdminApps());
 	}
 	
 	private static function isTheme($theme, $data, &$respond) {
-		return in_array(strtolower($theme), getThemes());
+		return in_array(strtolower($theme), self::getThemes());
 	}
 	
 	private static function isSQLServer($credentials, $data, &$respond) {
