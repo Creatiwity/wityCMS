@@ -13,6 +13,9 @@ $(document).ready(function() {
 			this.summary = $('[data-wity-installer-summary="'+this.id+'"]');
 			this.button = $('[data-wity-installer-submit="'+this.id+'"]');
 			this.stepInstances = {};
+			this.validated = false;
+			this.alertContainer = $('[data-wity-installer-alert="'+this.id+'"]');
+			this.alerts = new Array();
 			
 			// Create the global manager
 			that = this;
@@ -23,30 +26,92 @@ $(document).ready(function() {
 				that.stepInstances[stepId] = new Step(this, that.summary, that);
 			});
 			
-			$(this.element).on('', '[data-wity-installer-step]', function(event, memo) {
-				
+			$(this.element).on('validate-installer', '[data-wity-installer-step]', function(event, memo) {
+				that.validated = true;
+
+				$.each(that.stepInstances, function(index, step) {
+					that.validated = that.validated && step.validated;
+				});
+
+				if(that.validated) {
+					that.btnReady();
+				}
+			});
+
+			this.button.on('click', function(event) {
+				var datas, callback;
+
+				datas = {};
+
+				if(that.validated) {
+					$.each(that.stepInstances, function(index, step) {
+						var stepDatas;
+
+						stepDatas = step.values();
+						$.each(stepDatas, function(key, value) {
+							datas[key] = value;
+						});
+					});
+
+					datas.installer = that.id;
+					datas.command = "FINISH_INSTALLATION";
+
+					callback = function(datas) {
+						if(!datas || !datas.installer || !datas.installer[that.id] || !datas.installer[that.id].success) {
+							$.each(that.stepInstances, function(index, step) {
+								step.dispatchMessages(datas);
+							});
+						}						
+					};
+
+					processAjax(document.location, datas, callback, that);
+				}
 			});
 			
 			this.btnRemaining();
+
+			processAjax(document.location, {command: "INIT_INSTALLER", installer: this.id}, null, this, this);
 		};
 		
 		Installer.prototype.processResponse = function(data) {
+			var displayNotes, that;
+
+			that = this;
+
+			displayNotes = function(notes, classes) {
+				$.each(notes, function(index, r) {
+					var alert = $('<div class="alert">'+
+						'<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+					'</div>');
+					$('<strong>'+r.head_message+'</strong>').appendTo(alert);
+					alert.append(' '+r.message);
+					alert.appendTo(that.alertContainer);
+					alert.addClass(classes);
+					that.alerts.push(alert);
+				});
+			};
+
 			if(data && data.installer && data.installer[this.id]) {
-				if(data.installer[this.id].error) {
-					// display error && stop
-				}
-				
-				if(data.installer[this.id].success) {
-					// Installation finished
-				}
-				
+
 				if(data.installer[this.id].warning) {
-					// display warning
+					displayNotes(data.installer[this.id].warning, '');
 				}
 				
 				if(data.installer[this.id].info) {
-					// display info
+					displayNotes(data.installer[this.id].info, 'alert-info');
 				}
+
+				if(data.installer[this.id].error) {
+					this.btnError();
+					displayNotes(data.installer[this.id].error, 'alert-error');
+					this.validated = false;
+					return;
+				}
+				
+				if(data.installer[this.id].success) {
+					$('[data-hide-onsuccess="'+this.id+'"]').hide();
+					$('[data-show-onsuccess="'+this.id+'"]').show();
+				}				
 			}
 		};
 		
@@ -102,6 +167,7 @@ $(document).ready(function() {
 			this.name = this.element.attr('data-wity-installer-step');
 			this.groupInstances = {};
 			this.validated = false;
+			this.required = false;
 			
 			that = this;
 			
@@ -109,20 +175,47 @@ $(document).ready(function() {
 			this.stepStatus = $('[data-wity-installer-step-status="'+this.name+'"]');
 			
 			this.element.find('[data-wity-installer-group]').each(function() {
-				var groupId;
+				var groupId, group;
 				
 				groupId = $(this).attr('data-wity-installer-group');
 				
 				if(!that.groupInstances[groupId]) {
-					that.groupInstances[groupId] = new Group(groupId, summary, that.installer);
+					group = new Group(groupId, summary, that.installer, that, this);
+					that.groupInstances[groupId] = group;
+					that.required = that.required || group.required;
+				}
+			});
+
+			if(!this.required) {
+				this.validated = true;
+			}
+			
+			$(this.element).on('validate-step', '[data-wity-installer-group]', function(event, memo) {
+				var oldValid = that.validated;
+				that.validated = true;
+
+				$.each(that.groupInstances, function(index, group) {
+					that.validated = that.validated && group.validated;
+				});
+
+				that.showValid(that.validated);
+
+				if(that.validated != oldValid) {
+					that.element.trigger('validate-installer');
 				}
 			});
 			
-			$(this.element).on('validate-step', '[data-wity-installer-group]', function(event, memo) {
-				
-			});
-			
 			this.showValid(false);
+		};
+
+		Step.prototype.dispatchMessages = function(datas) {
+			if(datas && datas.group) {
+				$.each(this.groupInstances, function(index, group) {
+					if(datas.group[group.name]) {
+						group.processResponse(datas);
+					}
+				});
+			}
 		};
 		
 		Step.prototype.showValid = function(isValid) {
@@ -135,17 +228,19 @@ $(document).ready(function() {
 	
 	Group = (function() {
 		
-		function Group(name, summary, installer) {
+		function Group(name, summary, installer, step, fieldInGroup) {
 			var label, that;
 			
 			that = this;
 			
 			this.name = name;
 			this.installer = installer;
+			this.step = step;
 			this.fieldInstances = {};
 			this.alerts = new Array();
 			this.required = false;
 			this.validated = false;
+			this.element = $(fieldInGroup);
 			
 			$("[data-wity-installer-group='"+name+"']").each(function(index, fieldElement) {
 				var field, n;
@@ -167,21 +262,32 @@ $(document).ready(function() {
 			} else {
 				this.groupSummary.addClass("text-info");
 			}
+
+			$("[data-wity-installer-group='"+name+"']").on('validate-group', function(event, memo) {
+				var oldValid = that.validated;
+				that.validate();
+			});
 		};
 		
 		Group.prototype.validate = function() {
 			var values = {};
 			
 			$.each(this.fieldInstances, function(index, field) {
-				if(field.validate()) {
-					values[field.name] = field.element.val();
+				field.validate(true);
+				if(field.validated) {
+					values[field.name] = field.value();
 				} else {
 					this.validated = false;
 					return false;
 				}
 			});
+
+			values.command = "GROUP_VALIDATION";
+			values.group = this.name;
+			values.installer = this.installer.id;
+			values.step = this.step.name;
 			
-			processAjax(document.location, values, this.processResponse, this.installer);
+			processAjax(document.location, values, this.processResponse, this.installer, this);
 		};
 		
 		Group.prototype.clearErrors = function() {
@@ -192,7 +298,9 @@ $(document).ready(function() {
 		};
 		
 		Group.prototype.processResponse = function(response) {
-			var displayNotes, oldValid;
+			var displayNotes, oldValid, that;
+
+			that = this;
 			
 			oldValid = this.validated;
 			this.validated = true;
@@ -205,25 +313,26 @@ $(document).ready(function() {
 					var alert = $('<div class="alert">'+
 						'<button type="button" class="close" data-dismiss="alert">&times;</button>'+
 					'</div>');
-					$('<strong>'+r.head_message+'</strong> '+r.message).appendTo(alert);
-					alert.appendTo(this.alertContainer);
+					$('<strong>'+r.head_message+'</strong>').appendTo(alert);
+					alert.append(' '+r.message);
+					alert.appendTo(that.alertContainer);
 					alert.addClass(classes);
-					this.alerts.push(alert);
+					that.alerts.push(alert);
 				});
 			};
 			
 			if(response) {
 				if(response.success) {
-					showValid(true, this.required);
+					this.showValid(true, this.required);
 				}
 				
 				if(response.warning) {
-					showValid(true, this.required);
+					this.showValid(true, this.required);
 					displayNotes(response.warning, '');
 				}
 				
 				if(response.error) {
-					showValid(false, this.required);
+					this.showValid(false, this.required);
 					displayNotes(response.error, 'alert-error');
 					this.validated = false;
 				}
@@ -235,16 +344,24 @@ $(document).ready(function() {
 			
 			//true if changed, false otherwise
 			if(this.validated != oldValid) {
-				this.element.trigger('validate-group');
+				this.element.trigger('validate-step');
 			}
 		};
 		
 		Group.prototype.showValid = function(isValid, isEmpty) {
+			this.groupSummary.removeClass("muted text-info text-success");			
+
 			this.groupSummary.find('i').remove();
 			if(isValid && !isEmpty) {
 				$('<i class="icon-ok"></i>').prependTo(this.groupSummary);
+				this.groupSummary.addClass("text-success");
 			} else if(!isValid) {
 				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
+				if(!this.required) {
+					this.groupSummary.addClass("muted");
+				} else {
+					this.groupSummary.addClass("text-info");
+				}
 			}
 		};
 		
@@ -259,18 +376,17 @@ $(document).ready(function() {
 			//element, name, validator, required
 			this.element = $(elem);
 			this.validated = false;
+			this.errors = new Array();
 			this.required = this.element.attr('data-wity-required') ? true : false;
 			if(this.element.is('select')) {
 				this.type = "select";
 				this.element.on('change', function() {that.validate(false);});
 			} else {
 				this.type = this.element.attr('type');
-				this.element.on('blur', function() {that.validate(false);});
+				this.element.on('blur change', function() {that.validate(false);});
 			}
 			this.name = this.element.attr('name');
-			//this.errorsContainer = this.element.attr('data-wity-errors-container') ;
-			
-			// this.element.on('change', function() {that.validate();});
+			this.validatedContent = null;
 		};
 		
 		Field.prototype.validate = function(withButton) {
@@ -280,12 +396,12 @@ $(document).ready(function() {
 			//launch loading
 			content = this.value();
 			
-			if(this.required && !content && (this.validated || withButton)) {
+			if(this.required && (!content || content === "") && (this.validated || withButton)) {
 				if((this.validated !== null && this.validated !== undefined) || withButton) {
 					this.displayErrors(false);
 					this.validated = false;
 				}
-				this.chooseTrigger(oldValid, withButton);
+				this.chooseTrigger(oldValid, content, withButton);
 				return false;
 			}
 			
@@ -295,18 +411,19 @@ $(document).ready(function() {
 			if(!datas.valid) {
 				this.displayErrors(false);
 				this.validated = false;
-				this.chooseTrigger(oldValid, withButton);
+				this.chooseTrigger(oldValid, content, withButton);
 				return false;
 			}
 			this.clearErrors();
 			this.validated = true;
-			this.chooseTrigger(oldValid, withButton);
+			this.chooseTrigger(oldValid, content, withButton);
 			return true;
 		};
 		
-		Field.prototype.chooseTrigger = function(oldValid, force) {
+		Field.prototype.chooseTrigger = function(oldValid, newContent, force) {
 			if(!force) {
-				if(oldValid != this.validated) {
+				if(oldValid !== this.validated || newContent !== this.validatedContent) {
+					this.validatedContent = newContent;
 					this.element.trigger('validate-group');
 				}
 			}
@@ -387,24 +504,31 @@ $(document).ready(function() {
 				process(prepared);
 			};
 			
-			processAjax(document.location, {"command": command}, callback, WITY_INSTALLER);			
+			processAjax(document.location, {"command": command}, callback, WITY_INSTALLER, WITY_INSTALLER);			
 		},
 		minLength:0
 	});
 	
-	processAjax = function (u, d, c, installer) {
-		var realCallback, _that;
-		
-		_that = this;
+	processAjax = function (u, d, c, installer, _this) {
+		var realCallback;
+
+		installer.btnLoading();
 		
 		realCallback = function(data, textStatus, jqXHR ) {
 			var json;
 			
 			json = $.parseJSON(data);
+
+			if(installer.validated) {
+				installer.btnReady();
+			} else {
+				installer.btnRemaining();
+			}
+
 			installer.processResponse(json);
 			
 			if(c) {
-				return c.call(_that, json);
+				return c.call(_this, json);
 			}
 		};
 		

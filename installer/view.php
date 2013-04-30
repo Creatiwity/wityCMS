@@ -48,7 +48,7 @@ class View {
 			$this->response[$level][$id] = array();
 		}
 		
-		$this->response[$level][$id][$state] = array('head_message' => $head_message, 'message' => $message);
+		$this->response[$level][$id][$state][] = array('head_message' => $head_message, 'message' => $message);
 	}
 	
 	public function push_content($id, $data) {

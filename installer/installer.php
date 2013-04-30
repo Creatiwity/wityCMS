@@ -313,11 +313,12 @@ class Installer {
 	 * Validators
 	 */
 	private static function isURL($url, $data,&$respond) {
-		return !empty($url) && preg_match('/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?/i', $url);
+		//return !empty($url) && preg_match("/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?*$/i", $url);
+		return !empty($url) && preg_match("/^[a-zA-Z]+[:\/\/]+[A-Za-z0-9\-_]+\\.+[A-Za-z0-9\.\/%&=\?\-_]+$/i", $url);
 	}
 	
 	private static function isVerifiedString($string, $data, &$respond) {
-		return !empty($url) && preg_match("/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i", $string);
+		return empty($url) || (!empty($url) && preg_match("/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i", $string));
 	}
 	
 	private static function isFrontApp($app, $data, &$respond) {
@@ -338,11 +339,11 @@ class Installer {
 			return $respond = false;
 		}
 		
-		$dsn = 'mysql:dbname=;host='.WConfig::get('database.server');
+		$dsn = 'mysql:dbname=;host='.$credentials['server'];
 		$dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']:'';
 		
 		try {
-			new PDO($dsn, $credentials['user'], $$credentials['pw']);
+			new PDO($dsn, $credentials['user'], $credentials['pw']);
 		} catch (PDOException $e) {
 			if(strstr($e->getMessage(), 'SQLSTATE[')) { 
 				preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
@@ -366,11 +367,11 @@ class Installer {
 			return $respond = false;
 		}
 		
-		$dsn = 'mysql:dbname=;host='.WConfig::get('database.server');
+		$dsn = 'mysql:dbname=;host='.$credentials['server'];
 		$dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']:'';
 		
 		try {
-			new PDO($dsn, $credentials['user'], $$credentials['pw']);
+			new PDO($dsn, $credentials['user'], $credentials['pw']);
 		} catch (PDOException $e) {
 			if(strstr($e->getMessage(), 'SQLSTATE[')) { 
 				preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
@@ -397,11 +398,11 @@ class Installer {
 			return $respond = false;
 		}
 		
-		$dsn = 'mysql:dbname=;host='.WConfig::get('database.server');
+		$dsn = 'mysql:dbname=;host='.$credentials['server'];
 		$dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']:'';
 		
 		try {
-			$db = new PDO($dsn, $credentials['user'], $$credentials['pw']);
+			$db = new PDO($dsn, $credentials['user'], $credentials['pw']);
 		} catch (PDOException $e) {
 			if(strstr($e->getMessage(), 'SQLSTATE[')) { 
 				preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
