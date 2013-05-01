@@ -62,7 +62,7 @@ class Installer {
 				if(self::installerValidation($data)) {
 					// General configuration
 					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language'), '', 'POST');
-					WConfig::set('config.base', $config['base']);
+					WConfig::set('config.base', trim($config['base'], '/'));
 					WConfig::set('config.site_name', $config['site_name']);
 					WConfig::set('config.theme', $config['theme']);
 					WConfig::set('config.lang', $config['language']);
@@ -313,8 +313,7 @@ class Installer {
 	 * Validators
 	 */
 	private static function isURL($url, $data,&$respond) {
-		//return !empty($url) && preg_match("/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?*$/i", $url);
-		return !empty($url) && preg_match("/^[a-zA-Z]+[:\/\/]+[A-Za-z0-9\-_]+\\.+[A-Za-z0-9\.\/%&=\?\-_]+$/i", $url);
+		return !empty($url) && preg_match("#^(http|https|ftp)\://[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(/[A-Z0-9~\._-]+)*/?$#i", $url);
 	}
 	
 	private static function isVerifiedString($string, $data, &$respond) {
