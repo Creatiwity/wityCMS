@@ -17,16 +17,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `test`
+-- Database: `WityCMS`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news`
+-- Table structure for table `prefix_news`
 --
 
-CREATE TABLE IF NOT EXISTS `news` (
+CREATE TABLE IF NOT EXISTS `prefix_news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` tinytext CHARACTER SET latin1 NOT NULL,
   `title` tinytext CHARACTER SET latin1 NOT NULL,
@@ -45,30 +45,10 @@ CREATE TABLE IF NOT EXISTS `news` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `newsletters`
+-- Table structure for table `prefix_news_cats`
 --
 
-CREATE TABLE IF NOT EXISTS `newsletters` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
-  `de` varchar(100) CHARACTER SET latin1 NOT NULL,
-  `objet` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `message` text CHARACTER SET latin1 NOT NULL,
-  `destinataires` text CHARACTER SET latin1 NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `cc` tinytext CHARACTER SET latin1 NOT NULL,
-  `cci` tinytext CHARACTER SET latin1 NOT NULL,
-  `attachment` varchar(255) CHARACTER SET latin1 NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `news_cats`
---
-
-CREATE TABLE IF NOT EXISTS `news_cats` (
+CREATE TABLE IF NOT EXISTS `prefix_news_cats` (
   `cid` tinyint(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext CHARACTER SET latin1 NOT NULL,
   `shortname` tinytext CHARACTER SET utf8 NOT NULL,
@@ -79,39 +59,21 @@ CREATE TABLE IF NOT EXISTS `news_cats` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news_cats_relations`
+-- Table structure for table `prefix_news_cats_relations`
 --
 
-CREATE TABLE IF NOT EXISTS `news_cats_relations` (
-  `news_id` mediumint(9) NOT NULL,
+CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
+  `prefix_news_id` mediumint(9) NOT NULL,
   `cat_id` tinyint(4) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pages`
+-- Table structure for table `prefix_users`
 --
 
-CREATE TABLE IF NOT EXISTS `pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` tinytext CHARACTER SET latin1 NOT NULL,
-  `title` tinytext CHARACTER SET latin1 NOT NULL,
-  `author` varchar(30) CHARACTER SET latin1 NOT NULL,
-  `content` text CHARACTER SET latin1 NOT NULL,
-  `keywords` mediumtext CHARACTER SET latin1 NOT NULL,
-  `creation_time` int(11) NOT NULL,
-  `edit_time` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `prefix_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nickname` varchar(100) CHARACTER SET latin1 NOT NULL,
   `password` varchar(50) CHARACTER SET utf8 NOT NULL,
@@ -132,17 +94,17 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_config`
+-- Table structure for table `prefix_users_config`
 --
 
-CREATE TABLE IF NOT EXISTS `users_config` (
+CREATE TABLE IF NOT EXISTS `prefix_users_config` (
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(50) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
-INSERT INTO `users_config` (`name`, `value`) VALUES
+INSERT INTO `prefix_users_config` (`name`, `value`) VALUES
 ('register', '1'),
 ('email_conf', '1'),
 ('admin_check', '1'),
@@ -150,10 +112,10 @@ INSERT INTO `users_config` (`name`, `value`) VALUES
 ('keep_users', '1');
 
 --
--- Table structure for table `users_groups`
+-- Table structure for table `prefix_users_groups`
 --
 
-CREATE TABLE IF NOT EXISTS `users_groups` (
+CREATE TABLE IF NOT EXISTS `prefix_users_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent` mediumint(9) NOT NULL,
   `name` varchar(50) CHARACTER SET latin1 NOT NULL,

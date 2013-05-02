@@ -54,37 +54,65 @@ class Installer {
 				return;
 			
 			case 'INIT_INSTALLER':
+				if (!class_exists('PDO')) {
+					self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
+					return;
+				}
+				
 				self::$view->info('installer', $data['installer'], 'Installer initialized', 'The Installer has been successfully initialized.');
 				break;
 			
 			case 'FINISH_INSTALLATION':
 				// Store the data in config files
-				if(self::installerValidation($data)) {
-					// General configuration
+				if (self::installerValidation($data)) {
+					set_time_limit(0);
+					
+					// Get config data
 					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language'), '', 'POST');
-					WConfig::set('config.base', trim($config['base'], '/'));
-					WConfig::set('config.site_name', $config['site_name']);
-					WConfig::set('config.theme', $config['theme']);
-					WConfig::set('config.lang', $config['language']);
-					
-					WConfig::save('config', CONFIG_DIR.'config.php');
-					
-					// Database
+					$route = WRequest::getAssoc(array('default', 'admin'), '', 'POST');
 					$database = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
+					$user = WRequest::getAssoc(array('nickname', 'password', 'confirm', 'email', 'firstname', 'lastname'), '', 'POST');
+					
+					// Create SQL Tables
+					$sql_commands = file_get_contents('bdd'.DS.'wity.sql');
+					$sql_commands = str_replace('prefix_', $database['prefix'], $sql_commands); // configure prefix
+					$db = self::getSQLServerConnection();
+					if (!$db->exec($sql_commands)) {
+						self::$view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
+					}
+					
+					// Create user account
+					if (self::isFrontApp('user', null, null)) {
+						include APPS_DIR.'user'.DS.'front'.DS.'model.php';
+						$userModel = new UserModel();
+						if (!$userModel->createUser($user)) {
+							self::$view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create your administrator account. Please, check your database credentials.');
+						}
+					} else {
+						self::$view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of WityCMS.');
+					}
+					
+					// Save Database configuration
 					WConfig::set('database.server', $database['server']);
 					WConfig::set('database.port', $database['port']);
 					WConfig::set('database.user', $database['user']);
 					WConfig::set('database.pw', $database['pw']);
 					WConfig::set('database.dbname', $database['dbname']);
 					WConfig::set('database.prefix', $database['prefix']);
-					
 					WConfig::save('database', CONFIG_DIR.'database.php');
 					
-					// Route
-					$route = WRequest::getAssoc(array('default', 'admin'));
+					// Save General configuration
+					WConfig::set('config.base', trim($config['base'], '/'));
+					WConfig::set('config.site_name', $config['site_name']);
+					WConfig::set('config.theme', $config['theme']);
+					WConfig::set('config.lang', $config['language']);
+					WConfig::set('config.email', $user['email']);
+					WConfig::set('config.debug', false);
+					WConfig::save('config', CONFIG_DIR.'config.php');
+					
+					// Save Route configuration
 					WConfig::set('route.default', array($route['default'], array()));
 					WConfig::set('route.admin', array($route['admin'], array()));
-					
 					WConfig::save('route', CONFIG_DIR.'route.php');
 					
 					// If success, Delete installer directory
@@ -310,118 +338,177 @@ class Installer {
 	}
 	
 	/**
-	 * Validators
+	 * URL Validator
+	 * Checks that a string is a URL where WityCMS can be installed
+	 * 
+	 * @param string $url
+	 * @param array $data
+	 * @param $respond
+	 * @return bool
 	 */
-	private static function isURL($url, $data,&$respond) {
+	private static function isURL($url, $data, &$respond) {
 		return !empty($url) && preg_match("#^(http|https|ftp)\://[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(/[A-Z0-9~\._-]+)*/?$#i", $url);
 	}
 	
+	/**
+	 * URL Validator
+	 * Checks that a string is ...
+	 * 
+	 * @param string $string
+	 * @param array $data
+	 * @param $respond
+	 * @return bool
+	 */
 	private static function isVerifiedString($string, $data, &$respond) {
 		return empty($url) || (!empty($url) && preg_match("/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i", $string));
 	}
 	
+	/**
+	 * Front App Validator
+	 * Checks that a string corresponds to an existing Front Application
+	 * 
+	 * @param string $app Front application name
+	 * @param array $data
+	 * @param $respond
+	 * @return bool
+	 */
 	private static function isFrontApp($app, $data, &$respond) {
 		return in_array(strtolower($app), self::getFrontApps());
 	}
 	
+	/**
+	 * Admin App Validator
+	 * Checks that a string corresponds to an existing Admin Application
+	 * 
+	 * @param string $app Admin application name
+	 * @param array $data
+	 * @param $respond
+	 * @return bool
+	 */
 	private static function isAdminApp($app, $data, &$respond) {
 		return in_array(strtolower($app), self::getAdminApps());
 	}
 	
+	/**
+	 * Theme Validator
+	 * Checks that a string corresponds to an existing Theme
+	 * 
+	 * @param string $theme Theme name
+	 * @param array $data
+	 * @param $respond
+	 * @return bool
+	 */
 	private static function isTheme($theme, $data, &$respond) {
 		return in_array(strtolower($theme), self::getThemes());
 	}
 	
+	/**
+	 * Create the PDO Object to connect to the database
+	 * 
+	 * @param array $credentials array(server, port, dbname, user, pw)
+	 * @return mixed true|PDOException
+	 */
+	private static function getSQLServerConnection($credentials) {
+		// Build dsn
+		$dsn = 'mysql:dbname=';
+		if (!empty($credentials['dbname'])) {
+			$dsn .= $credentials['dbname'];
+		}
+		$dsn .= ';host='.$credentials['server'].';';
+		if (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) {
+			$dsn .=  'port='.$credentials['port'];
+		}
+		
+		try {
+			new PDO($dsn, $credentials['user'], $credentials['pw']);
+		} catch (PDOException $e) {
+			return $e;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Checks the SQL server credentials
+	 * 
+	 * @param array $credentials MySQL Database credentials
+	 * @param array $data
+	 * @param bool  $respond
+	 * @return bool
+	 */
 	private static function isSQLServer($credentials, $data, &$respond) {
-		if (!class_exists('PDO')) {
-			self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
-			return $respond = false;
-		}
+		$db = self::getSQLServerConnection($credentials);
 		
-		$dsn = 'mysql:dbname=;host='.$credentials['server'];
-		$dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']:'';
-		
-		try {
-			new PDO($dsn, $credentials['user'], $credentials['pw']);
-		} catch (PDOException $e) {
-			if(strstr($e->getMessage(), 'SQLSTATE[')) { 
-				preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
-				if ($matches[2] == "1049") {
-					return true;
-				} else if ($matches[2] == "1044") {
-					self::$view->error('group', $data['group'], 'Unable to connect to the database', "Bad user/password.");
-					return $respond = false;
-				} else {
-					return false;
-				}
+		if ($db instanceof PDOException && strstr($e->getMessage(), 'SQLSTATE[')) {
+			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+			if ($matches[2] == "1049") {
+				return true;
+			} else if ($matches[2] == "1044") {
+				self::$view->error('group', $data['group'], 'Unable to connect to the database', "Bad user/password.");
+				return $respond = false;
+			} else {
+				return false;
 			}
 		}
-		
 		return true;
 	}
 	
+	/**
+	 * Checks that a specified database exists on the SQL Server
+	 * 
+	 * @param array $credentials MySQL Database credentials
+	 * @param array $data
+	 * @param bool  $respond
+	 * @return bool
+	 */
 	private static function isDatabase($credentials, $data, &$respond) {
-		if (!class_exists('PDO')) {
-			self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
-			return $respond = false;
-		}
+		$db = self::getSQLServerConnection($credentials);
 		
-		$dsn = 'mysql:dbname=;host='.$credentials['server'];
-		$dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']:'';
-		
-		try {
-			new PDO($dsn, $credentials['user'], $credentials['pw']);
-		} catch (PDOException $e) {
-			if(strstr($e->getMessage(), 'SQLSTATE[')) { 
-				preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
-				if ($matches[2] == "1049") {
-					self::$view->error('group', $data['group'], 'Unable to find the database', "The database you specified cannot be found.");
-					return $respond = false;
-				} else {
-					return false;
-				}
+		if ($db instanceof PDOException && strstr($e->getMessage(), 'SQLSTATE[')) { 
+			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+			if ($matches[2] == "1049") {
+				self::$view->error('group', $data['group'], 'Unable to find the database', "The database you specified cannot be found.");
+				return $respond = false;
+			} else {
+				return false;
 			}
 		}
 		
 		return true;
 	}
 	
+	/**
+	 * Checks that a prefix is available in the database
+	 * 
+	 * @param array $credentials MySQL Database credentials
+	 * @param array $data
+	 * @param bool  $respond
+	 * @return bool
+	 */
 	private static function isPrefixNotExisting($credentials, $data, &$respond) {
-		if (!preg_match("/^[a-zA-Z0-9]$/", $credentials['prefix'])) {
-			self::$view->error('group', $data['group'], 'Malformed prefix', 'The prefix must be only alphanumeric.');
-			return $respond = false;
+		$db = self::getDatabaseObject($credentials);
+		
+		if ($db) {
+			$prefix = (!empty($credentials['prefix'])) ? $credentials['prefix']."_":"";
+			
+			$prep = $db->prepare("SHOW TABLES LIKE :prefixedTable");
+			$prep->bindParam(":prefixedTable", $prefix."user");
+			$prep->execute();
+			return !empty($prep->fetch());
 		}
 		
-		if (!class_exists('PDO')) {
-			self::$view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
-			return $respond = false;
-		}
-		
-		$dsn = 'mysql:dbname=;host='.$credentials['server'];
-		$dsn .= (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) ? ';port='.$credentials['port']:'';
-		
-		try {
-			$db = new PDO($dsn, $credentials['user'], $credentials['pw']);
-		} catch (PDOException $e) {
-			if(strstr($e->getMessage(), 'SQLSTATE[')) { 
-				preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
-				if ($matches[2] == "1049") {
-					self::$view->error('group', $data['group'], 'Unable to find the database', "The database you specified cannot be found.");
-					return $respond = false;
-				} else {
-					return false;
-				}
-			}
-		}
-		
-		$prefix = (!empty($credentials['prefix'])) ? $credentials['prefix']."_":"";
-		
-		$prep = $db->prepare("SHOW TABLES LIKE :prefixedTable");
-		$prep->bindParam(":prefixedTable", $prefix."user");
-		$prep->execute();
-		return $prep->fetch() ? false:true;
+		return false;
 	}
 	
+	/**
+	 * Email Validator
+	 * Checks that a string corresponds to an email
+	 * 
+	 * @param string $email Email address
+	 * @param array $data
+	 * @param $respond
+	 * @return bool
+	 */
 	private static function isEmail($email, $data, &$respond) {
 		return !empty($email) && preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $email);
 	}
