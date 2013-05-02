@@ -1,0 +1,24 @@
+<div id="login-form" class="container">
+	<h2>{lang login_form_title}</h2>
+	<form action="/user/login/" method="post">
+		<div>
+			<input type="hidden" name="redirect" value="{$redirect}" />
+			<label for="nickname">{lang nickname}:</label>
+			<input id="nickname" type="text" name="nickname" placeholder="{lang nickname}" /> <span class="mandatory">*</span>
+			<br />
+			<label for="password">{lang password}:</label>
+			<input id="password" type="password" name="password" placeholder="{lang password}" /> <span class="mandatory">*</span>
+			<br />
+			<label for="minutes">{lang remain_connected_for}:</label>
+			<input id="minutes" type="text" name="time" value="60" size="3" /> <em>{lang minuts}</em>
+			<br />
+			<label for="always">{lang always_remain_connected}:</label>
+			<input id="always" type="checkbox" name="remember" onclick="document.getElementById('minutes').disabled = document.getElementById('minutes').disabled == true ? false : true;" />
+			<p class="text-center">
+				<input type="submit" value="{lang login_button}" />
+				<a href="/user/password-lost/">{lang password_lost}</a>
+			</p>
+			<p><em><span class="mandatory">*</span> {lang mandatory_fields}</em></p>
+		</div>
+	</form>
+</div>

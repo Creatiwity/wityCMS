@@ -1,0 +1,80 @@
+<div id="content" class="row-fluid">
+	<form action="/admin/user/group-diff/" method="post">
+		<div id="group-diff" class="item">
+			<script type="text/javascript">
+				var groupid = {$group.id};
+				var group_access = '{$group.access}';
+			</script>
+			<input type="hidden" name="groupid" value="{$group.id}" />
+			<input type="hidden" name="old_access" value="{$group.access}" />
+			<input type="hidden" name="new_name" value="{$new_name}" />
+			<input type="hidden" name="new_access" value="{$new_access}" />
+			<h1>{lang apply_access|{$group.name}} (<a href="/admin/user/listing/?groupe={$group.id}" onclick="window.open(this.href); return false;">{$count_total} {lang users}</a>)</h1>
+			<p>
+				{if {$count_regular} > 0}
+				<label><input type="checkbox" name="apply_to_regular" checked="checked" /> {lang apply_access_inheriting} ({$count_regular} {lang users})</label>
+				<br />
+				{/if}
+				{if {$count_custom} > 0}
+				<label><input id="display-custom" type="checkbox" name="apply_to_custom" checked="checked" /> {lang apply_access_custom} ({$count_custom} {lang users})</label>
+				{/if}
+			</p>
+			{if {$count_custom} > 0}
+			<div class="listing-wrapper">
+				<div class="alphabet">
+				{for $letter, $users_count in $alphabet}{if {$users_count} > 0}<a href="javascript:void(0)">{$letter} ({$users_count})</a>{else}<span>{$letter}</span>{/if} {/for}
+				</div>
+				<div class="users-list-container">
+					<p>{lang select_users}</p>
+					<dl class="users-list">
+						<dt class="pattern"><label><input type="checkbox" name="user[]" checked="checked" /> <span class="nickname"></span></label></dt>
+						<dd class="pattern">
+							<label><input class="access-type none" type="radio" name="type[]" value="none" checked="checked" /> {lang access_none}</label>
+							<label><input class="access-type all" type="radio" name="type[]" value="all" /> {lang access_all}</label>
+							<label><input class="access-type custom" type="radio" name="type[]" value="custom" /> {lang access_custom}</label>
+							- [<a href="javascript:void(0)" class="reset">{lang reset}</a>]
+							
+							<div class="custom-controls tright">
+								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+							</div>
+							<table class="rights" cellpadding="0" cellspacing="0">
+								<colgroup><col width="25%" /></colgroup>
+								{for $app, $details in $admin_apps}
+								<tr>
+									<td><p class="text-center"><strong>{$details.name}</strong></p></td>
+									<td>
+										<table class="permissions" cellpadding="0" cellspacing="0">
+											<tr>
+											{for $perm in {$details.permissions}}
+												<td><p class="text-center"><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[][{$app}][{$perm}]" /></label></p></td>
+											{/for}
+											{empty}
+												<td><p class="text-center"><em>{lang no_permissions}</em></p></td>
+											{/empty}
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{/for}
+							</table>
+							<div class="custom-controls tright">
+								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+							</div>
+						</dd>
+					</dl>
+					<ul class="legende">
+						<li><span class="shared">{lang gd_perm_shared}</span></li>
+						<li><span class="plus">{lang gd_perm_plus}</span></li>
+						<li><span class="minus">{lang gd_perm_minus}</span></li>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
+			{/if}
+			<p class="text-center">
+				<input type="submit" value="{lang apply}" class="btn btn-primary button-submit" />
+				<input type="button" value="{lang cancel}" class="btn button-submit" onclick="history.back();" />
+			</p>
+		</div>
+	</form>
+</div>

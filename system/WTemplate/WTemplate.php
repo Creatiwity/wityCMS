@@ -18,39 +18,28 @@ include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateCompiler.php';
  */
 class WTemplate {
 
-    /**
-     *
-     * @var string Compilation directory: where to place compiled files
-     */
+	/**
+	 * @var string Compilation directory: where to place compiled files
+	 */
 	private $compileDir;
 	
-    /**
-     *
-     * @var array Template variables
-     */
+	/**
+	 * @var array Template variables
+	 */
 	private $tpl_vars = array();
 	
-    /**
-     *
-     * @var WTemplateCompiler Template compilator
-     */
+	/**
+	 * @var WTemplateCompiler Template compilator
+	 */
 	private $compiler;
 	
-    /**
-     *
-     * @var boolean Buffer state 
-     * @todo unused variable buffer_launched. Clean it or not ?
-     */
-	private $buffer_launched = false;
-	
-    /**
-     * Setup template engine
-     * 
-     * @todo Sets the default compile_dir to cache/templates ?
-     * @param string $baseDir script root directory
-     * @param string $compileDir optional compilation directory
-     * @throws Exception
-     */
+	/**
+	 * Setup template engine
+	 * 
+	 * @param string $baseDir script root directory
+	 * @param string $compileDir optional compilation directory
+	 * @throws Exception
+	 */
 	public function __construct($baseDir, $compileDir = '') {
 		if (is_dir($baseDir)) {
 			$this->baseDir = $baseDir;
@@ -58,8 +47,6 @@ class WTemplate {
 			throw new Exception("WTemplate::__construct(): Directory \"".$baseDir."\" does not exist.");
 		}
 		
-		// Default value
-		$this->compileDir = '.'.DIRECTORY_SEPARATOR.'tpl_compiled'.DIRECTORY_SEPARATOR;
 		if (!empty($compileDir)) {
 			$this->setCompileDir($compileDir);
 		}
@@ -67,12 +54,12 @@ class WTemplate {
 		$this->compiler = new WTemplateCompiler();
 	}
 	
-    /**
-     * Sets the compile directory
-     * 
-     * @param string $compileDir the compile directory
-     * @throws Exception
-     */
+	/**
+	 * Sets the compile directory
+	 * 
+	 * @param string $compileDir the compile directory
+	 * @throws Exception
+	 */
 	public function setCompileDir($compileDir) {
 		if (is_dir($compileDir)) {
 			$this->compileDir = $compileDir;
@@ -86,12 +73,12 @@ class WTemplate {
 		}
 	}
 	
-    /**
-     * Adds variables whose names are in names and their values to the private property $tpl_vars
-     * 
-     * @param array|string $names
-     * @param array|mixed $values
-     */
+	/**
+	 * Adds variables whose names are in names and their values to the private property $tpl_vars
+	 * 
+	 * @param array|string $names
+	 * @param array|mixed $values
+	 */
 	public function assign($names, $values = null) {
 		if (is_array($names)) {
 			$this->tpl_vars = array_merge($this->tpl_vars, $names);
@@ -100,12 +87,12 @@ class WTemplate {
 		}
 	}
 	
-    /**
-     * Adds values in a variable if exists
-     * 
-     * @param string    $var    variable name
-     * @param mixed     $value  value to append
-     */
+	/**
+	 * Adds values in a variable if exists
+	 * 
+	 * @param string    $var    variable name
+	 * @param mixed     $value  value to append
+	 */
 	public function append($var, $value) {
 		if (isset($this->tpl_vars[$var])) {
 			if (!is_array($this->tpl_vars[$var])) {
@@ -117,12 +104,12 @@ class WTemplate {
 		}
 	}
 	
-    /**
-     * Returns the variable value
-     * 
-     * @param string $var variable name
-     * @return mixed variable value or '' if it is not set
-     */
+	/**
+	 * Returns the variable value
+	 * 
+	 * @param string $var variable name
+	 * @return mixed variable value or '' if it is not set
+	 */
 	public function getVar($var) {
 		if (isset($this->tpl_vars[$var])) {
 			return $this->tpl_vars[$var];
@@ -131,11 +118,11 @@ class WTemplate {
 		}
 	}
 	
-    /**
-     * Removes template variables
-     * 
-     * @param array|string $vars variable name or list of variable names to clear
-     */
+	/**
+	 * Removes template variables
+	 * 
+	 * @param array|string $vars variable name or list of variable names to clear
+	 */
 	public function clear($vars) {
 		if (is_array($vars)) {
 			foreach ($vars as $v) {
@@ -146,26 +133,26 @@ class WTemplate {
 		}
 	}
 	
-    /**
-     * Get the resulting output of a compiled file without printing anything on screen
-     * 
-     * @param string $href file's href
-     * @return string output string
-     * @throws Exception
-     */
+	/**
+	 * Gets the resulting output of a compiled file without printing anything on screen
+	 * 
+	 * @param string $href file's href
+	 * @return string output string
+	 * @throws Exception
+	 */
 	public function parse($href) {
 		// File init
 		$file = new WTemplateFile($href, $this->baseDir, $this->compileDir);
 		
 		// Compilation (if needed)
-		$file->compile($this->compiler);
+		$code = $file->compile($this->compiler);
 		
 		// Buffer
 		ob_start();
 		
 		try { // Critical section
 			// Adds the php close balise at the begining because it is a whole php file being evaluated
-			$eval_result = eval('?>'.file_get_contents($file->getCompilationHref()));
+			$eval_result = eval('?>'.$code);
 		} catch (Exception $e) {
 			// Just stores the exception into $e to throw it later
 		}
@@ -183,11 +170,11 @@ class WTemplate {
 		return $buffer;
 	}
 	
-    /**
-     * Displays a file on screen
-     * 
-     * @param string $href file's href
-     */
+	/**
+	 * Displays a file on the screen
+	 * 
+	 * @param string $href file's href
+	 */
 	public function display($href) {
 		// Display parsing result
 		echo $this->parse($href);

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang value="fr">
+	<!-- Actions -->
+	<item id="action_listing">Liste des membres</item>
+	<item id="action_add">Ajouter un utilisateur</item>
+	<item id="action_edit">Éditer un utilisateur</item>
+	<item id="action_delete">Supprimer un utilisateur</item>
+	<item id="action_groups">Gestion des groupes</item>
+	<item id="action_group_del">Suprimer un groupe</item>
+	<item id="action_config">Configuration</item>
+	
+	<!-- Errors -->
+	<item id="bad_data">Veuillez remplir tous les champs requis.</item>
+	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
+	<item id="error_no_password">Pas de mot de passe fourni.</item>
+	<item id="user_not_found">L'utilisateur demandé n'existe pas.</item>
+	<item id="nickname_bad_length">Le pseudo doit contenir entre 3 et 30 caractères.</item>
+	<item id="nickname_invalid_char">Le pseudo contient des caractères non valides (.)</item>
+	<item id="nickname_already_used">Ce pseudo est déjà en utilisation.</item>
+	<item id="email_not_valid">Cet email n'est pas valide.</item>
+	<item id="email_already_used">Cet email est déjà utilisé.</item>
+	
+	<!-- General -->
+	<item id="search">Rechercher</item>
+	<item id="nickname">Pseudo </item>
+	<item id="password">Mot de passe </item>
+	<item id="email">Email </item>
+	<item id="firstname">Prénom </item>
+	<item id="lastname">Nom </item>
+	<item id="group">Groupe </item>
+	<item id="statistics">Statistiques</item>
+	<item id="register_time">Date d'inscription</item>
+	<item id="last_connection">Dernière connexion</item>
+	<item id="edit">Editer</item>
+	<item id="delete">Supprimer</item>
+	<item id="cancel">Annuler</item>
+	
+	<!-- Account Admin checking -->
+	<item id="waiting">En attente de validation</item>
+	<item id="validate">Valider</item>
+	<item id="refuse">Décliner</item>
+	<item id="notify_these_users">Notifier ces utilisateurs</item>
+	<item id="user_account_validated_subject">%s - Votre compte utilisateur a été validé</item>
+	<item id="user_account_validated_email"><![CDATA[
+<p>Bonjour,</p>
+<p>Votre compte sur le site {site_name} vient d'être validé par un administrateur.</p>
+<p>Vous pouvez vous connecter à l'adresse suivante :<br />
+<a href="{base}/user/connexion/">Se connecter</a></p>
+<p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
+{base}/user/connexion/</p>
+<p><strong>{site_name}</strong></p>]]></item>
+	<item id="user_account_validated">L'utilisateur %s a été validé.</item>
+	<item id="user_account_refused_subject">%s - Votre inscription a été refusée</item>
+	<item id="user_account_refused_email"><![CDATA[
+<p>Bonjour,</p>
+<p>Votre inscription sur le site {site_name} n'a pas été acceptée.</p>
+<p>Pour plus d'informations, merci de contacter un administrateur.</p>
+<p><strong>{site_name}</strong></p>]]></item>
+	<item id="user_account_refused">L'utilisateur %s a été refusé.</item>
+	<item id="user_account_invalid">L'utilisateur %s ne correspond pas au processus de validation.</item>
+	
+	<!-- User add/edit form -->
+	<item id="users_total">%s utilisateurs inscrits</item>
+	<item id="users_found">%s utilisateurs trouvés</item>
+	<item id="no_user_found">Aucun utilisateur trouvé</item>
+	<item id="leave_empty_to_leave_unchanged">Laisser vide pour ne pas effectuer de modification.</item>
+	<item id="confirmation">(confirmation)</item>
+	<item id="group_default">Aucun groupe</item>
+	<item id="user_rights">Droits d'accès </item>
+	<item id="access_none">Simple utilisateur</item>
+	<item id="access_all">Administrateur suprême</item>
+	<item id="access_custom">Mode personnalisé</item>
+	<item id="check_all">Sélectionner tout</item>
+	<item id="uncheck_all">Déselectionner tout</item>
+	<item id="no_permissions">Cette application ne possède ni permission spéciale, ni zone d'administration.</item>
+	<item id="add_user">Créer l'utilisateur</item>
+	<item id="edit_user">Modifier l'utilisateur</item>
+	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_created">L'utilisateur %s a été créé avec succès.</item>
+	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
+	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
+	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
+	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email ?</item>
+	<item id="user_edit_own">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
+	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
+	
+	<!-- User deletion -->
+	<item id="user_delete_confirmation">Êtes-vous sûr de vouloir supprimer l'utilisateur %s</item>
+	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
+	<item id="user_self_delete">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
+	
+	<!-- Group form -->
+	<item id="add_a_group">Ajouter un groupe</item>
+	<item id="group_name">Nom du groupe</item>
+	<item id="group_default_access_for_users">Accès par défaut des utilisateurs du groupe</item>
+	<item id="group_users_count">Nombre d'utilisateurs dans le groupe</item>
+	<item id="actions">Actions</item>
+	<item id="no_group_found">Aucun groupe trouvé</item>
+	<item id="apply">Appliquer</item>
+	<item id="group_del_confirm">Voulez-vous vraiment supprimer la catégorie %s ?</item>
+	<item id="group_not_modified">Une erreur inconnue s'est produite lors du traitement du groupe dans la base de données.</item>
+	
+	<!-- Group treatment -->
+	<item id="group_name_empty">Le nom du groupe est vide.</item>
+	<item id="group_added"><![CDATA[Le groupe <strong>%s</strong> a été ajouté avec succès.]]></item>
+	<item id="group_edited"><![CDATA[Le groupe <strong>%s</strong> a été édité avec succès.]]></item>
+	<item id="group_not_added">Une erreur inconnue s'est produite lors du traitement du groupe par la base de données.</item>
+	<item id="group_deleted">Le groupe a été supprimé avec succès.</item>
+	
+	<!-- Group diff -->
+	<item id="apply_access">Application des nouveaux droits d'accès au groupe %s</item>
+	<item id="apply_access_inheriting">Appliquer les nouveaux droits d'accès à tous les utilisateurs qui héritaient des précédents accès du groupe</item>
+	<item id="apply_access_custom">Appliquer les nouveaux droits à tous les utilisateurs ayant des accès personnalisés</item>
+	<item id="select_users">Sélectionnez les utilisateurs auxquels vous voulez appliquer les nouveaux droits.</item>
+	<item id="gd_perm_shared">Permission commune avec les nouveaux accès du groupe</item>
+	<item id="gd_perm_plus">Permission en plus des nouveaux accès du groupe</item>
+	<item id="gd_perm_minus">Permission en moins par rapport au nouveaux accès du groupe</item>
+	<item id="reset">Réinitialiser</item>
+	<item id="users">utilisateurs</item>
+	
+	<!-- Config -->
+	<item id="config_register">Ouvrir les inscriptions</item>
+	<item id="config_email_conf">Lors de l'inscription, demander une confirmation par email</item>
+	<item id="config_summary">Envoyer un récapitulatif par email</item>
+	<item id="config_admin_check">Valider les nouveaux inscrits par un administrateur</item>
+	<item id="config_keep_users">Conserver les comptes supprimés ou refusés dans la base de données en les désactivant</item>
+	<item id="submit">Enregistrer</item>
+	<item id="user_config_updated">La configuration de l'application User a été mise à jour avec succès.</item>
+</lang>

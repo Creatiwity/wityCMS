@@ -47,7 +47,7 @@ class WHelper {
 			);
 			
 			// Include helper main file containing the class to instantiate
-			include HELPERS_DIR.$helper_name.DS.$helper['file'];
+			include_once HELPERS_DIR.$helper_name.DS.$helper['file'];
 			
 			// Check helper class existency
 			if (!class_exists($helper['class'])) {
@@ -57,7 +57,7 @@ class WHelper {
 		
 		// Check params number
 		$params_given = count($params);
-		if ($params_given != self::$helpers_loaded[$helper_name]['params_expected']) {
+		if ($params_given < self::$helpers_loaded[$helper_name]['params_expected']) {
 			throw new Exception("Missing arguments to instantiate helper \"".$helper_name."\": "
 				.$params_given." given / "
 				.self::$helpers_loaded[$helper_name]['params_expected']." expected.");
@@ -68,7 +68,7 @@ class WHelper {
 			$reflection_class = new ReflectionClass($helper['class']);
 			return $reflection_class->newInstanceArgs($params);
 		} else {
-			return new $helper['class']();
+			return new self::$helpers_loaded[$helper_name]['class']();
 		}
 	}
 }

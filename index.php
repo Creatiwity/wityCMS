@@ -18,7 +18,7 @@ define('WITY_VERSION', '0.3.0');
 
 /**
  * Error reporting level = MAXIMUM
-*/
+ */
 error_reporting(E_ALL);
 
 /**
@@ -33,20 +33,20 @@ if (file_exists('installer/installer.php')) {
 /**
  * Files paths
  */
-require 'paths.php';
+require_once 'paths.php';
 
 /**
  * Core classes inclusion
  */
-require SYS_DIR.'WCore'.DS.'WSystem.php';
-require SYS_DIR.'WCore'.DS.'WDatabase.php';
-require SYS_DIR.'WCore'.DS.'WRoute.php';
-require SYS_DIR.'WCore'.DS.'WConfig.php';
-require SYS_DIR.'WCore'.DS.'WRequest.php';
-require SYS_DIR.'WCore'.DS.'WLang.php';
-require SYS_DIR.'WCore'.DS.'WNote.php';
-require SYS_DIR.'WCore'.DS.'WHelper.php';
-require SYS_DIR.'WCore'.DS.'WMain.php';
+require_once SYS_DIR.'WCore'.DS.'WSystem.php';
+require_once SYS_DIR.'WCore'.DS.'WDatabase.php';
+require_once SYS_DIR.'WCore'.DS.'WRoute.php';
+require_once SYS_DIR.'WCore'.DS.'WConfig.php';
+require_once SYS_DIR.'WCore'.DS.'WRequest.php';
+require_once SYS_DIR.'WCore'.DS.'WLang.php';
+require_once SYS_DIR.'WCore'.DS.'WNote.php';
+require_once SYS_DIR.'WCore'.DS.'WHelper.php';
+require_once SYS_DIR.'WCore'.DS.'WMain.php';
 
 /**
  * Execute Wity

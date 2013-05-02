@@ -29,7 +29,13 @@ class PageAdminModel {
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->fetchAll();
+		$values = array();
+		while ($row = $prep->fetch()) {
+			$row['creation_time'] = "le ".date('d/m/Y à H:i', intval($row['creation_time']));
+			$row['edit_time'] = "le ".date('d/m/Y à H:i', intval($row['edit_time']));
+			$values[] = $row;
+		}
+		return $values;
 	}
 	
 	/**

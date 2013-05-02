@@ -1,12 +1,17 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author	Fofif
- * @version	$Id: apps/user/admin/view.php 0004 02-02-2012 Fofif $
+ * User Application - Admin View - /apps/user/admin/view.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * UserAdminView is the Admin View of the User Application
+ * 
+ * @package Apps
+ * @author Johan Dufau <johandufau@gmail.com>
+ * @version 0.3-26-04-2013
+ */
 class UserAdminView extends WView {
 	private $model;
 	
@@ -14,139 +19,189 @@ class UserAdminView extends WView {
 		parent::__construct();
 		$this->model = $model;
 		
+		// CSS for all views
 		$this->assign('css', '/apps/user/admin/css/user.css');
 	}
 	
-	public function liste($sortBy, $sens, $currentPage, $filtres) {
-		// -- AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$adminStyle = new AdminStyle(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC');
-		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
-		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
+	/**
+	 * Setting up the users listing view
+	 */
+	public function listing($sortBy, $sens, $currentPage, $filters) {
+		$n = 30; // number of users per page
 		
-		// Traitement des filtres
+		// SortingHelper Helper
+		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
+		$sort = $sortingHelper->findSorting($sortBy, $sens);
+		$this->assign($sortingHelper->getTplVars());
+		
+		// Get the user groups
+		$this->assign('groups', $this->model->getGroupsList());
+		
+		// Assign main data
+		$data = $this->model->getUsersList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters);
+		$this->assign('users', $data);
+		
+		// Get users waiting for validation
+		$users_waiting = $this->model->getUsersList(0, 0, $sort[0], $sort[1] == 'ASC', array('valid' => 2));
+		$this->assign('users_waiting', $users_waiting);
+		if (!empty($users_waiting)) {
+			$this->assign('js', '/apps/user/admin/js/admin_check.js');
+		}
+		
+		// Treat filters
 		$subURL = "";
-		foreach ($filtres as $k => $v) {
-			// Nettoyage des filtres
+		$hasFilter = false;
+		foreach ($filters as $k => $v) {
+			// Cleanup filters
 			if (!empty($v)) {
 				$subURL .= $k."=".$v."&";
+				$hasFilter = true;
 			}
 		}
 		if (!empty($subURL)) {
 			$subURL = '?'.substr($subURL, 0, -1);
 		}
-		$this->tpl->assign('subURL', $subURL);
-		$this->tpl->assign($filtres);
+		$this->assign('subURL', $subURL);
+		$this->assign($filters);
 		
-		// -- Récupération des groupes
-		$groups = $this->model->getCatList();
-		foreach ($groups as $g) {
-			$this->tpl->assignBlockVars('groups', $g);
+		// Generate the pagination to browse data
+		$stats = array();
+		$stats['total'] = $this->model->countUsers();
+		$stats['request'] = $stats['total'];
+		
+		if($hasFilter) {
+			$stats['filtered'] = $this->model->countUsers($filters);
+			$stats['request'] = $stats['filtered'];
 		}
 		
-		$n = 40; // 40 utilisateurs par page
-		$data = $this->model->getUserList(($currentPage-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filtres);
-		foreach ($data as $values) {
-			// if ($values['factivity'] == '00/00/0000 00:00') {
-				// $values['factivity'] = 'N/A';
-			// }
-			$values['access'] = explode(',', $values['access']);
-			$this->tpl->assignBlockVars('users', $values);
-		}
+		$this->assign('stats', $stats);
 		
-		// -- Génération de la numérotation
-		$count = $this->model->countUsersWithFilters($filtres);
-		include HELPERS_DIR.'pagination'.DS.'pagination.php';
-		$page = new Pagination($count, $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL);
-		$this->assign('pagination', $page->getHtml());
-		$this->assign('total', $count);
+		$pagination = WHelper::load('pagination', array($stats['request'], $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
+		$this->assign('pagination', $pagination->getHTML());
+		
+		$this->render('listing');
 	}
 	
 	/**
-	 * Définition des valeurs de contenu du formulaire
+	 * Setup add form
 	 */
-	private function fillForm($model, $data) {
+	public function user_form($user_id = null, $data = array()) {
+		if (empty($user_id)) {
+			$this->assign('add_form', true); // ADD form
+		}
+		
+		// Display a warning message when user edits its own account
+		if ($user_id == $_SESSION['userid']) {
+			WNote::info('user_edit_own', WLang::get('user_edit_own'));
+		}
+		
+		// Displays a message for user under validation
+		if (isset($data['valid']) && $data['valid'] == 2) {
+			WNote::info('user_validating_account', WLang::get('user_validating_account'));
+		}
+		
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminApps());
+		
+		// Setup the form
+		$this->assign('js', '/apps/user/admin/js/access_form.js');
+		$this->assign('groups', $this->model->getGroupsList());
+		$this->assign('user_home', WRoute::getBase().'/admin/user/');
+		
+		$model = array(
+			'id' => 0,
+			'nickname' => '', 
+			'email' => '',
+			'firstname' => '',
+			'lastname' => '',
+			'groupe' => 0,
+			'access' => ''
+		);
 		foreach ($model as $item => $default) {
 			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
 		}
+		
+		$this->render('user_form');
 	}
 	
-	public function add($data = array()) {
-		$this->assign('js', '/apps/user/admin/js/catChange.js');
-		$this->assign('cats', $this->model->getCatList());
-		
-		$adminModel = new AdminModel();
-		foreach($adminModel->getAdminAppList() as $mod) {
-			$levels = $adminModel->getLevels($mod); // level = array('id' => 0, 'title' => 'nom du niveau')
-			$this->tpl->assignBlockVars('module', array(
-				'name' => $mod,
-				'levels' => $levels
-			));
-		}
-		
-		$this->fillForm(
-			array(
-				'nickname' => '', 
-				'email' => '',
-				'access' => array(),
-			),
-			$data
-		);
-	}
-	
-	public function edit($id) {
-		$this->assign('cats', $this->model->getCatList());
-		
-		$adminModel = new AdminModel();
-		foreach($adminModel->getAdminAppList() as $mod) {
-			$levels = $adminModel->getLevels($mod); // level = array('id' => 0, 'title' => 'nom du niveau')
-			$this->tpl->assignBlockVars('module', array(
-				'name' => $mod,
-				'levels' => $levels
-			));
-		}
-		
-		$data = $this->model->getUserData($id);
-		$data['accessArray'] = explode(',', $data['access']);
-		$this->assign($data);
-	}
-	
-	public function del($id) {
-		$data = $this->model->getUserData($id);
+	/**
+	 * Checks if the user really wanted to delete an account
+	 */
+	public function del($userid) {
+		$data = $this->model->getUser($userid);
 		$this->assign('nickname', $data['nickname']);
+		$this->assign('confirm_delete_url', WRoute::getDir()."/admin/user/del/".$userid);
+		$this->tpl->assign($this->vars);
+		echo $this->tpl->parse('/apps/user/admin/templates/del.html');
 	}
 	
-	public function cat($sortBy, $sens) {
-		$this->assign('js', '/apps/user/admin/js/cat.js');
-		$this->assign('css', '/apps/user/admin/css/user.css');
+	/**
+	 * Displays a groups listing
+	 */
+	public function groups_listing($sortBy, $sens) {
+		$this->assign('js', '/apps/user/admin/js/access_form.js');
+		$this->assign('js', '/apps/user/admin/js/groups.js');
 		
-		$adminModel = new AdminModel();
-		foreach($adminModel->getAdminAppList() as $mod) {
-			$levels = $adminModel->getLevels($mod); // level = array('id' => 0, 'title' => 'nom du niveau')
-			$this->tpl->assignBlockVars('module', array(
-				'name' => $mod,
-				'levels' => $levels
-			));
-		}
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminApps());
 		
 		// AdminStyle Helper
-		include HELPERS_DIR.'adminStyle'.DS.'adminStyle.php';
-		$dispFields = array('name');
-		$adminStyle = new AdminStyle($dispFields, 'name');
-		
-		// Sorting vars
-		$sort = $adminStyle->getSorting($sortBy, $sens);
+		$dispFields = array('name', 'users_count');
+		$adminStyle = WHelper::load('SortingHelper', array($dispFields, 'name'));
+		$sort = $adminStyle->findSorting($sortBy, $sens); // sorting vars
 		
 		// Enregistrement des variables de classement
-		$this->tpl->assign($adminStyle->getTplVars());
+		$this->assign($adminStyle->getTplVars());
 		
-		$data = $this->model->getCatList($sort[0], $sort[1] == 'ASC');
-		foreach ($data as $values) {
-			//$values['access'] = explode(',', $values['access']);
-			$this->tpl->assignBlockVars('cat', $values);
+		$data = $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC');
+		$this->assign('groups', $data);
+		
+		$this->render('groups_listing');
+	}
+	
+	/**
+	 * Displays the group difference form
+	 * Allows to customize user access when modifying group access
+	 */
+	public function group_diff($groupid, $new_name, $new_access) {
+		$this->assign('js', '/apps/user/admin/js/access_form.js');
+		$this->assign('js', '/apps/user/admin/js/group_diff.js');
+		
+		// Get admin apps
+		$adminModel = new AdminController();
+		$this->assign('admin_apps', $adminModel->getAdminApps());
+		$this->assign('group', $this->model->getGroup($groupid));
+		$this->assign('new_name', $new_name);
+		$this->assign('new_access', $new_access);
+		
+		$chars = array('#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+		$alphabet = array();
+		$count_custom = 0;
+		foreach ($chars as $c) {
+			if ($c == '#') {
+				$alphabet['#'] = $this->model->countUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $groupid));
+			} else {
+				$alphabet[$c] = $this->model->countUsersWithCustomAccess(array('nickname' => $c.'%', 'groupe' => $groupid));
+			}
+			$count_custom += $alphabet[$c];
 		}
+		$this->assign('alphabet', $alphabet);
+		$count_total = $this->model->countUsers(array('groupe' => $groupid));
+		$this->assign('count_total', $count_total);
+		$this->assign('count_custom', $count_custom);
+		$this->assign('count_regular', $count_total-$count_custom);
+		
+		$this->render('group_diff');
+	}
+	
+	/**
+	 * Prepares the config view
+	 */
+	public function config($config) {
+		$this->assign('config', $config);
+		$this->render('config');
 	}
 }
 

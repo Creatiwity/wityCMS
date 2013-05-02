@@ -29,7 +29,6 @@
 		</div>
 	</div>
 	<div id="content">
-		{if !empty({$note})}{$note}{/if}
 		<div class="item">
 			<label for="pTitle">Titre :</label>
 			<input id="pTitle" type="text" name="pTitle" size="40" value="{$pTitle}" onkeyup="updatePermalien(this.value);" /><br />
@@ -45,13 +44,13 @@
 						<a href="/#" onclick="permalienCancel(); return false;">Annuler</a>
 					</span>
 				</span>
-			</div><br /><br />
+			</div><br />
 			
 			<label for="pContent">Contenu de la page :</label>
 			<textarea id="pContent" name="pContent" rows="15" cols="80">{$pContent}</textarea><br />
 			<script type="text/javascript">
 				var editor = CKEDITOR.replace('pContent');
-				CKFinder.setupCKEditor(editor, '{$baseDir}helpers/ckfinder/') ;
+				CKFinder.setupCKEditor(editor, '{$baseDir}/libraries/ckfinder/') ;
 			</script>
 			
 			<div class="tcenter">

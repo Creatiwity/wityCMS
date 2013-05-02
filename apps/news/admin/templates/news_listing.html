@@ -1,0 +1,40 @@
+<table class="table table-hover table-striped">
+	<thead>
+		<tr>
+			<th><a href="/admin/news/news_title-{$news_title_sort}/"><i class="{$news_title_class}"></i> {lang title}</a></th>
+			<th><a href="/admin/news/news_author-{$news_author_sort}/"><i class="{$news_author_class}"></i> {lang author}</a></th>
+			<th>{lang category}</th>
+			<th><a href="/admin/news/news_date-{$news_date_sort}/"><i class="{$news_date_class}"></i> {lang date}</a></th>
+			<th><a href="/admin/news/news_views-{$news_views_sort}/"><i class="{$news_views_class}"></i> {lang views}</a></th>
+			<th>{lang actions}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{for $n in $news}
+		<tr>
+			<td><strong>{$n.news_title}</strong></td>
+			<td>{$n.news_author}</td>
+			<td>
+				<ul class="unstyled">
+				{for $c in {$n.news_cats}}
+					<li>{$c.news_cat_name}</li>
+				{/for}
+				</ul>
+			</td>
+			<td>{$n.news_date}</td>
+			<td>{lang number_of_views|{$n.news_views}}</td>
+			<td>
+				<a title="{lang article_edit}" href="/admin/news/edit/{$n.news_id}-{$n.news_url}/"><i class="icon-edit"></i></a>
+				<span title="{lang article_delete}" class="link" data-link-modal="/admin/news/news_delete/{$n.news_id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>
+			</td>
+		</tr>
+	{/for}
+	{empty}
+		<tr>
+			<td colspan="6"><p class="text-center">{lang no_article_in_database}</p></td>
+		</tr>
+	{/empty}
+	</tbody>
+</table>
+{$pagination}
+<div id="modal_delete" class="modal hide fade"></div>
