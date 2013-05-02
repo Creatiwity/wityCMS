@@ -13,10 +13,13 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-15-02-2013
  */
 class UserModel {
-	private $db;
+	protected $db;
 	
 	public function __construct() {
 		$this->db = WSystem::getDB();
+		
+		// Declare table
+		$this->db->declareTable('users');
 	}
 	
 	/**
