@@ -552,7 +552,7 @@ $(document).ready(function() {
 		var value, regexp, error;
 		
 		value = datas.content;
-		regexp = $(this).attr('data-wity-validate-regexp');
+		regexp = new RegExp($(this).attr('data-wity-validate-regexp'), "i");
 		error = $(this).attr('data-wity-regexp-message');
 		
 		if(value && !regexp.test(value)) {
