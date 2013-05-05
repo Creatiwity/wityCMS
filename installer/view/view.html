@@ -56,14 +56,14 @@
 									<div class="control-group">
 										<label class="control-label" for="site_name">Site name</label>
 										<div class="controls">
-											<input type="text" id="site_name" name="site_name" data-wity-installer-group="site_name" data-wity-name="Site name" data-wity-validate-regexp="/.+/" data-wity-regexp-message="Site name must be an alphanumeric value" data-wity-required="true"/>
+											<input type="text" id="site_name" name="site_name" data-wity-installer-group="site_name" data-wity-name="Site name" data-wity-validate-regexp=".+" data-wity-regexp-message="Site name must be an alphanumeric value" data-wity-required="true"/>
 										</div>
 									</div>
 									<div data-wity-group-alert="base_url"></div>
 									<div class="control-group">
 										<label class="control-label" for="base">Base URL</label>
 										<div class="controls">
-											<input type="url" id="base" name="base" data-wity-installer-group="base_url" data-wity-name="Base URL" data-wity-validate-regexp="#^(http|https|ftp)\://[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(/[A-Z0-9~\._-]+)*/?$#i" data-wity-regexp-message="Base URL must be a valid URL" data-wity-required="true"/>
+											<input type="url" id="base" name="base" data-wity-installer-group="base_url" data-wity-name="Base URL" data-wity-validate-regexp="^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(\/[A-Z0-9~\._-]+)*\/?$" data-wity-regexp-message="Base URL must be a valid URL" data-wity-required="true"/>
 										</div>
 									</div>
 									<div data-wity-group-alert="theme"></div>
@@ -112,7 +112,7 @@
 									<div class="control-group">
 										<label class="control-label" for="port">Port</label>
 										<div class="controls">
-											<input type="number" id="port" name="port" placeholder="3306" data-wity-installer-group="db_credentials" data-wity-validate-regexp="/^[0-9]*/" data-wity-regexp-message="Database port must be a number"/>
+											<input type="number" id="port" name="port" placeholder="3306" data-wity-installer-group="db_credentials" data-wity-validate-regexp="^[0-9]*" data-wity-regexp-message="Database port must be a number"/>
 										</div>
 									</div>
 									<div class="control-group">
@@ -150,7 +150,7 @@
 									<div class="control-group">
 										<label class="control-label" for="nickname">Pseudo</label>
 										<div class="controls">
-											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="nickname" data-wity-validate-regexp="/^[a-zA-Z0-9]([a-zA-Z0-9])*$/i" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value."/>
+											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="nickname" data-wity-validate-regexp="^[a-zA-Z0-9]([a-zA-Z0-9])*$" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value."/>
 										</div>
 									</div>
 									<div data-wity-group-alert="password"></div>
@@ -170,7 +170,7 @@
 									<div class="control-group">
 										<label class="control-label" for="email">Email</label>
 										<div class="controls">
-											<input type="email" id="email" name="email" data-wity-name="Email" data-wity-installer-group="email" data-wity-validate-regexp="/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i" data-wity-required="true" data-wity-regexp-message="This email is not valid."/>
+											<input type="email" id="email" name="email" data-wity-name="Email" data-wity-installer-group="email" data-wity-validate-regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$" data-wity-required="true" data-wity-regexp-message="This email is not valid."/>
 										</div>
 									</div>
 									<hr/>
@@ -178,14 +178,14 @@
 									<div class="control-group">
 										<label class="control-label" for="firstname">Firstname</label>
 										<div class="controls">
-											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="firstname" data-wity-validate-regexp="/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i" data-wity-regexp-message="The firstname is not valid."/>
+											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="firstname" data-wity-validate-regexp="^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$" data-wity-regexp-message="The firstname is not valid."/>
 										</div>
 									</div>
 									<div data-wity-group-alert="lastname"></div>
 									<div class="control-group">
 										<label class="control-label" for="lastname">Lastname</label>
 										<div class="controls">
-											<input type="text" id="lastname" name="lastname" data-wity-name="Lastname" data-wity-installer-group="lastname" data-wity-validate-regexp="/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i" data-wity-regexp-message="The lastname is not valid."/>
+											<input type="text" id="lastname" name="lastname" data-wity-name="Lastname" data-wity-installer-group="lastname" data-wity-validate-regexp="^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$" data-wity-regexp-message="The lastname is not valid."/>
 										</div>
 									</div>
 								</div>
