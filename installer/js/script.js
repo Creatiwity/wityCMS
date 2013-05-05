@@ -653,6 +653,9 @@ $(document).ready(function() {
 	$('[data-wity-installer]').each( function() {
 		new Installer(this);
 	});
+
+	$('[data-wity-link-front]').attr('href', document.location);
+	$('[data-wity-link-admin]').attr('href', document.location+'/admin');
 });
 
 /*

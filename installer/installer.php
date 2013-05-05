@@ -70,17 +70,22 @@ class Installer {
 					$route = WRequest::getAssoc(array('default', 'admin'), '', 'POST');
 					$database = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
 					$user = WRequest::getAssoc(array('nickname', 'password', 'confirm', 'email', 'firstname', 'lastname'), '', 'POST');
+
+					$database['prefix'] = (!empty($database['prefix'])) ? $database['prefix']."_":"";
 					
 					// Create SQL Tables
-					$sql_commands = file_get_contents('bdd'.DS.'wity.sql');
+					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'wity.sql');
 					$sql_commands = str_replace('prefix_', $database['prefix'], $sql_commands); // configure prefix
-					$db = $this->getSQLServerConnection();
-					if (!$db->exec($sql_commands)) {
+					$db = $this->getSQLServerConnection($database);
+					$db->exec($sql_commands);
+					$error = $db->errorInfo();
+					if (!is_null($error[0]) && !$error[0]!=0) {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
 					}
 					
 					// Create user account
-					if ($this->isFrontApp('user', null, null)) {
+					$placeholder = false;
+					if ($this->isFrontApp('user', null, $placeholder)) {
 						include APPS_DIR.'user'.DS.'front'.DS.'model.php';
 						$userModel = new UserModel();
 						if (!$userModel->createUser($user)) {
