@@ -1,13 +1,14 @@
 
 $(document).ready(function() {
 	
-	var Installer, Step, Group, Field, processAjax;
+	var Installer, Step, Group, Field, processAjax, WITY_INSTALLER;
 	
 	Installer = (function() {
 		
 		function Installer(elem) {
 			var that;
 			
+			WITY_INSTALLER = this;
 			this.element = $(elem);
 			this.id = this.element.attr('data-wity-installer');
 			this.summary = $('[data-wity-installer-summary="'+this.id+'"]');
@@ -23,7 +24,7 @@ $(document).ready(function() {
 				var stepId;
 				
 				stepId = $(this).attr('data-wity-installer-step');
-				that.stepInstances[stepId] = new Step(this, that.summary, that);
+				that.stepInstances[stepId] = new Step(this, that.summary);
 			});
 			
 			$(this.element).on('validate-installer', '[data-wity-installer-step]', function(event, memo) {
@@ -159,10 +160,9 @@ $(document).ready(function() {
 	
 	Step = (function() {
 		
-		function Step(stepElement, summary, installer) {
+		function Step(stepElement, summary) {
 			var that;
 			
-			this.installer = installer;
 			this.element = $(stepElement);
 			this.name = this.element.attr('data-wity-installer-step');
 			this.groupInstances = {};
@@ -180,7 +180,7 @@ $(document).ready(function() {
 				groupId = $(this).attr('data-wity-installer-group');
 				
 				if(!that.groupInstances[groupId]) {
-					group = new Group(groupId, summary, that.installer, that, this);
+					group = new Group(groupId, summary, that, this);
 					that.groupInstances[groupId] = group;
 					that.required = that.required || group.required;
 				}
@@ -228,30 +228,47 @@ $(document).ready(function() {
 	
 	Group = (function() {
 		
-		function Group(name, summary, installer, step, fieldInGroup) {
-			var label, that;
+		function Group(name, summary, step, fieldInGroup) {
+			var label, that, forcedRequired, relatedGroups;
 			
 			that = this;
 			
 			this.name = name;
-			this.installer = installer;
 			this.step = step;
 			this.fieldInstances = {};
 			this.alerts = new Array();
 			this.required = false;
 			this.validated = false;
 			this.element = $(fieldInGroup);
+			this.requiredGroups = new Array();
+			this.empty = true;
+
+			relatedGroups = this.element.attr('data-wity-require-groups');
+
+			if(relatedGroups && relatedGroups !== "") {
+				this.requiredGroups = relatedGroups.split(" ");
+			}
+
+			forcedRequired = false;
 			
 			$("[data-wity-installer-group='"+name+"']").each(function(index, fieldElement) {
-				var field, n;
+				var n, field;				
 				
 				if(n = $(fieldElement).attr('data-wity-name')) {
 					label = n;
 				}
+
+				if($(fieldElement).is('[data-wity-required-group]')) {
+					forcedRequired = true;
+					that.required = ($(fieldElement).attr('data-wity-required-group') === "true");
+				}
+
+				if(!forcedRequired) {
+					that.required = (that.required || $(fieldElement).attr('data-wity-required') === "true");
+				}
 				
 				field = new Field(fieldElement);
 				that.fieldInstances[field.name] = field;
-				that.required = that.required || field.required;
 			});
 			
 			this.groupSummary = $('<li><em> '+label+'</em></li>').appendTo(summary);
@@ -270,24 +287,49 @@ $(document).ready(function() {
 		};
 		
 		Group.prototype.validate = function() {
-			var values = {};
+			var abortAjax, requiredGroup, that, values = {};
+
+			abortAjax = false;
+			that = this;
+
+			for(var index = 0, length = this.requiredGroups.length; index < length; ++index) {
+				requiredGroup = this.step.groupInstances[this.requiredGroups[index]];
+				if(requiredGroup.validated) {
+					requiredGroup.populateWithValues(values);
+				} else {
+					abortAjax = true;
+				}
+			}
+
+			this.empty = true;
 			
 			$.each(this.fieldInstances, function(index, field) {
-				field.validate(true);
+				field.validateInGroup();
+				that.empty = that.empty && field.isEmpty();
 				if(field.validated) {
 					values[field.name] = field.value();
-				} else {
-					this.validated = false;
-					return false;
+				} else if((field.required && field.isEmpty()) || !field.isEmpty()) {
+					that.validated = false;
+					abortAjax = true;
 				}
 			});
 
+			if(abortAjax) {
+				return false;
+			}
+
 			values.command = "GROUP_VALIDATION";
 			values.group = this.name;
-			values.installer = this.installer.id;
+			values.installer = WITY_INSTALLER.id;
 			values.step = this.step.name;
 			
-			processAjax(document.location, values, this.processResponse, this.installer, this);
+			processAjax(document.location, values, this.processResponse, this);
+		};
+
+		Group.prototype.populateWithValues = function(values) {
+			$.each(this.fieldInstances, function(index, field) {
+				values[field.name] = field.value();
+			});
 		};
 		
 		Group.prototype.clearErrors = function() {
@@ -323,16 +365,16 @@ $(document).ready(function() {
 			
 			if(response) {
 				if(response.success) {
-					this.showValid(true, this.required);
+					this.showValid(true);
 				}
 				
 				if(response.warning) {
-					this.showValid(true, this.required);
+					this.showValid(true);
 					displayNotes(response.warning, '');
 				}
 				
 				if(response.error) {
-					this.showValid(false, this.required);
+					this.showValid(false);
 					displayNotes(response.error, 'alert-error');
 					this.validated = false;
 				}
@@ -348,14 +390,14 @@ $(document).ready(function() {
 			}
 		};
 		
-		Group.prototype.showValid = function(isValid, isEmpty) {
+		Group.prototype.showValid = function(isValid) {
 			this.groupSummary.removeClass("muted text-info text-success");			
 
 			this.groupSummary.find('i').remove();
-			if(isValid && !isEmpty) {
+			if(isValid || (!this.required && this.empty)) {
 				$('<i class="icon-ok"></i>').prependTo(this.groupSummary);
 				this.groupSummary.addClass("text-success");
-			} else if(!isValid) {
+			} else if(!isValid || (this.required && this.empty)) {
 				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
 				if(!this.required) {
 					this.groupSummary.addClass("muted");
@@ -377,67 +419,108 @@ $(document).ready(function() {
 			this.element = $(elem);
 			this.validated = false;
 			this.errors = new Array();
-			this.required = this.element.attr('data-wity-required') ? true : false;
+
+			if(this.element.is('[data-wity-required-field]')) {
+				this.required = (this.element.attr('data-wity-required-field') === "true");
+			} else {
+				this.required = (this.element.attr('data-wity-required') === "true");
+			}
+			
 			if(this.element.is('select')) {
 				this.type = "select";
-				this.element.on('change', function() {that.validate(false);});
+				this.element.on('blur change', function() {that.validateInField();});
 			} else {
 				this.type = this.element.attr('type');
-				this.element.on('blur change', function() {that.validate(false);});
+				this.element.on('blur change', function() {that.validateInField();});
 			}
 			this.name = this.element.attr('name');
 			this.validatedContent = null;
 		};
-		
-		Field.prototype.validate = function(withButton) {
-			var content, datas, oldValid;
-			
+
+		Field.prototype.validateInField = function() {
+			var oldValid, oldValidatedContent, content;
+
 			oldValid = this.validated;
-			//launch loading
+			oldValidatedContent = this.validatedContent;
 			content = this.value();
-			
-			if(this.required && (!content || content === "") && (this.validated || withButton)) {
-				if((this.validated !== null && this.validated !== undefined) || withButton) {
-					this.displayErrors(false);
-					this.validated = false;
+
+			this.validate();
+
+			if(!this.validated && (!content || content === "") && this.required) {
+				// not validated : field is empty and required
+				this.clearErrors();
+			} else if(!this.validated) {
+				// display errors on the field
+				this.displayErrors();
+				// validated and content changed or validated changed
+			} else if((this.validatedContent !== oldValidatedContent) || (oldValid !== this.validated)) {
+				this.element.trigger('validate-group');
+			}
+
+		};
+
+		Field.prototype.validateInGroup = function() {
+			var oldValidatedContent;
+
+			if(this.validated && (this.value() === this.validatedContent)) {
+				return true;
+			} else {
+				oldValidatedContent = this.validatedContent;
+				this.validate();
+
+				if(!this.validated && (!oldValidatedContent || oldValidatedContent === "") && (this.value || this.value === "") && this.required) {
+					// not validated : field is empty and required
+					this.clearErrors();
+				} else if(!this.validated) {
+					// display errors on the field
+					this.displayErrors();
 				}
-				this.chooseTrigger(oldValid, content, withButton);
+			}
+		};
+
+		Field.prototype.validate = function() {
+			var content, datas;
+
+			content = this.value();
+
+			if(this.required && (!content || content === "")) {
+				this.storeErrors(["This field is required."]);
+				this.validated = false;
 				return false;
 			}
-			
+
 			datas = {"content": content, "valid": true, "errors-messages": []};
 			this.element.trigger('validate', [datas]);
-			
 			if(!datas.valid) {
-				this.displayErrors(false);
+				this.storeErrors(datas.errors-messages);
 				this.validated = false;
-				this.chooseTrigger(oldValid, content, withButton);
 				return false;
 			}
+			this.validatedContent = content;
 			this.clearErrors();
 			this.validated = true;
-			this.chooseTrigger(oldValid, content, withButton);
 			return true;
 		};
-		
-		Field.prototype.chooseTrigger = function(oldValid, newContent, force) {
-			if(!force) {
-				if(oldValid !== this.validated || newContent !== this.validatedContent) {
-					this.validatedContent = newContent;
-					this.element.trigger('validate-group');
-				}
-			}
-		}
 		
 		Field.prototype.clearErrors = function() {
 			var cg = this.element.closest('.control-group');
 			cg.removeClass('error');
+		};
+
+		Field.prototype.storeErrors = function(errors) {
+
 		};
 		
 		Field.prototype.displayErrors = function(errors) {
 			this.clearErrors();
 			var cg = this.element.closest('.control-group');
 			cg.addClass('error');
+		};
+
+		Field.prototype.isEmpty = function() {
+			var value = this.value();
+
+			return (value!==null && value!==undefined && value!==""); 
 		};
 		
 		Field.prototype.value = function(newValue) {
@@ -481,6 +564,23 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$(document).on('validate', '[data-wity-validate-equals]', function(datas) {
+		var value, fieldName, otherValue, error;
+		
+		value = datas.content;
+		fieldName = $(this).attr('[data-wity-validate-equals]');
+		otherValue = $('[name="'+fieldName+'"]').val();
+		error = $(this).attr('[data-wity-equals-message]');
+		
+		if(value !== otherValue) {
+			datas.valid = false;
+			
+			if(error) {
+				datas.errors.push(error);
+			}
+		}
+	});
 	
 	/**
 	 * Some values initialisation
@@ -509,9 +609,10 @@ $(document).ready(function() {
 		minLength:0
 	});
 	
-	processAjax = function (u, d, c, installer, _this) {
-		var realCallback;
+	processAjax = function (u, d, c, _this) {
+		var realCallback, installer;
 
+		installer = WITY_INSTALLER;
 		installer.btnLoading();
 		
 		realCallback = function(data, textStatus, jqXHR ) {
@@ -541,7 +642,7 @@ $(document).ready(function() {
 	};
 	
 	$('[data-wity-installer]').each( function() {
-		WITY_INSTALLER = new Installer(this);
+		new Installer(this);
 	});
 });
 

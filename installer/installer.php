@@ -206,7 +206,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid site name", "The site name must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-				break;
 			
 			case 'base_url':
 				$base_url = WRequest::get('base', '', 'POST');
@@ -217,7 +216,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid base url", "The base url must be a valid URL representing the constant part of your site URL.");
 					return false;
 				}
-				break;
 			
 			case 'theme':
 				$theme = WRequest::get('theme', '', 'POST');
@@ -228,13 +226,11 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid theme", "Theme parameter must be an existing front theme, in 'themes' directory.");
 					return false;
 				}
-				break;
 			
 			case 'language':
 				// TODO : auto-detect available languages and validate them
 				$this->view->success('group', $data['group'], "Validated !", "Theme validated.");
 				return true;
-				break;
 			
 			case 'front_app':
 				$front_app = WRequest::get('default', '', 'POST');
@@ -245,7 +241,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid front application", "Starting front application parameter must an existing front application, in 'apps' directory.");
 					return false;
 				}
-				break;
 			
 			case 'admin_app':
 				$admin_app = WRequest::get('admin', '', 'POST');
@@ -256,7 +251,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid admin application", "Starting admin application parameter must an existing admin application, in 'apps' directory.");
 					return false;
 				}
-				break;
 			
 			case 'db_credentials':
 				$r = WRequest::getAssoc(array('server', 'port', 'user', 'pw'), '', 'POST');
@@ -267,7 +261,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid database credentials", "Unable to connect to the database with the credentials you've just provided.");
 					return false;
 				}
-				break;
 			
 			case 'db_name':
 				$r = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname'), '', 'POST');
@@ -278,18 +271,16 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid database name", "Unable to find the database with the name you've just provided.");
 					return false;
 				}
-				break;
 			
 			case 'tables_prefix':
 				$r = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
 				if ($this->isPrefixNotExisting($r, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Tables prefix validated and not used.");
-					return true;
 				} else if ($respond) {
 					$this->view->warning('group', $data['group'], "Prefix already used", "Be careful, the prefix you provides is already used. Some existing tables will be overridden");
-					return true;
+					
 				}
-				break;
+				return true;
 			
 			case 'user_nickname':
 				$user_nickname = WRequest::get('nickname', '', 'POST');
@@ -300,13 +291,11 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid nickname", "Your nickname must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-				break;
 			
 			case 'user_password':
 				$user_password = WRequest::get('password', '', 'POST');
 				$this->view->success('group', $data['group'], "Validated !", "Password validated.");
 				return true;
-				break;
 			
 			case 'user_email':
 				$user_email = WRequest::get('email', '', 'POST');
@@ -317,7 +306,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid email", "This email is not valid.");
 					return false;
 				}
-				break;
 			
 			case 'user_firstname':
 				$user_firstname = WRequest::get('firstname', '', 'POST');
@@ -328,7 +316,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid firstname", "Your firstname must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-				break;
 			
 			case 'user_lastname':
 				$user_lastname = WRequest::ge('lastname', '', 'POST');
@@ -339,7 +326,6 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid lastname", "Your lastname must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-				break;
 			
 			default:
 				$this->view->error('step', $data['step'], 'Unknown group', "You're trying to validate an unknown group.");
@@ -430,12 +416,10 @@ class Installer {
 		}
 		
 		try {
-			new PDO($dsn, $credentials['user'], $credentials['pw']);
+			return new PDO($dsn, $credentials['user'], $credentials['pw']);
 		} catch (PDOException $e) {
 			return $e;
 		}
-		
-		return true;
 	}
 	
 	/**
@@ -449,8 +433,8 @@ class Installer {
 	private function isSQLServer($credentials, $data, &$respond) {
 		$db = $this->getSQLServerConnection($credentials);
 		
-		if ($db instanceof PDOException && strstr($e->getMessage(), 'SQLSTATE[')) {
-			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+		if ($db instanceof PDOException && strstr($db->getMessage(), 'SQLSTATE[')) {
+			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $db->getMessage(), $matches);
 			if ($matches[2] == "1049") {
 				return true;
 			} else if ($matches[2] == "1044") {
@@ -474,8 +458,8 @@ class Installer {
 	private function isDatabase($credentials, $data, &$respond) {
 		$db = $this->getSQLServerConnection($credentials);
 		
-		if ($db instanceof PDOException && strstr($e->getMessage(), 'SQLSTATE[')) {
-			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $e->getMessage(), $matches);
+		if ($db instanceof PDOException && strstr($db->getMessage(), 'SQLSTATE[')) {
+			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $db->getMessage(), $matches);
 			if ($matches[2] == "1049") {
 				$this->view->error('group', $data['group'], 'Unable to find the database', "The database you specified cannot be found.");
 				return $respond = false;
@@ -496,16 +480,17 @@ class Installer {
 	 * @return bool
 	 */
 	private function isPrefixNotExisting($credentials, $data, &$respond) {
-		$db = $this->getDatabaseObject($credentials);
+		$db = $this->getSQLServerConnection($credentials);
 		
-		if ($db) {
+		if ($db instanceof PDO) {
 			$prefix = (!empty($credentials['prefix'])) ? $credentials['prefix']."_":"";
+			$prefix .= "users";
 			
 			$prep = $db->prepare("SHOW TABLES LIKE :prefixedTable");
-			$prep->bindParam(":prefixedTable", $prefix."user");
+			$prep->bindParam(":prefixedTable", $prefix);
 			$prep->execute();
 			$data = $prep->fetch();
-			return !empty($data);
+			return empty($data);
 		}
 		
 		return false;
