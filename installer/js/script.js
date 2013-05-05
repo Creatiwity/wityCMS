@@ -489,7 +489,7 @@ $(document).ready(function() {
 				return false;
 			}
 
-			datas = {"content": content, "valid": true, "errors-messages": []};
+			datas = {"content": content, "valid": true, "errors-messages": new Array()};
 			this.element.trigger('validate', [datas]);
 			if(!datas.valid) {
 				this.storeErrors(datas.errors-messages);
@@ -549,12 +549,12 @@ $(document).ready(function() {
 		return Field;
 	})();
 	
-	$(document).on('validate', '[data-wity-validate-regexp]', function(datas) {
+	$(document).on('validate', '[data-wity-validate-regexp]', function(event, datas) {
 		var value, regexp, error;
 		
 		value = datas.content;
-		regexp = $(this).attr('[data-wity-validate-regexp]');
-		error = $(this).attr('[data-wity-regexp-message]');
+		regexp = new RegExp($(this).attr('data-wity-validate-regexp'));
+		error = $(this).attr('data-wity-regexp-message');
 		
 		if(value && !regexp.test(value)) {
 			datas.valid = false;
@@ -565,13 +565,13 @@ $(document).ready(function() {
 		}
 	});
 
-	$(document).on('validate', '[data-wity-validate-equals]', function(datas) {
+	$(document).on('validate', '[data-wity-validate-equals]', function(event, datas) {
 		var value, fieldName, otherValue, error;
 		
 		value = datas.content;
-		fieldName = $(this).attr('[data-wity-validate-equals]');
+		fieldName = $(this).attr('data-wity-validate-equals');
 		otherValue = $('[name="'+fieldName+'"]').val();
-		error = $(this).attr('[data-wity-equals-message]');
+		error = $(this).attr('data-wity-equals-message');
 		
 		if(value !== otherValue) {
 			datas.valid = false;
