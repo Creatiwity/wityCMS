@@ -222,6 +222,16 @@ $(document).ready(function() {
 			this.stepStatus.removeClass('icon-ok icon-remove');
 			isValid ? this.stepStatus.addClass('icon-ok') : this.stepStatus.addClass('icon-remove');
 		};
+
+		Step.prototype.values = function() {
+			var datas = {};
+
+			$.each(this.groupInstances, function(index, group) {
+				group.populateWithValues(datas);
+			});
+
+			return datas;
+		};
 		
 		return Step;
 	})();

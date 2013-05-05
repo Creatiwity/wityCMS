@@ -178,9 +178,10 @@ class Installer {
 	 * @return bool
 	 */
 	private function installerValidation($data) {
-		$inputs = array('site_name', 'base', 'theme', 'language', 'server', 'port', 'user', 'pw', 'dbname', 'prefix', 'default', 'admin');
+		$inputs = array('site_name', 'base_url', 'theme', 'language', 'front_app', 'admin_app', 'db_credentials', 'db_name', 'tables_prefix', 'user_password', 'user_nickname', 'user_email');
 		foreach ($inputs as $input_name) {
-			if (!$this->groupValidation($input_name)) {
+			$data['group'] = $input_name;
+			if (!$this->groupValidation($data)) {
 				return false;
 			}
 		}
@@ -318,7 +319,7 @@ class Installer {
 				}
 			
 			case 'user_lastname':
-				$user_lastname = WRequest::ge('lastname', '', 'POST');
+				$user_lastname = WRequest::get('lastname', '', 'POST');
 				if ($this->isVerifiedString($user_lastname, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Lastname validated.");
 					return true;
@@ -328,7 +329,7 @@ class Installer {
 				}
 			
 			default:
-				$this->view->error('step', $data['step'], 'Unknown group', "You're trying to validate an unknown group.");
+				$this->view->error('installer', $data['installer'], 'Unknown group', "You're trying to validate an unknown group.");
 				return false;
 		}
 	}

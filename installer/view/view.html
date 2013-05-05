@@ -150,27 +150,27 @@
 									<div class="control-group">
 										<label class="control-label" for="nickname">Pseudo</label>
 										<div class="controls">
-											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="nickname" data-wity-validate-regexp="^[a-zA-Z0-9]([a-zA-Z0-9])*$" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value."/>
+											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="user_nickname" data-wity-validate-regexp="^[a-zA-Z0-9]([a-zA-Z0-9])*$" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value."/>
 										</div>
 									</div>
 									<div data-wity-group-alert="password"></div>
 									<div class="control-group">
 										<label class="control-label" for="password">Password</label>
 										<div class="controls">
-											<input type="password" id="password" name="password" data-wity-name="Password" data-wity-installer-group="password" data-wity-required="true"/>
+											<input type="password" id="password" name="password" data-wity-name="Password" data-wity-installer-group="user_password" data-wity-required="true"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label" for="confirm"><em>Confirmation</em></label>
 										<div class="controls">
-											<input type="password" id="confirm" name="confirm" data-wity-installer-group="password" data-wity-required="true" data-wity-validate-equals="password" data-wity-equals-message="Password and confirmation are different."/>
+											<input type="password" id="confirm" name="confirm" data-wity-installer-group="user_password" data-wity-required="true" data-wity-validate-equals="password" data-wity-equals-message="Password and confirmation are different."/>
 										</div>
 									</div>
 									<div data-wity-group-alert="email"></div>
 									<div class="control-group">
 										<label class="control-label" for="email">Email</label>
 										<div class="controls">
-											<input type="email" id="email" name="email" data-wity-name="Email" data-wity-installer-group="email" data-wity-validate-regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$" data-wity-required="true" data-wity-regexp-message="This email is not valid."/>
+											<input type="email" id="email" name="email" data-wity-name="Email" data-wity-installer-group="user_email" data-wity-validate-regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$" data-wity-required="true" data-wity-regexp-message="This email is not valid."/>
 										</div>
 									</div>
 									<hr/>
@@ -178,14 +178,14 @@
 									<div class="control-group">
 										<label class="control-label" for="firstname">Firstname</label>
 										<div class="controls">
-											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="firstname" data-wity-validate-regexp="^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$" data-wity-regexp-message="The firstname is not valid."/>
+											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="user_firstname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The firstname is not valid."/>
 										</div>
 									</div>
 									<div data-wity-group-alert="lastname"></div>
 									<div class="control-group">
 										<label class="control-label" for="lastname">Lastname</label>
 										<div class="controls">
-											<input type="text" id="lastname" name="lastname" data-wity-name="Lastname" data-wity-installer-group="lastname" data-wity-validate-regexp="^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$" data-wity-regexp-message="The lastname is not valid."/>
+											<input type="text" id="lastname" name="lastname" data-wity-name="Lastname" data-wity-installer-group="user_lastname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The lastname is not valid."/>
 										</div>
 									</div>
 								</div>
