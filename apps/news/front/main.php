@@ -34,19 +34,26 @@ class NewsController extends WController {
 	
 	public function listing() {
 		$news_id = $this->getId();
-		if (!empty($news_id) && $this->model->validExistingNewsId($news_id)) {
-			$this->display($news_id);
+		if (!empty($news_id) && !$this->model->validExistingNewsId($news_id)) {
+			// display error
+			$news_id = 0;
+		}
+		
+		if (empty($news_id)) {
+			return $this->display($news_id);
 		} else {
-			$this->listNews();
+			return $this->listNews();
 		}
 	}
 	
 	protected function listNews() {
-		$this->view->listing();
+		return $this->model->getNewsList(0, 3);
+		// $this->view->listing();
 	}
 	
 	protected function display($news_id) {
-		$this->view->detail($news_id);
+		return $this->model->getNews($news_id);
+		// $this->view->detail($news_id);
 	}
 }
 
