@@ -427,12 +427,11 @@ $(document).ready(function() {
 			}
 			
 			if(this.element.is('select')) {
-				this.type = "select";
-				this.element.on('blur change', function() {that.validateInField();});
+				this.type = "select";				
 			} else {
 				this.type = this.element.attr('type');
-				this.element.on('blur change', function() {that.validateInField();});
 			}
+			this.element.on('blur', function() {that.validateInField();});
 			this.name = this.element.attr('name');
 			this.validatedContent = null;
 		};
@@ -553,7 +552,7 @@ $(document).ready(function() {
 		var value, regexp, error;
 		
 		value = datas.content;
-		regexp = new RegExp($(this).attr('data-wity-validate-regexp'));
+		regexp = $(this).attr('data-wity-validate-regexp');
 		error = $(this).attr('data-wity-regexp-message');
 		
 		if(value && !regexp.test(value)) {
