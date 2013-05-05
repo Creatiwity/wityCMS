@@ -14,14 +14,6 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-04-2013
  */
 class NewsController extends WController {
-	public function __construct() {
-		include 'model.php';
-		$this->model = new NewsModel();
-		
-		include 'view.php';
-		$this->setView(new NewsView($this->model));
-	}
-	
 	private function getId() {
 		$args = WRoute::getArgs();
 		if (empty($args[0])) {
@@ -39,7 +31,7 @@ class NewsController extends WController {
 			$news_id = 0;
 		}
 		
-		if (empty($news_id)) {
+		if (!empty($news_id)) {
 			return $this->display($news_id);
 		} else {
 			return $this->listNews();
@@ -48,12 +40,10 @@ class NewsController extends WController {
 	
 	protected function listNews() {
 		return $this->model->getNewsList(0, 3);
-		// $this->view->listing();
 	}
 	
 	protected function display($news_id) {
-		return $this->model->getNews($news_id);
-		// $this->view->detail($news_id);
+		return array($this->model->getNews($news_id));
 	}
 }
 

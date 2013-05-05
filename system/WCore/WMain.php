@@ -63,9 +63,34 @@ class WMain {
 					'admin'      => false
 				);
 				
+				// Construct App Controller
 				$controller = new $app_class();
+				
+				// Instantiate Model if exists
+				if (file_exists($app_dir.'model.php')) {
+					include $app_dir.'model.php';
+					$model_class = str_replace('Controller', 'Model', $app_class);
+					if (class_exists($model_class)) {
+						$controller->model = new $model_class();
+					}
+				}
+				
+				// Instantiate View if exists
+				if (file_exists($app_dir.'view.php')) {
+					include $app_dir.'view.php';
+					$view_class = str_replace('Controller', 'View', $app_class);
+					if (class_exists($view_class)) {
+						$controller->setView(new $view_class());
+					}
+				}
+				
+				// Init & Launch
 				$controller->init($this, $context);
-				$controller->launch();
+				$model = $controller->launch();
+				
+				// Render View
+				$view = $controller->getView();
+				$view->render($controller->getTriggeredAction(), $model);
 			} else {
 				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
 			}

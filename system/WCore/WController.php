@@ -76,7 +76,7 @@ abstract class WController {
 	
 	public function launch() {
 		// Trigger proper method
-		$this->forward($this->getAskedAction());
+		return $this->forward($this->getAskedAction());
 	}
 	
 	/**
@@ -84,7 +84,7 @@ abstract class WController {
 	 * 
 	 * @param type $action  action under execution
 	 * @param type $default optional default action value
-	 * @return boolean Action forwarding success
+	 * @return mixed Model|false if error
 	 */
 	protected final function forward($action) {
 		if (!empty($action)) {
@@ -92,11 +92,10 @@ abstract class WController {
 				// Execute action
 				if (method_exists($this, $action)) {
 					$this->action = $action;
-					$this->$action();
+					return $this->$action();
 				} else {
 					WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
 				}
-				return true;
 			} else {
 				WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.', 'display');
 			}

@@ -218,15 +218,20 @@ class WView {
 	 * @param  string  $response  Template file to be displayed
 	 * @return boolean true if view successfully loaded, false otherwise
 	 */
-	public function render($response = '') {
+	public function render($response = '', $model = array()) {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
 			// HTML sent => abort
 			return false;
 		}
 		
-		// Declare response file if given
 		if (!empty($response)) {
+			// Prepare the view
+			if (method_exists($this, $response)) {
+				$this->$response($model);
+			}
+			
+			// Declare response file if given
 			$this->setResponse($response);
 		}
 		
