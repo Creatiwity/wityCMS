@@ -489,10 +489,10 @@ $(document).ready(function() {
 				return false;
 			}
 
-			datas = {"content": content, "valid": true, "errors-messages": new Array()};
+			datas = {"content": content, "valid": true, "errors": new Array()};
 			this.element.trigger('validate', [datas]);
 			if(!datas.valid) {
-				this.storeErrors(datas.errors-messages);
+				this.storeErrors(datas.errors);
 				this.validated = false;
 				return false;
 			}
