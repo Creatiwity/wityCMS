@@ -417,12 +417,12 @@ class Installer {
 			$dsn .= $credentials['dbname'];
 		}
 		$dsn .= ';host='.$credentials['server'].';';
-		if (isset($credentials['port']) && !empty($credentials['port']) && is_numeric($credentials['port'])) {
+		if (!empty($credentials['port']) && is_numeric($credentials['port'])) {
 			$dsn .=  'port='.$credentials['port'];
 		}
 		
 		try {
-			return new PDO($dsn, $credentials['user'], $credentials['pw']);
+			return @new PDO($dsn, $credentials['user'], $credentials['pw']);
 		} catch (PDOException $e) {
 			return $e;
 		}

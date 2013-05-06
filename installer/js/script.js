@@ -291,7 +291,6 @@ $(document).ready(function() {
 			}
 
 			$("[data-wity-installer-group='"+name+"']").on('validate-group', function(event, memo) {
-				var oldValid = that.validated;
 				that.validate();
 			});
 		};
@@ -452,37 +451,41 @@ $(document).ready(function() {
 			oldValid = this.validated;
 			oldValidatedContent = this.validatedContent;
 			content = this.value();
-
+			
+			// Validate field
 			this.validate();
 
-			if(!this.validated && (!content || content === "") && this.required) {
+			// if(!this.validated && (!content || content === "") && this.required) {
 				// not validated : field is empty and required
-				this.clearErrors();
-			} else if(!this.validated) {
+				// this.clearErrors();
+			// } else 
+			if(!this.validated) {
 				// display errors on the field
 				this.displayErrors();
-				// validated and content changed or validated changed
-			} else if((this.validatedContent !== oldValidatedContent) || (oldValid !== this.validated)) {
+			}
+			// validated and content changed or validated changed
+			else if((this.validatedContent !== oldValidatedContent) || (oldValid !== this.validated)) {
 				this.element.trigger('validate-group');
 			}
 
 		};
 
 		Field.prototype.validateInGroup = function() {
-			var oldValidatedContent;
-
-			if(this.validated && (this.value() === this.validatedContent)) {
-				return true;
+			var oldValidatedContent, oldValue;
+			
+			oldValue = this.value();
+			if(oldValue === this.validatedContent) {
+				return this.validated;
 			} else {
 				oldValidatedContent = this.validatedContent;
 				this.validate();
-
-				if(!this.validated && (!oldValidatedContent || oldValidatedContent === "") && (this.value || this.value === "") && this.required) {
-					// not validated : field is empty and required
-					this.clearErrors();
-				} else if(!this.validated) {
-					// display errors on the field
-					this.displayErrors();
+				
+				if (!this.validated) {
+					if (this.required && (oldValidatedContent == null || oldValidatedContent === "") && (oldValue == null || oldValue === "")) { // not validated : field is empty and required
+						this.clearErrors();
+					} else { // display errors on the field
+						this.displayErrors();
+					}
 				}
 			}
 		};
@@ -491,7 +494,7 @@ $(document).ready(function() {
 			var content, datas;
 
 			content = this.value();
-
+			
 			if(this.required && (!content || content === "")) {
 				this.storeErrors(["This field is required."]);
 				this.validated = false;
@@ -500,13 +503,15 @@ $(document).ready(function() {
 
 			datas = {"content": content, "valid": true, "errors": new Array()};
 			this.element.trigger('validate', [datas]);
+			
 			if(!datas.valid) {
 				this.storeErrors(datas.errors);
 				this.validated = false;
 				return false;
 			}
-			this.validatedContent = content;
+			
 			this.clearErrors();
+			this.validatedContent = content;
 			this.validated = true;
 			return true;
 		};
@@ -529,9 +534,15 @@ $(document).ready(function() {
 		Field.prototype.isEmpty = function() {
 			var value = this.value();
 
-			return (value!==null && value!==undefined && value!==""); 
+			return (value !== null && value !== undefined && value !== ""); 
 		};
 		
+		/**
+		 * Gets or assigns a new value to the field
+		 * 
+		 * @param mixed New value to assign
+		 * @return mixed null if no value or the old value
+		 */
 		Field.prototype.value = function(newValue) {
 			var oldValue;
 			if(this.type === "checkbox") {
