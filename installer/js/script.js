@@ -398,6 +398,9 @@ $(document).ready(function() {
 			$("[data-wity-installer-group='"+name+"']").on('validate-group', function(event, memo) {
 				that.validate();
 			});
+			
+			// Attempt to validate the group with the init values
+			this.validate();
 		};
 		
 		/**
