@@ -20,7 +20,7 @@ class Installer {
 	private $APPS_DIR;
 	private $CONFIG_DIR;
 	
-	private $EXCLUDED_THEMES = array('system', 'admin');
+	private $EXCLUDED_THEMES = array('system', 'admin-bootstrap');
 	private $EXCLUDED_APPS = array('admin');
 	private $EXCLUDED_DIRS = array('.', '..');
 	
