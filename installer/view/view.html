@@ -63,7 +63,7 @@
 									<div class="control-group">
 										<label class="control-label" for="base">Base URL</label>
 										<div class="controls">
-											<input type="url" id="base" name="base" data-wity-installer-group="base_url" data-wity-name="Base URL" data-wity-validate-regexp="^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(\/[A-Z0-9~\._-]+)*\/?$" data-wity-regexp-message="Base URL must be a valid URL" data-wity-required="true"/>
+											<input type="url" id="base" name="base" data-wity-installer-group="base_url" data-wity-name="Base URL" data-wity-validate-regexp="^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(\/[A-Z0-9~\._-]+)*\/?$" data-wity-regexp-message="Base URL must be a valid URL" data-wity-required="true" data-wity-validate-init="true"/>
 										</div>
 									</div>
 									<div data-wity-group-alert="theme"></div>
@@ -77,7 +77,7 @@
 									<div class="control-group">
 										<label class="control-label" for="lang">Language</label>
 										<div class="controls">
-											<select name="lang" id="lang" data-wity-name="Language" data-wity-required="true" data-wity-installer-group="language">
+											<select name="lang" id="lang" data-wity-name="Language" data-wity-required="true" data-wity-installer-group="language" data-wity-validate-init="true">
 												<option selected="selected">en-EN</option>
 												<option selected="selected">fr-FR</option>
 											</select>
@@ -146,14 +146,14 @@
 							</div>
 							<div class="tab-pane" id="admin_configuration_tab"  data-wity-installer-step="user" data-wity-name="User">
 								<fieldset class="form-horizontal">
-									<div data-wity-group-alert="nickname"></div>
+									<div data-wity-group-alert="user_nickname"></div>
 									<div class="control-group">
 										<label class="control-label" for="nickname">Pseudo</label>
 										<div class="controls">
 											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="user_nickname" data-wity-validate-regexp="^[a-zA-Z0-9]([a-zA-Z0-9])*$" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value."/>
 										</div>
 									</div>
-									<div data-wity-group-alert="password"></div>
+									<div data-wity-group-alert="user_password"></div>
 									<div class="control-group">
 										<label class="control-label" for="password">Password</label>
 										<div class="controls">
@@ -166,7 +166,7 @@
 											<input type="password" id="confirm" name="confirm" data-wity-installer-group="user_password" data-wity-required="true" data-wity-validate-equals="password" data-wity-equals-message="Password and confirmation are different."/>
 										</div>
 									</div>
-									<div data-wity-group-alert="email"></div>
+									<div data-wity-group-alert="user_email"></div>
 									<div class="control-group">
 										<label class="control-label" for="email">Email</label>
 										<div class="controls">
@@ -174,14 +174,14 @@
 										</div>
 									</div>
 									<hr/>
-									<div data-wity-group-alert="firstname"></div>
+									<div data-wity-group-alert="user_firstname"></div>
 									<div class="control-group">
 										<label class="control-label" for="firstname">Firstname</label>
 										<div class="controls">
 											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="user_firstname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The firstname is not valid."/>
 										</div>
 									</div>
-									<div data-wity-group-alert="lastname"></div>
+									<div data-wity-group-alert="user_lastname"></div>
 									<div class="control-group">
 										<label class="control-label" for="lastname">Lastname</label>
 										<div class="controls">

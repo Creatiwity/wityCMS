@@ -380,7 +380,7 @@ $(document).ready(function() {
 				}
 				
 				// Instantiate the field
-				field = new Field(fieldElement);
+				field = new Field(fieldElement, that);
 				that.fieldInstances[field.name] = field;
 			});
 			
@@ -400,7 +400,9 @@ $(document).ready(function() {
 			});
 			
 			// Attempt to validate the group with the init values
-			this.validate();
+			if (this.element.attr('data-wity-validate-init') === "true") {
+				this.validate();
+			}
 		};
 		
 		/**
@@ -411,6 +413,9 @@ $(document).ready(function() {
 			
 			that = this;
 			abortAjax = false; // used to cancel final ajax request
+			
+			this.showValid(false);
+			this.clearErrors();
 			
 			// For each required group
 			for(var index = 0, length = this.requiredGroups.length; index < length; ++index) {
@@ -438,6 +443,11 @@ $(document).ready(function() {
 				else if(field.required || !field.isEmpty()) {
 					that.validated = false;
 					abortAjax = true;
+				}
+				
+				var alerts = field.getErrors();
+				if (alerts.length > 0) {
+					that.displayNotes(alerts, 'alert-error');
 				}
 			});
 			
@@ -469,10 +479,28 @@ $(document).ready(function() {
 		 * Clear group errors
 		 */
 		Group.prototype.clearErrors = function() {
+			$.each(this.fieldInstances, function(index, field) {
+				field.clearErrors();
+			});
+			
 			for(var i = this.alerts.length-1; i >= 0; --i) {
 				this.alerts[i].alert('close');
 				this.alerts.splice(i,1);
 			}
+		};
+		
+		Group.prototype.displayNotes = function(notes, classes) {
+			var that = this;
+			$.each(notes, function(index, r) {
+				var alert = $('<div class="alert">'+
+					'<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+				'</div>');
+				$('<strong>'+r.head_message+'</strong>').appendTo(alert);
+				alert.append(' '+r.message);
+				alert.appendTo(that.alertContainer);
+				alert.addClass(classes);
+				that.alerts.push(alert);
+			});
 		};
 		
 		/**
@@ -487,22 +515,8 @@ $(document).ready(function() {
 			
 			oldValid = this.validated;
 			this.validated = true;
-			this.clearErrors();
 			
 			response = response && response.group && response.group[this.name];
-			
-			displayNotes = function(notes, classes) {
-				$.each(notes, function(index, r) {
-					var alert = $('<div class="alert">'+
-						'<button type="button" class="close" data-dismiss="alert">&times;</button>'+
-					'</div>');
-					$('<strong>'+r.head_message+'</strong>').appendTo(alert);
-					alert.append(' '+r.message);
-					alert.appendTo(that.alertContainer);
-					alert.addClass(classes);
-					that.alerts.push(alert);
-				});
-			};
 			
 			// Apply response type to the group
 			if(response) {
@@ -512,17 +526,17 @@ $(document).ready(function() {
 				
 				if(response.warning) {
 					this.showValid(true);
-					displayNotes(response.warning, '');
+					this.displayNotes(response.warning, '');
 				}
 				
 				if(response.error) {
 					this.showValid(false);
-					displayNotes(response.error, 'alert-error');
+					this.displayNotes(response.error, 'alert-error');
 					this.validated = false;
 				}
 				
 				if(response.info) {
-					displayNotes(response.success, 'alert-info');
+					this.displayNotes(response.success, 'alert-info');
 				}
 			}
 			
@@ -575,7 +589,7 @@ $(document).ready(function() {
 		 * 
 		 * @param DOMNode elem HTML node of the field
 		 */
-		function Field(elem) {
+		function Field(elem, group) {
 			var that = this;
 			
 			// Init properties
@@ -584,6 +598,8 @@ $(document).ready(function() {
 			this.errors = new Array();
 			this.name = this.element.attr('name');
 			this.validatedContent = null;
+			this.group = group;
+			this.alerts = new Array();
 
 			if(this.element.is('[data-wity-required-field]')) {
 				this.required = (this.element.attr('data-wity-required-field') === "true");
@@ -610,6 +626,7 @@ $(document).ready(function() {
 			var content, datas;
 
 			content = this.value();
+			
 			this.validatedContent = content;
 			
 			if(this.required && (!content || content === "")) {
@@ -617,7 +634,7 @@ $(document).ready(function() {
 				return this.validated = false;
 			}
 			
-			// Ask to the server if content is valid
+			// Trigger "validate" event for regexp or equals to another field checkup
 			datas = {"content": content, "valid": true, "errors": new Array()};
 			this.element.trigger('validate', [datas]);
 			
@@ -626,7 +643,6 @@ $(document).ready(function() {
 				return this.validated = false;
 			}
 			
-			this.clearErrors();
 			return this.validated = true;
 		};
 		
@@ -636,19 +652,9 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInField = function() {
-			var content;
-			
-			content = this.validatedContent;
-			
-			// Validate field
-			this.validate();
-			
-			if (!this.validated) {
-				this.displayErrors();
-			}
-			
 			// validated and content changed or validated changed
-			if(content != this.validatedContent) {
+			if(this.value() !== this.validatedContent) {
+				// this.clearErrors();
 				this.element.trigger('validate-group');
 			}
 		};
@@ -659,19 +665,11 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInGroup = function() {
-			var oldValidatedContent, content;
-			
-			content = this.value();
-			
 			// Validate field
 			this.validate();
 			
 			if (!this.validated) {
-				if (this.validatedContent != null && this.validatedContent != content) {
-					this.displayErrors(); // display errors on the field
-				}
-			} else {
-				this.clearErrors();
+				this.displayErrors(); // display errors on the field
 			}
 		};
 		
@@ -689,7 +687,13 @@ $(document).ready(function() {
 		 * @todo
 		 */
 		Field.prototype.storeErrors = function(errors) {
-
+			this.alerts.push({'head_message': '', 'message': errors});
+		};
+		
+		Field.prototype.getErrors = function() {
+			var alerts = this.alerts;
+			this.alerts = new Array();
+			return alerts;
 		};
 		
 		/**
@@ -766,10 +770,12 @@ $(document).ready(function() {
 		otherValue = $('[name="'+fieldName+'"]').val();
 		error = $(this).attr('data-wity-equals-message');
 		
-		if(value !== otherValue) {
+		if(otherValue !== "" && value !== otherValue) {
 			datas.valid = false;
 			
 			if(error) {
+				var cg = $('[name="'+fieldName+'"]').closest('.control-group');
+				cg.addClass('error');
 				datas.errors.push(error);
 			}
 		}
