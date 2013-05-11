@@ -1,4 +1,4 @@
 cache/[^.]*/
 /nbproject
 doc/
-installer/bypass.php
+installer/bypass*
