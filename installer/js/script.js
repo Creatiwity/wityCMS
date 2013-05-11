@@ -7,7 +7,9 @@
 
 $(document).ready(function() {
 	
-	var Installer, Step, Group, Field, processAjax, WITY_INSTALLER;
+	var Installer, Step, Group, Field, processAjax, typeaheadResults, WITY_INSTALLER;
+	
+	typeaheadResults = {};
 	
 	/**
 	 * Class Installer
@@ -791,19 +793,23 @@ $(document).ready(function() {
 			var command, callback;
 			command = this.$element.attr('data-wity-autocomplete');
 			
-			callback = function(data) {
-				var prepared = new Array();
+			if(typeaheadResults && typeaheadResults[command]) {
+				process(typeaheadResults[command]);
+			} else {
+				callback = function(data) {
+					typeaheadResults[command] = new Array();
+
+					data = (data && data.content) || {};
+
+					for (var key in data[command]) {
+						typeaheadResults[command].push(data[command][key]);
+					}
+
+					process(typeaheadResults[command]);
+				};
 				
-				data = (data && data.content) || {};
-				
-				for (var key in data[command]) {
-					prepared.push(data[command][key]);
-				}
-				
-				process(prepared);
-			};
-			
-			processAjax(document.location, {"command": command}, callback, WITY_INSTALLER);			
+				processAjax(document.location, {"command": command}, callback, WITY_INSTALLER);
+			}		
 		},
 		minLength:0
 	});
