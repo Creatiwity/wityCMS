@@ -274,7 +274,7 @@ $(document).ready(function() {
 				that.showValid(that.validated);
 				
 				// Step status has been updated, so update installer status
-				if(that.validated != oldValid) {
+				if(that.validated !== oldValid) {
 					that.element.trigger('validate-installer');
 				}
 			});
@@ -548,7 +548,7 @@ $(document).ready(function() {
 			}
 			
 			// If group valid status changed, validate the step
-			if(this.validated != oldValid) {
+			if(this.validated !== oldValid) {
 				this.element.trigger('validate-step');
 			}
 		};
@@ -661,7 +661,7 @@ $(document).ready(function() {
 		Field.prototype.validateInField = function() {
 			// validated and content changed or validated changed
 			if(this.value() !== this.validatedContent) {
-				if (this.validatedContent == null) {
+				if (this.validatedContent === null) {
 					this.validatedContent = "";
 				}
 				
@@ -675,7 +675,7 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInGroup = function() {
-			if (this.validatedContent == null && this.value() == "") {
+			if (this.validatedContent === null && this.value() === "") {
 				return;
 			}
 			
@@ -744,7 +744,7 @@ $(document).ready(function() {
 				oldValue = this.element.is(':checked') ? true : null;
 				
 				if(newValue !== null && newValue !== undefined) {
-					this.element.prop('checked', newValue == true);
+					this.element.prop('checked', newValue === true);
 				}
 			} else {
 				oldValue = this.element.val();
