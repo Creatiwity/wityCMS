@@ -416,7 +416,6 @@ $(document).ready(function() {
 			that = this;
 			abortAjax = false; // used to cancel final ajax request
 			
-			this.showValid(false);
 			this.clearErrors();
 			
 			// For each required group
@@ -433,6 +432,7 @@ $(document).ready(function() {
 			this.empty = true;
 			
 			// For each field in the group
+			var alerts = new Array();
 			$.each(this.fieldInstances, function(index, field) {
 				// Validate field
 				field.validateInGroup();
@@ -447,13 +447,18 @@ $(document).ready(function() {
 					abortAjax = true;
 				}
 				
-				var alerts = field.getErrors();
+				alerts = field.getErrors();
 				if (alerts.length > 0) {
 					that.displayNotes(alerts, 'alert-error');
 				}
 			});
 			
+			// A required group or a field within this group is not validated
+			// => cancel the checking with the server
 			if(abortAjax) {
+				if (alerts.length > 0) {
+					this.showValid(false);
+				}
 				return false;
 			}
 			
@@ -616,7 +621,7 @@ $(document).ready(function() {
 			}
 			
 			// Defines validate event "blur"
-			this.element.on('blur', function() {that.validateInField();});
+			this.element.on('change blur', function() {that.validateInField();});
 		};
 		
 		/**
@@ -656,7 +661,10 @@ $(document).ready(function() {
 		Field.prototype.validateInField = function() {
 			// validated and content changed or validated changed
 			if(this.value() !== this.validatedContent) {
-				// this.clearErrors();
+				if (this.validatedContent == null) {
+					this.validatedContent = "";
+				}
+				
 				this.element.trigger('validate-group');
 			}
 		};
@@ -667,6 +675,10 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInGroup = function() {
+			if (this.validatedContent == null && this.value() == "") {
+				return;
+			}
+			
 			// Validate field
 			this.validate();
 			
