@@ -42,7 +42,7 @@ require_once SYS_DIR.'WCore'.DS.'WMain.php';
 /**
  * Installer section
  */
-if (file_exists('installer/installer.php')) {
+if (file_exists('installer/installer.php') && !file_exists('installer/bypass.php')) {
 	require 'installer/installer.php';
 	$installer = new Installer();
 	$installer->launch();
