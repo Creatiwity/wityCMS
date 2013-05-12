@@ -26,6 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `prefix_news`
 --
 
+DROP TABLE IF EXISTS `prefix_news`;
 CREATE TABLE IF NOT EXISTS `prefix_news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` tinytext CHARACTER SET latin1 NOT NULL,
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news` (
 -- Table structure for table `prefix_news_cats`
 --
 
+DROP TABLE IF EXISTS `prefix_news_cats`;
 CREATE TABLE IF NOT EXISTS `prefix_news_cats` (
   `cid` tinyint(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext CHARACTER SET latin1 NOT NULL,
@@ -62,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats` (
 -- Table structure for table `prefix_news_cats_relations`
 --
 
+DROP TABLE IF EXISTS `prefix_news_cats_relations`;
 CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
   `prefix_news_id` mediumint(9) NOT NULL,
   `cat_id` tinyint(4) NOT NULL
@@ -73,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
 -- Table structure for table `prefix_users`
 --
 
+DROP TABLE IF EXISTS `prefix_users`;
 CREATE TABLE IF NOT EXISTS `prefix_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nickname` varchar(100) CHARACTER SET latin1 NOT NULL,
@@ -97,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `prefix_users` (
 -- Table structure for table `prefix_users_config`
 --
 
+DROP TABLE IF EXISTS `prefix_users_config`;
 CREATE TABLE IF NOT EXISTS `prefix_users_config` (
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(50) COLLATE utf8_unicode_ci NOT NULL
@@ -106,8 +111,8 @@ CREATE TABLE IF NOT EXISTS `prefix_users_config` (
 
 INSERT INTO `prefix_users_config` (`name`, `value`) VALUES
 ('register', '1'),
-('email_conf', '1'),
-('admin_check', '1'),
+('email_conf', '0'),
+('admin_check', '0'),
 ('summary', '1'),
 ('keep_users', '1');
 
@@ -115,6 +120,7 @@ INSERT INTO `prefix_users_config` (`name`, `value`) VALUES
 -- Table structure for table `prefix_users_groups`
 --
 
+DROP TABLE IF EXISTS `prefix_users_groups`;
 CREATE TABLE IF NOT EXISTS `prefix_users_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent` mediumint(9) NOT NULL,
