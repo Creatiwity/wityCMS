@@ -478,9 +478,9 @@ $(document).ready(function() {
 			
 			// A required group or a field within this group is not validated
 			// => cancel the checking with the server
-			if(abortAjax) {
-				this.showValid(false);
+			if(abortAjax) 				
 				if(!abortShowInvalidOnFields) {
+					this.showValid(false);
 					this.showValidOnFields(false);
 				}
 				return false;
