@@ -134,6 +134,8 @@ class Installer {
 							}
 						}
 						rmdir($dir);
+						
+						$this->view->success('installer', $data['installer'], 'Congratulations', 'Installation finished !');
 					} else {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
 					}

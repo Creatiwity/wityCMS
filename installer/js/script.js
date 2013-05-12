@@ -432,7 +432,6 @@ $(document).ready(function() {
 			this.empty = true;
 			
 			// For each field in the group
-			var alerts = new Array();
 			$.each(this.fieldInstances, function(index, field) {
 				// Validate field
 				field.validateInGroup();
@@ -446,19 +445,12 @@ $(document).ready(function() {
 					that.validated = false;
 					abortAjax = true;
 				}
-				
-				alerts = field.getErrors();
-				if (alerts.length > 0) {
-					that.displayNotes(alerts, 'alert-error');
-				}
 			});
 			
 			// A required group or a field within this group is not validated
 			// => cancel the checking with the server
 			if(abortAjax) {
-				if (alerts.length > 0) {
-					this.showValid(false);
-				}
+				this.showValid(false);
 				return false;
 			}
 			
@@ -565,6 +557,12 @@ $(document).ready(function() {
 			if(isValid || (!this.required && this.empty)) {
 				$('<i class="icon-ok"></i>').prependTo(this.groupSummary);
 				this.groupSummary.addClass("text-success");
+				
+				$.each(this.fieldInstances, function(index, field) {
+					if(!field.isEmpty()) {
+						field.showValid(true);
+					}
+				});
 			} else if(!isValid || (this.required && this.empty)) {
 				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
 				
@@ -572,7 +570,7 @@ $(document).ready(function() {
 				// @todo find the fields with issue
 				$.each(this.fieldInstances, function(index, field) {
 					field.validated = false;
-					field.displayErrors();
+					field.showValid(false);
 				});
 				
 				if(!this.required) {
@@ -606,7 +604,7 @@ $(document).ready(function() {
 			this.name = this.element.attr('name');
 			this.validatedContent = null;
 			this.group = group;
-			this.alerts = new Array();
+			this.errorBlocks = new Array();
 
 			if(this.element.is('[data-wity-required-field]')) {
 				this.required = (this.element.attr('data-wity-required-field') === "true");
@@ -621,7 +619,7 @@ $(document).ready(function() {
 			}
 			
 			// Defines validate event "blur"
-			this.element.on('change blur', function() {that.validateInField();});
+			this.element.on('blur', function() {that.validateInField();});
 		};
 		
 		/**
@@ -661,6 +659,7 @@ $(document).ready(function() {
 		Field.prototype.validateInField = function() {
 			// validated and content changed or validated changed
 			if(this.value() !== this.validatedContent) {
+				this.clearErrors();
 				if (this.validatedContent === null) {
 					this.validatedContent = "";
 				}
@@ -675,6 +674,7 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInGroup = function() {
+			this.clearErrors();
 			if (this.validatedContent === null && this.value() === "") {
 				return;
 			}
@@ -691,8 +691,12 @@ $(document).ready(function() {
 		 * Remove errors displayed on the field
 		 */
 		Field.prototype.clearErrors = function() {
-			var cg = this.element.closest('.control-group');
-			cg.removeClass('error');
+			this.showValid();
+			
+			for(var i = this.errorBlocks.length-1; i >= 0; --i) {
+				this.errorBlocks[i].remove();
+				this.errorBlocks.splice(i,1);
+			}
 		};
 		
 		/**
@@ -701,13 +705,7 @@ $(document).ready(function() {
 		 * @todo
 		 */
 		Field.prototype.storeErrors = function(errors) {
-			this.alerts.push({'head_message': '', 'message': errors});
-		};
-		
-		Field.prototype.getErrors = function() {
-			var alerts = this.alerts;
-			this.alerts = new Array();
-			return alerts;
+			this.errors = this.errors.concat(errors);
 		};
 		
 		/**
@@ -715,10 +713,31 @@ $(document).ready(function() {
 		 * 
 		 * @param Array errors
 		 */
-		Field.prototype.displayErrors = function(errors) {
+		Field.prototype.displayErrors = function() {
+			var that = this;
 			this.clearErrors();
-			var cg = this.element.closest('.control-group');
-			cg.addClass('error');
+			this.showValid(false);
+			
+			$.each(this.errors, function(index, r) {
+				var block = $('<span class="help-block"></span>');
+				block.html(r);
+				that.element.after(block);
+				that.errorBlocks.push(block);
+			});
+			
+			this.errors.length = 0;
+		};
+		
+		Field.prototype.showValid = function(valid) {
+			var cg;
+			cg = this.element.closest('.control-group');
+			cg.removeClass('error success');
+			
+			if(valid === true) {
+				cg.addClass('success');
+			} else if(valid === false) {
+				cg.addClass('error');
+			}
 		};
 		
 		/**
