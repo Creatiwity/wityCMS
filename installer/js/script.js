@@ -129,11 +129,15 @@ $(document).ready(function() {
 			var datas;
 			if(this.debugContainer) {
 				this.debugContainer.append($("<hr/><p>" + debugContent + "</p>"));
+				datas = {"installer": {}};
+				datas.installer[this.id] = {"warning": {"head_message": "Debug datas received", "message": "Some debug datas have been appended in the debug container."}};
+				this.processResponse(datas);
 			} else {
 				datas = {"installer": {}};
 				datas.installer[this.id] = {"error": {"head_message": "Unknown error", "message": "An unknown error occurred. Please restart the installer."}};
 				this.processResponse(datas);
 			}
+			this.btnRemaining();
 		};
 		
 		/**
