@@ -261,7 +261,7 @@ class UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
-		$groupe = isset($data['groupe']) ? $data['groupe'] : 0;
+		$groupe = isset($data['groupe']) ? $data['groupe'] : '';
 		$prep->bindParam(':groupe', $groupe);
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);

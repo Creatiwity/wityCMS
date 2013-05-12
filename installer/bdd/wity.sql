@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats` (
 
 DROP TABLE IF EXISTS `prefix_news_cats_relations`;
 CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
-  `prefix_news_id` mediumint(9) NOT NULL,
+  `news_id` mediumint(9) NOT NULL,
   `cat_id` tinyint(4) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
