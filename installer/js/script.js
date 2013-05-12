@@ -698,7 +698,7 @@ $(document).ready(function() {
 		 */
 		Field.prototype.validateInField = function() {
 			// Validate when the value changed
-			if(this.value() !== this.validatedContent && ((this.value() !== "" && this.value() !== null) || this.validatedContent !== null)) {
+			if(this.value() !== this.validatedContent) {
 				
 				// Init validatedContent value to allow validateInGroup to process
 				if(this.validatedContent === null) {
