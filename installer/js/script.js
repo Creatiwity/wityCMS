@@ -1,6 +1,25 @@
 /**
  * Script for Installer module
  * 
+ * Type on a lonely field :
+ * 
+ * onBlur or onClick or onChange :
+ *		reset server group + itself cached validation ( + onKey ...)
+ *		verify the field (required and validation)
+ *		trigger(valid)
+ *		verify each field in the group (required + client validation)
+ *		if server validation not ok, ajax call with all fields in the group serialized to know if ok or not
+ *			if all ok, cache validation, if change, up to step
+ *			if not, dispatch errors on fields -> display error fields
+ *		if validation not ok, nothing to do -> each field not validated itself display its error
+ *		if required not ok -> each field in required-error and not yet filled or no okButton pressed, nothing to do
+ *					otherwise display required-error.
+ * 
+ * step validation :
+ *		calls validate on each group -> return cached response, or if null, call validation-group and return cache
+ *		if valid, display valid, if change, call installer validate
+ *		if not, display not valid, if change, invalidate installer
+ * 
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.3
  */
@@ -9,6 +28,10 @@ $(document).ready(function() {
 	
 	var Installer, Step, Group, Field, processAjax, typeaheadResults, WITY_INSTALLER;
 	
+	/**
+	 * @var Stores the XHR results
+	 * @see processAjax()
+	 */
 	typeaheadResults = {};
 	
 	/**
@@ -65,23 +88,23 @@ $(document).ready(function() {
 			// Triggers final installation action
 			this.button.on('click', function(event) {
 				var datas, callback;
-
+				
 				datas = {};
 				
 				if(that.validated) {
 					// Retrieve all the data in the form steps
 					$.each(that.stepInstances, function(index, step) {
 						var stepDatas;
-
+						
 						stepDatas = step.values();
 						$.each(stepDatas, function(key, value) {
 							datas[key] = value;
 						});
 					});
-
+					
 					datas.installer = that.id;
 					datas.command = "FINISH_INSTALLATION";
-
+					
 					callback = function(datas) {
 						if(!datas || !datas.installer || !datas.installer[that.id] || !datas.installer[that.id].success) {
 							$.each(that.stepInstances, function(index, step) {
@@ -108,9 +131,9 @@ $(document).ready(function() {
 		 */
 		Installer.prototype.processResponse = function(data) {
 			var displayNotes, that;
-
+			
 			that = this;
-
+			
 			displayNotes = function(notes, classes) {
 				$.each(notes, function(index, r) {
 					var alert = $('<div class="alert">'+
@@ -148,7 +171,7 @@ $(document).ready(function() {
 				if(data.installer[this.id].success) {
 					$('[data-hide-onsuccess="'+this.id+'"]').hide();
 					$('[data-show-onsuccess="'+this.id+'"]').show();
-				}				
+				}
 			}
 		};
 		
@@ -216,7 +239,7 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * Class step
+	 * Class Step
 	 */
 	Step = (function() {
 		/**
@@ -282,7 +305,7 @@ $(document).ready(function() {
 			// Default, show step as invalid
 			this.showValid(false);
 		};
-
+		
 		/**
 		 * Displays a response message from the server to each sub-group
 		 * 
@@ -328,7 +351,7 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * Group class
+	 * Class Group
 	 */
 	Group = (function() {
 		/**
@@ -357,7 +380,7 @@ $(document).ready(function() {
 			
 			// Get required groups to validate this group
 			relatedGroups = this.element.attr('data-wity-require-groups');
-
+			
 			if(relatedGroups && relatedGroups !== "") {
 				this.requiredGroups = relatedGroups.split(" ");
 			}
@@ -371,12 +394,12 @@ $(document).ready(function() {
 				if(n = $(fieldElement).attr('data-wity-name')) {
 					label = n;
 				}
-
+				
 				if($(fieldElement).is('[data-wity-required-group]')) {
 					forcedRequired = true;
 					that.required = ($(fieldElement).attr('data-wity-required-group') === "true");
 				}
-
+				
 				if(!forcedRequired) {
 					that.required = (that.required || $(fieldElement).attr('data-wity-required') === "true");
 				}
@@ -402,7 +425,7 @@ $(document).ready(function() {
 			});
 			
 			// Attempt to validate the group with the init values
-			if (this.element.attr('data-wity-validate-init') === "true") {
+			if(this.element.attr('data-wity-validate-init') === "true") {
 				this.validate();
 			}
 		};
@@ -488,6 +511,12 @@ $(document).ready(function() {
 			}
 		};
 		
+		/**
+		 * Displays notes on the group
+		 * 
+		 * @param array notes
+		 * @param string CSS Classes to be used for this set of notes (alert-error, alert-info)
+		 */
 		Group.prototype.displayNotes = function(notes, classes) {
 			var that = this;
 			$.each(notes, function(index, r) {
@@ -509,7 +538,7 @@ $(document).ready(function() {
 		 */
 		Group.prototype.processResponse = function(response) {
 			var displayNotes, oldValid, that;
-
+			
 			that = this;
 			
 			oldValid = this.validated;
@@ -546,22 +575,24 @@ $(document).ready(function() {
 		};
 		
 		/**
-		 * Changes the group status view
+		 * Changes the Group Valid status
+		 * Applies the news status to each field within the group.
+		 * If the group is invalidated, all the fields inside become invalid.
 		 * 
 		 * @param bool isValid
 		 */
 		Group.prototype.showValid = function(isValid) {
-			this.groupSummary.removeClass("muted text-info text-success");			
-
+			this.groupSummary.removeClass("muted text-info text-success");
+			
 			this.groupSummary.find('i').remove();
 			if(isValid || (!this.required && this.empty)) {
 				$('<i class="icon-ok"></i>').prependTo(this.groupSummary);
 				this.groupSummary.addClass("text-success");
 				
 				$.each(this.fieldInstances, function(index, field) {
-					if(!field.isEmpty()) {
+					// if(!field.isEmpty()) {
 						field.showValid(true);
-					}
+					// }
 				});
 			} else if(!isValid || (this.required && this.empty)) {
 				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
@@ -586,7 +617,7 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * Field Class
+	 * Class Field
 	 */
 	Field = (function() {
 		/**
@@ -605,7 +636,7 @@ $(document).ready(function() {
 			this.validatedContent = null;
 			this.group = group;
 			this.errorBlocks = new Array();
-
+			
 			if(this.element.is('[data-wity-required-field]')) {
 				this.required = (this.element.attr('data-wity-required-field') === "true");
 			} else {
@@ -629,7 +660,7 @@ $(document).ready(function() {
 		 */
 		Field.prototype.validate = function() {
 			var content, datas;
-
+			
 			content = this.value();
 			
 			this.validatedContent = content;
@@ -657,15 +688,18 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInField = function() {
-			// validated and content changed or validated changed
+			// Validate when the value changed
 			if(this.value() !== this.validatedContent) {
 				this.clearErrors();
-				if (this.validatedContent === null) {
+				
+				// Init validatedContent value to allow validateInGroup to process
+				if(this.validatedContent === null) {
 					this.validatedContent = "";
 				}
 				
 				this.element.trigger('validate-group');
 			}
+			return this.validated;
 		};
 		
 		/**
@@ -674,17 +708,20 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInGroup = function() {
-			this.clearErrors();
-			if (this.validatedContent === null && this.value() === "") {
-				return;
+			if(this.validatedContent === null && this.value() === "") {
+				return false;
 			}
+			
+			this.clearErrors();
 			
 			// Validate field
 			this.validate();
 			
-			if (!this.validated) {
-				this.displayErrors(); // display errors on the field
+			if(!this.validated) {
+				this.displayErrors();
+				return false;
 			}
+			return true;
 		};
 		
 		/**
@@ -702,7 +739,7 @@ $(document).ready(function() {
 		/**
 		 * Store an error
 		 * 
-		 * @todo
+		 * @param Array errors Set of errors to add to the field
 		 */
 		Field.prototype.storeErrors = function(errors) {
 			this.errors = this.errors.concat(errors);
@@ -728,6 +765,11 @@ $(document).ready(function() {
 			this.errors.length = 0;
 		};
 		
+		/**
+		 * Changes the valid state of the field: error or success
+		 * 
+		 * @param bool valid
+		 */
 		Field.prototype.showValid = function(valid) {
 			var cg;
 			cg = this.element.closest('.control-group');
@@ -735,7 +777,7 @@ $(document).ready(function() {
 			
 			if(valid === true) {
 				cg.addClass('success');
-			} else if(valid === false) {
+			} else if(valid === false && this.validatedContent !== null) {
 				cg.addClass('error');
 			}
 		};
@@ -779,6 +821,12 @@ $(document).ready(function() {
 		return Field;
 	})();
 	
+	/**
+	 * Special validator event handler: 
+	 * validates a value with Regular Expression
+	 * 
+	 * This event receives the parameter datas = {valid: bool, errors: array}
+	 */
 	$(document).on('validate', '[data-wity-validate-regexp]', function(event, datas) {
 		var value, regexp, error;
 		
@@ -794,7 +842,13 @@ $(document).ready(function() {
 			}
 		}
 	});
-
+	
+	/**
+	 * Special validator event handler: 
+	 * validates a value compared to another field (other value)
+	 * 
+	 * This event receives the parameter datas = {valid: bool, errors: array}
+	 */
 	$(document).on('validate', '[data-wity-validate-equals]', function(event, datas) {
 		var value, fieldName, otherValue, error;
 		
@@ -819,6 +873,10 @@ $(document).ready(function() {
 	 **/
 	$('[name="base"]').val(document.location);
 	
+	/**
+	 * Special behaviour for "autocomplete" fields.
+	 * Whenever the user type ahead, a results list is proposed to user.
+	 */
 	$('[data-wity-autocomplete]').typeahead({
 		source: function(query, process) {
 			var command, callback;
@@ -829,25 +887,33 @@ $(document).ready(function() {
 			} else {
 				callback = function(data) {
 					typeaheadResults[command] = new Array();
-
+					
 					data = (data && data.content) || {};
-
+					
 					for (var key in data[command]) {
 						typeaheadResults[command].push(data[command][key]);
 					}
-
+					
 					process(typeaheadResults[command]);
 				};
 				
 				processAjax(document.location, {"command": command}, callback, WITY_INSTALLER);
-			}		
+			}
 		},
 		minLength:0
 	});
 	
-	processAjax = function (u, d, c, _this) {
+	/**
+	 * Executes POST XHR request
+	 * 
+	 * @param string    u      URL of the request
+	 * @param JSON      d      Datas to be sent within the request
+	 * @param Callback  c      Callback to be triggered when the request is done
+	 * @param Object    _this  Context in which the callback must be executed
+	 */
+	processAjax = function(u, d, c, _this) {
 		var realCallback, installer;
-
+		
 		installer = WITY_INSTALLER;
 		installer.btnLoading();
 		
@@ -855,13 +921,13 @@ $(document).ready(function() {
 			var json;
 			
 			json = $.parseJSON(data);
-
+			
 			if(installer.validated) {
 				installer.btnReady();
 			} else {
 				installer.btnRemaining();
 			}
-
+			
 			installer.processResponse(json);
 			
 			if(c) {
@@ -877,32 +943,13 @@ $(document).ready(function() {
 		});
 	};
 	
+	/**
+	 * Initiates the Installer
+	 */
 	$('[data-wity-installer]').each( function() {
 		new Installer(this);
 	});
-
+	
 	$('[data-wity-link-front]').attr('href', document.location);
 	$('[data-wity-link-admin]').attr('href', document.location+'/admin');
 });
-
-/*
- * Type on a lonely field :
- * 
- * onBlur or onClick or onChange : 
- *		reset server group + itself cached validation ( + onKey ...)
- *		verify the field (required and validation)
- *		trigger(valid)
- *		verify each field in the group (required + client validation)
- *		if server validation not ok, ajax call with all fields in the group serialized to know if ok or not
- *			if all ok, cache validation, if change, up to step
- *			if not, dispatch errors on fields -> display error fields
- *		if validation not ok, nothing to do -> each field not validated itself display its error
- *		if required not ok -> each field in required-error and not yet filled or no okButton pressed, nothing to do
- *					otherwise display required-error.
- *					
- * step validation :
- *		calls validate on each group -> return cached response, or if null, call validation-group and return cache
- *		if valid, display valid, if change, call installer validate
- *		if not, display not valid, if change, invalidate installer
- * 
- */
