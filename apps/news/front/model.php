@@ -80,6 +80,8 @@ class NewsModel {
 		
 		// Declare table
 		$this->db->declareTable('news');
+		$this->db->declareTable('news_cats');
+		$this->db->declareTable('news_cats_relations');
 	}
 	
 	/**
