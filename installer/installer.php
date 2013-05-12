@@ -71,6 +71,9 @@ class Installer {
 					$database = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
 					$user = WRequest::getAssoc(array('nickname', 'password', 'email', 'firstname', 'lastname'), '', 'POST');
 					$user['password'] = sha1($user['password']);
+					$user['confirm'] = 0;
+					$user['access'] = 'all';
+					$user['valid'] = 1;
 
 					$database['prefix'] = (!empty($database['prefix'])) ? $database['prefix']."_":"";
 					
