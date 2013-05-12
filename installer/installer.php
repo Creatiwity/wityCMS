@@ -100,7 +100,7 @@ class Installer {
 					$placeholder = false;
 					if ($this->isFrontApp('user', null, $placeholder)) {
 						include APPS_DIR.'user'.DS.'admin'.DS.'model.php';
-						$userModel = new UserModel();
+						$userModel = new UserAdminModel();
 						if (!$userModel->createUser($user)) {
 							$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create your administrator account. Please, check your database credentials.');
 						}
