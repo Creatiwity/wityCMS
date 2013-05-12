@@ -59,6 +59,7 @@ $(document).ready(function() {
 			this.validated = false;
 			this.alertContainer = $('[data-wity-installer-alert="'+this.id+'"]');
 			this.alerts = new Array();
+			this.debugContainer = $('[data-wity-installer-debug="'+this.id+'"]');
 			
 			// Create the global manager
 			$('[data-wity-installer-step]').each(function() {
@@ -122,6 +123,17 @@ $(document).ready(function() {
 			
 			// Init the installer
 			processAjax(document.location, {command: "INIT_INSTALLER", installer: this.id}, null, this);
+		};
+		
+		Installer.prototype.debug = function(debugContent) {
+			var datas;
+			if(this.debugContainer) {
+				this.debugContainer.append($("<hr/><p>" + debugContent + "</p>"));
+			} else {
+				datas = {"installer": {}};
+				datas.installer[this.id] = {"error": {"head_message": "Unknown error", "message": "An unknown error occurred. Please restart the installer."}};
+				this.processResponse(datas);
+			}
 		};
 		
 		/**
@@ -928,7 +940,12 @@ $(document).ready(function() {
 		realCallback = function(data, textStatus, jqXHR ) {
 			var json;
 			
-			json = $.parseJSON(data);
+			try {
+				json = $.parseJSON(data);
+			} catch(e) {
+				installer.debug(data);
+				return;
+			}
 			
 			if(installer.validated) {
 				installer.btnReady();
