@@ -16,11 +16,8 @@ include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
  * @version 0.3-15-02-2013
  */
 class UserAdminModel extends UserModel {
-	private $db;
-	
 	public function __construct() {
 		parent::__construct();
-		$this->db = WSystem::getDB();
 	}
 	
 	/**

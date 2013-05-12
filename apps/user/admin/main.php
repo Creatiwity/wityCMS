@@ -240,8 +240,6 @@ Ceci est un message automatique.";
 	 */
 	protected function edit() {
 		$user_id = intval(WRoute::getArg(1));
-		var_dump($user_id);
-		die;
 		if ($this->model->validId($user_id)) {
 			$db_data = $this->model->getUser($user_id);
 			$this->user_form($user_id, $db_data);

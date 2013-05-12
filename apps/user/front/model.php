@@ -13,10 +13,12 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-15-02-2013
  */
 class UserModel {
-	private $db;
+	protected $db;
 	
 	public function __construct() {
 		$this->db = WSystem::getDB();
+		
+		// Declare table
 		$this->db->declareTable('users');
 		$this->db->declareTable('users_config');
 		$this->db->declareTable('users_groups');
@@ -28,8 +30,8 @@ class UserModel {
 	 * @param string $userid
 	 * @return boolean Only one row must be returned
 	 */
-	public function validId($user_id) {
-		if (empty($user_id)) {
+	public function validId($userid) {
+		if (empty($userid)) {
 			return false;
 		}
 		$prep = $this->db->prepare('
