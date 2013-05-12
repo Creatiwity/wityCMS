@@ -43,7 +43,8 @@ class UserAdminModel extends UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
-		$prep->bindParam(':groupe', $data['groupe']);
+		$groupe = isset($data['groupe']) ? $data['groupe'] : '';
+		$prep->bindParam(':groupe', $groupe);
 		$prep->bindParam(':access', $data['access']);
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);

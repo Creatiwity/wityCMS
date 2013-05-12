@@ -6,7 +6,7 @@
  *
  * @package System
  * @author Charly Poly <charly[dot]poly at live[dot]fr>
- * @version	0.3
+ * @version 0.3
  */
 
 /**
@@ -15,47 +15,52 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * Séparateur de dossiers
+ * Directory Separator
  */
 define('DS', DIRECTORY_SEPARATOR);
 
 /**
- * Racine du CMS
+ * WityCMS Root directory
  */
 define('WITY_PATH', dirname(__FILE__).DS);
 
 /**
- * Emplacement du Système
+ * System location
  */
 define('SYS_DIR', WITY_PATH.'system'.DS);
 
 /**
- * Emplacement des Helpers
+ * Configs location
+ */
+define('CONFIG_DIR', WITY_PATH.'system'.DS.'config'.DS);
+
+/**
+ * Helpers location
  */
 define('HELPERS_DIR', WITY_PATH.'helpers'.DS);
 
 /**
- * Emplacement des Librairies
+ * Libraries location
  */
 define('LIBS_DIR', WITY_PATH.'libraries'.DS);
 
 /**
- * Emplacement des Applications
+ * Applications location
  */
 define('APPS_DIR', WITY_PATH.'apps'.DS);
 
 /**
- * Emplacement des Thèmes
+ * Themes location
  */
 define('THEMES_DIR', WITY_PATH.'themes'.DS);
 
 /**
- * Emplacement des Logs
+ * Logs location
  */
 define('LOGS_DIR', WITY_PATH.'helpers'.DS);
 
 /**
- * Emplacement des Fichiers de cache
+ * Cache directory location
  */
 define('CACHE_DIR', WITY_PATH.'cache'.DS);
 

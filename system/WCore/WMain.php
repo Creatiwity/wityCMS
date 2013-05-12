@@ -106,7 +106,7 @@ class WMain {
 	 * Loads WConfig
 	 */
 	private function loadConfigs() {
-		WConfig::load('config', SYS_DIR.'config'.DS.'config.php', 'php');
+		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
 	}
 	
 	/**
