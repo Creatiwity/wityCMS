@@ -66,10 +66,11 @@ class Installer {
 					set_time_limit(0);
 					
 					// Get config data
-					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language'), '', 'POST');
+					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'lang'), '', 'POST');
 					$route = WRequest::getAssoc(array('default', 'admin'), '', 'POST');
 					$database = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
-					$user = WRequest::getAssoc(array('nickname', 'password', 'confirm', 'email', 'firstname', 'lastname'), '', 'POST');
+					$user = WRequest::getAssoc(array('nickname', 'password', 'email', 'firstname', 'lastname'), '', 'POST');
+					$user['password'] = sha1($user['password']);
 
 					$database['prefix'] = (!empty($database['prefix'])) ? $database['prefix']."_":"";
 					
@@ -83,6 +84,15 @@ class Installer {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
 					}
 					
+					// Save Database configuration
+					WConfig::set('database.server', $database['server']);
+					WConfig::set('database.port', $database['port']);
+					WConfig::set('database.user', $database['user']);
+					WConfig::set('database.pw', $database['pw']);
+					WConfig::set('database.dbname', $database['dbname']);
+					WConfig::set('database.prefix', $database['prefix']);
+					WConfig::save('database', CONFIG_DIR.'database.php');
+					
 					// Create user account
 					$placeholder = false;
 					if ($this->isFrontApp('user', null, $placeholder)) {
@@ -95,20 +105,11 @@ class Installer {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of WityCMS.');
 					}
 					
-					// Save Database configuration
-					WConfig::set('database.server', $database['server']);
-					WConfig::set('database.port', $database['port']);
-					WConfig::set('database.user', $database['user']);
-					WConfig::set('database.pw', $database['pw']);
-					WConfig::set('database.dbname', $database['dbname']);
-					WConfig::set('database.prefix', $database['prefix']);
-					WConfig::save('database', CONFIG_DIR.'database.php');
-					
 					// Save General configuration
 					WConfig::set('config.base', trim($config['base'], '/'));
 					WConfig::set('config.site_name', $config['site_name']);
 					WConfig::set('config.theme', $config['theme']);
-					WConfig::set('config.lang', $config['language']);
+					WConfig::set('config.lang', $config['lang']);
 					WConfig::set('config.email', $user['email']);
 					WConfig::set('config.debug', false);
 					WConfig::save('config', CONFIG_DIR.'config.php');

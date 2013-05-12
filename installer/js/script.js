@@ -290,7 +290,7 @@ $(document).ready(function() {
 				
 				// Checks if each group is validated
 				$.each(that.groupInstances, function(index, group) {
-					that.validated = that.validated && group.validated;
+					that.validated = that.validated && (group.validated || (group.empty && !group.required));
 				});
 				
 				// Updates the view of te ste
@@ -434,10 +434,11 @@ $(document).ready(function() {
 		 * Validates the group
 		 */
 		Group.prototype.validate = function() {
-			var abortAjax, requiredGroup, that, values = {};
+			var abortAjax, abortShowInvalidOnFields, requiredGroup, that, values = {};
 			
 			that = this;
 			abortAjax = false; // used to cancel final ajax request
+			abortShowInvalidOnFields = false;
 			
 			this.clearErrors();
 			
@@ -467,6 +468,11 @@ $(document).ready(function() {
 				else if(field.required || !field.isEmpty()) {
 					that.validated = false;
 					abortAjax = true;
+					
+					// if null, field not yet focused
+					if(field.validatedContent === null) {
+						abortShowInvalidOnFields = true;
+					}
 				}
 			});
 			
@@ -474,6 +480,9 @@ $(document).ready(function() {
 			// => cancel the checking with the server
 			if(abortAjax) {
 				this.showValid(false);
+				if(!abortShowInvalidOnFields) {
+					this.showValidOnFields(false);
+				}
 				return false;
 			}
 			
@@ -500,11 +509,7 @@ $(document).ready(function() {
 		/** 
 		 * Clear group errors
 		 */
-		Group.prototype.clearErrors = function() {
-			$.each(this.fieldInstances, function(index, field) {
-				field.clearErrors();
-			});
-			
+		Group.prototype.clearErrors = function() {			
 			for(var i = this.alerts.length-1; i >= 0; --i) {
 				this.alerts[i].alert('close');
 				this.alerts.splice(i,1);
@@ -550,15 +555,18 @@ $(document).ready(function() {
 			if(response) {
 				if(response.success) {
 					this.showValid(true);
+					this.showValidOnFields(true);
 				}
 				
 				if(response.warning) {
 					this.showValid(true);
+					this.showValidOnFields(true);
 					this.displayNotes(response.warning, '');
 				}
 				
 				if(response.error) {
 					this.showValid(false);
+					this.showValidOnFields(false);
 					this.displayNotes(response.error, 'alert-error');
 					this.validated = false;
 				}
@@ -582,7 +590,7 @@ $(document).ready(function() {
 		 * @param bool isValid
 		 */
 		Group.prototype.showValid = function(isValid) {
-			this.groupSummary.removeClass("muted text-info text-success");
+			this.groupSummary.removeClass("muted text-info text-success text-error");
 			
 			this.groupSummary.find('i').remove();
 			if(isValid || (!this.required && this.empty)) {
@@ -590,19 +598,10 @@ $(document).ready(function() {
 				this.groupSummary.addClass("text-success");
 				
 				$.each(this.fieldInstances, function(index, field) {
-					// if(!field.isEmpty()) {
-						field.showValid(true);
-					// }
+					field.showValid(true);
 				});
 			} else if(!isValid || (this.required && this.empty)) {
 				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
-				
-				// Display each field as error
-				// @todo find the fields with issue
-				$.each(this.fieldInstances, function(index, field) {
-					field.validated = false;
-					field.showValid(false);
-				});
 				
 				if(!this.required) {
 					this.groupSummary.addClass("muted");
@@ -610,6 +609,12 @@ $(document).ready(function() {
 					this.groupSummary.addClass("text-info");
 				}
 			}
+		};
+		
+		Group.prototype.showValidOnFields = function(isValid) {
+			$.each(this.fieldInstances, function(index, field) {
+				field.showValid(isValid);
+			});
 		};
 		
 		return Group;
@@ -650,7 +655,7 @@ $(document).ready(function() {
 			}
 			
 			// Defines validate event "blur"
-			this.element.on('blur', function() {that.validateInField();});
+			this.element.on('change blur', function() {that.validateInField();});
 		};
 		
 		/**
@@ -663,7 +668,11 @@ $(document).ready(function() {
 			
 			content = this.value();
 			
-			this.validatedContent = content;
+			if(this.validatedContent === null && (content === "" || content === null)) {
+				this.validatedContent === null;
+			} else {
+				this.validatedContent = content || "";
+			}
 			
 			if(this.required && (!content || content === "")) {
 				this.storeErrors(["This field is required."]);
@@ -689,8 +698,7 @@ $(document).ready(function() {
 		 */
 		Field.prototype.validateInField = function() {
 			// Validate when the value changed
-			if(this.value() !== this.validatedContent) {
-				this.clearErrors();
+			if(this.value() !== this.validatedContent && ((this.value() !== "" && this.value() !== null) || this.validatedContent !== null)) {
 				
 				// Init validatedContent value to allow validateInGroup to process
 				if(this.validatedContent === null) {
@@ -708,7 +716,7 @@ $(document).ready(function() {
 		 * @return bool Field is valid?
 		 */
 		Field.prototype.validateInGroup = function() {
-			if(this.validatedContent === null && this.value() === "") {
+			if(this.validatedContent === null && (this.value() === "" || this.value() === null)) {
 				return false;
 			}
 			
@@ -951,5 +959,5 @@ $(document).ready(function() {
 	});
 	
 	$('[data-wity-link-front]').attr('href', document.location);
-	$('[data-wity-link-admin]').attr('href', document.location+'/admin');
+	$('[data-wity-link-admin]').attr('href', document.location+'admin');
 });

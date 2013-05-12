@@ -174,7 +174,7 @@ class WConfig {
 			if (isset(self::$files[$field])) { // File already defined
 				list($file, $type) = self::$files[$field];
 			} else if (!empty($file)) { // File is given by argument
-				$type = substr($file, strrpos('.', $file)+1);
+				$type = substr($file, strrpos($file, '.')+1);
 			}
 			
 			if (empty($file) || !is_writable(dirname($file))) {

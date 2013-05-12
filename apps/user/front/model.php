@@ -17,6 +17,9 @@ class UserModel {
 	
 	public function __construct() {
 		$this->db = WSystem::getDB();
+		$this->db->declareTable('users');
+		$this->db->declareTable('users_config');
+		$this->db->declareTable('users_groups');
 	}
 	
 	/**
