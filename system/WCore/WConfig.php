@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package System\WCore
  * @author xpLosIve
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-22-11-2012
  */
 class WConfig {

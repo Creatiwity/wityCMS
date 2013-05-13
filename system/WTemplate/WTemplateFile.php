@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * WTemplateFile
  *
  * @package System\WTemplate
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-04-08-2012
  */
 class WTemplateFile {

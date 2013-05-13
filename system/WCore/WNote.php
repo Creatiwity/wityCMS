@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * WNote manages all notes : stores, displays, ...
  *
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-01-03-2013
  */
 class WNote {

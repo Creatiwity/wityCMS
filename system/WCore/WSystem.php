@@ -14,7 +14,7 @@ defined('IN_WITY') or die('Access denied');
  * </p>
  *
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-28-09-2012
  */
 class WSystem {

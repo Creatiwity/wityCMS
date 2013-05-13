@@ -12,7 +12,7 @@ include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
  * UserAdminModel is the admin Model of the User Application
  * 
  * @package Apps
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-15-02-2013
  */
 class UserAdminModel extends UserModel {

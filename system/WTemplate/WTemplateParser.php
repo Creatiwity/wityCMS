@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * WTemplateParser is the parser part of WTemplate
  *
  * @package System\WTemplate
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-22-11-2012
  */
 class WTemplateParser {

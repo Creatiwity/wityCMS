@@ -13,7 +13,7 @@ include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateCompiler.php';
  * WTemplate is the template engine used by WityCMS
  * 
  * @package System\WTemplate
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-26-10-2012
  */
 class WTemplate {

@@ -28,7 +28,7 @@ defined('IN_WITY') or die('Access denied');
  * not in the end of the variables (except for the query if there is one "/" in the end).
  * 
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-23-01-2013
  */
 class WRoute {

@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * NewsAdminView is the Admin View of the News Application
  * 
  * @package Apps
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.3-19-04-2013
  */

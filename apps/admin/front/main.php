@@ -1,16 +1,16 @@
 <?php
 /**
- * admin/front/main.php
+ * Admin Application - Admin Controller - admin/front/main.php
  */
 
 defined('IN_WITY') or die('Access denied');
 
 /**
- * AdminController handles admin applications
+ * AdminController is a controller which gives access to admin applications
  * 
- * @package Apps\Admin
- * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.3-17/01/2013
+ * @package Apps
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-17-01-2013
  */
 class AdminController extends WController {
 	/**
