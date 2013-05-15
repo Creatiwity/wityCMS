@@ -393,6 +393,7 @@ $(document).ready(function() {
 			this.element = $(fieldInGroup);
 			this.requiredGroups = new Array();
 			this.empty = true;
+			this.timer = null;
 			
 			// Get required groups to validate this group
 			relatedGroups = this.element.attr('data-wity-require-groups');
@@ -494,7 +495,7 @@ $(document).ready(function() {
 			
 			// A required group or a field within this group is not validated
 			// => cancel the checking with the server
-			if(abortAjax) { 				
+			if(abortAjax) {
 				if(!abortShowInvalidOnFields) {
 					this.showValid(false);
 					this.showValidOnFields(false);
@@ -508,7 +509,12 @@ $(document).ready(function() {
 			values.installer = WITY_INSTALLER.id;
 			values.step = this.step.name;
 			
-			processAjax(document.location, values, this.processResponse, this);
+			// Added a timeout to give the time to user to input some non required fields
+			// which can change the result of the group validation on server side
+			// @todo Use normal method if group does not contain non required field
+			that.timer = setTimeout(function() {
+				processAjax(document.location, values, that.processResponse, that);
+			}, 500);
 		};
 		
 		/**
@@ -672,6 +678,7 @@ $(document).ready(function() {
 			
 			// Defines validate event "blur"
 			this.element.on('change blur', function() {that.validateInField();});
+			this.element.on('focus', function() {clearTimeout(that.group.timer);});
 		};
 		
 		/**
