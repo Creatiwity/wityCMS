@@ -37,6 +37,7 @@ require_once SYS_DIR.'WCore'.DS.'WRequest.php';
 require_once SYS_DIR.'WCore'.DS.'WLang.php';
 require_once SYS_DIR.'WCore'.DS.'WNote.php';
 require_once SYS_DIR.'WCore'.DS.'WHelper.php';
+require_once SYS_DIR.'WCore'.DS.'WRetriever.php';
 require_once SYS_DIR.'WCore'.DS.'WMain.php';
 
 /**

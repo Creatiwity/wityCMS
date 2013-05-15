@@ -15,11 +15,6 @@ defined('IN_WITY') or die('Access denied');
 abstract class WController {
 
 	/**
-	 * @var WMain main Wity instance of WMain 
-	 */
-	protected $wity;
-	
-	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
 	protected $context;
@@ -45,8 +40,7 @@ abstract class WController {
 	 * @param WMain  $wity     main Wity instance of WMain
 	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
 	 */
-	public function init(WMain $wity, $context) {
-		$this->wity = $wity;
+	public function init($context) {
 		$this->context = $context;
 		
 		// Initialize view if the app's constructor did not do it
