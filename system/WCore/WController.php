@@ -52,9 +52,9 @@ abstract class WController {
 		$this->view->setContext($this->context);
 		
 		// Default theme configuration
-		if ($this->view->getTheme() == '') {
-			$this->view->setTheme(WConfig::get('config.theme'));
-		}
+		// if ($this->view->getTheme() == '') {
+			// $this->view->setTheme(WConfig::get('config.theme'));
+		// }
 		
 		// Automaticly declare the language directory
 		if (is_dir($context['directory'].'lang')) {

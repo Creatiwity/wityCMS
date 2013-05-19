@@ -29,7 +29,10 @@ class WRetriever {
 		
 		
 		// Get model
-		$model = $controller->launch();
+		$model = array();
+		if ($controller instanceof WController) {
+			$model = $controller->launch();
+		}
 		
 		// Apply some Dynamic Permissions on the model
 		
@@ -38,6 +41,11 @@ class WRetriever {
 		return $model;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return WView
+	 */
 	public static function getView($app_name, $view_name = '', $params = array(), $view_size = '') {
 		// Get the model
 		$model = self::getModel($app_name, $params);
@@ -45,14 +53,16 @@ class WRetriever {
 		// Get app controller
 		$controller = self::getController($app_name, $params);
 		
-		// Render the view
 		$view = $controller->getView();
 		
 		if (empty($view_name)) {
 			$view_name = $controller->getTriggeredAction();
 		}
 		
-		$view->render($view_name, $model);
+		// Prepare the view
+		$view->prepare($view_name, $model);
+		
+		return $view;
 	}
 	
 	/**
@@ -64,7 +74,7 @@ class WRetriever {
 	public static function getController($app_name, $params) {
 		// Check if app not already instantiated
 		if (isset(self::$controllers[$app_name])) {
-			return $controllers[$app_name];
+			return self::$controllers[$app_name];
 		}
 		
 		// App asked exists?
@@ -104,8 +114,11 @@ class WRetriever {
 					}
 				}
 				
-				// Init & Launch
+				// Init
 				$controller->init($context);
+				
+				// Store the controller
+				self::$controllers[$app_name] = $controller;
 				
 				return $controller;
 			} else {
@@ -114,6 +127,7 @@ class WRetriever {
 		} else {
 			WNote::error(404, "The page requested was not found.", 'display');
 		}
+		return null;
 	}
 	
 	/**

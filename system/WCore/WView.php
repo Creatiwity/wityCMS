@@ -13,12 +13,6 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-17-01-2013
  */
 class WView {
-	
-	/**
-	 * @var boolean State variable telling whether the view was already rendered
-	 */
-	private static $response_sent = false;
-	
 	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
@@ -78,31 +72,6 @@ class WView {
 	}
 	
 	/**
-	 * Assigns a theme
-	 * 
-	 * @param string $theme theme name (must a be an existing directory in /themes/)
-	 */
-	public function setTheme($theme) {
-		if ($theme == '_blank') {
-			$this->themeName = '_blank';
-		} else if (is_dir(THEMES_DIR.$theme)) {
-			$this->themeName = $theme;
-			$this->themeDir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
-		} else {
-			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
-		}
-	}
-	
-	/**
-	 * Returns current theme name
-	 * 
-	 * @return string current theme name
-	 */
-	public function getTheme() {
-		return $this->themeName;
-	}
-	
-	/**
 	 * Sets the file that will be used for template compiling
 	 * 
 	 * @param string $file file that will be used for template compiling
@@ -120,6 +89,10 @@ class WView {
 		} else {
 			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'plain');
 		}
+	}
+	
+	public function getResponse() {
+		return $this->responseFile;
 	}
 	
 	/**
@@ -218,13 +191,7 @@ class WView {
 	 * @param  string  $response  Template file to be displayed
 	 * @return boolean true if view successfully loaded, false otherwise
 	 */
-	public function render($response = '', $model = array()) {
-		// Check if no previous view has already been rendered
-		if (self::$response_sent) {
-			// HTML sent => abort
-			return false;
-		}
-		
+	public function prepare($response = '', $model = array()) {
 		if (!empty($response)) {
 			// Prepare the view
 			if (method_exists($this, $response)) {
@@ -236,33 +203,15 @@ class WView {
 		}
 		
 		// Check theme
-		if (empty($this->themeName) && WNote::count('view_theme') == 0) {
-			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
-			return false;
-		}
+		// if (empty($this->themeName) && WNote::count('view_theme') == 0) {
+			// WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
+			// return false;
+		// }
 		// Check response file
 		if (empty($this->responseFile) && WNote::count('view_response') == 0) {
 			WNote::error('view_response', "WView::render(): No response file given.", 'plain');
 			return false;
 		}
-		
-		// Flush the notes waiting for their own view
-		if (WNote::displayPlainView()) {
-			return false;
-		}
-		
-		// Select Theme main template
-		if ($this->getTheme() == '_blank') {
-			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).'system'.DS.'_blank.html';
-		} else {
-			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
-		}
-		
-		// Define {$include} tpl's var
-		$this->tpl->assign('include', $this->responseFile);
-		
-		// Handle notes
-		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Treat "special vars"
 		foreach ($this->specialVars as $stack) {
@@ -271,31 +220,6 @@ class WView {
 		
 		// Assign View variables
 		$this->tpl->assign($this->vars);
-		
-		$dir = WRoute::getDir();
-		if (empty($dir)) {
-			// Direct render
-			try {
-				$this->tpl->display($themeMainFile);
-			} catch (Exception $e) {
-				WNote::error('view_tpl_display', $e->getMessage(), 'die');
-				return false;
-			}
-		} else {
-			// Absolute links fix
-			// If $dir is not the root file, then change links
-			try {
-				$html = $this->tpl->parse($themeMainFile);
-				echo str_replace(
-					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
-					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
-					$html
-				);
-			} catch (Exception $e) {
-				WNote::error('view_tpl_parse', $e->getMessage(), 'die');
-				return false;
-			}
-		}
 		
 		// Mark the view as rendered
 		self::$response_sent = true;

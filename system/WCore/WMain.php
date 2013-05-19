@@ -37,8 +37,20 @@ class WMain {
 		// Initializing lang
 		WLang::init();
 		
-		// exec application
-		echo WRetriever::getView(WRoute::getApp());
+		// Exec application
+		$this->exec(WRoute::getApp());
+		//echo WRetriever::getView(WRoute::getApp());
+	}
+	
+	/**
+	 * This function will setup the whole WityCMS response
+	 * Find and load the theme
+	 */
+	private function exec($app_name) {
+		$view = WRetriever::getView(WRoute::getApp());
+		
+		$response = new WResponse(WConfig::get('config.theme'));
+		$response->render($view);
 	}
 	
 	/**

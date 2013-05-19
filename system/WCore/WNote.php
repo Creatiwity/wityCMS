@@ -159,13 +159,16 @@ class WNote {
 	 * @param array $note a note as it is returned by WNote::raise()
 	 */
 	public static function handle_display($note) {
-		// own view
+		// Prepare a new view with the note
 		$view = new WView();
-		$view->setTheme(WConfig::get('config.theme'));
-		$view->setResponse('themes/system/note/note_view.html');
 		$view->assign('css', '/themes/system/note/note.css');
 		$view->assign('notes_data', array($note));
-		$view->render();
+		$view->setResponse('themes/system/note/note_view.html');
+		$view->prepare();
+		
+		// Render the response
+		$response = new WResponse('_blank');
+		$response->render($view);
 	}
 	
 	/**
@@ -312,15 +315,19 @@ class WNote {
 		if (!is_null($tpl) && !empty(self::$plain_stack)) {
 			$notes_data = self::$plain_stack;
 			self::$plain_stack = array();
+			
+			// Prepare a new view
 			$view = new WView();
 			$view->assign('css', '/themes/system/note/note.css');
 			$view->assign('css', '/themes/system/note/note_plain.css');
 			$view->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
 			$view->assign('js', '/themes/system/note/note.js');
 			$view->assign('notes_data', $notes_data);
-			$view->setTheme('_blank');
 			$view->setResponse('themes/system/note/note_plain_view.html');
-			if (!$view->render()) {
+			$view->prepare();
+			
+			$response = new WResponse('_blank');
+			if (!$response->render($view)) {
 				die(
 					"WView did not manage to display the Note's Plain View (themes/system/note/note_plain_view.html).<br />\n"
 					."<u>Triggering notes:</u>\n"
