@@ -1,20 +1,19 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author Fofif
- * @version	$Id: main.php 0001 09-04-2011 Fofif $
+ * News Application - Front Controller - /apps/news/front/main.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * NewsController is the Front Controller of the News Application
+ * 
+ * @package Apps
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @author Julien Blatecky <julien.blatecky@creatiwity.net>
+ * @version 0.3-19-04-2013
+ */
 class NewsController extends WController {
-	protected $actionList = array(
-		'index' => "Liste des articles",
-	);
-	
-	/*
-	 * Chargement du modèle et de la view
-	 */
 	public function __construct() {
 		include 'model.php';
 		$this->model = new NewsModel();
@@ -23,14 +22,6 @@ class NewsController extends WController {
 		$this->setView(new NewsView($this->model));
 	}
 	
-	public function launch() {
-		$action = $this->getAskedAction();
-		$this->forward($action, 'index');
-	}
-	
-	/**
-	 * Récupère un id fourni dans l'url
-	 */
 	private function getId() {
 		$args = WRoute::getArgs();
 		if (empty($args[0])) {
@@ -41,18 +32,21 @@ class NewsController extends WController {
 		}
 	}
 	
-	protected function index() {
-		// Récupération éventuelle d'un id si on demande l'affichage d'une news
-		$nid = $this->getId();
-		
-		// Si l'id fourni est valide, on charge la news demandée
-		if (!empty($id) && $this->model->validId($id)) {
-			$this->view->detail($id);
-			$this->render('detail');
+	public function listing() {
+		$news_id = $this->getId();
+		if (!empty($news_id) && $this->model->validExistingNewsId($news_id)) {
+			$this->display($news_id);
 		} else {
-			$this->view->main_listing();
-			$this->render('main_listing');
+			$this->listNews();
 		}
+	}
+	
+	protected function listNews() {
+		$this->view->listing();
+	}
+	
+	protected function display($news_id) {
+		$this->view->detail($news_id);
 	}
 }
 

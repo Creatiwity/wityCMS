@@ -1,31 +1,38 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * WTemplate
- * Moteur de template pour le CMS Wity
- *
- * @author     Fofif
- * @version    $Id: WTemplate/WTemplateParser.php 0001 04-08-2012 Fofif $
- * @package    Wity
- * @subpackage WTemplate
+ * WTemplateParser.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WTemplateParser is the parser part of WTemplate
+ *
+ * @package System\WTemplate
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-22-11-2012
+ */
 class WTemplateParser {
+	
 	/**
-	 * This function reads a string and finds node matching {im a node}
-	 * and gives these nodes to a compiler which will replace them.
+	 * Replaces all nodes found in $string by the callback result
 	 * 
-	 * If the car { is backslashed or directly followed by a carriage return, it will be ignored.
+	 * If the char '{' is backslashed or directly followed by a carriage return, it will be ignored.
 	 * 
-	 * @param WTemplateCompiler $compiler The compiler which will work on nodes
-	 * @return string Parsed and compiled template file
+	 * @param string    $string     a string to parse
+	 * @param string    $callback   the callback to call to replace the node
+	 * @param type      $nodes      optional and unused
+	 * @return string the parsed string on which all callback results are in it
+	 * @throws Exception
 	 */
-	public static function replaceNodes($string, $callback, &$nodes = null) {
+	public static function replaceNodes($string, $callback) {
 		$length = strlen($string);
 		$level = 0;
 		$code = ""; // $code stocks the entire code compiled
 		$tmp = ""; // $tmp stocks the node currently being read
 		$last_char = '';
 		$return = null;
+		$comment = false;
 		
 		if (!is_callable($callback)) {
 			if (is_array($callback)) {
@@ -54,36 +61,55 @@ class WTemplateParser {
 					}
 					break;
 				
-				case '{':
-					// Check whether { is backslashed
-					if ($string[$i+1] != "\n" && $string[$i+1] != "\r" && $string[$i+1] != "\r\n" && $last_char != '\\') {
-						$level++;
+				case '%': // comment node
+					if ($level > 0 && $last_char == '{') {
+						$comment = true;
 					}
-					
-					// Are we in a node?
-					if ($level > 0) {
-						if ($level > 1) {
-							$tmp .= '{';
+					break;
+				
+				case '{':
+					if (!$comment) {
+						// Check whether { is backslashed
+						// List of authorized chars to start a node (alphanum, / for closing nodes and $ for var displaying nodes
+						if (preg_match('#[a-zA-Z0-9/$]#', $string[$i+1]) && $last_char != '\\') {
+							$level++;
 						}
-					} else {
-						$code .= '{';
+						
+						// Are we in a node?
+						if ($level > 0) {
+							if ($level > 1) {
+								$tmp .= '{';
+							}
+						} else {
+							$code .= '{';
+						}
 					}
 					break;
 				
 				case '}':
 					if ($level > 0) {
-						if ($level > 1) {
-							$tmp .= '}';
-						}
-						
-						// Check whether } is backslashed
-						if ($last_char != '\\') {
+						if (!$comment) {
+							if ($level > 1) {
+								$tmp .= '}';
+							}
+							
+							// Check whether } is backslashed
+							if ($last_char != '\\') {
+								$level--;
+							}
+							
+							// We arrived at the end of the node => compile it
+							if ($level == 0) {
+								if (!empty($tmp)) {
+									$code .= call_user_func($callback, $tmp);
+									$tmp = "";
+								} else {
+									$code .= '{}';
+								}
+							}
+						} else if ($last_char == '%') {
+							$comment = false;
 							$level--;
-						}
-						
-						// We are arrived at the end of the node => compile it
-						if ($level == 0) {
-							$code .= call_user_func($callback, $tmp);
 							$tmp = "";
 						}
 					} else {
@@ -92,18 +118,24 @@ class WTemplateParser {
 					break;
 				
 				default:
-					if ($char == "\n" && $level > 0) {
-						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node.");
+					if ($char == "\n" && $level > 0 && !$comment) {
+						throw new Exception("WTemplateParser::replaceNodes(): found illegal carriage return character in a node (".$tmp.").");
 					}
 					
 					if ($level > 0) {
+						// We are in a node. Special chars may be used
+						// so add them back
 						if ($last_char == '\\') {
 							$tmp .= '\\';
+						} else if ($last_char == '%') {
+							$tmp .= '%';
 						}
 						$tmp .= $char;
 					} else {
 						if ($last_char == '\\') {
 							$code .= '\\';
+						} else if ($last_char == '%') {
+							$code .= '%';
 						}
 						$code .= $char;
 					}

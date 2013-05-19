@@ -1,46 +1,73 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version	$Id: WCore/WSystem.php 0001 10-04-2010 Fofif $
- * @package Wity
+ * WSystem.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WSystem keeps the session, template and database instances as singletons
+ * 
+ * <p>If you need the WSession instance, just call :
+ * <code>WSystem::getSession();</code>
+ * It's the same thing with WTemplate andWDatabase.
+ * </p>
+ *
+ * @package System\WCore
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-28-09-2012
+ */
 class WSystem {
+	
 	/**
-	 * Session object
+	 * @var WSession Session object
 	 */
 	private static $sessionInstance;
 	
 	/**
-	 * WTemplate object
+	 * @var WTemplate WTemplate object
 	 */
 	private static $templateInstance;
 	
 	/**
-	 * DB Manager object
+	 * @var WDatabase WDatabase object
 	 */
 	private static $dbInstance;
 	
+	/**
+	 * Returns current session or creates it if it doesn't exist yet
+	 * @return WSession returns current session
+	 */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
-			include SYS_DIR.'WCore/WSession.php';
+			include_once SYS_DIR.'WCore/WSession.php';
 			self::$sessionInstance = new WSession();
 		}
 		
 		return self::$sessionInstance;
 	}
 	
+	/**
+	 * Returns current template or creates it if it doesn't exist yet
+	 * @return WSession returns current template
+	 */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
-			include SYS_DIR.'WTemplate/WTemplate.php';
-			self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
+			include_once SYS_DIR.'WTemplate/WTemplate.php';
+			try {
+				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
+			} catch (Exception $e) {
+				WNote::error('system_template_instantiation', $e->getMessage(), 'die');
+			}
 		}
 		
 		return self::$templateInstance;
 	}
 	
+	/**
+	 * Returns current database manager or creates it if it doesn't exist yet
+	 * @return WSession returns current database manager
+	 */
 	public static function getDB() {
 		if (!is_object(self::$dbInstance)) {
 			// Chargement des infos db
@@ -50,17 +77,7 @@ class WSystem {
 			$user = WConfig::get('database.user');
 			$password = WConfig::get('database.pw');
 			
-			if (!class_exists('PDO')) {
-				throw new Exception("WSystem::getDB(): Class PDO unfound.");
-			}
-			
-			try {
-				# Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
-				@self::$dbInstance = new PDO($dsn, $user, $password);
-			} catch (PDOException $e) {
-				WNote::displayFull(array(WNote::error('sql_conn_error', "Impossible to connect to MySQL.<br /><br /><em>PDO's error</em><br />".utf8_encode($e->getMessage()), 'ignore')));
-				die;
-			}
+			self::$dbInstance = new WDatabase($dsn, $user, $password);
 			self::$dbInstance->query("SET NAMES 'utf8'");
 			self::$dbInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		}

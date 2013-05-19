@@ -1,4 +1,15 @@
+/**
+ * Users listing
+ */
+#search label {
+	display: block;
+	float: left;
+	width: 80px;
+}
 
+/**
+ * Groups listing
+ */
 #edition {
 	display: none;
 }
@@ -9,8 +20,158 @@ ul#access, ul#accessEdit {
 	padding: 0;
 }
 
-#search label {
-	display: block;
+#groups-list .group-form td {
+	padding: 0;
+}
+
+#groups-list .group-form form {
+	padding: 8px;
+}
+
+#admin_check a {
+	filter:alpha(opacity=30);
+    -moz-opacity: 0.3;
+    -khtml-opacity: 0.3;
+    opacity: 0.3;
+}
+
+#admin_check a:hover, #admin_check a.checked {
+	filter:alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
+
+#admin-check {
+	width: 70%;
 	float: left;
-	width: 80px;
+}
+
+#admin_check_buttons {
+	display: none;
+}
+
+#admin-check-details {
+	width: 28%;
+	float: right;
+}
+
+/**
+ * User form
+ */
+#user-form {
+	width: 100%;
+}
+
+#content .rights {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#content .rights td {
+	border-top: 1px solid black;
+	padding: 0;
+}
+
+#content .rights .permissions {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#content .rights .permissions td {
+	border-top: none;
+	border-left: 1px solid black;
+	padding: 8px;
+}
+
+#content .rights .permissions label {
+	display: block;
+}
+
+#groupEditor form {
+	margin-bottom: 0px;
+}
+
+/**
+ * Group diff
+ */
+#group-diff .listing-wrapper {
+	margin: 1em;
+	display: none;
+}
+
+#group-diff .alphabet {
+	width: 15%;
+	margin: 0 2% 0 0;
+	padding: 0;
+	float: left;
+	line-height: 35px;
+}
+
+#group-diff .alphabet a, #group-diff .alphabet span {
+	background: #28b8f7;
+	font-size: 15px;
+	padding: 5px;
+	margin-right: 5px;
+	color: white;
+	white-space: nowrap;
+}
+
+#group-diff .alphabet span {
+	background: gray;
+}
+
+#group-diff .alphabet a:hover, #group-diff .alphabet a.current {
+	background: #1aa4e0;
+}
+
+#group-diff .legende {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#group-diff .users-list-container {
+	width: 80%;
+	float: left;
+}
+
+#group-diff .users-list-container dl {
+	margin: 0;
+}
+
+#group-diff .users-list-container p.loading {
+	padding-left: 25px;
+	background: url('../../../../themes/system/images/icones/loader.gif') no-repeat;
+}
+
+#group-diff dl dt {
+	background: #28b8f7;
+	padding: 5px;
+	margin-bottom: 1em;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#group-diff dl dd {
+	margin-bottom: 1em;
+	display: none;
+}
+
+#group-diff .pattern {
+	display: none;
+}
+
+#group-diff .shared {
+	font-weight: bold;
+	color: blue;
+}
+#group-diff .minus {
+	font-weight: bold;
+	color: red;
+}
+#group-diff .plus {
+	font-weight: bold;
+	color: green;
 }

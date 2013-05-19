@@ -1,38 +1,62 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @version $Id: WCore/WView.php 0002 21-07-2012 Fofif $
- * @package Wity
+ * WView.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
 /**
- * WView
+ * WView handles application's response
  * 
- * This class handles application's response
+ * @package System\WCore
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-17-01-2013
  */
-
 class WView {
-	// State variable telling whether the view was already rendered
+	
+	/**
+	 * @var boolean State variable telling whether the view was already rendered
+	 */
 	private static $response_sent = false;
 	
-	// Instance of WTemplate
+	/**
+	 * @var array Context of the application describing app's name, app's directory and app's main class
+	 */
+	private $context;
+	
+	/**
+	 * @var WTemplate Instance of WTemplate
+	 */
 	public $tpl;
 	
-	// Theme to be loaded
+	/**
+	 * @var string Theme name to be loaded
+	 */
 	private $themeName = '';
+	
+	/**
+	 * @var string Theme directory
+	 */
 	private $themeDir = '';
 	
-	// Template response file to display as output
+	/**
+	 * @var string Template response file to display as output
+	 */
 	private $responseFile = '';
 	
-	// Variables with a special treatment
+	/**
+	 * @var array Variables with a special treatment like "css" and "js"
+	 */
 	private $specialVars = array('css', 'js');
 	
-	// Template variables
-	private $vars = array();
+	/**
+	 * @var array Template variables
+	 */
+	protected $vars = array();
 	
+	/**
+	 * Setup template
+	 */
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
 		
@@ -43,8 +67,20 @@ class WView {
 	}
 	
 	/**
-	 * Assign a theme
-	 * Must a be an existing directory in /themes/
+	 * Defines the context of the application this View belongs to
+	 * 
+	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
+	 */
+	public function setContext($context) {
+		if (empty($this->context)) {
+			$this->context = $context;
+		}
+	}
+	
+	/**
+	 * Assigns a theme
+	 * 
+	 * @param string $theme theme name (must a be an existing directory in /themes/)
 	 */
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
@@ -53,43 +89,45 @@ class WView {
 			$this->themeName = $theme;
 			$this->themeDir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
-			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'custom');
-		}
-	}
-	
-	public function getTheme() {
-		return $this->themeName;
-	}
-	
-	public function setResponse($file) {
-		$file = str_replace(WITY_PATH, '', $file);
-		if (file_exists(WITY_PATH.$file)) {
-			// WTemplate automaticly adds the base directory defined in WSystem::getTemplate()
-			$this->responseFile = $file;
-		} else {
-			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'custom');
+			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
 		}
 	}
 	
 	/**
-	 * Recherche un fichier template en fonction du nom de l'appli et de l'action
-	 * Le fichier sera cherché en priorité dans les fichiers du thème puis dans les fichiers de l'appli
+	 * Returns current theme name
 	 * 
-	 * @return string adresse du fichier
+	 * @return string current theme name
 	 */
-	public function findResponse($appName, $action, $adminLoaded) {
-		if ($adminLoaded) {
-			$this->setResponse(APPS_DIR.$appName.DS.'admin'.DS.'templates'.DS.$action.'.html');
+	public function getTheme() {
+		return $this->themeName;
+	}
+	
+	/**
+	 * Sets the file that will be used for template compiling
+	 * 
+	 * @param string $file file that will be used for template compiling
+	 */
+	public function setResponse($file) {
+		// Format the file asked
+		if (strpos($file, '/') === false) {
+			$file = $this->context['directory'].'templates'.DS.$file.'.html';
+		}
+		
+		$file = str_replace(WITY_PATH, '', $file);
+		if (file_exists(WITY_PATH.$file)) {
+			// WTemplate automatically adds the base directory defined in WSystem::getTemplate()
+			$this->responseFile = $file;
 		} else {
-			$themeTplHref = $this->themeDir.'templates'.DS.$appName.DS.$action.'.html';
-			if (file_exists($themeTplHref)) {
-				$this->setResponse($themeTplHref);
-			} else {
-				$this->setResponse(APPS_DIR.$appName.DS.'front'.DS.'templates'.DS.$action.'.html');
-			}
+			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'plain');
 		}
 	}
 	
+	/**
+	 * Assigns a variable whose name is $name to a $value
+	 * 
+	 * @param mixed $name   variable name 
+	 * @param mixed $value  variable value
+	 */
 	public function assignOne($name, $value) {
 		// Is $name a Special var?
 		if (in_array($name, $this->specialVars)) {
@@ -103,56 +141,67 @@ class WView {
 		}
 	}
 	
-	public function assign($a, $b = null) {
-		if (is_string($a)) {
-			$this->assignOne($a, $b);
-		} else if (is_array($a)) {
-			foreach ($a as $key => $value) {
+	/**
+	 * Assigns a list of variables whose names are in $names to their $values
+	 * 
+	 * @param mixed $names  variable names
+	 * @param mixed $values variable values
+	 */
+	public function assign($names, $values = null) {
+		if (is_string($names)) {
+			$this->assignOne($names, $values);
+		} else if (is_array($names)) {
+			foreach ($names as $key => $value) {
 				$this->assignOne($key, $value);
 			}
 		}
 	}
 	
-	public function assignBlock($blockName, $value) {
-		if (!isset($this->vars[$blockName.'_block'])) {
-			$this->vars[$blockName.'_block'] = array($value);
-		} else {
-			$this->vars[$blockName.'_block'][] = $value;
-		}
-	}
-	
 	/**
-	 * Retourne une variable en "stack" avec un traitement particulier
+	 * Some variables may be considered as "special vars" in a way that they will have a
+	 * particular treatment when they will be assigned in the template compilator.
+	 * This treatment is defined in this function.
+	 * Special vars are not erased. If two different values are assigned to a same special var,
+	 * they will stack in an array.
 	 * 
-	 * @param $stack_name Nom du stack
-	 * @return string
+	 * For instance, $css and $js are considered as special vars since they will be automaticly
+	 * inserted in a <script> or <link> html tag.
+	 * $this->assign('css', 'style.css');
+	 * {$css} will be replaced by <link href="THEMES_DIR/style.css" rel="stylesheet" type="text/css" />
+	 * 
+	 * @param string $stack_name stack name
+	 * @return string variable value
 	 */
-	public function getStack($stack_name) {
+	public function getSpecialVar($stack_name) {
 		if (empty($this->vars[$stack_name])) {
-			return '';
+			return $this->tpl->getVar($stack_name);
 		}
 		
 		switch ($stack_name) {
 			case 'css':
 				$css = $this->tpl->getVar('css');
-				foreach ($this->vars['css'] as $file) {
-					$css .= sprintf(
-						'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
-						(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
-						$file
-					);
+				if (is_array($this->vars['css'])) {
+					foreach ($this->vars['css'] as $file) {
+						$css .= sprintf(
+							'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
+							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
+							$file
+						);
+					}
 				}
 				return $css;
 				break;
 			
 			case 'js':
 				$script = $this->tpl->getVar('js');
-				foreach ($this->vars['js'] as $file) {
-					$script .= sprintf(
-						'<script type="text/javascript" src="%s%s"></script>'."\n", 
-						(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
-						$file
-					);
+				if (is_array($this->vars['js'])) {
+					foreach ($this->vars['js'] as $file) {
+						$script .= sprintf(
+							'<script type="text/javascript" src="%s%s"></script>'."\n", 
+							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
+							$file
+						);
+					}
 				}
 				return $script;
 				break;
@@ -164,73 +213,81 @@ class WView {
 	}
 	
 	/**
-	 * Render the view
+	 * Renders the view
+	 * 
+	 * @param  string  $response  Template file to be displayed
+	 * @return boolean true if view successfully loaded, false otherwise
 	 */
-	public function render() {
+	public function render($response = '') {
 		// Check if no previous view has already been rendered
 		if (self::$response_sent) {
 			// HTML sent => abort
 			return false;
 		}
 		
+		// Declare response file if given
+		if (!empty($response)) {
+			$this->setResponse($response);
+		}
+		
 		// Check theme
 		if (empty($this->themeName) && WNote::count('view_theme') == 0) {
-			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'custom');
+			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
 			return false;
 		}
 		// Check response file
 		if (empty($this->responseFile) && WNote::count('view_response') == 0) {
-			WNote::error('view_response', "WView::render(): No response file given.", 'custom');
+			WNote::error('view_response', "WView::render(): No response file given.", 'plain');
 			return false;
 		}
 		
-		// Handle notes
-		if ($this->getTheme() != '_blank') {
-			$this->assign('notes', WNote::parse(WNote::get('*')));
+		// Flush the notes waiting for their own view
+		if (WNote::displayPlainView()) {
+			return false;
 		}
+		
+		// Select Theme main template
+		if ($this->getTheme() == '_blank') {
+			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).'system'.DS.'_blank.html';
+		} else {
+			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
+		}
+		
+		// Define {$include} tpl's var
+		$this->tpl->assign('include', $this->responseFile);
+		
+		// Handle notes
+		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Treat "special vars"
 		foreach ($this->specialVars as $stack) {
-			if (!empty($this->vars[$stack])) {
-				$this->vars[$stack] = $this->getStack($stack);
-			} else {
-				unset($this->vars[$stack]);
-			}
+			$this->vars[$stack] = $this->getSpecialVar($stack);
 		}
 		
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		if ($this->themeName == '_blank') {
-			$themeMainFile = $this->responseFile;
-		} else {
-			// Define {$include} tpl's var
-			$this->tpl->assign('include', $this->responseFile);
-			
-			$themeMainFile = $this->themeDir.'templates'.DS.'index.html';
-		}
-		
-		$base = WRoute::getDir();
-		if ($base == '/') {
+		$dir = WRoute::getDir();
+		if (empty($dir)) {
 			// Direct render
 			try {
 				$this->tpl->display($themeMainFile);
 			} catch (Exception $e) {
-				WNote::error('view_tpl_display', $e->getMessage(), 'custom');
+				WNote::error('view_tpl_display', $e->getMessage(), 'die');
 				return false;
 			}
 		} else {
 			// Absolute links fix
-			// If $base is not the root file, then change links
+			// If $dir is not the root file, then change links
 			try {
 				$html = $this->tpl->parse($themeMainFile);
 				echo str_replace(
-					array('src="/', 'href="/', 'action="/'),
-					array('src="'.$base, 'href="'.$base, 'action="'.$base),
+					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
+					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
 					$html
 				);
 			} catch (Exception $e) {
-				WNote::error('view_tpl_parse', $e->getMessage(), 'custom');
+				WNote::error('view_tpl_parse', $e->getMessage(), 'die');
 				return false;
 			}
 		}

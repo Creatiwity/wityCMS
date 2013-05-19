@@ -1,73 +1,30 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author Fofif
- * @version	$Id: apps/news/admin/model.php 0003 01-08-2011 Fofif $
+ * News Application - Admin Model - /apps/news/admin/model.php
  */
 
-class NewsAdminModel {
-	private $db;
-	
+defined('IN_WITY') or die('Access denied');
+
+// Include Front Model for inheritance
+include_once APPS_DIR.'news'.DS.'front'.DS.'model.php';
+
+/**
+ * NewsAdminModel is the Admin Model of the News Application
+ *
+ * @package Apps
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @author Julien Blatecky <julien.blatecky@creatiwity.net>
+ * @version 0.3-19-04-2013
+ */
+class NewsAdminModel extends NewsModel {
 	public function __construct() {
-		$this->db = WSystem::getDB();
+		parent::__construct();
 	}
 	
 	/**
-	 * Récupère la liste complète des pages
-	 */
-	public function getNewsList($from, $number, $order = 'title', $asc = true) {
-		$prep = $this->db->prepare('
-			SELECT id, url, title, author, content, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
-				DATE_FORMAT(modified, "%d/%m/%Y %H:%i") AS modified, views, editor_id
-			FROM news
-			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
-			LIMIT :start, :number
-		');
-		$prep->bindParam(':start', $from, PDO::PARAM_INT);
-		$prep->bindParam(':number', $number, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->fetchAll();
-	}
-	
-	/**
-	 * Récupère les catégories liées à une news
-	 */
-	public function findNewsCats($nid) {
-		$prep = $this->db->prepare('
-			SELECT cat_id, name
-			FROM news_cats_relations
-			LEFT JOIN news_cats
-			ON cat_id = cid
-			WHERE news_id = :nid
-		');
-		$prep->bindParam(':nid', $nid, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->fetchAll();
-	}
-	
-	/**
-	 * Création d'une news
-	 */
-	public function createNews($data) {
-		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, keywords, date, editor_id, image)
-			VALUES (:permalien, :title, :author, :content, :keywords, NOW(), :editor_id, :image)
-		');
-		$prep->bindParam(':permalien', $data['nUrl']);
-		$prep->bindParam(':title', $data['nTitle']);
-		$prep->bindParam(':author', $data['nAuthor']);
-		$prep->bindParam(':content', $data['nContent']);
-		$prep->bindParam(':keywords', $data['nKeywords']);
-		$prep->bindParam(':editor_id', $_SESSION['userid']);
-		$prep->bindParam(':image', $data['nImage']);
-		return $prep->execute() or die (var_dump($prep->errorInfo()));
-	}
-	
-	/**
-	 * Obtenir le dernier id inséré dans la table
-	 * Utile pour le nouveau routage lors de la création d'une page
+	 * Retrieves last News_ID in the database
+	 * 
+	 * @return int
 	 */
 	public function getLastNewsId() {
 		$prep = $this->db->prepare('
@@ -78,142 +35,173 @@ class NewsAdminModel {
 	}
 	
 	/**
-	 * Récupération des données d'une news
+	 * Creates a News in the database from a set of data
+	 * 
+	 * @param array $data
+	 * @return bool Success?
 	 */
-	public function loadNews($id) {
+	public function createNews($data) {
 		$prep = $this->db->prepare('
-			SELECT url, title, author, content, keywords, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(modified, "%d/%m/%Y %H:%i") AS modified, image
-			FROM news
+			INSERT INTO news(url, title, author, content, keywords, creation_date, edited_by, image)
+			VALUES (:url, :title, :author, :content, :keywords, NOW(), :edited_by, :image)
+		');
+		$prep->bindParam(':url', $data['news_url']);
+		$prep->bindParam(':title', $data['news_title']);
+		$prep->bindParam(':author', $data['news_author']);
+		$prep->bindParam(':content', $data['news_content']);
+		$prep->bindParam(':keywords', $data['news_keywords']);
+		$prep->bindParam(':edited_by', $_SESSION['userid']);
+		$prep->bindParam(':image', $data['news_image']);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Updates a News in the database from a set of data
+	 * 
+	 * @param int $news_id
+	 * @param array $data
+	 * @return bool Success?
+	 */
+	public function updateNews($news_id, $data) {
+		$prep = $this->db->prepare('
+			UPDATE news
+			SET url = :url, title = :title, author = :author, content = :content, keywords = :keywords, modified_date = NOW(), edited_by = :edited_by, image = :image 
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->fetch();
-	}
-	
-	/**
-	 * Mise à jour d'une news
-	 */
-	public function updateNews($id, $data) {
-		$string = '';
-		foreach ($data as $key => $value) {
-			$string .= strtolower(substr($key, 1)).' = '.$this->db->quote($value).', ';
-		}
-		$string = substr($string, 0, -2);
-		
-		return $this->db->query('
-			UPDATE news
-			SET '.$string.',
-				modified = NOW()
-			WHERE id = '.$id
-		);
-	}
-	
-	/**
-	 * Suppression d'une news
-	 */
-	public function deleteNews($id) {
-		$prep = $this->db->prepare('
-			DELETE FROM news WHERE id = :id
-		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
+		$prep->bindParam(':id', $news_id);
+		$prep->bindParam(':url', $data['news_url']);
+		$prep->bindParam(':title', $data['news_title']);
+		$prep->bindParam(':author', $data['news_author']);
+		$prep->bindParam(':content', $data['news_content']);
+		$prep->bindParam(':keywords', $data['news_keywords']);
+		$prep->bindParam(':edited_by', $_SESSION['userid']);
+		$prep->bindParam(':image', $data['news_image']);
 		return $prep->execute();
 	}
 	
 	/**
-	 * Vérifie l'existence d'une news pour un id donné
+	 * Deletes a News in the database
+	 * 
+	 * @param int $news_id
+	 * @return bool Success?
 	 */
-	public function validId($id) {
+	public function deleteNews($news_id) {
 		$prep = $this->db->prepare('
-			SELECT * FROM news WHERE id = :id
+			DELETE FROM news WHERE id = :news_id
 		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->rowCount() == 1;
+		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		return $prep->execute();
 	}
 	
 	/**
-	 * Ajout d'une relation news/cat
+	 * Create a relation between a News and a Category
+	 * 
+	 * @param int $news_id
+	 * @param int $cat_id
+	 * @return bool Success?
 	 */
-	public function newsAddCat($nid, $cid) {
+	public function addCatToNews($news_id, $cat_id) {
 		$prep = $this->db->prepare('
 			INSERT INTO news_cats_relations(news_id, cat_id)
-			VALUES (:nid, :cid)
+			VALUES (:news_id, :cat_id)
 		');
-		$prep->bindParam(':nid', $nid, PDO::PARAM_INT);
-		$prep->bindParam(':cid', $cid, PDO::PARAM_INT);
+		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
 		return $prep->execute();
 	}
 	
 	/**
-	 * Destruction des relations news/cats d'une news
+	 * Destroy all relations link categories to a given News_ID
+	 * 
+	 * @param int $news_id
+	 * @return bool Success?
 	 */
-	public function newsDestroyCats($nid) {
+	public function removeCatsFromNews($news_id) {
 		$prep = $this->db->prepare('
-			DELETE FROM news_cats_relations WHERE news_id = :nid
+			DELETE FROM news_cats_relations WHERE news_id = :news_id
 		');
-		$prep->bindParam(':nid', $nid, PDO::PARAM_INT);
+		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		return $prep->execute();
 	}
 	
 	/**
-	 * Récupère la liste complète des pages
+	 * Destroy all relations involving a given News_Cat_ID
+	 * 
+	 * @param int $cat_id
+	 * @return bool Success?
 	 */
-	public function getCatList($order = 'name', $asc = true) {
+	public function removeRelationsOfCat($cat_id) {
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname, parent
-			FROM news_cats
-			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
-		);
-		$prep->execute();
-		return $prep->fetchAll();
-	}
-	
-	/**
-	 * Vérifie l'existence d'une catégorie
-	 */
-	public function catExists($id) {
-		$prep = $this->db->prepare('
-			SELECT * FROM news_cats WHERE cid = :id
+			DELETE FROM news_cats_relations WHERE cat_id = :cat_id
 		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->rowCount() == 1;
+		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		return $prep->execute();
 	}
 	
 	/**
-	 * Création d'une catégorie
+	 * Removes all relations to a parent category
+	 * 
+	 * @param int $parent_cat_id
+	 * @return bool Success?
+	 */
+	public function unlinkChildrenOfParentCat($parent_cat_id) {
+		$prep = $this->db->prepare('
+			UPDATE news_cats
+			SET parent = 0
+			WHERE parent = :cat_id
+		');
+		$prep->bindParam(':cat_id', $parent_cat_id);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Creates a news category in the database
+	 * 
+	 * @param array $data
+	 * @return bool Success?
 	 */
 	public function createCat($data) {
 		$prep = $this->db->prepare('
 			INSERT INTO news_cats(name, shortname, parent)
 			VALUES (:name, :shortname, :parent)
 		');
-		$prep->bindParam(':name', $data['cName']);
-		$prep->bindParam(':shortname', $data['cShortname']);
-		$prep->bindParam(':parent', $data['cParent']);
-		return $prep->execute() or die (var_dump($prep->errorInfo()));
+		$prep->bindParam(':name', $data['news_cat_name']);
+		$prep->bindParam(':shortname', $data['news_cat_shortname']);
+		$prep->bindParam(':parent', $data['news_cat_parent']);
+		return $prep->execute();
 	}
 	
 	/**
-	 * Mise à jour d'une catégorie
+	 * Updates a category in the database
+	 * 
+	 * @param int $cat_id
+	 * @param array $data
+	 * @return bool Success?
 	 */
-	public function updateCat($cid, $data) {
-		return $this->db->query('
-			UPDATE news_cats
-			SET name = '.$this->db->quote($data['cNameEdit']).', shortname = '.$this->db->quote($data['cShortnameEdit']).', parent = '.intval($data['cParentEdit']).'
-			WHERE cid = '.$cid
-		);
-	}
-	
-	/**
-	 * Suppression d'une catégorie
-	 */
-	public function deleteCat($id) {
+	public function updateCat($cat_id, $data) {
 		$prep = $this->db->prepare('
-			DELETE FROM news_cats WHERE cid = :id
+			UPDATE news_cats
+			SET name = :name, shortname = :shortname, parent = :parent
+			WHERE cid = :cat_id
 		');
-		$prep->bindParam(':id', $id, PDO::PARAM_INT);
+		$prep->bindParam(':name', $data['news_cat_name']);
+		$prep->bindParam(':shortname', $data['news_cat_shortname']);
+		$prep->bindParam(':parent', $data['news_cat_parent']);
+		$prep->bindParam(':cat_id', $cat_id);
+		return $prep->execute();
+	}
+	
+	/**
+	 * Deletes a news category in the database
+	 * 
+	 * @param int $cat_id
+	 * @return bool Success?
+	 */
+	public function deleteCat($cat_id) {
+		$prep = $this->db->prepare('
+			DELETE FROM news_cats WHERE cid = :cat_id
+		');
+		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
 		return $prep->execute();
 	}
 }

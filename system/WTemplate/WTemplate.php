@@ -1,44 +1,44 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * WTemplate
- * Moteur de template pour le CMS Wity
- *
- * @author     Fofif
- * @version    $Id: WTemplate/WTemplate.php 0008 29-07-2012 Fofif $
- * @package    Wity
- * @subpackage WTemplate
+ * WTemplate.php
  */
+
+defined('IN_WITY') or die('Access denied');
 
 include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateFile.php';
 include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateParser.php';
 include dirname(__FILE__).DIRECTORY_SEPARATOR.'WTemplateCompiler.php';
 
+/**
+ * WTemplate is the template engine used by WityCMS
+ * 
+ * @package System\WTemplate
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-26-10-2012
+ */
 class WTemplate {
+
 	/**
-	 * Compilation directory: where to place compiled files
+	 * @var string Compilation directory: where to place compiled files
 	 */
 	private $compileDir;
 	
 	/**
-	 * Template variables
+	 * @var array Template variables
 	 */
 	private $tpl_vars = array();
 	
 	/**
-	 * Template compilator
+	 * @var WTemplateCompiler Template compilator
 	 */
 	private $compiler;
 	
 	/**
-	 * Buffer state
-	 */
-	private $buffer_launched = false;
-	
-	/**
-	 * Constructor
+	 * Setup template engine
 	 * 
-	 * @param $baseDir Script root directory
-	 * @param $compileDir Compilation directory
+	 * @param string $baseDir script root directory
+	 * @param string $compileDir optional compilation directory
+	 * @throws Exception
 	 */
 	public function __construct($baseDir, $compileDir = '') {
 		if (is_dir($baseDir)) {
@@ -47,8 +47,6 @@ class WTemplate {
 			throw new Exception("WTemplate::__construct(): Directory \"".$baseDir."\" does not exist.");
 		}
 		
-		// Default value
-		$this->compileDir = '.'.DIRECTORY_SEPARATOR.'tpl_compiled'.DIRECTORY_SEPARATOR;
 		if (!empty($compileDir)) {
 			$this->setCompileDir($compileDir);
 		}
@@ -56,6 +54,12 @@ class WTemplate {
 		$this->compiler = new WTemplateCompiler();
 	}
 	
+	/**
+	 * Sets the compile directory
+	 * 
+	 * @param string $compileDir the compile directory
+	 * @throws Exception
+	 */
 	public function setCompileDir($compileDir) {
 		if (is_dir($compileDir)) {
 			$this->compileDir = $compileDir;
@@ -70,19 +74,24 @@ class WTemplate {
 	}
 	
 	/**
-	 * Assign variables
+	 * Adds variables whose names are in names and their values to the private property $tpl_vars
+	 * 
+	 * @param array|string $names
+	 * @param array|mixed $values
 	 */
-	public function assign($a, $b = null) {
-		if (is_array($a)) {
-			$this->tpl_vars = array_merge($this->tpl_vars, $a);
+	public function assign($names, $values = null) {
+		if (is_array($names)) {
+			$this->tpl_vars = array_merge($this->tpl_vars, $names);
 		} else {
-			$this->tpl_vars[$a] = $b;
+			$this->tpl_vars[$names] = $values;
 		}
 	}
 	
 	/**
-	 * Add values in a variable if exists
-	 * (automaticy transforms this var into array)
+	 * Adds values in a variable if exists
+	 * 
+	 * @param string    $var    variable name
+	 * @param mixed     $value  value to append
 	 */
 	public function append($var, $value) {
 		if (isset($this->tpl_vars[$var])) {
@@ -96,7 +105,10 @@ class WTemplate {
 	}
 	
 	/**
-	 * Get a template variable
+	 * Returns the variable value
+	 * 
+	 * @param string $var variable name
+	 * @return mixed variable value or '' if it is not set
 	 */
 	public function getVar($var) {
 		if (isset($this->tpl_vars[$var])) {
@@ -107,9 +119,9 @@ class WTemplate {
 	}
 	
 	/**
-	 * Remove template variables
+	 * Removes template variables
 	 * 
-	 * @param $vars string|array(string) List of keys
+	 * @param array|string $vars variable name or list of variable names to clear
 	 */
 	public function clear($vars) {
 		if (is_array($vars)) {
@@ -122,24 +134,25 @@ class WTemplate {
 	}
 	
 	/**
-	 * Get the resulting output of a compiled file without printing anything on screen
+	 * Gets the resulting output of a compiled file without printing anything on screen
 	 * 
-	 * @param string $href File's href
-	 * @return string Output string
+	 * @param string $href file's href
+	 * @return string output string
+	 * @throws Exception
 	 */
 	public function parse($href) {
 		// File init
 		$file = new WTemplateFile($href, $this->baseDir, $this->compileDir);
 		
 		// Compilation (if needed)
-		$file->compile($this->compiler);
+		$code = $file->compile($this->compiler);
 		
 		// Buffer
 		ob_start();
 		
 		try { // Critical section
 			// Adds the php close balise at the begining because it is a whole php file being evaluated
-			$eval_result = eval('?>'.file_get_contents($file->getCompilationHref()));
+			$eval_result = eval('?>'.$code);
 		} catch (Exception $e) {
 			// Just stores the exception into $e to throw it later
 		}
@@ -158,9 +171,9 @@ class WTemplate {
 	}
 	
 	/**
-	 * Display a file on screen
+	 * Displays a file on the screen
 	 * 
-	 * @param string $href File's href
+	 * @param string $href file's href
 	 */
 	public function display($href) {
 		// Display parsing result

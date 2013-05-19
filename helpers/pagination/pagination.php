@@ -1,29 +1,57 @@
 <?php
 /**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- * 
- * Classe destinée à générer le sommaire des pages
- * en fonction du nombre d'éléments à afficher par page
- * 
- * @author	Fofif
- * @version	$Id: pagination.php 0001 01-04-2010 Fofif $
+ * pagination.php
  */
 
+/**
+ * Pagination generates the page counter according to the number of elements to display
+ *
+ * @package Helpers
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-01-04-2010
+ */
 class Pagination {
-	private 
-		$n,
-		$total,
-		$limit,
-		$currentPage,
-		$scheme;
+    
+    /**
+     *
+     * @var int Total pages number 
+     */
+	private $n;
+    /**
+     *
+     * @var int Total elements number 
+     */
+	private $total;
+    /**
+     *
+     * @var int Maximum number of elements on a page
+     */
+	private $limit;
+    /**
+     *
+     * @var int Current page 
+     */
+	private $currentPage;
+    /**
+     *
+     * @var string URL pattern for the current page
+     */
+	private $urlPattern;
 	
-	public function __construct($total, $limit, &$currentPage, $scheme) {
+    /**
+     * Setup Pagination
+     * 
+     * @param type  $total          Total elements number
+     * @param type  $limit          Maximum number of elements on a page
+     * @param int   $currentPage    Page Current page
+     * @param type  $urlPattern     URL model for the current page
+     */
+	public function __construct($total, $limit, $currentPage, $urlPattern) {
 		$this->total = $total <= 0 ? 1 : $total;
 		$this->limit = $limit;
-		$this->scheme = $scheme;
+		$this->urlPattern = $urlPattern;
 		
-		// Calcul du nombre de pages (arrondi à l'entier sup)
+		// Computes the number of pages (rule for inexact value : trunc(n)+1)
 		$this->n = ceil($this->total / $this->limit);
 		
 		if ($currentPage <= 0 || $currentPage > $this->n) {
@@ -32,63 +60,68 @@ class Pagination {
 		$this->currentPage = $currentPage;
 	}
 	
-	public function getHtml() {
-		// Ajout du css
+    /**
+     * Returns the HTML code corresponding to the current page page-selector
+     * 
+     * @return string HTML code of the page selector
+     */
+	public function getHTML() {
+		// CSS adding
 		$tpl = WSystem::getTemplate();
-		$tpl->assign('css', $tpl->getVar('css').'<link href="/helpers/pagination/pagination.css" rel="stylesheet" type="text/css" media="screen" />');
 		
-		// Début de la chaîne d'affichage
-		$output = sprintf(
-			'<div class="pages">
-				<strong>Page %s sur %s</strong> ',
-			$this->currentPage, $this->n
-		);
-		
+		// Beginning of the display-chain
+		$output = "<div class='pagination pagination-centered'>
+						<ul>";
+						
 		$firstDone = false;
 		$lastDone = false;
 		for ($i = 1; $i <= $this->n; $i++) {
 			if ($i == $this->currentPage) {
-				$output .= sprintf('<span class="current">%d</span> ', $i);
+				$output .= sprintf('<li class="active"><span>%d</span></li> ', $i);
 			}
-			// On est autour de la page actuelle : on affiche
-			else if (abs($this->currentPage - $i) <= 3) {
-				$output .= sprintf('<a href="'.$this->scheme.'">%d</a> ', $i, $i);
+			// We are around the current page : we display it
+			else if (abs($this->currentPage - $i) <= 5) {
+				$output .= sprintf('<li><a href="'.$this->urlPattern.'">%d</a></li> ', $i, $i);
 			}
-			// On affiche quelque chose avant d'omettre les pages inutiles
+            // Displaying something before forgetting useless pages
 			else {
-				// On est avant la page courante
+				// Before the current page
 				if (!$firstDone && $i < $this->currentPage) {
 					$firstDone = true;
 					$output .= sprintf(
-						'<a href="%s">First</a> 
-						... 
-						<a href="%s" title="Page précédente">&laquo; Prev</a> ', 
-						sprintf($this->scheme, 1), sprintf($this->scheme, $this->currentPage-1)
+						'<li><a href="%s">First</a></li>
+						<li><a href="%s" title="Page précédente">&laquo;</a></li> ', 
+						sprintf($this->urlPattern, 1), sprintf($this->urlPattern, $this->currentPage-1)
 					);
 				}
-				// Après la page courante
+				// After the current page
 				else if (!$lastDone && $i > $this->currentPage) {
 					$lastDone = true;
 					$output .= sprintf(
-						'<a href="%s" title="Page suivante">Next &raquo;</a> 
-						... 
-						<a href="%s">Last</a>', 
-						sprintf($this->scheme, $this->currentPage+1), sprintf($this->scheme, $this->n)
+						'<li><a href="%s" title="Page suivante">&raquo;</a></li>
+						<li><a href="%s">Last</a></li>', 
+						sprintf($this->urlPattern, $this->currentPage+1), sprintf($this->urlPattern, $this->n)
 					);
 				}
-				// On a dépassé les cas qui nous intéressent : inutile de continuer
+				// After interesting cases : stop
 				else if ($i > $this->currentPage) {
 					break;
 				}
 			}
 		}
 		
-		$output .= '</div>';
+		$output .= '</ul></div>';
 		return $output;
 	}
 	
+    /**
+     * Returns the HTML code corresponding to the current page page-selector
+     * 
+     * @see Pagination::getHTML()
+     * @return string HTML code of the page selector
+     */
 	public function __toString() {
-		return $this->getHtml();
+		return $this->getHTML();
 	}
 }
 

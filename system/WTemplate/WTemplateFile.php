@@ -1,50 +1,62 @@
-<?php defined('IN_WITY') or die('Access denied');
+<?php 
 /**
- * WTemplate
- * Moteur de template pour le CMS Wity
- *
- * @author     Fofif
- * @version    $Id: WTemplate/WTemplateFile.php 0003 04-08-2012 Fofif $
- * @package    Wity
- * @subpackage WTemplate
+ * WTemplateFile.php
  */
 
+defined('IN_WITY') or die('Access denied');
+
+/**
+ * WTemplateFile
+ *
+ * @package System\WTemplate
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.3-04-08-2012
+ */
 class WTemplateFile {
+
 	/**
-	 * Complete file href
+	 * @var string Complete file href
 	 */
 	private $href;
 	
 	/**
-	 * Directory containing this file
+	 * @var string Directory containing this file
 	 */
 	private $baseDir;
 	
 	/**
-	 * Compilation directory
+	 * @var string Compilation directory
 	 */
 	private $compilationDir;
 	
 	/**
-	 * Compiled file href
+	 * @var string Compiled file href
 	 */
 	private $compilationHref;
 	
 	/**
-	 * Creation time of this file
+	 * @var int Creation time of this file
 	 */
 	private $creationTime;
 	
 	/**
-	 * Compilation state
+	 * @var bool Compilation state
 	 */
 	private $compiled = false;
 	
 	/**
-	 * Compilation ellapsed time
+	 * @var int Compilation ellapsed time
 	 */
 	private $compilationTime = 0;
 	
+	/**
+	 * Setup WTemplateFile
+	 * 
+	 * @param string $href      Complete file href
+	 * @param string $baseDir   Directory containing this file
+	 * @param string $compDir   Compilation directory
+	 * @throws Exception
+	 */
 	public function __construct($href, $baseDir, $compDir) {
 		if (!file_exists($baseDir.$href)) {
 			throw new Exception("WTemplateFile::__construct(): File \"".$href."\" does not exist.");
@@ -54,11 +66,13 @@ class WTemplateFile {
 		$this->baseDir = $baseDir;
 		$this->compilationDir = $compDir;
 		$this->compilationHref = $this->createCompilationHref();
-		$this->creationTime = filemtime($baseDir.$href);
+		$this->creationTime = @filemtime($baseDir.$href);
 	}
 	
 	/**
-	 * Create the position of the cached file compiled
+	 * Creates the position of the cached file compiled
+	 * 
+	 * @return string href of the cached file
 	 */
 	private function createCompilationHref() {
 		return $this->compilationDir
@@ -66,18 +80,28 @@ class WTemplateFile {
 			.'-'.str_replace(array('.html', '.tpl'), '.php', basename($this->href));
 	}
 	
+	/**
+	 * Returns the href of the cached file
+	 * 
+	 * @return string href to the cached file
+	 */
 	public function getCompilationHref() {
 		return $this->compilationHref;
 	}
 	
+	/**
+	 * Returns the compilation time
+	 * 
+	 * @return int compilation time
+	 */
 	public function getCompilationTime() {
 		return $this->compilationTime;
 	}
 	
 	/**
-	 * Checks whether compilation is required
+	 * Checks if there is a valid compiled file
 	 * 
-	 * @return bool
+	 * @return boolean true if compilation is NOT required, false otherwise
 	 */
 	private function checkCompilation()	{
 		if ($this->compiled) {
@@ -91,7 +115,7 @@ class WTemplateFile {
 		
 		// Cached file is too old
 		$cacheDate = @filemtime($this->compilationHref);
-		if ($cacheDate < $this->creationTime) {
+		if (empty($this->compilationHref) || $cacheDate < $this->creationTime) {
 			return false;
 		}
 		
@@ -99,10 +123,11 @@ class WTemplateFile {
 	}
 	
 	/**
-	 * Compile this file
+	 * Compiles this file
 	 * 
 	 * @param WTemplateCompiler $compiler This object is a compiler which will compile each nodes
-	 * @return void
+	 * @return Output compiled code
+	 * @throws Exception
 	 */
 	public function compile(WTemplateCompiler $compiler) {
 		if (!$this->checkCompilation()) {
@@ -122,23 +147,31 @@ class WTemplateFile {
 			// Update data
 			$this->compilationTime = microtime(true) - $start; // ellapsed time
 			$this->compiled = true;
+			
+			return $code;
 		}
+		return file_get_contents($this->getCompilationHref());
 	}
 	
 	/**
-	 * Write output string into the cache file
+	 * Writes output string into the cache file
+	 * 
+	 * @param string $data the output string
+	 * @throws Exception
 	 */
 	private function saveFile($data) {
-		$handle = fopen($this->compilationHref, 'w');
-		if (!$handle) {
-			throw new Exception("WTemplateFile::saveFile(): Unable to open cache file \"".$this->compilationHref."\".");
+		if (is_writable($this->compilationDir)) {
+			$handle = fopen($this->compilationHref, 'w');
+			if (!$handle) {
+				throw new Exception("WTemplateFile::saveFile(): Unable to open cache file \"".$this->compilationHref."\".");
+			}
+			
+			// Write
+			fwrite($handle, $data);
+			fclose($handle);
+			
+			chmod($this->compilationHref, 0777);
 		}
-		
-		// Write
-		fwrite($handle, $data);
-		fclose($handle);
-		
-		chmod($this->compilationHref, 0777);
 	}
 }
 
