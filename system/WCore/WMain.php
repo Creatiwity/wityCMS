@@ -39,7 +39,6 @@ class WMain {
 		
 		// Exec application
 		$this->exec(WRoute::getApp());
-		//echo WRetriever::getView(WRoute::getApp());
 	}
 	
 	/**
@@ -47,10 +46,12 @@ class WMain {
 	 * Find and load the theme
 	 */
 	private function exec($app_name) {
-		$view = WRetriever::getView(WRoute::getApp());
+		$view = WRetriever::getView($app_name);
 		
-		$response = new WResponse(WConfig::get('config.theme'));
-		$response->render($view);
+		if ($view instanceof WView) {
+			$response = new WResponse(WConfig::get('config.theme'));
+			$response->render($view);
+		}
 	}
 	
 	/**

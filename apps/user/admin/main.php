@@ -13,10 +13,6 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-26-04-2013
  */
 class UserAdminController extends WController {
-	/**
-	 * @var Instance of UserAdminModel
-	 */
-	private $model;
 	
 	public function __construct() {
 		include_once 'model.php';

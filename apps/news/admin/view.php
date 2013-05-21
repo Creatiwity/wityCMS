@@ -18,8 +18,6 @@ class NewsAdminView extends WView {
 		$this->assign('pagination', $pagination->getHTML());
 		$this->assign($adminStyle->getTplVars());
 		$this->assign('news', $data);
-		
-		$this->render('news_listing');
 	}
 
 	/**
@@ -60,8 +58,6 @@ class NewsAdminView extends WView {
 			'news_date' => '',
 			'news_modified' => ''
 		), $data);
-		
-		$this->render('news_form');
 	}
 	
 	public function news_delete($data = array()) {
@@ -88,7 +84,6 @@ class NewsAdminView extends WView {
 			'news_cat_parent_name' => ""
 		), $post_data);
 		$this->assign('cats', $cats_list);
-		$this->render('categories_manager');
 	}
 }
 

@@ -13,11 +13,9 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-26-02-2013
  */
 class UserView extends WView {
-	private $model;
 	
-	public function __construct(UserModel $model) {
+	public function __construct() {
 		parent::__construct();
-		$this->model = $model;
 		$this->assign('css', '/apps/user/front/css/user.css');
 	}
 	
@@ -28,7 +26,6 @@ class UserView extends WView {
 	 */
 	public function connexion($redirect = '') {
 		$this->assign('redirect', $redirect);
-		$this->render('connexion_form');
 	}
 	
 	public function register(array $data = array()) {
@@ -37,17 +34,11 @@ class UserView extends WView {
 		foreach ($inputs as $name) {
 			$this->assign($name, isset($data[$name]) ? $data[$name] : '');
 		}
-		$this->render('register');
-	}
-	
-	public function password_lost() {
-		$this->render('password_lost');
 	}
 	
 	public function reset_password($email, $confirm) {
 		$this->assign('email', $email);
 		$this->assign('confirm', $confirm);
-		$this->render('reset_password');
 	}
 }
 

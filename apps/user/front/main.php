@@ -24,11 +24,6 @@ class UserController extends WController {
 	private $session;
 	
 	/**
-	 * @var Instance of UserModel
-	 */
-	private $model;
-	
-	/**
 	 * UserController constructor
 	 * Basically instantiates vars: model, views and session
 	 */

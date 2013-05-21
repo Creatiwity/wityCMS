@@ -202,11 +202,6 @@ class WView {
 			$this->setResponse($response);
 		}
 		
-		// Check theme
-		// if (empty($this->themeName) && WNote::count('view_theme') == 0) {
-			// WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
-			// return false;
-		// }
 		// Check response file
 		if (empty($this->responseFile) && WNote::count('view_response') == 0) {
 			WNote::error('view_response', "WView::render(): No response file given.", 'plain');
@@ -221,8 +216,6 @@ class WView {
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		// Mark the view as rendered
-		self::$response_sent = true;
 		return true;
 	}
 }

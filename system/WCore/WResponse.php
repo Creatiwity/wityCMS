@@ -20,7 +20,6 @@ class WResponse {
 	
 	public function __construct($theme) {
 		$this->setTheme($theme);
-		
 		$this->tpl = WSystem::getTemplate();
 	}
 	
@@ -49,9 +48,19 @@ class WResponse {
 		return $this->themeName;
 	}
 	
+	/**
+	 * Final render of the response
+	 * Displays a valid HTML5 to the screen
+	 */
 	public function render(WView $view) {
 		// Flush the notes waiting for their own view
 		if (WNote::displayPlainView()) {
+			return false;
+		}
+		
+		// Check theme
+		if (empty($this->themeName) && WNote::count('view_theme') == 0) {
+			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
 			return false;
 		}
 		

@@ -78,8 +78,6 @@ class UserAdminView extends WView {
 		
 		$pagination = WHelper::load('pagination', array($stats['request'], $n, $currentPage, '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
 		$this->assign('pagination', $pagination->getHTML());
-		
-		$this->render('listing');
 	}
 	
 	/**
@@ -121,8 +119,6 @@ class UserAdminView extends WView {
 		foreach ($model as $item => $default) {
 			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
 		}
-		
-		$this->render('user_form');
 	}
 	
 	/**
@@ -157,8 +153,6 @@ class UserAdminView extends WView {
 		
 		$data = $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC');
 		$this->assign('groups', $data);
-		
-		$this->render('groups_listing');
 	}
 	
 	/**
@@ -192,8 +186,6 @@ class UserAdminView extends WView {
 		$this->assign('count_total', $count_total);
 		$this->assign('count_custom', $count_custom);
 		$this->assign('count_regular', $count_total-$count_custom);
-		
-		$this->render('group_diff');
 	}
 	
 	/**
@@ -201,7 +193,6 @@ class UserAdminView extends WView {
 	 */
 	public function config($config) {
 		$this->assign('config', $config);
-		$this->render('config');
 	}
 }
 

@@ -53,16 +53,20 @@ class WRetriever {
 		// Get app controller
 		$controller = self::getController($app_name, $params);
 		
-		$view = $controller->getView();
-		
-		if (empty($view_name)) {
-			$view_name = $controller->getTriggeredAction();
+		if ($controller instanceof WController) {
+			$view = $controller->getView();
+			
+			if (empty($view_name)) {
+				$view_name = $controller->getTriggeredAction();
+			}
+			
+			// Prepare the view
+			$view->prepare($view_name, $model);
+			
+			return $view;
 		}
 		
-		// Prepare the view
-		$view->prepare($view_name, $model);
-		
-		return $view;
+		return null;
 	}
 	
 	/**
@@ -101,7 +105,7 @@ class WRetriever {
 					include_once $app_dir.'model.php';
 					$model_class = str_replace('Controller', 'Model', $app_class);
 					if (class_exists($model_class)) {
-						$controller->model = new $model_class();
+						$controller->setModel(new $model_class());
 					}
 				}
 				

@@ -25,6 +25,11 @@ abstract class WController {
 	private $manifest;
 	
 	/**
+	 * @var model
+	 */
+	protected $model;
+	
+	/**
 	 * @var WView view object corresponding to this controller instance
 	 */
 	protected $view;
@@ -51,11 +56,6 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 		
-		// Default theme configuration
-		// if ($this->view->getTheme() == '') {
-			// $this->view->setTheme(WConfig::get('config.theme'));
-		// }
-		
 		// Automaticly declare the language directory
 		if (is_dir($context['directory'].'lang')) {
 			WLang::declareLangDir($context['directory'].'lang');
@@ -68,8 +68,14 @@ abstract class WController {
 		}
 	}
 	
+	/**
+	 * Default Launch method
+	 * 
+	 * Launch method determines the method that must be triggered in the application.
+	 * Most of the time, the action given in URL is used.
+	 */
 	public function launch() {
-		// Trigger proper method
+		// Trigger the corresponding method for the action given in URL
 		return $this->forward($this->getAskedAction());
 	}
 	
@@ -134,6 +140,22 @@ abstract class WController {
 	 */
 	public function getView() {
 		return $this->view;
+	}
+	
+	/**
+	 * Defines a new model for this controller
+	 */
+	public function setModel($model) {
+		$this->model = $model;
+	}
+	
+	/**
+	 * Get the model defined for this application
+	 * 
+	 * @return Object
+	 */
+	public function getModel() {
+		return $this->model;
 	}
 	
 	/**

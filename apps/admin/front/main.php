@@ -14,11 +14,6 @@ defined('IN_WITY') or die('Access denied');
  */
 class AdminController extends WController {
 	/**
-	 * @var Model of admin app
-	 */
-	private $model;
-	
-	/**
 	 * @var Name of the admin application asked
 	 */
 	private $appAsked;
@@ -28,10 +23,10 @@ class AdminController extends WController {
 	 */
 	private $appController = null;
 	
-	public function init(WMain $wity, $context) {
+	public function init($context) {
 		// Change admin context
 		$context['admin'] = true;
-		parent::init($wity, $context);
+		parent::init($context);
 	}
 	
 	/**
@@ -40,7 +35,9 @@ class AdminController extends WController {
 	public function launch() {
 		if (!WSession::isConnected()) { // Display login form if not connected
 			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
-			$this->wity->exec('user');
+			$userView = WRetriever::getView('user', 'login');
+			$response = new WResponse(WConfig::get('config.theme'));
+			$response->render($userView);
 		} else if ($this->checkAdminAccess()) {
 			$this->routeAdmin();
 			$this->appAsked = WRoute::getApp();
