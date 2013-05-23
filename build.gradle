@@ -1,0 +1,17 @@
+task deploy(dependsOn: 'init') << {
+    print 'Deploying in '
+    4.times { print "$it " }
+    println '.\nDeploy.'
+    
+    copy {
+	from "."
+	into "build"
+	exclude "build.gradle"
+    }
+    
+    println 'Finished.'
+}
+
+task init << {
+    println 'Script initialization'
+}
