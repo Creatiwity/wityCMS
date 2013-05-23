@@ -2,3 +2,4 @@ cache/[^.]*/
 /nbproject
 doc/
 installer/bypass*
+/.gradle
