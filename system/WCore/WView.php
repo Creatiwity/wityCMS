@@ -6,7 +6,7 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WView handles application's response
+ * WView handles application's Views
  * 
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
@@ -34,9 +34,9 @@ class WView {
 	private $themeDir = '';
 	
 	/**
-	 * @var string Template response file to display as output
+	 * @var string Template file to be used when the view will be rendered
 	 */
-	private $responseFile = '';
+	private $templateFile = '';
 	
 	/**
 	 * @var array Variables with a special treatment like "css" and "js"
@@ -76,7 +76,7 @@ class WView {
 	 * 
 	 * @param string $file file that will be used for template compiling
 	 */
-	public function setResponse($file) {
+	public function setTemplate($file) {
 		// Format the file asked
 		if (strpos($file, '/') === false) {
 			$file = $this->context['directory'].'templates'.DS.$file.'.html';
@@ -85,14 +85,14 @@ class WView {
 		$file = str_replace(WITY_PATH, '', $file);
 		if (file_exists(WITY_PATH.$file)) {
 			// WTemplate automatically adds the base directory defined in WSystem::getTemplate()
-			$this->responseFile = $file;
+			$this->templateFile = $file;
 		} else {
-			WNote::error('view_set_response', "WView::setResponse(): The response file \"".$file."\" does not exist.", 'plain');
+			WNote::error('view_set_template', "WView::setTemplate(): The template file \"".$file."\" does not exist.", 'plain');
 		}
 	}
 	
-	public function getResponse() {
-		return $this->responseFile;
+	public function getTemplate() {
+		return $this->templateFile;
 	}
 	
 	/**
@@ -163,7 +163,6 @@ class WView {
 					}
 				}
 				return $css;
-				break;
 			
 			case 'js':
 				$script = $this->tpl->getVar('js');
@@ -177,34 +176,32 @@ class WView {
 					}
 				}
 				return $script;
-				break;
 			
 			default:
 				return $this->tpl->getVar($stack_name).$this->vars[$stack_name];
-				break;
 		}
 	}
 	
 	/**
 	 * Renders the view
 	 * 
-	 * @param  string  $response  Template file to be displayed
+	 * @param  string  $action  Template file to be displayed
 	 * @return boolean true if view successfully loaded, false otherwise
 	 */
-	public function prepare($response = '', $model = array()) {
-		if (!empty($response)) {
+	public function prepare($action = '', $model = array()) {
+		if (!empty($action)) {
 			// Prepare the view
-			if (method_exists($this, $response)) {
-				$this->$response($model);
+			if (method_exists($this, $action)) {
+				$this->$action($model);
 			}
 			
-			// Declare response file if given
-			$this->setResponse($response);
+			// Declare template file if given
+			$this->setTemplate($action);
 		}
 		
-		// Check response file
-		if (empty($this->responseFile) && WNote::count('view_response') == 0) {
-			WNote::error('view_response', "WView::render(): No response file given.", 'plain');
+		// Check template file
+		if (empty($this->templateFile) && WNote::count('view_template') == 0) {
+			WNote::error('view_template', "WView::prepare(): No template file given.", 'plain');
 			return false;
 		}
 		

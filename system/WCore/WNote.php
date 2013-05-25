@@ -163,12 +163,13 @@ class WNote {
 		$view = new WView();
 		$view->assign('css', '/themes/system/note/note.css');
 		$view->assign('notes_data', array($note));
-		$view->setResponse('themes/system/note/note_view.html');
-		$view->prepare();
+		$view->setTemplate('themes/system/note/note_view.html');
 		
-		// Render the response
-		$response = new WResponse('_blank');
-		$response->render($view);
+		if ($view->prepare()) {
+			// Render the response
+			$response = new WResponse('_blank');
+			$response->render($view);
+		}
 	}
 	
 	/**
@@ -323,18 +324,21 @@ class WNote {
 			$view->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
 			$view->assign('js', '/themes/system/note/note.js');
 			$view->assign('notes_data', $notes_data);
-			$view->setResponse('themes/system/note/note_plain_view.html');
-			$view->prepare();
+			$view->setTemplate('themes/system/note/note_plain_view.html');
 			
-			$response = new WResponse('_blank');
-			if (!$response->render($view)) {
-				die(
-					"WView did not manage to display the Note's Plain View (themes/system/note/note_plain_view.html).<br />\n"
-					."<u>Triggering notes:</u>\n"
-					.implode('', array_map('WNote::handle_html', $notes_data))
-				);
+			if ($view->prepare()) {
+				$response = new WResponse('_blank');
+				if ($response->render($view)) {
+					return true;
+				}
 			}
-			return true;
+			
+			// View or response did not execute correctly
+			die(
+				"WView did not manage to display the Note's Plain View (themes/system/note/note_plain_view.html).<br />\n"
+				."<u>Triggering notes:</u>\n"
+				.implode('', array_map('WNote::handle_html', $notes_data))
+			);
 		}
 		return false;
 	}

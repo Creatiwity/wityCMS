@@ -59,8 +59,8 @@ class WResponse {
 		}
 		
 		// Check theme
-		if (empty($this->themeName) && WNote::count('view_theme') == 0) {
-			WNote::error('view_theme', "WView::render(): No theme given or it was not found.", 'plain');
+		if (empty($this->themeName) && WNote::count('response_theme') == 0) {
+			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
 			return false;
 		}
 		
@@ -75,7 +75,7 @@ class WResponse {
 		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Define {$include} tpl's var
-		$this->tpl->assign('include', $view->getResponse());
+		$this->tpl->assign('include', $view->getTemplate());
 		
 		$dir = WRoute::getDir();
 		if (empty($dir)) {
@@ -83,7 +83,7 @@ class WResponse {
 			try {
 				$this->tpl->display($themeMainFile);
 			} catch (Exception $e) {
-				WNote::error('view_tpl_display', $e->getMessage(), 'die');
+				WNote::error('response_tpl_display', $e->getMessage(), 'die');
 				return false;
 			}
 		} else {
@@ -97,7 +97,7 @@ class WResponse {
 					$html
 				);
 			} catch (Exception $e) {
-				WNote::error('view_tpl_parse', $e->getMessage(), 'die');
+				WNote::error('response_tpl_parse', $e->getMessage(), 'die');
 				return false;
 			}
 		}
