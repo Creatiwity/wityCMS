@@ -244,7 +244,7 @@ class WView {
 		
 		// Check template file
 		if (empty($this->templateFile)) {
-			WNote::error('view_template', "WView::prepare(): No template file given for the view ".$this->getName()."/".$action.".", 'plain');
+			WNote::error('view_template', "WView::prepare(): No template file found for the view ".$this->getName()."/".$action.".", 'plain');
 			return false;
 		}
 		

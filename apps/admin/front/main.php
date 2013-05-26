@@ -61,10 +61,13 @@ class AdminController extends WController {
 					// Config Template
 					$this->configTheme();
 					
-					// Execute
-					$this->appController->launch();
+					// Execute and get model
+					$model = $this->appController->launch();
 					
+					// Update the action triggered
 					$this->action = $this->appController->getTriggeredAction();
+					
+					return $model;
 				} else {
 					WNote::error('app_structure', "The application \"".$this->appAsked."\" has to have a main class inheriting from WController abstract class.", 'display');
 				}
