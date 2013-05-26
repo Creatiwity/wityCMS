@@ -77,6 +77,19 @@ class WView {
 	}
 	
 	/**
+	 * Gets the name of the current view
+	 * 
+	 * @return string View name
+	 */
+	public function getName() {
+		if (isset($this->context['name'])) {
+			return $this->context['name'];
+		} else {
+			return get_class($this);
+		}
+	}
+	
+	/**
 	 * Sets the file that will be used for template compiling
 	 * 
 	 * @param string $file file that will be used for template compiling
@@ -96,6 +109,11 @@ class WView {
 		}
 	}
 	
+	/**
+	 * Returns the template file configured for the current view
+	 * 
+	 * @return string Template file href
+	 */
 	public function getTemplate() {
 		return $this->templateFile;
 	}
@@ -219,12 +237,14 @@ class WView {
 			}
 			
 			// Declare template file if given
-			$this->setTemplate($action);
+			if ($this->getTemplate() == "") {
+				$this->setTemplate($action);
+			}
 		}
 		
 		// Check template file
 		if (empty($this->templateFile)) {
-			WNote::error('view_template', "WView::prepare(): No template file given for this view.", 'plain');
+			WNote::error('view_template', "WView::prepare(): No template file given for the view ".$this->getName()."/".$action.".", 'plain');
 			return false;
 		}
 		

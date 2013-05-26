@@ -63,6 +63,7 @@ class WResponse {
 		$plain_view = WNote::getPlainView();
 		if (!is_null($plain_view)) {
 			$view = $plain_view;
+			$this->setTheme('_blank');
 			$view->prepare();
 		}
 		

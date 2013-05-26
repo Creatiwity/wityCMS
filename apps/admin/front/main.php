@@ -56,13 +56,15 @@ class AdminController extends WController {
 					);
 					
 					$this->appController = new $app_class();
-					$this->appController->init($this->wity, $context);
+					$this->appController->init($context);
 					
 					// Config Template
 					$this->configTheme();
 					
 					// Execute
 					$this->appController->launch();
+					
+					$this->action = $this->appController->getTriggeredAction();
 				} else {
 					WNote::error('app_structure', "The application \"".$this->appAsked."\" has to have a main class inheriting from WController abstract class.", 'display');
 				}
@@ -146,14 +148,13 @@ class AdminController extends WController {
 	 * Configurates the admin template
 	 */
 	private function configTheme() {
-		// Matching the views
+		// Linking the views
 		if (!is_null($this->appController)) {
 			$this->setView($this->appController->getView());
 		}
 		
 		// Config theme
 		WConfig::set('config.theme', 'admin');
-		$this->view->setTheme('admin');
 		
 		// These are template variables => direct assign in WTemplate
 		$tpl = WSystem::getTemplate();

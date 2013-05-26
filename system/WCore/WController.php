@@ -37,7 +37,7 @@ abstract class WController {
 	/**
 	 * @var string action that will be performed in this application (default: 'index')
 	 */
-	private $action = '';
+	protected $action = '';
 	
 	/**
 	 * Application initialization
