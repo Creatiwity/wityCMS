@@ -36,8 +36,7 @@ class AdminController extends WController {
 		if (!WSession::isConnected()) { // Display login form if not connected
 			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
 			$userView = WRetriever::getView('user', 'login');
-			$response = new WResponse(WConfig::get('config.theme'));
-			$response->render($userView);
+			$this->setView($userView);
 		} else if ($this->checkAdminAccess()) {
 			$this->routeAdmin();
 			$this->appAsked = WRoute::getApp();

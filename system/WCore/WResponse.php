@@ -53,15 +53,17 @@ class WResponse {
 	 * Displays a valid HTML5 to the screen
 	 */
 	public function render(WView $view) {
-		// Flush the notes waiting for their own view
-		if (WNote::displayPlainView()) {
+		// Check theme
+		if (empty($this->themeName)) {
+			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
 			return false;
 		}
 		
-		// Check theme
-		if (empty($this->themeName) && WNote::count('response_theme') == 0) {
-			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
-			return false;
+		// Flush the notes waiting for their own view
+		$plain_view = WNote::getPlainView();
+		if (!is_null($plain_view)) {
+			$view = $plain_view;
+			$view->prepare();
 		}
 		
 		// Select Theme main template
@@ -101,6 +103,8 @@ class WResponse {
 				return false;
 			}
 		}
+		
+		return true;
 	}
 }
 

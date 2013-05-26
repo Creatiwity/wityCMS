@@ -165,11 +165,9 @@ class WNote {
 		$view->assign('notes_data', array($note));
 		$view->setTemplate('themes/system/note/note_view.html');
 		
-		if ($view->prepare()) {
-			// Render the response
-			$response = new WResponse('_blank');
-			$response->render($view);
-		}
+		// Render the response
+		$response = new WResponse('_blank');
+		$response->render($view);
 	}
 	
 	/**
@@ -298,22 +296,24 @@ class WNote {
 		}
 		$tpl = WSystem::getTemplate();
 		$tpl->assign('css', $tpl->getVar('css').'<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n");
+		
 		$previous_notes_data = $tpl->getVar('notes_data');
+		
 		$tpl->assign('notes_data', $notes);
 		$html = $tpl->parse('themes/system/note/note_view.html');
-		$tpl->assign('notes_dta', $previous_notes_data);
+		
+		$tpl->assign('notes_data', $previous_notes_data);
 		return $html;
 	}
 	
 	/**
 	 * Display a set of notes in a fallback view
 	 * 
-	 * @return boolean true if there were some notes to render, false otherwise
+	 * @return WView
 	 */
-	public static function displayPlainView() {
+	public static function getPlainView() {
 		// Generate view
-		$tpl = WSystem::getTemplate(); // TPL must be OK
-		if (!is_null($tpl) && !empty(self::$plain_stack)) {
+		if (!empty(self::$plain_stack)) {
 			$notes_data = self::$plain_stack;
 			self::$plain_stack = array();
 			
@@ -326,21 +326,16 @@ class WNote {
 			$view->assign('notes_data', $notes_data);
 			$view->setTemplate('themes/system/note/note_plain_view.html');
 			
-			if ($view->prepare()) {
-				$response = new WResponse('_blank');
-				if ($response->render($view)) {
-					return true;
-				}
-			}
+			return $view;
 			
 			// View or response did not execute correctly
-			die(
-				"WView did not manage to display the Note's Plain View (themes/system/note/note_plain_view.html).<br />\n"
-				."<u>Triggering notes:</u>\n"
-				.implode('', array_map('WNote::handle_html', $notes_data))
-			);
+			// die(
+				// "WView did not manage to display the Note's Plain View (themes/system/note/note_plain_view.html).<br />\n"
+				// ."<u>Triggering notes:</u>\n"
+				// .implode('', array_map('WNote::handle_html', $notes_data))
+			// );
 		}
-		return false;
+		return null;
 	}
 }
 

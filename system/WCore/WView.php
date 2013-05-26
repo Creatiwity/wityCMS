@@ -24,6 +24,11 @@ class WView {
 	public $tpl;
 	
 	/**
+	 * @var Prepared state
+	 */
+	private $prepared = false;
+	
+	/**
 	 * @var string Theme name to be loaded
 	 */
 	private $themeName = '';
@@ -115,6 +120,19 @@ class WView {
 	}
 	
 	/**
+	 * Get the value of one assigned variable
+	 * 
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function getVar($name) {
+		if (isset($this->vars[$name])) {
+			return $this->vars[$name];
+		}
+		return null;
+	}
+	
+	/**
 	 * Assigns a list of variables whose names are in $names to their $values
 	 * 
 	 * @param mixed $names  variable names
@@ -189,6 +207,11 @@ class WView {
 	 * @return boolean true if view successfully loaded, false otherwise
 	 */
 	public function prepare($action = '', $model = array()) {
+		if ($this->prepared) {
+			return true;
+		}
+		$this->prepared = true;
+		
 		if (!empty($action)) {
 			// Prepare the view
 			if (method_exists($this, $action)) {
@@ -200,8 +223,8 @@ class WView {
 		}
 		
 		// Check template file
-		if (empty($this->templateFile) && WNote::count('view_template') == 0) {
-			WNote::error('view_template', "WView::prepare(): No template file given.", 'plain');
+		if (empty($this->templateFile)) {
+			WNote::error('view_template', "WView::prepare(): No template file given for this view.", 'plain');
 			return false;
 		}
 		
