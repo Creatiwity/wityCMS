@@ -42,8 +42,8 @@ class NewsAdminModel extends NewsModel {
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, keywords, creation_date, edited_by, image)
-			VALUES (:url, :title, :author, :content, :keywords, NOW(), :edited_by, :image)
+			INSERT INTO news(url, title, author, content, keywords, creation_date, edited_by)
+			VALUES (:url, :title, :author, :content, :keywords, NOW(), :edited_by)
 		');
 		$prep->bindParam(':url', $data['news_url']);
 		$prep->bindParam(':title', $data['news_title']);
@@ -51,7 +51,6 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':content', $data['news_content']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':edited_by', $_SESSION['userid']);
-		$prep->bindParam(':image', $data['news_image']);
 		return $prep->execute();
 	}
 	
@@ -65,7 +64,7 @@ class NewsAdminModel extends NewsModel {
 	public function updateNews($news_id, $data) {
 		$prep = $this->db->prepare('
 			UPDATE news
-			SET url = :url, title = :title, author = :author, content = :content, keywords = :keywords, modified_date = NOW(), edited_by = :edited_by, image = :image 
+			SET url = :url, title = :title, author = :author, content = :content, keywords = :keywords, modified_date = NOW(), edited_by = :edited_by
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $news_id);
@@ -75,7 +74,6 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':content', $data['news_content']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':edited_by', $_SESSION['userid']);
-		$prep->bindParam(':image', $data['news_image']);
 		return $prep->execute();
 	}
 	

@@ -60,14 +60,13 @@ class NewsAdminController extends WController {
 		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_date', 'DESC'));
 		$sorting = $adminStyle->findSorting($sortBy, $sens);
 		
-		// Get data
-		$news = $this->model->getNewsList(($page-1)*$n, $n, $sorting[0], $sorting[1] == 'ASC');
-		$total = $this->model->countNews();
-		
-		// Pagination
-		$pagination = WHelper::load('pagination', array($total, $n, $page, '/admin/news/'.$sorting[0].'-'.$sorting[1].'-%d/'));
-		
-		$this->view->news_listing($news, $adminStyle, $pagination);
+		return array(
+			'data' => $this->model->getNewsList(($page-1)*$n, $n, $sorting[0], $sorting[1] == 'ASC'),
+			'total' => $this->model->countNews(),
+			'current_page' => $page,
+			'news_per_page' => $n,
+			'adminStyle' => $adminStyle
+		);
 	}
 	
 	/**
@@ -119,7 +118,7 @@ class NewsAdminController extends WController {
 			// }
 			
 			if (!empty($errors)) {
-				WNote::error('data_errors', implode("<br />\n", $erreurs), 'assign');
+				WNote::error('data_errors', implode("<br />\n", $errors));
 			} else {
 				if (is_null($news_id)) { // Add case
 					if ($this->model->createNews($data)) {
@@ -133,7 +132,7 @@ class NewsAdminController extends WController {
 						}
 						
 						WNote::success('article_added', WLang::get('article_added', $data['news_title']));
-						header('Location: '.Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
+						$this->view->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
 						return;
 					} else {
 						WNote::error('article_not_added', WLang::get('article_not_added'));
@@ -149,7 +148,7 @@ class NewsAdminController extends WController {
 						}
 						
 						WNote::success('article_edited', WLang::get('article_edited', $data['news_title']));
-						header('Location: '.Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
+						$this->view->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
 						return;
 					} else {
 						WNote::error('article_not_edited', WLang::get('article_not_edited'));
@@ -159,18 +158,19 @@ class NewsAdminController extends WController {
 		}
 		
 		// Load form
+		$model = array('news_id' => '', 'data' => array(), 'cats_list' => array());
 		$cats_list = $this->model->getCatsList('news_cat_name', 'ASC');
+		$model['cats_list'] = $cats_list;
 		if (is_null($news_id)) { // Add case
-			$lastId = $this->model->getLastNewsId() + 1;
-			if (!isset($data)) {
-				$this->view->news_form($cats_list, $lastId);
-			} else {
-				$this->view->news_form($cats_list, $lastId, $data);
+			$model['news_id'] = $this->model->getLastNewsId() + 1;
+			if (isset($data)) {
+				$model['data'] = $data;
 			}
 		} else { // Edit case
-			$data = $this->model->getNews($news_id);
-			$this->view->news_form($cats_list, $news_id, $data);
+			$model['news_id'] = $news_id;
+			$model['data'] = $this->model->getNews($news_id);
 		}
+		return $model;
 	}
 	
 	/**
@@ -184,7 +184,7 @@ class NewsAdminController extends WController {
 			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 			header('Location: '.WRoute::getDir().'/admin/news/');
 		} else {
-			$this->news_form($news_id);
+			return $this->news_form($news_id);
 		}
 	}
 	
@@ -202,13 +202,12 @@ class NewsAdminController extends WController {
 				$this->model->removeCatsFromNews($news_id);
 				$this->model->deleteNews($news_id);
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
-				header('Location: ' . WRoute::getDir() . '/admin/news/');
-			} else {
-				$this->view->news_delete($data);
+				$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/');
 			}
+			return $data;
 		} else {
 			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
-			header('Location: ' . WRoute::getDir() . '/admin/news/');
+			$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/');
 		}
 	}
 	
@@ -280,11 +279,15 @@ class NewsAdminController extends WController {
 		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name', 'ASC'));
 		$sorting = $adminStyle->findSorting($sortBy, $sens);
 		
-		$cats_list = $this->model->getCatsList($sorting[0], $sorting[1]);
-		if (!isset($data)) {
-			$data = array();
+		$model = array(
+			'data' => $this->model->getCatsList($sorting[0], $sorting[1]),
+			'adminStyle' => $adminStyle,
+			'post_data' => array()
+		);
+		if (isset($data)) {
+			$model['post_data'] = $data;
 		}
-		$this->view->categories_manager($cats_list, $adminStyle, $data);
+		return $model;
 	}
 	
 	/**
@@ -301,10 +304,9 @@ class NewsAdminController extends WController {
 				$this->model->unlinkChildrenOfParentCat($cat_id);
 				$this->model->deleteCat($cat_id);
 				WNote::success('category_deleted', WLang::get('category_deleted'));
-				header('Location: ' . WRoute::getDir() . '/admin/news/categories_manager/');
-			} else {
-				$this->view->category_delete($cat_id);
+				$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager/');
 			}
+			return $cat_id;
 		} else {
 			WNote::error('category_not_found', WLang::get('category_not_found'));
 		}
