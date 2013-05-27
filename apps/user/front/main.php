@@ -25,15 +25,9 @@ class UserController extends WController {
 	
 	/**
 	 * UserController constructor
-	 * Basically instantiates vars: model, views and session
+	 * Basically instantiates session
 	 */
 	public function __construct() {
-		include_once 'model.php';
-		$this->model = new UserModel();
-		
-		include_once 'view.php';
-		$this->setView(new UserView($this->model));
-		
 		$this->session = WSystem::getSession();
 	}
 	
@@ -109,7 +103,7 @@ class UserController extends WController {
 				return;
 			}
 		}
-		$this->view->connexion($redirect);
+		return $redirect;
 	}
 	
 	/**
@@ -245,9 +239,7 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
-			$this->view->register($data);
-		} else {
-			$this->view->register();
+			return $data;
 		}
 	}
 	
@@ -302,7 +294,7 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_register_failure', WLang::get('user_register_failure'));
 			}
-			$this->view->connexion();
+			$this->view->login();
 		}
 	}
 	
@@ -339,7 +331,7 @@ class UserController extends WController {
 					WNote::error('user_password_lost_not_found', WLang::get('user_password_lost_not_found'));
 				}
 			}
-			$this->view->password_lost();
+			return array('step' => 1);
 		} else { // Step 2 - Reset password
 			$user_data = $this->model->findUserWithEmailAndConfirmCode($data['email'], $data['confirm']);
 			if (!empty($user_data)) {
@@ -358,7 +350,7 @@ class UserController extends WController {
 						WNote::error('error_password_not_matching', WLang::get('error_password_not_matching'));
 					}
 				}
-				$this->view->reset_password($data['email'], $data['confirm']);
+				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
 				header('location: '.WRoute::getBase());
 			}

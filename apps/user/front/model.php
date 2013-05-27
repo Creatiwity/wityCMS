@@ -35,7 +35,25 @@ class UserModel {
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE id = :id
 		');
-		$prep->bindParam(':id', $userid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $user_id, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->rowCount() == 1;
+	}
+	
+	/**
+	 * Checks whether a $userid truely exists in the database
+	 * 
+	 * @param string $userid
+	 * @return boolean Only one row must be returned
+	 */
+	public function validGroupId($group_id) {
+		if (empty($group_id)) {
+			return false;
+		}
+		$prep = $this->db->prepare('
+			SELECT * FROM users_groups WHERE id = :group_id
+		');
+		$prep->bindParam(':group_id', $group_id, PDO::PARAM_INT);
 		$prep->execute();
 		return $prep->rowCount() == 1;
 	}

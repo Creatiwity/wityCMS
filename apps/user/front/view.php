@@ -24,8 +24,9 @@ class UserView extends WView {
 	 * 
 	 * @param string $redirect The redirect value to set in the input form
 	 */
-	public function connexion($redirect = '') {
+	public function login($redirect) {
 		$this->assign('redirect', $redirect);
+		$this->setTemplate('connexion_form');
 	}
 	
 	public function register(array $data = array()) {
@@ -36,9 +37,13 @@ class UserView extends WView {
 		}
 	}
 	
-	public function reset_password($email, $confirm) {
-		$this->assign('email', $email);
-		$this->assign('confirm', $confirm);
+	public function password_lost($model) {
+		// Reset password
+		if ($model['step'] == 2) {
+			$this->assign('email', $model['email']);
+			$this->assign('confirm', $model['confirm']);
+			$this->setTemplate('reset_password');
+		}
 	}
 }
 
