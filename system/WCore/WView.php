@@ -29,16 +29,6 @@ class WView {
 	private $prepared = false;
 	
 	/**
-	 * @var string Theme name to be loaded
-	 */
-	private $themeName = '';
-	
-	/**
-	 * @var string Theme directory
-	 */
-	private $themeDir = '';
-	
-	/**
 	 * @var string Template file to be used when the view will be rendered
 	 */
 	private $templateFile = '';
@@ -47,6 +37,16 @@ class WView {
 	 * @var array Variables with a special treatment like "css" and "js"
 	 */
 	private $specialVars = array('css', 'js');
+	
+	/**
+	 * @var array List of headers for this view
+	 */
+	private $headers = array();
+	
+	/**
+	 * @var string Theme name for this view
+	 */
+	private $theme;
 	
 	/**
 	 * @var array Template variables
@@ -216,6 +216,44 @@ class WView {
 			default:
 				return $this->tpl->getVar($stack_name).$this->vars[$stack_name];
 		}
+	}
+	
+	/**
+	 * Set a new header for the response
+	 * Will be assigned in WResponse::render()
+	 * 
+	 * @param string $name Header's name
+	 * @param string $value
+	 */
+	public function setHeader($name, $value) {
+		$this->headers[strtolower($name)] = $value;
+	}
+	
+	/**
+	 * Get the headers for this view
+	 * 
+	 * @return array
+	 */
+	public function getHeaders() {
+		return $this->headers;
+	}
+	
+	/**
+	 * Define the theme for this view
+	 * 
+	 * @param string $theme
+	 */
+	public function setTheme($theme) {
+		$this->theme = $theme;
+	}
+	
+	/**
+	 * Get the theme name for this view
+	 * 
+	 * @return string Theme name
+	 */
+	public function getTheme() {
+		return $this->theme;
 	}
 	
 	/**

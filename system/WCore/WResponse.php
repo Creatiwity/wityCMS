@@ -10,16 +10,26 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.4-19-05-2013
+ * @version 0.4-27-05-2013
  */
 class WResponse {
+	/**
+	 * @var WTemplate Instance of WTemplate
+	 */
 	private $tpl;
 	
-	private $themeName;
-	private $themeDir;
+	/**
+	 * @var string Name of the theme used for the response
+	 */
+	private $theme_name;
 	
-	public function __construct($theme) {
-		$this->setTheme($theme);
+	/**
+	 * @var string Directory of the theme used for the response
+	 */
+	private $theme_dir;
+	
+	public function __construct($default_theme) {
+		$this->setTheme($default_theme);
 		$this->tpl = WSystem::getTemplate();
 	}
 	
@@ -30,10 +40,10 @@ class WResponse {
 	 */
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
-			$this->themeName = '_blank';
+			$this->theme_name = '_blank';
 		} else if (is_dir(THEMES_DIR.$theme)) {
-			$this->themeName = $theme;
-			$this->themeDir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
+			$this->theme_name = $theme;
+			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
 			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
 		}
@@ -45,7 +55,7 @@ class WResponse {
 	 * @return string current theme name
 	 */
 	public function getTheme() {
-		return $this->themeName;
+		return $this->theme_name;
 	}
 	
 	/**
@@ -53,8 +63,22 @@ class WResponse {
 	 * Displays a valid HTML5 to the screen
 	 */
 	public function render(WView $view) {
+		// Check headers
+		$headers = $view->getHeaders();
+		foreach ($headers as $name => $value) {
+			header($name.': '.$headers['location']);
+		}
+		if (isset($headers['location'])) {
+			return true;
+		}
+		
+		$view_theme = $view->getTheme();
+		if (!empty($view_theme)) {
+			$this->setTheme($view_theme);
+		}
+		
 		// Check theme
-		if (empty($this->themeName)) {
+		if (empty($this->theme_name)) {
 			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
 			return false;
 		}
@@ -68,10 +92,10 @@ class WResponse {
 		}
 		
 		// Select Theme main template
-		if ($this->themeName == '_blank') {
+		if ($this->theme_name == '_blank') {
 			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).'system'.DS.'_blank.html';
 		} else {
-			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).$this->themeName.DS.'templates'.DS.'index.html';
+			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).$this->theme_name.DS.'templates'.DS.'index.html';
 		}
 		
 		// Handle notes
