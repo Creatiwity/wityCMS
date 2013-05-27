@@ -15,8 +15,8 @@ defined('IN_WITY') or die('Access denied');
  */
 class NewsAdminView extends WView {
 	public function listing($model) {
-		$sorting = $model['adminStyle']->getSorting();
-		$this->assign($model['adminStyle']->getTplVars());
+		$sorting = $model['sortingHelper']->getSorting();
+		$this->assign($model['sortingHelper']->getTplVars());
 		
 		$pagination = WHelper::load('pagination', array($model['total'], $model['news_per_page'], $model['current_page'], '/admin/news/'.$sorting[0].'-'.$sorting[1].'-%d/'));
 		$this->assign('pagination', $pagination->getHTML());

@@ -55,17 +55,17 @@ class NewsAdminController extends WController {
 			$page = 1;
 		}
 		
-		// AdminStyle Helper
+		// SortingHelper
 		$orderingFields = array('news_id', 'news_title', 'news_author', 'news_date', 'news_views');
-		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_date', 'DESC'));
-		$sorting = $adminStyle->findSorting($sortBy, $sens);
+		$sortingHelper = WHelper::load('SortingHelper', array($orderingFields, 'news_date', 'DESC'));
+		$sorting = $sortingHelper->findSorting($sortBy, $sens);
 		
 		return array(
 			'data' => $this->model->getNewsList(($page-1)*$n, $n, $sorting[0], $sorting[1] == 'ASC'),
 			'total' => $this->model->countNews(),
 			'current_page' => $page,
 			'news_per_page' => $n,
-			'adminStyle' => $adminStyle
+			'sortingHelper' => $sortingHelper
 		);
 	}
 	
@@ -117,9 +117,7 @@ class NewsAdminController extends WController {
 				// $data['news_image'] = '';
 			// }
 			
-			if (!empty($errors)) {
-				WNote::error('data_errors', implode("<br />\n", $errors));
-			} else {
+			if (empty($errors)) {
 				if (is_null($news_id)) { // Add case
 					if ($this->model->createNews($data)) {
 						$news_id = $this->model->getLastNewsId();
@@ -154,6 +152,8 @@ class NewsAdminController extends WController {
 						WNote::error('article_not_edited', WLang::get('article_not_edited'));
 					}
 				}
+			} else {
+				WNote::error('data_errors', implode("<br />\n", $errors));
 			}
 		}
 		
@@ -251,9 +251,7 @@ class NewsAdminController extends WController {
 			$data['news_cat_shortname'] = preg_replace('#-{2,}#', '-', $data['news_cat_shortname']);
 			$data['news_cat_shortname'] = trim($data['news_cat_shortname'], '-');
 			
-			if (!empty($errors)) {
-				WNote::error('data_errors', implode("<br />\n", $errors), 'assign');
-			} else {
+			if (empty($errors)) {
 				if (empty($cat_id)) { // Add case
 					if ($this->model->createCat($data)) {
 						WNote::success('cat_added', WLang::get('cat_added', $data['news_cat_name']));
@@ -271,6 +269,8 @@ class NewsAdminController extends WController {
 						WNote::error('cat_not_edited', WLang::get('cat_not_edited'));
 					}
 				}
+			} else {
+				WNote::error('data_errors', implode("<br />\n", $errors));
 			}
 		}
 		
