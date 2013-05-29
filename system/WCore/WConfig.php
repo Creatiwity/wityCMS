@@ -227,7 +227,7 @@ class WConfig {
 			fclose($handle);
 			
 			// Change Modification rights
-			$chmod = chmod($file, 0777);
+			$chmod = @chmod($file, 0777);
 		}
 	}
 	
