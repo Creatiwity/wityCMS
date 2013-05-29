@@ -12,7 +12,7 @@ include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
  * UserAdminModel is the admin Model of the User Application
  * 
  * @package Apps
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-15-02-2013
  */
 class UserAdminModel extends UserModel {
@@ -43,7 +43,8 @@ class UserAdminModel extends UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
-		$prep->bindParam(':groupe', $data['groupe']);
+		$groupe = isset($data['groupe']) ? $data['groupe'] : '';
+		$prep->bindParam(':groupe', $groupe);
 		$prep->bindParam(':access', $data['access']);
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);

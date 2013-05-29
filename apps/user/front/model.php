@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * UserModel is the front Model of the User Application
  * 
  * @package Apps
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-15-02-2013
  */
 class UserModel {
@@ -20,6 +20,8 @@ class UserModel {
 		
 		// Declare table
 		$this->db->declareTable('users');
+		$this->db->declareTable('users_config');
+		$this->db->declareTable('users_groups');
 	}
 	
 	/**
@@ -28,8 +30,8 @@ class UserModel {
 	 * @param string $userid
 	 * @return boolean Only one row must be returned
 	 */
-	public function validId($user_id) {
-		if (empty($user_id)) {
+	public function validId($userid) {
+		if (empty($userid)) {
 			return false;
 		}
 		$prep = $this->db->prepare('
@@ -277,7 +279,7 @@ class UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
-		$groupe = isset($data['groupe']) ? $data['groupe'] : 0;
+		$groupe = isset($data['groupe']) ? $data['groupe'] : '';
 		$prep->bindParam(':groupe', $groupe);
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);

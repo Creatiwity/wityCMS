@@ -7,7 +7,7 @@
  * Pagination generates the page counter according to the number of elements to display
  *
  * @package Helpers
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-01-04-2010
  */
 class Pagination {

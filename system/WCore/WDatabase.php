@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * WDatabase manages all database interactions
  *
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-22-11-2012
  */
 class WDatabase extends PDO {

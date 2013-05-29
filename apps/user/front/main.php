@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * UserController is the front Controller of the User Application
  * 
  * @package Apps
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-06-03-2013
  */
 class UserController extends WController {

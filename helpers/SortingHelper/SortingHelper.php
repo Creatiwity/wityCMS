@@ -9,7 +9,7 @@
  * Thanks to this class you'll be able to know what variable to choose if you want to sort a set
  * 
  * @package Helpers
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-12-07-2012
  */
 class SortingHelper {

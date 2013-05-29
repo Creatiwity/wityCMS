@@ -12,7 +12,7 @@ require SYS_DIR.'WCore'.DS.'WView.php';
  * WMain is the main class that Wity launches at startup
  *
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.3-17-01-2013
  */
 class WMain {
@@ -58,7 +58,7 @@ class WMain {
 	 * Loads WConfig
 	 */
 	private function loadConfigs() {
-		WConfig::load('config', SYS_DIR.'config'.DS.'config.php', 'php');
+		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
 	}
 	
 	/**

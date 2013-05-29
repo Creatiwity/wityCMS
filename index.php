@@ -7,7 +7,7 @@
  * @package System
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version	0.3
+ * @version 0.3
  */
 
 /**
@@ -40,6 +40,16 @@ require_once SYS_DIR.'WCore'.DS.'WHelper.php';
 require_once SYS_DIR.'WCore'.DS.'WRetriever.php';
 require_once SYS_DIR.'WCore'.DS.'WResponse.php';
 require_once SYS_DIR.'WCore'.DS.'WMain.php';
+
+/**
+ * Installer section
+ */
+if (file_exists('installer/installer.php') && !file_exists('installer/bypass.php')) {
+	require 'installer/installer.php';
+	$installer = new Installer();
+	$installer->launch();
+	return;
+}
 
 /**
  * Execute Wity
