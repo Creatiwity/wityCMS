@@ -157,7 +157,7 @@ class AdminController extends WController {
 		}
 		
 		// Config theme
-		WConfig::set('config.theme', 'admin');
+		WConfig::set('config.theme', 'admin-bootstrap');
 		
 		// These are template variables => direct assign in WTemplate
 		$tpl = WSystem::getTemplate();
