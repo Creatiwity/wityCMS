@@ -42,11 +42,7 @@ class NewsAdminController extends WController {
 		$n = 30; // Number of news per page
 		
 		// Sorting criterias given by URL
-		$args = WRoute::getArgs();
-		$criterias = array_shift($args);
-		if ($criterias == 'listing') {
-			$criterias = array_shift($args);
-		}
+		$criterias = $this->getOption(0);
 		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sortBy, $sens, $page);
 		if (!isset($this->model->news_data_model['toDB'][$sortBy])) {
 			$sortBy = 'news_date';
@@ -197,8 +193,8 @@ class NewsAdminController extends WController {
 		$news_id = $this->getId();
 		if ($this->model->validExistingNewsId($news_id)) {
 			$data = $this->model->getNews($news_id);
-			$args = WRoute::getArgs();
-			if (isset($args[2]) && $args[2] == "confirm") {
+			
+			if ($this->inOptions('confirm')) {
 				$this->model->removeCatsFromNews($news_id);
 				$this->model->deleteNews($news_id);
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
@@ -217,11 +213,7 @@ class NewsAdminController extends WController {
 	 */
 	protected function categories_manager() {
 		// Sorting criterias given by URL
-		$args = WRoute::getArgs();
-		$criterias = array_shift($args);
-		if ($criterias == 'listing') {
-			$criterias = array_shift($args);
-		}
+		$criterias = $this->getOption(0);
 		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s', $sortBy, $sens);
 		if (!isset($this->model->cats_data_model['toDB'][$sortBy])) {
 			$sortBy = 'news_cat_name';
@@ -295,8 +287,7 @@ class NewsAdminController extends WController {
 	protected function category_delete() {
 		$cat_id = $this->getId();
 		if ($this->model->validExistingCatId($cat_id)) {
-			$args = WRoute::getArgs();
-			if (isset($args[2]) && $args[2] == "confirm") {
+			if ($this->inOptions('confirm')) {
 				$this->model->removeCatsFromNews($cat_id);
 				$this->model->unlinkChildrenOfParentCat($cat_id);
 				$this->model->deleteCat($cat_id);
