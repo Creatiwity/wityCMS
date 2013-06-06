@@ -155,15 +155,18 @@ class WLang {
 	 * sprintf format (such as %s) may be use in language files like this :
 	 * {lang index|{$arg1}} = sprintf(WLang::_('index'), {$arg1})
 	 * 
-	 * @param string $args language identifier if no closing node in template file
+	 * @param string $args language identifier
 	 * @return string php string that calls the WLang::get()
 	 */
 	public static function compile_lang($args) {
 		if (!empty($args)) {
 			$data = explode('|', $args);
 			$id = array_shift($data);
+			
+			// Replace the template variables in the string
 			$id = WTemplateParser::replaceNodes($id, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
-			// is there some data left in $data?
+			
+			// Some parameters can be provided to replace the %s in the lang string
 			if (!empty($data)) {
 				$args = '';
 				foreach ($data as $var) {
