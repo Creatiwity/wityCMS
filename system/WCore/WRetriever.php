@@ -21,6 +21,12 @@ class WRetriever {
 	 */
 	private static $controllers = array();
 	
+	public static function init() {
+		// Init template handler
+		WSystem::getTemplate();
+		WTemplateCompiler::registerCompiler('retrieve_view', array('WRetriever', 'compile_retrieve_view'));
+	}
+	
 	public static function getModel($app_name, $params = array()) {
 		// Get app controller
 		$controller = self::getController($app_name, $params);
@@ -143,7 +149,7 @@ class WRetriever {
 		if (empty(self::$apps_list)) {
 			$apps = glob(APPS_DIR.'*', GLOB_ONLYDIR);
 			foreach ($apps as $appDir) {
-				if (file_exists($appDir.DS.'front'.DS.'main.php')) {
+				if ($appDir != '.' && $appDir != '..' && file_exists($appDir.DS.'front'.DS.'main.php')) {
 					self::$apps_list[] = basename($appDir);
 				}
 			}
@@ -159,6 +165,45 @@ class WRetriever {
 	 */
 	public static function isApp($app) {
 		return !empty($app) && in_array($app, self::getAppsList());
+	}
+	
+	/*****************************************
+	 * WTemplateCompiler's new handlers part *
+	 *****************************************/
+	/**
+	 * Handles the {lang} node in WTemplate
+	 * {lang} gives access to translation variables
+	 * sprintf format (such as %s) may be use in language files like this :
+	 * {lang index|{$arg1}} = sprintf(WLang::_('index'), {$arg1})
+	 * 
+	 * @param string $args language identifier if no closing node in template file
+	 * @return string php string that calls the WLang::get()
+	 */
+	public static function compile_retrieve_view($args) {
+		if (!empty($args)) {
+			// Replace all the template variables in the strig
+			$data = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			$data = explode('/', $args);
+			
+			if (count($data) >= 2) {
+				$app_name = array_shift($data);
+				$action = array_shift($data);
+				
+				// Some parameters left
+				if (!empty($data)) {
+					foreach ($data as $var) {
+						if (!empty($var)) {
+							$args .= $var.', ';
+						}
+					}
+					
+					return '<?php self::getView($app_name, $action, array('.$args.')); ?>';
+				} else {
+					return '<?php self::getView($app_name, $action); ?>';
+				}
+			}
+		}
+		return '';
 	}
 }
 

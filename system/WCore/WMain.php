@@ -37,6 +37,9 @@ class WMain {
 		// Initializing lang
 		WLang::init();
 		
+		// Initializing WRetrever
+		WRetriever::init();
+		
 		// Exec application
 		$this->exec(WRoute::getApp());
 	}
