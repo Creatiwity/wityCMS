@@ -158,9 +158,12 @@ class NewsAdminController extends WController {
 		}
 		
 		// Load form
-		$model = array('news_id' => '', 'data' => array(), 'cats_list' => array());
-		$cats_list = $this->model->getCatsList('news_cat_name', 'ASC');
-		$model['cats_list'] = $cats_list;
+		$model = array(
+			'news_id' => '', 
+			'data' => array(), 
+			'cats_list' => $this->model->getCatsList('news_cat_name', 'ASC')
+		);
+		
 		if (is_null($news_id)) { // Add case
 			$model['news_id'] = $this->model->getLastNewsId() + 1;
 			if (isset($data)) {
@@ -279,15 +282,11 @@ class NewsAdminController extends WController {
 		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name', 'ASC'));
 		$sorting = $adminStyle->findSorting($sortBy, $sens);
 		
-		$model = array(
+		return array(
 			'data' => $this->model->getCatsList($sorting[0], $sorting[1]),
 			'adminStyle' => $adminStyle,
-			'post_data' => array()
+			'post_data' => isset($data) ? $data : array()
 		);
-		if (isset($data)) {
-			$model['post_data'] = $data;
-		}
-		return $model;
 	}
 	
 	/**
