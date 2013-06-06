@@ -17,7 +17,7 @@ $route = array(
         ),
     ),
     'custom' => array(
-        'test' => array(
+        'test-custom-route' => array(
             0 => 'app_name',
             1 => array(
                 0 => 'arg1',
