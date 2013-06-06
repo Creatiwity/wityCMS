@@ -55,7 +55,7 @@ class UserController extends WController {
 		
 		if ($this->session->isConnected()) {
 			// WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.', 'display');
-			header('location: '.$redirect);
+			$this->view->setHeader('Location', $redirect);
 			return;
 		}
 		
@@ -79,7 +79,7 @@ class UserController extends WController {
 						} else {
 							// Redirect
 							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
-							header('location: '.$redirect);
+							$this->view->setHeader('Location', $redirect);
 							return;
 						}
 						break;
@@ -99,8 +99,7 @@ class UserController extends WController {
 			// Login process triggered from an external application
 			if ($cookie && strpos($referer, 'user') === false) {
 				// Redirect to it
-				header('location: '.$referer);
-				return;
+				$this->view->setHeader('Location', $referer);
 			}
 		}
 		return $redirect;
@@ -117,7 +116,7 @@ class UserController extends WController {
 			$this->session->closeSession();
 		}
 		WNote::success('user_disconnected', WLang::get('user_disconnected'));
-		header('location: '.WRoute::getBase());
+		$this->view->setHeader('Location', WRoute::getBase());
 	}
 	
 	/**
@@ -258,7 +257,7 @@ class UserController extends WController {
 		// Retrieve the confirm code
 		$confirm_code = WRoute::getArg(1);
 		if (empty($confirm_code)) {
-			header('location: '.WRoute::getBase());
+			$this->view->setHeader('Location', WRoute::getBase());
 			return;
 		}
 		
@@ -285,6 +284,7 @@ class UserController extends WController {
 					);
 				}
 				WNote::success('user_validated_admin', WLang::get('user_validated_admin'), 'display');
+				return;
 			} else {
 				WNote::error('user_register_failure', WLang::get('user_register_failure'));
 			}
@@ -294,8 +294,8 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_register_failure', WLang::get('user_register_failure'));
 			}
-			$this->view->login();
 		}
+		$this->view->login();
 	}
 	
 	/**
@@ -352,7 +352,7 @@ class UserController extends WController {
 				}
 				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				header('location: '.WRoute::getBase());
+				$this->view->setHeader('location: '.WRoute::getBase());
 			}
 		}
 	}

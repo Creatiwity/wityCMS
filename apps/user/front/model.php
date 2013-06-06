@@ -30,8 +30,8 @@ class UserModel {
 	 * @param string $userid
 	 * @return boolean Only one row must be returned
 	 */
-	public function validId($userid) {
-		if (empty($userid)) {
+	public function validId($user_id) {
+		if (empty($user_id)) {
 			return false;
 		}
 		$prep = $this->db->prepare('
