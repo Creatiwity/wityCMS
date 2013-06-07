@@ -286,11 +286,11 @@ class WRoute {
 	 * Returns the arguments of the current application
 	 * 
 	 * @param int $index Argument index
-	 * @return array Argument corresponding to the index (null if not found)
+	 * @return string Argument corresponding to the index ('' if not found)
 	 */
 	public static function getArg($index) {
 		$args = self::getArgs();
-		return isset($args[$index]) ? $args[$index] : null;
+		return isset($args[$index]) ? $args[$index] : '';
 	}
 	
 	/**
