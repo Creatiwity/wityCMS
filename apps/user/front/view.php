@@ -24,8 +24,8 @@ class UserView extends WView {
 	 * 
 	 * @param string $redirect The redirect value to set in the input form
 	 */
-	public function login($redirect) {
-		$this->assign('redirect', $redirect);
+	public function login($model) {
+		$this->assign('redirect', $model['redirect']);
 		$this->setTemplate('connexion_form');
 	}
 	

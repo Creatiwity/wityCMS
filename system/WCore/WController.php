@@ -159,6 +159,61 @@ abstract class WController {
 	}
 	
 	/**
+	 * Returns the arguments in the URL without the application action if known
+	 * Example:
+	 *    URL = /app/action/option1/option2 OR /app/option1/option2
+	 *    getArgs() = array('option1', 'option2')
+	 * 
+	 * @param int $index Option index
+	 * @return array Options in the URL
+	 */
+	public function getOptions() {
+		$args = WRoute::getArgs();
+		if (isset($args[0]) && $args[0] == $this->action) {
+			array_shift($args);
+		}
+		return $args;
+	}
+	
+	/**
+	 * Returns the nth argument in the URL without the application action if known
+	 * Example:
+	 *    URL = /app/action/option1/option2 OR /app/option1/option2
+	 *    getArg(0) = option1, getArg(1) = option2, getArg(2) = ''
+	 * 
+	 * @param int $index Option index
+	 * @return string Option corresponding to the index
+	 */
+	public function getOption($index) {
+		$args = $this->getOptions();
+		return isset($args[$index]) ? $args[$index] : '';
+	}
+	
+	/**
+	 * Searches within the application options if a specified value is present
+	 * 
+	 * @param string $value Value to search
+	 * @param bool   $exact Exact search?
+	 * @return bool
+	 */
+	public function inOptions($value, $exact = true) {
+		$args = $this->getOptions();
+		foreach ($args as $arg) {
+			if ($exact) {
+				if ($arg === $value) {
+					return true;
+				}
+			} else {
+				if (strpos($arg, $value) !== false) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns action's name which is the second parameter given in the URL, right after the app's name.
 	 * 
 	 * If the $check param is set to true, the method will check if the action found is declared in 
@@ -169,8 +224,7 @@ abstract class WController {
 	 * @return string action's name asked in the URL
 	 */
 	public function getAskedAction($check = true) {
-		$args = WRoute::getArgs();
-		$action = isset($args[0]) ? strtolower($args[0]) : '';
+		$action = strtolower(WRoute::getArg(0));
 		
 		// Find a fine $action
 		if ($check) {

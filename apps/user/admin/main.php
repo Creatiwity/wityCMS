@@ -85,11 +85,7 @@ class UserAdminController extends WController {
 		}
 		
 		// Sorting criterias given by URL
-		$args = WRoute::getArgs();
-		$criterias = array_shift($args);
-		if ($criterias == 'listing') {
-			$criterias = array_shift($args);
-		}
+		$criterias = $this->getOption(0);
 		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sortBy, $sens, $page);
 		if (empty($page) || $page <= 0) {
 			$page = 1;
@@ -315,8 +311,8 @@ Ceci est un message automatique.";
 	 */
 	protected function groups() {
 		// Préparation tri colonnes
-		$args = WRoute::getArg(1);
-		$count = sscanf(str_replace('-', ' ', $args), '%s %s', $sortBy, $sens);
+		$option = $this->getOption(0);
+		$count = sscanf(str_replace('-', ' ', $option), '%s %s', $sortBy, $sens);
 		
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');

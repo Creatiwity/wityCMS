@@ -102,7 +102,8 @@ class UserController extends WController {
 				$this->view->setHeader('Location', $referer);
 			}
 		}
-		return $redirect;
+		
+		return array('redirect' => $redirect);
 	}
 	
 	/**
