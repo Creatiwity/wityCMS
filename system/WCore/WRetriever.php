@@ -27,17 +27,29 @@ class WRetriever {
 		WTemplateCompiler::registerCompiler('retrieve_view', array('WRetriever', 'compile_retrieve_view'));
 	}
 	
-	public static function getModel($app_name, $params = array()) {
+	/**
+	 * Gets the model of an application/action
+	 * 
+	 * @param string $app_name
+	 * @param array  $params
+	 * @return array
+	 */
+	public static function getModel($app_name, array $params = array()) {
 		// Get app controller
 		$controller = self::getController($app_name, $params);
 		
 		// Input parameters in the app
-		
+		if (!empty($params)) {
+			// $controller->setOptions($params);
+		}
 		
 		// Get model
 		$model = array();
 		if ($controller instanceof WController) {
-			$model = $controller->launch();
+			$return = $controller->launch();
+			if (!empty($return) && is_array($return)) {
+				$model = $return;
+			}
 		}
 		
 		// Apply some Dynamic Permissions on the model
@@ -48,16 +60,20 @@ class WRetriever {
 	}
 	
 	/**
+	 * Gets the view of an application/action
 	 * 
-	 * 
+	 * @param string $app_name
+	 * @param string $view_name
+	 * @param array  $params
+	 * @param string $view_size
 	 * @return WView
 	 */
-	public static function getView($app_name, $view_name = '', $params = array(), $view_size = '') {
+	public static function getView($app_name, $view_name = '', array $params = array(), $view_size = '') {
 		// Get the model
 		$model = self::getModel($app_name, $params);
 		
 		// Get app controller
-		$controller = self::getController($app_name, $params);
+		$controller = self::getController($app_name);
 		
 		if ($controller instanceof WController) {
 			$view = $controller->getView();
@@ -81,7 +97,7 @@ class WRetriever {
 	 * @param string $app_name name of the application that will be launched
 	 * @return WController App Controller
 	 */
-	public static function getController($app_name, $params) {
+	public static function getController($app_name) {
 		// Check if app not already instantiated
 		if (isset(self::$controllers[$app_name])) {
 			return self::$controllers[$app_name];
@@ -191,15 +207,18 @@ class WRetriever {
 				
 				// Some parameters left
 				if (!empty($data)) {
+					$params = '';
 					foreach ($data as $var) {
 						if (!empty($var)) {
-							$args .= $var.', ';
+							// TODO support vars
+							$params .= '"'.$var.'", ';
 						}
 					}
+					$params = substr($params, 0, -2);
 					
-					return '<?php self::getView($app_name, $action, array('.$args.')); ?>';
+					return '<?php WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.')); ?>';
 				} else {
-					return '<?php self::getView($app_name, $action); ?>';
+					return '<?php WRetriever::getView('.$app_name.', '.$action.'); ?>';
 				}
 			}
 		}

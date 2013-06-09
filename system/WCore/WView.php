@@ -257,7 +257,7 @@ class WView {
 	 * @param  string $action Name of the action in the view to display
 	 * @return string The rendered string of the view
 	 */
-	public function render($action = '', $model = array()) {
+	public function render($action = '', array $model = array()) {
 		if (!empty($this->rendered_string)) {
 			return $this->rendered_string;
 		}
@@ -281,7 +281,7 @@ class WView {
 		
 		// Check template file
 		if (empty($this->templateFile)) {
-			WNote::error('view_template', "WView::prepare(): No template file found for the view ".$this->getName()."/".$action.".", 'plain');
+			WNote::error('view_template', "WView::render(): No template file found for the view ".$this->getName()."/".$action.".", 'plain');
 			return false;
 		}
 		
