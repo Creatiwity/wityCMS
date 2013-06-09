@@ -24,9 +24,14 @@ class WView {
 	public $tpl;
 	
 	/**
-	 * @var Prepared state
+	 * @var array List of headers for this view
 	 */
-	private $prepared = false;
+	private $headers = array();
+	
+	/**
+	 * @var string Theme name for this view
+	 */
+	private $theme;
 	
 	/**
 	 * @var string Template file to be used when the view will be rendered
@@ -39,30 +44,20 @@ class WView {
 	private $specialVars = array('css', 'js');
 	
 	/**
-	 * @var array List of headers for this view
-	 */
-	private $headers = array();
-	
-	/**
-	 * @var string Theme name for this view
-	 */
-	private $theme;
-	
-	/**
 	 * @var array Template variables
 	 */
 	protected $vars = array();
+	
+	/**
+	 * @var Final view rendered as a string
+	 */
+	private $rendered_string;
 	
 	/**
 	 * Setup template
 	 */
 	public function __construct() {
 		$this->tpl = WSystem::getTemplate();
-		
-		// Default vars
-		$site_name = WConfig::get('config.site_name');
-		$this->assign('site_name', $site_name);
-		$this->assign('page_title', $site_name);
 	}
 	
 	/**
@@ -259,14 +254,18 @@ class WView {
 	/**
 	 * Renders the view
 	 * 
-	 * @param  string  $action  Template file to be displayed
-	 * @return boolean true if view successfully loaded, false otherwise
+	 * @param  string $action Name of the action in the view to display
+	 * @return string The rendered string of the view
 	 */
-	public function prepare($action = '', $model = array()) {
-		if ($this->prepared) {
-			return true;
+	public function render($action = '', $model = array()) {
+		if (!empty($this->rendered_string)) {
+			return $this->rendered_string;
 		}
-		$this->prepared = true;
+		
+		// If model is a Note, return it parsed
+		if (array_keys($model) == array('level', 'code', 'message','handlers')) {
+			return $this->rendered_string = WNote::parse(array($model));
+		}
 		
 		if (!empty($action)) {
 			// Prepare the view
@@ -294,7 +293,7 @@ class WView {
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		return true;
+		return $this->rendered_string = $this->tpl->parse($this->getTemplate());
 	}
 }
 ?>

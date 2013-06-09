@@ -29,8 +29,14 @@ class WResponse {
 	private $theme_dir;
 	
 	public function __construct($default_theme) {
-		$this->setTheme($default_theme);
 		$this->tpl = WSystem::getTemplate();
+		
+		$this->setTheme($default_theme);
+		
+		// Default vars
+		$site_name = WConfig::get('config.site_name');
+		$this->tpl->assign('site_name', $site_name);
+		$this->tpl->assign('page_title', $site_name);
 	}
 	
 	/**
@@ -61,6 +67,8 @@ class WResponse {
 	/**
 	 * Final render of the response
 	 * Displays a valid HTML5 to the screen
+	 * 
+	 * @param WView $view The view to render as a main instance
 	 */
 	public function render(WView $view) {
 		// Check headers
@@ -72,6 +80,7 @@ class WResponse {
 			return true;
 		}
 		
+		// Use the theme of this view
 		$view_theme = $view->getTheme();
 		if (!empty($view_theme)) {
 			$this->setTheme($view_theme);
@@ -80,7 +89,6 @@ class WResponse {
 		// Check theme
 		if (empty($this->theme_name)) {
 			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
-			return false;
 		}
 		
 		// Flush the notes waiting for their own view
@@ -88,7 +96,6 @@ class WResponse {
 		if (!is_null($plain_view)) {
 			$view = $plain_view;
 			$this->setTheme('_blank');
-			$view->prepare();
 		}
 		
 		// Select Theme main template
@@ -102,31 +109,26 @@ class WResponse {
 		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Define {$include} tpl's var
-		$this->tpl->assign('include', $view->getTemplate());
+		$this->tpl->assign('include', $view->render());
 		
 		$dir = WRoute::getDir();
-		if (empty($dir)) {
-			// Direct render
-			try {
+		try {
+			if (empty($dir)) {
+				// Direct render
 				$this->tpl->display($themeMainFile);
-			} catch (Exception $e) {
-				WNote::error('response_tpl_display', $e->getMessage(), 'die');
-				return false;
-			}
-		} else {
-			// Absolute links fix
-			// If $dir is not the root file, then change links
-			try {
+			} else {
+				// Absolute links fix
+				// If $dir is not the root file, then change links
 				$html = $this->tpl->parse($themeMainFile);
 				echo str_replace(
 					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
 					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
 					$html
 				);
-			} catch (Exception $e) {
-				WNote::error('response_tpl_parse', $e->getMessage(), 'die');
-				return false;
 			}
+		} catch (Exception $e) {
+			WNote::error(empty($dir) ? 'response_tpl_display' : 'response_tpl_parse', $e->getMessage(), 'die');
+			return false;
 		}
 		
 		return true;

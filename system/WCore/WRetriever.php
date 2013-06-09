@@ -67,7 +67,7 @@ class WRetriever {
 			}
 			
 			// Prepare the view
-			$view->prepare($view_name, $model);
+			$view->render($view_name, $model);
 			
 			return $view;
 		}
