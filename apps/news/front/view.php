@@ -17,11 +17,6 @@ class NewsView extends WView {
 	public function listing($data) {
 		$this->assign('news', $data);
 	}
-	
-	public function detail($data) {
-		$data['news_content'] = str_replace('<hr />', '', $data['news_content']);
-		$this->assign($data);
-	}
 }
 
 ?>

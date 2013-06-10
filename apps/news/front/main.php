@@ -15,23 +15,22 @@ defined('IN_WITY') or die('Access denied');
  */
 class NewsController extends WController {
 	private function getId() {
-		$args = WRoute::getArgs();
-		if (empty($args[0])) {
+		$option = $this->getOption(0);
+		if (empty($option)) {
 			return -1;
 		} else {
-			list($id) = explode('-', $args[0]);
+			list($id) = explode('-', $option);
 			return intval($id);
 		}
 	}
 	
 	public function listing() {
 		$news_id = $this->getId();
-		if (!empty($news_id) && !$this->model->validExistingNewsId($news_id)) {
-			// display error
-			$news_id = 0;
+		if ($news_id != -1 && !$this->model->validExistingNewsId($news_id)) {
+			return WNote::error('news_not_found', "Error");
 		}
 		
-		if (!empty($news_id)) {
+		if ($news_id != -1) {
 			return $this->display($news_id);
 		} else {
 			return $this->listNews();
