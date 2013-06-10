@@ -40,6 +40,11 @@ abstract class WController {
 	protected $action = '';
 	
 	/**
+	 * @var array Parameters to forward to the application's action
+	 */
+	private $params;
+	
+	/**
 	 * Application initialization
 	 * 
 	 * @param WMain  $wity     main Wity instance of WMain
@@ -169,9 +174,24 @@ abstract class WController {
 	 */
 	public function getOptions() {
 		$args = WRoute::getArgs();
+		
+		// Remove action if in the arguments
 		if (isset($args[0]) && $args[0] == $this->action) {
 			array_shift($args);
 		}
+		
+		// Merge retriever params and URL options
+		foreach ($args as $key => $arg) {
+			if (isset($this->params[$key])) {
+				$args[$key] = $this->params[$key];
+				unset($this->params[$key]);
+			}
+		}
+		
+		if (count($this->params) > 0) {
+			$args = array_merge($args, $this->params);
+		}
+		
 		return $args;
 	}
 	
@@ -211,6 +231,13 @@ abstract class WController {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * 
+	 */
+	public function setOptions(array $options) {
+		$this->params = $options;
 	}
 	
 	/**
