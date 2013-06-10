@@ -5,8 +5,8 @@
 
 defined('IN_WITY') or die('Access denied');
 
-require SYS_DIR.'WCore'.DS.'WController.php';
-require SYS_DIR.'WCore'.DS.'WView.php';
+require_once SYS_DIR.'WCore'.DS.'WController.php';
+require_once SYS_DIR.'WCore'.DS.'WView.php';
 
 /**
  * WMain is the main class that Wity launches at startup
