@@ -258,12 +258,8 @@ class WView {
 	 * @return string The rendered string of the view
 	 */
 	public function render($action = '', array $model = array()) {
-		if (!empty($this->rendered_string)) {
-			return $this->rendered_string;
-		}
-		
 		// If model is a Note, return it parsed
-		if (array_keys($model) == array('level', 'code', 'message','handlers')) {
+		if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
 			return $this->rendered_string = WNote::parse(array($model));
 		}
 		
@@ -294,6 +290,10 @@ class WView {
 		$this->tpl->assign($this->vars);
 		
 		return $this->rendered_string = $this->tpl->parse($this->getTemplate());
+	}
+	
+	public function getRenderedString() {
+		return $this->rendered_string;
 	}
 }
 ?>

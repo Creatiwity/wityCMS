@@ -80,12 +80,6 @@ class WResponse {
 			return true;
 		}
 		
-		// Use the theme of this view
-		$view_theme = $view->getTheme();
-		if (!empty($view_theme)) {
-			$this->setTheme($view_theme);
-		}
-		
 		// Check theme
 		if (empty($this->theme_name)) {
 			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
@@ -109,7 +103,7 @@ class WResponse {
 		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Define {$include} tpl's var
-		$this->tpl->assign('include', $view->render());
+		$this->tpl->assign('include', $view->getRenderedString());
 		
 		$dir = WRoute::getDir();
 		try {

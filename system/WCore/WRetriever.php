@@ -40,15 +40,21 @@ class WRetriever {
 		
 		// Input parameters in the app
 		if (!empty($params)) {
-			// $controller->setOptions($params);
+			$controller->setOptions($params);
 		}
 		
 		// Get model
 		$model = array();
 		if ($controller instanceof WController) {
 			$return = $controller->launch();
-			if (!empty($return) && is_array($return)) {
-				$model = $return;
+			
+			// Model must be an array
+			if (!empty($return)) {
+				if (is_array($return)) {
+					$model = $return;
+				} else {
+					$model = array('result' => $return);
+				}
 			}
 		}
 		
@@ -216,9 +222,9 @@ class WRetriever {
 					}
 					$params = substr($params, 0, -2);
 					
-					return '<?php WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.')); ?>';
+					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.'))->getRenderedString(); ?>';
 				} else {
-					return '<?php WRetriever::getView('.$app_name.', '.$action.'); ?>';
+					return '<?php echo WRetriever::getView('.$app_name.', '.$action.')->getRenderedString(); ?>';
 				}
 			}
 		}
