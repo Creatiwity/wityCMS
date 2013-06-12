@@ -103,7 +103,7 @@ class WResponse {
 		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
 		
 		// Define {$include} tpl's var
-		$this->tpl->assign('include', $view->getRenderedString());
+		$this->tpl->assign('include', $view->render());
 		
 		$dir = WRoute::getDir();
 		try {

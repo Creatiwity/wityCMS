@@ -17,7 +17,7 @@ abstract class WController {
 	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
-	protected $context;
+	private $context = array();
 	
 	/**
 	 * @var array Manifest of the application
@@ -50,7 +50,7 @@ abstract class WController {
 	 * @param WMain  $wity     main Wity instance of WMain
 	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
 	 */
-	public function init($context) {
+	public function init(array $context) {
 		$this->context = $context;
 		
 		// Initialize view if the app's constructor did not do it
@@ -61,15 +61,15 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 		
-		// Automaticly declare the language directory
-		if (is_dir($context['directory'].'lang')) {
-			WLang::declareLangDir($context['directory'].'lang');
+		// Automatically declare the language directory
+		if (is_dir($this->context['directory'].'lang')) {
+			WLang::declareLangDir($this->context['directory'].'lang');
 		}
 		
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
-			WNote::error('app_no_manifest', 'The manifest of the application '.$this->getAppName().' cannot be found');
+			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found');
 		}
 	}
 	
@@ -120,12 +120,21 @@ abstract class WController {
 	}
 	
 	/**
+	 * Returns the application context
+	 * 
+	 * @return array Application's context
+	 */
+	public function getContext() {
+		return $this->context;
+	}
+	
+	/**
 	 * Returns if the application is in admin mode or not
 	 * 
 	 * @return bool true if admin mode loaded, false otherwise
 	 */
 	public function getAdminContext() {
-		return $this->context['admin'];
+		return $this->context['admin'] === true;
 	}
 	
 	/**
@@ -136,6 +145,9 @@ abstract class WController {
 	public function setView(WView $view) {
 		unset($this->view);
 		$this->view = $view;
+		
+		// Forward the context to the View
+		$this->view->setContext($this->context);
 	}
 	
 	/**

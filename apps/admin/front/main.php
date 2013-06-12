@@ -23,12 +23,6 @@ class AdminController extends WController {
 	 */
 	private $appController = null;
 	
-	public function init($context) {
-		// Change admin context
-		$context['admin'] = true;
-		parent::init($context);
-	}
-	
 	/**
 	 * Main method
 	 */
@@ -47,16 +41,33 @@ class AdminController extends WController {
 				$app_class = ucfirst($this->appAsked).'AdminController';
 				
 				if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
-					// Create context
-					$context = array(
+					$this->appController = new $app_class();
+					
+					// Instantiate Model if exists
+					if (file_exists($app_dir.'model.php')) {
+						include_once $app_dir.'model.php';
+						$model_class = str_replace('Controller', 'Model', $app_class);
+						if (class_exists($model_class)) {
+							$this->appController->setModel(new $model_class());
+						}
+					}
+					
+					// Instantiate View if exists
+					if (file_exists($app_dir.'view.php')) {
+						include_once $app_dir.'view.php';
+						$view_class = str_replace('Controller', 'View', $app_class);
+						if (class_exists($view_class)) {
+							$this->appController->setView(new $view_class());
+						}
+					}
+					
+					// Init
+					$this->appController->init(array(
 						'name'       => $this->appAsked,
 						'directory'  => $app_dir,
 						'controller' => $app_class,
 						'admin'      => true
-					);
-					
-					$this->appController = new $app_class();
-					$this->appController->init($context);
+					));
 					
 					// Config Template
 					$this->configTheme();
