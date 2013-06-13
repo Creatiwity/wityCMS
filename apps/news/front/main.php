@@ -27,7 +27,7 @@ class NewsController extends WController {
 	public function listing() {
 		$news_id = $this->getId();
 		if ($news_id != -1 && !$this->model->validExistingNewsId($news_id)) {
-			return WNote::error('news_not_found', "Error");
+			return WNote::error('news_not_found', "The news #".$news_id." was not found.");
 		}
 		
 		if ($news_id != -1) {
