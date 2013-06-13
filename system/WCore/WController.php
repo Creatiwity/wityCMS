@@ -91,7 +91,7 @@ abstract class WController {
 	 * @param type $default optional default action value
 	 * @return mixed Model|false if error
 	 */
-	protected final function forward($action) {
+	public final function forward($action) {
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
 				// Execute action
