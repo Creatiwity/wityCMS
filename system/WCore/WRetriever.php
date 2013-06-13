@@ -74,27 +74,40 @@ class WRetriever {
 	 * @param string $view_size
 	 * @return WView
 	 */
-	public static function getView($app_name, $view_name = '', array $params = array(), $view_size = '') {
-		// Get the model
-		$model = self::getModel($app_name, $params);
-		
+	public static function getView($app_name, $action = '', array $params = array(), $view_size = '') {
 		// Get app controller
 		$controller = self::getController($app_name);
 		
 		if ($controller instanceof WController) {
+			// Get the model
+			$model = self::getModel($app_name, $params);
+			
+			// If model is a Note, return it parsed
+			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
+				return WNote::getView(array($model));
+			}
+			
 			$view = $controller->getView();
 			
-			if (empty($view_name)) {
-				$view_name = $controller->getTriggeredAction();
+			if (empty($action)) {
+				$action = $controller->getTriggeredAction();
 			}
 			
 			// Prepare the view
-			$view->render($view_name, $model);
+			if (method_exists($view, $action)) {
+				$view->$action($model);
+			}
+			
+			// Declare template file if given
+			if ($view->getTemplate() == "") {
+				$view->setTemplate($action);
+			}
 			
 			return $view;
+		} else {
+			// Return a WView with error
+			return new WView();
 		}
-		
-		return null;
 	}
 	
 	/**
@@ -222,9 +235,9 @@ class WRetriever {
 					}
 					$params = substr($params, 0, -2);
 					
-					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.'))->getRenderedString(); ?>';
+					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.'))->render(); ?>';
 				} else {
-					return '<?php echo WRetriever::getView('.$app_name.', '.$action.')->getRenderedString(); ?>';
+					return '<?php echo WRetriever::getView('.$app_name.', '.$action.')->render(); ?>';
 				}
 			}
 		}

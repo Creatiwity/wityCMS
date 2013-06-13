@@ -51,10 +51,8 @@ class WMain {
 	private function exec($app_name) {
 		$view = WRetriever::getView($app_name);
 		
-		if ($view instanceof WView) {
-			$response = new WResponse(WConfig::get('config.theme'));
-			$response->render($view);
-		}
+		$response = new WResponse(WConfig::get('config.theme'));
+		$response->render($view);
 	}
 	
 	/**

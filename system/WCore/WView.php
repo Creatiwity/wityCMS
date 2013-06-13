@@ -257,27 +257,10 @@ class WView {
 	 * @param  string $action Name of the action in the view to display
 	 * @return string The rendered string of the view
 	 */
-	public function render($action = '', array $model = array()) {
-		// If model is a Note, return it parsed
-		if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
-			return $this->rendered_string = WNote::parse(array($model));
-		}
-		
-		if (!empty($action)) {
-			// Prepare the view
-			if (method_exists($this, $action)) {
-				$this->$action($model);
-			}
-			
-			// Declare template file if given
-			if ($this->getTemplate() == "") {
-				$this->setTemplate($action);
-			}
-		}
-		
+	public function render() {
 		// Check template file
 		if (empty($this->templateFile)) {
-			WNote::error('view_template', "WView::render(): No template file found for the view ".$this->getName()."/".$action.".", 'plain');
+			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
 			return false;
 		}
 		
@@ -289,11 +272,7 @@ class WView {
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		return $this->rendered_string = $this->tpl->parse($this->getTemplate());
-	}
-	
-	public function getRenderedString() {
-		return $this->rendered_string;
+		return $this->tpl->parse($this->getTemplate());
 	}
 }
 ?>

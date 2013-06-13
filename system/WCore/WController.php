@@ -145,9 +145,6 @@ abstract class WController {
 	public function setView(WView $view) {
 		unset($this->view);
 		$this->view = $view;
-		
-		// Forward the context to the View
-		$this->view->setContext($this->context);
 	}
 	
 	/**

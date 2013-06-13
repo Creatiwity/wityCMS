@@ -100,7 +100,7 @@ class WResponse {
 		}
 		
 		// Handle notes
-		$this->tpl->assign('notes', WNote::parse(WNote::get('*')));
+		$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
 		
 		// Define {$include} tpl's var
 		$this->tpl->assign('include', $view->render());

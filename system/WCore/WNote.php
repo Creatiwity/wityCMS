@@ -298,34 +298,24 @@ class WNote {
 	 * @param array $notes Set of notes that will be parsed
 	 * @return string The HTML response
 	 */
-	public static function parse(array $notes) {
+	public static function getView(array $notes_data) {
 		static $css_added = false;
 		
-		if (empty($notes)) {
-			return '';
+		if (empty($notes_data)) {
+			return new WView();
 		}
 		
 		// Remove the notes from the stack
-		foreach ($notes as $note) {
+		foreach ($notes_data as $note) {
 			unset($_SESSION['notes'][$note['code']]);
 		}
 		
-		$tpl = WSystem::getTemplate();
+		$view = new WView();
+		$view->assign('css', '/themes/system/note/note.css');
+		$view->assign('notes_data', $notes_data);
+		$view->setTemplate('themes/system/note/note_view.html');
 		
-		// Add Note stylesheet if not already done
-		if (!$css_added) {
-			$tpl->assign('css', $tpl->getVar('css').'<link href="/themes/system/note/note.css" rel="stylesheet" type="text/css" media="screen" />'."\n");
-			$css_added = true;
-		}
-		
-		$previous_notes_data = $tpl->getVar('notes_data');
-		
-		$tpl->assign('notes_data', $notes);
-		$html = $tpl->parse('themes/system/note/note_view.html');
-		
-		$tpl->assign('notes_data', $previous_notes_data);
-		
-		return $html;
+		return $view;
 	}
 	
 	/**
