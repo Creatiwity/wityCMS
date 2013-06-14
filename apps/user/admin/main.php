@@ -14,14 +14,6 @@ defined('IN_WITY') or die('Access denied');
  */
 class UserAdminController extends WController {
 	
-	public function __construct() {
-		include_once 'model.php';
-		$this->model = new UserAdminModel();
-		
-		include_once 'view.php';
-		$this->setView(new UserAdminView($this->model));
-	}
-	
 	/**
 	 * List action handler
 	 * Displays a list of users in the database
@@ -249,9 +241,10 @@ Ceci est un message automatique.";
 		
 		// Model
 		return array(
-			'user_id' => $user_id, 
+			'user_id'   => $user_id, 
 			'user_data' => $db_data,
-			'post_data' => $post_data
+			'post_data' => $post_data,
+			'groupes'   => $this->model->getGroupsList()
 		);
 	}
 	
@@ -339,10 +332,11 @@ Ceci est un message automatique.";
 						// There will be a change in group's default access affecting users
 						if ($data['access'] != $db_data['access'] && $count_users > 0) {
 							return array(
-								'group_diff' => true,
-								'group_id' => $data['id'],
-								'group_name' => $data['name'],
-								'group_access' => $data['access']
+								'group_diff'   => true,
+								'group_id'     => $data['id'],
+								'group_name'   => $data['name'],
+								'group_access' => $data['access'],
+								'group'        => $db_data
 							);
 						} else if ($this->model->updateGroup($data['id'], $data)) {
 							WNote::success('user_group_edited', WLang::get('group_edited', $data['name']));
@@ -411,12 +405,14 @@ Ceci est un message automatique.";
 				if ($data['apply_to_regular'] == 'on') {
 					$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => $data['old_access']));
 				}
+				
 				// Update all users having custom group access
 				if ($data['apply_to_custom'] == 'on' || sizeof($data['user']) == sizeof($data['type'])) {
 					$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => 'NOT:'.$data['old_access']));
 				} else { // Custom update
 					// Retrieve all custom users belonging to this group
 					$users = $this->model->getUsersWithCustomAccess(array('groupe' => $data['groupid']));
+					
 					foreach ($users as $user) {
 						$user_id = $user['id'];
 						if (array_key_exists($user_id, $data['user'])) {
@@ -424,6 +420,7 @@ Ceci est un message automatique.";
 						} else if (!empty($data['type'][$user_id])) {
 							// Update with given access
 							$access = $this->model->treatAccessData($data['type'][$user_id], isset($data['access'][$user_id]) ? $data['access'][$user_id] : array());
+							
 							if ($user['access'] != $access) {
 								$this->model->updateUser($user_id, array('access' => $access));
 							}
@@ -439,6 +436,7 @@ Ceci est un message automatique.";
 				WNote::error('user_group_not_modified', WLang::get('group_not_modified'));
 			}
 		}
+		
 		$this->view->setHeader('Location', WRoute::getDir().'/admin/user/groups');
 	}
 	

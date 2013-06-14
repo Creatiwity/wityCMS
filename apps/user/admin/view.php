@@ -15,9 +15,8 @@ defined('IN_WITY') or die('Access denied');
 class UserAdminView extends WView {
 	private $model;
 	
-	public function __construct(UserAdminModel $model) {
+	public function __construct() {
 		parent::__construct();
-		$this->model = $model;
 		
 		// CSS for all views
 		$this->assign('css', '/apps/user/admin/css/user.css');
@@ -83,7 +82,7 @@ class UserAdminView extends WView {
 		
 		// Setup the form
 		$this->assign('js', '/apps/user/admin/js/access_form.js');
-		$this->assign('groups', $this->model->getGroupsList());
+		$this->assign('groups', $model['groupes']);
 		$this->assign('user_home', WRoute::getBase().'/admin/user/');
 		
 		$default_model = array(
@@ -156,23 +155,24 @@ class UserAdminView extends WView {
 		// Get admin apps
 		$adminModel = new AdminController();
 		$this->assign('admin_apps', $adminModel->getAdminApps());
-		$this->assign('group', $this->model->getGroup($group_id));
+		$this->assign('group', $model['group']);
 		$this->assign('new_name', $model['group_name']);
 		$this->assign('new_access', $model['group_access']);
 		
 		$chars = array('#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 		$alphabet = array();
 		$count_custom = 0;
+		$model = new UserAdminModel();
 		foreach ($chars as $c) {
 			if ($c == '#') {
-				$alphabet['#'] = $this->model->countUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $group_id));
+				$alphabet['#'] = $model->countUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $group_id));
 			} else {
-				$alphabet[$c] = $this->model->countUsersWithCustomAccess(array('nickname' => $c.'%', 'groupe' => $group_id));
+				$alphabet[$c] = $model->countUsersWithCustomAccess(array('nickname' => $c.'%', 'groupe' => $group_id));
 			}
 			$count_custom += $alphabet[$c];
 		}
 		$this->assign('alphabet', $alphabet);
-		$count_total = $this->model->countUsers(array('groupe' => $group_id));
+		$count_total = $model->countUsers(array('groupe' => $group_id));
 		$this->assign('count_total', $count_total);
 		$this->assign('count_custom', $count_custom);
 		$this->assign('count_regular', $count_total-$count_custom);
