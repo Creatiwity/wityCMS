@@ -9,10 +9,14 @@ defined('IN_WITY') or die('Access denied');
  * WRetriever does...
  *
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.4-14-05-2013
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.4-14-06-2013
  */
 class WRetriever {
+	/**
+	 * @var Stores the application list
+	 * @static
+	 */
 	private static $apps_list = array();
 	
 	/**
@@ -66,12 +70,14 @@ class WRetriever {
 	}
 	
 	/**
-	 * Gets the view of an application/action
+	 * Gets the View of a given application/action
+	 * The model will automatically be generated and the View will be prepared
+	 * (the corresponding method to the action will be executed in WView)
 	 * 
-	 * @param string $app_name
-	 * @param string $view_name
-	 * @param array  $params
-	 * @param string $view_size
+	 * @param string $app_name  Application's name
+	 * @param string $action    Action to execute in the application (default is default application's action)
+	 * @param array  $params    Some special parameters to send to the controller (optional)
+	 * @param string $view_size Size mode of the view expected (optional)
 	 * @return WView
 	 */
 	public static function getView($app_name, $action = '', array $params = array(), $view_size = '') {
@@ -122,6 +128,8 @@ class WRetriever {
 			return self::$controllers[$app_name];
 		}
 		
+		$controller = null;
+		
 		// App asked exists?
 		if (self::isApp($app_name)) {
 			// App controller file
@@ -161,18 +169,17 @@ class WRetriever {
 				
 				// Init
 				$controller->init($context);
-				
-				// Store the controller
-				self::$controllers[$app_name] = $controller;
-				
-				return $controller;
 			} else {
 				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
 			}
 		} else {
 			WNote::error(404, "The page requested was not found.", 'display');
 		}
-		return null;
+		
+		// Store the controller
+		self::$controllers[$app_name] = $controller;
+		
+		return $controller;
 	}
 	
 	/**
