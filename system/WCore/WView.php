@@ -90,8 +90,13 @@ class WView {
 	 * @param string $file file that will be used for template compiling
 	 */
 	public function setTemplate($file) {
+		// Use system directory separator
+		if (DS != '/') {
+			$file = str_replace('/', DS, $file);
+		}
+		
 		// Format the file asked
-		if (strpos($file, '/') === false) {
+		if (strpos($file, DS) === false) {
 			$file = $this->context['directory'].'templates'.DS.$file.'.html';
 		}
 		
@@ -100,7 +105,7 @@ class WView {
 			// WTemplate automatically adds the base directory defined in WSystem::getTemplate()
 			$this->templateFile = $file;
 		} else {
-			WNote::error('view_set_template', "WView::setTemplate(): The template file \"".$file."\" does not exist.", 'plain');
+			WNote::error('view_set_template', "WView::setTemplate(): The template file \"".$file."\" does not exist.");
 		}
 	}
 	

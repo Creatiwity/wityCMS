@@ -38,7 +38,7 @@ class WRetriever {
 	 * @param array  $params
 	 * @return array
 	 */
-	public static function getModel($app_name, array $params = array()) {
+	public static function getModel($app_name, $action = '', array $params = array()) {
 		// Get app controller
 		$controller = self::getController($app_name, $params);
 		
@@ -50,7 +50,11 @@ class WRetriever {
 		// Get model
 		$model = array();
 		if ($controller instanceof WController) {
-			$return = $controller->launch();
+			if (!empty($action)) {
+				$return = $controller->forward($action);
+			} else {
+				$return = $controller->launch();
+			}
 			
 			// Model must be an array
 			if (!empty($return)) {
@@ -83,10 +87,11 @@ class WRetriever {
 	public static function getView($app_name, $action = '', array $params = array(), $view_size = '') {
 		// Get app controller
 		$controller = self::getController($app_name);
+		$context = $controller->getContext();
 		
 		if ($controller instanceof WController) {
 			// Get the model
-			$model = self::getModel($app_name, $params);
+			$model = self::getModel($app_name, $action, $params);
 			
 			// If model is a Note, return it parsed
 			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
@@ -99,14 +104,15 @@ class WRetriever {
 				$action = $controller->getTriggeredAction();
 			}
 			
+			// Declare the template file
+			$actionTemplateFile = $context['directory'].'templates'.DS.$action.'.html';
+			if (file_exists($actionTemplateFile)) {
+				$view->setTemplate($actionTemplateFile);
+			}
+			
 			// Prepare the view
 			if (method_exists($view, $action)) {
 				$view->$action($model);
-			}
-			
-			// Declare template file if given
-			if ($view->getTemplate() == "") {
-				$view->setTemplate($action);
 			}
 			
 			return $view;
@@ -244,7 +250,7 @@ class WRetriever {
 					
 					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.'))->render(); ?>';
 				} else {
-					return '<?php echo WRetriever::getView('.$app_name.', '.$action.')->render(); ?>';
+					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'")->render(); ?>';
 				}
 			}
 		}
