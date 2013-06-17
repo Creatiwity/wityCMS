@@ -266,7 +266,7 @@ class WView {
 		// Check template file
 		if (empty($this->templateFile)) {
 			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
-			return false;
+			return '';
 		}
 		
 		// Treat "special vars"
@@ -277,7 +277,18 @@ class WView {
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		return $this->tpl->parse($this->getTemplate());
+		$file = $this->getTemplate();
+		
+		// Clean template file for next render
+		$this->templateFile = "";
+		
+		$this->rendered_string = $this->tpl->parse($file);
+		
+		return $this->rendered_string;
+	}
+	
+	public function getRenderedString() {
+		return $this->rendered_string;
 	}
 }
 ?>
