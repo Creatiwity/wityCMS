@@ -54,9 +54,8 @@ class UserController extends WController {
 		}
 		
 		if ($this->session->isConnected()) {
-			// WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.', 'display');
 			$this->view->setHeader('Location', $redirect);
-			return;
+			return WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.');
 		}
 		
 		// Vars given to trigger login process?

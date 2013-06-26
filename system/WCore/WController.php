@@ -69,7 +69,7 @@ abstract class WController {
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
-			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found');
+			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found.');
 		}
 	}
 	
@@ -99,15 +99,14 @@ abstract class WController {
 					$this->action = $action;
 					return $this->$action();
 				} else {
-					WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
+					return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
 				}
 			} else {
-				WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.', 'display');
+				return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
 			}
 		} else {
-			WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.', 'display');
+			return WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.');
 		}
-		return false;
 	}
 	
 	/**
