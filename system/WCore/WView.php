@@ -16,7 +16,7 @@ class WView {
 	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
-	private $context;
+	public $context;
 	
 	/**
 	 * @var WTemplate Instance of WTemplate
@@ -39,9 +39,12 @@ class WView {
 	private $templateFile = '';
 	
 	/**
-	 * @var array Variables with a special treatment like "css" and "js"
+	 * @var array Global variables with a special treatment like "css" and "js"
 	 */
-	private $specialVars = array('css', 'js');
+	private static $global_vars = array(
+		'css' => array(),
+		'js' => array()
+	);
 	
 	/**
 	 * @var array Template variables
@@ -119,20 +122,34 @@ class WView {
 	}
 	
 	/**
+	 * Assigns a list of variables whose names are in $names to their $values
+	 * 
+	 * @param mixed $names  variable names
+	 * @param mixed $values variable values
+	 */
+	public function assign($names, $values = null) {
+		if (is_string($names)) {
+			$this->assignOne($names, $values);
+		} else if (is_array($names)) {
+			foreach ($names as $key => $value) {
+				$this->assignOne($key, $value);
+			}
+		}
+	}
+	
+	/**
 	 * Assigns a variable whose name is $name to a $value
 	 * 
 	 * @param mixed $name   variable name 
 	 * @param mixed $value  variable value
 	 */
 	public function assignOne($name, $value) {
-		// Is $name a Special var?
-		if (in_array($name, $this->specialVars)) {
-			if (!isset($this->vars[$name])) {
-				$this->vars[$name] = array($value);
-			} else if (!in_array($value, $this->vars[$name])) {
-				$this->vars[$name][] = $value;
+		// Is $name a Global var?
+		if (isset(self::$global_vars[$name])) {
+			if (!in_array($value, self::$global_vars[$name])) {
+				self::$global_vars[$name][] = $value;
 			}
-		} else { // Normal case
+		} else { // Normal var
 			$this->vars[$name] = $value;
 		}
 	}
@@ -151,29 +168,13 @@ class WView {
 	}
 	
 	/**
-	 * Assigns a list of variables whose names are in $names to their $values
-	 * 
-	 * @param mixed $names  variable names
-	 * @param mixed $values variable values
-	 */
-	public function assign($names, $values = null) {
-		if (is_string($names)) {
-			$this->assignOne($names, $values);
-		} else if (is_array($names)) {
-			foreach ($names as $key => $value) {
-				$this->assignOne($key, $value);
-			}
-		}
-	}
-	
-	/**
-	 * Some variables may be considered as "special vars" in a way that they will have a
+	 * Some variables may be considered as global vars in a way that they will have a
 	 * particular treatment when they will be assigned in the template compilator.
 	 * This treatment is defined in this function.
-	 * Special vars are not erased. If two different values are assigned to a same special var,
+	 * Global vars are not erased. If two different values are assigned to a same global var,
 	 * they will stack in an array.
 	 * 
-	 * For instance, $css and $js are considered as special vars since they will be automaticly
+	 * For instance, $css and $js are considered as global vars since they will be automaticly
 	 * inserted in a <script> or <link> html tag.
 	 * $this->assign('css', 'style.css');
 	 * {$css} will be replaced by <link href="THEMES_DIR/style.css" rel="stylesheet" type="text/css" />
@@ -181,40 +182,28 @@ class WView {
 	 * @param string $stack_name stack name
 	 * @return string variable value
 	 */
-	public function getSpecialVar($stack_name) {
-		if (empty($this->vars[$stack_name])) {
-			return $this->tpl->getVar($stack_name);
+	public function getGlobalVar($stack_name) {
+		if (empty(self::$global_vars[$stack_name])) {
+			return '';
 		}
 		
 		switch ($stack_name) {
 			case 'css':
-				$css = $this->tpl->getVar('css');
-				if (is_array($this->vars['css'])) {
-					foreach ($this->vars['css'] as $file) {
-						$css .= sprintf(
-							'<link href="%s%s" rel="stylesheet" type="text/css" />'."\n", 
-							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'css'.DS : '',
-							$file
-						);
-					}
+				$css = '';
+				foreach (self::$global_vars['css'] as $file) {
+					$css .= '<link href="'.$file.'" rel="stylesheet" type="text/css" />'."\n";
 				}
 				return $css;
 			
 			case 'js':
-				$script = $this->tpl->getVar('js');
-				if (is_array($this->vars['js'])) {
-					foreach ($this->vars['js'] as $file) {
-						$script .= sprintf(
-							'<script type="text/javascript" src="%s%s"></script>'."\n", 
-							(dirname($file) == '.') ? THEMES_DIR.$this->themeName.DS.'js'.DS : '',
-							$file
-						);
-					}
+				$script = '';
+				foreach (self::$global_vars['js'] as $file) {
+					$script .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 				}
 				return $script;
 			
 			default:
-				return $this->tpl->getVar($stack_name).$this->vars[$stack_name];
+				return self::$global_vars[$stack_name];
 		}
 	}
 	
@@ -266,29 +255,44 @@ class WView {
 		// Check template file
 		if (empty($this->templateFile)) {
 			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
+			// A View can now be empty
 			return '';
 		}
 		
-		// Treat "special vars"
-		foreach ($this->specialVars as $stack) {
-			$this->vars[$stack] = $this->getSpecialVar($stack);
+		// Treat global vars
+		foreach (self::$global_vars as $stack => $values) {
+			$data = $this->getGlobalVar($stack);
+			
+			if (!empty($data)) {
+				$this->tpl->assign($stack, $data, true);
+			}
 		}
+		
+		// Switch context in WTemplate
+		$this->tpl->pushContext();
 		
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
+		// Get template file and clean it for next render
 		$file = $this->getTemplate();
-		
-		// Clean template file for next render
 		$this->templateFile = "";
 		
+		// Render the view
 		$this->rendered_string = $this->tpl->parse($file);
+		
+		// Come back to previous context
+		$this->tpl->popContext();
 		
 		return $this->rendered_string;
 	}
 	
+	/**
+	 * Retrieves the last rendered view string
+	 */
 	public function getRenderedString() {
 		return $this->rendered_string;
 	}
 }
+
 ?>

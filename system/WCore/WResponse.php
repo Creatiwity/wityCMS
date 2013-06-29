@@ -47,6 +47,7 @@ class WResponse {
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
 			$this->theme_name = '_blank';
+			$this->theme_dir = 'themes/system/';
 		} else if (is_dir(THEMES_DIR.$theme)) {
 			$this->theme_name = $theme;
 			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
@@ -94,9 +95,9 @@ class WResponse {
 		
 		// Select Theme main template
 		if ($this->theme_name == '_blank') {
-			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).'system'.DS.'_blank.html';
+			$themeMainFile = $this->theme_dir.'_blank.html';
 		} else {
-			$themeMainFile = str_replace(WITY_PATH, '', THEMES_DIR).$this->theme_name.DS.'templates'.DS.'index.html';
+			$themeMainFile = $this->theme_dir.'templates'.DS.'index.html';
 		}
 		
 		// Handle notes

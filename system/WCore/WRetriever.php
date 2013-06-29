@@ -87,32 +87,33 @@ class WRetriever {
 	public static function getView($app_name, $action = '', array $params = array(), $view_size = '') {
 		// Get app controller
 		$controller = self::getController($app_name);
-		$context = $controller->getContext();
 		
 		if ($controller instanceof WController) {
 			// Get the model
 			$model = self::getModel($app_name, $action, $params);
 			
-			// If model is a Note, return it parsed
 			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
-				return WNote::getView(array($model));
-			}
-			
-			$view = $controller->getView();
-			
-			if (empty($action)) {
-				$action = $controller->getTriggeredAction();
-			}
-			
-			// Declare the template file
-			$actionTemplateFile = $context['directory'].'templates'.DS.$action.'.html';
-			if (file_exists($actionTemplateFile)) {
-				$view->setTemplate($actionTemplateFile);
-			}
-			
-			// Prepare the view
-			if (method_exists($view, $action)) {
-				$view->$action($model);
+				// If model is a Note
+				$view = WNote::getView(array($model));
+			} else {
+				$view = $controller->getView();
+				
+				if (empty($action)) {
+					$action = $controller->getTriggeredAction();
+				}
+				
+				// Declare the template file
+				$actionTemplateFile = $view->context['directory'].'templates'.DS.$action.'.html';
+				if (file_exists($actionTemplateFile)) {
+					$view->setTemplate($actionTemplateFile);
+				}
+				
+				// Prepare the view
+				if (method_exists($view, $action)) {
+					$view->$action($model);
+				}
+				
+				// @TODO: Check if template file is not empty
 			}
 			
 			return $view;
