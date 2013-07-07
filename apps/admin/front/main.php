@@ -26,14 +26,16 @@ class AdminController extends WController {
 	/**
 	 * Main method
 	 */
-	public function launch() {
+	public function launch(array $params = array()) {
 		if (!WSession::isConnected()) { // Display login form if not connected
 			WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
-			$userView = WRetriever::getView('user', 'login');
+			$userView = WRetriever::getView('user', array('login'));
 			$this->setView($userView);
 		} else if ($this->checkAdminAccess()) {
-			$this->routeAdmin();
+			$this->routeAdmin($params);
+			
 			$this->appAsked = WRoute::getApp();
+			
 			if (!empty($this->appAsked) && $this->appAsked != 'admin') {
 				// Load admin controller of the app
 				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
@@ -70,11 +72,11 @@ class AdminController extends WController {
 						'admin'      => true
 					));
 					
+					// Execute and get model
+					$model = $this->appController->launch($params);
+					
 					// Config Template
 					$this->configTheme();
-					
-					// Execute and get model
-					$model = $this->appController->launch();
 					
 					// Update the action triggered
 					$this->action = $this->appController->getTriggeredAction();
@@ -134,23 +136,24 @@ class AdminController extends WController {
 	/**
 	 * Updates the route for the admin app
 	 */
-	private function routeAdmin() {
-		// Le nom de l'appli à administrer se trouve dans les arguments
-		$args = WRoute::getArgs();
-		$app = array_shift($args);
-		if (!empty($app) && $this->hasAccess($app, '', true)) {
-			// Mise à jour du routage
-			WRoute::updateApp($app);
-			WRoute::updateArgs($args); // Nettoyage des arguments
+	private function routeAdmin(array &$params) {
+		$app_name = array_shift($params);
+		
+		if (!empty($app_name) && $this->hasAccess($app_name, '', true)) {
+			WRoute::updateApp($app_name);
+			WRoute::updateArgs($params);
 		} else {
 			$default = WConfig::get('route.admin');
+			
 			// Get the first arg of the route which is the action to load
 			$action = isset($default[1][0]) ? $default[1][0] : '';
+			
 			if ($this->hasAccess($default[0], $action, true)) {
 				WRoute::setRoute($default);
 			} else {
 				// Select a random app to display
 				$apps = $this->getAdminApps();
+				
 				if (!empty($apps)) {
 					$apps_keys = array_keys($apps);
 					WRoute::setRoute(array(array_shift($apps_keys), array()));
@@ -178,7 +181,7 @@ class AdminController extends WController {
 		
 		if (!is_null($this->appController)) {
 			$manifest = $this->appController->getManifest();
-			$action_asked = $this->appController->getAskedAction();
+			$action_asked = $this->appController->getTriggeredAction();
 			
 			$tpl->assign(array(
 				'appSelected' => $this->appAsked,
