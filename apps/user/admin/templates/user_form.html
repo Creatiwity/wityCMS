@@ -12,7 +12,7 @@
 				<label for="password" class="control-label">{lang password}</label>
 				<div class="controls">
 					<input type="password" name="password" />
-					<span class="help-inline">{lang leave_empty_to_leave_unchanged}</span>
+					{if !empty({$id})}<span class="help-inline">{lang leave_empty_to_leave_unchanged}</span>{/if}
 				</div>
 			</div>
 			<div class="control-group">

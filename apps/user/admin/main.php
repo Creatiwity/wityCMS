@@ -18,7 +18,7 @@ class UserAdminController extends WController {
 	 * List action handler
 	 * Displays a list of users in the database
 	 */
-	protected function listing() {
+	protected function listing($params) {
 		$n = 30; // number of users per page
 		
 		// Admin check
@@ -77,15 +77,19 @@ class UserAdminController extends WController {
 		}
 		
 		// Sorting criterias given by URL
-		$criterias = $this->getOption(0);
-		$count = sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sortBy, $sens, $page);
-		if (empty($page) || $page <= 0) {
-			$page = 1;
+		$sort_by = '';
+		$sens = 'DESC';
+		$page = 1;
+		if (!empty($params[0])) {
+			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s %d', $sort_by, $sens, $page_crit);
+			if ($page > 1) {
+				$page = $page_crit;
+			}
 		}
 		
 		// SortingHelper
 		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
-		$sort = $sortingHelper->findSorting($sortBy, $sens);
+		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		// Filters
 		$filters = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
@@ -302,11 +306,7 @@ Ceci est un message automatique.";
 	/**
 	 * Groups listing/add/edit action
 	 */
-	protected function groups() {
-		// Préparation tri colonnes
-		$option = $this->getOption(0);
-		$count = sscanf(str_replace('-', ' ', $option), '%s %s', $sortBy, $sens);
-		
+	protected function groups($params) {
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
 			$errors = array();
@@ -352,10 +352,17 @@ Ceci est un message automatique.";
 			}
 		}
 		
+		// Préparation tri colonnes
+		$sort_by = '';
+		$sens = 'DESC';
+		if (!empty($params[0])) {
+			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by, $sens);
+		}
+		
 		// SortingHelper
 		$disp_fields = array('name', 'users_count');
 		$sortingHelper = WHelper::load('SortingHelper', array($disp_fields, 'name'));
-		$sort = $sortingHelper->findSorting($sortBy, $sens); // sorting vars
+		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
 		$adminController = new AdminController();
 		

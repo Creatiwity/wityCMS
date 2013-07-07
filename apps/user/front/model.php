@@ -226,7 +226,7 @@ class UserModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
+				SELECT users.id, nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
 				FROM users
 				LEFT JOIN users_groups
 				ON groupe = users_groups.id
