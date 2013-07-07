@@ -75,14 +75,14 @@ class NewsAdminView extends WView {
 		$this->news_form($model);
 	}
 	
-	public function news_delete($data) {
-		$this->assign('title', $data['news_title']);
-		$this->assign('confirm_delete_url', "/admin/news/news_delete/".$data['news_id']."/confirm");
+	public function news_delete($model) {
+		$this->assign('title', $model['news_title']);
+		$this->assign('confirm_delete_url', "/admin/news/news_delete/".$model['news_id']."/confirm");
 		$this->setTheme('_blank');
 	}
 	
-	public function category_delete($id) {
-		$this->assign('confirm_delete_url', "/admin/news/category_delete/".$id."/confirm");
+	public function category_delete($model) {
+		$this->assign('confirm_delete_url', "/admin/news/category_delete/".$model['cat_id']."/confirm");
 		$this->setTheme('_blank');
 	}
 	
