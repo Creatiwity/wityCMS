@@ -38,23 +38,14 @@ class WRetriever {
 	 * @param array  $params
 	 * @return array
 	 */
-	public static function getModel($app_name, $action = '', array $params = array()) {
+	public static function getModel($app_name, array $params = array()) {
 		// Get app controller
-		$controller = self::getController($app_name, $params);
-		
-		// Input parameters in the app
-		if (!empty($params)) {
-			$controller->setOptions($params);
-		}
+		$controller = self::getController($app_name);
 		
 		// Get model
 		$model = array();
 		if ($controller instanceof WController) {
-			if (!empty($action)) {
-				$return = $controller->forward($action);
-			} else {
-				$return = $controller->launch();
-			}
+			$return = $controller->launch($params);
 			
 			// Model must be an array
 			if (!empty($return)) {
@@ -79,18 +70,17 @@ class WRetriever {
 	 * (the corresponding method to the action will be executed in WView)
 	 * 
 	 * @param string $app_name  Application's name
-	 * @param string $action    Action to execute in the application (default is default application's action)
 	 * @param array  $params    Some special parameters to send to the controller (optional)
 	 * @param string $view_size Size mode of the view expected (optional)
 	 * @return WView
 	 */
-	public static function getView($app_name, $action = '', array $params = array(), $view_size = '') {
+	public static function getView($app_name, array $params = array(), $view_size = '') {
 		// Get app controller
 		$controller = self::getController($app_name);
 		
 		if ($controller instanceof WController) {
 			// Get the model
-			$model = self::getModel($app_name, $action, $params);
+			$model = self::getModel($app_name, $params);
 			
 			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
@@ -98,19 +88,18 @@ class WRetriever {
 			} else {
 				$view = $controller->getView();
 				
-				if (empty($action)) {
-					$action = $controller->getTriggeredAction();
-				}
+				// Get the real action triggered by the controller
+				$triggered_action = $controller->getTriggeredAction();
 				
 				// Declare the template file
-				$actionTemplateFile = $view->context['directory'].'templates'.DS.$action.'.html';
+				$actionTemplateFile = $view->context['directory'].'templates'.DS.$triggered_action.'.html';
 				if (file_exists($actionTemplateFile)) {
 					$view->setTemplate($actionTemplateFile);
 				}
 				
 				// Prepare the view
-				if (method_exists($view, $action)) {
-					$view->$action($model);
+				if (method_exists($view, $triggered_action)) {
+					$view->$triggered_action($model);
 				}
 				
 				// @TODO: Check if template file is not empty
@@ -230,29 +219,33 @@ class WRetriever {
 	 */
 	public static function compile_retrieve_view($args) {
 		if (!empty($args)) {
-			// Replace all the template variables in the strig
-			$data = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
-			$data = explode('/', $args);
+			// Replace all the template variables in the string
+			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
 			
-			if (count($data) >= 2) {
-				$app_name = array_shift($data);
-				$action = array_shift($data);
+			$args = explode('?', $args);
+			
+			// Explode the route in several parts
+			$route = explode('/', $args[0]);
+			
+			$querystring = '';
+			if (isset($args[1])) {
+				$querystring = $args[1];
+			}
+			
+			if (count($route) >= 2) {
+				// Extract the relevant data
+				$app_name = array_shift($route);
+				$params = '';
 				
-				// Some parameters left
-				if (!empty($data)) {
-					$params = '';
-					foreach ($data as $var) {
-						if (!empty($var)) {
-							// TODO support vars
-							$params .= '"'.$var.'", ';
-						}
+				foreach ($route as $part) {
+					if (!empty($part)) {
+						// TODO support vars
+						$params .= '"'.$part.'", ';
 					}
 					$params = substr($params, 0, -2);
-					
-					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'", array('.$params.'))->render(); ?>';
-				} else {
-					return '<?php echo WRetriever::getView("'.$app_name.'", "'.$action.'")->render(); ?>';
 				}
+				
+				return '<?php echo WRetriever::getView("'.$app_name.'", array('.$params.'))->render(); ?>';
 			}
 		}
 		return '';

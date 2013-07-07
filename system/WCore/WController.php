@@ -79,9 +79,13 @@ abstract class WController {
 	 * Launch method determines the method that must be triggered in the application.
 	 * Most of the time, the action given in URL is used.
 	 */
-	public function launch() {
+	public function launch(array $params = array()) {
+		// Match the asked action with the manifest
+		// getAskedAction() will removed the action from $params if it is found inside the array
+		$action = $this->getAskedAction($params);
+		
 		// Trigger the corresponding method for the action given in URL
-		return $this->forward($this->getAskedAction());
+		return $this->forward($action, $params);
 	}
 	
 	/**
@@ -91,13 +95,14 @@ abstract class WController {
 	 * @param type $default optional default action value
 	 * @return mixed Model|false if error
 	 */
-	public final function forward($action) {
+	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
 				// Execute action
 				if (method_exists($this, $action)) {
 					$this->action = $action;
-					return $this->$action();
+					
+					return $this->$action($params);
 				} else {
 					return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
 				}
@@ -172,123 +177,46 @@ abstract class WController {
 	}
 	
 	/**
-	 * Returns the arguments in the URL without the application action if known
-	 * Example:
-	 *    URL = /app/action/option1/option2 OR /app/option1/option2
-	 *    getArgs() = array('option1', 'option2')
-	 * 
-	 * @param int $index Option index
-	 * @return array Options in the URL
-	 */
-	public function getOptions() {
-		$args = WRoute::getArgs();
-		
-		// Remove action if in the arguments
-		if (isset($args[0]) && $args[0] == $this->action) {
-			array_shift($args);
-		}
-		
-		// Merge retriever params and URL options
-		foreach ($args as $key => $arg) {
-			if (isset($this->params[$key])) {
-				$args[$key] = $this->params[$key];
-				unset($this->params[$key]);
-			}
-		}
-		
-		if (count($this->params) > 0) {
-			$args = array_merge($args, $this->params);
-		}
-		
-		return $args;
-	}
-	
-	/**
-	 * Returns the nth argument in the URL without the application action if known
-	 * Example:
-	 *    URL = /app/action/option1/option2 OR /app/option1/option2
-	 *    getArg(0) = option1, getArg(1) = option2, getArg(2) = ''
-	 * 
-	 * @param int $index Option index
-	 * @return string Option corresponding to the index
-	 */
-	public function getOption($index) {
-		$args = $this->getOptions();
-		return isset($args[$index]) ? $args[$index] : '';
-	}
-	
-	/**
-	 * Searches within the application options if a specified value is present
-	 * 
-	 * @param string $value Value to search
-	 * @param bool   $exact Exact search?
-	 * @return bool
-	 */
-	public function inOptions($value, $exact = true) {
-		$args = $this->getOptions();
-		foreach ($args as $arg) {
-			if ($exact) {
-				if ($arg === $value) {
-					return true;
-				}
-			} else {
-				if (strpos($arg, $value) !== false) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * 
-	 */
-	public function setOptions(array $options) {
-		$this->params = $options;
-	}
-	
-	/**
 	 * Returns action's name which is the second parameter given in the URL, right after the app's name.
 	 * 
-	 * If the $check param is set to true, the method will check if the action found is declared in 
-	 * the manifest. If it is not declared, it will retun the default application action.
-	 * If $check is set to false, it will return the action as it is asked in the URL.
+	 * This method will remove the first item in $params if it is used to determine the action to trigger.
 	 * 
-	 * @param bool $check Parameter to check if the action asked is defined (default to true)
+	 * @param array $params
 	 * @return string action's name asked in the URL
 	 */
-	public function getAskedAction($check = true) {
-		$action = strtolower(WRoute::getArg(0));
+	public function getAskedAction(&$params) {
+		$action = isset($params[0]) ? $params[0] : '';
 		
-		// Find a fine $action
-		if ($check) {
-			if ($this->getAdminContext()) {
-				$actions_key = 'admin';
-				$alias_prefix = 'admin-';
-				$default = 'default_admin';
-			} else {
-				$actions_key = 'actions';
-				$alias_prefix = '';
-				$default = 'default';
-			}
-			
-			// $action exists ? Otherwise, check alias and finally, use default action if exists?
-			if (!empty($action) && !isset($this->manifest[$actions_key][$action])) {
-				// check alias
-				if (isset($this->manifest['alias'][$alias_prefix.$action])) {
-					$action = $this->manifest['alias'][$alias_prefix.$action];
-				} else { // try to guess
-					$action = str_replace('-', '_', $action);
-					if (!isset($this->manifest[$actions_key][$action])) {
-						$action = '';
-					}
+		if ($this->getAdminContext()) {
+			$actions_key = 'admin';
+			$alias_prefix = 'admin-';
+			$default = 'default_admin';
+		} else {
+			$actions_key = 'actions';
+			$alias_prefix = '';
+			$default = 'default';
+		}
+		
+		// $action exists ? Otherwise, check alias and finally, use default action if exists?
+		if (!empty($action) && !isset($this->manifest[$actions_key][$action])) {
+			// check alias
+			if (isset($this->manifest['alias'][$alias_prefix.$action])) {
+				$action = $this->manifest['alias'][$alias_prefix.$action];
+			} else { // try to guess
+				$action = str_replace('-', '_', $action);
+				if (!isset($this->manifest[$actions_key][$action])) {
+					$action = '';
 				}
 			}
-			if (empty($action) && isset($this->manifest[$default])) {
-				$action = $this->manifest[$default];
-			}
 		}
+		
+		if (!empty($action)) {
+			// Remove the first item in $params because it is the action name
+			array_shift($params);
+		} else if (isset($this->manifest[$default])) {
+			$action = $this->manifest[$default];
+		}
+		
 		return $action;
 	}
 	

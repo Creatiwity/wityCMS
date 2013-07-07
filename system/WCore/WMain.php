@@ -41,16 +41,22 @@ class WMain {
 		WRetriever::init();
 		
 		// Exec application
-		$this->exec(WRoute::getApp());
+		$this->exec();
 	}
 	
 	/**
 	 * This function will setup the whole WityCMS response
 	 * Find and load the theme
 	 */
-	private function exec($app_name) {
-		$view = WRetriever::getView($app_name);
+	private function exec() {
+		// Setup the main app to execute
+		$app_name = WRoute::getApp();
+		$params = WRoute::getArgs();
 		
+		// Get the view
+		$view = WRetriever::getView($app_name, $params);
+		
+		// Render the final response
 		$response = new WResponse(WConfig::get('config.theme'));
 		$response->render($view);
 	}
