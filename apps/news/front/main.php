@@ -14,16 +14,6 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-04-2013
  */
 class NewsController extends WController {
-	private function getId() {
-		$option = $this->getOption(0);
-		if (empty($option)) {
-			return -1;
-		} else {
-			list($id) = explode('-', $option);
-			return intval($id);
-		}
-	}
-	
 	protected function listing(array $params) {
 		$news_id = -1;
 		

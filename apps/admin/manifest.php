@@ -1,5 +1,5 @@
 <?php defined('IN_WITY') or die('Access denied'); ?>
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <app>
 	<!-- Application name -->
 	<name>Admin</name>
