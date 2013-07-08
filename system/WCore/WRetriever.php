@@ -227,25 +227,32 @@ class WRetriever {
 			// Explode the route in several parts
 			$route = explode('/', $args[0]);
 			
-			$querystring = '';
-			if (isset($args[1])) {
-				$querystring = $args[1];
-			}
-			
 			if (count($route) >= 2) {
 				// Extract the relevant data
-				$app_name = array_shift($route);
+				$app_name = addslashes(array_shift($route));
 				$params = '';
+				$vars_get = '';
 				
+				// Get the params from the route of the view
 				foreach ($route as $part) {
 					if (!empty($part)) {
-						// TODO support vars
-						$params .= '"'.$part.'", ';
+						$params .= '"'.addslashes($part).'", ';
 					}
 					$params = substr($params, 0, -2);
 				}
 				
-				return '<?php echo WRetriever::getView("'.$app_name.'", array('.$params.'))->render(); ?>';
+				// Extract the querystring
+				if (isset($args[1])) {
+					$querystring = explode('&', str_replace('&amp;', '&', $args[1]));
+					foreach ($querystring as $key_value) {
+						$data = explode('=', addslashes($key_value));
+						if (count($data) == 2) {
+							$vars_get .= '<?php WRequest::set("'.$data[0].'", "'.$data[1].'", "GET"); ?>'."\n";
+						}
+					}
+				}
+				
+				return $vars_get.'<?php echo WRetriever::getView("'.$app_name.'", array('.$params.'))->render(); ?>'."\n";
 			}
 		}
 		return '';
