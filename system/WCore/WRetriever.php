@@ -101,8 +101,6 @@ class WRetriever {
 				if (method_exists($view, $triggered_action)) {
 					$view->$triggered_action($model);
 				}
-				
-				// @TODO: Check if template file is not empty
 			}
 			
 			return $view;

@@ -100,14 +100,14 @@ class WResponse {
 			$themeMainFile = $this->theme_dir.'templates'.DS.'index.html';
 		}
 		
-		// Handle notes
-		$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
-		
-		// Define {$include} tpl's var
-		$this->tpl->assign('include', $view->render());
-		
-		$dir = WRoute::getDir();
 		try {
+			// Handle notes
+			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
+			
+			// Define {$include} tpl's var
+			$this->tpl->assign('include', $view->render());
+			
+			$dir = WRoute::getDir();
 			if (empty($dir)) {
 				// Direct render
 				$this->tpl->display($themeMainFile);
@@ -122,7 +122,7 @@ class WResponse {
 				);
 			}
 		} catch (Exception $e) {
-			WNote::error(empty($dir) ? 'response_tpl_display' : 'response_tpl_parse', $e->getMessage(), 'die');
+			WNote::error('response_final_render', $e->getMessage(), 'die');
 			return false;
 		}
 		
