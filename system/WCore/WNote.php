@@ -136,14 +136,23 @@ class WNote {
 		static $died = false;
 		if (!$died) {
 			$died = true;
+			$rendered = false;
+			
 			self::handle_plain($note);
 			$plain_view = self::getPlainView();
+			
 			if (!is_null($plain_view)) {
 				$response = new WResponse('_blank');
-				$response->render($plain_view);
-			} else {
+				if ($response->render($plain_view)) {
+					$rendered = true;
+				}
+			}
+			
+			// Error during Note View rendering so print it in html
+			if (!$rendered) {
 				echo self::handle_html($note);
 			}
+			
 			die;
 		}
 	}
