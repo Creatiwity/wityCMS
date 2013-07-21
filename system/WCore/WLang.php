@@ -166,7 +166,8 @@ class WLang {
 			// Replace the template variables in the string
 			$id = WTemplateParser::replaceNodes($id, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
 			
-			// Some parameters can be provided to replace the %s in the lang string
+			// Find parameters to replace the %s in the lang string
+			$params = "";
 			if (!empty($data)) {
 				$args = '';
 				foreach ($data as $var) {
@@ -175,11 +176,16 @@ class WLang {
 						$args .= $var_parsed.', ';
 					}
 				}
-				return '<?php echo WLang::get("'.$id.'", array('.$args.')); ?>';
-			} else {
-				return '<?php echo WLang::get("'.$id.'"); ?>';
+				
+				$params = ', array('.$args.')';
+			}
+			
+			// Build final php lang string
+			if (strlen($id) > 0) {
+				return '<?php echo WLang::get("'.$id.'"'.$params.'); ?>';
 			}
 		}
+		
 		return '';
 	}
 }
