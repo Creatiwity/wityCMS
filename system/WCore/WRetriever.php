@@ -29,6 +29,7 @@ class WRetriever {
 		// Init template handler
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('retrieve_view', array('WRetriever', 'compile_retrieve_view'));
+		WTemplateCompiler::registerCompiler('retrieve_model', array('WRetriever', 'compile_retrieve_model'));
 	}
 	
 	/**
@@ -41,6 +42,26 @@ class WRetriever {
 	public static function getModel($app_name, array $params = array()) {
 		// Get app controller
 		$controller = self::getController($app_name);
+		
+		// Treat the GET querystring
+		if (isset($params['querystring'])) {
+			$querystring = explode('&', str_replace('&amp;', '&', $params['querystring']));
+			foreach ($querystring as $assignment) {
+				$data = addslashes($assignment);
+				
+				$equal_pos = strpos($data, '=');
+				if ($equal_pos !== false) {
+					// Extract key and value
+					$key = substr($data, 0, $equal_pos);
+					$value = substr($data, $equal_pos+1);
+					
+					// Update the Global variables
+					WRequest::set($key, $value, "GET");
+				}
+			}
+			
+			unset($params['querystring']);
+		}
 		
 		// Get model
 		$model = array();
@@ -203,19 +224,26 @@ class WRetriever {
 		return !empty($app) && in_array($app, self::getAppsList());
 	}
 	
-	/*****************************************
-	 * WTemplateCompiler's new handlers part *
-	 *****************************************/
+	/********************************************
+	 * WTemplateCompiler's custom handlers part *
+	 ********************************************/
+	
 	/**
-	 * Handles the {lang} node in WTemplate
-	 * {lang} gives access to translation variables
-	 * sprintf format (such as %s) may be use in language files like this :
-	 * {lang index|{$arg1}} = sprintf(WLang::_('index'), {$arg1})
+	 * Handles the {retrieve_model} node in WTemplate
+	 * {retrieve_model} will return an array of the targeted Model
 	 * 
-	 * @param string $args language identifier if no closing node in template file
-	 * @return string php string that calls the WLang::get()
+	 * The full syntax is as follow:
+	 * {retrieve_model app_name/action/param1/param2?var1=value1&var2=value2}
+	 * 
+	 * Note that you can specify a querystring that will be accessible through WRequest.
+	 * 
+	 * It should be used within a {set} node as follow:
+	 * {set $model = {retrieve_model app_name/action/param1/param2?var1=value1&var2=value2}}
+	 * 
+	 * @param string $args Model location + querystring: "app_name/action/param1/param2?var1=value1&var2=value2"
+	 * @return string PHP string to trigger WRetriever that will return an array of the desired model
 	 */
-	public static function compile_retrieve_view($args) {
+	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
 			// Replace all the template variables in the string
 			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
@@ -229,30 +257,49 @@ class WRetriever {
 				// Extract the relevant data
 				$app_name = addslashes(array_shift($route));
 				$params = '';
-				$vars_get = '';
 				
 				// Get the params from the route of the view
 				foreach ($route as $part) {
 					if (!empty($part)) {
 						$params .= '"'.addslashes($part).'", ';
 					}
+				}
+				
+				// Format the querystring PHP code if a querystring is given
+				if (isset($args[1])) {
+					$querystring = ', "'.$args[1].'"';
+					$params .= '"querystring" => "'.$args[1].'"';
+				} else {
 					$params = substr($params, 0, -2);
 				}
 				
-				// Extract the querystring
-				if (isset($args[1])) {
-					$querystring = explode('&', str_replace('&amp;', '&', $args[1]));
-					foreach ($querystring as $key_value) {
-						$data = explode('=', addslashes($key_value));
-						if (count($data) == 2) {
-							$vars_get .= '<?php WRequest::set("'.$data[0].'", "'.$data[1].'", "GET"); ?>'."\n";
-						}
-					}
-				}
-				
-				return $vars_get.'<?php echo WRetriever::getView("'.$app_name.'", array('.$params.'))->render(); ?>'."\n";
+				return 'WRetriever::getModel("'.$app_name.'", array('.$params.'))';
 			}
 		}
+		return '';
+	}
+	
+	/**
+	 * Handles the {retrieve_view} node in WTemplate
+	 * {retrieve_view} will return a compiled view of an internal or external application's action
+	 * 
+	 * The full syntax is as follow :
+	 * {retrieve_view app_name/action/param1/param2?var1=value1&var2=value2}
+	 * 
+	 * Note that you can specify a querystring that will be accessible through WRequest.
+	 * 
+	 * @param string $args View location + querystring: "app_name/action/param1/param2?var1=value1&var2=value2"
+	 * @return string PHP string to fire the View compilation (will be replaced by the View HTML response in the end)
+	 */
+	public static function compile_retrieve_view($args) {
+		// Use {retrieve_model} compiler
+		$model_syntax = self::compile_retrieve_model($args);
+		
+		// Replace 'WRetriever::getModel' with 'WRetriever::getView'
+		if (!empty($model_syntax)) {
+			return '<?php echo '.str_replace('getModel', 'getView', $model_syntax).'->render(); ?>'."\n";
+		}
+		
 		return '';
 	}
 }
