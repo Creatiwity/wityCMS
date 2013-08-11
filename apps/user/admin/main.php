@@ -103,7 +103,7 @@ class UserAdminController extends WController {
 			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
 			$errors = array();
 			
-			// Check nickname availabililty
+			// Check nickname availability
 			if ($add_case || $data['nickname'] != $db_data['nickname']) {
 				if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
 					$errors[] = WLang::get($e);
@@ -115,6 +115,7 @@ class UserAdminController extends WController {
 			// Matching passwords
 			if (!empty($data['password']) || !empty($data['password_conf'])) {
 				if ($data['password'] === $data['password_conf']) {
+					$password_original = $data['password'];
 					$data['password'] = sha1($data['password']);
 					if (!$add_case && $data['password'] == $db_data['password']) {
 						unset($data['password']); // don't change password if it's the same
@@ -127,7 +128,7 @@ class UserAdminController extends WController {
 			}
 			unset($data['password_conf']);
 			
-			// Email availabililty
+			// Email availability
 			if ($add_case || $data['email'] != $db_data['email']) {
 				if (($e = $this->model->checkEmail($data['email'])) !== true) {
 					$errors[] = WLang::get($e);
@@ -173,7 +174,7 @@ Pour vous connecter, rendez-vous à l'adresse <a href=\"".WRoute::getBase()."/us
 <br /><br />
 Voici vos données de connexion :<br />
 <strong>Identifiant :</strong> ".$data['nickname']."<br />
-<strong>Mot de passe :</strong> ".$data['password_conf']."
+<strong>Mot de passe :</strong> ".$password_original."
 <br /><br />
 Ces informations sont personnelles.<br />
 Pour tout changement, rendez-vous sur l'espace membre.
