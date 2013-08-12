@@ -34,14 +34,10 @@ class NewsAdminController extends WController {
 		// Sorting criterias given by URL
 		if (isset($params[0])) {
 			$criterias = $params[0];
-			$count = sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sort_by_crit, $sens_crit, $page_crit);
+			sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sort_by_crit, $sens, $page_crit);
 			
 			if (isset($this->model->news_data_model['toDB'][$sort_by_crit])) {
 				$sort_by = $sort_by_crit;
-			}
-			
-			if ($sens_crit == 'DESC') {
-				$sens = 'DESC';
 			}
 			
 			if ($page_crit > 1) {
@@ -55,9 +51,9 @@ class NewsAdminController extends WController {
 		$sorting = $sortingHelper->findSorting($sort_by, $sens);
 		
 		return array(
-			'data' => $this->model->getNewsList(($page-1)*$n, $n, $sorting[0], $sorting[1] == 'ASC'),
-			'total' => $this->model->countNews(),
-			'current_page' => $page,
+			'data'          => $this->model->getNewsList(($page-1)*$n, $n, $sorting[0], $sorting[1] == 'ASC'),
+			'total'         => $this->model->countNews(),
+			'current_page'  => $page,
 			'news_per_page' => $n,
 			'sortingHelper' => $sortingHelper
 		);
@@ -178,12 +174,12 @@ class NewsAdminController extends WController {
 	protected function edit($params) {
 		$news_id = isset($params[0]) ? intval($params[0]) : -1;
 		
-		// Check whether this news exist
-		if (empty($news_id) || !$this->model->validExistingNewsId($news_id)) {
-			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
-			header('Location: '.WRoute::getDir().'/admin/news/');
-		} else {
+		// Check whether this news exists
+		if ($news_id != -1 && $this->model->validExistingNewsId($news_id)) {
 			return $this->news_form(array($news_id));
+		} else {
+			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
+			$this->view->setHeader('Location', WRoute::getDir().'/admin/news/');
 		}
 	}
 	
@@ -267,7 +263,8 @@ class NewsAdminController extends WController {
 		$sort_by = 'news_cat_name';
 		$sens = 'ASC';
 		if (!empty($params[0])) {
-			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by_crit, $sens);
+			sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by_crit, $sens);
+			
 			if (isset($this->model->cats_data_model['toDB'][$sort_by_crit])) {
 				$sort_by = $sort_by_crit;
 			}
@@ -275,13 +272,13 @@ class NewsAdminController extends WController {
 		
 		// AdminStyle Helper
 		$orderingFields = array('news_cat_name', 'news_cat_shortname');
-		$adminStyle = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name', 'ASC'));
-		$sorting = $adminStyle->findSorting($sort_by, $sens);
+		$sortingHelper = WHelper::load('SortingHelper', array($orderingFields, 'news_cat_name', 'ASC'));
+		$sorting = $sortingHelper->findSorting($sort_by, $sens);
 		
 		return array(
-			'data' => $this->model->getCatsList($sorting[0], $sorting[1]),
-			'adminStyle' => $adminStyle,
-			'post_data' => isset($data) ? $data : array()
+			'data'          => $this->model->getCatsList($sorting[0], $sorting[1] == 'ASC'),
+			'post_data'     => isset($data) ? $data : array(),
+			'sortingHelper' => $sortingHelper
 		);
 	}
 	
@@ -301,6 +298,7 @@ class NewsAdminController extends WController {
 				WNote::success('category_deleted', WLang::get('category_deleted'));
 				$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager/');
 			}
+			
 			return array('cat_id' => $cat_id);
 		} else {
 			WNote::error('category_not_found', WLang::get('category_not_found'));

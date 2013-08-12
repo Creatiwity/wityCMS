@@ -276,7 +276,7 @@ class NewsModel {
 		$prep = $this->db->prepare('
 			SELECT cid, name, shortname, parent
 			FROM news_cats
-			ORDER BY ' . $order . ' ' . ($asc ? 'ASC' : 'DESC')
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
 		$result = array();

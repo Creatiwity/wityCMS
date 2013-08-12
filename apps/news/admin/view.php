@@ -88,7 +88,7 @@ class NewsAdminView extends WView {
 	
 	public function categories_manager($model) {
 		$this->assign('js', '/apps/news/admin/js/categories_manager.js');
-		$this->assign($model['adminStyle']->getTplVars());
+		$this->assign($model['sortingHelper']->getTplVars());
 		$this->fillMainForm(array(
 			'news_cat_id' => '',
 			'news_cat_name' => '',
