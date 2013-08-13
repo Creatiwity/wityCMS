@@ -147,6 +147,7 @@ class UserAdminController extends WController {
 			// Matching passwords
 			if (!empty($post_data['password']) || !empty($post_data['password_conf'])) {
 				if ($post_data['password'] === $post_data['password_conf']) {
+					$password_original = $post_data['password'];
 					$post_data['password'] = sha1($post_data['password']);
 					if (!$add_case && $post_data['password'] == $db_data['password']) {
 						unset($post_data['password']); // don't change password if it's the same
@@ -205,7 +206,7 @@ Pour vous connecter, rendez-vous à l'adresse <a href=\"".WRoute::getBase()."/us
 <br /><br />
 Voici vos données de connexion :<br />
 <strong>Identifiant :</strong> ".$post_data['nickname']."<br />
-<strong>Mot de passe :</strong> ".$post_data['password_conf']."
+<strong>Mot de passe :</strong> ".$password_original."
 <br /><br />
 Ces informations sont personnelles.<br />
 Pour tout changement, rendez-vous sur l'espace membre.

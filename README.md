@@ -1,6 +1,6 @@
 # WityCMS
 
-WityCMS is a simple Content Management System Model-View-Controler oriented in PHP. Requires PHP 5.4+ (may work with 5.3+ too). The Apache module mod_rewrite is required too, because the safe-mode without URL rewriting is not yet ready.
+WityCMS is a simple Content Management System Model-View-Controler oriented in PHP. Requires PHP 5.3+. The Apache module mod_rewrite is required too, because the safe-mode without URL rewriting is not yet ready.
 
 This CMS uses its own templating system, named [WTemplate](https://github.com/Creatiwity/WTemplate), developed as a separate GitHub project but included here as a submodule.
 
