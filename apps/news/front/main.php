@@ -14,39 +14,33 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-04-2013
  */
 class NewsController extends WController {
-	public function __construct() {
-		include 'model.php';
-		$this->model = new NewsModel();
+	protected function listing(array $params) {
+		$news_id = -1;
 		
-		include 'view.php';
-		$this->setView(new NewsView($this->model));
-	}
-	
-	private function getId() {
-		$args = WRoute::getArgs();
-		if (empty($args[0])) {
-			return -1;
-		} else {
-			list($id) = explode('-', $args[0]);
-			return intval($id);
+		if (isset($params[0])) {
+			$id = intval($params[0]);
+			if (!empty($id)) {
+				$news_id = $id;
+			}
 		}
-	}
-	
-	public function listing() {
-		$news_id = $this->getId();
-		if (!empty($news_id) && $this->model->validExistingNewsId($news_id)) {
-			$this->display($news_id);
+		
+		if ($news_id != -1 && !$this->model->validExistingNewsId($news_id)) {
+			return WNote::error('news_not_found', "The news #".$news_id." was not found.");
+		}
+		
+		if ($news_id != -1) {
+			return $this->display($news_id);
 		} else {
-			$this->listNews();
+			return $this->listNews();
 		}
 	}
 	
 	protected function listNews() {
-		$this->view->listing();
+		return $this->model->getNewsList(0, 3);
 	}
 	
 	protected function display($news_id) {
-		$this->view->detail($news_id);
+		return array($this->model->getNews($news_id));
 	}
 }
 

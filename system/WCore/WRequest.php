@@ -4,14 +4,6 @@
  */
 
 defined('IN_WITY') or die('Access denied');
-/**
- * Wity CMS
- * Système de gestion de contenu pour tous.
- *
- * @author    Fofif
- * @version   $Id: WCore/WRequest.php 0003 29-12-2011 Fofif $
- * @desc      Gestion des variables de type REQUEST
- */
 
 /**
  * WRequest manages all requests

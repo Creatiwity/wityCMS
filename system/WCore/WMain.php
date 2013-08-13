@@ -5,8 +5,8 @@
 
 defined('IN_WITY') or die('Access denied');
 
-require SYS_DIR.'WCore'.DS.'WController.php';
-require SYS_DIR.'WCore'.DS.'WView.php';
+require_once SYS_DIR.'WCore'.DS.'WController.php';
+require_once SYS_DIR.'WCore'.DS.'WView.php';
 
 /**
  * WMain is the main class that Wity launches at startup
@@ -37,69 +37,28 @@ class WMain {
 		// Initializing lang
 		WLang::init();
 		
-		// exec application
-		$this->exec(WRoute::getApp());
+		// Initializing WRetrever
+		WRetriever::init();
+		
+		// Exec application
+		$this->exec();
 	}
 	
 	/**
-	 * If found, execute the application in the apps/$app_name directory
-	 * 
-	 * @param string $app_name name of the application that will be launched
+	 * This function will setup the whole WityCMS response
+	 * Find and load the theme
 	 */
-	public function exec($app_name) {
-		// App asked exists?
-		if ($this->isApp($app_name)) {
-			// App controller file
-			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
-			include_once $app_dir.'main.php';
-			$app_class = str_replace('-', '_', ucfirst($app_name)).'Controller';
-			
-			// App's controller must inherit WController
-			if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
-				$context = array(
-					'name'       => $app_name,
-					'directory'  => $app_dir,
-					'controller' => $app_class,
-					'admin'      => false
-				);
-				
-				$controller = new $app_class();
-				$controller->init($this, $context);
-				$controller->launch();
-			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
-			}
-		} else {
-			WNote::error(404, "The page requested was not found.", 'display');
-		}
-	}
-	
-	/**
-	 * Returns a list of applications that contains a main.php file in their front directory
-	 * 
-	 * @return array(string)
-	 */
-	public function getAppsList() {
-		if (empty($this->apps)) {
-			$apps = glob(APPS_DIR.'*', GLOB_ONLYDIR);
-			$this->apps = array();
-			foreach ($apps as $appDir) {
-				if (file_exists($appDir.DS.'front'.DS.'main.php')) {
-					$this->apps[] = basename($appDir);
-				}
-			}
-		}
-		return $this->apps;
-	}
-	
-	/**
-	 * Returns application existence
-	 * 
-	 * @param string $app
-	 * @return bool true if $app exists, false otherwise
-	 */
-	public function isApp($app) {
-		return !empty($app) && in_array($app, $this->getAppsList());
+	private function exec() {
+		// Setup the main app to execute
+		$app_name = WRoute::getApp();
+		$params = WRoute::getArgs();
+		
+		// Get the view
+		$view = WRetriever::getView($app_name, $params);
+		
+		// Render the final response
+		$response = new WResponse(WConfig::get('config.theme'));
+		$response->render($view);
 	}
 	
 	/**

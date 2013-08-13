@@ -24,21 +24,10 @@ class UserController extends WController {
 	private $session;
 	
 	/**
-	 * @var Instance of UserModel
-	 */
-	private $model;
-	
-	/**
 	 * UserController constructor
-	 * Basically instantiates vars: model, views and session
+	 * Basically instantiates session
 	 */
 	public function __construct() {
-		include_once 'model.php';
-		$this->model = new UserModel();
-		
-		include_once 'view.php';
-		$this->setView(new UserView($this->model));
-		
 		$this->session = WSystem::getSession();
 	}
 	
@@ -65,9 +54,8 @@ class UserController extends WController {
 		}
 		
 		if ($this->session->isConnected()) {
-			// WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.', 'display');
-			header('location: '.$redirect);
-			return;
+			$this->view->setHeader('Location', $redirect);
+			return WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.');
 		}
 		
 		// Vars given to trigger login process?
@@ -90,7 +78,7 @@ class UserController extends WController {
 						} else {
 							// Redirect
 							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
-							header('location: '.$redirect);
+							$this->view->setHeader('Location', $redirect);
 							return;
 						}
 						break;
@@ -110,11 +98,11 @@ class UserController extends WController {
 			// Login process triggered from an external application
 			if ($cookie && strpos($referer, 'user') === false) {
 				// Redirect to it
-				header('location: '.$referer);
-				return;
+				$this->view->setHeader('Location', $referer);
 			}
 		}
-		$this->view->connexion($redirect);
+		
+		return array('redirect' => $redirect);
 	}
 	
 	/**
@@ -128,7 +116,7 @@ class UserController extends WController {
 			$this->session->closeSession();
 		}
 		WNote::success('user_disconnected', WLang::get('user_disconnected'));
-		header('location: '.WRoute::getBase());
+		$this->view->setHeader('Location', WRoute::getBase());
 	}
 	
 	/**
@@ -250,9 +238,7 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
-			$this->view->register($data);
-		} else {
-			$this->view->register();
+			return $data;
 		}
 	}
 	
@@ -271,7 +257,7 @@ class UserController extends WController {
 		// Retrieve the confirm code
 		$confirm_code = WRoute::getArg(1);
 		if (empty($confirm_code)) {
-			header('location: '.WRoute::getBase());
+			$this->view->setHeader('Location', WRoute::getBase());
 			return;
 		}
 		
@@ -298,6 +284,7 @@ class UserController extends WController {
 					);
 				}
 				WNote::success('user_validated_admin', WLang::get('user_validated_admin'), 'display');
+				return;
 			} else {
 				WNote::error('user_register_failure', WLang::get('user_register_failure'));
 			}
@@ -307,8 +294,8 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_register_failure', WLang::get('user_register_failure'));
 			}
-			$this->view->connexion();
 		}
+		$this->view->login();
 	}
 	
 	/**
@@ -344,7 +331,7 @@ class UserController extends WController {
 					WNote::error('user_password_lost_not_found', WLang::get('user_password_lost_not_found'));
 				}
 			}
-			$this->view->password_lost();
+			return array('step' => 1);
 		} else { // Step 2 - Reset password
 			$user_data = $this->model->findUserWithEmailAndConfirmCode($data['email'], $data['confirm']);
 			if (!empty($user_data)) {
@@ -363,9 +350,9 @@ class UserController extends WController {
 						WNote::error('error_password_not_matching', WLang::get('error_password_not_matching'));
 					}
 				}
-				$this->view->reset_password($data['email'], $data['confirm']);
+				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				header('location: '.WRoute::getBase());
+				$this->view->setHeader('location: '.WRoute::getBase());
 			}
 		}
 	}

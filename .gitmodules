@@ -1,0 +1,3 @@
+[submodule "system/WTemplate"]
+	path = system/WTemplate
+	url = git://github.com/Creatiwity/WTemplate.git
