@@ -85,7 +85,7 @@
 	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
 	
 	<!-- User deletion -->
-	<item id="user_delete_confirmation">Êtes-vous sûr de vouloir supprimer l'utilisateur %s</item>
+	<item id="user_delete_confirmation">Êtes-vous sûr de vouloir supprimer l'utilisateur %s ?</item>
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
 	<item id="user_self_delete">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
 	
@@ -106,6 +106,7 @@
 	<item id="group_edited"><![CDATA[Le groupe <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="group_not_added">Une erreur inconnue s'est produite lors du traitement du groupe par la base de données.</item>
 	<item id="group_deleted">Le groupe a été supprimé avec succès.</item>
+	<item id="group_delete_confirmation">Êtes-vous sûr de vouloir supprimer le groupe %s ?</item>
 	
 	<!-- Group diff -->
 	<item id="apply_access">Application des nouveaux droits d'accès au groupe %s</item>

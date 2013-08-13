@@ -15,19 +15,19 @@ defined('IN_WITY') or die('Access denied');
 abstract class WController {
 
 	/**
-	 * @var WMain main Wity instance of WMain 
-	 */
-	protected $wity;
-	
-	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
-	protected $context;
+	private $context = array();
 	
 	/**
 	 * @var array Manifest of the application
 	 */
 	private $manifest;
+	
+	/**
+	 * @var model
+	 */
+	protected $model;
 	
 	/**
 	 * @var WView view object corresponding to this controller instance
@@ -37,7 +37,12 @@ abstract class WController {
 	/**
 	 * @var string action that will be performed in this application (default: 'index')
 	 */
-	private $action = '';
+	protected $action = '';
+	
+	/**
+	 * @var array Parameters to forward to the application's action
+	 */
+	private $params;
 	
 	/**
 	 * Application initialization
@@ -45,8 +50,7 @@ abstract class WController {
 	 * @param WMain  $wity     main Wity instance of WMain
 	 * @param array  $context  Context of the application describing app's name, app's directory and app's main class
 	 */
-	public function init(WMain $wity, $context) {
-		$this->wity = $wity;
+	public function init(array $context) {
 		$this->context = $context;
 		
 		// Initialize view if the app's constructor did not do it
@@ -57,26 +61,31 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 		
-		// Default theme configuration
-		if ($this->view->getTheme() == '') {
-			$this->view->setTheme(WConfig::get('config.theme'));
-		}
-		
-		// Automaticly declare the language directory
-		if (is_dir($context['directory'].'lang')) {
-			WLang::declareLangDir($context['directory'].'lang');
+		// Automatically declare the language directory
+		if (is_dir($this->context['directory'].'lang')) {
+			WLang::declareLangDir($this->context['directory'].'lang');
 		}
 		
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
-			WNote::error('app_no_manifest', 'The manifest of the application '.$this->getAppName().' cannot be found');
+			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found.');
 		}
 	}
 	
-	public function launch() {
-		// Trigger proper method
-		$this->forward($this->getAskedAction());
+	/**
+	 * Default Launch method
+	 * 
+	 * Launch method determines the method that must be triggered in the application.
+	 * Most of the time, the action given in URL is used.
+	 */
+	public function launch(array $params = array()) {
+		// Match the asked action with the manifest
+		// getAskedAction() will removed the action from $params if it is found inside the array
+		$action = $this->getAskedAction($params);
+		
+		// Trigger the corresponding method for the action given in URL
+		return $this->forward($action, $params);
 	}
 	
 	/**
@@ -84,26 +93,25 @@ abstract class WController {
 	 * 
 	 * @param type $action  action under execution
 	 * @param type $default optional default action value
-	 * @return boolean Action forwarding success
+	 * @return mixed Model|false if error
 	 */
-	protected final function forward($action) {
+	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
 			if ($this->hasAccess($this->getAppName(), $action)) {
 				// Execute action
 				if (method_exists($this, $action)) {
 					$this->action = $action;
-					$this->$action();
+					
+					return $this->$action($params);
 				} else {
-					WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'display');
+					return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
 				}
-				return true;
 			} else {
-				WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.', 'display');
+				return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
 			}
 		} else {
-			WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.', 'display');
+			return WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.');
 		}
-		return false;
 	}
 	
 	/**
@@ -116,12 +124,21 @@ abstract class WController {
 	}
 	
 	/**
+	 * Returns the application context
+	 * 
+	 * @return array Application's context
+	 */
+	public function getContext() {
+		return $this->context;
+	}
+	
+	/**
 	 * Returns if the application is in admin mode or not
 	 * 
 	 * @return bool true if admin mode loaded, false otherwise
 	 */
 	public function getAdminContext() {
-		return $this->context['admin'];
+		return $this->context['admin'] === true;
 	}
 	
 	/**
@@ -144,101 +161,62 @@ abstract class WController {
 	}
 	
 	/**
-	 * Returns the arguments in the URL without the application action if known
-	 * Example:
-	 *    URL = /app/action/option1/option2 OR /app/option1/option2
-	 *    getArgs() = array('option1', 'option2')
-	 * 
-	 * @param int $index Option index
-	 * @return array Options in the URL
+	 * Defines a new model for this controller
 	 */
-	public function getOptions() {
-		$args = WRoute::getArgs();
-		if (isset($args[0]) && $args[0] == $this->action) {
-			array_shift($args);
-		}
-		return $args;
+	public function setModel($model) {
+		$this->model = $model;
 	}
 	
 	/**
-	 * Returns the nth argument in the URL without the application action if known
-	 * Example:
-	 *    URL = /app/action/option1/option2 OR /app/option1/option2
-	 *    getArg(0) = option1, getArg(1) = option2, getArg(2) = ''
+	 * Get the model defined for this application
 	 * 
-	 * @param int $index Option index
-	 * @return string Option corresponding to the index
+	 * @return Object
 	 */
-	public function getOption($index) {
-		$args = $this->getOptions();
-		return isset($args[$index]) ? $args[$index] : '';
-	}
-	
-	/**
-	 * Searches within the application options if a specified value is present
-	 * 
-	 * @param string $value Value to search
-	 * @param bool   $exact Exact search?
-	 * @return bool
-	 */
-	public function inOptions($value, $exact = true) {
-		$args = $this->getOptions();
-		foreach ($args as $arg) {
-			if ($exact) {
-				if ($arg === $value) {
-					return true;
-				}
-			} else {
-				if (strpos($arg, $value) !== false) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
+	public function getModel() {
+		return $this->model;
 	}
 	
 	/**
 	 * Returns action's name which is the second parameter given in the URL, right after the app's name.
 	 * 
-	 * If the $check param is set to true, the method will check if the action found is declared in 
-	 * the manifest. If it is not declared, it will retun the default application action.
-	 * If $check is set to false, it will return the action as it is asked in the URL.
+	 * This method will remove the first item in $params if it is used to determine the action to trigger.
 	 * 
-	 * @param bool $check Parameter to check if the action asked is defined (default to true)
+	 * @param array $params
 	 * @return string action's name asked in the URL
 	 */
-	public function getAskedAction($check = true) {
-		$action = strtolower(WRoute::getArg(0));
+	public function getAskedAction(&$params) {
+		$action = isset($params[0]) ? $params[0] : '';
 		
-		// Find a fine $action
-		if ($check) {
-			if ($this->getAdminContext()) {
-				$actions_key = 'admin';
-				$alias_prefix = 'admin-';
-				$default = 'default_admin';
-			} else {
-				$actions_key = 'actions';
-				$alias_prefix = '';
-				$default = 'default';
-			}
-			
-			// $action exists ? Otherwise, check alias and finally, use default action if exists?
-			if (!empty($action) && !isset($this->manifest[$actions_key][$action])) {
-				// check alias
-				if (isset($this->manifest['alias'][$alias_prefix.$action])) {
-					$action = $this->manifest['alias'][$alias_prefix.$action];
-				} else { // try to guess
-					$action = str_replace('-', '_', $action);
-					if (!isset($this->manifest[$actions_key][$action])) {
-						$action = '';
-					}
+		if ($this->getAdminContext()) {
+			$actions_key = 'admin';
+			$alias_prefix = 'admin-';
+			$default = 'default_admin';
+		} else {
+			$actions_key = 'actions';
+			$alias_prefix = '';
+			$default = 'default';
+		}
+		
+		// $action exists ? Otherwise, check alias and finally, use default action if exists?
+		if (!empty($action) && !isset($this->manifest[$actions_key][$action])) {
+			// check alias
+			if (isset($this->manifest['alias'][$alias_prefix.$action])) {
+				$action = $this->manifest['alias'][$alias_prefix.$action];
+			} else { // try to guess
+				$action = str_replace('-', '_', $action);
+				if (!isset($this->manifest[$actions_key][$action])) {
+					$action = '';
 				}
 			}
-			if (empty($action) && isset($this->manifest[$default])) {
-				$action = $this->manifest[$default];
-			}
 		}
+		
+		if (!empty($action)) {
+			// Remove the first item in $params because it is the action name
+			array_shift($params);
+		} else if (isset($this->manifest[$default])) {
+			$action = $this->manifest[$default];
+		}
+		
 		return $action;
 	}
 	

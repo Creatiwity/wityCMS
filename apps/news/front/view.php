@@ -14,23 +14,8 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-04-2013
  */
 class NewsView extends WView {
-	private $model;
-	
-	public function __construct(NewsModel $model) {
-		parent::__construct();
-		$this->model = $model;
-	}
-	
-	public function listing() {
-		$this->assign('news', $this->model->getNewsList(0, 3));
-		$this->render('listing');
-	}
-	
-	public function detail($news_id) {
-		$data = $this->model->getNews($news_id);
-		$data['news_content'] = str_replace('<hr />', '', $data['news_content']);
-		$this->assign($data);
-		$this->render('details');
+	public function listing($data) {
+		$this->assign('news', $data);
 	}
 }
 

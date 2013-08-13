@@ -30,14 +30,32 @@ class UserModel {
 	 * @param string $userid
 	 * @return boolean Only one row must be returned
 	 */
-	public function validId($userid) {
-		if (empty($userid)) {
+	public function validId($user_id) {
+		if (empty($user_id)) {
 			return false;
 		}
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE id = :id
 		');
-		$prep->bindParam(':id', $userid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $user_id, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->rowCount() == 1;
+	}
+	
+	/**
+	 * Checks whether a $userid truely exists in the database
+	 * 
+	 * @param string $userid
+	 * @return boolean Only one row must be returned
+	 */
+	public function validGroupId($group_id) {
+		if (empty($group_id)) {
+			return false;
+		}
+		$prep = $this->db->prepare('
+			SELECT * FROM users_groups WHERE id = :group_id
+		');
+		$prep->bindParam(':group_id', $group_id, PDO::PARAM_INT);
 		$prep->execute();
 		return $prep->rowCount() == 1;
 	}
@@ -208,7 +226,7 @@ class UserModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
+				SELECT users.id, nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
 				FROM users
 				LEFT JOIN users_groups
 				ON groupe = users_groups.id
