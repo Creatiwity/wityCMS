@@ -5,20 +5,20 @@
 			<div class="control-group">
 				<label for="nickname" class="control-label label-big">{lang nickname}</label>
 				<div class="controls">
-					<input class="input-big input-block-level" type="text" name="nickname" value="{$nickname}" />
+					<input class="input-big input-block-level" type="text" name="nickname" value="{$nickname}"  autocomplete="off"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="password" class="control-label">{lang password}</label>
 				<div class="controls">
-					<input type="password" name="password" />
+					<input type="password" name="password" autocomplete="off"/>
 					{if !empty({$id})}<span class="help-inline">{lang leave_empty_to_leave_unchanged}</span>{/if}
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="password_conf" class="control-label"><em>{lang confirmation}</em></label>
 				<div class="controls">
-					<input type="password" name="password_conf" />
+					<input type="password" name="password_conf" autocomplete="off"/>
 				</div>
 			</div>
 			<div class="control-group">
