@@ -97,11 +97,20 @@ abstract class WController {
 	 */
 	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
+			/*
+			 * Here will come the method call to check whether the user can execute this action with dynamic permissions using input values ($params)
+			 * Disallow if "strict"; Filter disallowed entries if "filter"
+			 * First, test if dynamic permissions are enabled on this site and not explicitly disabled on this application
+			 */
 			if ($this->hasAccess($this->getAppName(), $action)) {
 				// Execute action
 				if (method_exists($this, $action)) {
 					$this->action = $action;
 					
+					/*
+					 * Here will come the model (output) filtering
+					 */
+
 					return $this->$action($params);
 				} else {
 					return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
@@ -313,7 +322,10 @@ abstract class WController {
 								if (!isset($manifest['actions'][$key])) {
 									$manifest['actions'][$key] = array(
 										'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
-										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()//,
+										/*
+										 * Here will come the dyn attributes to know which filter (strict or filter) we will have to use to filter this action
+										 */
 									);
 								}
 								if (isset($attributes['default']) && empty($manifest['default'])) {
@@ -379,6 +391,10 @@ abstract class WController {
 						}
 					}
 					break;
+
+				/*
+				 * Here will come the "dyn" initialization
+				 */
 				
 				case 'name':
 					$manifest['name'] = property_exists($xml, 'name') ? (string) $xml->name : basename(dirname($manifest_href));
