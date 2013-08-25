@@ -4,10 +4,10 @@
 	<!-- Application name -->
 	<name>News</name>
 	
-	<version>0.3</version>
+	<version>0.4</version>
 	
 	<!-- Last update date -->
-	<date>19-04-2013</date>
+	<date>17-08-2013</date>
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
@@ -16,6 +16,11 @@
 	<permission name="news_editor" />
 	<permission name="global_editor" />
 	<permission name="deletor" />
+
+	<!-- Dynamic permissions -->
+	<dyn name="categories" table="news_cats" c-id="cid" c-parent="parent" c-name="name" />
+		<filter name="" model="lvl1/lvl2/cat_id" />
+	</dyn>
 	
 	<!-- Front pages -->
 	<action default="default">listing</action>

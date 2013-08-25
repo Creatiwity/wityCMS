@@ -148,6 +148,9 @@ class WSession {
 					$app_name = substr($access, 0, $first_bracket);
 					$permissions = substr($access, $first_bracket+1, -1);
 					if (!empty($permissions)) {
+						/*
+						 * Here will come dynamic permissions grabbing
+						 */
 						$_SESSION['access'][$app_name] = explode('|', $permissions);
 					}
 				}
@@ -217,7 +220,7 @@ class WSession {
 	
 	/**
 	 * Generates a user-and-computer specific hash that will be stored in a cookie
-
+	 *
 	 * @param string $nick nickname
 	 * @param string $pass password
 	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
