@@ -131,6 +131,15 @@ abstract class WController {
 	public function getContext() {
 		return $this->context;
 	}
+
+	/**
+	 * Returns true if there is a parent in the context, false otherwise
+	 *
+	 * @return bool true if there is a parent in the context, false otherwise
+	 */
+	public function hasParent() {
+		return $this->context['parent'];
+	}
 	
 	/**
 	 * Returns if the application is in admin mode or not

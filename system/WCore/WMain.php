@@ -54,7 +54,7 @@ class WMain {
 		$params = WRoute::getArgs();
 		
 		// Get the view
-		$view = WRetriever::getView($app_name, $params);
+		$view = WRetriever::getView($app_name, $params, 'plain', false);
 		
 		// Render the final response
 		$response = new WResponse(WConfig::get('config.theme'));

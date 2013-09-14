@@ -95,9 +95,9 @@ class WRetriever {
 	 * @param string $view_size Size mode of the view expected (optional)
 	 * @return WView
 	 */
-	public static function getView($app_name, array $params = array(), $view_size = '') {
+	public static function getView($app_name, array $params = array(), $view_size = '', $has_parent = true) {
 		// Get app controller
-		$controller = self::getController($app_name);
+		$controller = self::getController($app_name, $has_parent);
 		
 		if ($controller instanceof WController) {
 			// Get the model
@@ -137,7 +137,7 @@ class WRetriever {
 	 * @param string $app_name name of the application that will be launched
 	 * @return WController App Controller
 	 */
-	public static function getController($app_name) {
+	public static function getController($app_name, $has_parent = true) {
 		// Check if app not already instantiated
 		if (isset(self::$controllers[$app_name])) {
 			return self::$controllers[$app_name];
@@ -158,7 +158,8 @@ class WRetriever {
 					'name'       => $app_name,
 					'directory'  => $app_dir,
 					'controller' => $app_class,
-					'admin'      => false
+					'admin'      => false,
+					'parent'	 => $has_parent
 				);
 				
 				// Construct App Controller
