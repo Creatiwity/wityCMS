@@ -41,7 +41,7 @@ class AdminController extends WController {
 				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
 				$app_class = ucfirst($this->appAsked).'AdminController';
 				
-				include $app_dir.'main.php';
+				include_once $app_dir.'main.php';
 				
 				if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
 					$this->appController = new $app_class();

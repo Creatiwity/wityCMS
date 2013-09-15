@@ -186,10 +186,10 @@ class WRetriever {
 				// Init
 				$controller->init($context);
 			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.", 'display');
+				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.");
 			}
 		} else {
-			WNote::error(404, "The page requested was not found.", 'display');
+			WNote::error(404, "The page requested was not found.");
 		}
 		
 		// Store the controller
@@ -252,6 +252,7 @@ class WRetriever {
 			$args = explode('?', $args);
 			
 			// Explode the route in several parts
+			$args[0] = trim($args[0], '/');
 			$route = explode('/', $args[0]);
 			
 			if (count($route) >= 2) {
