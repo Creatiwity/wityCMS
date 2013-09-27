@@ -1,6 +1,5 @@
 User-agent: *
 Disallow: /libraries
-Disallow: /admin
 Disallow: /helpers
 Disallow: /cache
 Disallow: /system
