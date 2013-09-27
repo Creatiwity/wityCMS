@@ -15,7 +15,7 @@ defined('IN_WITY') or die('Access denied');
  */
 class MediaView extends WView {
 
-	public function list($data) {
+	public function listing($data) {
 		
 	}
 	

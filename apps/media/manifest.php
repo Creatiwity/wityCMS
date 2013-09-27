@@ -16,12 +16,13 @@
 	<permission name="manager" />
 	
 	<!-- Front pages -->
-	<action default="default">list</action>
+	<action default="default">listing</action>
 	<action>upload</action>
 	<action>upload_button</action>
 	<action>metaedit</action>
 	<action>relatives</action>
 	<action>link</action>
+	<action>get</action>
 
 	<!-- Admin pages -->
 	<admin>

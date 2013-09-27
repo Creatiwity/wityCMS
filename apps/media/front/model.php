@@ -1,6 +1,6 @@
 <?php
 /**
- * Media Application - Front Model - /apps/news/front/model.php
+ * Media Application - Front Model - /apps/media/front/model.php
  */
 
 defined('IN_WITY') or die('Access denied');
@@ -14,5 +14,12 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-04-2013
  */
 class MediaModel {
+	protected $db;
 	
+	public function __construct() {
+		$this->db = WSystem::getDB();
+		
+		// Declare table
+		$this->db->declareTable('media');
+	}
 }
