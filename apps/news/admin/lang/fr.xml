@@ -27,7 +27,7 @@
 	<item id="keywords">Mots clés</item>
 	<item id="article_created_on"><strong>Article créé</strong> le %s</item>
 	<item id="article_modified_on"><strong>Dernière édition</strong> le %s</item>
-	<item id="category_of_article">Catégorie de l'article</item>
+	<item id="category_of_article">Catégories de l'article</item>
 	<item id="article_not_found">L'article n°%s que vous tentez de manipuler n'existe pas.</item>
 	<item id="article_no_title">Il manque un titre à l'article.</item>
 	<item id="article_no_author">Il manque un auteur à l'article.</item>

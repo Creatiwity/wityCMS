@@ -27,7 +27,7 @@
 	<item id="keywords">Keywords</item>
 	<item id="article_created_on"><strong>News created</strong> on %s</item>
 	<item id="article_modified_on"><strong>Last edition</strong> on %s</item>
-	<item id="category_of_article">Article's category</item>
+	<item id="category_of_article">Article's categories</item>
 	<item id="article_not_found">The news #%s that you are trying to modify cannot be found.</item>
 	<item id="article_no_title">Title is missing</item>
 	<item id="article_no_author">Author is missing</item>
