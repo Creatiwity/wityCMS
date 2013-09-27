@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WView handles application's Views
+ * WView handles application's Views.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-17-01-2013
+ * @version 0.4.0-17-01-2013
  */
 class WView {
 	/**

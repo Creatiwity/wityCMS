@@ -5,8 +5,7 @@
  * Content Management System for everyone
  *
  * @package System
- * @author Charly Poly <charly[dot]poly at live[dot]fr>
- * @version 0.3
+ * @version 0.4.0
  */
 
 /**
@@ -63,7 +62,5 @@ define('LOGS_DIR', WITY_PATH.'helpers'.DS);
  * Cache directory location
  */
 define('CACHE_DIR', WITY_PATH.'cache'.DS);
-
-
 
 ?>

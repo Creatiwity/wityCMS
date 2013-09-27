@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * UserModel is the front Model of the User Application
+ * UserModel is the front Model of the User Application.
  * 
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-15-02-2013
+ * @version 0.4.0-15-02-2013
  */
 class UserModel {
 	protected $db;

@@ -6,19 +6,18 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WSystem keeps the session, template and database instances as singletons
+ * WSystem keeps the session, template and database instances as singletons.
  * 
  * <p>If you need the WSession instance, just call :
  * <code>WSystem::getSession();</code>
  * It's the same thing with WTemplate andWDatabase.
  * </p>
- *
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-28-09-2012
+ * @version 0.4.0-28-09-2012
  */
 class WSystem {
-	
 	/**
 	 * @var WSession Session object
 	 */

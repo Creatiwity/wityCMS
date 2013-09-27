@@ -6,14 +6,13 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WRequest manages all requests
- *
+ * WRequest manages all requests.
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-29-12-2011
+ * @version 0.4.0-29-12-2011
  */
 class WRequest {
-	
 	/**
 	 * @var array Contains all checked variables to avoid infinite loop
 	 */

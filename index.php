@@ -1,20 +1,21 @@
 <?php
 /**
- * WityCMS index.php start-file
+ * WityCMS index.php start-up file
  * 
- * Content Management System for everyone
- *
+ * Content Management System for everyone.
+ * 
  * @package System
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3
+ * @version 0.4.0
  */
+
+define('WITY_VERSION', '0.4.0');
 
 /**
  * Security system to avoid direct access to the other php files
  */
 define('IN_WITY', true);
-define('WITY_VERSION', '0.3.0');
 
 /**
  * Error reporting level = MAXIMUM

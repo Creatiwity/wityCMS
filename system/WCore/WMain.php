@@ -9,11 +9,11 @@ require_once SYS_DIR.'WCore'.DS.'WController.php';
 require_once SYS_DIR.'WCore'.DS.'WView.php';
 
 /**
- * WMain is the main class that Wity launches at startup
- *
+ * WMain is the main class that Wity launches at start-up.
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-17-01-2013
+ * @version 0.4.0-27-09-2013
  */
 class WMain {
 	/**

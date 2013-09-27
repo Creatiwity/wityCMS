@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * AdminController is a controller which gives access to admin applications
+ * AdminController is a controller which gives access to admin applications.
  * 
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-17-01-2013
+ * @version 0.4.0-17-01-2013
  */
 class AdminController extends WController {
 	/**

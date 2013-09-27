@@ -6,14 +6,13 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * UserView is the front View of the User Application
+ * UserView is the front View of the User Application.
  * 
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-26-02-2013
+ * @version 0.4.0-26-02-2013
  */
 class UserView extends WView {
-	
 	public function __construct() {
 		parent::__construct();
 		$this->assign('css', '/apps/user/front/css/user.css');

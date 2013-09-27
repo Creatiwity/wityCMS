@@ -9,11 +9,11 @@ defined('IN_WITY') or die('Access denied');
 include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 
 /**
- * UserAdminModel is the admin Model of the User Application
+ * UserAdminModel is the admin Model of the User Application.
  * 
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-15-02-2013
+ * @version 0.4.0-15-02-2013
  */
 class UserAdminModel extends UserModel {
 	public function __construct() {

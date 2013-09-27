@@ -6,14 +6,13 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * UserAdminController is the Admin Controller of the User Application
+ * UserAdminController is the Admin Controller of the User Application.
  * 
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-26-04-2013
+ * @version 0.4.0-26-04-2013
  */
 class UserAdminController extends WController {
-	
 	/**
 	 * List action handler
 	 * Displays a list of users in the database

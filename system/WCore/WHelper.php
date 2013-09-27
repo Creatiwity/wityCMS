@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WHelper
+ * WHelper automatically instantiates for you small libraries.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-09-01-2013
+ * @version 0.4.0-09-01-2013
  */
 class WHelper {
 	/**

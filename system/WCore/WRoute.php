@@ -29,7 +29,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-23-01-2013
+ * @version 0.4.0-23-01-2013
  */
 class WRoute {
 	/**

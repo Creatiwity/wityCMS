@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WRetriever does...
- *
+ * WRetriever is the component to get the model or the view of an action from any WityCMS's application.
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4-14-06-2013
+ * @version 0.4.0-14-06-2013
  */
 class WRetriever {
 	/**
