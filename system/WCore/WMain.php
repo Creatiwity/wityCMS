@@ -53,12 +53,40 @@ class WMain {
 		$app_name = WRoute::getApp();
 		$params = WRoute::getArgs();
 		
-		// Get the view
-		$view = WRetriever::getView($app_name, $params);
+		$mode = WConfig::get('route.response');
 		
-		// Render the final response
-		$response = new WResponse(WConfig::get('config.theme'));
-		$response->render($view);
+		if (!empty($mode)) {
+			$format = strtoupper(WConfig::get('route.format'));
+			if (empty($format) || !in_array($format, array('JSON', 'XML', 'YAML'))) {
+				$format = 'JSON';
+			}
+			
+			$model = WRetriever::getModel($app_name, $params);
+			if ($mode == 'm') {
+				$response = array('model' => $model);
+				
+			} else if ($mode == 'v') {
+				$view = WRetriever::getView($app_name, $params)->render();
+				
+				$response = array('view'  => $view);
+			} else if ($mode == 'mv') {
+				$view = WRetriever::getView($app_name, $params)->render();
+				
+				$response = array(
+					'model' => $model,
+					'view'  => $view
+				);
+			}
+			
+			echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		} else {
+			// Get the view
+			$view = WRetriever::getView($app_name, $params);
+			
+			// Render the final response
+			$response = new WResponse(WConfig::get('config.theme'));
+			$response->render($view);
+		}
 	}
 	
 	/**
