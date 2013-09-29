@@ -1,0 +1,24 @@
+/**
+ * Grafx v1 theme for WityCMS
+ * 29/09/2013
+ */
+
+body {
+	background: url('../img/bg.png') repeat-x;
+	padding: 30px;
+}
+
+#wrapper {
+	width: 70%;
+	margin: auto;
+}
+
+#column-content, #column-blocks {
+	padding: 0 15px;
+}
+
+.block {
+	background: white;
+	padding: 30px;
+	margin-bottom: 15px;
+}
