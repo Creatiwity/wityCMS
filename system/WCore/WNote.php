@@ -133,23 +133,25 @@ class WNote {
 	 * @param array $note Note as returned by WNote::raise()
 	 */
 	public static function handle_die(array $note) {
-		static $died = false;
+		static $died = false; // prevent from looping
 		if (!$died) {
 			$died = true;
 			
-			self::handle_plain($note);
-			$plain_view = self::getPlainView();
-			
-			if (!is_null($plain_view)) {
-				$response = new WResponse('_blank');
-				if (!$response->render($plain_view)) {
-					// Error during Note View rendering so print it in html
-					echo self::handle_html($note);
+			try {
+				// Try to display the note an artistic way
+				self::handle_plain($note);
+				$plain_view = self::getPlainView();
+				
+				if (!is_null($plain_view)) {
+					$response = new WResponse('_blank');
+					if ($response->render($plain_view)) {
+						die;
+					}
 				}
-			} else {
-				echo self::handle_html($note);
-			}
+			} catch (Exception $e) {}
 			
+			// Default HTML display
+			echo self::handle_html($note);
 			die;
 		}
 	}
