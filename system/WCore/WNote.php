@@ -164,7 +164,7 @@ class WNote {
 	 * @see WNote::get()
 	 */
 	public static function handle_assign(array $note) {
-		if (self::count($note['code']) == 0) {
+		if (!isset($_SESSION['notes'][$note['code']])) {
 			$_SESSION['notes'][$note['code']] = $note;
 		}
 	}
@@ -260,24 +260,6 @@ class WNote {
 			self::handle_log($note);
 			self::handle_email($note);
 		}
-	}
-	
-	/**
-	 * Returns the number of notes in the SESSION stack whose $code is matching the $pattern
-	 * 
-	 * @param string $pattern optional pattern to find a note by its code
-	 * @return int number of notes whose $code is matching the $pattern
-	 */
-	public static function count($pattern = '*') {
-		$count = 0;
-		if (!empty($_SESSION['notes'])) {
-			foreach ($_SESSION['notes'] as $code => $note) {
-				if ($pattern == '*' || $code == $pattern || (strpos($pattern, '*') !== false && preg_match('#'.str_replace('*', '.*', $pattern).'#', $code))) {
-					$count++;
-				}
-			}
-		}
-		return $count;
 	}
 	
 	/**
