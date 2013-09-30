@@ -6,15 +6,15 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WDate manages dates using the user's custom timezone
- *
+ * WDate manages dates using the user's custom timezone.
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4-24-09-2013
+ * @version 0.4.0-24-09-2013
  */
 class WDate extends DateTime {
 	/**
-	 * This function handles user's custom timezone
+	 * This function handles user's custom timezone.
 	 * 
 	 * @param string If empty, use the current date. See DateTime class for full documentation.
 	 */
@@ -53,7 +53,7 @@ class WDate extends DateTime {
 	}
 	
 	/**
-	 * Translates the object into string: 15/01/2013 13:37
+	 * Translates the object into a string compatible with SQL format: 2013-01-30 13:37:00.
 	 * 
 	 * @return string
 	 */
