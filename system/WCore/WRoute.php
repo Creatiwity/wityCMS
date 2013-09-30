@@ -8,28 +8,28 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WRoute calculates the route given in the URL to find out the right application to execute.
  * 
- * Traditionnally, Apache URL Rewriting is used in Wity.
- * Example: the URL "http://mysite.fr/news/see/4" would be translated like this :
+ * Traditionally, Apache URL Rewriting is used in WityCMS.
+ * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :
  * - app = "news"
- * - arg1 = "see" - in this case, this argument is called the action of the application)
- * - arg2 = "4" - in this case, it may be the id of the news to display)
+ * - arg1 = "see" - in this case, this argument is called the action of the application
+ * - arg2 = "4" - in this case, it may be the id of the news to display
  * 
  * WRoute can provide several informations about the URL of the page.
- * If we keep the example URL = http://mysite.fr/news/see/4
- * - Base = "http://mysite.fr"
- * - Dir = "" - it is the directory in which Wity is installed
+ * If we keep the example URL = http://mysite.com/wity/news/see/4
+ * - Base = "http://mysite.com/wity" - Base contains the directory in which WityCMS is installed
+ * - Dir = "/wity" - it is the directory in which WityCMS is installed (may be empty)
  * - Query = "/news/see/4"
  *     _ App = "news"
  *     _ Args = array("see", "4")
  * - URL = Base + Query - full URL of the page
- *       = "http://mysite.fr/wity/news/see/4"
+ *       = "http://mysite.com/wity/news/see/4"
  * 
- * Notice that every route information given by WRoute is formated with the slash provided in the begining,
- * not in the end of the variables (except for the query if there is one "/" in the end).
+ * Notice that every route information given by WRoute is formatted with the slash located at the beginning,
+ * not at the end of the variables (except for the query if there is one "/" in the end).
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-23-01-2013
+ * @version 0.4.0-23-01-2013
  */
 class WRoute {
 	/**
@@ -37,8 +37,8 @@ class WRoute {
 	 */
 	
 	/**
-	 * If the URL is http://mysite.fr/wity/user/login
-	 * and if wity is executed in /wity/, then the $query will be set to "user/login"
+	 * If the URL is http://mysite.com/wity/user/login and if WityCMS is executed in /wity, 
+	 * then the $query will be set to "user/login".
 	 */
 	/**
 	 * @var string Request string of the page
@@ -46,7 +46,7 @@ class WRoute {
 	private static $query;
 	
 	/**
-	 * Initializes WRoute
+	 * Initializes WRoute.
 	 */
 	public static function init() {
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
@@ -57,19 +57,19 @@ class WRoute {
 	}
 	
 	/**
-	 * Launches the calculation of the route to find out the app to execute
+	 * Launches the calculation of the route to find out the app to execute.
 	 */
 	public static function route() {
 		$query = trim(self::$query, '/');
 		
-		// Checking the existency of a custom route
+		// Checking the existence of a custom route
 		$custom_routes = WConfig::get('route.custom');
 		if (isset($custom_routes[$query])) {
 			self::setRoute($custom_routes[$query]);
 		} else {
 			// Loading URL config
-			$routage = self::parseURL(self::$query);
-			if (!empty($routage)) {
+			$routage = self::parseURL($query);
+			if (!empty($routage[0])) {
 				self::setRoute($routage);
 			} else {
 				// If nothing found, launch the default route
@@ -79,10 +79,10 @@ class WRoute {
 	}
 	
 	/**
-	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php
+	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php.
 	 * 
-	 * If the website adress is http://mysite.fr/wity/user/login,
-	 * it should return http://mysite.fr/wity
+	 * If the website address is http://mysite.com/wity/user/login,
+	 * it should return http://mysite.com/wity.
 	 * 
 	 * @return string the full root location of WityCMS
 	 */
@@ -91,26 +91,26 @@ class WRoute {
 	}
 	
 	/**
-	 * Returns the partial WityCMS root directory
+	 * Returns the partial WityCMS root directory.
 	 * 
-	 * If the website adress is http://mysite.fr/wity/user/login
-	 * it will return /wity
+	 * If the website address is http://mysite.com/wity/user/login,
+	 * it will return /wity.
 	 * 
 	 * @return string the partial root location of WityCMS
 	 */
 	public static function getDir() {
 		// Remove the working directory of the script
-		// $_SERVER['SCRIPT_NAME'] = http://mysite.fr/wity/index.php
+		// example: $_SERVER['SCRIPT_NAME'] = http://mysite.com/wity/index.php
 		$dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
 		$dir = rtrim($dir, '/');
 		return $dir;
 	}
 	
 	/**
-	 * Returns the query asked to Wity in the URL
+	 * Returns the query asked to WityCMS in the URL.
 	 * 
-	 * If the request URL is http://mysite.fr/wity/user/login
-	 * it will return /user/login
+	 * If the request URL is http://mysite.com/wity/user/login,
+	 * it will return /user/login.
 	 * 
 	 * @return string the partial root location of WityCMS
 	 */
@@ -119,9 +119,9 @@ class WRoute {
 	}
 	
 	/**
-	 * Returns the full URL of the page
+	 * Returns the full URL of the page.
 	 * 
-	 * For example: http://mysite.fr/wity/user/login
+	 * For example: http://mysite.com/wity/user/login
 	 * 
 	 * @return string the full URL
 	 */
@@ -130,18 +130,20 @@ class WRoute {
 	}
 	
 	/**
-	 * Return the referer (the previous address)
+	 * Returns the referer (the previous address).
 	 * 
 	 * @param bool $default true: if the referer is empty, returns the URL base; false: return ''
-	 * @return string the referer
+	 * @return string The referer
 	 */
 	public static function getReferer($default = true) {
 		$base = self::getBase();
+		
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $base) !== false) {
 			return $_SERVER['HTTP_REFERER'];
 		} else if ($default) {
 			return $base;
 		}
+		
 		return '';
 	}
 	
@@ -176,7 +178,7 @@ class WRoute {
 	}
 	
 	/**
-	 * Removing a custom route
+	 * Deletes a custom route.
 	 * 
 	 * @see WConfig::get()
 	 * @param string $uri the custom route to remove
@@ -191,40 +193,39 @@ class WRoute {
 	}
 	
 	/**
-	 * Parse the webpage URL
+	 * Parses the web page URL.
 	 * 
-	 * @param string $url webpage URL (ex: http://MySite.com/News/Read/1)
-	 * @return array the route (ex: array('app' => "News", 'args' => array(1)))
+	 * @param string $url Web page URL
+	 * @return array The route such as array("app_name", array("arg1", "arg2"))
 	 */
 	private static function parseURL($url) {
-		$routage = array();
+		$routage = array('', array());
 		
 		// Cleaning
 		$url = trim($url, '/');
 		$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
-		$url = preg_replace('#\?.*$#', '', $url); // Nettoyage des query string
+		$url = preg_replace('#\?.*$#', '', $url); // Remove query string
 		
 		$array = explode('/', $url);
 		// Given application name
 		if (!empty($array[0])) {
-			$routage[] = strtolower(array_shift($array));
+			$routage[0] = strtolower(array_shift($array));
 			if (sizeof($array) > 0) {
 				// Storing arguments
-				$routage[] = $array;
-			} else {
-				$routage[] = array();
+				$routage[1] = $array;
 			}
 		}
+		
 		return $routage;
 	}
 	
 	/**
-	 * Checks if the route structure is good
+	 * Checks if the route structure is correct.
 	 * 
 	 * A good structure example :
 	 * <code>$routage = array('AppName', array('argument1', 'argument2'));</code>
 	 * 
-	 * @param array $routage the route
+	 * @param array $routage The route to check
 	 * @return boolean true if the structure is good, false otherwise
 	 */
 	private static function checkRouteStructure(array $routage) {
@@ -235,11 +236,12 @@ class WRoute {
 				}
 			}
 		}
+		
 		return false;
 	}
 	
 	/**
-	 * Defines route values in the configuration
+	 * Defines route values in the configuration.
 	 * 
 	 * @see WConfig::set()
 	 * @param array $routage routes that will be defined in the configuration
@@ -256,7 +258,7 @@ class WRoute {
 	}
 	
 	/**
-	 * Returns the current applcation name
+	 * Returns the current application name.
 	 * 
 	 * @return string current application name
 	 */
@@ -265,7 +267,7 @@ class WRoute {
 	}
 	
 	/**
-	 * Changes the current application to $app
+	 * Changes the current application to $app.
 	 * 
 	 * @param string $app the new application name
 	 */
@@ -274,16 +276,16 @@ class WRoute {
 	}
 	
 	/**
-	 * Returns the arguments of the current application
+	 * Returns the arguments of the current application.
 	 * 
-	 * @return array current application arguments
+	 * @return array Current application arguments
 	 */
 	public static function getArgs() {
 		return WConfig::get('route.args');
 	}
 	
 	/**
-	 * Returns the arguments of the current application
+	 * Returns the arguments of the current application.
 	 * 
 	 * @param int $index Argument index
 	 * @return string Argument corresponding to the index ('' if not found)
@@ -294,7 +296,7 @@ class WRoute {
 	}
 	
 	/**
-	 * Changes the arguments of the current application
+	 * Changes the arguments of the current application.
 	 *  
 	 * @param array $args the new arguments
 	 */

@@ -6,15 +6,14 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WConfig loads all configuration files, manages all configuration values
- *
+ * WConfig loads all configuration files, manages all configuration values.
+ * 
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-22-11-2012
+ * @version 0.4.0-22-11-2012
  */
 class WConfig {
-	
 	/**
 	 * @var array() Multidimensionnal array containing configurations sorted by type
 	 * 
@@ -203,7 +202,7 @@ class WConfig {
 						. "\n"
 						. "$".$field." = ".var_export(self::$configs[$field], true).";\n"
 						. "\n"
-						. "?>";
+						. "?>\n";
 					break;
 				
 				case 'xml':

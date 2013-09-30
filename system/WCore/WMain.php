@@ -9,11 +9,11 @@ require_once SYS_DIR.'WCore'.DS.'WController.php';
 require_once SYS_DIR.'WCore'.DS.'WView.php';
 
 /**
- * WMain is the main class that Wity launches at startup
- *
+ * WMain is the main class that Wity launches at start-up.
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-17-01-2013
+ * @version 0.4.0-27-09-2013
  */
 class WMain {
 	/**
@@ -33,6 +33,9 @@ class WMain {
 		
 		// Initializing sessions
 		$this->setupSession();
+		
+		// Setup Timezone
+		$this->setupTimezone();
 		
 		// Initializing lang
 		WLang::init();
@@ -87,6 +90,28 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
+	}
+	
+	/**
+	 * Setup WityCMS timezone for dates
+	 * Will change PHP and MySQL configuration
+	 */
+	private function setupTimezone() {
+		// Get client timezone
+		$timezone = WDate::getUserTimezone();
+		
+		// Define default GMT timezone if the Server's config is empty
+		$server_timezone = ini_get('date.timezone');
+		if (empty($server_timezone) || $server_timezone != $timezone->getName()) {
+			date_default_timezone_set($timezone->getName());
+		}
+		
+		// Calculates the offset to GMT in Hours
+		$offset = $timezone->getOffset(new DateTime('now', new DateTimeZone('UTC')))/3600;
+		$plus = ($offset >= 0) ? '+' : '';
+		
+		// Change MySQL timezone
+		WSystem::getDB()->query("SET time_zone = '".$plus.$offset.":00'");
 	}
 }
 

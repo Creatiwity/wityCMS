@@ -6,15 +6,14 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WLang manages everything about languages
- *
+ * WLang manages everything about languages.
+ * 
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-06-03-2013
+ * @version 0.4.0-06-03-2013
  */
 class WLang {
-
 	/**
 	 * @var string current language
 	 */

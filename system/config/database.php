@@ -1,8 +1,7 @@
 <?php
+
 /**
  * Database configuration file
- * 
- * @package System
  */
 
 $database = array(
@@ -13,4 +12,5 @@ $database = array(
     'dbname' => 'test',
     'prefix' => ''
 );
+
 ?>

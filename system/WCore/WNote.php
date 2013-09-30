@@ -7,10 +7,10 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * WNote manages all notes : stores, displays, ...
- *
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4-09-06-2013
+ * @version 0.4.0-09-06-2013
  */
 class WNote {
 	/**
@@ -339,7 +339,7 @@ class WNote {
 			$view = new WView();
 			$view->assign('css', '/themes/system/note/note.css');
 			$view->assign('css', '/themes/system/note/note_plain.css');
-			$view->assign('js', '/themes/system/js/jquery-1.8.1.min.js');
+			$view->assign('js', '/libraries/jquery-1.10.2/jquery-1.10.2.min.js');
 			$view->assign('js', '/themes/system/note/note.js');
 			$view->assign('notes_data', $notes_data);
 			$view->setTemplate('themes/system/note/note_plain_view.html');

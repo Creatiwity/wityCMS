@@ -8,14 +8,13 @@ defined('IN_WITY') or die('Access denied');
 require 'view.php';
 
 /**
- * Installer installs Wity on the server (configuration files and MySQL tables)
+ * Installer installs Wity on the server (configuration files and MySQL tables).
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-17-01-2013
+ * @version 0.4.0-17-01-2013
  */
 class Installer {
-
 	private $THEMES_DIR;
 	private $APPS_DIR;
 	private $CONFIG_DIR;

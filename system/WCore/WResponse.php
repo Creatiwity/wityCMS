@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WResponse does...
- *
+ * WResponse compiles the final render of WityCMS that will be sent to the browser.
+ * 
  * @package System\WCore
- * @author Johan Dufau <johandufau@gmail.com>
- * @version 0.4-27-05-2013
+ * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @version 0.4.0-27-05-2013
  */
 class WResponse {
 	/**

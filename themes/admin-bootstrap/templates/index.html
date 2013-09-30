@@ -10,22 +10,21 @@
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Bootstrap -->
-		<link href="/themes/admin-bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/libraries/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/libraries/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet">
 		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet">
-		<link href="/themes/admin-bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-		<link href="/themes/admin-bootstrap/css/bootstrap-modal.css" rel="stylesheet">
+		{if isset({$css})}{$css}{/if}
 
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-		  <script src="/themes/admin-bootstrap/js/html5shiv.js"></script>
+			<script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-
-		{if isset({$css})}{$css}{/if}
-
-		<script src="/themes/admin-bootstrap/js/jquery-1.9.1.min.js"></script>
-		<script src="/themes/admin-bootstrap/js/bootstrap.min.js"></script>
-		<script src="/themes/admin-bootstrap/js/bootstrap-modalmanager.js"></script>
-		<script src="/themes/admin-bootstrap/js/bootstrap-modal.js"></script>
+		
+		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
+		<script src="/libraries/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modalmanager.js"></script>
+		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modal.js"></script>
 		<script src="/themes/admin-bootstrap/js/core-admin.js"></script>
 		{if isset({$js})}{$js}{/if}
 	</head>

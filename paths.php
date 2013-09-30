@@ -5,8 +5,7 @@
  * Content Management System for everyone
  *
  * @package System
- * @author Charly Poly <charly[dot]poly at live[dot]fr>
- * @version 0.3
+ * @version 0.4.0
  */
 
 /**

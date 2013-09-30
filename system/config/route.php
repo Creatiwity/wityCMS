@@ -2,9 +2,8 @@
 
 /**
  * Route configuration file
- * 
- * @package System
  */
+
 $route = array(
     'default' => array(
         0 => 'news',
@@ -16,13 +15,7 @@ $route = array(
         1 => array(
         ),
     ),
-    'custom' => array(
-        'test-custom-route' => array(
-            0 => 'app_name',
-            1 => array(
-                0 => 'arg1',
-            ),
-        ),
-    ),
+    'custom' => array(),
 );
+
 ?>

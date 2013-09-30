@@ -6,19 +6,18 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WSystem keeps the session, template and database instances as singletons
+ * WSystem keeps the session, template and database instances as singletons.
  * 
  * <p>If you need the WSession instance, just call :
  * <code>WSystem::getSession();</code>
  * It's the same thing with WTemplate andWDatabase.
  * </p>
- *
+ * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.3-28-09-2012
+ * @version 0.4.0-28-09-2012
  */
 class WSystem {
-	
 	/**
 	 * @var WSession Session object
 	 */
@@ -40,7 +39,7 @@ class WSystem {
 	 */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
-			include_once SYS_DIR.'WCore/WSession.php';
+			require_once SYS_DIR.'WCore/WSession.php';
 			self::$sessionInstance = new WSession();
 		}
 		
@@ -53,7 +52,7 @@ class WSystem {
 	 */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
-			include_once SYS_DIR.'WTemplate/WTemplate.php';
+			require_once SYS_DIR.'WTemplate/WTemplate.php';
 			try {
 				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
 			} catch (Exception $e) {
