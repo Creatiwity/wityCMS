@@ -63,16 +63,22 @@ class WMain {
 			
 			$model = WRetriever::getModel($app_name, $params);
 			if ($mode == 'm') {
-				$response = array('model' => $model);
-				
+				$response = array(
+					'app-name' => $app_name,
+					'model' => $model
+				);
 			} else if ($mode == 'v') {
 				$view = WRetriever::getView($app_name, $params)->render();
 				
-				$response = array('view'  => $view);
+				$response = array(
+					'app-name' => $app_name,
+					'view'  => $view
+				);
 			} else if ($mode == 'mv') {
 				$view = WRetriever::getView($app_name, $params)->render();
 				
 				$response = array(
+					'app-name' => $app_name,
 					'model' => $model,
 					'view'  => $view
 				);
