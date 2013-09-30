@@ -110,6 +110,7 @@ class Installer {
 					WConfig::set('config.site_name', $config['site_name']);
 					WConfig::set('config.theme', $config['theme']);
 					WConfig::set('config.lang', $config['lang']);
+					WConfig::set('config.timezone', 'Europe/Paris');
 					WConfig::set('config.email', $user['email']);
 					WConfig::set('config.debug', false);
 					WConfig::save('config', CONFIG_DIR.'config.php');
