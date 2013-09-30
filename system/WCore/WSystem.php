@@ -55,8 +55,13 @@ class WSystem {
 			require_once SYS_DIR.'WTemplate/WTemplate.php';
 			try {
 				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
+				
+				// Checks the compile directory in Debug mode
+				if (self::$templateInstance->getCompileDir() == '' && WConfig::get('config.debug')) {
+					WNote::info('system_template_init', "Impossible to create cache directory in ".CACHE_DIR.'templates'.DS.".");
+				}
 			} catch (Exception $e) {
-				WNote::error('system_template_instantiation', $e->getMessage(), 'die');
+				WNote::error('system_template_init', $e->getMessage(), 'die');
 			}
 		}
 		

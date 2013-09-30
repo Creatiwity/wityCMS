@@ -209,12 +209,10 @@ class WRoute {
 		$array = explode('/', $url);
 		// Given application name
 		if (!empty($array[0])) {
-			$routage[] = strtolower(array_shift($array));
+			$routage[0] = strtolower(array_shift($array));
 			if (sizeof($array) > 0) {
 				// Storing arguments
-				$routage[] = $array;
-			} else {
-				$routage[] = array();
+				$routage[1] = $array;
 			}
 		}
 		
