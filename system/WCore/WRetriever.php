@@ -140,8 +140,6 @@ class WRetriever {
 			return self::$controllers[$app_name];
 		}
 		
-		$controller = null;
-		
 		// App asked exists?
 		if (self::isApp($app_name)) {
 			// App controller file
@@ -181,17 +179,17 @@ class WRetriever {
 				
 				// Init
 				$controller->init($context);
+				
+				// Store the controller
+				self::$controllers[$app_name] = $controller;
+				
+				return $controller;
 			} else {
 				return WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.");
 			}
 		} else {
 			return WNote::error(404, "The page requested was not found.");
 		}
-		
-		// Store the controller
-		self::$controllers[$app_name] = $controller;
-		
-		return $controller;
 	}
 	
 	/**
