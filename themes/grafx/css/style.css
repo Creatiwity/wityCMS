@@ -20,11 +20,12 @@ body {
 }
 
 a {
-	
+	color: #a0a0a0;
+	text-decoration: none;
 }
 
 a:hover {
-	
+	color: #91cadf;
 }
 
 /**
@@ -40,7 +41,7 @@ a:hover {
 
 .block {
 	background: white;
-	padding: 30px;
+	padding: 10px 30px;
 	margin-bottom: 15px;
 }
 
@@ -114,7 +115,33 @@ nav ul li em {
  * News
  */
 
+.app-news .item {
+	border-bottom: 1px solid #91cadf;
+	margin-bottom: 1em;
+}
 
+.app-news .item-title {
+	font-size: 1.1em;
+	background: url('../img/button-plus-green.png') no-repeat left center;
+	margin: 0;
+	padding: 10px 0 8px 28px;
+}
 
+.app-news .item-meta {
+	font-size: 0.9em;
+	font-style: italic;
+	margin-bottom: 1em;
+	padding-left: 28px;
+	position: relative;
+	top: -10px;
+}
 
+.app-news .news-read-more {
+	text-align: right;
+}
+
+.app-news .news-read-more a {
+	background: url('../img/button-read-more.png') no-repeat left center;
+	padding-left: 20px;
+}
 

@@ -3,9 +3,9 @@
 	{for $n in $news}
 		<div class="item">
 			<h2 class="item-title">{$n.news_title}</h2>
-			<span class="item-meta">{lang news_meta|{$n.news_author}|{$n.news_date}}</em>
+			<span class="item-meta">{lang news_meta|{$n.news_author}|{$n.news_date}}</span>
 			<div class="item-content">{$n.news_content}</div>
-			<a href="#" class="news-read-more">{lang read_more}</a>
+			<p class="news-read-more"><a href="/news/{$n.news_id}-{$n.news_url}">{lang read_more}</a></p>
 		</div>
 	{/for}
 	</div>
