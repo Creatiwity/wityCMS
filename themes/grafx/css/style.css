@@ -3,14 +3,35 @@
  * 29/09/2013
  */
 
+html {
+	font-size: 1em;
+}
+
 body {
+	font-family: Arial, Helvetica, FreeSans, sans-serif;
+	font-size: 0.8em;
+	color: #a0a0a0;
 	background: url('../img/bg.png') repeat-x;
 	padding: 30px;
 }
 
-#wrapper {
+.clear {
+	clear: both;
+}
+
+a {
+	
+}
+
+a:hover {
+	
+}
+
+/**
+ * Structure
+ */
+.container {
 	width: 70%;
-	margin: auto;
 }
 
 #column-content, #column-blocks {
@@ -22,3 +43,78 @@ body {
 	padding: 30px;
 	margin-bottom: 15px;
 }
+
+/**
+ * Header
+ */
+
+header {
+	color: white;
+	font-weight: bold;
+}
+
+header img {
+	float: left;
+}
+
+header .inner {
+	display: inline-block;
+	text-align: right;
+	padding-top: 50px;
+}
+
+header h1 {
+	text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+header p {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: -10px;
+	z-index: -5;
+}
+
+/**
+ * Navigation
+ */
+
+nav {
+	background: white; 
+}
+
+nav ul li a {
+	color: #a0a0a0;
+}
+
+nav ul li a:hover {
+	color: #91cadf;
+}
+
+nav ul li a span {
+	font-size: 1.4em;
+}
+
+nav ul li em {
+	font-style: normal;
+}
+
+.navbar-toggle {
+	border-color: #dddddd;
+}
+
+.icon-bar {
+	background-color: #dddddd;
+}
+
+/**
+ * News
+ */
+
+
+
+
+
