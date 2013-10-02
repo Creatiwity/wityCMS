@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="en">
+	<!-- Actions -->
+	<item id="mail_history">Inbox</item>
+	<item id="mail_reply">Reply</item>
+	<item id="new_mail">Compose</item>
+</lang>
