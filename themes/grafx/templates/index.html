@@ -18,6 +18,7 @@
 		
 		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
 		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+		<script src="/themes/grafx/js/script.js"></script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
@@ -25,8 +26,8 @@
 			<header>
 				<img src="/themes/grafx/img/logo.png" alt="logo" />
 				<div class="inner">
-					<h1>{$site_name}</h1>
-					<p>your slogan here</p>
+					<p class="site-name">{$site_name}</p>
+					<p class="slogan">your slogan here</p>
 				</div>
 				<div class="clear"></div>
 			</header>
@@ -41,7 +42,6 @@
 					</button>
 					<a class="navbar-brand" href="#"><img src="/themes/grafx/img/button-plus.png" alt="Plus" /></a>
 				</div>
-
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav">
@@ -60,9 +60,9 @@
 					</ul>
 					<form class="navbar-form navbar-right" role="search">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Search" />
+							<input type="text" class="form-control" placeholder="Search the website" size="30" />
 						</div>
-						<button type="submit" class="btn btn-default">Submit</button>
+						<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
 					</form>
 				</div><!-- /.navbar-collapse -->
 			</nav>
@@ -74,11 +74,32 @@
 					</div>
 				</div>
 				<div id="column-blocks" class="col-md-4">
-					<div class="block">
-						<p>Test</p>
-					</div>
+					<aside class="block-user block">
+						<p class="text-center buttons">
+							<a class="button-sign-in" href="/user/register/">Sign in <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
+							<a class="button-login" href="/user/login/"><img src="/themes/grafx/img/login.png" alt="Login" /> Login</a>
+						</p>
+						<div class="sign-in closed">
+							{retrieve_view user/register}
+						</div>
+						<div class="login closed">
+							{retrieve_view user/login}
+						</div>
+					</aside>
+					<aside class="block">
+						<h2>Titre du block</h2>
+						<ul class="listing">
+							<li>Test</li>
+							<li>Test</li>
+							<li>Test</li>
+							<li>Test</li>
+						</ul>
+					</aside>
 				</div>
 			</div>
+			<footer class="text-center">
+				<p>Creatiwity 2013</p>
+			</footer>
 		</div>
 	</body>
 </html>
