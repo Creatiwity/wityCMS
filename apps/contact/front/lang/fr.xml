@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang value="fr">
-	
+	<!-- Form -->
+	<item id="from_name_label">Votre nom</item>
+	<item id="from_name_placeholder">Nom</item>
+
+	<item id="from_company_label">Organisme</item>
+	<item id="from_company_placeholder">Organisme</item>
+
+	<item id="from_email_label">Votre e-mail</item>
+	<item id="from_email_placeholder">E-mail</item>
+
+	<item id="email_object_label">Objet</item>
+	<item id="email_object_placeholder">Objet</item>
+
+	<item id="email_message_label">Message</item>
+	<item id="email_message_placeholder">Message</item>
+
+	<item id="send_button">Envoyer</item>
 </lang>
