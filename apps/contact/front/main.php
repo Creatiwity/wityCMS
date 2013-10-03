@@ -31,7 +31,7 @@ class ContactController extends WController {
 
 			if (empty($data['from_email'])) {
 				$errors[] = WLang::get("no_from_email");
-			} else if (!preg_match('#^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$#i', $data['email'])) {
+			} else if (!preg_match('#^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$#i', $data['from_email'])) {
 				$errors[] = WLang::get("invalid_from_email");
 			}
 
@@ -50,11 +50,11 @@ class ContactController extends WController {
 			 */
 			
 			if (empty($errors)) {
-				if (!is_null($userid)) {
-					$data['from_id'] = $userid;
+				if (!is_null($user_id)) {
+					$data['userid'] = $user_id;
 				}
 
-				if ($this->sendMail($data)) {			
+				if ($this->sendMail($data)) {		
 					$this->view->setHeader('Location', Wroute::getDir());
 					return WNote::success('email_sent', WLang::get('email_sent'));
 				} else {
@@ -91,20 +91,24 @@ class ContactController extends WController {
 			return false;
 		}
 
-		$universalAdd = function ($param, $fn) {
-			if(!empty($param)) {
-				if (!is_array($param)) {
-					$fn($param);
-				} else {
-					foreach ($param as $val) {
-						if (is_array($val)) {
-							$fn($val[0], $val[1]);
-						} else {
-							$fn($val);
+		$universalAdd = function ($param, $key, $fn) {
+			if(isset($param[$key])) {
+				$param = $param[$key];
+
+				if(!empty($param)) {
+					if (!is_array($param)) {
+						call_user_func($fn, $param);
+					} else {
+						foreach ($param as $val) {
+							if (is_array($val)) {
+								call_user_func($fn, $val[0], $val[1]);
+							} else {
+								call_user_func($fn, $val);
+							}
 						}
 					}
 				}
-			}
+			}			
 		};
 
 		// Send mail
@@ -113,10 +117,10 @@ class ContactController extends WController {
 		$phpmailer->From = $params['from_email'];
 		$phpmailer->FromName = $params['from_name'];
 
-		$universalAdd($params['to'], $phpmailer->addAddress);
-		$universalAdd($params['cc'], $phpmailer->addCC);
-		$universalAdd($params['bcc'], $phpmailer->addBCC);
-		$universalAdd($params['reply_to'], $phpmailer->addReplyTo);
+		$universalAdd($params, 'to', array($phpmailer, 'addAddress'));
+		$universalAdd($params, 'cc', array($phpmailer, 'addCC'));
+		$universalAdd($params, 'bcc', array($phpmailer, 'addBCC'));
+		$universalAdd($params, 'reply_to', array($phpmailer, 'addReplyTo'));
 
 		$phpmailer->isHTML(true);
 		$phpmailer->Subject = $params['email_subject'];
@@ -134,7 +138,7 @@ class ContactController extends WController {
 		$phpmailer->From = $config['site_from_name'][1];
 		$phpmailer->FromName = $config['site_from_name'][0];
 
-		$universalAdd(array(array($params['from_email'], $params['from_name'])), $phpmailer->addAddress);
+		$universalAdd(array(array(array($params['from_email'], $params['from_name']))), 0, array($phpmailer, 'addAddress'));
 
 		$phpmailer->isHTML(true);
 		$phpmailer->Subject = WLang::get('copy_subject');

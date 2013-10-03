@@ -16,7 +16,7 @@ class WNote {
 	/**
 	 * Note levels
 	 */
-	const ERROR   = 'error';
+	const ERROR   = 'danger';
 	const INFO    = 'info';
 	const SUCCESS = 'success';
 	

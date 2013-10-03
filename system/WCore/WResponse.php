@@ -115,11 +115,11 @@ class WResponse {
 			$html = $this->tpl->parse($themeMainFile);
 			
 			// Add forgotten CSS and JS
-			$html = str_replace(
+			/*$html = str_replace(
 				'</head>',
 				$this->tpl->getVar('css').$this->tpl->getVar('js').'</head>',
 				$html
-			);
+			);*/
 			
 			// Absolute links fix
 			// Automatically updates the links with WityCMS path
