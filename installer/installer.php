@@ -55,8 +55,6 @@ class Installer {
 					$this->view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
 					return;
 				}
-				
-				$this->view->info('installer', $data['installer'], 'Installer initialized', 'The Installer has been successfully initialized.');
 				break;
 			
 			case 'FINISH_INSTALLATION':

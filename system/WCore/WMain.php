@@ -34,6 +34,9 @@ class WMain {
 		// Initializing sessions
 		$this->setupSession();
 		
+		// Setup Timezone
+		$this->setupTimezone();
+		
 		// Initializing lang
 		WLang::init();
 		
@@ -52,7 +55,6 @@ class WMain {
 		// Setup the main app to execute
 		$app_name = WRoute::getApp();
 		$params = WRoute::getArgs();
-		
 		$mode = WConfig::get('route.response');
 		
 		if (!empty($mode)) {
@@ -121,6 +123,28 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
+	}
+	
+	/**
+	 * Setup WityCMS timezone for dates
+	 * Will change PHP and MySQL configuration
+	 */
+	private function setupTimezone() {
+		// Get client timezone
+		$timezone = WDate::getUserTimezone();
+		
+		// Define default GMT timezone if the Server's config is empty
+		$server_timezone = ini_get('date.timezone');
+		if (empty($server_timezone) || $server_timezone != $timezone->getName()) {
+			date_default_timezone_set($timezone->getName());
+		}
+		
+		// Calculates the offset to GMT in Hours
+		$offset = $timezone->getOffset(new DateTime('now', new DateTimeZone('UTC')))/3600;
+		$plus = ($offset >= 0) ? '+' : '';
+		
+		// Change MySQL timezone
+		WSystem::getDB()->query("SET time_zone = '".$plus.$offset.":00'");
 	}
 }
 

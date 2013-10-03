@@ -29,9 +29,13 @@ class WResponse {
 	private $theme_dir;
 	
 	public function __construct($default_theme) {
-		$this->tpl = WSystem::getTemplate();
-		
 		$this->setTheme($default_theme);
+		
+		// Load WTemplate
+		$this->tpl = WSystem::getTemplate();
+		if (is_null($this->tpl)) {
+			throw new Exception("WResponse::__construct(): WTemplate cannot be loaded.");
+		}
 		
 		// Default vars
 		$site_name = WConfig::get('config.site_name');

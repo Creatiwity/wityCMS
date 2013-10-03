@@ -64,25 +64,22 @@ class WRetriever {
 		}
 		
 		// Get model
-		$model = array();
 		if ($controller instanceof WController) {
-			$return = $controller->launch($params);
+			$model = $controller->launch($params);
 			
 			// Model must be an array
-			if (!empty($return)) {
-				if (is_array($return)) {
-					$model = $return;
+			if (!empty($model)) {
+				if (is_array($model)) {
+					return $model;
 				} else {
-					$model = array('result' => $return);
+					return array('result' => $model);
 				}
 			}
+		} else {
+			return $controller;
 		}
 		
-		// Apply some Dynamic Permissions on the model
-		
-		
-		// Return the model
-		return $model;
+		return array();
 	}
 	
 	/**
@@ -127,7 +124,7 @@ class WRetriever {
 			return $view;
 		} else {
 			// Return a WView with error
-			return new WView();
+			return WNote::getView(array($controller));
 		}
 	}
 	
@@ -142,8 +139,6 @@ class WRetriever {
 		if (isset(self::$controllers[$app_name])) {
 			return self::$controllers[$app_name];
 		}
-		
-		$controller = null;
 		
 		// App asked exists?
 		if (self::isApp($app_name)) {
@@ -184,17 +179,17 @@ class WRetriever {
 				
 				// Init
 				$controller->init($context);
+				
+				// Store the controller
+				self::$controllers[$app_name] = $controller;
+				
+				return $controller;
 			} else {
-				WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.");
+				return WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.");
 			}
 		} else {
-			WNote::error(404, "The page requested was not found.");
+			return WNote::error(404, "The page requested was not found.");
 		}
-		
-		// Store the controller
-		self::$controllers[$app_name] = $controller;
-		
-		return $controller;
 	}
 	
 	/**

@@ -41,7 +41,9 @@ class AdminController extends WController {
 				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
 				$app_class = ucfirst($this->appAsked).'AdminController';
 				
-				include_once $app_dir.'main.php';
+				if (file_exists($app_dir.'main.php')) {
+					include_once $app_dir.'main.php';
+				}
 				
 				if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
 					$this->appController = new $app_class();
@@ -83,15 +85,15 @@ class AdminController extends WController {
 					
 					return $model;
 				} else {
-					WNote::error('app_structure', "The application \"".$this->appAsked."\" has to have a main class inheriting from WController abstract class.", 'display');
+					return WNote::error('app_structure', "No Admin implementation found for application \"".$this->appAsked."\".");
 				}
 			} else {
 				// Config du template
 				$this->configTheme();
-				WNote::error('admin_no_access', "No suitable application to display was found. Please, select one from the menu.", 'display');
+				return WNote::info('admin_no_access', "No suitable application to display was found. Please, select one from the menu.");
 			}
 		} else {
-			WNote::error('admin_access_forbidden', "You do not have access to the administration.", 'display');
+			return WNote::error('admin_access_forbidden', "You do not have access to the administration.");
 		}
 	}
 	

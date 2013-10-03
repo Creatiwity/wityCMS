@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
-		<meta charset="utf-8"/>
-
 		<title>{$page_title}</title>
-
-		<meta name="Language" content="fr" />
-		<meta name="Robots" content="nofollow" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
 		<!-- Bootstrap -->
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet">
-		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet">
-		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet">
+		<link href="/libraries/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="/libraries/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet" />
+		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
-
+		
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-			<script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
+			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
 		
 		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
@@ -54,7 +52,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2">
@@ -76,13 +73,10 @@
 					<div class="row-fluid">{$include}</div>				
 				</div><!--/span-->
 			</div><!--/row-->
-
-			<hr>
-
+			<hr />
 			<footer>
 				<p>&copy; WityCMS Administration 2013</p>
 			</footer>
-
 		</div><!--/.fluid-container-->
 	</body>
 </html>
