@@ -1,9 +1,12 @@
-<div id="article_listing">
-{for $n in $news}
-	<div class="item">
-		<h2>{$n.news_title}</h2>
-		<em>Rédigé par {$n.news_author}, le {$n.news_date}</em>
-		<div>{$n.news_content}</div>
+<div class="app-news">
+	<div class="listing">
+	{for $n in $news}
+		<article class="item">
+			<h1 class="item-title">{$n.news_title}</h1>
+			<span class="item-meta">{lang news_meta|{$n.news_author}|{$n.news_date}}</span>
+			<div class="item-content">{$n.news_content}</div>
+			<p class="news-read-more"><a href="/news/{$n.news_id}-{$n.news_url}">{lang read_more}</a></p>
+		</article>
+	{/for}
 	</div>
-{/for}
 </div>
