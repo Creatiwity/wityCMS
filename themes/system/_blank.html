@@ -6,8 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		
 		<!-- Bootstrap -->
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
 		
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -16,11 +15,11 @@
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
 		
-		<script src="/libraries/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
-		<div id="wrapper">
+		<div class="container">
 			{$notes}
 			{$include}
 		</div>
