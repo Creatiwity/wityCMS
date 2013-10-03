@@ -55,13 +55,46 @@ class WMain {
 		// Setup the main app to execute
 		$app_name = WRoute::getApp();
 		$params = WRoute::getArgs();
+		$mode = WConfig::get('route.response');
 		
-		// Get the main application's view
-		$view = WRetriever::getView($app_name, $params);
-		
-		// Render the final response
-		$response = new WResponse(WConfig::get('config.theme'));
-		$response->render($view);
+		if (!empty($mode)) {
+			$format = strtoupper(WConfig::get('route.format'));
+			if (empty($format) || !in_array($format, array('JSON', 'XML', 'YAML'))) {
+				$format = 'JSON';
+			}
+			
+			$model = WRetriever::getModel($app_name, $params);
+			if ($mode == 'm') {
+				$response = array(
+					'app-name' => $app_name,
+					'model' => $model
+				);
+			} else if ($mode == 'v') {
+				$view = WRetriever::getView($app_name, $params)->render();
+				
+				$response = array(
+					'app-name' => $app_name,
+					'view'  => $view
+				);
+			} else if ($mode == 'mv') {
+				$view = WRetriever::getView($app_name, $params)->render();
+				
+				$response = array(
+					'app-name' => $app_name,
+					'model' => $model,
+					'view'  => $view
+				);
+			}
+			
+			echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		} else {
+			// Get the view
+			$view = WRetriever::getView($app_name, $params);
+			
+			// Render the final response
+			$response = new WResponse(WConfig::get('config.theme'));
+			$response->render($view);
+		}
 	}
 	
 	/**
