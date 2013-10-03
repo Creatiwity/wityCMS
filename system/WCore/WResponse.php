@@ -111,28 +111,20 @@ class WResponse {
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $view->render());
 			
-			// Render the theme
-			$html = $this->tpl->parse($themeMainFile);
-			
-			// Add forgotten CSS and JS
-			$html = str_replace(
-				'</head>',
-				$this->tpl->getVar('css').$this->tpl->getVar('js').'</head>',
-				$html
-			);
-			
-			// Absolute links fix
-			// Automatically updates the links with WityCMS path
 			$dir = WRoute::getDir();
-			if (!empty($dir)) {
-				$html = str_replace(
+			if (empty($dir)) {
+				// Direct render
+				$this->tpl->display($themeMainFile);
+			} else {
+				// Absolute links fix
+				// If $dir is not the root file, then change links
+				$html = $this->tpl->parse($themeMainFile);
+				echo str_replace(
 					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
 					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
 					$html
 				);
 			}
-			
-			echo $html;
 		} catch (Exception $e) {
 			WNote::error('response_final_render', $e->getMessage(), 'die');
 			return false;
