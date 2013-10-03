@@ -79,6 +79,52 @@ class WRoute {
 	}
 	
 	/**
+	 * Parses the web page URL.
+	 * 
+	 * @param string $url Web page URL
+	 * @return array The route such as array("app_name", array("arg1", "arg2"))
+	 */
+	private static function parseURL($url) {
+		$routage = array('', array());
+		
+		// Cleaning
+		$url = trim($url, '/');
+		$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
+		$url = preg_replace('#\?.*$#', '', $url); // Remove query string
+		
+		$array = explode('/', $url);
+		// Given application name
+		if (!empty($array[0])) {
+			$first = strtolower(array_shift($array));
+			
+			// Check for mode given at the beginning
+			// - m: model will be returned
+			// - v: view will be returned
+			// - mv: model+view will be returned
+			$equal_pos = strpos($first, '=');
+			$first_min = ($equal_pos !== false) ? substr($first, 0, $equal_pos) : $first;
+			if (in_array($first_min, array('m', 'v', 'mv'))) {
+				WConfig::set('route.response', $first_min);
+				if ($equal_pos !== false) {
+					WConfig::set('route.format', substr($first, $equal_pos));
+				}
+				
+				// App name
+				$routage[0] = strtolower(array_shift($array));
+			} else {
+				$routage[0] = $first;
+			}
+			
+			// Arguments
+			if (sizeof($array) > 0) {
+				$routage[1] = $array;
+			}
+		}
+		
+		return $routage;
+	}
+	
+	/**
 	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php.
 	 * 
 	 * If the website address is http://mysite.com/wity/user/login,
@@ -193,33 +239,6 @@ class WRoute {
 	}
 	
 	/**
-	 * Parses the web page URL.
-	 * 
-	 * @param string $url Web page URL
-	 * @return array The route such as array("app_name", array("arg1", "arg2"))
-	 */
-	private static function parseURL($url) {
-		$routage = array('', array());
-		
-		// Cleaning
-		$url = trim($url, '/');
-		$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
-		$url = preg_replace('#\?.*$#', '', $url); // Remove query string
-		
-		$array = explode('/', $url);
-		// Given application name
-		if (!empty($array[0])) {
-			$routage[0] = strtolower(array_shift($array));
-			if (sizeof($array) > 0) {
-				// Storing arguments
-				$routage[1] = $array;
-			}
-		}
-		
-		return $routage;
-	}
-	
-	/**
 	 * Checks if the route structure is correct.
 	 * 
 	 * A good structure example :
@@ -229,7 +248,7 @@ class WRoute {
 	 * @return boolean true if the structure is good, false otherwise
 	 */
 	private static function checkRouteStructure(array $routage) {
-		if (sizeof($routage) == 2) {
+		if (sizeof($routage) >= 2) {
 			if (is_string($routage[0])) {
 				if (is_array($routage[1])) {
 					return true;
