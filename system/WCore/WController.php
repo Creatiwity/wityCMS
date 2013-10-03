@@ -96,7 +96,8 @@ abstract class WController {
 	 */
 	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
-			if ($this->hasAccess($this->getAppName(), $action)) {
+			$access_result = $this->hasAccess($this->getAppName(), $action);
+			if ($access_result === true) {
 				$this->action = $action;
 				
 				// Execute action
@@ -106,6 +107,8 @@ abstract class WController {
 					// return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
 					return array();
 				}
+			} else if (is_array($access_result)) {
+				return $access_result; // hasAccess returned a note
 			} else {
 				return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
 			}
@@ -400,7 +403,7 @@ abstract class WController {
 	 * @param string  $app    Name of the app
 	 * @param string  $action Action in the app to be checked (can be empty '' to check overall app access)
 	 * @param boolean $admin  Admin context (default to Wity admin context)
-	 * @return boolean
+	 * @return boolean|array
 	 */
 	public function hasAccess($app, $action = '', $admin = null) {
 		if (is_null($admin)) {
@@ -417,6 +420,7 @@ abstract class WController {
 			if (empty($_SESSION['access'])) {
 				return false;
 			}
+			
 			if ($_SESSION['access'] == 'all') {
 				return true;
 			} else if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
@@ -432,12 +436,12 @@ abstract class WController {
 							
 							default:
 								if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
-									WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
-									return false;
+									return WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.');
 								}
 								break;
 						}
 					}
+					
 					return true;
 				}
 			}
@@ -450,29 +454,28 @@ abstract class WController {
 					switch ($req) {
 						case 'not-connected':
 							if (WSession::isConnected()) {
-								WNote::error('app_logout_required', 'The '.$action.' action of the application '.$app.' requires to be loged out.', 'display');
-								return false;
+								return WNote::error('app_logout_required', 'The '.$action.' action of the application '.$app.' requires to be loged out.');
 							}
 							break;
 						
 						case 'connected':
 							if (!WSession::isConnected()) {
-								WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.', 'display');
-								return false;
+								return WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.');
 							}
 							break;
 						
 						default:
 							if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
-								WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
-								return false;
+								return WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.');
 							}
 							break;
 					}
 				}
+				
 				return true;
 			}
 		}
+		
 		return false;
 	}
 }
