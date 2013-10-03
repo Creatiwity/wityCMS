@@ -40,7 +40,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><img src="/themes/grafx/img/button-plus.png" alt="Plus" /></a>
+					<a class="navbar-brand" href="/"><img src="/themes/grafx/img/button-plus.png" alt="Plus" /></a>
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -74,6 +74,7 @@
 					</div>
 				</div>
 				<div id="column-blocks" class="col-md-4">
+					<?php if (empty($_SESSION['userid'])): ?>
 					<aside class="block-user block">
 						<p class="text-center buttons">
 							<a class="button-sign-in" href="/user/register/">Sign in <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
@@ -86,6 +87,7 @@
 							{retrieve_view user/login}
 						</div>
 					</aside>
+					<?php endif; ?>
 					<aside class="block">
 						<h2>Titre du block</h2>
 						<ul class="listing">
