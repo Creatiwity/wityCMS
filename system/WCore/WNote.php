@@ -16,7 +16,7 @@ class WNote {
 	/**
 	 * Note levels
 	 */
-	const ERROR   = 'error';
+	const ERROR   = 'danger';
 	const INFO    = 'info';
 	const SUCCESS = 'success';
 	
@@ -143,7 +143,7 @@ class WNote {
 				$plain_view = self::getPlainView();
 				
 				if (!is_null($plain_view)) {
-					$response = new WResponse('_blank');
+					$response = new WResponseTheme('_blank');
 					if ($response->render($plain_view)) {
 						die;
 					}
@@ -284,7 +284,6 @@ class WNote {
 		}
 		
 		$view = new WView();
-		$view->assign('css', '/themes/system/note/note.css');
 		$view->assign('notes_data', $notes_data);
 		$view->setTemplate('themes/system/note/note_view.html');
 		
@@ -304,7 +303,6 @@ class WNote {
 			
 			// Prepare a new view
 			$view = new WView();
-			$view->assign('css', '/themes/system/note/note.css');
 			$view->assign('css', '/themes/system/note/note_plain.css');
 			$view->assign('js', '/libraries/jquery-1.10.2/jquery-1.10.2.min.js');
 			$view->assign('js', '/themes/system/note/note.js');
