@@ -10,11 +10,32 @@
 	<item id="from_email_label">Your e-mail</item>
 	<item id="from_email_placeholder">E-mail</item>
 
-	<item id="email_object_label">Object</item>
-	<item id="email_object_placeholder">Object</item>
+	<item id="email_subject_label">Subject</item>
+	<item id="email_subject_placeholder">Subject</item>
 
 	<item id="email_message_label">Message</item>
 	<item id="email_message_placeholder">Message</item>
 
 	<item id="send_button">Send</item>
+
+	<!-- Auto reply -->
+	<item id="copy_subject">E-mail successfully sent</item>
+	<item id="auto_reply">Hi,&lt;br/&gt;&lt;br/&gt; your e-mail with the subject &lt;i/&gt;%s&lt;i/&gt; has been successfully sent.&lt;br/&gt;&lt;br/&gt;&lt;b/&gt;%s&lt;b/&gt;</item>
+
+	<!-- Errors -->
+	<item id="no_from_name">Your name is missing.</item>
+	<item id="no_from_email">Your e-mail address is missing.</item>
+	<item id="invalid_from_email">Your e-mail address is invalid.</item>
+	<item id="no_email_subject">The subject of this e-mail is missing.</item>
+	<item id="no_email_message">The body of this e-mail is missing.</item>
+
+	<item id="email_not_sent">Sorry, unable to send this email. The administrator will be informed, please try again later.</item>
+
+	<item id="missing_configuration">The 'from' field is not configured in the 'contact' application. Unable to send mails. Here is the last e-mail that I tried to send: &lt;br/&gt;%s.</item>
+
+	<item id="unable_to_save_email">I was unable to save the last e-mail in the database but I sent it. Here is the last e-mail I tried to save: &lt;br/&gt;%s.</item>
+
+	<!-- Success -->
+	<item id="email_sent">E-mail successfully sent.</item>
+
 </lang>

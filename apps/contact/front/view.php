@@ -16,7 +16,9 @@ defined('IN_WITY') or die('Access denied');
 class ContactView extends WView {
 
 	public function form($data) {
-		// $this->assign('news', $data);
+		$this->assign('js', '/apps/contact/front/js/validator.js');
+		$this->assign('from_email', $data['from_email']);
+		$this->assign('from_name', $data['from_name']);
 	}
 
 }

@@ -10,11 +10,32 @@
 	<item id="from_email_label">Votre e-mail</item>
 	<item id="from_email_placeholder">E-mail</item>
 
-	<item id="email_object_label">Objet</item>
-	<item id="email_object_placeholder">Objet</item>
+	<item id="email_subject_label">Objet</item>
+	<item id="email_subject_placeholder">Objet</item>
 
 	<item id="email_message_label">Message</item>
 	<item id="email_message_placeholder">Message</item>
 
 	<item id="send_button">Envoyer</item>
+
+	<!-- Auto reply -->
+	<item id="copy_subject">E-mail envoyé</item>
+	<item id="auto_reply">Bonjour,&lt;br/&gt;&lt;br/&gt; l'e-mail ayant pour objet &lt;i/&gt;%s&lt;i/&gt; a bien été envoyé.&lt;br/&gt;&lt;br/&gt;&lt;b/&gt;%s&lt;b/&gt;</item>
+
+	<!-- Errors -->
+	<item id="no_from_name">Il manque votre nom.</item>
+	<item id="no_from_email">Il manque votre adresse mail.</item>
+	<item id="invalid_from_email">Votre adresse mail semble invalide.</item>
+	<item id="no_email_subject">Il manque l'objet du mail.</item>
+	<item id="no_email_message">Il manque le corps de ce mail.</item>
+
+	<item id="email_not_sent">Nous sommes désolés mais ce mail n'a pas pu être envoyé. Cependant l'administrateur a été prévenu de l'erreur, nous vous invitons donc à réessayer plus tard.</item>
+
+	<item id="missing_configuration">Le champs 'De' n'est pas configuré dans l'application contact. Il est donc impossible d'envoyer un mail depuis cette application. Voici le dernier mail que j'ai essayé d'envoyer : &lt;br/&gt;%s.</item>
+
+	<item id="unable_to_save_email">J'ai été incapable d'enregistrer le dernier mail dans la base de données mais je l'ai tout de même envoyé. Voici le dernier mail que j'ai essayé d'enregistrer : &lt;br/&gt;%s.</item>
+
+	<!-- Success -->
+	<item id="email_sent">E-mail envoyé.</item>
+
 </lang>
