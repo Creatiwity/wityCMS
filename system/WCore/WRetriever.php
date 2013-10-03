@@ -249,7 +249,7 @@ class WRetriever {
 			$args[0] = trim($args[0], '/');
 			$route = explode('/', $args[0]);
 			
-			if (count($route) >= 2) {
+			if (count($route) >= 1) {
 				// Extract the relevant data
 				$app_name = addslashes(array_shift($route));
 				$params = '';

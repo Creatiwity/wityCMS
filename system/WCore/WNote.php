@@ -188,7 +188,7 @@ class WNote {
 	public static function handle_log(array $note) {
 		$file = fopen(SYS_DIR.'wity.log', 'a+');
 		$text = sprintf("[%s] [%s] [user %s|%s] [route %s] %s - %s\r\n", 
-			date('d/m/Y H:i:s', time()), 
+			(new WDate())->__toString(), 
 			$note['level'], 
 			@$_SESSION['userid'], 
 			$_SERVER['REMOTE_ADDR'], 
