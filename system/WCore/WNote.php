@@ -170,23 +170,6 @@ class WNote {
 	}
 	
 	/**
-	 * Renders the note as the main application
-	 * 
-	 * @param array $note Note as returned by WNote::raise()
-	 */
-	public static function handle_display(array $note) {
-		// Prepare a new view with the note
-		$view = new WView();
-		$view->assign('css', '/themes/system/note/note.css');
-		$view->assign('notes_data', array($note));
-		$view->setTemplate('themes/system/note/note_view.html');
-		
-		// Render the response
-		$response = new WResponse('_blank');
-		$response->render($view);
-	}
-	
-	/**
 	 * Handles note to be displayed in a plain HTML View.
 	 * Oftenly used for failover purposes (a view did not manage to render since theme cannot be found for instance).
 	 * 

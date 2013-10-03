@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>{$page_title}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<!-- Bootstrap -->
+		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="/themes/grafx/css/style.css" rel="stylesheet" title="Grafx" />
+		{if isset({$css})}{$css}{/if}
+		
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
+			<script src="/libraries/IE-compatibility/respond.min.js"></script>
+		<![endif]-->
+		
+		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
+		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+		<script src="/themes/grafx/js/script.js"></script>
+		{if isset({$js})}{$js}{/if}
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<img src="/themes/grafx/img/logo.png" alt="logo" />
+				<div class="inner">
+					<p class="site-name">{$site_name}</p>
+					<p class="slogan">your slogan here</p>
+				</div>
+				<div class="clear"></div>
+			</header>
+			<nav class="navbar" role="navigation">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/"><img src="/themes/grafx/img/button-plus.png" alt="Plus" /></a>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="/"><span>Home</span><br />
+							<em>starting page</em></a></li>
+						<li><a href="#"><span>About</span><br />
+							<em>the company</em></a></li>
+						<li><a href="#"><span>Services</span><br />
+							<em>our skills</em></a></li>
+						<li><a href="#"><span>Portfolio</span><br />
+							<em>our works</em></a></li>
+						<li><a href="#"><span>Blog</span><br />
+							<em>latest posts</em></a></li>
+						<li><a href="#"><span>Contact</span><br />
+							<em>send us an email</em></a></li>
+					</ul>
+					<form class="navbar-form navbar-right" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search the website" size="30" />
+						</div>
+						<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+					</form>
+				</div><!-- /.navbar-collapse -->
+			</nav>
+			<div class="row">
+				<div id="column-content" class="col-md-8">
+					<div class="block">
+						{$notes}
+						{$include}
+					</div>
+				</div>
+				<div id="column-blocks" class="col-md-4">
+					<?php if (empty($_SESSION['userid'])): ?>
+					<aside class="block-user block">
+						<p class="text-center buttons">
+							<a class="button-sign-in" href="/user/register/">Sign in <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
+							<a class="button-login" href="/user/login/"><img src="/themes/grafx/img/login.png" alt="Login" /> Login</a>
+						</p>
+						<div class="sign-in closed">
+							{retrieve_view user/register}
+						</div>
+						<div class="login closed">
+							{retrieve_view user/login}
+						</div>
+					</aside>
+					<?php endif; ?>
+					<aside class="block">
+						<h2>Titre du block</h2>
+						<ul class="listing">
+							<li>Test</li>
+							<li>Test</li>
+							<li>Test</li>
+							<li>Test</li>
+						</ul>
+					</aside>
+				</div>
+			</div>
+			<footer class="text-center">
+				<p>{$site_name}&copy; 2013<br />
+					All rights reserved.</p>
+			</footer>
+		</div>
+	</body>
+</html>
