@@ -65,8 +65,6 @@ class WLang {
 		$http_lang = trim($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		$priority_lang = array();
 		
-		return array('en');
-		
 		if (!empty($http_lang)) {
 			$accept_lang = explode(',', $http_lang);
 			
