@@ -6,7 +6,7 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WRequest manages all requests.
+ * WRequest manages all input variables.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
@@ -14,21 +14,16 @@ defined('IN_WITY') or die('Access denied');
  */
 class WRequest {
 	/**
-	 * @var array Contains all checked variables to avoid infinite loop
-	 */
-	private static $checked = array();
-	
-	/**
 	 * Returns the values of all variables with name in $names sent by $hash method
 	 * 
-	 * You can use the following hashes :
+	 * You can use the following hashes:
 	 * - "GET"
 	 * - "POST"
 	 * - "FILES"
 	 * - "COOKIE"
 	 * - "REQUEST" (default)
 	 * 
-	 * The following syntax IS allowed :
+	 * The following syntax is allowed:
 	 * <code>list($v1, ...) = WRequest::get(array('v1', 'v2'));</code>
 	 * 
 	 * @param string|array  $names      variable names
@@ -65,6 +60,7 @@ class WRequest {
 				$result[] = $value;
 				$result[$name] = $value;
 			}
+			
 			return $result;
 		} else {
 			return self::getValue($data, $names, $default, $hash);
@@ -107,6 +103,7 @@ class WRequest {
 			$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
 			$result[$name] = $value;
 		}
+		
 		return $result;
 	}
 	
@@ -120,25 +117,20 @@ class WRequest {
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {
-		if (isset(self::$checked[$hash.$name])) {
-			// On récupère la variable vérifiée des données
-			return $data[$name];
+		if (isset($data[$name]) && !is_null($data[$name])) {
+			// Filter the variable value
+			$value = self::filter($data[$name]);
+		} else if (!is_null($default)) {
+			// Use default
+			$value = self::filter($default);
 		} else {
-			if (isset($data[$name]) && !is_null($data[$name])) {
-				// On filtre la variable requête pour la première fois
-				$data[$name] = self::filter($data[$name]);
-			} else if (!is_null($default)) {
-				// On utilise la valeur par défaut
-				$data[$name] = self::filter($default);
-			} else {
-				$data[$name] = null;
-			}
-			
-			// La variable est vérifiée
-			self::$checked[$hash.$name] = true;
-			
-			return $data[$name];
+			$value = null;
 		}
+		
+		// Remove the variable from the global stack
+		unset($data[$name]);
+		
+		return $value;
 	}
 	
 	/**
@@ -179,8 +171,6 @@ class WRequest {
 				$_REQUEST[$name] = $value;
 				break;
 		}
-		
-		self::$checked[$hash.$name] = true;
 		
 		return $previous;
 	}

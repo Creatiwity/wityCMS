@@ -79,7 +79,7 @@ class WResponse {
 		// Check headers
 		$headers = $view->getHeaders();
 		foreach ($headers as $name => $value) {
-			header($name.': '.$headers['location']);
+			header($name.': '.$value);
 		}
 		if (isset($headers['location'])) {
 			return true;
