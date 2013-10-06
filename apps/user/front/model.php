@@ -247,7 +247,7 @@ class UserModel {
 	 */
 	public function matchUser($nickname, $password) {
 		$prep = $this->db->prepare('
-			SELECT id, nickname, password, email, firstname, lastname, country, groupe, access
+			SELECT id, nickname, password, email, firstname, lastname, country, lang, groupe, access
 			FROM users
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
 		');

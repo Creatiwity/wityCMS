@@ -21,7 +21,7 @@ class WLang {
 	/**
 	 * @var array Languages to use in order of priority
 	 */
-	private static $languages;
+	private static $languages = array();
 	
 	/**
 	 * @var array List of language directories registered
@@ -46,8 +46,13 @@ class WLang {
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
 		
+		// Set session lang as top priority
+		if (!empty($_SESSION['lang'])) {
+			self::addLang($_SESSION['lang']);
+		}
+		
 		// Use browser languages
-		self::$languages = self::getUserLang();
+		self::addLang(self::getBrowserLang());
 		
 		// Add config lang
 		self::addLang(WConfig::get('config.lang'));
@@ -59,7 +64,7 @@ class WLang {
 	 * 
 	 * @return array List of languages prioritized
 	 */
-	public static function getUserLang() {
+	public static function getBrowserLang() {
 		// Exemple of $http_lang: 'fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4'
 		// q-value is a ponderation: nothing or 1 means favorite lang, 0 means to avoid
 		$http_lang = trim($_SERVER['HTTP_ACCEPT_LANGUAGE']);
@@ -106,9 +111,15 @@ class WLang {
 	 * @param string $lang Language name (2 letters identifier)
 	 */
 	public static function addLang($lang) {
-		$lang = strtolower(substr($lang, 0, 2));
-		if (!in_array($lang, self::$languages)) {
-			self::$languages[] = $lang;
+		if (is_array($lang)) {
+			foreach ($lang as $l) {
+				self::addLang($l);
+			}
+		} else {
+			$lang = strtolower(substr($lang, 0, 2));
+			if (!in_array($lang, self::$languages)) {
+				self::$languages[] = $lang;
+			}
 		}
 	}
 	
