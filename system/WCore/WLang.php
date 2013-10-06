@@ -124,6 +124,28 @@ class WLang {
 	}
 	
 	/**
+	 * Returns the top priority language for the user.
+	 * 
+	 * @return string Top priority language
+	 */
+	public static function getLang() {
+		if (isset(self::$languages[0])) {
+			return self::$languages[0];
+		}
+		
+		return '';
+	}
+	
+	/**
+	 * Returns the list of the prefered languages according to the user configuration.
+	 * 
+	 * @return array List of prioritized languages
+	 */
+	public static function getPriorityLang() {
+		return self::$languages;
+	}
+	
+	/**
 	 * Assigns a new language constant.
 	 * If the constant was already defined, it will keep the previous value by default.
 	 *
