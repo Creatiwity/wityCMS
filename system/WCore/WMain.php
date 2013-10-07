@@ -92,7 +92,7 @@ class WMain {
 			$view = WRetriever::getView($app_name, $params);
 			
 			// Render the final response
-			$response = new WResponse(WConfig::get('config.theme'));
+			$response = new WResponse('theme', WConfig::get('config.theme'));
 			$response->render($view);
 		}
 	}
