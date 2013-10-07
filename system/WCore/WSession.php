@@ -129,10 +129,12 @@ class WSession {
 	 * @param array $data data to store into $_SESSION
 	 */
 	public function setupSession($userid, $data) {
-		$_SESSION['userid']   = $userid;
-		$_SESSION['nickname'] = $data['nickname'];
-		$_SESSION['email']    = $data['email'];
-		$_SESSION['groupe']   = $data['groupe'];
+		$_SESSION['userid']   	= $userid;
+		$_SESSION['nickname'] 	= $data['nickname'];
+		$_SESSION['email']    	= $data['email'];
+		$_SESSION['groupe']   	= $data['groupe'];
+		$_SESSION['firstname']	= $data['firstname'];
+		$_SESSION['lastname']	= $data['lastname'];
 		
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {
