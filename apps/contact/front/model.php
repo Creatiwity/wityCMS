@@ -40,16 +40,21 @@ class ContactModel {
 	public function addMail(array $params) {
 		$prep = $this->db->prepare(
 			'INSERT INTO contact(`from`, `from_id`, `to`, `cc`, `bcc`, `reply_to`, `name`, `organism`, `object`, `message`, `date`) 
-			VALUES (:from_email, :user_id, :to, :cc, :bcc, :reply_to, :from_name, :organism, :object, : message, NOW())');
+			VALUES (:from_email, :user_id, :to, :cc, :bcc, :reply_to, :from_name, :organism, :object, :message, NOW())');
+
+		$to = serialize($params['to']);
+		$cc = isset($params['cc']) ? serialize($params['cc']) : serialize('');
+		$bcc = isset($params['bcc']) ? serialize($params['bcc']) : serialize('');
+		$replyTo = isset($params['reply_to']) ? serialize($params['reply_to']) : serialize('');
 
 		$prep->bindParam(':from_email', $params['from_email']);
 		$prep->bindParam(':user_id', $params['userid']);
-		$prep->bindParam(':to', serialize($params['to']));
-		$prep->bindParam(':cc', serialize($params['cc']));
-		$prep->bindParam(':bcc', serialize($params['bcc']));
-		$prep->bindParam(':reply_to', serialize($params['reply_to']));
+		$prep->bindParam(':to', $to);
+		$prep->bindParam(':cc', $cc);
+		$prep->bindParam(':bcc', $bcc);
+		$prep->bindParam(':reply_to', $replyTo);
 		$prep->bindParam(':from_name', $params['from_name']);
-		$prep->bindParam(':organism', $params['from_organism']);
+		$prep->bindParam(':organism', $params['from_company']);
 		$prep->bindParam(':object', $params['email_subject']);
 		$prep->bindParam(':message', $params['email_message']);
 		

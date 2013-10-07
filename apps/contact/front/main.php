@@ -54,7 +54,7 @@ class ContactController extends WController {
 					$data['userid'] = $user_id;
 				}
 
-				if ($this->sendMail($data)) {		
+				if ($this->sendMail($data)) {	
 					$this->view->setHeader('Location', Wroute::getDir());
 					return WNote::success('email_sent', WLang::get('email_sent'));
 				} else {
@@ -90,6 +90,11 @@ class ContactController extends WController {
 			WNote::error('missing_configuration', WLang::get('missing_configuration', serialize($params)), 'email');
 			return false;
 		}
+
+		$params['to'] = array();
+		$params['to'][] = array($config['site_from_email'][0], $config['site_from_name'][0]);
+		$params['reply_to'] = array();
+		$params['reply_to'][] = array($params['from_email'], $params['from_name']);
 
 		$universalAdd = function ($param, $key, $fn) {
 			if(isset($param[$key])) {
@@ -135,14 +140,14 @@ class ContactController extends WController {
 		// Send mail to expeditor
 		$phpmailer = WHelper::load("phpmailer");
 		$phpmailer->CharSet = 'utf-8';
-		$phpmailer->From = $config['site_from_name'][1];
+		$phpmailer->From = $config['site_from_email'][0];
 		$phpmailer->FromName = $config['site_from_name'][0];
 
 		$universalAdd(array(array(array($params['from_email'], $params['from_name']))), 0, array($phpmailer, 'addAddress'));
 
 		$phpmailer->isHTML(true);
 		$phpmailer->Subject = WLang::get('copy_subject');
-		$phpmailer->Body = WLang::get('auto_reply', $params['email_subject'], WConfig::get('config.site_name'));
+		$phpmailer->Body = WLang::get('auto_reply', array($params['email_subject'], WConfig::get('config.site_name')));
 
 		if(!$phpmailer->send()) {
 			return false;
