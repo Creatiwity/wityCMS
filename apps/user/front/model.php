@@ -202,7 +202,7 @@ class UserModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, users.access, groupe, name AS groupe_name, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip
+			SELECT users.id, nickname, email, firstname, lastname, country, lang, users.access, groupe, name AS groupe_name, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -226,7 +226,7 @@ class UserModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT users.id, nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
+				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, users_groups.name, users.access AS access, valid
 				FROM users
 				LEFT JOIN users_groups
 				ON groupe = users_groups.id
@@ -247,7 +247,7 @@ class UserModel {
 	 */
 	public function matchUser($nickname, $password) {
 		$prep = $this->db->prepare('
-			SELECT id, nickname, password, email, firstname, lastname, country, groupe, access
+			SELECT id, nickname, password, email, firstname, lastname, country, lang, groupe, access
 			FROM users
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
 		');
@@ -265,8 +265,8 @@ class UserModel {
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, valid, ip)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :valid, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, lang, groupe, valid, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :lang, :groupe, :valid, :ip)
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);
@@ -279,6 +279,8 @@ class UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
+		$lang = isset($data['lang']) ? $data['lang'] : '';
+		$prep->bindParam(':lang', $lang);
 		$groupe = isset($data['groupe']) ? $data['groupe'] : '';
 		$prep->bindParam(':groupe', $groupe);
 		$valid = isset($data['valid']) ? $data['valid'] : 1;

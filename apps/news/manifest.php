@@ -12,6 +12,8 @@
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
 	
+	<default_lang>fr</default_lang>
+	
 	<!-- Permissions -->
 	<permission name="news_editor" />
 	<permission name="global_editor" />

@@ -60,15 +60,15 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 		
-		// Automatically declare the language directory
-		if (is_dir($this->context['directory'].'lang')) {
-			WLang::declareLangDir($this->context['directory'].'lang');
-		}
-		
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
 			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found.');
+		}
+		
+		// Automatically declare the language directory
+		if (is_dir($this->context['directory'].'lang')) {
+			WLang::declareLangDir($this->context['directory'].'lang', $this->manifest['default_lang']);
 		}
 	}
 	
@@ -303,7 +303,7 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission', 'default_lang');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'action':
