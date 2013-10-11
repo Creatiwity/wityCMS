@@ -85,7 +85,7 @@ class Installer {
 					}
 					
 					// Save Database configuration
-					WConfig::set('database.server', $database['server']);
+					WConfig::set('database.server', str_replace('localhost', '127.0.0.1', $database['server']));
 					WConfig::set('database.port', $database['port']);
 					WConfig::set('database.user', $database['user']);
 					WConfig::set('database.pw', $database['pw']);
