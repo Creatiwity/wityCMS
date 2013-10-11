@@ -13,6 +13,16 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.4.0-29-12-2011
  */
 class WRequest {
+	 /**
+	 * @var array Contains all checked variables to avoid infinite loop
+	 */
+	private static $checked = array();
+	
+	/**
+	 * @var bool Variable to lock all read/write actions on the input values. Default values will be sent.
+	 */
+	private static $lock = false;
+	
 	/**
 	 * Returns the values of all variables with name in $names sent by $hash method
 	 * 
@@ -117,20 +127,30 @@ class WRequest {
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {
-		if (isset($data[$name]) && !is_null($data[$name])) {
-			// Filter the variable value
-			$value = self::filter($data[$name]);
-		} else if (!is_null($default)) {
-			// Use default
-			$value = self::filter($default);
-		} else {
-			$value = null;
+		// Stop read action
+		if (self::$lock) {
+			return $default;
 		}
 		
-		// Remove the variable from the global stack
-		unset($data[$name]);
-		
-		return $value;
+		if (isset(self::$checked[$hash.$name])) {
+			// On récupère la variable vérifiée des données
+			return $data[$name];
+		} else {
+			if (isset($data[$name]) && !is_null($data[$name])) {
+				// Filter the variable value
+				$data[$name] = self::filter($data[$name]);
+			} else if (!is_null($default)) {
+				// Use default
+				$data[$name] = self::filter($default);
+			} else {
+				$data[$name] = null;
+			}
+			
+			// La variable est vérifiée
+			self::$checked[$hash.$name] = true;
+			
+			return $data[$name];
+		}
 	}
 	
 	/**
@@ -143,6 +163,11 @@ class WRequest {
 	 * @return mixed previous value, may be null
 	 */
 	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
+		// Stop write action
+		if (self::$lock) {
+			return null;
+		}
+		
 		// Check if overwriting is allowed
 		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
 			return $_REQUEST[$name];
@@ -172,6 +197,8 @@ class WRequest {
 				break;
 		}
 		
+		self::$checked[$hash.$name] = true;
+		
 		return $previous;
 	}
 	
@@ -194,6 +221,20 @@ class WRequest {
 		}
 		
 		return $variable;
+	}
+	
+	/**
+	 * Stops all read/write actions on the Request variables.
+	 */
+	public static function lock() {
+		self::$lock = true;
+	}
+	
+	/**
+	 * Allows all read/write actions on the Request variables.
+	 */
+	public static function unlock() {
+		self::$lock = false;
 	}
 }
 
