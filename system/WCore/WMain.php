@@ -63,21 +63,21 @@ class WMain {
 				$format = 'JSON';
 			}
 			
-			$model = WRetriever::getModel($app_name, $params);
+			$model = WRetriever::getModel($app_name, $params, false);
 			if ($mode == 'm') {
 				$response = array(
 					'app-name' => $app_name,
 					'model' => $model
 				);
 			} else if ($mode == 'v') {
-				$view = WRetriever::getView($app_name, $params)->render();
+				$view = WRetriever::getView($app_name, $params, false)->render();
 				
 				$response = array(
 					'app-name' => $app_name,
 					'view'  => $view
 				);
 			} else if ($mode == 'mv') {
-				$view = WRetriever::getView($app_name, $params)->render();
+				$view = WRetriever::getView($app_name, $params, false)->render();
 				
 				$response = array(
 					'app-name' => $app_name,
@@ -89,7 +89,7 @@ class WMain {
 			echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 		} else {
 			// Get the view
-			$view = WRetriever::getView($app_name, $params);
+			$view = WRetriever::getView($app_name, $params, false);
 			
 			// Render the final response
 			$response = new WResponse(WConfig::get('config.theme'));
