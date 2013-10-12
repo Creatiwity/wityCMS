@@ -223,16 +223,18 @@ class WLang {
 	 */
 	public static function get($name, $params = null) {
 		if (!empty($name)) {
-			foreach (self::$lang_dirs as $dir_name => $dir) {
-				foreach (self::$languages as $lang) {
-					if (isset($dir[$lang])) {
-						self::loadLangFile($dir[$lang]);
+			if (!isset(self::$values[$name])) {
+				foreach (self::$lang_dirs as $dir_name => $dir) {
+					foreach (self::$languages as $lang) {
+						if (isset($dir[$lang])) {
+							self::loadLangFile($dir[$lang]);
+						}
 					}
-				}
-				
-				// Load default file
-				if (!isset(self::$values[$name]) && isset($dir['default']) && isset(self::$lang_dirs[$dir_name][$dir['default']])) {
-					self::loadLangFile($dir[$dir['default']]);
+					
+					// Load default file
+					if (!isset(self::$values[$name]) && isset($dir['default']) && isset(self::$lang_dirs[$dir_name][$dir['default']])) {
+						self::loadLangFile($dir[$dir['default']]);
+					}
 				}
 			}
 			
