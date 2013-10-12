@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-14-06-2013
+ * @version 0.4.0-12-10-2013
  */
 class WRetriever {
 	/**
@@ -24,6 +24,12 @@ class WRetriever {
 	 * @static
 	 */
 	private static $controllers = array();
+	
+	/**
+	 * @var Stores the models already calculated
+	 * @static
+	 */
+	private static $models = array();
 	
 	public static function init() {
 		// Init template handler
@@ -40,6 +46,13 @@ class WRetriever {
 	 * @return array
 	 */
 	public static function getModel($app_name, array $params = array(), $has_parent = true) {
+		$signature = md5($app_name.serialize($params).$has_parent);
+		
+		// Check if this model was not already calculated
+		if (isset(self::$models[$signature])) {
+			return self::$models[$signature];
+		}
+		
 		// Get app controller
 		$controller = self::getController($app_name, $has_parent);
 		
@@ -65,21 +78,32 @@ class WRetriever {
 		
 		// Get model
 		if ($controller instanceof WController) {
+			// Lock access to the Request variables of not the target app
+			$form_signature = WRequest::get('form_signature', '', 'POST');
+			if (!empty($form_signature) && $form_signature != $signature) {
+				WRequest::lock();
+			}
+			
+			// Trigger the action and get the result model
 			$model = $controller->launch($params);
 			
+			// Unlock the Request variables access
+			WRequest::unlock();
+			
 			// Model must be an array
-			if (!empty($model)) {
-				if (is_array($model)) {
-					return $model;
-				} else {
-					return array('result' => $model);
-				}
+			if (is_null($model)) {
+				return array();
+			} else if (!is_array($model)) {
+				$model = array('result' => $model);
 			}
 		} else {
-			return $controller;
+			$model = $controller;
 		}
 		
-		return array();
+		// Cache the value
+		self::$models[$signature] = $model;
+		
+		return $model;
 	}
 	
 	/**
@@ -109,8 +133,9 @@ class WRetriever {
 				// Get the real action triggered by the controller
 				$triggered_action = $controller->getTriggeredAction();
 				
-				// Declare the template file
-				$actionTemplateFile = $view->context['directory'].'templates'.DS.$triggered_action.'.html';
+				// Attempt to declare the template file according to the action
+				// The final template file can be changed directly in the View.php
+				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$triggered_action.'.html';
 				if (file_exists($actionTemplateFile)) {
 					$view->setTemplate($actionTemplateFile);
 				}
@@ -119,6 +144,9 @@ class WRetriever {
 				if (method_exists($view, $triggered_action)) {
 					$view->$triggered_action($model);
 				}
+				
+				// Update the context
+				$view->updateContext('signature', md5($app_name.serialize($params).$has_parent));
 			}
 			
 			return $view;
