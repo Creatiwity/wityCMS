@@ -79,7 +79,7 @@ class WRetriever {
 		// Get model
 		if ($controller instanceof WController) {
 			// Lock access to the Request variables of not the target app
-			$form_signature = WRequest::get('form_signature', '', 'POST');
+			$form_signature = WRequest::get('form_signature');
 			if (!empty($form_signature) && $form_signature != $signature) {
 				WRequest::lock();
 			}
