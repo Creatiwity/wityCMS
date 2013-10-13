@@ -77,11 +77,13 @@ class AdminController extends WController {
 					// Execute and get model
 					$model = $this->appController->launch($params);
 					
-					// Config Template
-					$this->configTheme();
+					// "triggered_action" key is mandatory in a model
+					if (!isset($model['triggered_action'])) {
+						$model['triggered_action'] = '';
+					}
 					
-					// Update the action triggered
-					$this->action = $this->appController->getTriggeredAction();
+					// Config Template
+					$this->configTheme($model['triggered_action']);
 					
 					return $model;
 				} else {
@@ -170,7 +172,7 @@ class AdminController extends WController {
 	/**
 	 * Configurates the admin template
 	 */
-	private function configTheme() {
+	private function configTheme($action_asked = '') {
 		// Linking the views
 		if (!is_null($this->appController)) {
 			$this->setView($this->appController->getView());
@@ -186,7 +188,6 @@ class AdminController extends WController {
 		
 		if (!is_null($this->appController)) {
 			$manifest = $this->appController->getManifest();
-			$action_asked = $this->appController->getTriggeredAction();
 			
 			$tpl->assign(array(
 				'appSelected' => $this->appAsked,

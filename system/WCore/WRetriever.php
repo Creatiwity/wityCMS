@@ -92,12 +92,17 @@ class WRetriever {
 			
 			// Model must be an array
 			if (is_null($model)) {
-				return array();
+				$model = array();
 			} else if (!is_array($model)) {
 				$model = array('result' => $model);
 			}
 		} else {
 			$model = $controller;
+		}
+		
+		// "triggered_action" key is mandatory in a model
+		if (!isset($model['triggered_action'])) {
+			$model['triggered_action'] = '';
 		}
 		
 		// Cache the value
@@ -130,19 +135,16 @@ class WRetriever {
 			} else {
 				$view = $controller->getView();
 				
-				// Get the real action triggered by the controller
-				$triggered_action = $controller->getTriggeredAction();
-				
 				// Attempt to declare the template file according to the action
 				// The final template file can be changed directly in the View.php
-				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$triggered_action.'.html';
+				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['triggered_action'].'.html';
 				if (file_exists($actionTemplateFile)) {
 					$view->setTemplate($actionTemplateFile);
 				}
 				
 				// Prepare the view
-				if (method_exists($view, $triggered_action)) {
-					$view->$triggered_action($model);
+				if (method_exists($view, $model['triggered_action'])) {
+					$view->$model['triggered_action']($model);
 				}
 				
 				// Update the context
