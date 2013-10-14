@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-14-06-2013
+ * @version 0.4.0-12-10-2013
  */
 class WRetriever {
 	/**
@@ -24,6 +24,12 @@ class WRetriever {
 	 * @static
 	 */
 	private static $controllers = array();
+	
+	/**
+	 * @var Stores the models already calculated
+	 * @static
+	 */
+	private static $models = array();
 	
 	public static function init() {
 		// Init template handler
@@ -40,6 +46,13 @@ class WRetriever {
 	 * @return array
 	 */
 	public static function getModel($app_name, array $params = array(), $has_parent = true) {
+		$signature = md5($app_name.serialize($params).$has_parent);
+		
+		// Check if this model was not already calculated
+		if (isset(self::$models[$signature])) {
+			return self::$models[$signature];
+		}
+		
 		// Get app controller
 		$controller = self::getController($app_name, $has_parent);
 		
@@ -63,23 +76,36 @@ class WRetriever {
 			unset($params['querystring']);
 		}
 		
+		// Init model structure
+		$model = array(
+			'app-name'         => $app_name,
+			'triggered-action' => '',
+			'result'           => null
+		);
+		
 		// Get model
 		if ($controller instanceof WController) {
-			$model = $controller->launch($params);
-			
-			// Model must be an array
-			if (!empty($model)) {
-				if (is_array($model)) {
-					return $model;
-				} else {
-					return array('result' => $model);
-				}
+			// Lock access to the Request variables for non targeted apps
+			$form_signature = WRequest::get('form_signature');
+			if (!empty($form_signature) && $form_signature != $signature) {
+				WRequest::lock();
 			}
+			
+			// Trigger the action and get the result model
+			$model['result'] = $controller->launch($params);
+			
+			$model['triggered-action'] = $controller->getTriggeredAction();
+			
+			// Unlock the Request variables access
+			WRequest::unlock();
 		} else {
-			return $controller;
+			$model['result'] = $controller;
 		}
 		
-		return array();
+		// Cache the value
+		self::$models[$signature] = $model;
+		
+		return $model;
 	}
 	
 	/**
@@ -100,25 +126,26 @@ class WRetriever {
 			// Get the model
 			$model = self::getModel($app_name, $params);
 			
-			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
+			if (array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
-				$view = WNote::getView(array($model));
+				$view = WNote::getView(array($model['result']));
 			} else {
 				$view = $controller->getView();
 				
-				// Get the real action triggered by the controller
-				$triggered_action = $controller->getTriggeredAction();
-				
-				// Declare the template file
-				$actionTemplateFile = $view->context['directory'].'templates'.DS.$triggered_action.'.html';
+				// Attempt to declare the template file according to the action
+				// The final template file can be changed directly in the View.php
+				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['triggered-action'].'.html';
 				if (file_exists($actionTemplateFile)) {
 					$view->setTemplate($actionTemplateFile);
 				}
 				
 				// Prepare the view
-				if (method_exists($view, $triggered_action)) {
-					$view->$triggered_action($model);
+				if (method_exists($view, $model['triggered-action'])) {
+					$view->$model['triggered-action']($model['result']);
 				}
+				
+				// Update the context
+				$view->updateContext('signature', md5($app_name.serialize($params).$has_parent));
 			}
 			
 			return $view;

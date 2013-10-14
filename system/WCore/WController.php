@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-20-03-2013
+ * @version 0.4.0-12-10-2013
  */
 abstract class WController {
 	/**
@@ -33,8 +33,8 @@ abstract class WController {
 	 */
 	protected $view;
 	
-	/**
-	 * @var string action that will be performed in this application (default: 'index')
+	 /**
+	 * @var string action that will be performed in this application
 	 */
 	protected $action = '';
 	
@@ -131,8 +131,24 @@ abstract class WController {
 	 * 
 	 * @return array Application's context
 	 */
-	public function getContext() {
+	public function getContext($field = '') {
+		if (!empty($field)) {
+			return (isset($this->context[$field])) ? $this->context[$field] : '';
+		}
+		
 		return $this->context;
+	}
+	
+	/**
+	 * Updates one field of the object context.
+	 * 
+	 * @param string $field Context's field to update
+	 * @param mixed  $value Value to assign
+	 */
+	public function updateContext($field, $value) {
+		if (!empty($field)) {
+			$this->context[$field] = $value;
+		}
 	}
 
 	/**
@@ -232,7 +248,7 @@ abstract class WController {
 		return $action;
 	}
 	
-	/**
+	 /**
 	 * Returns the real executed action
 	 * 
 	 * @return string real executed action name
