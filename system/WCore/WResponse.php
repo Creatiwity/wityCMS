@@ -105,11 +105,11 @@ class WResponse {
 		}
 		
 		try {
-			// Handle notes
-			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
-			
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $view->render());
+			
+			// Handle notes (including Retrievers' notes)
+			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
 			
 			$dir = WRoute::getDir();
 			if (empty($dir)) {

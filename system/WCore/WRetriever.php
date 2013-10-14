@@ -76,37 +76,30 @@ class WRetriever {
 			unset($params['querystring']);
 		}
 		
+		// Init model structure
 		$model = array(
 			'app-name'         => $app_name,
 			'triggered-action' => '',
-			'note'             => null,
 			'result'           => null
 		);
 		
 		// Get model
 		if ($controller instanceof WController) {
-			// Lock access to the Request variables of not the target app
+			// Lock access to the Request variables for non targeted apps
 			$form_signature = WRequest::get('form_signature');
 			if (!empty($form_signature) && $form_signature != $signature) {
 				WRequest::lock();
 			}
 			
 			// Trigger the action and get the result model
-			$result = $controller->launch($params);
-			
-			// Extract note
-			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
-				$model['note'] = $result;
-			} else {
-				$model['result'] = $result;
-			}
+			$model['result'] = $controller->launch($params);
 			
 			$model['triggered-action'] = $controller->getTriggeredAction();
 			
 			// Unlock the Request variables access
 			WRequest::unlock();
 		} else {
-			$model['note'] = $controller;
+			$model['result'] = $controller;
 		}
 		
 		// Cache the value
@@ -133,9 +126,9 @@ class WRetriever {
 			// Get the model
 			$model = self::getModel($app_name, $params);
 			
-			if (!empty($model['note'])) {
+			if (array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
-				$view = WNote::getView(array($model['note']));
+				$view = WNote::getView(array($model['result']));
 			} else {
 				$view = $controller->getView();
 				

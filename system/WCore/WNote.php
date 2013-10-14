@@ -166,6 +166,9 @@ class WNote {
 	public static function handle_assign(array $note) {
 		if (!isset($_SESSION['notes'][$note['code']])) {
 			$_SESSION['notes'][$note['code']] = $note;
+		} else if (strlen($_SESSION['notes'][$note['code']]['message']) != strlen($note['message'])) {
+			// Note id exists but message changed so add the note to the stack
+			$_SESSION['notes'][] = $note;
 		}
 	}
 	
