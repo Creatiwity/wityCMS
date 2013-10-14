@@ -4,14 +4,10 @@ body {
 	padding: 30px;
 }
 
+fieldset.form-horizontal {
+	margin-top: 20px;
+}
+
 .special-well {
 	background-color: #ffffff;
-}
-
-.form-horizontal  .control-label {
-	width: 110px;
-}
-
-.form-horizontal  .controls {
-	margin-left: 130px;
 }

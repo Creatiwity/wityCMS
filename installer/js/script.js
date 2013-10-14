@@ -343,8 +343,8 @@ $(document).ready(function() {
 		 * @param bool isValid true: step is validated | false: step is not validated
 		 */
 		Step.prototype.showValid = function(isValid) {
-			this.stepStatus.removeClass('icon-ok icon-remove');
-			isValid ? this.stepStatus.addClass('icon-ok') : this.stepStatus.addClass('icon-remove');
+			this.stepStatus.removeClass('glyphicon glyphicon-ok glyphicon-remove');
+			isValid ? this.stepStatus.addClass('glyphicon glyphicon-ok') : this.stepStatus.addClass('glyphicon glyphicon-remove');
 		};
 		
 		/**
@@ -583,13 +583,13 @@ $(document).ready(function() {
 				if(response.warning) {
 					this.showValid(true);
 					this.showValidOnFields(true);
-					this.displayNotes(response.warning, '');
+					this.displayNotes(response.warning, 'alert-warning');
 				}
 				
 				if(response.error) {
 					this.showValid(false);
 					this.showValidOnFields(false);
-					this.displayNotes(response.error, 'alert-error');
+					this.displayNotes(response.error, 'alert-danger');
 					this.validated = false;
 				}
 				
@@ -616,19 +616,19 @@ $(document).ready(function() {
 			
 			this.groupSummary.find('i').remove();
 			if(isValid || (!this.required && this.empty)) {
-				$('<i class="icon-ok"></i>').prependTo(this.groupSummary);
+				$('<i class="glyphicon glyphicon-ok"></i>').prependTo(this.groupSummary);
 				this.groupSummary.addClass("text-success");
 				
 				$.each(this.fieldInstances, function(index, field) {
 					field.showValid(true);
 				});
 			} else if(!isValid || (this.required && this.empty)) {
-				$('<i class="icon-remove"></i>').prependTo(this.groupSummary);
+				$('<i class="glyphicon glyphicon-remove"></i>').prependTo(this.groupSummary);
 				
 				if(!this.required) {
 					this.groupSummary.addClass("muted");
 				} else {
-					this.groupSummary.addClass("text-info");
+					this.groupSummary.addClass("text-danger");
 				}
 			}
 		};
@@ -802,14 +802,14 @@ $(document).ready(function() {
 		 * @param bool valid
 		 */
 		Field.prototype.showValid = function(valid) {
-			var cg;
-			cg = this.element.closest('.control-group');
-			cg.removeClass('error success');
+			var fg;
+			fg = this.element.closest('.form-group');
+			fg.removeClass('has-error has-success');
 			
 			if(valid === true) {
-				cg.addClass('success');
+				fg.addClass('has-success');
 			} else if(valid === false && this.validatedContent !== null) {
-				cg.addClass('error');
+				fg.addClass('has-error');
 			}
 		};
 		
@@ -908,7 +908,7 @@ $(document).ready(function() {
 	 * Special behaviour for "autocomplete" fields.
 	 * Whenever the user type ahead, a results list is proposed to user.
 	 */
-	$('[data-wity-autocomplete]').typeahead({
+	/*$('[data-wity-autocomplete]').typeahead({
 		source: function(query, process) {
 			var command, callback;
 			command = this.$element.attr('data-wity-autocomplete');
@@ -932,7 +932,7 @@ $(document).ready(function() {
 			}
 		},
 		minLength:0
-	});
+	});*/
 	
 	/**
 	 * Executes POST XHR request

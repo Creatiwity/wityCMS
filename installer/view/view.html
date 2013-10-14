@@ -9,8 +9,8 @@
 		<link rel="shortcut icon" href="installer/favicon.ico" />
 		<link rel="icon" type="image/png" href="installer/favicon.png" />
 		
-		<link type="text/css" rel="stylesheet" href="libraries/bootstrap-2.3.2/css/bootstrap.min.css" />
-		<link type="text/css" rel="stylesheet" href="libraries/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
+		<link type="text/css" rel="stylesheet" href="libraries/bootstrap-3.0.0/css/bootstrap.min.css" />
+		<link type="text/css" rel="stylesheet" href="libraries/typeahead.js-bootstrap.css" />
 		<link type="text/css" rel="stylesheet" href="installer/css/style.css" />
 		
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -20,30 +20,30 @@
 		<![endif]-->
 		
 		<script type="text/javascript" src="libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="libraries/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="installer/js/script.js"></script>
 	</head>
 	<body>
 		<div class="container" data-wity-installer="witycms">
-			<div class="row-fluid text-center">
-				<div class="span12 logo">
+			<div class="row text-center">
+				<div class="col-md-12 logo">
 					<!-- WityCMS logo -->
 					<img src="themes/system/images/wity_logo.png" alt="WityCMS" />
 				</div>
 			</div>
 			<hr />
-			<div class="row-fluid">
-				<div class="span8 offset2" data-wity-installer-alert="witycms"></div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2" data-wity-installer-alert="witycms"></div>
 			</div>
-			<div class="row-fluid" data-hide-onsuccess="witycms">
-				<div class="span3 offset2">
-					<button type="button" class="btn btn-primary btn-large btn-block" data-wity-installer-submit="witycms" autocomplete="off" data-loading-text="Loading..." data-remaining-text="Fill in the fields" data-error-text="Fatal Error !">Here we go !</button>
+			<div class="row" data-hide-onsuccess="witycms">
+				<div class="col-md-3 col-md-offset-1">
+					<button type="button" class="btn btn-primary btn-lg btn-block" data-wity-installer-submit="witycms" autocomplete="off" data-loading-text="Loading..." data-remaining-text="Fill in the fields" data-error-text="Fatal Error !">Here we go !</button>
 					<br />
 					<div class="well special-well">
-						<ul class="unstyled" data-wity-installer-summary="witycms"></ul>
+						<ul class="list-unstyled" data-wity-installer-summary="witycms"></ul>
 					</div>
 				</div>
-				<div class="span5">
+				<div class="col-md-7">
 					<div class="well special-well">
 						<ul class="nav nav-tabs">
 							<li class="active"><a href="#site_configuration_tab" data-toggle="tab"><i data-wity-installer-step-status="site"></i> Site</a></li>
@@ -54,41 +54,41 @@
 							<div class="tab-pane active" id="site_configuration_tab" data-wity-installer-step="site" data-wity-name="Site">
 								<fieldset class="form-horizontal">
 									<div data-wity-group-alert="site_name"></div>
-									<div class="control-group">
-										<label class="control-label" for="site_name">Site name</label>
-										<div class="controls">
-											<input type="text" id="site_name" name="site_name" data-wity-installer-group="site_name" data-wity-name="Site name" data-wity-validate-regexp=".+" data-wity-regexp-message="Site name must be an alphanumeric value" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="site_name">Site name</label>
+										<div class="col-md-9">
+											<input type="text" id="site_name" name="site_name" data-wity-installer-group="site_name" data-wity-name="Site name" data-wity-validate-regexp=".+" data-wity-regexp-message="Site name must be an alphanumeric value" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="base_url"></div>
-									<div class="control-group">
-										<label class="control-label" for="base">Base URL</label>
-										<div class="controls">
-											<input type="url" id="base" name="base" data-wity-installer-group="base_url" data-wity-name="Base URL" data-wity-validate-regexp="^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(\/[A-Z0-9~\._-]+)*\/?$" data-wity-regexp-message="Base URL must be a valid URL" data-wity-required="true" data-wity-validate-init="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="base">Base URL</label>
+										<div class="col-md-9">
+											<input type="url" id="base" name="base" data-wity-installer-group="base_url" data-wity-name="Base URL" data-wity-validate-regexp="^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(\/[A-Z0-9~\._-]+)*\/?$" data-wity-regexp-message="Base URL must be a valid URL" data-wity-required="true" data-wity-validate-init="true" class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="theme"></div>
-									<div class="control-group">
-										<label class="control-label" for="theme">Theme</label>
-										<div class="controls">
-											<input type="text" id="theme" data-wity-autocomplete="GET_THEMES" name="theme" autocomplete="off" data-wity-name="Theme" data-wity-installer-group="theme" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="theme">Theme</label>
+										<div class="col-md-9">
+											<input type="text" id="theme" data-wity-autocomplete="GET_THEMES" name="theme" autocomplete="off" data-wity-name="Theme" data-wity-installer-group="theme" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="language"></div>
-									<div class="control-group">
-										<label class="control-label" for="lang">Language</label>
-										<div class="controls">
-											<select name="lang" id="lang" data-wity-name="Language" data-wity-required="true" data-wity-installer-group="language" data-wity-validate-init="true">
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="lang">Language</label>
+										<div class="col-md-9">
+											<select name="lang" id="lang" data-wity-name="Language" data-wity-required="true" data-wity-installer-group="language" data-wity-validate-init="true" class="form-control">
 												<option value="en-EN" selected="selected">English (en-EN)</option>
 												<option value="fr-FR" selected="selected">Français (fr-FR)</option>
 											</select>
 										</div>
 									</div>
 									<div data-wity-group-alert="timezone"></div>
-									<div class="control-group">
-										<label class="control-label" for="timezone">Timezone</label>
-										<div class="controls">
-											<select name="timezone" id="timezone" data-wity-name="Timezone" data-wity-required="true" data-wity-installer-group="timezone" data-wity-validate-init="true">
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="timezone">Timezone</label>
+										<div class="col-md-9">
+											<select name="timezone" id="timezone" data-wity-name="Timezone" data-wity-required="true" data-wity-installer-group="timezone" data-wity-validate-init="true" class="form-control">
 												<option value="Pacific/Midway">(UTC-11:00) Midway Island</option>
 												<option value="Pacific/Samoa">(UTC-11:00) Samoa</option>
 												<option value="Pacific/Honolulu">(UTC-10:00) Hawaii</option>
@@ -237,17 +237,17 @@
 									</div>
 									<hr />
 									<div data-wity-group-alert="front_app"></div>
-									<div class="control-group">
-										<label class="control-label" for="default">Front app.</label>
-										<div class="controls">
-											<input type="text" id="default" data-wity-name="Front app." data-wity-autocomplete="GET_FRONT_APPS" name="default" autocomplete="off" data-wity-installer-group="front_app" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="default">Front app.</label>
+										<div class="col-md-9">
+											<input type="text" id="default" data-wity-name="Front app." data-wity-autocomplete="GET_FRONT_APPS" name="default" autocomplete="off" data-wity-installer-group="front_app" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="admin_app"></div>
-									<div class="control-group">
-										<label class="control-label" for="admin">Admin app.</label>
-										<div class="controls">
-											<input type="text" id="admin" data-wity-name="Admin app." data-wity-autocomplete="GET_ADMIN_APPS" name="admin" autocomplete="off" data-wity-installer-group="admin_app" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="admin">Admin app.</label>
+										<div class="col-md-9">
+											<input type="text" id="admin" data-wity-name="Admin app." data-wity-autocomplete="GET_ADMIN_APPS" name="admin" autocomplete="off" data-wity-installer-group="admin_app" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
 								</fieldset>
@@ -255,43 +255,43 @@
 							<div class="tab-pane" id="db_configuration_tab" data-wity-installer-step="database" data-wity-name="Database">
 								<fieldset class="form-horizontal">
 									<div data-wity-group-alert="db_credentials"></div>
-									<div class="control-group">
-										<label class="control-label" for="server">Server</label>
-										<div class="controls">
-											<input type="text" id="server" name="server" data-wity-name="Credentials" data-wity-installer-group="db_credentials" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="server">Server</label>
+										<div class="col-md-9">
+											<input type="text" id="server" name="server" data-wity-name="Credentials" data-wity-installer-group="db_credentials" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
-									<div class="control-group">
-										<label class="control-label" for="port">Port</label>
-										<div class="controls">
-											<input type="number" id="port" name="port" placeholder="3306" data-wity-installer-group="db_credentials" data-wity-validate-regexp="^[0-9]*$" data-wity-regexp-message="Database port must be a number" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="port">Port</label>
+										<div class="col-md-9">
+											<input type="number" id="port" name="port" placeholder="3306" data-wity-installer-group="db_credentials" data-wity-validate-regexp="^[0-9]*$" data-wity-regexp-message="Database port must be a number" class="form-control" />
 										</div>
 									</div>
-									<div class="control-group">
-										<label class="control-label" for="user">Login</label>
-										<div class="controls">
-											<input type="text" id="user" name="user" data-wity-installer-group="db_credentials" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="user">Login</label>
+										<div class="col-md-9">
+											<input type="text" id="user" name="user" data-wity-installer-group="db_credentials" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
-									<div class="control-group">
-										<label class="control-label" for="pw">Password</label>
-										<div class="controls">
-											<input type="password" id="pw" name="pw" data-wity-installer-group="db_credentials" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="pw">Password</label>
+										<div class="col-md-9">
+											<input type="password" id="pw" name="pw" data-wity-installer-group="db_credentials" class="form-control" />
 										</div>
 									</div>
 									<hr/>
 									<div data-wity-group-alert="db_name"></div>
-									<div class="control-group">
-										<label class="control-label" for="dbname">Database name</label>
-										<div class="controls">
-											<input type="text" id="dbname" name="dbname" data-wity-name="Database name" data-wity-installer-group="db_name" data-wity-required="true" data-wity-require-groups="db_credentials" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="dbname">Database name</label>
+										<div class="col-md-9">
+											<input type="text" id="dbname" name="dbname" data-wity-name="Database name" data-wity-installer-group="db_name" data-wity-required="true" data-wity-require-groups="db_credentials" class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="tables_prefix"></div>
-									<div class="control-group">
-										<label class="control-label" for="prefix">Table prefix</label>
-										<div class="controls">
-											<input type="text" id="prefix" name="prefix" data-wity-name="Tables prefix" data-wity-installer-group="tables_prefix" data-wity-require-groups="db_credentials db_name" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="prefix">Table prefix</label>
+										<div class="col-md-9">
+											<input type="text" id="prefix" name="prefix" data-wity-name="Tables prefix" data-wity-installer-group="tables_prefix" data-wity-require-groups="db_credentials db_name" class="form-control" />
 										</div>
 									</div>
 								</fieldset>
@@ -299,45 +299,45 @@
 							<div class="tab-pane" id="admin_configuration_tab"  data-wity-installer-step="user" data-wity-name="User">
 								<fieldset class="form-horizontal">
 									<div data-wity-group-alert="user_nickname"></div>
-									<div class="control-group">
-										<label class="control-label" for="nickname">Pseudo</label>
-										<div class="controls">
-											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="user_nickname" data-wity-validate-regexp="^[a-zA-Z0-9]([a-zA-Z0-9])*$" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value." />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="nickname">Pseudo</label>
+										<div class="col-md-9">
+											<input type="text" id="nickname" name="nickname" data-wity-name="Nickname" data-wity-installer-group="user_nickname" data-wity-validate-regexp="^[a-zA-Z0-9]([a-zA-Z0-9])*$" data-wity-required="true" data-wity-regexp-message="The nickname must be an alphanumeric value." class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="user_password"></div>
-									<div class="control-group">
-										<label class="control-label" for="password">Password</label>
-										<div class="controls">
-											<input type="password" id="password" name="password" data-wity-name="Password" data-wity-installer-group="user_password" data-wity-required="true" />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="password">Password</label>
+										<div class="col-md-9">
+											<input type="password" id="password" name="password" data-wity-name="Password" data-wity-installer-group="user_password" data-wity-required="true" class="form-control" />
 										</div>
 									</div>
-									<div class="control-group">
-										<label class="control-label" for="confirm"><em>Confirmation</em></label>
-										<div class="controls">
-											<input type="password" id="confirm" name="confirm" data-wity-installer-group="user_password" data-wity-required="true" data-wity-validate-equals="password" data-wity-equals-message="Password and confirmation are different." />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="confirm"><em>Confirmation</em></label>
+										<div class="col-md-9">
+											<input type="password" id="confirm" name="confirm" data-wity-installer-group="user_password" data-wity-required="true" data-wity-validate-equals="password" data-wity-equals-message="Password and confirmation are different." class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="user_email"></div>
-									<div class="control-group">
-										<label class="control-label" for="email">Email</label>
-										<div class="controls">
-											<input type="email" id="email" name="email" data-wity-name="Email" data-wity-installer-group="user_email" data-wity-validate-regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$" data-wity-required="true" data-wity-regexp-message="This email is not valid." />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="email">Email</label>
+										<div class="col-md-9">
+											<input type="email" id="email" name="email" data-wity-name="Email" data-wity-installer-group="user_email" data-wity-validate-regexp="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$" data-wity-required="true" data-wity-regexp-message="This email is not valid." class="form-control" />
 										</div>
 									</div>
 									<hr/>
 									<div data-wity-group-alert="user_firstname"></div>
-									<div class="control-group">
-										<label class="control-label" for="firstname">Firstname</label>
-										<div class="controls">
-											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="user_firstname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The firstname is not valid." />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="firstname">Firstname</label>
+										<div class="col-md-9">
+											<input type="text" id="firstname" name="firstname" data-wity-name="Firstname" data-wity-installer-group="user_firstname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The firstname is not valid." class="form-control" />
 										</div>
 									</div>
 									<div data-wity-group-alert="user_lastname"></div>
-									<div class="control-group">
-										<label class="control-label" for="lastname">Lastname</label>
-										<div class="controls">
-											<input type="text" id="lastname" name="lastname" data-wity-name="Lastname" data-wity-installer-group="user_lastname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The lastname is not valid." />
+									<div class="form-group">
+										<label class="col-md-3 control-label" for="lastname">Lastname</label>
+										<div class="col-md-9">
+											<input type="text" id="lastname" name="lastname" data-wity-name="Lastname" data-wity-installer-group="user_lastname" data-wity-validate-regexp="^[a-zA-Z]([- a-zA-Z])*$" data-wity-regexp-message="The lastname is not valid." class="form-control" />
 										</div>
 									</div>
 								</div>
@@ -346,15 +346,15 @@
 					</div>
 				</div>
 			</div>
-			<div class="row-fluid" data-wity-installer-debug="witycms"></div>
-			<div class="row-fluid hide" data-show-onsuccess="witycms">
-				<div class="hero-unit">
+			<div class="row" data-wity-installer-debug="witycms"></div>
+			<div class="row hide" data-show-onsuccess="witycms">
+				<div class="jumbotron">
   					<h1>Congratulations</h1>
   					<p>The installation of WityCMS is done !</p>
 					<br /><br />
   					<p>
-  						<a data-wity-link-front="true" class="btn btn-primary btn-large">Front page</a>
-    					<a data-wity-link-admin="true" class="btn btn-warning btn-large">Administration</a>
+  						<a data-wity-link-front="true" class="btn btn-primary btn-lg">Front page</a>
+    					<a data-wity-link-admin="true" class="btn btn-warning btn-lg">Administration</a>
   					</p>
 				</div>
 			</div>
