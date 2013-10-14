@@ -89,7 +89,15 @@
 							{retrieve_view user/login}
 						</div>
 					</aside>
+					<?php else: ?>
+					<aside class="block-user block text-center">
+						<p>Bienvenue <?php echo $_SESSION['nickname']; ?> !</p>
+						<?php if (!empty($_SESSION['access'])): ?>
+						<p><a href="/admin/">Administration</a></p>
+						<?php endif; ?>
+					</aside>
 					<?php endif; ?>
+					<!--
 					<aside class="block">
 						<h2>Titre du block</h2>
 						<ul class="listing">
@@ -99,6 +107,7 @@
 							<li>Test</li>
 						</ul>
 					</aside>
+					-->
 				</div>
 			</div>
 			<footer class="text-center">
