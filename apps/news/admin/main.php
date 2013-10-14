@@ -14,14 +14,6 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.3-19-04-2013
  */
 class NewsAdminController extends WController {
-	public function __construct() {
-		include 'model.php';
-		$this->model = new NewsAdminModel();
-		
-		include 'view.php';
-		$this->setView(new NewsAdminView());
-	}
-	
 	/**
 	 * Handle News Listing action
 	 */
