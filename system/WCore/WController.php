@@ -33,6 +33,11 @@ abstract class WController {
 	 */
 	protected $view;
 	
+	 /**
+	 * @var string action that will be performed in this application
+	 */
+	protected $action = '';
+	
 	/**
 	 * @var array Parameters to forward to the application's action
 	 */
@@ -93,22 +98,20 @@ abstract class WController {
 		if (!empty($action)) {
 			$access_result = $this->hasAccess($this->getAppName(), $action);
 			if ($access_result === true) {
+				$this->action = $action;
+				
 				// Execute action
 				if (method_exists($this, $action)) {
-					$model = $this->$action($params);
+					return $this->$action($params);
 				} else {
 					// return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
-					$model = array();
+					return array();
 				}
 			} else if (is_array($access_result)) {
-				$model = $access_result; // hasAccess returned a note
+				return $access_result; // hasAccess returned a note
 			} else {
-				$model = WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
+				return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
 			}
-			
-			$model['triggered_action'] = $action;
-			
-			return $model;
 		} else {
 			return WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.');
 		}
@@ -243,6 +246,15 @@ abstract class WController {
 		}
 		
 		return $action;
+	}
+	
+	 /**
+	 * Returns the real executed action
+	 * 
+	 * @return string real executed action name
+	 */
+	public function getTriggeredAction() {
+		return $this->action;
 	}
 	
 	/**

@@ -76,6 +76,13 @@ class WRetriever {
 			unset($params['querystring']);
 		}
 		
+		$model = array(
+			'app-name'         => $app_name,
+			'triggered-action' => '',
+			'note'             => null,
+			'result'           => null
+		);
+		
 		// Get model
 		if ($controller instanceof WController) {
 			// Lock access to the Request variables of not the target app
@@ -85,24 +92,21 @@ class WRetriever {
 			}
 			
 			// Trigger the action and get the result model
-			$model = $controller->launch($params);
+			$result = $controller->launch($params);
+			
+			// Extract note
+			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
+				$model['note'] = $result;
+			} else {
+				$model['result'] = $result;
+			}
+			
+			$model['triggered-action'] = $controller->getTriggeredAction();
 			
 			// Unlock the Request variables access
 			WRequest::unlock();
-			
-			// Model must be an array
-			if (is_null($model)) {
-				$model = array();
-			} else if (!is_array($model)) {
-				$model = array('result' => $model);
-			}
 		} else {
-			$model = $controller;
-		}
-		
-		// "triggered_action" key is mandatory in a model
-		if (!isset($model['triggered_action'])) {
-			$model['triggered_action'] = '';
+			$model['note'] = $controller;
 		}
 		
 		// Cache the value
@@ -129,22 +133,22 @@ class WRetriever {
 			// Get the model
 			$model = self::getModel($app_name, $params);
 			
-			if (array_keys($model) == array('level', 'code', 'message', 'handlers')) {
+			if (!empty($model['note'])) {
 				// If model is a Note
-				$view = WNote::getView(array($model));
+				$view = WNote::getView(array($model['note']));
 			} else {
 				$view = $controller->getView();
 				
 				// Attempt to declare the template file according to the action
 				// The final template file can be changed directly in the View.php
-				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['triggered_action'].'.html';
+				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['triggered-action'].'.html';
 				if (file_exists($actionTemplateFile)) {
 					$view->setTemplate($actionTemplateFile);
 				}
 				
 				// Prepare the view
-				if (method_exists($view, $model['triggered_action'])) {
-					$view->$model['triggered_action']($model);
+				if (method_exists($view, $model['triggered-action'])) {
+					$view->$model['triggered-action']($model['result']);
 				}
 				
 				// Update the context
