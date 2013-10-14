@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-20-03-2013
+ * @version 0.4.0-12-10-2013
  */
 abstract class WController {
 	/**
@@ -33,8 +33,8 @@ abstract class WController {
 	 */
 	protected $view;
 	
-	/**
-	 * @var string action that will be performed in this application (default: 'index')
+	 /**
+	 * @var string action that will be performed in this application
 	 */
 	protected $action = '';
 	
@@ -60,15 +60,15 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 		
-		// Automatically declare the language directory
-		if (is_dir($this->context['directory'].'lang')) {
-			WLang::declareLangDir($this->context['directory'].'lang');
-		}
-		
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
 			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found.');
+		}
+		
+		// Automatically declare the language directory
+		if (is_dir($this->context['directory'].'lang')) {
+			WLang::declareLangDir($this->context['directory'].'lang', $this->manifest['default_lang']);
 		}
 	}
 	
@@ -96,7 +96,8 @@ abstract class WController {
 	 */
 	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
-			if ($this->hasAccess($this->getAppName(), $action)) {
+			$access_result = $this->hasAccess($this->getAppName(), $action);
+			if ($access_result === true) {
 				$this->action = $action;
 				
 				// Execute action
@@ -106,6 +107,8 @@ abstract class WController {
 					// return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
 					return array();
 				}
+			} else if (is_array($access_result)) {
+				return $access_result; // hasAccess returned a note
 			} else {
 				return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
 			}
@@ -128,8 +131,33 @@ abstract class WController {
 	 * 
 	 * @return array Application's context
 	 */
-	public function getContext() {
+	public function getContext($field = '') {
+		if (!empty($field)) {
+			return (isset($this->context[$field])) ? $this->context[$field] : '';
+		}
+		
 		return $this->context;
+	}
+	
+	/**
+	 * Updates one field of the object context.
+	 * 
+	 * @param string $field Context's field to update
+	 * @param mixed  $value Value to assign
+	 */
+	public function updateContext($field, $value) {
+		if (!empty($field)) {
+			$this->context[$field] = $value;
+		}
+	}
+
+	/**
+	 * Returns true if there is a parent in the context, false otherwise
+	 *
+	 * @return bool true if there is a parent in the context, false otherwise
+	 */
+	public function hasParent() {
+		return $this->context['parent'];
 	}
 	
 	/**
@@ -220,7 +248,7 @@ abstract class WController {
 		return $action;
 	}
 	
-	/**
+	 /**
 	 * Returns the real executed action
 	 * 
 	 * @return string real executed action name
@@ -300,7 +328,7 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission', 'default_lang');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'action':
@@ -400,7 +428,7 @@ abstract class WController {
 	 * @param string  $app    Name of the app
 	 * @param string  $action Action in the app to be checked (can be empty '' to check overall app access)
 	 * @param boolean $admin  Admin context (default to Wity admin context)
-	 * @return boolean
+	 * @return boolean|array
 	 */
 	public function hasAccess($app, $action = '', $admin = null) {
 		if (is_null($admin)) {
@@ -417,6 +445,7 @@ abstract class WController {
 			if (empty($_SESSION['access'])) {
 				return false;
 			}
+			
 			if ($_SESSION['access'] == 'all') {
 				return true;
 			} else if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
@@ -432,12 +461,12 @@ abstract class WController {
 							
 							default:
 								if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
-									WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
-									return false;
+									return WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.');
 								}
 								break;
 						}
 					}
+					
 					return true;
 				}
 			}
@@ -450,29 +479,28 @@ abstract class WController {
 					switch ($req) {
 						case 'not-connected':
 							if (WSession::isConnected()) {
-								WNote::error('app_logout_required', 'The '.$action.' action of the application '.$app.' requires to be loged out.', 'display');
-								return false;
+								return WNote::error('app_logout_required', 'The '.$action.' action of the application '.$app.' requires to be loged out.');
 							}
 							break;
 						
 						case 'connected':
 							if (!WSession::isConnected()) {
-								WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.', 'display');
-								return false;
+								return WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.');
 							}
 							break;
 						
 						default:
 							if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
-								WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.', 'display');
-								return false;
+								return WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.');
 							}
 							break;
 					}
 				}
+				
 				return true;
 			}
 		}
+		
 		return false;
 	}
 }

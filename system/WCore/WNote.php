@@ -16,7 +16,7 @@ class WNote {
 	/**
 	 * Note levels
 	 */
-	const ERROR   = 'error';
+	const ERROR   = 'danger';
 	const INFO    = 'info';
 	const SUCCESS = 'success';
 	
@@ -166,24 +166,10 @@ class WNote {
 	public static function handle_assign(array $note) {
 		if (!isset($_SESSION['notes'][$note['code']])) {
 			$_SESSION['notes'][$note['code']] = $note;
+		} else if (strlen($_SESSION['notes'][$note['code']]['message']) != strlen($note['message'])) {
+			// Note id exists but message changed so add the note to the stack
+			$_SESSION['notes'][] = $note;
 		}
-	}
-	
-	/**
-	 * Renders the note as the main application
-	 * 
-	 * @param array $note Note as returned by WNote::raise()
-	 */
-	public static function handle_display(array $note) {
-		// Prepare a new view with the note
-		$view = new WView();
-		$view->assign('css', '/themes/system/note/note.css');
-		$view->assign('notes_data', array($note));
-		$view->setTemplate('themes/system/note/note_view.html');
-		
-		// Render the response
-		$response = new WResponse('_blank');
-		$response->render($view);
 	}
 	
 	/**
@@ -204,8 +190,9 @@ class WNote {
 	 */
 	public static function handle_log(array $note) {
 		$file = fopen(SYS_DIR.'wity.log', 'a+');
+		$date = new WDate();
 		$text = sprintf("[%s] [%s] [user %s|%s] [route %s] %s - %s\r\n", 
-			date('d/m/Y H:i:s', time()), 
+			$date->__toString(), 
 			$note['level'], 
 			@$_SESSION['userid'], 
 			$_SERVER['REMOTE_ADDR'], 
@@ -301,7 +288,6 @@ class WNote {
 		}
 		
 		$view = new WView();
-		$view->assign('css', '/themes/system/note/note.css');
 		$view->assign('notes_data', $notes_data);
 		$view->setTemplate('themes/system/note/note_view.html');
 		
@@ -321,7 +307,6 @@ class WNote {
 			
 			// Prepare a new view
 			$view = new WView();
-			$view->assign('css', '/themes/system/note/note.css');
 			$view->assign('css', '/themes/system/note/note_plain.css');
 			$view->assign('js', '/libraries/jquery-1.10.2/jquery-1.10.2.min.js');
 			$view->assign('js', '/themes/system/note/note.js');

@@ -85,6 +85,9 @@ class AdminController extends WController {
 					
 					return $model;
 				} else {
+					// Config Template
+					$this->configTheme();
+					
 					return WNote::error('app_structure', "No Admin implementation found for application \"".$this->appAsked."\".");
 				}
 			} else {

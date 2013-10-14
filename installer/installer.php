@@ -85,7 +85,7 @@ class Installer {
 					}
 					
 					// Save Database configuration
-					WConfig::set('database.server', $database['server']);
+					WConfig::set('database.server', str_replace('localhost', '127.0.0.1', $database['server']));
 					WConfig::set('database.port', $database['port']);
 					WConfig::set('database.user', $database['user']);
 					WConfig::set('database.pw', $database['pw']);
@@ -110,6 +110,7 @@ class Installer {
 					WConfig::set('config.site_name', $config['site_name']);
 					WConfig::set('config.theme', $config['theme']);
 					WConfig::set('config.lang', $config['lang']);
+					WConfig::set('config.timezone', 'Europe/Paris');
 					WConfig::set('config.email', $user['email']);
 					WConfig::set('config.debug', false);
 					WConfig::save('config', CONFIG_DIR.'config.php');
@@ -238,7 +239,12 @@ class Installer {
 			
 			case 'language':
 				// TODO : auto-detect available languages and validate them
-				$this->view->success('group', $data['group'], "Validated !", "Theme validated.");
+				$this->view->success('group', $data['group'], "Validated !", "Language validated.");
+				return true;
+			
+			case 'timezone':
+				// TODO : auto-detect available languages and validate them
+				$this->view->success('group', $data['group'], "Validated !", "Timezone validated.");
 				return true;
 			
 			case 'front_app':

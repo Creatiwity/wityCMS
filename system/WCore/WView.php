@@ -10,13 +10,13 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-17-01-2013
+ * @version 0.4.0-12-10-2013
  */
 class WView {
 	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
-	public $context;
+	private $context = array();
 	
 	/**
 	 * @var WTemplate Instance of WTemplate
@@ -71,6 +71,31 @@ class WView {
 	public function setContext($context) {
 		if (empty($this->context)) {
 			$this->context = $context;
+		}
+	}
+	
+	/**
+	 * Returns the application context
+	 * 
+	 * @return array Application's context
+	 */
+	public function getContext($field = '') {
+		if (!empty($field)) {
+			return (isset($this->context[$field])) ? $this->context[$field] : '';
+		}
+		
+		return $this->context;
+	}
+	
+	/**
+	 * Updates one field of the object context.
+	 * 
+	 * @param string $field Context's field to update
+	 * @param mixed  $value Value to assign
+	 */
+	public function updateContext($field, $value) {
+		if (!empty($field)) {
+			$this->context[$field] = $value;
 		}
 	}
 	
@@ -280,6 +305,13 @@ class WView {
 		
 		// Render the view
 		$this->rendered_string = $this->tpl->parse($file);
+		
+		// Add the signature to the forms within the view
+		$this->rendered_string = preg_replace(
+			'#<form(.+)>#', 
+			'<form$1><input type="hidden" name="form_signature" value="'.$this->getContext('signature').'" />', 
+			$this->rendered_string
+		);
 		
 		// Come back to previous context
 		$this->tpl->popContext();

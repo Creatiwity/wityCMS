@@ -133,6 +133,7 @@ class WSession {
 		$_SESSION['nickname'] = $data['nickname'];
 		$_SESSION['email']    = $data['email'];
 		$_SESSION['groupe']   = $data['groupe'];
+		$_SESSION['lang']     = $data['lang'];
 		
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {

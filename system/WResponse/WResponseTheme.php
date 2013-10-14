@@ -107,11 +107,11 @@ class WResponseTheme {
 			$themeMainFile = $this->theme_dir.'templates'.DS.'index.html';
 		}
 		
-		// Handle notes
-		$this->tpl->assign('notes', WNote::getView($notes)->render());
-		
 		// Define {$include} tpl's var
 		$this->tpl->assign('include', $view->render());
+		
+		// Handle notes
+		$this->tpl->assign('notes', WNote::getView($notes)->render());
 		
 		$html = $this->tpl->parse($themeMainFile);
 		
