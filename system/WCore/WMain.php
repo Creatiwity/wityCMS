@@ -63,30 +63,18 @@ class WMain {
 				$format = 'JSON';
 			}
 			
+			// Calculate the model
 			$model = WRetriever::getModel($app_name, $params, false);
-			if ($mode == 'm') {
-				$response = array(
-					'app-name' => $app_name,
-					'model' => $model
-				);
+			
+			// Add the view if asked
+			if ($mode == 'mv') {
+				$model['view'] = WRetriever::getView($app_name, $params, false)->render();
 			} else if ($mode == 'v') {
-				$view = WRetriever::getView($app_name, $params, false)->render();
-				
-				$response = array(
-					'app-name' => $app_name,
-					'view'  => $view
-				);
-			} else if ($mode == 'mv') {
-				$view = WRetriever::getView($app_name, $params, false)->render();
-				
-				$response = array(
-					'app-name' => $app_name,
-					'model' => $model,
-					'view'  => $view
-				);
+				$model['view'] = WRetriever::getView($app_name, $params, false)->render();
+				unset($model['result']);
 			}
 			
-			echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+			echo json_encode($model, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 		} else {
 			// Get the view
 			$view = WRetriever::getView($app_name, $params, false);
