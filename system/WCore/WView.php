@@ -57,6 +57,11 @@ class WView {
 	private $rendered_string;
 	
 	/**
+	 * @var Counts the number of times a view was rendered for each signature.
+	 */
+	private $render_counts = array();
+	
+	/**
 	 * Setup template
 	 */
 	public function __construct() {
@@ -277,11 +282,24 @@ class WView {
 	 * @return string The rendered string of the view
 	 */
 	public function render() {
+		$signature = $this->getContext('signature');
+		
 		// Check template file
 		if (empty($this->templateFile)) {
 			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
 			// A View can now be empty
 			return '';
+		}
+		
+		// Prevent Views from self inclusion more than 5 times
+		if (!isset($this->render_counts[$signature])) {
+			$this->render_counts[$signature] = 1;
+		} else {
+			if ($this->render_counts[$signature] >= 5) {
+				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times. ')))->render();
+			}
+			
+			$this->render_counts[$signature]++;
 		}
 		
 		// Treat global vars
@@ -309,7 +327,7 @@ class WView {
 		// Add the signature to the forms within the view
 		$this->rendered_string = preg_replace(
 			'#<form(.+)>#', 
-			'<form$1><input type="hidden" name="form_signature" value="'.$this->getContext('signature').'" />', 
+			'<form$1><input type="hidden" name="form_signature" value="'.$signature.'" />', 
 			$this->rendered_string
 		);
 		
