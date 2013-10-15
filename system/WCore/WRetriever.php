@@ -126,7 +126,7 @@ class WRetriever {
 			// Get the model
 			$model = self::getModel($app_name, $params);
 			
-			if (array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
+			if (is_array($model['result']) && array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
 				$view = WNote::getView(array($model['result']));
 			} else {
@@ -145,7 +145,7 @@ class WRetriever {
 				}
 				
 				// Update the context
-				$view->updateContext('signature', md5($app_name.serialize($params).$has_parent));
+				$view->setSignature(md5($app_name.serialize($params).$has_parent));
 			}
 			
 			return $view;

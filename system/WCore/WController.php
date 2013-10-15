@@ -138,18 +138,6 @@ abstract class WController {
 		
 		return $this->context;
 	}
-	
-	/**
-	 * Updates one field of the object context.
-	 * 
-	 * @param string $field Context's field to update
-	 * @param mixed  $value Value to assign
-	 */
-	public function updateContext($field, $value) {
-		if (!empty($field)) {
-			$this->context[$field] = $value;
-		}
-	}
 
 	/**
 	 * Returns true if there is a parent in the context, false otherwise
