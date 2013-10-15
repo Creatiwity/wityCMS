@@ -268,6 +268,8 @@ class WRetriever {
 	 */
 	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
+			$args = addslashes($args);
+			
 			// Replace all the template variables in the string
 			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
 			
@@ -285,7 +287,7 @@ class WRetriever {
 				// Get the params from the route of the view
 				foreach ($route as $part) {
 					if (!empty($part)) {
-						$params .= '"'.addslashes($part).'", ';
+						$params .= '"'.$part.'", ';
 					}
 				}
 				
