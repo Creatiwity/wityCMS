@@ -29,11 +29,6 @@ class WLang {
 	private static $lang_dirs = array();
 	
 	/**
-	 * @var array List of all loaded language files
-	 */
-	private static $files_loaded = array();
-	
-	/**
 	 * @var array Language values associated to their constant
 	 */
 	private static $values = array();
@@ -201,7 +196,7 @@ class WLang {
 	 */
 	private static function loadLangFile($file) {
 		// Checks that file exists and not already loaded
-		if (!in_array($file, self::$files_loaded) && file_exists($file)) {
+		if (file_exists($file)) {
 			// Parses XML file
 			$string = file_get_contents($file);
 			$xml = new SimpleXMLElement($string);
@@ -209,9 +204,6 @@ class WLang {
 				$lang_string = dom_import_simplexml($lang_item)->nodeValue;
 				self::assign((string) $lang_item->attributes()->id, $lang_string);
 			}
-			
-			// Mark as loaded
-			self::$files_loaded[] = $file;
 		}
 	}
 	
@@ -228,6 +220,9 @@ class WLang {
 					foreach (self::$languages as $lang) {
 						if (isset($dir[$lang])) {
 							self::loadLangFile($dir[$lang]);
+							
+							// Remove the directory treated
+							unset(self::$lang_dirs[$dir_name][$lang]);
 						}
 					}
 					
