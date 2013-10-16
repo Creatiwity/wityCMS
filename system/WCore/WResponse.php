@@ -54,7 +54,7 @@ class WResponse {
 			
 			$response = $this->handler->render($view, $notes);
 		} catch (Exception $e) {
-			WNote::error('response_final_render', $e->getMessage(), 'die');
+			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
 			return false;
 		}
 		

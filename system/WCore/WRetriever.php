@@ -126,7 +126,7 @@ class WRetriever {
 			// Get the model
 			$model = self::getModel($app_name, $params);
 			
-			if (array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
+			if (is_array($model['result']) && array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
 				$view = WNote::getView(array($model['result']));
 			} else {
@@ -145,7 +145,7 @@ class WRetriever {
 				}
 				
 				// Update the context
-				$view->updateContext('signature', md5($app_name.serialize($params).$has_parent));
+				$view->setSignature(md5($app_name.serialize($params).$has_parent));
 			}
 			
 			return $view;
@@ -268,6 +268,8 @@ class WRetriever {
 	 */
 	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
+			$args = addslashes($args);
+			
 			// Replace all the template variables in the string
 			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
 			
@@ -285,7 +287,7 @@ class WRetriever {
 				// Get the params from the route of the view
 				foreach ($route as $part) {
 					if (!empty($part)) {
-						$params .= '"'.addslashes($part).'", ';
+						$params .= '"'.$part.'", ';
 					}
 				}
 				
