@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-20-03-2013
+ * @version 0.4.0-12-10-2013
  */
 abstract class WController {
 	/**
@@ -33,8 +33,8 @@ abstract class WController {
 	 */
 	protected $view;
 	
-	/**
-	 * @var string action that will be performed in this application (default: 'index')
+	 /**
+	 * @var string action that will be performed in this application
 	 */
 	protected $action = '';
 	
@@ -60,15 +60,15 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 		
-		// Automatically declare the language directory
-		if (is_dir($this->context['directory'].'lang')) {
-			WLang::declareLangDir($this->context['directory'].'lang');
-		}
-		
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
 			WNote::error('app_no_manifest', 'The manifest of the application "'.$this->getAppName().'" cannot be found.');
+		}
+		
+		// Automatically declare the language directory
+		if (is_dir($this->context['directory'].'lang')) {
+			WLang::declareLangDir($this->context['directory'].'lang', $this->manifest['default_lang']);
 		}
 	}
 	
@@ -131,8 +131,21 @@ abstract class WController {
 	 * 
 	 * @return array Application's context
 	 */
-	public function getContext() {
+	public function getContext($field = '') {
+		if (!empty($field)) {
+			return (isset($this->context[$field])) ? $this->context[$field] : '';
+		}
+		
 		return $this->context;
+	}
+
+	/**
+	 * Returns true if there is a parent in the context, false otherwise
+	 *
+	 * @return bool true if there is a parent in the context, false otherwise
+	 */
+	public function hasParent() {
+		return $this->context['parent'];
 	}
 	
 	/**
@@ -223,7 +236,7 @@ abstract class WController {
 		return $action;
 	}
 	
-	/**
+	 /**
 	 * Returns the real executed action
 	 * 
 	 * @return string real executed action name
@@ -303,7 +316,7 @@ abstract class WController {
 		$manifest = array();
 		
 		// Nodes to look for
-		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission');
+		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission', 'default_lang');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'action':

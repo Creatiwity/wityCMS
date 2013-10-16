@@ -129,10 +129,11 @@ class WSession {
 	 * @param array $data data to store into $_SESSION
 	 */
 	public function setupSession($userid, $data) {
-		$_SESSION['userid']   	= $userid;
-		$_SESSION['nickname'] 	= $data['nickname'];
-		$_SESSION['email']    	= $data['email'];
-		$_SESSION['groupe']   	= $data['groupe'];
+		$_SESSION['userid']   = $userid;
+		$_SESSION['nickname'] = $data['nickname'];
+		$_SESSION['email']    = $data['email'];
+		$_SESSION['groupe']   = $data['groupe'];
+		$_SESSION['lang']     = $data['lang'];
 		$_SESSION['firstname']	= $data['firstname'];
 		$_SESSION['lastname']	= $data['lastname'];
 		
@@ -218,7 +219,7 @@ class WSession {
 	
 	/**
 	 * Generates a user-and-computer specific hash that will be stored in a cookie
-
+	 *
 	 * @param string $nick nickname
 	 * @param string $pass password
 	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash

@@ -10,13 +10,13 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-17-01-2013
+ * @version 0.4.0-12-10-2013
  */
 class WView {
 	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
-	public $context;
+	private $context = array();
 	
 	/**
 	 * @var WTemplate Instance of WTemplate
@@ -57,6 +57,11 @@ class WView {
 	private $rendered_string;
 	
 	/**
+	 * @var Counts the number of times a view was rendered for each signature.
+	 */
+	private $render_counts = array();
+	
+	/**
 	 * Setup template
 	 */
 	public function __construct() {
@@ -71,6 +76,30 @@ class WView {
 	public function setContext($context) {
 		if (empty($this->context)) {
 			$this->context = $context;
+		}
+	}
+	
+	/**
+	 * Returns the application context
+	 * 
+	 * @return array Application's context
+	 */
+	public function getContext($field = '') {
+		if (!empty($field)) {
+			return (isset($this->context[$field])) ? $this->context[$field] : '';
+		}
+		
+		return $this->context;
+	}
+	
+	/**
+	 * Updates the signature of the view.
+	 * 
+	 * @param string $value Signature of the view to display in forms
+	 */
+	public function setSignature($value) {
+		if (empty($this->context['signature'])) {
+			$this->context['signature'] = $value;
 		}
 	}
 	
@@ -252,11 +281,24 @@ class WView {
 	 * @return string The rendered string of the view
 	 */
 	public function render() {
+		$signature = $this->getContext('signature');
+		
 		// Check template file
 		if (empty($this->templateFile)) {
 			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
 			// A View can now be empty
 			return '';
+		}
+		
+		// Prevent Views from self inclusion more than 5 times
+		if (!isset($this->render_counts[$signature])) {
+			$this->render_counts[$signature] = 1;
+		} else {
+			if ($this->render_counts[$signature] >= 5) {
+				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times. ')))->render();
+			}
+			
+			$this->render_counts[$signature]++;
 		}
 		
 		// Treat global vars
@@ -274,15 +316,30 @@ class WView {
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		// Get template file and clean it for next render
-		$file = $this->getTemplate();
-		$this->templateFile = "";
-		
 		// Render the view
+		$file = $this->getTemplate();
 		$this->rendered_string = $this->tpl->parse($file);
+		
+		// Add the signature to the forms within the view
+		$this->rendered_string = preg_replace_callback(
+			'#<form([^>]+)>(<input type="hidden" name="form_signature")?#', 
+			function($matches) use($signature) {
+				// Prevent from overriding sub-forms signatures
+				if (empty($matches[2])) {
+					return '<form'.$matches[1].'><input type="hidden" name="form_signature" value="'.$signature.'" />';
+				} else {
+					return $matches[0];
+				}
+			},
+			$this->rendered_string
+		);
 		
 		// Come back to previous context
 		$this->tpl->popContext();
+		
+		// Clean the view for the next render
+		$this->templateFile = '';
+		$this->context['signature'] = '';
 		
 		return $this->rendered_string;
 	}

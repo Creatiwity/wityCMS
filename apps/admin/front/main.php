@@ -32,68 +32,88 @@ class AdminController extends WController {
 			$userView = WRetriever::getView('user', array('login'));
 			$this->setView($userView);
 		} else if ($this->checkAdminAccess()) {
-			$this->routeAdmin($params);
+			$this->appAsked = array_shift($params);
 			
-			$this->appAsked = WRoute::getApp();
-			
-			if (!empty($this->appAsked) && $this->appAsked != 'admin') {
-				// Load admin controller of the app
-				$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
-				$app_class = ucfirst($this->appAsked).'AdminController';
+			// Use default
+			if (empty($this->appAsked)) {
+				$default = WConfig::get('route.admin');
+				// Get the first arg of the route which is the action to load
+				$action = isset($default[1][0]) ? $default[1][0] : '';
+				$this->appAsked = $default[0];
 				
-				if (file_exists($app_dir.'main.php')) {
-					include_once $app_dir.'main.php';
-				}
-				
-				if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
-					$this->appController = new $app_class();
-					
-					// Instantiate Model if exists
-					if (file_exists($app_dir.'model.php')) {
-						include_once $app_dir.'model.php';
-						$model_class = str_replace('Controller', 'Model', $app_class);
-						if (class_exists($model_class)) {
-							$this->appController->setModel(new $model_class());
-						}
-					}
-					
-					// Instantiate View if exists
-					if (file_exists($app_dir.'view.php')) {
-						include_once $app_dir.'view.php';
-						$view_class = str_replace('Controller', 'View', $app_class);
-						if (class_exists($view_class)) {
-							$this->appController->setView(new $view_class());
-						}
-					}
-					
-					// Init
-					$this->appController->init(array(
-						'name'       => $this->appAsked,
-						'directory'  => $app_dir,
-						'controller' => $app_class,
-						'admin'      => true
-					));
-					
-					// Execute and get model
-					$model = $this->appController->launch($params);
-					
-					// Config Template
-					$this->configTheme();
-					
-					// Update the action triggered
-					$this->action = $this->appController->getTriggeredAction();
-					
-					return $model;
+				if ($this->hasAccess($this->appAsked, $action, true)) {
+					$model = $this->exec($default[1]);
 				} else {
-					return WNote::error('app_structure', "No Admin implementation found for application \"".$this->appAsked."\".");
+					// Select a random app to display
+					$apps = array_keys($this->getAdminApps());
+					$this->appAsked = $apps[0];
+					$model = $this->exec($params);
 				}
+			} else if ($this->hasAccess($this->appAsked)) {
+				$model = $this->exec($params);
 			} else {
-				// Config du template
-				$this->configTheme();
-				return WNote::info('admin_no_access', "No suitable application to display was found. Please, select one from the menu.");
+				$model = WNote::error('admin_no_access', "You don't have access to the administration of this application.");
 			}
+			
+			// Config du template
+			$this->configTheme();
+			
+			return $model;
 		} else {
 			return WNote::error('admin_access_forbidden', "You do not have access to the administration.");
+		}
+	}
+	
+	private function exec($params) {
+		// Load admin controller of the app
+		$app_dir = APPS_DIR.$this->appAsked.DS.'admin'.DS;
+		$app_class = ucfirst($this->appAsked).'AdminController';
+		
+		if (file_exists($app_dir.'main.php')) {
+			include_once $app_dir.'main.php';
+		}
+		
+		if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
+			$this->appController = new $app_class();
+			
+			// Instantiate Model if exists
+			if (file_exists($app_dir.'model.php')) {
+				include_once $app_dir.'model.php';
+				$model_class = str_replace('Controller', 'Model', $app_class);
+				if (class_exists($model_class)) {
+					$this->appController->setModel(new $model_class());
+				}
+			}
+			
+			// Instantiate View if exists
+			if (file_exists($app_dir.'view.php')) {
+				include_once $app_dir.'view.php';
+				$view_class = str_replace('Controller', 'View', $app_class);
+				if (class_exists($view_class)) {
+					$this->appController->setView(new $view_class());
+				}
+			}
+			
+			// Init
+			$this->appController->init(array(
+				'name'       => $this->appAsked,
+				'directory'  => $app_dir,
+				'controller' => $app_class,
+				'admin'      => true
+			));
+			
+			// Execute and get model
+			$model = $this->appController->launch($params);
+			
+			// Linking the views
+			$this->setView($this->appController->getView());
+			
+			// Update the action triggered
+			$this->action = $this->appController->getTriggeredAction();
+			
+			return $model;
+		} else {
+			return WNote::error('app_structure', "No Admin implementation found for application \"".$this->appAsked."\".");
 		}
 	}
 	
@@ -136,43 +156,9 @@ class AdminController extends WController {
 	}
 	
 	/**
-	 * Updates the route for the admin app
-	 */
-	private function routeAdmin(array &$params) {
-		$app_name = array_shift($params);
-		
-		if (!empty($app_name) && $this->hasAccess($app_name, '', true)) {
-			WRoute::updateApp($app_name);
-			WRoute::updateArgs($params);
-		} else {
-			$default = WConfig::get('route.admin');
-			
-			// Get the first arg of the route which is the action to load
-			$action = isset($default[1][0]) ? $default[1][0] : '';
-			
-			if ($this->hasAccess($default[0], $action, true)) {
-				WRoute::setRoute($default);
-			} else {
-				// Select a random app to display
-				$apps = $this->getAdminApps();
-				
-				if (!empty($apps)) {
-					$apps_keys = array_keys($apps);
-					WRoute::setRoute(array(array_shift($apps_keys), array()));
-				}
-			}
-		}
-	}
-	
-	/**
 	 * Configurates the admin template
 	 */
 	private function configTheme() {
-		// Linking the views
-		if (!is_null($this->appController)) {
-			$this->setView($this->appController->getView());
-		}
-		
 		// Config theme
 		WConfig::set('config.theme', 'admin-bootstrap');
 		

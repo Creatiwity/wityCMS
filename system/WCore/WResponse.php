@@ -79,7 +79,7 @@ class WResponse {
 		// Check headers
 		$headers = $view->getHeaders();
 		foreach ($headers as $name => $value) {
-			header($name.': '.$headers['location']);
+			header($name.': '.$value);
 		}
 		if (isset($headers['location'])) {
 			return true;
@@ -105,36 +105,28 @@ class WResponse {
 		}
 		
 		try {
-			// Handle notes
-			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
-			
 			// Define {$include} tpl's var
 			$this->tpl->assign('include', $view->render());
 			
-			// Render the theme
-			$html = $this->tpl->parse($themeMainFile);
+			// Handle notes (including Retrievers' notes)
+			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
 			
-			// Add forgotten CSS and JS
-			/*$html = str_replace(
-				'</head>',
-				$this->tpl->getVar('css').$this->tpl->getVar('js').'</head>',
-				$html
-			);*/
-			
-			// Absolute links fix
-			// Automatically updates the links with WityCMS path
 			$dir = WRoute::getDir();
-			if (!empty($dir)) {
-				$html = str_replace(
+			if (empty($dir)) {
+				// Direct render
+				$this->tpl->display($themeMainFile);
+			} else {
+				// Absolute links fix
+				// If $dir is not the root file, then change links
+				$html = $this->tpl->parse($themeMainFile);
+				echo str_replace(
 					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
 					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
 					$html
 				);
 			}
-			
-			echo $html;
 		} catch (Exception $e) {
-			WNote::error('response_final_render', $e->getMessage(), 'die');
+			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
 			return false;
 		}
 		

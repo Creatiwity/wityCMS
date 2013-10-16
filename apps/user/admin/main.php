@@ -156,6 +156,8 @@ class UserAdminController extends WController {
 				}
 			} else if ($add_case) {
 				$errors[] = WLang::get('error_no_password');
+			} else {
+				unset($post_data['password']);
 			}
 			unset($post_data['password_conf']);
 			

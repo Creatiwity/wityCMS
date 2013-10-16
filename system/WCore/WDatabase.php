@@ -40,7 +40,12 @@ class WDatabase extends PDO {
 			# Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
 			@parent::__construct($dsn, $user, $password);
 		} catch (PDOException $e) {
-			WNote::error('sql_conn_error', "Impossible to connect to MySQL.<br />".utf8_encode($e->getMessage()), 'debug, die');
+			$message = utf8_encode($e->getMessage());
+			if ($message == "could not find driver") {
+				$message = "WityCMS was unable to find the PHP's <strong>PDO extension</strong> on your system. Please, activate PDO to run the script.";
+			}
+			
+			WNote::error('sql_conn_error', "Impossible to connect to the database MySQL.<br />".$message, 'debug, die');
 		}
 		$this->tablePrefix = WConfig::get('database.prefix');
 	}

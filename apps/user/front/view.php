@@ -28,7 +28,7 @@ class UserView extends WView {
 		$this->setTemplate('connexion_form');
 	}
 	
-	public function register(array $data = array()) {
+	public function register($data = array()) {
 		$this->assign('base', WRoute::getBase());
 		$inputs = array('nickname', 'email', 'firstname', 'lastname', 'country');
 		foreach ($inputs as $name) {

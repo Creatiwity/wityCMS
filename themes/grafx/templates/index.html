@@ -3,6 +3,8 @@
 	<head>
 		<title>{$page_title}</title>
 		<meta charset="utf-8" />
+		<meta name="description" content="{if isset({$site_desc})}{$site_desc}{/if}" />
+		<meta name="keywords" content="{if isset({$keywords})}{$keywords}{/if}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		
 		<!-- Bootstrap -->
@@ -87,7 +89,15 @@
 							{retrieve_view user/login}
 						</div>
 					</aside>
+					<?php else: ?>
+					<aside class="block-user block text-center">
+						<p>Bienvenue <?php echo $_SESSION['nickname']; ?> !</p>
+						<?php if (!empty($_SESSION['access'])): ?>
+						<p><a href="/admin/">Administration</a></p>
+						<?php endif; ?>
+					</aside>
 					<?php endif; ?>
+					<!--
 					<aside class="block">
 						<h2>Titre du block</h2>
 						<ul class="listing">
@@ -97,6 +107,7 @@
 							<li>Test</li>
 						</ul>
 					</aside>
+					-->
 				</div>
 			</div>
 			<footer class="text-center">

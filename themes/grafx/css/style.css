@@ -12,7 +12,6 @@ body {
 	font-size: 0.8em;
 	color: #a0a0a0;
 	background: url('../img/bg.png') repeat-x;
-	padding: 30px;
 }
 
 .clear {
@@ -79,6 +78,7 @@ ul.listing li:hover {
 header {
 	color: white;
 	font-weight: bold;
+	margin-top: 30px;
 }
 
 header img {

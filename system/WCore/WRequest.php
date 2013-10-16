@@ -6,29 +6,34 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WRequest manages all requests.
+ * WRequest manages all input variables.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-29-12-2011
  */
 class WRequest {
-	/**
+	 /**
 	 * @var array Contains all checked variables to avoid infinite loop
 	 */
 	private static $checked = array();
 	
 	/**
+	 * @var bool Variable to lock all read/write actions on the input values. Default values will be sent.
+	 */
+	private static $lock = false;
+	
+	/**
 	 * Returns the values of all variables with name in $names sent by $hash method
 	 * 
-	 * You can use the following hashes :
+	 * You can use the following hashes:
 	 * - "GET"
 	 * - "POST"
 	 * - "FILES"
 	 * - "COOKIE"
 	 * - "REQUEST" (default)
 	 * 
-	 * The following syntax IS allowed :
+	 * The following syntax is allowed:
 	 * <code>list($v1, ...) = WRequest::get(array('v1', 'v2'));</code>
 	 * 
 	 * @param string|array  $names      variable names
@@ -65,6 +70,7 @@ class WRequest {
 				$result[] = $value;
 				$result[$name] = $value;
 			}
+			
 			return $result;
 		} else {
 			return self::getValue($data, $names, $default, $hash);
@@ -107,6 +113,7 @@ class WRequest {
 			$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
 			$result[$name] = $value;
 		}
+		
 		return $result;
 	}
 	
@@ -120,15 +127,20 @@ class WRequest {
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {
+		// Stop read action
+		if (self::$lock) {
+			return $default;
+		}
+		
 		if (isset(self::$checked[$hash.$name])) {
 			// On récupère la variable vérifiée des données
 			return $data[$name];
 		} else {
 			if (isset($data[$name]) && !is_null($data[$name])) {
-				// On filtre la variable requête pour la première fois
+				// Filter the variable value
 				$data[$name] = self::filter($data[$name]);
 			} else if (!is_null($default)) {
-				// On utilise la valeur par défaut
+				// Use default
 				$data[$name] = self::filter($default);
 			} else {
 				$data[$name] = null;
@@ -151,6 +163,11 @@ class WRequest {
 	 * @return mixed previous value, may be null
 	 */
 	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
+		// Stop write action
+		if (self::$lock) {
+			return null;
+		}
+		
 		// Check if overwriting is allowed
 		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
 			return $_REQUEST[$name];
@@ -204,6 +221,20 @@ class WRequest {
 		}
 		
 		return $variable;
+	}
+	
+	/**
+	 * Stops all read/write actions on the Request variables.
+	 */
+	public static function lock() {
+		self::$lock = true;
+	}
+	
+	/**
+	 * Allows all read/write actions on the Request variables.
+	 */
+	public static function unlock() {
+		self::$lock = false;
 	}
 }
 
