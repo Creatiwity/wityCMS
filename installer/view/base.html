@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="installer/favicon.png" />
 		
 		<link type="text/css" rel="stylesheet" href="libraries/bootstrap-3.0.0/css/bootstrap.min.css" />
-		<link type="text/css" rel="stylesheet" href="libraries/typeahead.js-bootstrap.css" />
+		<link type="text/css" rel="stylesheet" href="libraries/twitter-typeahead/css/typeahead.js-bootstrap.css" />
 		<link type="text/css" rel="stylesheet" href="installer/css/style.css" />
 		
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -21,7 +21,7 @@
 		
 		<script type="text/javascript" src="libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="installer/js/script.js"></script>
+		<script type="text/javascript" src="installer/js/form.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -35,7 +35,7 @@
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2" data-wity-form-alert="witycms"></div>
 			</div>
-			<div class="row" data-form-witycms-onsuccess="hide">
+			<div class="row" data-wity-form-witycms-onsuccess="hide">
 				<div class="col-md-3 col-md-offset-1">
 					<button type="button" class="btn btn-primary btn-lg btn-block" data-wity-form-submit="witycms" autocomplete="off" data-loading-text="Loading..." data-remaining-text="Fill in the fields" data-error-text="Fatal Error !">Here we go !</button>
 					<br />
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 			<div class="row" data-wity-form-debug="witycms"></div>
-			<div class="row hide" data-form-witycms-onsuccess="show">
+			<div class="row hide" data-wity-form-witycms-onsuccess="show">
 				<div class="jumbotron">
   					<h1>Congratulations</h1>
   					<p>The installation of WityCMS is done !</p>

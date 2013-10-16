@@ -64,7 +64,7 @@ class View {
 	
 	public function render() {
 		if(file_exists("installer".DS."view".DS."view.html")) {
-			$content = file_get_contents("installer".DS."view".DS."view.html");
+			$content = file_get_contents("installer".DS."view".DS."base.html");
 			echo $content;
 		}
 	}

@@ -358,7 +358,7 @@ class Installer {
 	 * @return bool
 	 */
 	private function isURL($url, $data, &$respond) {
-		return !empty($url) && preg_match("#^(http|https|ftp)\://[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(/[A-Z0-9~\._-]+)*/?$#i", $url);
+		return !empty($url) && preg_match("#^(http|https|ftp)\://[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(:[0-9]+)?(/[A-Z0-9~\._-]+)*/?$#i", $url);
 	}
 	
 	/**
