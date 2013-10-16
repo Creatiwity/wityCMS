@@ -116,7 +116,6 @@ class UserAdminView extends WView {
 	public function del($model) {
 		$this->assign('nickname', $model['user_data']['nickname']);
 		$this->assign('confirm_delete_url', "/admin/user/del/".$model['user_id']);
-		$this->setTheme('_blank');
 	}
 	
 	/**
@@ -186,7 +185,6 @@ class UserAdminView extends WView {
 	public function group_del($model) {
 		$this->assign('group_name', $model['group_data']['name']);
 		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['group_id']);
-		$this->setTheme('_blank');
 	}
 	
 	/**

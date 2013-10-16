@@ -10,9 +10,21 @@ $(document).ready(function() {
 		modalId = $(this).attr('data-modal-container');
 		modal = $('#'+modalId);
 		
-		modal.load(link, '', function() {
-			modal.modal();
-		})
+		$.ajax(link, {
+			success: function(data) {
+				var json;
+				
+				try {
+					json = $.parseJSON(data);
+				} catch (e) {
+					console.error('Error parsing modal JSON');
+					return;
+				}
+				
+				modal.html(json.view);
+				modal.modal();
+			}
+		});
 	});
 	
 });
