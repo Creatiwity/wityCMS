@@ -5,16 +5,8 @@
  */
 
 $route = array(
-    'default' => array(
-        0 => 'news',
-        1 => array(
-        ),
-    ),
-    'admin' => array(
-        0 => 'news',
-        1 => array(
-        ),
-    ),
+    'default' => array('news'),
+    'admin' => array('news'),
     'custom' => array(),
 );
 

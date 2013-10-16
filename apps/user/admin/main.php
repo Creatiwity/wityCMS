@@ -264,10 +264,10 @@ Ceci est un message automatique.";
 	/**
 	 * Edits a user in the database
 	 */
-	protected function edit() {
-		$user_id = intval(WRoute::getArg(1));
+	protected function edit($params) {
+		$user_id = intval(array_shift($params));
 		
-		if (!$this->model->validId($user_id)) {
+		if (empty($user_id) || !$this->model->validId($user_id)) {
 			WNote::error('user_not_found', WLang::get('user_not_found'));
 			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
 			return false;
@@ -280,15 +280,15 @@ Ceci est un message automatique.";
 	/**
 	 * Deletes a user
 	 */
-	protected function del() {
-		$user_id = intval(WRoute::getArg(1));
+	protected function del($params) {
+		$user_id = intval(array_shift($params));
 		
 		if ($user_id == $_SESSION['userid']) {
 			WNote::error('user_self_delete', WLang::get('user_self_delete'), 'display');
 			return false;
 		}
 		
-		if (!$this->model->validId($user_id)) {
+		if (empty($user_id) || !$this->model->validId($user_id)) {
 			WNote::error('user_not_found', WLang::get('user_not_found'), 'display');
 			return false;
 		}
@@ -378,8 +378,8 @@ Ceci est un message automatique.";
 	/**
 	 * Deletes a group
 	 */
-	protected function group_del() {
-		$group_id = intval(WRoute::getArg(1));
+	protected function group_del($params) {
+		$group_id = intval(array_shift($params));
 		
 		if (!$this->model->validGroupId($group_id)) {
 			WNote::error('group_not_found', WLang::get('group_not_found'), 'display');
@@ -390,7 +390,7 @@ Ceci est un message automatique.";
 			$this->model->deleteGroup($group_id);
 			$this->model->resetUsersInGroup($group_id);
 			WNote::success('user_group_deleted', WLang::get('group_deleted'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/groups/');
+			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/groups/');
 		}
 		
 		return array(
