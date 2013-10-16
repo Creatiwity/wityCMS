@@ -22,7 +22,8 @@ $(document).ready(function() {
 
 			this.context = {
 				id: id,
-				form: this
+				form: this,
+				indexed: {}
 			};
 			
 			this.$alert = $('[data-wity-form-alert="' + id + '"]');
@@ -57,8 +58,12 @@ $(document).ready(function() {
 				handlers.failure.push([$this, handler]);
 			});
 
-			this.node = new FormNode(options, this.context);
+			this.node = new FormNode(options, this.context, this);
 		}
+
+		Form.prototype.updateStatus = function() {
+			// Check validated or not to allow click
+		};
 
 		Form.prototype.getAjaxHtml = function (url, datas, callback, context) {
 			var _url = url || this.url;
@@ -108,28 +113,37 @@ $(document).ready(function() {
 
 	FormNode = (function() {
 
-		var tabCounter = 0, NEVER_VALIDATED = 0, NOT_VALIDATED = 1, VALIDATED = 2;
+		var tabCounter = 0, NOT_YET_VALIDATED = 0, NOT_VALIDATED = 1, NOT_VALIDATED_EMPTY_REQUIRED = 2, VALIDATING = 3, VALIDATED = 4, EMPTY_NOT_REQUIRED = 5;
 
-		function FormNode(options, context) {
-			var _i, _len, $tabTitle, $tabStatus, $tabContainer, $tabContent, $summaryLi, $summaryStatus, $alertContainer, $fieldContainer, $field, contentCache, that = this;
+		/**
+		 * Validation updateStatus
+		 */
+
+		function FormNode(options, context, parent) {
+			var _i, _len, $tabTitle, $tabStatus, $tabContainer, 
+				$tabContent, $summaryLi, $summaryStatus, 
+				$alertContainer, $fieldContainer, $field, 
+				validationTimer, contentCache, that = this;
 
 			if (!options || !context || !context.id || !context.form || !context.$content || context.$content.length === 0) {
 				console.debug("context passed to FormNode isn't valid.");
 				return false;
 			}
 
+			context.indexed[this.id] = this;
+
 			this.id = options.id;
 			this.views = [];
+			this.indexed = context.indexed;
+			this.parent = parent;
 
-			if (options.name) {
-				this.name = options.name;
-			} else {
-				this.name = this.id;
-			}
-
+			this.name = options.name || this.id;
+			
 			this.required = (options.required === true) || (options.root === true);
-			this.validated = NEVER_VALIDATED;
+			this.validated = NOT_YET_VALIDATED;
 			this.summary = false;
+
+			this.validateDatas = options.validate || {};
 
 			// Build validate
 
@@ -163,7 +177,7 @@ $(document).ready(function() {
 							$tabStatus.removeClass('glyphicon-remove glyphicon-ok');
 
 							switch (that.validated) {
-								case NEVER_VALIDATED:
+								case NOT_YET_VALIDATED:
 								$tabStatus.addClass('glyphicon-remove');
 								break;
 
@@ -194,6 +208,10 @@ $(document).ready(function() {
 						for (_i = 0, _len = options.options.length; _i < _len; ++_i) {
 							$field.append('<option value="' + options.options[_i].value + '">' + options.options[_i].text + '</option>')
 						}
+
+						if (options.value) {
+							$field.val(options.value);
+						}
 					} else if (options.options.url) {
 						context.form.getAjaxHtml(options.options.url, null, function (data) {
 							$field.append(data);
@@ -217,6 +235,8 @@ $(document).ready(function() {
 					}
 				}
 
+				this.$field = $field;
+
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
 				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
@@ -227,7 +247,7 @@ $(document).ready(function() {
 						$fieldContainer.removeClass('has-success has-error has-warning');
 
 						switch (that.validated) {
-							case NEVER_VALIDATED:
+							case NOT_YET_VALIDATED:
 							break;
 
 							case NOT_VALIDATED:
@@ -240,6 +260,15 @@ $(document).ready(function() {
 						}
 					}
 				});
+
+				$field.on('blur changed', function() {
+					if (validationTimer) {
+						clearTimeout(validationTimer);
+					}
+
+					validationTimer = setTimeout(function() {that.validate();}, 0);
+				});
+
 			} else {
 				this.summary = (options.summary === true);
 			}
@@ -259,7 +288,7 @@ $(document).ready(function() {
 						$summaryStatus.removeClass('glyphicon-remove glyphicon-ok');
 
 						switch (that.validated) {
-							case NEVER_VALIDATED:
+							case NOT_YET_VALIDATED:
 							$summaryLi.addClass('text-primary');
 							break;
 
@@ -277,14 +306,12 @@ $(document).ready(function() {
 				});
 			}
 
-			// Build DOM
-
 			// Constructs all children of this node
-			if (options.childs && options.childs.length > 0) {
-				this.childs = [];
+			this.childs = [];
 
+			if (options.childs && options.childs.length > 0) {
 				for (_i = 0, _len = options.childs.length; _i < _len; ++_i) {
-					this.childs.push(new FormNode(options.childs[_i], context));
+					this.childs.push(new FormNode(options.childs[_i], context, this));
 				}
 			}
 
@@ -297,7 +324,133 @@ $(document).ready(function() {
 			this.render();
 		}
 
+		FormNode.prototype.isValidated = function() {
+			return (this.validated === VALIDATED);
+		};
+
+		FormNode.prototype.getValues = function() {
+			var _i, _len, values = {};
+
+			if(this.$field && this.$field.length > 0) {
+				values[this.id] = this.$field.val();
+			}
+
+			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
+				$.extend(values, this.childs[_i].getValues());
+			}
+
+			return values;
+		};
+
+		FormNode.prototype.hasChanged = function() {
+			var _i, _len, changed, currentValue;
+
+			if (this.$field && this.$field.length > 0) {
+				currentValue = this.$field.val();
+
+				changed = this.value !== currentValue;
+				if (changed === true) {
+					this.value = currentValue;
+					return true;
+				}
+			}
+
+			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
+				if (this.childs[_i].hasChanged() === true) {
+					return true;
+				}
+			}
+
+			return false;
+		};
+
+		FormNode.prototype.isEmpty = function() {
+			return (this.value === null || this.value === undefined || this.value === "");
+		};
+
+		FormNode.prototype.hasFocus = function() {
+			var _i, _len;
+
+			if (this.$field && this.$field.length > 0) {
+				if(this.$field.is(':focus')) {
+					return true;
+				}
+			}
+
+			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
+				if (this.childs[_i].hasFocus() === true) {
+					return true;
+				}
+			}
+
+			return false;
+		};
+
+		FormNode.prototype.updateStatus = function() {
+			var _i, _len, child, childrenValid = true;
+
+			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
+				childrenValid = childrenValid && (this.childs[_i].validated === VALIDATED || this.childs[_i].validated === EMPTY_NOT_REQUIRED);
+			}
+
+			if (childrenValid === false) {
+				this.validated = NOT_VALIDATED;
+			}
+		};
+
+		FormNode.prototype.triggerParentUpdate = function() {
+			this.parent.updateStatus();
+		};
+
 		FormNode.prototype.validate = function() {
+			var empty, regexp, localValid = true, localMessage, remoteValid = true;
+
+			if (this.hasChanged()) {
+				this.validated = VALIDATING;
+
+				empty = this.isEmpty();
+
+				if (this.required && empty) {
+					this.validated = NOT_VALIDATED_EMPTY_REQUIRED;
+				} else if (empty) {
+					this.validated = EMPTY_NOT_REQUIRED;
+				} else {
+					if (this.validateDatas.local && this.value) {
+						if (this.validateDatas.local.type === "regexp") {
+							regexp = new RegExp(this.validateDatas.local.options, "i");
+							localValid = regexp.test(this.value);
+							localMessage = this.validateDatas.local.message;
+						} else if (this.validateDatas.local.type === "equals") {
+							localValid = (this.indexed[this.validateDatas.local.options].value === this.value);
+							localMessage = this.validateDatas.local.message;
+						}
+
+						if (!localValid) {
+							this.message = this.message || [];
+							this.message.push({
+								type: "danger",
+								message: localMessage
+							});
+
+							this.validated = NOT_VALIDATED;
+						}
+					}
+
+					if (localValid && this.validateDatas.remote) {
+
+					}
+				}
+
+				if (localValid && remoteValid) {
+					this.validated = VALIDATED;
+				}
+
+				this.render();
+				this.triggerParentUpdate();
+			}
+
+			// Trigger updateStatus on parent
+
 			// Triggered on blur or changed or keyup && no focus
 
 			// Test empty, if required return false (always update view), else return true
@@ -342,7 +495,7 @@ $(document).ready(function() {
 							name: "Site name",
 							required: true,
 							validate: {
-								remote: true
+								remote: 'site_name'
 							}
 						},
 						{
@@ -356,7 +509,7 @@ $(document).ready(function() {
 									options: "^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(:[0-9]+)?(\/[A-Z0-9~\._-]+)*\/?$",
 									message: "Base URL must be a valid URL"
 								},
-								remote: true
+								remote: 'base_url'
 							},
 							type: "url"
 						},
@@ -365,7 +518,7 @@ $(document).ready(function() {
 							name: "Theme",
 							required: true,
 							validate: {
-								remote: true
+								remote: 'theme'
 							},
 							autocomplete: "GET_THEMES"
 						},
@@ -399,13 +552,21 @@ $(document).ready(function() {
 							id: "front_app",
 							name: "Front app.",
 							required: true,
-							autocomplete: "GET_FRONT_APPS"
+							autocomplete: "GET_FRONT_APPS",
+
+							validate: {
+								remote: 'front_app'
+							}
 						},
 						{
 							id: "admin_app",
 							name: "Admin app.",
 							required: true,
-							autocomplete: "GET_ADMIN_APPS"
+							autocomplete: "GET_ADMIN_APPS",
+
+							validate: {
+								remote: 'admin_app'
+							}
 						}
 					]
 				},
@@ -425,7 +586,7 @@ $(document).ready(function() {
 							hr: true,
 
 							validate: {
-								remote: true
+								remote: 'db_credentials'
 							},
 
 							childs: [
@@ -474,7 +635,7 @@ $(document).ready(function() {
 							requires: "credentials",
 
 							validate: {
-								remote: true
+								remote: 'db_name'
 							}
 						},
 						{
@@ -483,7 +644,7 @@ $(document).ready(function() {
 							requires: "dbname",
 
 							validate: {
-								remote: true
+								remote: 'tables_prefix'
 							}
 						}
 					]
@@ -506,7 +667,7 @@ $(document).ready(function() {
 									options: "^[a-zA-Z0-9]([a-zA-Z0-9])*$",
 									message: "The nickname must be an alphanumeric value."
 								},
-								remote: true
+								remote: 'user_nickname'
 							}
 						},
 						{
@@ -517,7 +678,7 @@ $(document).ready(function() {
 							summary: true,
 
 							validate: {
-								remote: true
+								remote: 'user_password'
 							},
 
 							childs: [
@@ -559,7 +720,7 @@ $(document).ready(function() {
 									options: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
 									message: "This email is not valid."
 								},
-								remote: true
+								remote: 'user_email'
 							},
 
 							type: "email"
@@ -574,7 +735,7 @@ $(document).ready(function() {
 									options: "^[a-zA-Z]([- a-zA-Z])*$",
 									message: "The firstname is not valid."
 								},
-								remote: true
+								remote: 'user_firstname'
 							}
 						},
 						{
@@ -587,7 +748,7 @@ $(document).ready(function() {
 									options: "^[a-zA-Z]([- a-zA-Z])*$",
 									message: "The lastname is not valid."
 								},
-								remote: true
+								remote: 'user_lastname'
 							}
 						}
 					]

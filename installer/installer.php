@@ -42,7 +42,7 @@ class Installer {
 		
 		$this->view = new View();
 		
-		$data = WRequest::getAssoc(array('command', 'installer', 'step', 'group'), '', 'POST');
+		$data = WRequest::getAssoc(array('command', 'installer', 'group'), '', 'POST');
 		
 		switch ($data['command']) {
 			default:
@@ -146,9 +146,9 @@ class Installer {
 				}
 				break;
 			
-			// Groups
-			case 'GROUP_VALIDATION':
-				$this->groupValidation($data);
+			// Remote
+			case 'REMOTE_VALIDATION':
+				$this->remoteValidation($data);
 				break;
 			
 			// Autocompletes
@@ -181,7 +181,7 @@ class Installer {
 	}
 	
 	/**
-	 * Checks that every group is validated
+	 * Checks that every field sent is validated
 	 * 
 	 * @param array $data
 	 * @return bool
@@ -190,7 +190,7 @@ class Installer {
 		$inputs = array('site_name', 'base_url', 'theme', 'language', 'front_app', 'admin_app', 'db_credentials', 'db_name', 'tables_prefix', 'user_password', 'user_nickname', 'user_email');
 		foreach ($inputs as $input_name) {
 			$data['group'] = $input_name;
-			if (!$this->groupValidation($data)) {
+			if (!$this->remoteValidation($data)) {
 				return false;
 			}
 		}
@@ -198,12 +198,12 @@ class Installer {
 	}
 	
 	/**
-	 * Groups validator
+	 * Remote validator
 	 * 
-	 * @param array $data Contains the name of the group
+	 * @param array $data Contains the name of the validator
 	 * @return bool
 	 */
-	private function groupValidation($data) {
+	private function remoteValidation($data) {
 		$respond = true;
 		
 		switch ($data['group']) {
