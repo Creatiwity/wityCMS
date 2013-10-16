@@ -446,8 +446,10 @@ $(document).ready(function() {
 				}
 
 				this.render();
-				this.triggerParentUpdate();
 			}
+
+			// Must be triggered in any case
+			this.triggerParentUpdate();
 
 			// Trigger updateStatus on parent
 
