@@ -17,19 +17,14 @@ require_once SYS_DIR.'WCore'.DS.'WView.php';
  */
 class WMain {
 	/**
-	 * @var array(string)|null Stores all the accessible applications
-	 */
-	private $apps = null;
-	
-	/**
-	 * Initializes config, route, session, lang and then exec the application
+	 * Initializes config, route, session, lang and then executes the application.
 	 */
 	public function __construct() {
 		// Loading config
 		$this->loadConfigs();
 		
-		// Route
-		$this->route();
+		// Initializing the route
+		WRoute::init();
 		
 		// Initializing sessions
 		$this->setupSession();
@@ -43,46 +38,47 @@ class WMain {
 		// Initializing WRetrever
 		WRetriever::init();
 		
-		// Exec application
+		// Executes the application
 		$this->exec();
 	}
 	
 	/**
-	 * This function will setup the whole WityCMS response
-	 * Find and load the theme
+	 * Executes the main application and wrap it into a response for the client.
+	 * The default response is the view of the main application included into a theme.
+	 * 
+	 * If the user adds /m/ in the beginning of the route, the response will be the serialized
+	 * model of the application in a JSON structure for instance.
 	 */
 	private function exec() {
-		// Setup the main app to execute
-		$app_name = WRoute::getApp();
-		$params = WRoute::getArgs();
-		$mode = WConfig::get('route.response');
+		// Setup the route
+		$params = WRoute::route();
+		$default = false;
 		
-		if (!empty($mode)) {
-			$format = strtoupper(WConfig::get('route.format'));
-			if (empty($format) || !in_array($format, array('JSON', 'XML', 'YAML'))) {
-				$format = 'JSON';
-			}
-			
-			// Calculate the model
-			$model = WRetriever::getModel($app_name, $params, false);
-			
-			// Add the view if asked
-			if ($mode == 'mv') {
-				$model['view'] = WRetriever::getView($app_name, $params, false)->render();
-			} else if ($mode == 'v') {
-				$model['view'] = WRetriever::getView($app_name, $params, false)->render();
-				unset($model['result']);
-			}
-			
-			echo json_encode($model, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-		} else {
-			// Get the view
-			$view = WRetriever::getView($app_name, $params, false);
-			
-			// Render the final response
-			$response = new WResponse('theme', WConfig::get('config.theme'));
-			$response->render($view);
+		// Load default route if needed
+		if (empty($params)) {
+			$params = WRoute::getDefault();
+			$default = true;
 		}
+		
+		// Extract the mode if exists
+		$mode = 'theme';
+		if (isset($params[0]) && WResponse::isMode($params[0])) {
+			$mode = array_shift($params);
+			
+			// Default route must not be loaded twice
+			if (!$default && empty($params)) {
+				$params = WRoute::getDefault();
+			}
+		}
+		
+		// Get the application name
+		$app_name = array_shift($params);
+		
+		// Triggers the application's action and get the resulting model
+		$model = WRetriever::getModel($app_name, $params, false);
+		
+		$response = new WResponse($mode);
+		$response->render($model);
 	}
 	
 	/**
@@ -90,14 +86,6 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
-	}
-	
-	/**
-	 * Loads WRoute
-	 */
-	private function route() {
-		WRoute::init();
-		WRoute::route();
 	}
 	
 	/**

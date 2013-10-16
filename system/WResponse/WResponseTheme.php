@@ -1,18 +1,21 @@
 <?php 
 /**
- * WResponse.php
+ * WResponseTheme.php
  */
 
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WResponse compiles the final render of WityCMS that will be sent to the browser.
+ * WResponseTheme is a plugin for WResponse.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-27-05-2013
+ * @version 0.4.0-16-10-2013
  */
-class WResponseTheme {
+class WResponseTheme implements WResponseMode {
+	private $model;
+	private $view;
+	
 	/**
 	 * @var WTemplate Instance of WTemplate
 	 */
@@ -29,7 +32,11 @@ class WResponseTheme {
 	private $theme_dir;
 	
 	public function __construct($theme) {
-		$this->setTheme($theme);
+		if (!empty($theme)) {
+			$this->setTheme($theme);
+		} else {
+			$this->setTheme(WConfig::get('config.theme'));
+		}
 		
 		// Load WTemplate
 		$this->tpl = WSystem::getTemplate();
@@ -69,7 +76,13 @@ class WResponseTheme {
 		return $this->theme_name;
 	}
 	
-	public function renderHeaders($headers) {
+	public function setModel($model) {
+		$this->model = $model;
+		$this->view = WRetriever::getViewFromModel($this->model);
+	}
+	
+	public function renderHeaders() {
+		$headers = $this->view->getHeaders();
 		foreach ($headers as $name => $value) {
 			header($name.': '.$value);
 		}
@@ -87,7 +100,7 @@ class WResponseTheme {
 	 * 
 	 * @param WView $view The view to render as a main instance
 	 */
-	public function render(WView $view, $notes) {
+	public function render($notes) {
 		// Check theme
 		if (empty($this->theme_name)) {
 			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
@@ -98,6 +111,8 @@ class WResponseTheme {
 		if (!is_null($plain_view)) {
 			$view = $plain_view;
 			$this->setTheme('_blank');
+		} else {
+			$view = $this->view;
 		}
 		
 		// Select Theme main template

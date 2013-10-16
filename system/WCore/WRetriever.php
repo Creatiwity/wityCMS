@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-12-10-2013
+ * @version 0.4.0-16-10-2013
  */
 class WRetriever {
 	/**
@@ -80,6 +80,9 @@ class WRetriever {
 		$model = array(
 			'app-name'         => $app_name,
 			'triggered-action' => '',
+			'params'           => $params,
+			'has-parent'       => $has_parent,
+			'signature'        => $signature,
 			'result'           => null
 		);
 		
@@ -124,7 +127,7 @@ class WRetriever {
 		
 		if ($controller instanceof WController) {
 			// Get the model
-			$model = self::getModel($app_name, $params);
+			$model = self::getModel($app_name, $params, $has_parent);
 			
 			if (is_array($model['result']) && array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
@@ -153,6 +156,10 @@ class WRetriever {
 			// Return a WView with error
 			return WNote::getView(array($controller));
 		}
+	}
+	
+	public static function getViewFromModel(array $model, $view_size = '') {
+		return self::getView($model['app-name'], $model['params'], $view_size, $model['has-parent']);
 	}
 	
 	/**
