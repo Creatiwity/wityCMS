@@ -24,7 +24,7 @@ class WMain {
 		$this->loadConfigs();
 		
 		// Initializing the route
-		WRoute::init();
+		$this->route();
 		
 		// Initializing sessions
 		$this->setupSession();
@@ -50,34 +50,14 @@ class WMain {
 	 * model of the application in a JSON structure for instance.
 	 */
 	private function exec() {
-		// Setup the route
-		$params = WRoute::route();
-		$default = false;
-		
-		// Load default route if needed
-		if (empty($params)) {
-			$params = WRoute::getDefault();
-			$default = true;
-		}
-		
-		// Extract the mode if exists
-		$mode = 'theme';
-		if (isset($params[0]) && WResponse::isMode($params[0])) {
-			$mode = array_shift($params);
-			
-			// Default route must not be loaded twice
-			if (!$default && empty($params)) {
-				$params = WRoute::getDefault();
-			}
-		}
-		
 		// Get the application name
+		$params = WRoute::getRoute();
 		$app_name = array_shift($params);
 		
 		// Triggers the application's action and get the resulting model
 		$model = WRetriever::getModel($app_name, $params, false);
 		
-		$response = new WResponse($mode);
+		$response = new WResponse(WConfig::get('route.mode'));
 		$response->render($model);
 	}
 	
@@ -86,6 +66,31 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
+	}
+	
+	/**
+	 * Initializes WRoute and calculate the response mode.
+	 */
+	private function route() {
+		// Setup the route
+		WRoute::init();
+		$route = WRoute::route();
+		
+		// Extract the mode if exists
+		$mode = 'theme';
+		if (isset($route[0]) && WResponse::isMode($route[0])) {
+			$mode = array_shift($route);
+			
+			// Default route must not be loaded twice
+			if (empty($route)) {
+				$route = WRoute::getDefault();
+			}
+			
+			// Update the route without the mode
+			WRoute::setRoute($route);
+		}
+		
+		WConfig::set('route.mode', $mode);
 	}
 	
 	/**

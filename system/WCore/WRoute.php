@@ -69,6 +69,10 @@ class WRoute {
 			$route = $custom_routes[$query];
 		} else {
 			$route = self::parseURL($query);
+			
+			if (empty($route)) { // Use default
+				$route = self::getDefault();
+			}
 		}
 		
 		self::setRoute($route);
