@@ -82,12 +82,10 @@ class WRoute {
 	 * @return array The route such as array("app_name", "param1", "param2")
 	 */
 	private static function parseURL($url) {
-		$routage = array('', array());
-		
 		// Cleaning
-		$url = trim($url, '/');
 		$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
 		$url = preg_replace('#\?.*$#', '', $url); // Remove query string
+		$url = trim($url, '/');
 		
 		return empty($url) ? array() : explode('/', $url);
 	}
