@@ -37,12 +37,12 @@ class AdminController extends WController {
 			// Use default
 			if (empty($this->appAsked)) {
 				$default = WConfig::get('route.admin');
+				$this->appAsked = array_shift($default);
 				// Get the first arg of the route which is the action to load
-				$action = isset($default[1][0]) ? $default[1][0] : '';
-				$this->appAsked = $default[0];
+				$action = isset($default[0]) ? $default[0] : '';
 				
 				if ($this->hasAccess($this->appAsked, $action, true)) {
-					$model = $this->exec($default[1]);
+					$model = $this->exec($default);
 				} else {
 					// Select a random app to display
 					$apps = array_keys($this->getAdminApps());

@@ -5,132 +5,125 @@
 
 defined('IN_WITY') or die('Access denied');
 
+interface WResponseMode {
+	public function setModel($model);
+	public function renderHeaders();
+	public function render($notes);
+}
+
 /**
  * WResponse compiles the final render of WityCMS that will be sent to the browser.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-27-05-2013
+ * @version 0.4.0-16-10-2013
  */
 class WResponse {
 	/**
-	 * @var WTemplate Instance of WTemplate
+	 * @var WResponseMode Response's handler to manage the final render
 	 */
-	private $tpl;
+	private $handler = null;
 	
 	/**
-	 * @var string Name of the theme used for the response
+	 * Finds the response handler and load it.
+	 * 
+	 * @param string $mode   Response's mode: theme, m, v, mv, ...
+	 * @param mixed  $option Response's option: theme name for instance
 	 */
-	private $theme_name;
-	
-	/**
-	 * @var string Directory of the theme used for the response
-	 */
-	private $theme_dir;
-	
-	public function __construct($default_theme) {
-		$this->setTheme($default_theme);
-		
-		// Load WTemplate
-		$this->tpl = WSystem::getTemplate();
-		if (is_null($this->tpl)) {
-			throw new Exception("WResponse::__construct(): WTemplate cannot be loaded.");
+	public function __construct($mode, $option = null) {
+		switch ($mode) {
+			case 'm':
+			case 'v':
+			case 'mv':
+				require_once SYS_DIR.'WResponse'.DS.'WResponseSerialize.php';
+				$this->handler = new WResponseSerialize($mode);
+				break;
+			
+			case 'theme':
+				require_once SYS_DIR.'WResponse'.DS.'WResponseTheme.php';
+				$this->handler = new WResponseTheme($option);
+				break;
+			
+			default:
+				$response_class = 'WResponse'.ucfirst(strtolower($mode));
+				$response_file  = SYS_DIR.'WResponse'.DS.$response_class.'.php';
+				
+				include_once $response_file;
+				// The response plugin must implement WResponseMode
+				if (class_exists($response_class) && in_array('WResponseMode', class_implements($response_class))) {
+					$this->handler = new $response_class($option);
+				} else {
+					require_once SYS_DIR.'WResponse'.DS.'WResponseTheme.php';
+					$this->handler = new WResponseTheme($option);
+				}
+				break;
 		}
-		
-		// Default vars
-		$site_name = WConfig::get('config.site_name');
-		$this->tpl->assign('site_name', $site_name);
-		$this->tpl->assign('page_title', $site_name);
 	}
 	
 	/**
-	 * Assigns a theme
+	 * Checks if a mode is valid: a handler have to be found for this mode
+	 * in system/WResponse/ directory.
 	 * 
-	 * @param string $theme theme name (must a be an existing directory in /themes/)
+	 * @param $mode string Mode name
+	 * @return bool
 	 */
-	public function setTheme($theme) {
-		if ($theme == '_blank') {
-			$this->theme_name = '_blank';
-			$this->theme_dir = 'themes/system/';
-		} else if (is_dir(THEMES_DIR.$theme)) {
-			$this->theme_name = $theme;
-			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
+	public static function isMode($mode) {
+		if (in_array($mode, array('theme', 'm', 'v', 'mv'))) {
+			return true;
 		} else {
-			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
+			$response_class = 'WResponse'.ucfirst(strtolower($mode));
+			$response_file  = SYS_DIR.'WResponse'.DS.$response_class.'.php';
+			
+			return file_exists($response_file);
 		}
 	}
 	
 	/**
-	 * Returns current theme name
+	 * Renders the final response to the client.
+	 * Response can be a valid HTML5 string with the WityCMS theme or, it can be a JSON structure for instance.
 	 * 
-	 * @return string current theme name
+	 * @param array $model Model to be rendered (the view will be calculated in the plugin)
 	 */
-	public function getTheme() {
-		return $this->theme_name;
-	}
-	
-	/**
-	 * Final render of the response
-	 * Displays a valid HTML5 to the screen
-	 * 
-	 * @param WView $view The view to render as a main instance
-	 */
-	public function render(WView $view) {
-		// Check headers
-		$headers = $view->getHeaders();
-		foreach ($headers as $name => $value) {
-			header($name.': '.$value);
-		}
-		if (isset($headers['location'])) {
+	public function render(array $model) {
+		// Assigns the model to the response plugin
+		$this->handler->setModel($model);
+		
+		// Render headers
+		if ($this->handler->renderHeaders()) {
 			return true;
 		}
 		
-		// Check theme
-		if (empty($this->theme_name)) {
-			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
-		}
-		
-		// Flush the notes waiting for their own view
-		$plain_view = WNote::getPlainView();
-		if (!is_null($plain_view)) {
-			$view = $plain_view;
-			$this->setTheme('_blank');
-		}
-		
-		// Select Theme main template
-		if ($this->theme_name == '_blank') {
-			$themeMainFile = $this->theme_dir.'_blank.html';
-		} else {
-			$themeMainFile = $this->theme_dir.'templates'.DS.'index.html';
-		}
-		
 		try {
-			// Define {$include} tpl's var
-			$this->tpl->assign('include', $view->render());
+			$notes = WNote::get('*');
 			
-			// Handle notes (including Retrievers' notes)
-			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
-			
-			$dir = WRoute::getDir();
-			if (empty($dir)) {
-				// Direct render
-				$this->tpl->display($themeMainFile);
-			} else {
-				// Absolute links fix
-				// If $dir is not the root file, then change links
-				$html = $this->tpl->parse($themeMainFile);
-				echo str_replace(
-					array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
-					array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
-					$html
-				);
-			}
+			$response = $this->handler->render($notes);
 		} catch (Exception $e) {
 			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
 			return false;
 		}
 		
-		return true;
+		echo $response;
+	}
+	
+	/**
+	 * Fixes absolute links.
+	 * If WRoute::getDir() is not the root file, then change links.
+	 * 
+	 * @param string $string A string containing root HTML links
+	 * @return string
+	 */
+	public static function absoluteLinkFix($string) {
+		// 
+		$dir = WRoute::getDir();
+		if (!empty($dir)) {
+			$string = str_replace(
+				array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
+				array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
+				$string
+			);
+		}
+		
+		return $string;
 	}
 }
 

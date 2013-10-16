@@ -256,9 +256,10 @@ class WSession {
 			}
 			// Flood time limit checking
 			else if (empty($_SESSION['access'][0]) && !empty($_SESSION['flood_time']) && $_SESSION['flood_time'] > time()) {
-				// Liste des exceptions échappant à cette vérification
 				$exceptions = array('user');
-				if (!in_array(WRoute::getApp(), $exceptions)) {
+				$route = WRoute::getRoute();
+				$app_name = array_shift($route);
+				if (!in_array($app_name, $exceptions)) { // Applications in $exceptions will bypass the flood checking
 					WNote::info('Modération', 'Veuillez respecter le délai de '.self::FLOOD_TIME.' secondes entre deux postes.', 'assign');
 					$flood = false;
 				}

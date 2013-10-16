@@ -10,17 +10,16 @@ defined('IN_WITY') or die('Access denied');
  * 
  * Traditionally, Apache URL Rewriting is used in WityCMS.
  * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :
- * - app = "news"
- * - arg1 = "see" - in this case, this argument is called the action of the application
- * - arg2 = "4" - in this case, it may be the id of the news to display
+ * - param1 = "news" (this param will be used as Application name in WMain)
+ * - param2 = "see" - in this case, this parameter is called the action of the application
+ * - param3 = "4" - in this case, it may be the id of the news to display
  * 
  * WRoute can provide several informations about the URL of the page.
  * If we keep the example URL = http://mysite.com/wity/news/see/4
  * - Base = "http://mysite.com/wity" - Base contains the directory in which WityCMS is installed
  * - Dir = "/wity" - it is the directory in which WityCMS is installed (may be empty)
  * - Query = "/news/see/4"
- *     _ App = "news"
- *     _ Args = array("see", "4")
+ *     _ Params = array("news", "see", "4")
  * - URL = Base + Query - full URL of the page
  *       = "http://mysite.com/wity/news/see/4"
  * 
@@ -29,7 +28,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-23-01-2013
+ * @version 0.4.0-16-10-2013
  */
 class WRoute {
 	/**
@@ -58,6 +57,8 @@ class WRoute {
 	
 	/**
 	 * Launches the calculation of the route to find out the app to execute.
+	 * 
+	 * @return array Current route
 	 */
 	public static function route() {
 		$query = trim(self::$query, '/');
@@ -65,63 +66,32 @@ class WRoute {
 		// Checking the existence of a custom route
 		$custom_routes = WConfig::get('route.custom');
 		if (isset($custom_routes[$query])) {
-			self::setRoute($custom_routes[$query]);
+			$route = $custom_routes[$query];
 		} else {
-			// Loading URL config
-			$routage = self::parseURL($query);
-			if (!empty($routage[0])) {
-				self::setRoute($routage);
-			} else {
-				// If nothing found, launch the default route
-				self::setRoute(WConfig::get('route.default'));
+			$route = self::parseURL($query);
+			
+			if (empty($route)) { // Use default
+				$route = self::getDefault();
 			}
 		}
+		
+		self::setRoute($route);
+		return $route;
 	}
 	
 	/**
 	 * Parses the web page URL.
 	 * 
 	 * @param string $url Web page URL
-	 * @return array The route such as array("app_name", array("arg1", "arg2"))
+	 * @return array The route such as array("app_name", "param1", "param2")
 	 */
 	private static function parseURL($url) {
-		$routage = array('', array());
-		
 		// Cleaning
-		$url = trim($url, '/');
 		$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
 		$url = preg_replace('#\?.*$#', '', $url); // Remove query string
+		$url = trim($url, '/');
 		
-		$array = explode('/', $url);
-		// Given application name
-		if (!empty($array[0])) {
-			$first = strtolower(array_shift($array));
-			
-			// Check for mode given at the beginning
-			// - m: model will be returned
-			// - v: view will be returned
-			// - mv: model+view will be returned
-			$equal_pos = strpos($first, '=');
-			$first_min = ($equal_pos !== false) ? substr($first, 0, $equal_pos) : $first;
-			if (in_array($first_min, array('m', 'v', 'mv'))) {
-				WConfig::set('route.response', $first_min);
-				if ($equal_pos !== false) {
-					WConfig::set('route.format', substr($first, $equal_pos));
-				}
-				
-				// App name
-				$routage[0] = strtolower(array_shift($array));
-			} else {
-				$routage[0] = $first;
-			}
-			
-			// Arguments
-			if (sizeof($array) > 0) {
-				$routage[1] = $array;
-			}
-		}
-		
-		return $routage;
+		return empty($url) ? array() : explode('/', $url);
 	}
 	
 	/**
@@ -196,26 +166,17 @@ class WRoute {
 	/**
 	 * Defines a custom route which is not following the regular application rules
 	 * 
-	 * <code>
-	 *   WRoute::defineCustomRoute('/test/', array(
-	 *     'appName',
-	 *     array('arg1', 'arg2')
-	 *   ));
-	 * </code>
-	 * 
-	 * @see WConfig::get()
-	 * @see WConfig::set()
-	 * @see WConfig::save()
+	 * <code>WRoute::defineCustomRoute('/test/', array('appName', 'param1', 'param2'));</code>
 	 * 
 	 * @param  string  $uri     the custom route to catch
-	 * @param  array   $routage application that will be launched with its arguments
+	 * @param  array   $route   List of parameters (application name and parameters...)
 	 * @return boolean true if route structure is valid, false otherwise
 	 */
-	public static function defineCustomRoute($uri, array $routage) {
+	public static function defineCustomRoute($uri, array $route) {
 		// Checking the routage structure
-		if (self::checkRouteStructure($routage)) {
+		if (self::checkRouteStructure($route)) {
 			$custom_routes = WConfig::get('route.custom');
-			$custom_routes[$uri] = $routage;
+			$custom_routes[$uri] = $route;
 			WConfig::set('route.custom', $custom_routes);
 			WConfig::save('route');
 			return true;
@@ -226,7 +187,6 @@ class WRoute {
 	/**
 	 * Deletes a custom route.
 	 * 
-	 * @see WConfig::get()
 	 * @param string $uri the custom route to remove
 	 */
 	public static function deleteCustomRoute($uri) {
@@ -239,88 +199,25 @@ class WRoute {
 	}
 	
 	/**
-	 * Checks if the route structure is correct.
-	 * 
-	 * A good structure example :
-	 * <code>$routage = array('AppName', array('argument1', 'argument2'));</code>
-	 * 
-	 * @param array $routage The route to check
-	 * @return boolean true if the structure is good, false otherwise
-	 */
-	private static function checkRouteStructure(array $routage) {
-		if (sizeof($routage) >= 2) {
-			if (is_string($routage[0])) {
-				if (is_array($routage[1])) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
 	 * Defines route values in the configuration.
 	 * 
-	 * @see WConfig::set()
-	 * @param array $routage routes that will be defined in the configuration
-	 * @return boolean true if route structure is good and defined, false otherwise
+	 * @param array $route Current route in WityCMS that will be set in configuration class.
 	 */
-	public static function setRoute(array $routage) {
-		if (self::checkRouteStructure($routage)) {
-			WConfig::set('route.app', $routage[0]);
-			WConfig::set('route.args', $routage[1]);
-			return true;
-		} else {
-			return false;
-		}
+	public static function setRoute(array $route) {
+		WConfig::set('route.request', $route);
 	}
 	
 	/**
-	 * Returns the current application name.
+	 * Returns the current route.
 	 * 
-	 * @return string current application name
+	 * @return string Current route in WityCMS
 	 */
-	public static function getApp() {
-		return WConfig::get('route.app');
+	public static function getRoute() {
+		return WConfig::get('route.request');
 	}
 	
-	/**
-	 * Changes the current application to $app.
-	 * 
-	 * @param string $app the new application name
-	 */
-	public static function updateApp($app) {
-		WConfig::set('route.app', $app);
-	}
-	
-	/**
-	 * Returns the arguments of the current application.
-	 * 
-	 * @return array Current application arguments
-	 */
-	public static function getArgs() {
-		return WConfig::get('route.args');
-	}
-	
-	/**
-	 * Returns the arguments of the current application.
-	 * 
-	 * @param int $index Argument index
-	 * @return string Argument corresponding to the index ('' if not found)
-	 */
-	public static function getArg($index) {
-		$args = self::getArgs();
-		return isset($args[$index]) ? $args[$index] : '';
-	}
-	
-	/**
-	 * Changes the arguments of the current application.
-	 *  
-	 * @param array $args the new arguments
-	 */
-	public static function updateArgs(array $args) {
-		WConfig::set('route.args', $args);
+	public static function getDefault() {
+		return WConfig::get('route.default');
 	}
 }
 

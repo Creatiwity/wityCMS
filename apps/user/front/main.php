@@ -44,7 +44,7 @@ class UserController extends WController {
 		if (empty($redirect)) {
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
-			} else if (WRoute::getApp() != 'user') { // Login form loaded from an external application
+			} else if (!in_array('user', WRoute::getRoute())) { // Login form loaded from an external application
 				$redirect = WRoute::getURL();
 			} else if (strpos($referer, 'user') === false) {
 				$redirect = $referer;
@@ -245,7 +245,7 @@ class UserController extends WController {
 	 * Confirm action handler
 	 * Allows the user to validate its account after registering
 	 */
-	protected function confirm() {
+	protected function confirm($params) {
 		// Check if inscriptions are open
 		$config = $this->model->getConfig();
 		if (!$config['register']) {
@@ -253,7 +253,7 @@ class UserController extends WController {
 		}
 		
 		// Retrieve the confirm code
-		$confirm_code = WRoute::getArg(1);
+		$confirm_code = array_shift($params);
 		if (empty($confirm_code)) {
 			$this->view->setHeader('Location', WRoute::getBase());
 			return;
