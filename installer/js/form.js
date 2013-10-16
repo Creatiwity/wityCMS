@@ -219,8 +219,8 @@ $(document).ready(function() {
 
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
-				context.$content.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
-				context.$content.append($('<div class="col-md-9"></div>').append($field));
+				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
+				$fieldContainer.append($('<div class="col-md-9"></div>').append($field));
 
 				this.views.push({
 					updater: function() {
@@ -289,6 +289,10 @@ $(document).ready(function() {
 			}
 
 			context.$content = contentCache;
+
+			if (options.hr === true) {
+				context.$content.append('<hr />');
+			}
 
 			this.render();
 		}
@@ -386,6 +390,7 @@ $(document).ready(function() {
 							name: "Timezone",
 							required: true,
 							type: "select",
+							hr: true,
 							options: {
 								url: "installer/view/timezones.html"
 							}
@@ -417,6 +422,7 @@ $(document).ready(function() {
 							virtual: true,
 							required: true,
 							summary: true,
+							hr: true,
 
 							validate: {
 								remote: true
@@ -545,6 +551,7 @@ $(document).ready(function() {
 							id: "email",
 							name: "Email",
 							required: true,
+							hr: true,
 
 							validate: {
 								local: {
