@@ -11,7 +11,7 @@ $(document).ready(function() {
 	Form = (function() {
 
 		function Form(options) {
-			var $alert, $submit, $summary, $tabs, $content, handlers = {}, id = options.id;
+			var handlers = {}, id = options.id;
 
 			if (!options || !options.id) {
 				console.error("options parameter is missing or empty, unable to create form.");
@@ -30,17 +30,17 @@ $(document).ready(function() {
 
 			this.$summary = $('[data-wity-form-summary="' + id + '"]');
 			if (this.$summary.length > 0) {
-				this.context.summary = this.$summary;
+				this.context.$summary = this.$summary;
 			}
 
 			this.$tabs = $('[data-wity-form-tabs="' + id + '"]');
 			if (this.$tabs.length > 0) {
-				this.context.tabs = this.$tabs;
+				this.context.$tabs = this.$tabs;
 			}
 
 			this.$content = $('[data-wity-form-content="' + id + '"]');
 			if (this.$content.length > 0) {
-				this.context.content = this.$content;
+				this.context.$content = this.$content;
 			}
 
 			$('[data-wity-form-' + id + '-onsuccess]').each(function () {
@@ -57,10 +57,21 @@ $(document).ready(function() {
 				handlers.failure.push([$this, handler]);
 			});
 
-			this.node = FormNode(options, context);
+			this.node = new FormNode(options, this.context);
 		}
 
-		Form.prototype.ajax = function (datas, callback, _context) {	
+		Form.prototype.getAjaxHtml = function (url, datas, callback, context) {
+			var _url = url || this.url;
+
+			$.ajax({
+				url: _url,
+				data: datas,
+				success: callback,
+				type: 'POST'
+			});
+		}
+
+		Form.prototype.ajax = function (datas, callback, context) {	
 			var realCallback, that = this;
 		
 			// show loading
@@ -79,7 +90,7 @@ $(document).ready(function() {
 				
 				//process callback ?
 				if(callback) {
-					return callback.call(_context, json);
+					return callback.call(context, json);
 				}
 			};
 			
@@ -93,16 +104,16 @@ $(document).ready(function() {
 
 		return Form;
 
-	});
+	})();
 
 	FormNode = (function() {
 
 		var tabCounter = 0, NEVER_VALIDATED = 0, NOT_VALIDATED = 1, VALIDATED = 2;
 
 		function FormNode(options, context) {
-			var _i, _len, $tabTitle, $tabStatus, $tabContainer, _context = context, that = this;
+			var _i, _len, $tabTitle, $tabStatus, $tabContainer, $tabContent, $summaryLi, $summaryStatus, $alertContainer, $fieldContainer, $field, contentCache, that = this;
 
-			if (!options || !context || !context.id || !context.form || !context.content) {
+			if (!options || !context || !context.id || !context.form || !context.$content || context.$content.length === 0) {
 				console.debug("context passed to FormNode isn't valid.");
 				return false;
 			}
@@ -116,19 +127,25 @@ $(document).ready(function() {
 				this.name = this.id;
 			}
 
-			this.required = (options.required === true);
+			this.required = (options.required === true) || (options.root === true);
 			this.validated = NEVER_VALIDATED;
+			this.summary = false;
 
 			// Build validate
 
 			// Build FormNode in DOM and in logic
-			if (options.tab && options.tab === true) {
+			contentCache = context.$content;
+
+			if (options.root === true) {
+				// Do nothing
+			} else if (options.tab && options.tab === true) {
 				if (context.$tabs.length > 0) {
 					$tabStatus = $('<i class="glyphicon"></i>');
-					$tabTitle = $('<a href="#form_' + context.id + '_' + this.id + '" data-toggle="tab"></a>').append($tabStatus);
+					$tabTitle = $('<a href="#form_' + context.id + '_' + this.id + '" data-toggle="tab"></a>').append($tabStatus).append(' ' + this.name);
 					$tabTitle = $('<li></li>').append($tabTitle);
 
-					$tabContainer = $('<div class="tab-pane" id="#form_' + context.id + '_' + this.id + '"><fieldset class="form-horizontal"></fieldset></div>');
+					$tabContainer = $('<div class="tab-pane" id="form_' + context.id + '_' + this.id + '"></div>');
+					$tabContent = $('<fieldset class="form-horizontal"></fieldset>').appendTo($tabContainer);
 					
 					if (tabCounter === 0) {
 						$tabTitle.addClass('active');
@@ -139,8 +156,7 @@ $(document).ready(function() {
 					context.$content.append($tabContainer);
 					context.$summary.append($('<h4>' + this.name + '</h4>'));
 
-					_context = jQuery.extend(true, {}, context);
-					_context.$content = $tabContainer;
+					context.$content = $tabContent;
 
 					this.views.push({
 						updater: function() {
@@ -149,18 +165,116 @@ $(document).ready(function() {
 							switch (that.validated) {
 								case NEVER_VALIDATED:
 								$tabStatus.addClass('glyphicon-remove');
+								break;
 
 								case NOT_VALIDATED:
 								$tabStatus.addClass('glyphicon-remove');
+								break;
 
 								case VALIDATED:
 								$tabStatus.addClass('glyphicon-ok');
+								break;
 							}
 						}
 					});
 
 					tabCounter++;
 				}
+			} else if (!options.virtual) {
+				this.summary = options.summary !== false;
+				this.type = options.type || "text";
+
+				$alertContainer = $('<div></div>');
+				$fieldContainer = $('<div class="form-group"></div>');
+
+				if (this.type === "select") {
+					$field = $('<select name="' + this.id + '" class="form-control"></select>');
+
+					if ($.isArray(options.options)) {
+						for (_i = 0, _len = options.options.length; _i < _len; ++_i) {
+							$field.append('<option value="' + options.options[_i].value + '">' + options.options[_i].text + '</option>')
+						}
+					} else if (options.options.url) {
+						context.form.getAjaxHtml(options.options.url, null, function (data) {
+							$field.append(data);
+
+							if (options.value) {
+								$field.val(options.value);
+							}
+						});
+					} else {
+						console.debug("No option provided for " + this.name + " in the form named " + context.id);
+					}
+				} else {
+					$field = $('<input type="' + this.type + '" class="form-control"></input>');
+
+					if (options.placeholder) {
+						$field.attr('placeholder', options.placeholder);
+					}
+
+					if (options.value) {
+						$field.val(options.value);
+					}
+				}
+
+				context.$content.append($alertContainer);
+				context.$content.append($fieldContainer);
+				context.$content.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
+				context.$content.append($('<div class="col-md-9"></div>').append($field));
+
+				this.views.push({
+					updater: function() {
+						$fieldContainer.removeClass('has-success has-error has-warning');
+
+						switch (that.validated) {
+							case NEVER_VALIDATED:
+							break;
+
+							case NOT_VALIDATED:
+							$fieldContainer.addClass('has-error');
+							break;
+
+							case VALIDATED:
+							$fieldContainer.addClass('has-success');
+							break;
+						}
+					}
+				});
+			} else {
+				this.summary = (options.summary === true);
+			}
+
+			if (this.summary) {
+				$summaryStatus = $('<i class="glyphicon"></i>');
+				$summaryLi = $('<li></li>');
+
+				$summaryLi.append($summaryStatus);
+				$summaryLi.append(' ' + this.name);
+
+				context.$summary.append($summaryLi);
+
+				this.views.push({
+					updater: function() {
+						$summaryLi.removeClass('text-success text-danger text-warning text-primary text-muted');
+						$summaryStatus.removeClass('glyphicon-remove glyphicon-ok');
+
+						switch (that.validated) {
+							case NEVER_VALIDATED:
+							$summaryLi.addClass('text-primary');
+							break;
+
+							case NOT_VALIDATED:
+							$summaryLi.addClass('text-danger');
+							$summaryStatus.addClass('glyphicon-remove');
+							break;
+
+							case VALIDATED:
+							$summaryLi.addClass('text-success');
+							$summaryStatus.addClass('glyphicon-ok');
+							break;
+						}
+					}
+				});
 			}
 
 			// Build DOM
@@ -170,9 +284,11 @@ $(document).ready(function() {
 				this.childs = [];
 
 				for (_i = 0, _len = options.childs.length; _i < _len; ++_i) {
-					this.childs.push(FormNode(options.childs[_i], _context));
+					this.childs.push(new FormNode(options.childs[_i], context));
 				}
 			}
+
+			context.$content = contentCache;
 
 			this.render();
 		}
@@ -192,22 +308,22 @@ $(document).ready(function() {
 		};
 
 		FormNode.prototype.render = function() {
-			var _i, _len, view;
+			var _i, _len;
 
 			for (_i = 0, _len = this.views.length; _i < _len; ++_i) {
-				view = this.views[_i];
-				view.updater(view.container);
+				this.views[_i].updater();
 			}
 		};
 
 		return FormNode;
 
-	});
+	})();
 
 	(function () {
 
 		var installer = {
 			id: "witycms",
+			root: true,
 
 			childs: [
 				{
@@ -229,10 +345,11 @@ $(document).ready(function() {
 							id: "base",
 							name: "Base URL",
 							required: true,
+							value: document.location.href,
 							validate: {
 								local: {
 									type: "regexp",
-									options: "^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(\/[A-Z0-9~\._-]+)*\/?$", 
+									options: "^(http|https|ftp)\:\/\/[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(:[0-9]+)?(\/[A-Z0-9~\._-]+)*\/?$",
 									message: "Base URL must be a valid URL"
 								},
 								remote: true
@@ -266,11 +383,11 @@ $(document).ready(function() {
 						},
 						{
 							id: "timezone",
-							name: "Name",
+							name: "Timezone",
 							required: true,
 							type: "select",
 							options: {
-								url: "/installer/view/timezones.html"
+								url: "installer/view/timezones.html"
 							}
 						},
 						{
@@ -299,6 +416,7 @@ $(document).ready(function() {
 							name: "Credentials",
 							virtual: true,
 							required: true,
+							summary: true,
 
 							validate: {
 								remote: true
@@ -308,7 +426,8 @@ $(document).ready(function() {
 								{
 									id: "dbserver",
 									name: "Server",
-									required: true
+									required: true,
+									summary: false
 								},
 								{
 									id: "dbport",
@@ -320,22 +439,25 @@ $(document).ready(function() {
 											options: "^[0-9]*$",
 											message: "Database port must be a number"
 										}
-									}
+									},
 
 									type: "number",
-									placeholder: "3306"
+									placeholder: "3306",
+									summary: false
 								},
 								{
 									id: "dbuser",
 									name: "User",
 
-									required: true
+									required: true,
+									summary: false
 								},
 								{
 									id: "dbpassword",
 									name: "Password",
 
-									type: "password"
+									type: "password",
+									summary: false
 								}
 							]
 						},
@@ -385,16 +507,19 @@ $(document).ready(function() {
 							id: "upassword",
 							name: "Password",
 							required: true,
+							virtual: true,
+							summary: true,
 
 							validate: {
 								remote: true
-							}
+							},
 
 							childs: [
 								{
 									id: "password",
 									name: "Password",
 									required: true,
+									summary: false,
 
 									type: "password"
 								},
@@ -402,6 +527,7 @@ $(document).ready(function() {
 									id: "confirm",
 									name: "Confirmation",
 									required: true,
+									summary: false,
 
 									validate: {
 										local: {
@@ -462,7 +588,7 @@ $(document).ready(function() {
 			]
 		}
 
-		Form(installer);
+		new Form(installer);
 
 	})();
 });
