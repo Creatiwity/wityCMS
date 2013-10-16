@@ -47,13 +47,16 @@ class WResponseSerialize implements WResponseMode {
 		// Depending on the mode, add the view and/or remove the application's result
 		if ($this->mode == 'v') {
 			unset($this->model['result']);
-			
-			$this->model['view'] = WRetriever::getViewFromModel($this->model)->render();
-		} else if ($this->mode == 'mv') {
-			$this->model['view'] = WRetriever::getViewFromModel($this->model)->render();
 		}
 		
-		return json_encode($this->model, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);;
+		if ($this->mode == 'v' || $this->mode == 'mv') {
+			$this->model['view'] = WRetriever::getViewFromModel($this->model)->render();
+			
+			// Absolute link fix
+			$this->model['view'] = WResponse::absoluteLinkFix($this->model['view']);
+		}
+		
+		return json_encode($this->model, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 	}
 }
 

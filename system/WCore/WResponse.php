@@ -102,18 +102,28 @@ class WResponse {
 			return false;
 		}
 		
-		// Absolute links fix
-		// If $dir is not the root file, then change links
+		echo $response;
+	}
+	
+	/**
+	 * Fixes absolute links.
+	 * If WRoute::getDir() is not the root file, then change links.
+	 * 
+	 * @param string $string A string containing root HTML links
+	 * @return string
+	 */
+	public static function absoluteLinkFix($string) {
+		// 
 		$dir = WRoute::getDir();
 		if (!empty($dir)) {
-			$response = str_replace(
+			$string = str_replace(
 				array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
 				array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
-				$response
+				$string
 			);
 		}
 		
-		echo $response;
+		return $string;
 	}
 }
 

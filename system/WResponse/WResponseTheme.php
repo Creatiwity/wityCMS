@@ -101,6 +101,11 @@ class WResponseTheme implements WResponseMode {
 	 * @param WView $view The view to render as a main instance
 	 */
 	public function render($notes) {
+		$view_theme = $this->view->getTheme();
+		if (!empty($view_theme)) {
+			$this->setTheme($view_theme);
+		}
+		
 		// Check theme
 		if (empty($this->theme_name)) {
 			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
@@ -130,7 +135,8 @@ class WResponseTheme implements WResponseMode {
 		
 		$html = $this->tpl->parse($themeMainFile);
 		
-		return $html;
+		// Absolute links fix
+		return WResponse::absoluteLinkFix($html);
 	}
 }
 
