@@ -46,7 +46,7 @@ class WRetriever {
 	 * @return array
 	 */
 	public static function getModel($app_name, array $params = array(), $has_parent = true) {
-		$signature = md5($app_name.serialize($params).$has_parent);
+		$signature = md5($app_name.serialize($params));
 		
 		// Check if this model was not already calculated
 		if (isset(self::$models[$signature])) {
@@ -148,7 +148,7 @@ class WRetriever {
 				}
 				
 				// Update the context
-				$view->setSignature(md5($app_name.serialize($params).$has_parent));
+				$view->setSignature(md5($app_name.serialize($params)));
 			}
 			
 			return $view;
