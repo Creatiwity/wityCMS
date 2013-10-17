@@ -77,8 +77,7 @@ class UserAdminView extends WView {
 		}
 		
 		// Get admin apps
-		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminApps());
+		$this->assign('admin_apps', $model['admin_apps']);
 		
 		// Setup the form
 		$this->assign('js', '/apps/user/admin/js/access_form.js');

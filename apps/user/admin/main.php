@@ -250,7 +250,8 @@ Ceci est un message automatique.";
 			'user_id'   => $user_id, 
 			'user_data' => $db_data,
 			'post_data' => $post_data,
-			'groupes'   => $this->model->getGroupsList()
+			'groupes'   => $this->model->getGroupsList(),
+			'admin_apps' => $this->getAdminApps()
 		);
 	}
 	

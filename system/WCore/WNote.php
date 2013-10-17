@@ -143,8 +143,8 @@ class WNote {
 				$plain_view = self::getPlainView();
 				
 				if (!is_null($plain_view)) {
-					$response = new WResponse('_blank');
-					if ($response->render($plain_view)) {
+					$response = new WResponse();
+					if ($response->render($plain_view, '_blank')) {
 						die;
 					}
 				}

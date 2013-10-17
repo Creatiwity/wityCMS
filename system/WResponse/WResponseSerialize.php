@@ -20,8 +20,8 @@ class WResponseSerialize implements WResponseMode {
 		$this->mode = $mode;
 	}
 	
-	public function setModel($model) {
-		$this->model = $model;
+	public function prepare($app_name, $params) {
+		$this->model = WRetriever::getModel($app_name, $params);
 	}
 	
 	public function renderHeaders() {
