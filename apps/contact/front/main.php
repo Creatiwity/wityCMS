@@ -123,8 +123,8 @@ class ContactController extends WController {
 		$phpmailer->FromName = $params['from_name'];
 
 		$universalAdd($params, 'to', array($phpmailer, 'addAddress'));
-		$universalAdd($params, 'cc', array($phpmailer, 'addCC'));
-		$universalAdd($params, 'bcc', array($phpmailer, 'addBCC'));
+		/*$universalAdd($params, 'cc', array($phpmailer, 'addCC'));
+		$universalAdd($params, 'bcc', array($phpmailer, 'addBCC'));*/
 		$universalAdd($params, 'reply_to', array($phpmailer, 'addReplyTo'));
 
 		$phpmailer->isHTML(true);

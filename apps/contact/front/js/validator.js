@@ -1,12 +1,14 @@
 $(document).ready(function() {
 
 	$('body').on('click', '[data-witycms-submit="ajax"]', function() {
-		var $form, url, method, data;
+		var $form, $button, url, method, data;
 
-    	$form = $(this).closest('form');
-    	url = $form.attr('action');
-    	method = $form.attr('method');
-    	data = $form.serialize();
+		$button = $(this);
+		$button.button('loading');
+		$form = $button.closest('form');
+		url = $form.attr('action');
+		method = $form.attr('method');
+		data = $form.serialize();
 
 		$.ajax({
 			type: method,
@@ -15,10 +17,15 @@ $(document).ready(function() {
 			success: function(response) {
 				var jResponse;
 
+				$button.button('reset');
+
 				try {
 					jResponse = $.parseJSON(response);
 				} catch(e) {
-					$('body').prepend('<pre>' + response + '</pre>');
+					// Debug code
+					// $('body').prepend('<pre>' + response + '</pre>');
+
+					return;
 				}
 				
 				$form.before(jResponse.view);

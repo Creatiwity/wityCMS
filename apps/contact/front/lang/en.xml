@@ -17,6 +17,7 @@
 	<item id="email_message_placeholder">Message</item>
 
 	<item id="send_button">Send</item>
+	<item id="sending">Sending...</item>
 
 	<!-- Auto reply -->
 	<item id="copy_subject">E-mail successfully sent</item>
