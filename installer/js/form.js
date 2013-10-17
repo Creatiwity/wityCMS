@@ -6,7 +6,7 @@
  */
 $(document).ready(function() {
 
-	var Form, FormNode;
+	var Form, FormNode, NOT_YET_VALIDATED = 0, NOT_VALIDATED = 1, NOT_VALIDATED_EMPTY_REQUIRED = 2, VALIDATING = 3, VALIDATED = 4, EMPTY_NOT_REQUIRED = 5;
 
 	Form = (function() {
 
@@ -59,10 +59,33 @@ $(document).ready(function() {
 			});
 
 			this.node = new FormNode(options, this.context, this);
+
+			this.$submit.on('click', function() {
+				var $this = $(this);
+
+				if (this.validated) {
+					$this.button('loading');
+				}
+			});
+
+			this.setButtonStatus(false);
 		}
 
 		Form.prototype.updateStatus = function() {
-			// Check validated or not to allow click
+			this.validated = (this.node.validated === VALIDATED || this.node.validated === EMPTY_NOT_REQUIRED);
+
+			this.setButtonStatus(this.validated);
+		};
+
+		Form.prototype.setButtonStatus = function(state) {
+			var that = this;
+
+			if(!state) {
+				this.$submit.button('remaining')
+				setTimeout(function() {that.$submit.attr("disabled", "disabled");}, 0);
+			} else {
+				this.$submit.button('reset');
+			}
 		};
 
 		Form.prototype.getAjaxHtml = function (url, datas, callback, context) {
@@ -113,7 +136,7 @@ $(document).ready(function() {
 
 	FormNode = (function() {
 
-		var tabCounter = 0, NOT_YET_VALIDATED = 0, NOT_VALIDATED = 1, NOT_VALIDATED_EMPTY_REQUIRED = 2, VALIDATING = 3, VALIDATED = 4, EMPTY_NOT_REQUIRED = 5;
+		var tabCounter = 0;
 
 		/**
 		 * Validation updateStatus
@@ -130,12 +153,13 @@ $(document).ready(function() {
 				return false;
 			}
 
-			context.indexed[this.id] = this;
+			context.indexed[options.id] = this;
 
 			this.id = options.id;
 			this.views = [];
 			this.indexed = context.indexed;
 			this.parent = parent;
+			this.root = (options.root === true);
 
 			this.name = options.name || this.id;
 			
@@ -144,6 +168,11 @@ $(document).ready(function() {
 			this.summary = false;
 
 			this.validateDatas = options.validate || {};
+
+			if (this.validateDatas.local && this.validateDatas.local.type === "equals") {
+				$.extend(true, this.indexed[this.validateDatas.local.options].validateDatas, this.validateDatas);
+				this.indexed[this.validateDatas.local.options].validateDatas.options = this.id;
+			}
 
 			// Build validate
 
@@ -185,6 +214,14 @@ $(document).ready(function() {
 								$tabStatus.addClass('glyphicon-remove');
 								break;
 
+								case NOT_VALIDATED_EMPTY_REQUIRED:
+								$tabStatus.addClass('glyphicon-remove');
+								break;
+
+								case EMPTY_NOT_REQUIRED:
+								$tabStatus.addClass('glyphicon-ok');
+								break;
+
 								case VALIDATED:
 								$tabStatus.addClass('glyphicon-ok');
 								break;
@@ -212,6 +249,7 @@ $(document).ready(function() {
 						if (options.value) {
 							$field.val(options.value);
 						}
+
 					} else if (options.options.url) {
 						context.form.getAjaxHtml(options.options.url, null, function (data) {
 							$field.append(data);
@@ -219,6 +257,7 @@ $(document).ready(function() {
 							if (options.value) {
 								$field.val(options.value);
 							}
+
 						});
 					} else {
 						console.debug("No option provided for " + this.name + " in the form named " + context.id);
@@ -254,8 +293,18 @@ $(document).ready(function() {
 							$fieldContainer.addClass('has-error');
 							break;
 
+							case NOT_VALIDATED_EMPTY_REQUIRED:
+							$fieldContainer.addClass('has-error');
+							break;
+
+							case VALIDATING:
+							break;
+
 							case VALIDATED:
 							$fieldContainer.addClass('has-success');
+							break;
+
+							case EMPTY_NOT_REQUIRED:
 							break;
 						}
 					}
@@ -289,7 +338,9 @@ $(document).ready(function() {
 
 						switch (that.validated) {
 							case NOT_YET_VALIDATED:
-							$summaryLi.addClass('text-primary');
+							if (that.required) {
+								$summaryLi.addClass('text-primary');
+							}
 							break;
 
 							case NOT_VALIDATED:
@@ -297,9 +348,21 @@ $(document).ready(function() {
 							$summaryStatus.addClass('glyphicon-remove');
 							break;
 
+							case NOT_VALIDATED_EMPTY_REQUIRED:
+							$summaryLi.addClass('text-danger');
+							$summaryStatus.addClass('glyphicon-remove');
+							break;
+
+							case VALIDATING:
+							$summaryLi.addClass('text-info');
+							break;
+
 							case VALIDATED:
 							$summaryLi.addClass('text-success');
 							$summaryStatus.addClass('glyphicon-ok');
+							break;
+
+							case EMPTY_NOT_REQUIRED:
 							break;
 						}
 					}
@@ -342,17 +405,33 @@ $(document).ready(function() {
 			return values;
 		};
 
-		FormNode.prototype.hasChanged = function() {
+		FormNode.prototype.setChanged = function() {
+			this.changed = true;
+			this.parent && this.parent.setChanged && this.parent.setChanged();
+		};
+
+		FormNode.prototype.hasChanged = function(swap) {
 			var _i, _len, changed, currentValue;
 
 			if (this.$field && this.$field.length > 0) {
 				currentValue = this.$field.val();
 
-				changed = this.value !== currentValue;
-				if (changed === true) {
+				changed = (this.value !== currentValue);
+
+				if (swap === true && changed === true) {
 					this.value = currentValue;
-					return true;
+					this.setChanged();
 				}
+
+				return changed;
+			}
+
+			if (this.changed !== undefined && this.changed !== null && this.changed === true) {
+				if (swap === true) {
+					this.changed = false;
+				}
+
+				return true;
 			}
 
 			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
@@ -365,7 +444,20 @@ $(document).ready(function() {
 		};
 
 		FormNode.prototype.isEmpty = function() {
-			return (this.value === null || this.value === undefined || this.value === "");
+			var value;
+
+			if (this.$field && this.$field.length > 0) {
+				value = this.$field.val();
+				return (value === undefined || value === null || value === "");
+			}
+
+			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
+				if (this.childs[_i].isEmpty() === false) {
+					return false;
+				}
+			}
+
+			return true;
 		};
 
 		FormNode.prototype.hasFocus = function() {
@@ -387,14 +479,32 @@ $(document).ready(function() {
 		};
 
 		FormNode.prototype.updateStatus = function() {
-			var _i, _len, child, childrenValid = true;
+			var _i, _len, child, childrenValid = true, preventValidationIfFocus = false;
 
 			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
-				childrenValid = childrenValid && (this.childs[_i].validated === VALIDATED || this.childs[_i].validated === EMPTY_NOT_REQUIRED);
+				child = this.childs[_i];
+				if (child.validated === NOT_VALIDATED 
+					|| child.validated === NOT_VALIDATED_EMPTY_REQUIRED) {
+					childrenValid = false;
+				} else if (child.hasFocus() 
+					&& (child.validated !== EMPTY_NOT_REQUIRED 
+						|| (child.validated === NOT_YET_VALIDATED && child.required === true))) {
+					preventValidationIfFocus = true;
+				} else if (child.validated === VALIDATING) {
+					preventValidationIfFocus = true;
+				}
 			}
 
-			if (childrenValid === false) {
+			if (!childrenValid || preventValidationIfFocus) {
 				this.validated = NOT_VALIDATED;
+				this.render();
+				this.triggerParentUpdate();
+			} else if (false) {
+				this.validated = VALIDATING;
+				this.render();
+				this.triggerParentUpdate();
+			} else {
+				this.validate();
 			}
 		};
 
@@ -402,26 +512,36 @@ $(document).ready(function() {
 			this.parent.updateStatus();
 		};
 
+		FormNode.prototype.equals = function(formNodeId) {
+			var node = this.indexed[formNodeId], valid = (node.value === this.value);
+			node.validated = valid ? VALIDATED : NOT_VALIDATED;
+			node.render();
+			
+			return valid;
+		};
+
 		FormNode.prototype.validate = function() {
-			var empty, regexp, localValid = true, localMessage, remoteValid = true;
+			var _i, _len, empty, regexp, compareValue, localValid = true, localMessage, remoteValid = true;
 
-			if (this.hasChanged()) {
+			empty = this.isEmpty();
+
+			if (this.hasChanged(true)) {
 				this.validated = VALIDATING;
-
-				empty = this.isEmpty();
 
 				if (this.required && empty) {
 					this.validated = NOT_VALIDATED_EMPTY_REQUIRED;
+					localValid = false;
 				} else if (empty) {
 					this.validated = EMPTY_NOT_REQUIRED;
+					localValid = false;
 				} else {
-					if (this.validateDatas.local && this.value) {
+					if (this.validateDatas.local) {
 						if (this.validateDatas.local.type === "regexp") {
 							regexp = new RegExp(this.validateDatas.local.options, "i");
 							localValid = regexp.test(this.value);
 							localMessage = this.validateDatas.local.message;
 						} else if (this.validateDatas.local.type === "equals") {
-							localValid = (this.indexed[this.validateDatas.local.options].value === this.value);
+							localValid = this.equals(this.validateDatas.local.options);
 							localMessage = this.validateDatas.local.message;
 						}
 
@@ -679,10 +799,6 @@ $(document).ready(function() {
 							virtual: true,
 							summary: true,
 
-							validate: {
-								remote: 'user_password'
-							},
-
 							childs: [
 								{
 									id: "password",
@@ -701,7 +817,7 @@ $(document).ready(function() {
 									validate: {
 										local: {
 											type: "equals",
-											options: "password",
+											options: "password", 
 											message: "Password and confirmation are different."
 										}
 									},
