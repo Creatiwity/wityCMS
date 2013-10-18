@@ -96,6 +96,7 @@ class WResponse {
 		// Flush the notes waiting for their own view
 		$plain_view = WNote::getPlainView();
 		if (!is_null($plain_view)) {
+			unset($view);
 			$view = $plain_view;
 			$this->setTheme('_blank');
 		}
@@ -117,7 +118,7 @@ class WResponse {
 			$html = $this->tpl->parse($themeMainFile);
 			
 			// Absolute links fix
-			echo WResponse::absoluteLinkFix($html);
+			echo $this->absoluteLinkFix($html);
 		} catch (Exception $e) {
 			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
 			return false;
@@ -147,15 +148,63 @@ class WResponse {
 	}
 	
 	public function renderModel(array $model) {
+		// Store the plain notes
+		$plain_notes = WNote::getPlain();
+		if (!empty($plain_notes)) {
+			$model['result'] = $plain_notes;
+		}
 		
+		// Store the notes
+		$model['notes'] = WNote::get('*');
+		
+		echo str_replace('\\/', '/', json_encode($model));
+		
+		return true;
 	}
 	
-	public function renderView(WView $view) {
+	public function renderView(array $model, WView $view) {
+		// Flush the notes waiting for their own view
+		$plain_view = WNote::getPlainView();
+		if (!is_null($plain_view)) {
+			unset($view);
+			$view = $plain_view;
+		}
 		
+		// Store the notes
+		$model['notes'] = WNote::get('*');
+		
+		// Remove the application's result
+		unset($model['result']);
+		
+		$model['view'] = $view->render();
+		
+		// Absolute link fix
+		$model['view'] = $this->absoluteLinkFix($model['view']);
+		
+		echo str_replace('\\/', '/', json_encode($model));
+		
+		return true;
 	}
 	
 	public function renderModelView(array $model, WView $view) {
+		// Flush the notes waiting for their own view
+		$plain_view = WNote::getPlainView();
+		if (!is_null($plain_view)) {
+			unset($view);
+			$view = $plain_view;
+		}
 		
+		// Store the notes
+		$model['notes'] = WNote::get('*');
+		
+		$model['view'] = $view->render();
+		
+		// Absolute link fix
+		$model['view'] = $this->absoluteLinkFix($model['view']);
+		
+		echo str_replace('\\/', '/', json_encode($model));
+		
+		return true;
 	}
 }
 

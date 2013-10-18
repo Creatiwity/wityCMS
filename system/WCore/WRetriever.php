@@ -306,32 +306,18 @@ class WRetriever {
 			$args = explode('?', $args);
 			
 			// Explode the route in several parts
-			$args[0] = trim($args[0], '/');
-			$route = explode('/', $args[0]);
+			$route = WRoute::parseURL($args[0]);
 			
-			if (count($route) >= 1) {
-				// Extract the relevant data
-				$app_name = addslashes(array_shift($route));
-				$params = '';
-				
-				// Get the params from the route of the view
-				foreach ($route as $part) {
-					if (!empty($part)) {
-						$params .= '"'.$part.'", ';
-					}
-				}
-				
+			if (!empty($route['app'])) {
 				// Format the querystring PHP code if a querystring is given
 				if (isset($args[1])) {
-					$querystring = ', "'.$args[1].'"';
-					$params .= '"querystring" => "'.$args[1].'"';
-				} else {
-					$params = substr($params, 0, -2);
+					$route['params']['querystring'] = $args[1];
 				}
 				
-				return 'WRetriever::getModel("'.$app_name.'", array('.$params.'))';
+				return 'WRetriever::getModel("'.$route['app'].'", '.var_export($route['params'], true).')';
 			}
 		}
+		
 		return '';
 	}
 	

@@ -1,13 +1,15 @@
 <?php
 
 /**
- * Route configuration file
+ * route configuration file
  */
 
-$route = array(
-    'default' => array('news'),
-    'admin' => array('admin/news'),
-    'custom' => array(),
+$route = array (
+  'default_front' => 'news',
+  'default_admin' => 'admin/news',
+  'custom' => 
+  array (
+  ),
 );
 
 ?>

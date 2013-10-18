@@ -24,7 +24,7 @@ class WMain {
 		$this->loadConfigs();
 		
 		// Initializing the route
-		$this->route();
+		WRoute::init();
 		
 		// Initializing sessions
 		$this->setupSession();
@@ -51,30 +51,32 @@ class WMain {
 	 */
 	private function exec() {
 		// Get the application name
-		$params = WRoute::getRoute();
-		$app_name = array_shift($params);
+		$route = WRoute::route();
 		
 		$response = new WResponse();
 		switch (WConfig::get('route.mode')) {
 			case 'm':
-				$response->renderModel(WRetriever::getModel($app_name, $params, false));
+				$response->renderModel(WRetriever::getModel($route['app'], $route['params'], false));
 				break;
 			
 			case 'v':
-				$response->renderView(WRetriever::getView($app_name, $params, false));
+				$response->renderView(
+					WRetriever::getModel($route['app'], $route['params'], false),
+					WRetriever::getView($route['app'], $route['params'], false)
+				);
 				break;
 			
 			case 'mv':
 				$response->renderModelView(
-					WRetriever::getModel($app_name, $params, false),
-					WRetriever::getView($app_name, $params, false)
+					WRetriever::getModel($route['app'], $route['params'], false),
+					WRetriever::getView($route['app'], $route['params'], false)
 				);
 				break;
 			
 			default:
 				// Render as a theme
 				$response->render(
-					WRetriever::getView($app_name, $params, false), 
+					WRetriever::getView($route['app'], $route['params'], false), 
 					WConfig::get('config.theme')
 				);
 				break;
@@ -86,46 +88,6 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
-	}
-	
-	/**
-	 * Initializes WRoute and calculate the response mode.
-	 */
-	private function route() {
-		// Setup the route
-		WRoute::init();
-		$route = WRoute::route();
-		
-		// Extract the mode if exists
-		$mode = 'theme';
-		if (isset($route[0]) && in_array($route[0], array('m', 'v', 'mv'))) {
-			$mode = array_shift($route);
-			
-			if (empty($route)) {
-				$route = WRoute::getDefault();
-			}
-			
-			// Update the route without the mode
-			WRoute::setRoute($route);
-		}
-		
-		// Admin route
-		// In WityCMS, to trigger an admin app, the first route key should be "admin/news"
-		if (isset($route[0]) && $route[0] == 'admin') {
-			array_shift($route); // remove "admin" from first key
-			$app = array_shift($route);
-			if (empty($app)) { // default admin route
-				$route = WConfig::get('route.admin');
-			} else {
-				$app = 'admin/'.$app;
-				array_unshift($route, $app);
-			}
-			
-			// Update the route with admin settings
-			WRoute::setRoute($route);
-		}
-		
-		WConfig::set('route.mode', $mode);
 	}
 	
 	/**
