@@ -367,11 +367,9 @@ Ceci est un message automatique.";
 		$sortingHelper = WHelper::load('SortingHelper', array($disp_fields, 'name'));
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
-		$adminController = new AdminController();
-		
 		return array(
 			'groups' => $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC'),
-			'admin_apps' => $adminController->getAdminApps(),
+			'admin_apps' => $this->getAdminApps(),
 			'sortingHelper' => $sortingHelper
 		);
 	}
