@@ -54,27 +54,26 @@ class WMain {
 		$route = WRoute::route();
 		
 		$response = new WResponse();
-		switch (WConfig::get('route.mode')) {
-			case 'm':
+		switch ($route['mode']) {
+			case 'm': // Only model
 				$response->renderModel(WRetriever::getModel($route['app'], $route['params'], false));
 				break;
 			
-			case 'v':
+			case 'v': // Only view
 				$response->renderView(
 					WRetriever::getModel($route['app'], $route['params'], false),
 					WRetriever::getView($route['app'], $route['params'], false)
 				);
 				break;
 			
-			case 'mv':
+			case 'mv': // Model + View
 				$response->renderModelView(
 					WRetriever::getModel($route['app'], $route['params'], false),
 					WRetriever::getView($route['app'], $route['params'], false)
 				);
 				break;
 			
-			default:
-				// Render as a theme
+			default: // Render in a theme
 				$response->render(
 					WRetriever::getView($route['app'], $route['params'], false), 
 					WConfig::get('config.theme')

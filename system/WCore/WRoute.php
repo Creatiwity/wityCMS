@@ -99,7 +99,7 @@ class WRoute {
 		$route = array(
 			'app'    => '',
 			'params' => null,
-			'mode'   => 'theme',
+			'mode'   => '',
 			'admin'  => false
 		);
 		
