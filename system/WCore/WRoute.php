@@ -76,11 +76,14 @@ class WRoute {
 			$route = self::parseURL($query);
 			
 			if (empty($route['app'])) { // Use default
+				$mode = $route['mode']; // save mode asked by user
 				if ($route['admin']) {
 					$route = self::parseURL(WConfig::get('route.default_admin'));
 				} else {
 					$route = self::parseURL(WConfig::get('route.default_front'));
 				}
+				
+				$route['mode'] = $mode;
 			}
 		}
 		
