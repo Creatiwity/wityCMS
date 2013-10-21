@@ -150,9 +150,7 @@ class UserAdminView extends WView {
 		$this->assign('js', '/apps/user/admin/js/access_form.js');
 		$this->assign('js', '/apps/user/admin/js/group_diff.js');
 		
-		// Get admin apps
-		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminApps());
+		$this->assign('admin_apps', $model['admin_apps']);
 		$this->assign('group', $model['group']);
 		$this->assign('new_name', $model['group_name']);
 		$this->assign('new_access', $model['group_access']);
