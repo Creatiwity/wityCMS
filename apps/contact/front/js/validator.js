@@ -1,4 +1,28 @@
 $(document).ready(function() {
+	var setNote;
+
+	setNote = function($domObject, jsonResponse) {
+		var cleaned, app, $container, _i, _len;
+
+		if (jsonResponse['app-name']) {
+
+			app = jsonResponse['app-name'];
+
+			$('[data-wity-note-app="' + app + '"]').remove();
+
+			if (jsonResponse.notes.length > 0) {
+				$container = $('<div class="row" data-wity-note-app="' + app + '"></div>');
+				$domObject.before($container);
+
+				for (_i = 0, _len = jsonResponse.notes.length; _i < _len; ++_i) {
+					$container.append('<div class="alert alert-' + jsonResponse.notes[_i].level + '" data-note-code="' + jsonResponse.notes[_i].code + '">'
+						+ '<button type="button" class="close" data-dismiss="alert">&times;</button>'
+						+ jsonResponse.notes[_i].message
+						+ '</div>');
+				}
+			}
+		}
+	};
 
 	$('body').on('click', '[data-witycms-submit="ajax"]', function() {
 		var $form, $button, url, method, data;
@@ -24,11 +48,10 @@ $(document).ready(function() {
 				} catch(e) {
 					// Debug code
 					// $('body').prepend('<pre>' + response + '</pre>');
-
 					return;
 				}
-				
-				$form.before(jResponse.view);
+
+				setNote($form, jResponse);
 			}
 		});
 		
