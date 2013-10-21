@@ -40,7 +40,7 @@ class NewsAdminView extends WView {
 		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
 		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
 		$this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
-		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
+		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap3-wysihtml5.js");
 		
 		// Assign site URL for permalink management
 		$this->assign('siteURL', WRoute::getBase() . '/news/');
