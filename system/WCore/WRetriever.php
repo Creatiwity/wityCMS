@@ -93,7 +93,14 @@ class WRetriever {
 			
 			// Lock access to the Request variables for non targeted apps
 			$form_signature = WRequest::get('form_signature');
-			if (!empty($form_signature) && $form_signature != $model['signature']) {
+			$form_action = WRequest::get('form_action');
+			if (!empty($form_action)) {
+				// If form's action was specified, checks that it is equal to the current app
+				$action_route = WRoute::parseURL($form_action);
+				if (strpos($form_action, $app_name) !== 0 || (isset($action_route['params'][0]) && $action_route['params'][0] != $action)) {
+					WRequest::lock();
+				}
+			} else if (!empty($form_signature) && $form_signature != $model['signature']) {
 				WRequest::lock();
 			}
 			
