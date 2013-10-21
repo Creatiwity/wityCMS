@@ -28,57 +28,51 @@
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-admin-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="/">{$site_name}</a>
-				</div>
-
-				<div class="navbar-collapse collapse navbar-menu-admin-collapse">
-					<p class="navbar-text pull-right">
-						Bienvenue <a href="#" class="navbar-link">{$userNickname}</a>
-						&nbsp;|&nbsp;
-						<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
-					</p>
-					<ul class="nav navbar-nav">
-						{for $app, $details in $appsList}
-						<li {if {$app} == {$appSelected}} class="active"{/if}>
-							<a href="/admin/{$app}/">{lang {$details.name}}</a>
-						</li>
-						{/for}
-					</ul>
-				</div><!--/.nav-collapse -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-admin-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">{$site_name}</a>
 			</div>
+
+			<div class="navbar-collapse collapse navbar-menu-admin-collapse">
+				<ul class="nav navbar-nav">
+					{for $app, $details in $appsList}
+					<li {if {$app} == {$appSelected}} class="active"{/if}>
+						<a href="/admin/{$app}/">{lang {$details.name}}</a>
+					</li>
+					{/for}
+				</ul>
+				<p class="navbar-text pull-right">
+					Bienvenue <a href="#" class="navbar-link">{$userNickname}</a>
+					&nbsp;|&nbsp;
+					<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
+				</p>
+			</div><!--/.nav-collapse -->
 		</div>
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<div class="span2">
-					<div class="well sidebar-nav">
-						<ul class="nav nav-list">
-							<li class="nav-header">{$appSelected}</li>
-							{for $action, $desc in $actionsList}
-							{if {$desc.menu}}
-							<li class="{if {$action} == {$actionAsked}}active{/if}">
-								<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.desc}}</a>
-							</li>
-							{/if}
-							{/for}
-						</ul>
-					</div><!--/.well -->
-				</div><!--/span-->
-				<div class="span10">
-					{$notes}
-					<div class="row-fluid">{$include}</div>				
-				</div><!--/span-->
-			</div><!--/row-->
+		<div class="col-md-2">
+			<ul class="nav nav-pills nav-stacked">
+				{for $action, $desc in $actionsList}
+				{if {$desc.menu}}
+				<li class="{if {$action} == {$actionAsked}}active{/if}">
+					<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.desc}}</a>
+				</li>
+				{/if}
+				{/for}
+			</ul>
+		</div><!--/span-->
+		<div class="col-md-10">
+			{$notes}
+			<div class="row">{$include}</div>				
+		</div><!--/span-->
+		<div class="clearfix"></div>
+		<div class="col-md-12">
 			<hr />
 			<footer>
 				<p>&copy; WityCMS Administration 2013</p>
 			</footer>
-		</div><!--/.fluid-container-->
+		</div>
 	</body>
 </html>
