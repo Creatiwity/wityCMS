@@ -53,7 +53,7 @@
 					<td>{$user.date}</td>
 					<td>{$user.last_activity}</td>
 					<td>
-						<a href="/admin/user/edit/{$user.id}/" title="{lang edit}"><i class="glyphicon glyphicon-edit"></i></a>
+						<a href="/admin/user/edit/{$user.id}/" class="black" title="{lang edit}"><i class="glyphicon glyphicon-edit"></i></a>
 						{if {$user.id} != $_SESSION['userid']}<span title="{lang article_delete}" class="link" data-link-modal="/v/admin/user/del/{$user.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>{/if}
 					</td>
 				</tr>
@@ -114,4 +114,4 @@
 	</div>
 </div>
 
-<div id="modal_delete" class="modal hide fade"></div>
+<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete" aria-hidden="true"></div>
