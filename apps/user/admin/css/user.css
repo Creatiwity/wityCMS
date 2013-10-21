@@ -1,13 +1,4 @@
 /**
- * Users listing
- */
-#search label {
-	display: block;
-	float: left;
-	width: 80px;
-}
-
-/**
  * Groups listing
  */
 #edition {
