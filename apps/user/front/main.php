@@ -42,9 +42,10 @@ class UserController extends WController {
 		$referer = WRoute::getReferer();
 		$redirect_request = WRequest::get('redirect');
 		if (empty($redirect)) {
+			$route = WRoute::route();
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
-			} else if (!in_array('user', WRoute::getRoute())) { // Login form loaded from an external application
+			} else if ($route['app'] != 'user') { // Login form loaded from an external application
 				$redirect = WRoute::getURL();
 			} else if (strpos($referer, 'user') === false) {
 				$redirect = $referer;

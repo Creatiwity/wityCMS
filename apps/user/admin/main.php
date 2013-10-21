@@ -250,7 +250,8 @@ Ceci est un message automatique.";
 			'user_id'   => $user_id, 
 			'user_data' => $db_data,
 			'post_data' => $post_data,
-			'groupes'   => $this->model->getGroupsList()
+			'groupes'   => $this->model->getGroupsList(),
+			'admin_apps' => $this->getAdminApps()
 		);
 	}
 	
@@ -333,13 +334,20 @@ Ceci est un message automatique.";
 						$count_users = $this->model->countUsers(array('groupe' => $data['id']));
 						// There will be a change in group's default access affecting users
 						if ($data['access'] != $db_data['access'] && $count_users > 0) {
-							return array(
-								'group_diff'   => true,
-								'group_id'     => $data['id'],
-								'group_name'   => $data['name'],
-								'group_access' => $data['access'],
-								'group'        => $db_data
-							);
+							$group_diff_data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
+							if (!in_array(null, $group_diff_data, true)) {
+								$this->group_diff();
+								return;
+							} else {
+								return array(
+									'group_diff'   => true,
+									'group_id'     => $data['id'],
+									'group_name'   => $data['name'],
+									'group_access' => $data['access'],
+									'group'        => $db_data,
+									'admin_apps'   => $this->getAdminApps()
+								);
+							}
 						} else if ($this->model->updateGroup($data['id'], $data)) {
 							WNote::success('user_group_edited', WLang::get('group_edited', $data['name']));
 							$db_success = true;
@@ -366,11 +374,9 @@ Ceci est un message automatique.";
 		$sortingHelper = WHelper::load('SortingHelper', array($disp_fields, 'name'));
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
-		$adminController = new AdminController();
-		
 		return array(
 			'groups' => $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC'),
-			'admin_apps' => $adminController->getAdminApps(),
+			'admin_apps' => $this->getAdminApps(),
 			'sortingHelper' => $sortingHelper
 		);
 	}

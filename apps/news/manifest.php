@@ -25,7 +25,7 @@
 	
 	<!-- Admin pages -->
 	<admin>
-		<action desc="articles_listing" default="1">listing</action>
+		<action desc="articles_listing" default="default">listing</action>
 		<action desc="article_add" requires="news_editor" alias="add">news_form</action>
 		<action desc="article_edit" requires="news_editor" menu="false">edit</action>
 		<action desc="article_delete" menu="false" requires="news_editor,deletor">news_delete</action>

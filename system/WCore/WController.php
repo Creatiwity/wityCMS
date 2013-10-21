@@ -78,11 +78,7 @@ abstract class WController {
 	 * Launch method determines the method that must be triggered in the application.
 	 * Most of the time, the action given in URL is used.
 	 */
-	public function launch(array $params = array()) {
-		// Match the asked action with the manifest
-		// getAskedAction() will removed the action from $params if it is found inside the array
-		$action = $this->getAskedAction($params);
-		
+	public function launch($action, array $params = array()) {
 		// Trigger the corresponding method for the action given in URL
 		return $this->forward($action, $params);
 	}
@@ -97,8 +93,32 @@ abstract class WController {
 	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
 			$access_result = $this->hasAccess($this->getAppName(), $action);
+			
 			if ($access_result === true) {
 				$this->action = $action;
+				
+				// Theme configuration for admin
+				if ($this->getAdminContext()) {
+					WConfig::set('config.theme', 'admin-bootstrap');
+					
+					// These are template variables => direct assign in WTemplate
+					$tpl = WSystem::getTemplate();
+					$tpl->assign('appsList', $this->getAdminApps());
+					$tpl->assign('userNickname', @$_SESSION['nickname']);
+					
+					$manifest = $this->getManifest();
+					$action_asked = $this->getTriggeredAction();
+					
+					$tpl->assign(array(
+						'appSelected' => $this->getAppName(),
+						'actionsList' => $manifest['admin'],
+						'actionAsked' => $action_asked
+					));
+					$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
+						ucwords($manifest['name']),
+						isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['desc']) : ''
+					));
+				}
 				
 				// Execute action
 				if (method_exists($this, $action)) {
@@ -110,7 +130,14 @@ abstract class WController {
 			} else if (is_array($access_result)) {
 				return $access_result; // hasAccess returned a note
 			} else {
-				return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
+				// Display login form if not connected
+				if (!WSession::isConnected()) {
+					WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
+					$userView = WRetriever::getView('user', array('login'));
+					$this->setView($userView);
+				} else {
+					return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
+				}
 			}
 		} else {
 			return WNote::error('app_no_suitable_action', 'No suitable action to trigger was found in the application '.$this->getAppName().'.');
@@ -490,6 +517,23 @@ abstract class WController {
 		}
 		
 		return false;
+	}
+	
+	public function getAdminApps() {
+		static $admin_apps = array();
+		if (empty($admin_apps)) {
+			$apps = WRetriever::getAppsList();
+			foreach ($apps as $app) {
+				if (substr($app, 0, 5) == 'admin') {
+					$app_name = substr($app, 6);
+					if ($this->hasAccess($app_name, '', true)) {
+						$admin_apps[$app_name] = $this->loadManifest($app_name);
+					}
+				}
+			}
+		}
+		
+		return $admin_apps;
 	}
 }
 

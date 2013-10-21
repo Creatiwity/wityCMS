@@ -24,7 +24,7 @@ class WMain {
 		$this->loadConfigs();
 		
 		// Initializing the route
-		$this->route();
+		WRoute::init();
 		
 		// Initializing sessions
 		$this->setupSession();
@@ -51,14 +51,35 @@ class WMain {
 	 */
 	private function exec() {
 		// Get the application name
-		$params = WRoute::getRoute();
-		$app_name = array_shift($params);
+		$route = WRoute::route();
 		
-		// Triggers the application's action and get the resulting model
-		$model = WRetriever::getModel($app_name, $params, false);
-		
-		$response = new WResponse(WConfig::get('route.mode'));
-		$response->render($model);
+		$response = new WResponse();
+		switch ($route['mode']) {
+			case 'm': // Only model
+				$response->renderModel(WRetriever::getModel($route['app'], $route['params'], false));
+				break;
+			
+			case 'v': // Only view
+				$response->renderView(
+					WRetriever::getModel($route['app'], $route['params'], false),
+					WRetriever::getView($route['app'], $route['params'], false)
+				);
+				break;
+			
+			case 'mv': // Model + View
+				$response->renderModelView(
+					WRetriever::getModel($route['app'], $route['params'], false),
+					WRetriever::getView($route['app'], $route['params'], false)
+				);
+				break;
+			
+			default: // Render in a theme
+				$response->render(
+					WRetriever::getView($route['app'], $route['params'], false), 
+					WConfig::get('config.theme')
+				);
+				break;
+		}
 	}
 	
 	/**
@@ -66,31 +87,6 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
-	}
-	
-	/**
-	 * Initializes WRoute and calculate the response mode.
-	 */
-	private function route() {
-		// Setup the route
-		WRoute::init();
-		$route = WRoute::route();
-		
-		// Extract the mode if exists
-		$mode = 'theme';
-		if (isset($route[0]) && WResponse::isMode($route[0])) {
-			$mode = array_shift($route);
-			
-			// Default route must not be loaded twice
-			if (empty($route)) {
-				$route = WRoute::getDefault();
-			}
-			
-			// Update the route without the mode
-			WRoute::setRoute($route);
-		}
-		
-		WConfig::set('route.mode', $mode);
 	}
 	
 	/**

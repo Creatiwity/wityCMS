@@ -46,13 +46,6 @@ class WRetriever {
 	 * @return array
 	 */
 	public static function getModel($app_name, array $params = array(), $has_parent = true) {
-		$signature = md5($app_name.serialize($params));
-		
-		// Check if this model was not already calculated
-		if (isset(self::$models[$signature])) {
-			return self::$models[$signature];
-		}
-		
 		// Get app controller
 		$controller = self::getController($app_name, $has_parent);
 		
@@ -78,35 +71,45 @@ class WRetriever {
 		
 		// Init model structure
 		$model = array(
-			'app-name'         => $app_name,
-			'triggered-action' => '',
-			'params'           => $params,
-			'has-parent'       => $has_parent,
-			'signature'        => $signature,
-			'result'           => null
+			'app-name'  => $app_name,
+			'action'    => '',
+			'params'    => $params,
+			'parent'    => $has_parent,
+			'signature' => '',
+			'result'    => null
 		);
 		
 		// Get model
 		if ($controller instanceof WController) {
+			// Match the asked action with the manifest
+			$action = $controller->getAskedAction($params);
+			
+			$model['signature'] = md5($app_name.$action.serialize($params));
+			
+			// Check if this model was not already calculated
+			if (isset(self::$models[$model['signature']])) {
+				return self::$models[$model['signature']];
+			}
+			
 			// Lock access to the Request variables for non targeted apps
 			$form_signature = WRequest::get('form_signature');
-			if (!empty($form_signature) && $form_signature != $signature) {
+			if (!empty($form_signature) && $form_signature != $model['signature']) {
 				WRequest::lock();
 			}
 			
 			// Trigger the action and get the result model
-			$model['result'] = $controller->launch($params);
+			$model['result'] = $controller->launch($action, $params);
 			
-			$model['triggered-action'] = $controller->getTriggeredAction();
+			$model['action'] = $controller->getTriggeredAction();
 			
 			// Unlock the Request variables access
 			WRequest::unlock();
+			
+			// Cache the value
+			self::$models[$model['signature']] = $model;
 		} else {
 			$model['result'] = $controller;
 		}
-		
-		// Cache the value
-		self::$models[$signature] = $model;
 		
 		return $model;
 	}
@@ -121,7 +124,7 @@ class WRetriever {
 	 * @param string $view_size Size mode of the view expected (optional)
 	 * @return WView
 	 */
-	public static function getView($app_name, array $params = array(), $view_size = '', $has_parent = true) {
+	public static function getView($app_name, array $params = array(), $has_parent = true) {
 		// Get app controller
 		$controller = self::getController($app_name, $has_parent);
 		
@@ -137,18 +140,18 @@ class WRetriever {
 				
 				// Attempt to declare the template file according to the action
 				// The final template file can be changed directly in the View.php
-				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['triggered-action'].'.html';
+				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['action'].'.html';
 				if (file_exists($actionTemplateFile)) {
 					$view->setTemplate($actionTemplateFile);
 				}
 				
 				// Prepare the view
-				if (method_exists($view, $model['triggered-action'])) {
-					$view->$model['triggered-action']($model['result']);
+				if (method_exists($view, $model['action'])) {
+					$view->$model['action']($model['result']);
 				}
 				
 				// Update the context
-				$view->setSignature(md5($app_name.serialize($params)));
+				$view->setSignature($model['signature']);
 			}
 			
 			return $view;
@@ -158,28 +161,40 @@ class WRetriever {
 		}
 	}
 	
-	public static function getViewFromModel(array $model, $view_size = '') {
-		return self::getView($model['app-name'], $model['params'], $view_size, $model['has-parent']);
+	public static function getViewFromModel(array $model) {
+		return self::getView($model['app-name'], $model['params'], $model['parent']);
 	}
 	
 	/**
 	 * If found, execute the application in the apps/$app_name directory
 	 * 
-	 * @param string $app_name name of the application that will be launched
+	 * @param string $app_code Code of the application that will be launched: "admin/news" or "news"
 	 * @return WController App Controller
 	 */
-	public static function getController($app_name, $has_parent) {
+	public static function getController($app_code, $has_parent) {
 		// Check if app not already instantiated
-		if (isset(self::$controllers[$app_name])) {
-			return self::$controllers[$app_name];
+		if (isset(self::$controllers[$app_code])) {
+			return self::$controllers[$app_code];
 		}
 		
 		// App asked exists?
-		if (self::isApp($app_name)) {
-			// App controller file
-			$app_dir = APPS_DIR.$app_name.DS.'front'.DS;
+		if (self::isApp($app_code)) {
+			// For example, an admin application is: "admin/news"
+			$admin = strpos($app_code, 'admin/') === 0;
+			
+			// Calculates app's directory and class name
+			if ($admin) {
+				$app_name  = substr($app_code, 6);
+				$app_dir   = APPS_DIR.$app_name.DS.'admin'.DS;
+				$app_class = preg_replace('#[^a-zA-Z]+#', '_', ucfirst($app_name)).'AdminController';
+			} else {
+				$app_name  = $app_code;
+				$app_dir   = APPS_DIR.$app_code.DS.'front'.DS;
+				$app_class = preg_replace('#[^a-zA-Z]+#', '_', ucfirst($app_code)).'Controller';
+			}
+			
+			// Include the application Controller class
 			include_once $app_dir.'main.php';
-			$app_class = str_replace('-', '_', ucfirst($app_name)).'Controller';
 			
 			// App's controller must inherit WController
 			if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
@@ -187,7 +202,7 @@ class WRetriever {
 					'name'       => $app_name,
 					'directory'  => $app_dir,
 					'controller' => $app_class,
-					'admin'      => false,
+					'admin'      => $admin,
 					'parent'     => $has_parent
 				);
 				
@@ -216,11 +231,11 @@ class WRetriever {
 				$controller->init($context);
 				
 				// Store the controller
-				self::$controllers[$app_name] = $controller;
+				self::$controllers[$app_code] = $controller;
 				
 				return $controller;
 			} else {
-				return WNote::error('app_structure', "The application \"".$app_name."\" has to have a main class inheriting from WController abstract class.");
+				return WNote::error('app_structure', "The application \"".$app_code."\" has to have a main class inheriting from WController abstract class.");
 			}
 		} else {
 			return WNote::error(404, "The page requested was not found.");
@@ -236,8 +251,16 @@ class WRetriever {
 		if (empty(self::$apps_list)) {
 			$apps = glob(APPS_DIR.'*', GLOB_ONLYDIR);
 			foreach ($apps as $appDir) {
-				if ($appDir != '.' && $appDir != '..' && file_exists($appDir.DS.'front'.DS.'main.php')) {
-					self::$apps_list[] = basename($appDir);
+				if ($appDir != '.' && $appDir != '..') {
+					// Check front
+					if (file_exists($appDir.DS.'front'.DS.'main.php')) {
+						self::$apps_list[] = basename($appDir);
+					}
+					
+					// Check admin
+					if (file_exists($appDir.DS.'admin'.DS.'main.php')) {
+						self::$apps_list[] = 'admin/'.basename($appDir);
+					}
 				}
 			}
 		}
@@ -283,32 +306,18 @@ class WRetriever {
 			$args = explode('?', $args);
 			
 			// Explode the route in several parts
-			$args[0] = trim($args[0], '/');
-			$route = explode('/', $args[0]);
+			$route = WRoute::parseURL($args[0]);
 			
-			if (count($route) >= 1) {
-				// Extract the relevant data
-				$app_name = addslashes(array_shift($route));
-				$params = '';
-				
-				// Get the params from the route of the view
-				foreach ($route as $part) {
-					if (!empty($part)) {
-						$params .= '"'.$part.'", ';
-					}
-				}
-				
+			if (!empty($route['app'])) {
 				// Format the querystring PHP code if a querystring is given
 				if (isset($args[1])) {
-					$querystring = ', "'.$args[1].'"';
-					$params .= '"querystring" => "'.$args[1].'"';
-				} else {
-					$params = substr($params, 0, -2);
+					$route['params']['querystring'] = $args[1];
 				}
 				
-				return 'WRetriever::getModel("'.$app_name.'", array('.$params.'))';
+				return 'WRetriever::getModel("'.$route['app'].'", '.var_export($route['params'], true).')';
 			}
 		}
+		
 		return '';
 	}
 	
