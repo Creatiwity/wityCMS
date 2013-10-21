@@ -37,11 +37,11 @@ class UserController extends WController {
 	 * 
 	 * @param string $redirect URL to redirect the request
 	 */
-	protected function login($redirect = '') {
+	protected function login($params) {
 		// Find redirect URL
 		$referer = WRoute::getReferer();
 		$redirect_request = WRequest::get('redirect');
-		if (empty($redirect)) {
+		if (empty($params[0])) {
 			$route = WRoute::route();
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
@@ -52,6 +52,8 @@ class UserController extends WController {
 			} else {
 				$redirect = WRoute::getBase();
 			}
+		} else {
+			$redirect = $params[0];
 		}
 		
 		if ($this->session->isConnected()) {
