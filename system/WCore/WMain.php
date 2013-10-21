@@ -24,7 +24,7 @@ class WMain {
 		$this->loadConfigs();
 		
 		// Initializing the route
-		WRoute::init();
+		$this->route();
 		
 		// Initializing sessions
 		$this->setupSession();
@@ -87,6 +87,34 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
+	}
+	
+	/**
+	 * Initializes the route.
+	 * Prevents browser from trying to load a physical file.
+	 */
+	private function route() {
+		WRoute::init();
+		
+		// Checks if the browser tried to load a physical file
+		$error = false;
+		$query = WRoute::getQuery();
+		$length = strlen($query);
+		if (substr($query, $length-4, 1) == '.') {
+			$ext = substr($query, $length-3, 3);
+			if (in_array($ext, array('js', 'css', 'png', 'jpg', 'gif', 'svg', 'eot', 'ttf'))) {
+				$error = true;
+			}
+		} else if (substr($query, $length-5, 1) == '.') {
+			$ext = substr($query, $length-4, 4);
+			if (in_array($ext, array('jpeg', 'woff'))) {
+				$error = true;
+			}
+		}
+		if ($error) {
+			header('HTTP/1.0 404 Not Found');
+			WNote::error(404, 'The resource could not be found.', 'die');
+		}
 	}
 	
 	/**
