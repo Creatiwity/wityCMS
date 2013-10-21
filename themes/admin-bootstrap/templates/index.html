@@ -6,8 +6,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		
 		<!-- Bootstrap -->
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal-bs3patch.css" rel="stylesheet" />
 		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet" />
 		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
@@ -19,37 +19,39 @@
 		<![endif]-->
 		
 		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script src="/libraries/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
 		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modalmanager.js"></script>
 		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modal.js"></script>
+		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap3-patch.js"></script>
 		<script src="/themes/admin-bootstrap/js/core-admin.js"></script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container-fluid">
-					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-admin-collapse">
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="brand" href="/">{$site_name}</a>
-					<div class="nav-collapse collapse">
-						<p class="navbar-text pull-right">
-							Bienvenue <a href="#" class="navbar-link">{$userNickname}</a>
-							&nbsp;|&nbsp;
-							<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
-						</p>
-						<ul class="nav">
-							{for $app, $details in $appsList}
-							<li {if {$app} == {$appSelected}} class="active"{/if}>
-								<a href="/admin/{$app}/">{lang {$details.name}}</a>
-							</li>
-							{/for}
-						</ul>
-					</div><!--/.nav-collapse -->
+					<a class="navbar-brand" href="/">{$site_name}</a>
 				</div>
+
+				<div class="navbar-collapse collapse navbar-menu-admin-collapse">
+					<p class="navbar-text pull-right">
+						Bienvenue <a href="#" class="navbar-link">{$userNickname}</a>
+						&nbsp;|&nbsp;
+						<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
+					</p>
+					<ul class="nav navbar-nav">
+						{for $app, $details in $appsList}
+						<li {if {$app} == {$appSelected}} class="active"{/if}>
+							<a href="/admin/{$app}/">{lang {$details.name}}</a>
+						</li>
+						{/for}
+					</ul>
+				</div><!--/.nav-collapse -->
 			</div>
 		</div>
 		<div class="container-fluid">
