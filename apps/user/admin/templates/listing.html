@@ -19,9 +19,11 @@
 				{/for}
 			</table>
 			<div id="admin-check-buttons" class="pull-right form-inline">
-				<label class="checkbox"><input type="checkbox" name="notify" checked="checked" /> {lang notify_these_users}</label>
-				<input id="cancel-button" class="btn" type="button" value="{lang cancel}" />
+				<div class="checkbox">
+					<label><input type="checkbox" name="notify" checked="checked" /> {lang notify_these_users}</label>
+				</div>
 				<input id="admin-check-button" class="btn btn-primary" type="submit" value="{lang submit}" />
+				<input id="cancel-button" class="btn btn-default" type="button" value="{lang cancel}" />
 			</div>
 			<div class="clearfix"></div>
 		</form>

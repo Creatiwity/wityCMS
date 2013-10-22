@@ -463,22 +463,16 @@ Ceci est un message automatique.";
 	protected function load_users_with_letter() {
 		$letter = WRequest::get('letter');
 		$groupid = intval(WRequest::get('groupe'));
-		$json = '{';
+		
 		if (!empty($letter) && !empty($groupid)) {
 			if ($letter == '#') {
 				$users = $this->model->getUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $groupid));
 			} else {
 				$users = $this->model->getUsersWithCustomAccess(array('nickname' => $letter.'%', 'groupe' => $groupid));
 			}
-			foreach ($users as $user) {
-				$json .= '"'.$user['id'].'": {"nickname": "'.addslashes($user['nickname']).'", "access": "'.$user['access'].'"},';
-			}
-			if (strlen($json) > 1) {
-				$json = substr($json, 0, -1);
-			}
 		}
-		$json .= '}';
-		echo $json;
+		
+		return $users;
 	}
 	
 	/**
