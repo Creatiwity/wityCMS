@@ -14,13 +14,24 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.4-07-10-2013
  */
 class ContactAdminView extends WView {
-	public function mail_history(array $params) {
 
-	}
-
-	public function new_mail(array $params) {
+	public function mail_history(array $model) {
+		// SortingHelper Helper
+		$sort = $model['sortingHelper']->getSorting();
+		$this->assign($model['sortingHelper']->getTplVars());
 		
+		// Emails data
+		$this->assign('emails', $model['emails']);
+		$this->assign('totalEmails', $model['totalEmails']);
+		
+		$pagination = WHelper::load('pagination', array($model['totalEmails'], $model['users_per_page'], $model['current_page'], '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'));
+		$this->assign('pagination', $pagination->getHTML());
 	}
+
+	public function detail_mail(array $params) {
+
+	}
+
 }
 
 ?>

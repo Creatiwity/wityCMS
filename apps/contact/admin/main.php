@@ -14,20 +14,45 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.4-07-10-2013
  */
 class ContactAdminController extends WController {
-	public function __construct() {
-		include 'model.php';
-		$this->model = new ContactAdminModel();
-		
-		include 'view.php';
-		$this->setView(new ContactAdminView());
-	}
 	
+	/**
+	 * Returns the corresponding mails (page and sorting) stored in the database
+	 * 
+	 * @param array $params
+	 * @return array List model
+	 */
 	protected function mail_history(array $params) {
+		$n = 30; // number of emails per page
+		
+		// Sorting criterias given by URL
+		$sort_by = '';
+		$sens = 'DESC';
+		$page = 1;
+		if (!empty($params[0])) {
+			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s %d', $sort_by, $sens, $page_input);
+			if ($page_input > 1) {
+				$page = $page_input;
+			}
+		}
 
+		// SortingHelper
+		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'from', 'name', 'organism', 'to', 'object', 'date'), 'date', 'DESC'));
+		$sort = $sortingHelper->findSorting($sort_by, $sens);
+		
+		// Define model
+		$model = array(
+			'emails' => $this->model->getEmailList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC'),
+			'totalEmails' => $this->model->getEmailCount(),
+			'current_page' => $page,
+			'users_per_page' => $n,
+			'sortingHelper' => $sortingHelper
+		);
+		
+		return $model;
 	}
 
-	protected function new_mail(array $params) {
-		
+	protected function mail_detail(array $params) {
+
 	}
 }
 

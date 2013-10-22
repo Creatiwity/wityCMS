@@ -17,7 +17,8 @@
 	
 	<!-- Admin pages -->
 	<admin>
-		<action desc="mail_history" default="default">history</action>
-		<action desc="new_mail" alias="reply">new_mail</action>
+		<action desc="mail_history" default="default" menu="false">mail_history</action>
+		<action menu="false">mail_detail</action>
+		<!-- <action desc="new_mail" alias="reply">new_mail</action> -->
 	</admin>
 </app>

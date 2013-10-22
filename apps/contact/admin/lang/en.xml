@@ -4,4 +4,11 @@
 	<item id="mail_history">Inbox</item>
 	<item id="mail_reply">Reply</item>
 	<item id="new_mail">Compose</item>
+
+	<!-- Mail history -->
+	<item id="emails_total">%s emails</item>
+	<item id="from_thead">From</item>
+	<item id="subject_thead">Subject</item>
+	<item id="date_thead">Date</item>
+	<item id="no_mail_found">No email found.</item>
 </lang>
