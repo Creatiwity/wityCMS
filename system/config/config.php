@@ -10,7 +10,7 @@ $config = array (
   'theme' => 'grafx',
   'lang' => 'fr-FR',
   'timezone' => 'Europe/Paris',
-  'email' => '',
+  'email' => 'julien1619@gmail.com',
   'debug' => true,
 );
 

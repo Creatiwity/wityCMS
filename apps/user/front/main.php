@@ -322,8 +322,8 @@ class UserController extends WController {
 							$data['email'],
 							WLang::get('user_password_lost_subject', WConfig::get('config.site_name')),
 							str_replace(
-								array('{site_name}', '{email}', '{confirm}'),
-								array(WConfig::get('config.site_name'), $user_data['email'], $confirm),
+								array('{base}', '{site_name}', '{email}', '{confirm}'),
+								array(WRoute::getBase(), WConfig::get('config.site_name'), $user_data['email'], $confirm),
 								WLang::get('user_password_lost_email')
 							)
 						);
@@ -363,7 +363,7 @@ class UserController extends WController {
 				
 				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				$this->view->setHeader('location: '.WRoute::getBase());
+				$this->view->setHeader('Location', WRoute::getBase());
 			}
 		}
 	}
