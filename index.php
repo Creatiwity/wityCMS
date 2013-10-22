@@ -47,6 +47,10 @@ require_once SYS_DIR.'WCore'.DS.'WMain.php';
  * Installer section
  */
 if (file_exists('installer/installer.php') && !file_exists('installer/bypass.php')) {
+	WRoute::init();
+	if (WRoute::getQuery() != '/') {
+		header('Location: '.WRoute::getDir());
+	}
 	require 'installer/installer.php';
 	$installer = new Installer();
 	$installer->launch();
