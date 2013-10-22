@@ -1,4 +1,4 @@
-.form-signin {
+.form-signin, .register-form {
 	max-width: 360px;
 	margin-right: auto;
 	margin-left: auto;
@@ -12,29 +12,36 @@
 }
 
 .form-signin .form-control.login-main {
-  position: relative;
-  font-size: 16px;
-  height: auto;
-  padding: 10px;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+	position: relative;
+	font-size: 16px;
+	height: auto;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-.form-signin .form-control:focus {
-  z-index: 2;
+.register-form .form-control.signup-main {
+	position: relative;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-.login-nickname {
-  margin-bottom: -1px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+.form-signin .form-control:focus, .register-form .form-control:focus {
+	z-index: 2;
 }
 
-.login-password {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+.login-nickname, .signup-password {
+	margin-bottom: -1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.login-password, .signup-confirm {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 .rotate {
