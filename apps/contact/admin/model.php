@@ -19,10 +19,68 @@ include_once APPS_DIR.'contact'.DS.'front'.DS.'model.php';
 class ContactAdminModel extends ContactModel {
 	public function __construct() {
 		parent::__construct();
+
+		// Declare table
+		$this->db->declareTable('users');
 	}
 
-	public function getEmails(array $filter) {
-
+	/**
+	 * Counts the emails in the database
+	 * 
+	 * @return array Number of emails stored
+	 */
+	public function getEmailCount() {
+		$prep = $this->db->prepare('
+			SELECT COUNT(*) FROM contact
+		');
+		$prep->execute();
+		return intval($prep->fetchColumn());
+	}
+	
+	/**
+	 * Retrieves a list of emails
+	 * 
+	 * @param int    $from     Position of the first email to return
+	 * @param int    $number   Number of emails
+	 * @param string $order    Name of the ordering column
+	 * @param bool   $asc      Ascendent or descendent?
+	 * @return array A list of information about the emails found
+	 */
+	public function getEmailList($from, $number, $order = 'date', $asc = false) {
+		$prep = $this->db->prepare('
+			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, DATE_FORMAT(`contact`.`date`, "%d/%m/%Y %H:%i") AS date
+			FROM contact
+			LEFT JOIN users
+			ON from_id = users.id
+			ORDER BY contact.'.$order.' '.($asc ? 'ASC' : 'DESC').'
+			'.($from >= 0 && $number > 0 ? 'LIMIT :start, :number' : '')
+		);
+		$prep->bindParam(':start', $from, PDO::PARAM_INT);
+		$prep->bindParam(':number', $number, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Retrieves informations about a specified email
+	 * 
+	 * @param int $emailid Id of the wanted email
+	 * @return array Information about the email
+	 */
+	public function getEmail($emailid) {
+		static $prep;
+		if (empty($prep)) {
+			$prep = $this->db->prepare('
+				SELECT id, from, users.nickname AS from_nickname, to, name, organism, object, message, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date
+				FROM contact
+				LEFT JOIN users
+				ON from_id = users.id
+				WHERE id = :emailid
+			');
+		}
+		$prep->bindParam(':emailid', $emailid, PDO::PARAM_INT);
+		$prep->execute();
+		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 }
 
