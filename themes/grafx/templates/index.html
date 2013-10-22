@@ -94,9 +94,7 @@
 					{else}
 					<aside class="block-user block text-center">
 						<p>Bienvenue <?php echo $_SESSION['nickname']; ?> !</p>
-						{if !empty($_SESSION['access'])}
-						<p><a href="/admin/">Administration</a></p>
-						{/if}
+						<p><a href="/user/logout/">Logout</a>{if !empty($_SESSION['access'])} - <a href="/admin/">Administration</a>{/if}</p>
 					</aside>
 					{/if}
 					<!--
