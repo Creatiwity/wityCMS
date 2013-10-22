@@ -1,87 +1,63 @@
 /**
- * Groups listing
+ * Users listing
  */
-#edition {
-	display: none;
-}
-
-ul#access, ul#accessEdit {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-#groups-list .group-form td {
-	padding: 0;
-}
-
-#groups-list .group-form form {
-	padding: 8px;
-}
-
-#admin_check a {
+#admin-check a {
 	filter:alpha(opacity=30);
     -moz-opacity: 0.3;
     -khtml-opacity: 0.3;
     opacity: 0.3;
 }
 
-#admin_check a:hover, #admin_check a.checked {
+#admin-check a:hover, #admin-check a.checked {
 	filter:alpha(opacity=100);
     -moz-opacity: 1;
     -khtml-opacity: 1;
     opacity: 1;
 }
 
-#admin-check {
-	width: 70%;
-	float: left;
-}
-
-#admin_check_buttons {
+#admin-check-buttons {
 	display: none;
-}
-
-#admin-check-details {
-	width: 28%;
-	float: right;
 }
 
 /**
  * User form
  */
-#user-form {
-	width: 100%;
-}
-
-#content .rights {
+.user-rights {
 	width: 100%;
 	border-collapse: collapse;
 	border: 1px solid black;
 }
 
-#content .rights td {
+.user-rights > tbody > tr > td {
 	border-top: 1px solid black;
 	padding: 0;
 }
 
-#content .rights .permissions {
+.user-rights .permissions {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-#content .rights .permissions td {
+.user-rights .permissions td {
 	border-top: none;
 	border-left: 1px solid black;
 	padding: 8px;
 }
 
-#content .rights .permissions label {
+.user-rights .permissions label {
 	display: block;
 }
 
-#groupEditor form {
-	margin-bottom: 0px;
+/**
+ * Groups listing
+ */
+#groups-list .group-form td {
+	padding: 0;
+}
+
+#groups-list .group-form form {
+	padding: 8px;
+	display: none;
 }
 
 /**
