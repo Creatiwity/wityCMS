@@ -6,7 +6,6 @@
 defined('IN_WITY') or die('Access denied');
 
 interface WResponseMode {
-	public function setModel($model);
 	public function renderHeaders();
 	public function render($notes);
 }
@@ -20,62 +19,44 @@ interface WResponseMode {
  */
 class WResponse {
 	/**
-	 * @var WResponseMode Response's handler to manage the final render
+	 * @var WTemplate Instance of WTemplate
 	 */
-	private $handler = null;
+	private $tpl;
 	
 	/**
-	 * Finds the response handler and load it.
-	 * 
-	 * @param string $mode   Response's mode: theme, m, v, mv, ...
-	 * @param mixed  $option Response's option: theme name for instance
+	 * @var string Name of the theme used for the response
 	 */
-	public function __construct($mode, $option = null) {
-		switch ($mode) {
-			case 'm':
-			case 'v':
-			case 'mv':
-				require_once SYS_DIR.'WResponse'.DS.'WResponseSerialize.php';
-				$this->handler = new WResponseSerialize($mode);
-				break;
-			
-			case 'theme':
-				require_once SYS_DIR.'WResponse'.DS.'WResponseTheme.php';
-				$this->handler = new WResponseTheme($option);
-				break;
-			
-			default:
-				$response_class = 'WResponse'.ucfirst(strtolower($mode));
-				$response_file  = SYS_DIR.'WResponse'.DS.$response_class.'.php';
-				
-				include_once $response_file;
-				// The response plugin must implement WResponseMode
-				if (class_exists($response_class) && in_array('WResponseMode', class_implements($response_class))) {
-					$this->handler = new $response_class($option);
-				} else {
-					require_once SYS_DIR.'WResponse'.DS.'WResponseTheme.php';
-					$this->handler = new WResponseTheme($option);
-				}
-				break;
+	private $theme_name;
+	
+	/**
+	 * @var string Directory of the theme used for the response
+	 */
+	private $theme_dir;
+	
+	/**
+	 * Assigns a theme
+	 * 
+	 * @param string $theme theme name (must a be an existing directory in /themes/)
+	 */
+	public function setTheme($theme) {
+		if ($theme == '_blank') {
+			$this->theme_name = '_blank';
+			$this->theme_dir = 'themes/system/';
+		} else if (is_dir(THEMES_DIR.$theme)) {
+			$this->theme_name = $theme;
+			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
+		} else {
+			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
 		}
 	}
 	
 	/**
-	 * Checks if a mode is valid: a handler have to be found for this mode
-	 * in system/WResponse/ directory.
+	 * Returns current theme name
 	 * 
-	 * @param $mode string Mode name
-	 * @return bool
+	 * @return string current theme name
 	 */
-	public static function isMode($mode) {
-		if (in_array($mode, array('theme', 'm', 'v', 'mv'))) {
-			return true;
-		} else {
-			$response_class = 'WResponse'.ucfirst(strtolower($mode));
-			$response_file  = SYS_DIR.'WResponse'.DS.$response_class.'.php';
-			
-			return file_exists($response_file);
-		}
+	public function getTheme() {
+		return $this->theme_name;
 	}
 	
 	/**
@@ -84,25 +65,66 @@ class WResponse {
 	 * 
 	 * @param array $model Model to be rendered (the view will be calculated in the plugin)
 	 */
-	public function render(array $model) {
-		// Assigns the model to the response plugin
-		$this->handler->setModel($model);
-		
-		// Render headers
-		if ($this->handler->renderHeaders()) {
+	public function render(WView $view = null, $theme) {
+		// Check headers
+		$headers = $view->getHeaders();
+		foreach ($headers as $name => $value) {
+			header($name.': '.$value);
+		}
+		if (isset($headers['location'])) {
 			return true;
 		}
 		
+		// Load WTemplate
+		$this->tpl = WSystem::getTemplate();
+		if (is_null($this->tpl)) {
+			throw new Exception("WResponse::__construct(): WTemplate cannot be loaded.");
+		}
+		
+		// Default vars
+		$site_name = WConfig::get('config.site_name');
+		$this->tpl->assign('site_name', $site_name);
+		$this->tpl->assign('page_title', $site_name);
+		
+		$this->setTheme($theme);
+		
+		// Check theme
+		if (empty($this->theme_name)) {
+			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
+		}
+		
+		// Flush the notes waiting for their own view
+		$plain_view = WNote::getPlainView();
+		if (!is_null($plain_view)) {
+			unset($view);
+			$view = $plain_view;
+			$this->setTheme('_blank');
+		}
+		
+		// Select Theme main template
+		if ($this->theme_name == '_blank') {
+			$themeMainFile = $this->theme_dir.'_blank.html';
+		} else {
+			$themeMainFile = $this->theme_dir.'templates'.DS.'index.html';
+		}
+		
 		try {
-			$notes = WNote::get('*');
+			// Define {$include} tpl's var
+			$this->tpl->assign('include', $view->render());
 			
-			$response = $this->handler->render($notes);
+			// Handle notes
+			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
+			
+			$html = $this->tpl->parse($themeMainFile);
+			
+			// Absolute links fix
+			echo $this->absoluteLinkFix($html);
 		} catch (Exception $e) {
 			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
 			return false;
 		}
 		
-		echo $response;
+		return true;
 	}
 	
 	/**
@@ -113,7 +135,6 @@ class WResponse {
 	 * @return string
 	 */
 	public static function absoluteLinkFix($string) {
-		// 
 		$dir = WRoute::getDir();
 		if (!empty($dir)) {
 			$string = str_replace(
@@ -124,6 +145,66 @@ class WResponse {
 		}
 		
 		return $string;
+	}
+	
+	public function renderModel(array $model) {
+		// Store the plain notes
+		$plain_notes = WNote::getPlain();
+		if (!empty($plain_notes)) {
+			$model['result'] = $plain_notes;
+		}
+		
+		// Store the notes
+		$model['notes'] = WNote::get('*');
+		
+		echo str_replace('\\/', '/', json_encode($model));
+		
+		return true;
+	}
+	
+	public function renderView(array $model, WView $view) {
+		// Flush the notes waiting for their own view
+		$plain_view = WNote::getPlainView();
+		if (!is_null($plain_view)) {
+			unset($view);
+			$view = $plain_view;
+		}
+		
+		// Store the notes
+		$model['notes'] = WNote::get('*');
+		
+		// Remove the application's result
+		unset($model['result']);
+		
+		$model['view'] = $view->render();
+		
+		// Absolute link fix
+		$model['view'] = $this->absoluteLinkFix($model['view']);
+		
+		echo str_replace('\\/', '/', json_encode($model));
+		
+		return true;
+	}
+	
+	public function renderModelView(array $model, WView $view) {
+		// Flush the notes waiting for their own view
+		$plain_view = WNote::getPlainView();
+		if (!is_null($plain_view)) {
+			unset($view);
+			$view = $plain_view;
+		}
+		
+		// Store the notes
+		$model['notes'] = WNote::get('*');
+		
+		$model['view'] = $view->render();
+		
+		// Absolute link fix
+		$model['view'] = $this->absoluteLinkFix($model['view']);
+		
+		echo str_replace('\\/', '/', json_encode($model));
+		
+		return true;
 	}
 }
 

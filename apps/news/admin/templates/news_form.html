@@ -1,44 +1,52 @@
-<form action="" method="post" enctype="multipart/form-data">
-	<div class="row-fluid">
-		<div class="span9">
-			<input id="news_title" class="input-block-level input-big" name="news_title" size="40" value="{$news_title}" type="text" placeholder="{lang title_of_article}"/>
-			<br/>
-			<div class="input-prepend">
-				<span class="add-on">{$siteURL}{$lastId}-</span>
-				<input class="span9" id="news_url" name="news_url" type="text" value="{$news_url}">
+<form method="post" enctype="multipart/form-data">
+	<div class="row form-horizontal">
+		<div class="col-md-9">
+			<h2 class="sr-only">{if empty({$news_id})}{lang article_add}{else}{lang article_edit}{/if}</h2>
+			<div class="form-group">
+				<div class="sr-only">
+					<label for="news_title" class="control-label">{lang title_of_article}</label>
+				</div>
+				<div class="col-md-12">
+					<input id="news_title" class="form-control input-lg" type="text" name="news_title" value="{$news_title}"  autocomplete="off" placeholder="{lang title_of_article}" />
+				</div>
 			</div>
-			<br/>
-			<label for="news_content" class="hide">{lang article_content}:</label><br />
-			<textarea id="news_content" class="input-block-level" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
+			
+			<div class="input-group">
+				<span class="input-group-addon">{$site_url}{$last_id}-</span>
+				<input id="news_url" class="form-control" type="text" name="news_url" />
+			</div>
+			
+			<label for="news_content" class="sr-only">{lang article_content}:</label><br />
+			<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
 			<script type="text/javascript">
 				$('#news_content').wysihtml5();
 			</script>
 		</div>
-		<div class="span3">
-			<div class="well">
-				<h4>{lang metadata}</h4>
-				<div class="control-group">
-					<label class="control-label" for="news_author">{lang author}</label>
-					<div class="controls">
-						<input type="text" id="news_author" class="input-block-level" name="news_author" value="{$news_author}" placeholder="{lang author}">
+		<div class="col-md-3">
+			<div class="well well-sm">
+				<h4 class="text-center">{lang metadata}</h4>
+				<div class="form-group">
+					<label for="news_author" class="control-label col-lg-5">{lang author}</label>
+					<div class="col-lg-7">
+						<input id="news_author" class="form-control" type="text" name="news_author" value="{$news_author}" placeholder="{lang author}" />
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="news_keywords">{lang keywords}</label>
-					<div class="controls">
-						<input type="text" id="news_keywords" class="input-block-level" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}">
+				<div class="form-group">
+					<label for="news_keywords" class="control-label col-lg-5">{lang keywords}</label>
+					<div class="col-lg-7">
+						<input id="news_keywords" class="form-control" type="text" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}">
 					</div>
 				</div>
 				{if !empty({$news_date})}
-				<hr/>
-				<ul class="unstyled">
+				<hr />
+				<ul class="list-unstyled">
 					<li>{lang article_created_on|{$news_date}}</li>
 					<li>{lang article_modified_on|{$news_modified}}</li>
 				</ul>
 				{/if}
 			</div>
-			<div class="well">
-				<h4>{lang category_of_article}</h4>
+			<div class="well well-sm">
+				<h4 class="text-center">{lang category_of_article}</h4>
 				{for $cat in $cats_list}
 				<label class="checkbox">
 					<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if}>
@@ -49,9 +57,9 @@
 				<p>{lang no_category_in_database}</p>
 				{/empty}
 			</div>
-			<div class="well">
-				<button type="submit" class="btn btn-large btn-block btn-primary" type="button">{lang submit}</button>
-				<button class="btn btn-large btn-block" type="button" onclick="history.back();">{lang cancel}</button>
+			<div class="well well-sm">
+				<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang submit}</button>
+				<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>
 			</div>
 		</div>
 	</div>

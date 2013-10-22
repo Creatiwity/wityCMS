@@ -37,20 +37,23 @@ class UserController extends WController {
 	 * 
 	 * @param string $redirect URL to redirect the request
 	 */
-	protected function login($redirect = '') {
+	protected function login($params) {
 		// Find redirect URL
 		$referer = WRoute::getReferer();
 		$redirect_request = WRequest::get('redirect');
-		if (empty($redirect)) {
+		if (empty($params[0])) {
+			$route = WRoute::route();
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
-			} else if (!in_array('user', WRoute::getRoute())) { // Login form loaded from an external application
+			} else if ($route['app'] != 'user') { // Login form loaded from an external application
 				$redirect = WRoute::getURL();
 			} else if (strpos($referer, 'user') === false) {
 				$redirect = $referer;
 			} else {
 				$redirect = WRoute::getBase();
 			}
+		} else {
+			$redirect = $params[0];
 		}
 		
 		if ($this->session->isConnected()) {
@@ -319,8 +322,8 @@ class UserController extends WController {
 							$data['email'],
 							WLang::get('user_password_lost_subject', WConfig::get('config.site_name')),
 							str_replace(
-								array('{site_name}', '{email}', '{confirm}'),
-								array(WConfig::get('config.site_name'), $user_data['email'], $confirm),
+								array('{base}', '{site_name}', '{email}', '{confirm}'),
+								array(WRoute::getBase(), WConfig::get('config.site_name'), $user_data['email'], $confirm),
 								WLang::get('user_password_lost_email')
 							)
 						);
@@ -360,7 +363,7 @@ class UserController extends WController {
 				
 				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				$this->view->setHeader('location: '.WRoute::getBase());
+				$this->view->setHeader('Location', WRoute::getBase());
 			}
 		}
 	}

@@ -21,14 +21,15 @@ Please, wait a moment before trying again.</item>
 	<item id="cookie_not_accepted">To login, your browser needs to accept the cookies.</item>
 	
 	<!-- Login form -->
-	<item id="login_form_title">Connexion</item>
+	<item id="login_form_title">Connection</item>
 	<item id="nickname">Identifier</item>
 	<item id="password">Password</item>
 	<item id="remain_connected_for">Remain connected for...</item>
 	<item id="minuts">minuts</item>
 	<item id="always_remain_connected">Always remain connected</item>
 	<item id="password_lost">Password lost?</item>
-	<item id="login_button">Connexion</item>
+	<item id="login_button">Connection</item>
+	<item id="more_options">More options</item>
 	
 	<!-- Register form -->
 	<item id="register_form_title">Create a new account</item>

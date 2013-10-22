@@ -135,14 +135,14 @@
 		margin: 0 !important;
 		padding: 0 !important;
 	}
-
+	
 	.modal.fade.in, 
 	.modal.container.fade.in,
 	.modal.modal-overflow.fade.in {
 		top: 1%;
 		bottom: auto;
 	}
-
+	
 	.modal-body,
 	.modal-overflow .modal-body {
 		position: static;
@@ -151,7 +151,7 @@
 		max-height: none !important;
 		overflow: visible !important;
 	}
-
+	
 	.modal-footer,
 	.modal-overflow .modal-footer {
 		position: static;

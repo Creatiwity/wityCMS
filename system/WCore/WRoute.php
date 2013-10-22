@@ -10,9 +10,9 @@ defined('IN_WITY') or die('Access denied');
  * 
  * Traditionally, Apache URL Rewriting is used in WityCMS.
  * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :
- * - param1 = "news" (this param will be used as Application name in WMain)
- * - param2 = "see" - in this case, this parameter is called the action of the application
- * - param3 = "4" - in this case, it may be the id of the news to display
+ * - app = "news" (this param will be used as Application name in WMain)
+ * - param1 = "see" - in this case, this parameter is called the action of the application
+ * - param2 = "4" - in this case, it may be the id of the news to display
  * 
  * WRoute can provide several informations about the URL of the page.
  * If we keep the example URL = http://mysite.com/wity/news/see/4
@@ -28,7 +28,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-16-10-2013
+ * @version 0.4.0-18-10-2013
  */
 class WRoute {
 	/**
@@ -56,42 +56,92 @@ class WRoute {
 	}
 	
 	/**
-	 * Launches the calculation of the route to find out the app to execute.
+	 * Launches the calculation of the current Route
 	 * 
-	 * @return array Current route
+	 * @return array The route
 	 */
 	public static function route() {
+		$route = WConfig::get('route.route');
+		if (!empty($route)) {
+			return $route;
+		}
+		
 		$query = trim(self::$query, '/');
+		$custom_routes = WConfig::get('route.custom');
 		
 		// Checking the existence of a custom route
-		$custom_routes = WConfig::get('route.custom');
 		if (isset($custom_routes[$query])) {
-			$route = $custom_routes[$query];
+			$route = self::parseURL($custom_routes[$query]);
 		} else {
 			$route = self::parseURL($query);
 			
-			if (empty($route)) { // Use default
-				$route = self::getDefault();
+			if (empty($route['app'])) { // Use default
+				$mode = $route['mode']; // save mode asked by user
+				if ($route['admin']) {
+					$route = self::parseURL(WConfig::get('route.default_admin'));
+				} else {
+					$route = self::parseURL(WConfig::get('route.default_front'));
+				}
+				
+				$route['mode'] = $mode;
 			}
 		}
 		
-		self::setRoute($route);
+		WConfig::set('route.route', $route);
+		
 		return $route;
 	}
 	
 	/**
-	 * Parses the web page URL.
+	 * Parses a URL to a route format.
 	 * 
-	 * @param string $url Web page URL
-	 * @return array The route such as array("app_name", "param1", "param2")
+	 * @param string $url A web page URL such as "news/see/13/"
+	 * @return array URL translated into a route ["app", "params", "mode", "admin"]
 	 */
-	private static function parseURL($url) {
-		// Cleaning
-		$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
-		$url = preg_replace('#\?.*$#', '', $url); // Remove query string
-		$url = trim($url, '/');
+	public static function parseURL($url) {
+		$route = array(
+			'app'    => '',
+			'params' => null,
+			'mode'   => '',
+			'admin'  => false
+		);
 		
-		return empty($url) ? array() : explode('/', $url);
+		if (is_string($url)) {
+			// Cleaning
+			$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
+			$url = preg_replace('#\?.*$#', '', $url); // Remove query string
+			$url = trim($url, '/');
+			
+			if (!empty($url)) {
+				$params = explode('/', $url);
+				
+				// Extract the mode if exists
+				if (isset($params[0]) && in_array($params[0], array('m', 'v', 'mv'))) {
+					$route['mode'] = array_shift($params);
+				}
+				
+				// Extract the app
+				$app = array_shift($params);
+				if (!empty($app)) {
+					// Admin route
+					if ($app == 'admin') {
+						$route['admin'] = true;
+						
+						$app = array_shift($params);
+						if (!empty($app)) {
+							// In WityCMS, to trigger an admin app, the app must be equal to "admin/news"
+							$route['app'] = 'admin/'.$app;
+						}
+					} else {
+						$route['app'] = $app;
+					}
+				}
+				
+				$route['params'] = $params;
+			}
+		}
+		
+		return $route;
 	}
 	
 	/**
@@ -164,60 +214,39 @@ class WRoute {
 	}
 	
 	/**
-	 * Defines a custom route which is not following the regular application rules
+	 * Defines a custom route to redirect to a specific application.
 	 * 
-	 * <code>WRoute::defineCustomRoute('/test/', array('appName', 'param1', 'param2'));</code>
+	 * <code>WRoute::defineCustomRoute('/test/', 'news/see/13');</code>
 	 * 
-	 * @param  string  $uri     the custom route to catch
-	 * @param  array   $route   List of parameters (application name and parameters...)
-	 * @return boolean true if route structure is valid, false otherwise
+	 * @param  string  $uri         The custom route to catch
+	 * @param  array   $redirection Redirection URI
+	 * @return boolean true if the redirection was applied
 	 */
-	public static function defineCustomRoute($uri, array $route) {
-		// Checking the routage structure
-		if (self::checkRouteStructure($route)) {
-			$custom_routes = WConfig::get('route.custom');
-			$custom_routes[$uri] = $route;
-			WConfig::set('route.custom', $custom_routes);
+	public static function defineCustom($uri, $redirection) {
+		$uri = trim($uri, '/');
+		if (!empty($uri)) {
+			WConfig::set('route.custom.'.$uri, $redirection);
 			WConfig::save('route');
+			
 			return true;
 		}
+		
 		return false;
 	}
 	
 	/**
 	 * Deletes a custom route.
 	 * 
-	 * @param string $uri the custom route to remove
+	 * @param string $uri The custom route to remove
 	 */
-	public static function deleteCustomRoute($uri) {
-		if (!is_null(WConfig::get('route.custom.'.$uri))) {
+	public static function deleteCustom($uri) {
+		$uri = trim($uri, '/');
+		if (!empty($uri) && !is_null(WConfig::get('route.custom.'.$uri))) {
 			$custom_routes = WConfig::get('route.custom');
 			unset($custom_routes[$uri]);
 			WConfig::set('route.custom', $custom_routes);
 			WConfig::save('route');
 		}
-	}
-	
-	/**
-	 * Defines route values in the configuration.
-	 * 
-	 * @param array $route Current route in WityCMS that will be set in configuration class.
-	 */
-	public static function setRoute(array $route) {
-		WConfig::set('route.request', $route);
-	}
-	
-	/**
-	 * Returns the current route.
-	 * 
-	 * @return string Current route in WityCMS
-	 */
-	public static function getRoute() {
-		return WConfig::get('route.request');
-	}
-	
-	public static function getDefault() {
-		return WConfig::get('route.default');
 	}
 }
 

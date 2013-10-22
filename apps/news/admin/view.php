@@ -40,24 +40,26 @@ class NewsAdminView extends WView {
 		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
 		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
 		$this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
-		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min.js");
+		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap3-wysihtml5.js");
 		
 		// Assign site URL for permalink management
-		$this->assign('siteURL', WRoute::getBase() . '/news/');
-		$this->assign('lastId', $model['news_id']);
+		$this->assign('site_url', WRoute::getBase() . '/news/');
+		$this->assign('news_id', $model['news_id']);
+		$this->assign('last_id', $model['last_id']);
 		
-		$cat_ids = array();
-		if (!empty($model['data']['news_cats']) && is_array($model['data']['news_cats'])) {
+		// Treat categories filled by user
+		$news_cats = array();
+		if (isset($model['data']['news_cats']) && is_array($model['data']['news_cats'])) {
 			foreach ($model['data']['news_cats'] as $key => $cat) {
 				if ($cat === 'on') {
-					$cat_ids[] = $key;
+					$news_cats[] = $key;
 				} else if (is_array($cat)) {
-					$cat_ids[] = $cat['news_cat_id'];
+					$news_cats[] = $cat['news_cat_id'];
 				}
 			}
 		}
 		$this->assign('cats_list', $model['cats_list']);
-		$this->assign('news_cats', $cat_ids);
+		$this->assign('news_cats', $news_cats);
 		
 		$this->fillMainForm(array(
 			'news_author' => $_SESSION['nickname'],

@@ -70,14 +70,14 @@ class Pagination {
 		$tpl = WSystem::getTemplate();
 		
 		// Beginning of the display-chain
-		$output = "<div class='pagination pagination-centered'>
-						<ul>";
+		$output = "<div class='row text-center'>
+						<ul class='pagination'>";
 						
 		$firstDone = false;
 		$lastDone = false;
 		for ($i = 1; $i <= $this->n; $i++) {
 			if ($i == $this->currentPage) {
-				$output .= sprintf('<li class="active"><span>%d</span></li> ', $i);
+				$output .= sprintf('<li class="active"><span>%d <span class="sr-only">(current)</span></span></li> ', $i);
 			}
 			// We are around the current page : we display it
 			else if (abs($this->currentPage - $i) <= 5) {
