@@ -20,8 +20,7 @@
 		<![endif]-->
 		
 		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-		<script src="/themes/grafx/js/script.js"></script>
+		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.js"></script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
@@ -77,27 +76,29 @@
 					</div>
 				</div>
 				<div id="column-blocks" class="col-md-4">
-					<?php if (empty($_SESSION['userid'])): ?>
-					<aside class="block-user block">
+					{if empty($_SESSION['userid'])}
+					<aside id="grafx-user" class="block-user block">
 						<p class="text-center buttons">
-							<a class="button-sign-in" href="/user/register/">Sign in <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
-							<a class="button-login" href="/user/login/"><img src="/themes/grafx/img/login.png" alt="Login" /> Login</a>
+							<a class="button-sign-in" data-toggle="collapse" data-parent="#grafx-user" href="#grafx-sign-in">Sign in <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
+							<a class="button-login" data-toggle="collapse" data-parent="#grafx-user" href="#grafx-login"><img src="/themes/grafx/img/login.png" alt="Login" /> Login</a>
 						</p>
-						<div class="sign-in closed">
-							{retrieve_view user/register}
-						</div>
-						<div class="login closed">
-							{retrieve_view user/login}
+						<div class="panel">
+							<div id="grafx-sign-in" class="sign-in collapse">
+								{retrieve_view user/register}
+							</div>
+							<div id="grafx-login" class="login collapse">
+								{retrieve_view user/login}
+							</div>
 						</div>
 					</aside>
-					<?php else: ?>
+					{else}
 					<aside class="block-user block text-center">
 						<p>Bienvenue <?php echo $_SESSION['nickname']; ?> !</p>
-						<?php if (!empty($_SESSION['access'])): ?>
+						{if !empty($_SESSION['access'])}
 						<p><a href="/admin/">Administration</a></p>
-						<?php endif; ?>
+						{/if}
 					</aside>
-					<?php endif; ?>
+					{/if}
 					<!--
 					<aside class="block">
 						<h2>Titre du block</h2>

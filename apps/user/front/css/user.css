@@ -21,6 +21,10 @@
           box-sizing: border-box;
 }
 
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
 .login-nickname {
   margin-bottom: -1px;
   border-bottom-left-radius: 0;
