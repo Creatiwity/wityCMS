@@ -51,14 +51,35 @@ class WMain {
 	 */
 	private function exec() {
 		// Get the application name
-		$params = WRoute::getRoute();
-		$app_name = array_shift($params);
+		$route = WRoute::route();
 		
-		// Triggers the application's action and get the resulting model
-		$model = WRetriever::getModel($app_name, $params, false);
-		
-		$response = new WResponse(WConfig::get('route.mode'));
-		$response->render($model);
+		$response = new WResponse();
+		switch ($route['mode']) {
+			case 'm': // Only model
+				$response->renderModel(WRetriever::getModel($route['app'], $route['params'], false));
+				break;
+			
+			case 'v': // Only view
+				$response->renderView(
+					WRetriever::getModel($route['app'], $route['params'], false),
+					WRetriever::getView($route['app'], $route['params'], false)
+				);
+				break;
+			
+			case 'mv': // Model + View
+				$response->renderModelView(
+					WRetriever::getModel($route['app'], $route['params'], false),
+					WRetriever::getView($route['app'], $route['params'], false)
+				);
+				break;
+			
+			default: // Render in a theme
+				$response->render(
+					WRetriever::getView($route['app'], $route['params'], false), 
+					WConfig::get('config.theme')
+				);
+				break;
+		}
 	}
 	
 	/**
@@ -69,28 +90,31 @@ class WMain {
 	}
 	
 	/**
-	 * Initializes WRoute and calculate the response mode.
+	 * Initializes the route.
+	 * Prevents browser from trying to load a physical file.
 	 */
 	private function route() {
-		// Setup the route
 		WRoute::init();
-		$route = WRoute::route();
 		
-		// Extract the mode if exists
-		$mode = 'theme';
-		if (isset($route[0]) && WResponse::isMode($route[0])) {
-			$mode = array_shift($route);
-			
-			// Default route must not be loaded twice
-			if (empty($route)) {
-				$route = WRoute::getDefault();
+		// Checks if the browser tried to load a physical file
+		$error = false;
+		$query = WRoute::getQuery();
+		$length = strlen($query);
+		if (substr($query, $length-4, 1) == '.') {
+			$ext = substr($query, $length-3, 3);
+			if (in_array($ext, array('js', 'css', 'png', 'jpg', 'gif', 'svg', 'eot', 'ttf'))) {
+				$error = true;
 			}
-			
-			// Update the route without the mode
-			WRoute::setRoute($route);
+		} else if (substr($query, $length-5, 1) == '.') {
+			$ext = substr($query, $length-4, 4);
+			if (in_array($ext, array('jpeg', 'woff'))) {
+				$error = true;
+			}
 		}
-		
-		WConfig::set('route.mode', $mode);
+		if ($error) {
+			header('HTTP/1.0 404 Not Found');
+			WNote::error(404, 'The resource could not be found.', 'die');
+		}
 	}
 	
 	/**

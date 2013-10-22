@@ -170,8 +170,8 @@ class NewsAdminController extends WController {
 		if ($news_id != -1 && $this->model->validExistingNewsId($news_id)) {
 			return $this->news_form(array($news_id));
 		} else {
-			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 			$this->view->setHeader('Location', WRoute::getDir().'/admin/news/');
+			return WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 		}
 	}
 	
@@ -192,10 +192,11 @@ class NewsAdminController extends WController {
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
 				$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/');
 			}
+			
 			return $data;
 		} else {
-			WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 			$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/');
+			return WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 		}
 	}
 	
@@ -293,7 +294,7 @@ class NewsAdminController extends WController {
 			
 			return array('cat_id' => $cat_id);
 		} else {
-			WNote::error('category_not_found', WLang::get('category_not_found'));
+			return WNote::error('category_not_found', WLang::get('category_not_found'));
 		}
 	}
 }
