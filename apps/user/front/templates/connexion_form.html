@@ -1,24 +1,34 @@
-<div id="login-form">
-	<h2>{lang login_form_title}</h2>
-	<form action="/user/login/" method="post">
-		<div>
-			<input type="hidden" name="redirect" value="{$redirect}" />
-			<label for="nickname">{lang nickname}:</label>
-			<input id="nickname" type="text" name="nickname" placeholder="{lang nickname}" /> <span class="mandatory">*</span>
-			<br />
-			<label for="password">{lang password}:</label>
-			<input id="password" type="password" name="password" placeholder="{lang password}" /> <span class="mandatory">*</span>
-			<br />
-			<label for="minutes">{lang remain_connected_for}:</label>
-			<input id="minutes" type="text" name="time" value="60" size="3" /> <em>{lang minuts}</em>
-			<br />
-			<label for="always">{lang always_remain_connected}:</label>
-			<input id="always" type="checkbox" name="remember" onclick="document.getElementById('minutes').disabled = document.getElementById('minutes').disabled == true ? false : true;" />
-			<p class="text-center">
-				<input type="submit" value="{lang login_button}" />
-				<a href="/user/password-lost/">{lang password_lost}</a>
-			</p>
-			<p><em><span class="mandatory">*</span> {lang mandatory_fields}</em></p>
+<form action="/user/login/" method="post" class="form-signin">
+	<h2 class="form-signin-heading">{lang login_form_title}</h2>
+
+	<input type="hidden" name="redirect" value="{$redirect}" />
+
+	<label class="sr-only" for="nickname">{lang nickname}</label>
+	<input type="text" class="form-control login-main login-nickname" name="nickname" placeholder="{lang nickname}" autofocus="" />
+	<label class="sr-only" for="password">{lang password}</label>
+	<input type="password" class="form-control login-main login-password" name="password" placeholder="{lang password}" />
+	<div class="row">
+		<div class="col-xs-10">
+			<label class="checkbox">
+				<input type="checkbox" value="remember" name="remember" onclick="document.getElementById('minutes').disabled = !document.getElementById('minutes').disabled;"> {lang always_remain_connected}
+			</label>
 		</div>
-	</form>
-</div>
+		<div class="col-xs-2 plus-button">
+			<a data-toggle="collapse" href="#more-options" class="text-right"><i class="glyphicon glyphicon-plus"></i></a>
+		</div>
+	</div>
+
+	<div id="more-options" class="collapse">
+		<div class="form-group">
+			<label for="minutes">{lang remain_connected_for}</label>
+			<div class="input-group">
+				<input id="minutes" class="form-control" type="number" name="time" min="1" value="60" />
+				<span class="input-group-addon">{lang minuts}</span>
+			</div>
+		</div>
+		<a class="btn btn-lg btn-default btn-block" href="/user/password-lost/">{lang password_lost}</a>
+		<br/>
+	</div>
+
+	<button class="btn btn-lg btn-primary btn-block" type="submit">{lang login_button}</button>
+</form>

@@ -29,6 +29,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="always_remain_connected">Toujours rester connecté </item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>
+	<item id="more_options">Plus d'options</item>
 	
 	<!-- Register form -->
 	<item id="register_form_title">Création d'un nouveau compte</item>
