@@ -61,7 +61,7 @@
 	<!-- User add/edit form -->
 	<item id="users_total">%s registered users</item>
 	<item id="users_found">%s users found</item>
-	<item id="no_user_found">No user found</item>
+	<item id="no_user_found">No user found in the database.</item>
 	<item id="leave_empty_to_leave_unchanged">Leave empty to let the password unchanged.</item>
 	<item id="confirmation">(confirmation)</item>
 	<item id="group_default">No group</item>
@@ -94,7 +94,7 @@
 	<item id="group_default_access_for_users">Default access for users belonging to the group</item>
 	<item id="group_users_count">Users count in the group</item>
 	<item id="actions">Actions</item>
-	<item id="no_group_found">No group found</item>
+	<item id="no_group_found">No group found in the database.</item>
 	<item id="apply">Apply</item>
 	<item id="group_del_confirm">Do you really want to delete the group %s?</item>
 	<item id="group_not_modified">An unknow error occured while trying to apply changes to the group.</item>
