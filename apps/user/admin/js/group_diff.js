@@ -77,8 +77,7 @@ function assignDiffPermissions(id, group_access, user_access) {
 
 function loadUsersBeginingBy(letter, groupid) {
 	var base = window.location.toString();
-	base = base.substring(0, base.length-1); // make sure to remove last '/'
-	base = base.substring(0, base.lastIndexOf('groups'));
+	base = base.substring(0, base.lastIndexOf('admin'));
 	var letter_encoded = letter.replace('#', 'sharp');
 	
 	// Hide elements
@@ -97,24 +96,25 @@ function loadUsersBeginingBy(letter, groupid) {
 		$('dl.users-list').fadeIn();
 	} else {
 		$.ajax({
-			url: base+'load_users_with_letter/',
+			url: base+'m/admin/user/load_users_with_letter/',
 			type: 'POST',
 			data: 'letter='+letter+'&groupe='+groupid,
 			dataType: 'json'
-		}).done(function(data) {
-			for (userid in data) {
+		}).success(function(data) {
+			data = data.result;
+			for (var i = 0; i < data.length; i++) {
 				// Clone pattern
-				var dt_clone = $('dt.pattern').clone().removeClass('pattern').addClass('user-'+userid+' letter-'+letter_encoded);
-				var dd_clone = $('dd.pattern').clone().removeClass('pattern').addClass('user-'+userid+' letter-'+letter_encoded);
+				var dt_clone = $('dt.pattern').clone().removeClass('pattern').addClass('user-'+data[i].id+' letter-'+letter_encoded);
+				var dd_clone = $('dd.pattern').clone().removeClass('pattern').addClass('user-'+data[i].id+' letter-'+letter_encoded);
 				
 				// Config
 				dt_clone.show();
-				dd_clone.attr('id', 'user-'+userid);
-				dt_clone.find('input').attr('name', 'user['+userid+']');
+				dd_clone.attr('id', 'user-'+data[i].id);
+				dt_clone.find('input').attr('name', 'user['+data[i].id+']');
 				dd_clone.find('input').each(function(index, el) {
-					$(el).attr('name', $(el).attr('name').replace('[]', '['+userid+']'));
+					$(el).attr('name', $(el).attr('name').replace('[]', '['+data[i].id+']'));
 				});
-				dt_clone.find('span.nickname').html(data[userid].nickname);
+				dt_clone.find('span.nickname').html(data[i].nickname);
 				
 				dt_clone.appendTo('dl.users-list');
 				dd_clone.appendTo('dl.users-list');
@@ -127,17 +127,17 @@ function loadUsersBeginingBy(letter, groupid) {
 				});
 				
 				// Bind change events to every inputs
-				bindEvents('user-'+userid);
-				$('#user-'+userid+' a.reset').click(function() {
+				bindEvents('user-'+data[i].id);
+				$('#user-'+data[i].id+' a.reset').click(function() {
 					var el_id = $(this).parent().attr('id');
 					var id = el_id.substring(5);
-					assignDiffPermissions(el_id, group_access, data[id].access);
+					assignDiffPermissions(el_id, group_access, data[i].access);
 				});
 				// Assign group permissions to inputs
-				assignDiffPermissions('user-'+userid, group_access, data[userid].access);
+				assignDiffPermissions('user-'+data[i].id, group_access, data[i].access);
 			}
 			
-			$('.users-list-container p').removeClass('loading');
+			$('.users-list-container p.caption').removeClass('loading');
 			$('dl.users-list').fadeIn();
 		});
 	}
@@ -162,7 +162,7 @@ $(document).ready(function() {
 						var letter = $(this).html().substring(0, 1);
 						if (!$(this).hasClass('current')) {
 							// Display loading gif
-							$('.users-list-container p').addClass('loading');
+							$('.users-list-container p.caption').addClass('loading');
 							$('dl.users-list').fadeOut(400, function() {
 								loadUsersBeginingBy(letter, groupid);
 							});

@@ -225,20 +225,13 @@ nav .navbar-form button:hover {
 	text-decoration: none;
 }
 
-.block-user .sign-in, .block-user .login {
-	transition: max-height 1s;
-	max-height: 350px;
-	overflow: hidden;
-}
-
-.block-user .login {
-	transition: max-height 1s;
-	max-height: 500px;
-	overflow: hidden;
-}
-
-.block-user .closed {
-	max-height: 0;
+#grafx-user .panel {
+	margin-bottom: 0px;
+	background-color: none;
+	border: 0px solid transparent;
+	border-radius: 0px;
+	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,0);
+	box-shadow: 0 0px 0px rgba(0,0,0,0);
 }
 
 .block-user h2 {

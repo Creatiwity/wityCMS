@@ -17,7 +17,7 @@
 	<item id="date">Date</item>
 	<item id="views">Views</item>
 	<item id="number_of_views">%s views</item>
-	<item id="no_article_in_database">There is no news in the database.</item>
+	<item id="no_article_in_database">No news found in the database.</item>
 	<item id="article_delete_confirmation">Delete "%s"?</item>
 	
 	<!-- News management -->
@@ -27,7 +27,7 @@
 	<item id="keywords">Keywords</item>
 	<item id="article_created_on">&lt;strong&gt;News created&lt;/strong&gt; on %s</item>
 	<item id="article_modified_on">&lt;strong&gt;Last edition&lt;/strong&gt; on %s</item>
-	<item id="category_of_article">Article's category</item>
+	<item id="category_of_article">Article's categories</item>
 	<item id="article_not_found">The news #%s that you are trying to modify cannot be found.</item>
 	<item id="article_no_title">Title is missing</item>
 	<item id="article_no_author">Author is missing</item>
@@ -43,7 +43,7 @@
 	<item id="Name">Name</item>
 	<item id="Shortname">Shortname</item>
 	<item id="None">None</item>
-	<item id="no_category_in_database">There is no category existing in the database.</item>
+	<item id="no_category_in_database">No category found in the database.</item>
 	<item id="category_no_name">Category name is missing.</item>
 	<item id="cat_added">The category "&lt;strong&gt;%s&lt;/strong&gt;" was successfully created.</item>
 	<item id="cat_not_added">An unknown error occurred while adding the category in the database.</item>
