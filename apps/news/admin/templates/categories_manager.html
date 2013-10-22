@@ -1,45 +1,48 @@
-<div class="span9">
-	<form method="post">
-		<table class="table table-hover table-striped">
-			<thead>
-				<tr>
-					<th><a href="/admin/news/categories_manager/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> {lang Name}</a></th>
-					<th><a href="/admin/news/categories_manager/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_shortname_class}"></i> {lang Shortname}</a></th>
-					<th>{lang Parent}</th>
-					<th>{lang Actions}</th>
-				</tr>
-			</thead>
-			<tbody id="categories_body">
-				{for $c in $cats}
-				<tr data-wity-category='{"news_cat_id":"{$c.news_cat_id}", "news_cat_name":"{$c.news_cat_name}", "news_cat_shortname":"{$c.news_cat_shortname}", "news_cat_parent":"{$c.news_cat_parent}"}'>
-					<td>{$c.news_cat_name}</td>
-					<td>{$c.news_cat_shortname}</td>
-					<td>{$c.news_cat_parent_name}</td>
-					<td>
-						<span title="{lang category_edit}" class="link wity_edit_category"><i class="icon-edit"></i></span>
-						<span title="{lang category_delete}" class="link" data-link-modal="/v/admin/news/category_delete/{$c.news_cat_id}" data-modal-container="modal_delete"><i class="icon-trash"></i></span>
-					</td>
-				</tr>
-				{/for}
-				{empty}
-				<tr>
-					<td colspan="6"><p class="text-center">{lang no_category_in_database}</p></td>
-				</tr>
-				{/empty}
-			</tbody>
-		</table>
-		<input type="text" id="news_cat_id" name="news_cat_id" class="hidden"/>
-	</form>
-</div>
-<div class="span3">
-	<div class="well">
-	<button id="add_cat_button" class="btn btn-block btn-large btn-success"><i class="icon-plus icon-white"></i> {lang category_add_button}</button>
+<div class="row">
+	<div class="col-md-9">
+		<h2 class="sr-only">{lang article_add}</h2>
+		<form method="post">
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th><a href="/admin/news/categories_manager/news_cat_name-{$news_cat_name_sort}/"><i class="{$news_cat_name_class}"></i> {lang Name}</a></th>
+						<th><a href="/admin/news/categories_manager/news_cat_shortname-{$news_cat_shortname_sort}/"><i class="{$news_cat_shortname_class}"></i> {lang Shortname}</a></th>
+						<th>{lang Parent}</th>
+						<th>{lang Actions}</th>
+					</tr>
+				</thead>
+				<tbody id="categories_body">
+					{for $c in $cats}
+					<tr data-wity-category='{"news_cat_id":"{$c.news_cat_id}", "news_cat_name":"{$c.news_cat_name}", "news_cat_shortname":"{$c.news_cat_shortname}", "news_cat_parent":"{$c.news_cat_parent}"}'>
+						<td>{$c.news_cat_name}</td>
+						<td>{$c.news_cat_shortname}</td>
+						<td>{$c.news_cat_parent_name}</td>
+						<td>
+							<span title="{lang category_edit}" class="link wity_edit_category"><i class="glyphicon glyphicon-edit"></i></span>
+							<span title="{lang category_delete}" class="link" data-link-modal="/v/admin/news/category_delete/{$c.news_cat_id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>
+						</td>
+					</tr>
+					{/for}
+					{empty}
+					<tr>
+						<td colspan="6"><p class="text-center">{lang no_category_in_database}</p></td>
+					</tr>
+					{/empty}
+				</tbody>
+			</table>
+			<input type="text" id="news_cat_id" name="news_cat_id" class="hidden" />
+		</form>
+	</div>
+	<div class="col-md-3">
+		<div class="well well-sm">
+			<button id="add_cat_button" class="btn btn-block btn-lg btn-success"><i class="glyphicon glyphicon-plus"></i> {lang category_add_button}</button>
+		</div>
 	</div>
 </div>
 
-<div id="modal_delete" class="modal hide fade"></div>
+<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete" aria-hidden="true"></div>
 <div id="selectParent" class="hide">
-	<select id="news_cat_parent" name="news_cat_parent">
+	<select id="news_cat_parent" name="news_cat_parent" class="form-control">
 		<option value="0">{lang None}</option>
 		{for $c in $cats}
 		<option value="{$c.news_cat_id}">{$c.news_cat_name}</option>

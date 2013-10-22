@@ -1,6 +1,7 @@
 <form method="post" enctype="multipart/form-data">
 	<div class="row form-horizontal">
 		<div class="col-md-9">
+			<h2 class="sr-only">{if empty({$news_id})}{lang article_add}{else}{lang article_edit}{/if}</h2>
 			<div class="form-group">
 				<div class="sr-only">
 					<label for="news_title" class="control-label">{lang title_of_article}</label>
@@ -11,7 +12,7 @@
 			</div>
 			
 			<div class="input-group">
-				<span class="input-group-addon">{$siteURL}{$lastId}-</span>
+				<span class="input-group-addon">{$site_url}{$last_id}-</span>
 				<input id="news_url" class="form-control" type="text" name="news_url" />
 			</div>
 			
