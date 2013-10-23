@@ -42,14 +42,16 @@ class NewsAdminModel extends NewsModel {
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, keywords, creation_date, edited_by)
-			VALUES (:url, :title, :author, :content, :keywords, NOW(), :edited_by)
+			INSERT INTO news(url, title, author, content, meta_title, keywords, description, creation_date, edited_by)
+			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :desciption, NOW(), :edited_by)
 		');
 		$prep->bindParam(':url', $data['news_url']);
 		$prep->bindParam(':title', $data['news_title']);
 		$prep->bindParam(':author', $data['news_author']);
 		$prep->bindParam(':content', $data['news_content']);
+		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
+		$prep->bindParam(':description', $data['news_description']);
 		$prep->bindParam(':edited_by', $_SESSION['userid']);
 		return $prep->execute();
 	}
@@ -64,7 +66,8 @@ class NewsAdminModel extends NewsModel {
 	public function updateNews($news_id, $data) {
 		$prep = $this->db->prepare('
 			UPDATE news
-			SET url = :url, title = :title, author = :author, content = :content, keywords = :keywords, modified_date = NOW(), edited_by = :edited_by
+			SET url = :url, title = :title, author = :author, content = :content, meta_title = :meta_title, 
+				keywords = :keywords, description = :description, modified_date = NOW(), edited_by = :edited_by
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $news_id);
@@ -72,7 +75,9 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':title', $data['news_title']);
 		$prep->bindParam(':author', $data['news_author']);
 		$prep->bindParam(':content', $data['news_content']);
+		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
+		$prep->bindParam(':description', $data['news_description']);
 		$prep->bindParam(':edited_by', $_SESSION['userid']);
 		return $prep->execute();
 	}

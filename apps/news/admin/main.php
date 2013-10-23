@@ -59,7 +59,7 @@ class NewsAdminController extends WController {
 		$news_id = isset($params[0]) ? intval($params[0]) : null;
 		
 		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('news_author', 'news_keywords', 'news_title', 'news_url', 'news_content', 'news_cats'));
+			$data = WRequest::getAssoc(array('news_author', 'news_meta_title', 'news_keywords', 'news_description', 'news_title', 'news_url', 'news_content', 'news_cats'));
 			$errors = array();
 			
 			/**

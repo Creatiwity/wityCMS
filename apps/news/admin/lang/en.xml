@@ -24,6 +24,7 @@
 	<item id="title_of_article">Article's title</item>
 	<item id="article_content">News content</item>
 	<item id="metadata">Metadata</item>
+	<item id="meta_title">Page's title</item>
 	<item id="keywords">Keywords</item>
 	<item id="article_created_on">&lt;strong&gt;News created&lt;/strong&gt; on %s</item>
 	<item id="article_modified_on">&lt;strong&gt;Last edition&lt;/strong&gt; on %s</item>
