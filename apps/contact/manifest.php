@@ -11,6 +11,11 @@
 	
 	<!-- Tiny icone to be displayed in the admin board -->
 	<icone></icone>
+
+	<!-- Dependencies -->
+	<dependencies>
+		<app>user</app>
+	</dependencies>
 	
 	<!-- Front pages -->
 	<action default="default">form</action>
