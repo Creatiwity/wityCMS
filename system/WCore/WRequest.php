@@ -243,7 +243,7 @@ class WRequest {
 	 * @return bool true if data available
 	 */
 	public static function hasData() {
-		return self::$lock;
+		return !self::$lock;
 	}
 }
 
