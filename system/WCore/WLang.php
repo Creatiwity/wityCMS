@@ -247,7 +247,7 @@ class WLang {
 			}
 		}
 		
-		return ucwords($name);
+		return ucwords(str_replace('_', ' ', $name));
 	}
 	
 	/**
