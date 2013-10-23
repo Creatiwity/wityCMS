@@ -1,11 +1,14 @@
-<form action="/admin/user/config/" method="post">
-	{for $name, $value in $config}
-	<div class="checkbox">
-		<label><input type="checkbox" name="config[{$name}]"{if {$value}} checked="checked"{/if} /> <strong>{lang config_{$name}}</strong></label>
-	</div>
-	{/for}
-	<div class="form-group">
-		<input type="hidden" name="update" value="true" />
-		<input class="btn btn-large btn-primary" type="submit" value="{lang submit}" />
-	</div>
-</form>
+<div class="wity-app wity-app-user wity-action-config">
+	<form action="/admin/user/config/" method="post">
+		<h2 class="sr-only">{lang action_config}</h2>
+		{for $name, $value in $config}
+		<div class="checkbox">
+			<label><input type="checkbox" name="config[{$name}]"{if {$value}} checked="checked"{/if} /> <strong>{lang config_{$name}}</strong></label>
+		</div>
+		{/for}
+		<div class="form-group">
+			<input type="hidden" name="update" value="true" />
+			<input class="btn btn-large btn-primary" type="submit" value="{lang submit}" />
+		</div>
+	</form>
+</div>

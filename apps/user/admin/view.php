@@ -91,7 +91,9 @@ class UserAdminView extends WView {
 			'firstname' => '',
 			'lastname' => '',
 			'groupe' => 0,
-			'access' => ''
+			'access' => '',
+			'date' => '',
+			'last_activity' => ''
 		);
 		$data = !empty($model['user_data']) ? $model['user_data'] : $model['post_data'];
 		foreach ($default_model as $item => $default) {
