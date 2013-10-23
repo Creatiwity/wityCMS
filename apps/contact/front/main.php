@@ -18,7 +18,7 @@ class ContactController extends WController {
 	protected function form(array $params) {
 		$user_id = isset($_SESSION['userid']) ? $_SESSION['userid'] : null;
 		
-		if (!empty($_POST)) {
+		if (WRequest::hasData()) {
 			$data = WRequest::getAssoc(array('from_name', 'from_company', 'from_email', 'email_subject', 'email_message'));
 			$errors = array();
 			
