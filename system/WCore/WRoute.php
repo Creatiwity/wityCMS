@@ -101,7 +101,7 @@ class WRoute {
 	public static function parseURL($url) {
 		$route = array(
 			'app'    => '',
-			'params' => null,
+			'params' => array(),
 			'mode'   => '',
 			'admin'  => false
 		);
