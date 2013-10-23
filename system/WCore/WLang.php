@@ -247,7 +247,7 @@ class WLang {
 			}
 		}
 		
-		return $name;
+		return ucwords($name);
 	}
 	
 	/**
