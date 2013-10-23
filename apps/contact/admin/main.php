@@ -22,7 +22,7 @@ class ContactAdminController extends WController {
 	 * @return array List model
 	 */
 	protected function mail_history(array $params) {
-		$n = 30; // number of emails per page
+		$n = 10; // number of emails per page
 		
 		// Sorting criterias given by URL
 		$sort_by = '';
