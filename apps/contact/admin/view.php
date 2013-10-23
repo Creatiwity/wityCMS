@@ -21,6 +21,10 @@ class ContactAdminView extends WView {
 		$this->assign($model['sortingHelper']->getTplVars());
 		
 		// Emails data
+		foreach ($model['emails'] as $key => $email) {
+			$model['emails'][$key]['abstract'] = $email['object'].'&nbsp;<span class="text-muted">-&nbsp;'.$email['message'].'</span>';
+		}
+
 		$this->assign('emails', $model['emails']);
 		$this->assign('totalEmails', $model['totalEmails']);
 		
