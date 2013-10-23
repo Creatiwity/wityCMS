@@ -236,6 +236,15 @@ class WRequest {
 	public static function unlock() {
 		self::$lock = false;
 	}
+	
+	/**
+	 * Tells the user if data is available.
+	 * 
+	 * @return bool true if data available
+	 */
+	public static function hasData() {
+		return self::$lock;
+	}
 }
 
 ?>

@@ -80,9 +80,9 @@ class UserAdminController extends WController {
 		$sens = 'DESC';
 		$page = 1;
 		if (!empty($params[0])) {
-			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s %d', $sort_by, $sens, $page_crit);
-			if ($page > 1) {
-				$page = $page_crit;
+			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s %d', $sort_by, $sens, $page_input);
+			if ($page_input > 1) {
+				$page = $page_input;
 			}
 		}
 		

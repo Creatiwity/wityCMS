@@ -202,7 +202,10 @@ class UserModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, lang, users.access, groupe, name AS groupe_name, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip
+			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe, users.access AS access, valid, 
+				DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
+				DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity,
+				ip, name AS groupe_name
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -226,7 +229,10 @@ class UserModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, users_groups.name, users.access AS access, valid
+				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, users.access AS access, valid, 
+					DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
+					DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity,
+					ip, name AS groupe_name
 				FROM users
 				LEFT JOIN users_groups
 				ON groupe = users_groups.id

@@ -24,6 +24,7 @@
 	<item id="title_of_article">Titre de l'article</item>
 	<item id="article_content">Contenu de la news </item>
 	<item id="metadata">Metadonnées</item>
+	<item id="meta_title">Titre de la page</item>
 	<item id="keywords">Mots clés</item>
 	<item id="article_created_on">&lt;strong&gt;Article créé&lt;/strong&gt; le %s</item>
 	<item id="article_modified_on">&lt;strong&gt;Dernière édition&lt;/strong&gt; le %s</item>

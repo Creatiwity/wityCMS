@@ -63,7 +63,9 @@ class NewsAdminView extends WView {
 		
 		$this->fillMainForm(array(
 			'news_author' => $_SESSION['nickname'],
+			'news_meta_title' => '',
 			'news_keywords' => '',
+			'news_description' => '',
 			'news_title' => '',
 			'news_url' => '',
 			'news_content' => '',

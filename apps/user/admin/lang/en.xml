@@ -22,7 +22,7 @@
 	<!-- General -->
 	<item id="search">Search</item>
 	<item id="nickname">Nickname</item>
-	<item id="password">Mot de passe</item>
+	<item id="password">Password</item>
 	<item id="email">Email</item>
 	<item id="firstname">Firstname</item>
 	<item id="lastname">Lastname</item>
@@ -79,7 +79,7 @@
 	<item id="user_not_created">An unknown error occured when trying to create your account in the database.</item>
 	<item id="user_edited"><![CDATA[The user <strong>%s</strong> was edited successfully.]]></item>
 	<item id="user_not_edited">An unknown error occured while trying to edit the account %s in the database.</item>
-	<item id="send_email_confirmation">Send an account creation confirmation by mail?</item>
+	<item id="send_email_confirmation">Send the new account's data by email?</item>
 	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
 	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
 	
@@ -101,8 +101,8 @@
 	
 	<!-- Group treatment -->
 	<item id="group_name_empty">No group name given</item>
-	<item id="group_added"><![CDATA[The group <strong>%s</strong> was edited successfully.]]></item>
-	<item id="group_edited"><![CDATA[The group <strong>%s</strong> was added successfully.]]></item>
+	<item id="group_added"><![CDATA[The group <strong>%s</strong> was added successfully.]]></item>
+	<item id="group_edited"><![CDATA[The group <strong>%s</strong> was edited successfully.]]></item>
 	<item id="group_not_added">An unknown error occured while trying to apply changes to the group in the database.</item>
 	<item id="group_deleted">The group selected was deleted successfully.</item>
 	<item id="group_delete_confirmation">Are you sure you want to delete the group %s?</item>
