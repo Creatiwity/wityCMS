@@ -61,11 +61,14 @@
 					img.setAttribute('id', 'flag');
 					img.setAttribute('src', src);
 					container = document.getElementById('flag-container');
-					container.removeChild(container.firstChild);
+					if (container.firstChild) {
+						container.removeChild(container.firstChild);
+					}
 					container.appendChild(img);
 				}
 			} else {
 				document.getElementById('flag-container').removeChild(document.getElementById('flag'));
+				document.getElementById('flag-container').innerHTML = '?';
 			}
 		}
 	</script>
