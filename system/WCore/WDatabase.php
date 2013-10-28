@@ -19,7 +19,7 @@ class WDatabase extends PDO {
 	private $tablePrefix = "";
 	
 	/**
-	 * @var array(string) list of all tables that will be automatically prefixed 
+	 * @var array List of all tables that will be automatically prefixed 
 	 */
 	private $tables = array();
 	
@@ -33,11 +33,11 @@ class WDatabase extends PDO {
 	 */
 	public function __construct($dsn, $user, $password) {
 		if (!class_exists('PDO')) {
-			throw new Exception("WSystem::__construct(): Class PDO not found.");
+			throw new Exception("WDatabase::__construct(): Class PDO not found.");
 		}
 		
 		try {
-			# Bug de PHP5.3 : constante PDO::MYSQL_ATTR_INIT_COMMAND n'existe pas
+			# Bug in PHP5.3 : PDO::MYSQL_ATTR_INIT_COMMAND constant does not exist
 			@parent::__construct($dsn, $user, $password);
 		} catch (PDOException $e) {
 			$message = utf8_encode($e->getMessage());
@@ -51,7 +51,7 @@ class WDatabase extends PDO {
 	}
 	
 	/**
-	 * Declare a new table in order to be automaticly prefixed
+	 * Declare a new table in order to be automatically prefixed
 	 * 
 	 * @param string $table table's name
 	 */

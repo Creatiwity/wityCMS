@@ -174,7 +174,7 @@ class WNote {
 	
 	/**
 	 * Handles note to be displayed in a plain HTML View.
-	 * Oftenly used for failover purposes (a view did not manage to render since theme cannot be found for instance).
+	 * Often used for fail-over purposes (a view did not manage to render since theme cannot be found for instance).
 	 * 
 	 * @param array $note Note as returned by WNote::raise()
 	 */
@@ -306,7 +306,7 @@ class WNote {
 	}
 	
 	/**
-	 * Prepares a view to display a set of notes in a fallback view
+	 * Prepares a view to display a set of notes in a fall-back view
 	 * 
 	 * @return WView
 	 */

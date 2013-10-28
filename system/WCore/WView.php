@@ -277,7 +277,6 @@ class WView {
 	/**
 	 * Renders the view
 	 * 
-	 * @param  string $action Name of the action in the view to display
 	 * @return string The rendered string of the view
 	 */
 	public function render() {
