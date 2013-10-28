@@ -120,10 +120,10 @@ class WRequest {
 	/**
 	 * Returns the checked value associated to $name
 	 * 
-	 * @param &array $data      request array
-	 * @param string $name      variable name
-	 * @param string $default   optional default value
-	 * @param string $hash      name of the method used to send
+	 * @param &array $data       request array
+	 * @param string $name       variable name
+	 * @param string $default    optional default value
+	 * @param string $hash       name of the method used to send
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {

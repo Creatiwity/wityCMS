@@ -15,24 +15,24 @@ defined('IN_WITY') or die('Access denied');
  */
 class WConfig {
 	/**
-	 * @var array() Multidimensionnal array containing configurations sorted by type
+	 * @var array Multidimensionnal array containing configurations sorted by type
 	 * 
 	 * No '.' in keys because it's a reserved character
 	 */
 	private static $configs = array();
 	
 	/**
-	 * @var array() List of loaded configuration files
+	 * @var array List of loaded configuration files
 	 */
 	private static $files = array();
 
 	/**
-	 * @var array() Stores modified configurations 
+	 * @var array Stores modified configurations 
 	 */
 	private static $modified = array();
 	
 	/**
-	 * Returns configuration value
+	 * Returns a configuration value.
 	 * 
 	 * @param  string $path     configuration path
 	 * @param  mixed  $default  optional default value
@@ -64,7 +64,7 @@ class WConfig {
 	}
 	
 	/**
-	 * Assign a configuration value to a path
+	 * Assign a configuration value to a path.
 	 * 
 	 * @param  string $path   configuration path
 	 * @param  mixed  $value  configuration value
@@ -89,7 +89,7 @@ class WConfig {
 	}
 	
 	/**
-	 * Adds configurations from a file
+	 * Loads configuration's values from a file.
 	 * 
 	 * @param  string  $field configuration name
 	 * @param  string  $file  configuration file
@@ -136,9 +136,9 @@ class WConfig {
 	}
 	
 	/**
-	 * Destroys a configuration value
+	 * Destroys a configuration value.
 	 * 
-	 * @param  string  $path configuration path
+	 * @param string $path Configuration's path
 	 */
 	public static function clear($path) {
 		$nodes = explode('.', $path);
@@ -164,9 +164,9 @@ class WConfig {
 	}
 	
 	/**
-	 * Saves configurations
+	 * Saves the specified configuration.
 	 * 
-	 * @param  string  $field configuration name
+	 * @param string $field Configuration's name
 	 */
 	public static function save($field, $file = '') {
 		if (in_array($field, self::$modified)) {
@@ -231,9 +231,9 @@ class WConfig {
 	}
 	
 	/**
-	 * Unloads a configuration
+	 * Unloads a configuration.
 	 * 
-	 * @param  string  $field configuartion name
+	 * @param string $field Configuration's name
 	 */
 	public static function unload($field) {
 		unset(self::$configs[$field], self::$files[$field]);
