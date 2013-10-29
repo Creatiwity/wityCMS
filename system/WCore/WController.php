@@ -44,6 +44,11 @@ abstract class WController {
 	private $params;
 	
 	/**
+	 * @var array List of headers for this view
+	 */
+	private $headers = array();
+	
+	/**
 	 * Application initialization
 	 * 
 	 * @param array $context Context of the application describing app's name, app's directory and app's main class
@@ -519,6 +524,9 @@ abstract class WController {
 		return false;
 	}
 	
+	/**
+	 * Returns the list of admin apps according to the user's access.
+	 */
 	public function getAdminApps() {
 		static $admin_apps = array();
 		if (empty($admin_apps)) {
@@ -534,6 +542,28 @@ abstract class WController {
 		}
 		
 		return $admin_apps;
+	}
+	
+	/**
+	 * Set a new header for the response
+	 * Will be assigned in WResponse::render()
+	 * 
+	 * @param string $name Header's name
+	 * @param string $value
+	 */
+	public function setHeader($name, $value) {
+		$this->headers[strtolower($name)] = $value;
+	}
+	
+	/**
+	 * Get the headers for this app
+	 * 
+	 * @return array
+	 */
+	public function getHeaders() {
+		$headers = $this->headers;
+		$this->headers = array();
+		return $headers;
 	}
 }
 

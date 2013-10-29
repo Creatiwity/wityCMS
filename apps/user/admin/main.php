@@ -223,7 +223,7 @@ Ceci est un message automatique.";
 						}
 						
 						WNote::success('user_created', WLang::get('user_created', $post_data['nickname']));
-						$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
+						$this->setHeader('Location', WRoute::getDir().'/admin/user/');
 					} else {
 						WNote::error('user_not_created', WLang::get('user_not_created', $post_data['nickname']));
 					}
@@ -235,7 +235,7 @@ Ceci est un message automatique.";
 						}
 						
 						WNote::success('user_edited', WLang::get('user_edited', $db_data['nickname']));
-						$this->view->setHeader('Location', WRoute::getDir().'/admin/user/edit/'.$user_id);
+						$this->setHeader('Location', WRoute::getDir().'/admin/user/edit/'.$user_id);
 					} else {
 						WNote::error('user_not_edited', WLang::get('user_not_edited', $db_data['nickname']));
 					}
@@ -270,7 +270,7 @@ Ceci est un message automatique.";
 		
 		if (empty($user_id) || !$this->model->validId($user_id)) {
 			WNote::error('user_not_found', WLang::get('user_not_found'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/');
 			return false;
 		}
 		
@@ -297,7 +297,7 @@ Ceci est un message automatique.";
 		if (WRequest::get('confirm', null, 'POST') === '1') {
 			$this->model->deleteUser($user_id);
 			WNote::success('user_deleted', WLang::get('user_deleted'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/');
 		}
 		
 		return array(
@@ -396,7 +396,7 @@ Ceci est un message automatique.";
 			$this->model->deleteGroup($group_id);
 			$this->model->resetUsersInGroup($group_id);
 			WNote::success('user_group_deleted', WLang::get('group_deleted'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/groups/');
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups/');
 		}
 		
 		return array(
@@ -452,7 +452,7 @@ Ceci est un message automatique.";
 			}
 		}
 		
-		$this->view->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+		$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
 	}
 	
 	/**

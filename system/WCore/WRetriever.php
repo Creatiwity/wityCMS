@@ -77,6 +77,7 @@ class WRetriever {
 			'params'     => $params,
 			'has-parent' => $has_parent,
 			'signature'  => '',
+			'headers'    => array(),
 			'result'     => null
 		);
 		
@@ -109,6 +110,7 @@ class WRetriever {
 			$model['result'] = $controller->launch($action, $params);
 			
 			$model['action'] = $controller->getTriggeredAction();
+			$model['headers'] = $controller->getHeaders();
 			
 			// Unlock the Request variables access
 			WRequest::unlock();

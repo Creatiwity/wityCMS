@@ -55,14 +55,15 @@ class WResponse {
 	 * @param WView  $view  View to be rendered
 	 * @param string $theme Theme name to use to wrap the view
 	 */
-	public function render(WView $view = null, $theme) {
+	public function render(WView $view = null, $theme, $model = array()) {
 		// Check headers
-		$headers = $view->getHeaders();
-		foreach ($headers as $name => $value) {
-			header($name.': '.$value);
-		}
-		if (isset($headers['location'])) {
-			return true;
+		if (isset($model['headers'])) {
+			foreach ($model['headers'] as $name => $value) {
+				header($name.': '.$value);
+			}
+			if (isset($model['headers']['location'])) {
+				return true;
+			}
 		}
 		
 		// Load WTemplate

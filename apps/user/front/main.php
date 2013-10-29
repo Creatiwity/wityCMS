@@ -57,7 +57,7 @@ class UserController extends WController {
 		}
 		
 		if ($this->session->isConnected()) {
-			$this->view->setHeader('Location', $redirect);
+			$this->setHeader('Location', $redirect);
 			return WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.');
 		}
 		
@@ -82,7 +82,7 @@ class UserController extends WController {
 						} else {
 							// Redirect
 							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
-							$this->view->setHeader('Location', $redirect);
+							$this->setHeader('Location', $redirect);
 							return;
 						}
 						break;
@@ -102,7 +102,7 @@ class UserController extends WController {
 			// Login process triggered from an external application
 			if ($cookie && strpos($referer, 'user') === false) {
 				// Redirect to it
-				$this->view->setHeader('Location', $referer);
+				$this->setHeader('Location', $referer);
 			}
 		}
 		
@@ -120,7 +120,7 @@ class UserController extends WController {
 			$this->session->closeSession();
 		}
 		
-		$this->view->setHeader('Location', WRoute::getBase());
+		$this->setHeader('Location', WRoute::getBase());
 		return WNote::success('user_disconnected', WLang::get('user_disconnected'));
 	}
 	
@@ -258,7 +258,7 @@ class UserController extends WController {
 		// Retrieve the confirm code
 		$confirm_code = array_shift($params);
 		if (empty($confirm_code)) {
-			$this->view->setHeader('Location', WRoute::getBase());
+			$this->setHeader('Location', WRoute::getBase());
 			return;
 		}
 		
@@ -363,7 +363,7 @@ class UserController extends WController {
 				
 				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				$this->view->setHeader('Location', WRoute::getBase());
+				$this->setHeader('Location', WRoute::getBase());
 			}
 		}
 	}
