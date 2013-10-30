@@ -128,7 +128,7 @@ abstract class WController {
 				if (method_exists($this, $action)) {
 					return $this->$action($params);
 				} else {
-					// return WNote::error('app_method_not_found', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.');
+					WNote::error('app_no_method', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'debug');
 					return array();
 				}
 			} else if (is_array($access_result)) {
@@ -136,7 +136,7 @@ abstract class WController {
 			} else {
 				// Display login form if not connected
 				if (!WSession::isConnected()) {
-					WNote::info('admin_login_required', "Cette zone nécessite une authentification.", 'assign');
+					WNote::info('user_login_required', 'This area requires to be logged in.', 'assign');
 					$userView = WRetriever::getView('user', array('login'));
 					$this->setView($userView);
 				} else {

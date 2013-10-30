@@ -98,12 +98,6 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
-			
-			// Login process triggered from an external application
-			if ($cookie && strpos($referer, 'user') === false) {
-				// Redirect to it
-				$this->setHeader('Location', $referer);
-			}
 		}
 		
 		return array('redirect' => $redirect);
