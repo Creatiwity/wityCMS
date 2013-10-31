@@ -111,7 +111,10 @@ class WRetriever {
 			$model['action'] = $controller->getTriggeredAction();
 			
 			// Add headers to the model
-			$model['headers'] = $controller->getHeaders();
+			$headers = $controller->getHeaders();
+			if (!empty($headers)) {
+				$model['headers'] = $headers;
+			}
 			
 			// Unlock the Request variables access
 			WRequest::unlock();
