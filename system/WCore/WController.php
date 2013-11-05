@@ -505,7 +505,7 @@ abstract class WController {
 						
 						case 'connected':
 							if (!WSession::isConnected()) {
-								return WNote::error('app_login_required', 'The '.$action.' action of the application '.$app.' requires to be loged in.');
+								return false;
 							}
 							break;
 						
