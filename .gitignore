@@ -1,5 +1,3 @@
 cache/[^.]*/
-/nbproject
-doc/
 installer/bypass*
-phpdoc-*.log
+config/[a-z]+.php
