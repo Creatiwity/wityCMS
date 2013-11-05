@@ -1,3 +1,5 @@
 cache/[^.]*/
 installer/bypass*
-config/[a-z]+.php
+system/config/config.php
+system/config/database.php
+system/config/route.php
