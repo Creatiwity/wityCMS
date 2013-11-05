@@ -102,7 +102,12 @@ class WMain {
 		$error = false;
 		$query = WRoute::getQuery();
 		$length = strlen($query);
-		if (substr($query, $length-4, 1) == '.') {
+		if (substr($query, $length-3, 1) == '.') {
+			$ext = substr($query, $length-2, 2);
+			if ($ext == 'js') {
+				$error = true;
+			}
+		} else if (substr($query, $length-4, 1) == '.') {
 			$ext = substr($query, $length-3, 3);
 			if (in_array($ext, array('js', 'css', 'png', 'jpg', 'gif', 'svg', 'eot', 'ttf'))) {
 				$error = true;
