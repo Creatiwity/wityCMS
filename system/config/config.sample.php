@@ -10,7 +10,7 @@ $config = array (
   'theme' => 'grafx',
   'lang' => 'fr-FR',
   'timezone' => 'Europe/Paris',
-  'email' => 'no-reply@creatiwity.net',
+  'email' => 'no-reply@WityCMS.com',
   'debug' => true,
 );
 

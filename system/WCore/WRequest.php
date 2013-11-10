@@ -120,10 +120,10 @@ class WRequest {
 	/**
 	 * Returns the checked value associated to $name
 	 * 
-	 * @param &array $data      request array
-	 * @param string $name      variable name
-	 * @param string $default   optional default value
-	 * @param string $hash      name of the method used to send
+	 * @param &array $data       request array
+	 * @param string $name       variable name
+	 * @param string $default    optional default value
+	 * @param string $hash       name of the method used to send
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {
@@ -133,7 +133,7 @@ class WRequest {
 		}
 		
 		if (isset(self::$checked[$hash.$name])) {
-			// On récupère la variable vérifiée des données
+			// Directly get the verifed variable in data
 			return $data[$name];
 		} else {
 			if (isset($data[$name]) && !is_null($data[$name])) {
@@ -146,7 +146,7 @@ class WRequest {
 				$data[$name] = null;
 			}
 			
-			// La variable est vérifiée
+			// Variable is verified
 			self::$checked[$hash.$name] = true;
 			
 			return $data[$name];
@@ -243,7 +243,7 @@ class WRequest {
 	 * @return bool true if data available
 	 */
 	public static function hasData() {
-		return !empty($_REQUEST) && !in_array(null, $_REQUEST) && !self::$lock;
+		return !empty($_REQUEST) && !in_array(null, $_REQUEST, true) && !self::$lock;
 	}
 }
 

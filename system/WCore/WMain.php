@@ -54,21 +54,22 @@ class WMain {
 		$route = WRoute::route();
 		
 		$response = new WResponse();
+		$model = WRetriever::getModel($route['app'], $route['params'], false);
 		switch ($route['mode']) {
 			case 'm': // Only model
-				$response->renderModel(WRetriever::getModel($route['app'], $route['params'], false));
+				$response->renderModel($model);
 				break;
 			
 			case 'v': // Only view
 				$response->renderView(
-					WRetriever::getModel($route['app'], $route['params'], false),
+					$model,
 					WRetriever::getView($route['app'], $route['params'], false)
 				);
 				break;
 			
 			case 'mv': // Model + View
 				$response->renderModelView(
-					WRetriever::getModel($route['app'], $route['params'], false),
+					$model,
 					WRetriever::getView($route['app'], $route['params'], false)
 				);
 				break;
@@ -76,7 +77,8 @@ class WMain {
 			default: // Render in a theme
 				$response->render(
 					WRetriever::getView($route['app'], $route['params'], false), 
-					WConfig::get('config.theme')
+					WConfig::get('config.theme'),
+					$model
 				);
 				break;
 		}
@@ -100,7 +102,12 @@ class WMain {
 		$error = false;
 		$query = WRoute::getQuery();
 		$length = strlen($query);
-		if (substr($query, $length-4, 1) == '.') {
+		if (substr($query, $length-3, 1) == '.') {
+			$ext = substr($query, $length-2, 2);
+			if ($ext == 'js') {
+				$error = true;
+			}
+		} else if (substr($query, $length-4, 1) == '.') {
 			$ext = substr($query, $length-3, 3);
 			if (in_array($ext, array('js', 'css', 'png', 'jpg', 'gif', 'svg', 'eot', 'ttf'))) {
 				$error = true;

@@ -43,7 +43,7 @@ class NewsAdminModel extends NewsModel {
 	public function createNews($data) {
 		$prep = $this->db->prepare('
 			INSERT INTO news(url, title, author, content, meta_title, keywords, description, creation_date, edited_by)
-			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :desciption, NOW(), :edited_by)
+			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :description, NOW(), :edited_by)
 		');
 		$prep->bindParam(':url', $data['news_url']);
 		$prep->bindParam(':title', $data['news_title']);

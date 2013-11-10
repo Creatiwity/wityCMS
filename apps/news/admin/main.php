@@ -113,7 +113,7 @@ class NewsAdminController extends WController {
 							}
 						}
 						
-						$this->view->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
+						$this->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
 						return WNote::success('article_added', WLang::get('article_added', $data['news_title']));
 					} else {
 						WNote::error('article_not_added', WLang::get('article_not_added'));
@@ -128,7 +128,7 @@ class NewsAdminController extends WController {
 							}
 						}
 						
-						$this->view->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
+						$this->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
 						return WNote::success('article_edited', WLang::get('article_edited', $data['news_title']));
 					} else {
 						WNote::error('article_not_edited', WLang::get('article_not_edited'));
@@ -170,7 +170,7 @@ class NewsAdminController extends WController {
 		if ($news_id != -1 && $this->model->validExistingNewsId($news_id)) {
 			return $this->news_form(array($news_id));
 		} else {
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/news/');
+			$this->setHeader('Location', WRoute::getDir().'/admin/news/');
 			return WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 		}
 	}
@@ -190,12 +190,12 @@ class NewsAdminController extends WController {
 				$this->model->removeCatsFromNews($news_id);
 				$this->model->deleteNews($news_id);
 				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
-				$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/');
+				$this->setHeader('Location', WRoute::getDir() . '/admin/news/');
 			}
 			
 			return $data;
 		} else {
-			$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/');
+			$this->setHeader('Location', WRoute::getDir() . '/admin/news/');
 			return WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
 		}
 	}
@@ -289,7 +289,7 @@ class NewsAdminController extends WController {
 				$this->model->unlinkChildrenOfParentCat($cat_id);
 				$this->model->deleteCat($cat_id);
 				WNote::success('category_deleted', WLang::get('category_deleted'));
-				$this->view->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager/');
+				$this->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager/');
 			}
 			
 			return array('cat_id' => $cat_id);

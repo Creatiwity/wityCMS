@@ -5,24 +5,14 @@
 
 defined('IN_WITY') or die('Access denied');
 
-interface WResponseMode {
-	public function renderHeaders();
-	public function render($notes);
-}
-
 /**
  * WResponse compiles the final render of WityCMS that will be sent to the browser.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-16-10-2013
+ * @version 0.4.0-28-10-2013
  */
 class WResponse {
-	/**
-	 * @var WTemplate Instance of WTemplate
-	 */
-	private $tpl;
-	
 	/**
 	 * @var string Name of the theme used for the response
 	 */
@@ -36,7 +26,7 @@ class WResponse {
 	/**
 	 * Assigns a theme
 	 * 
-	 * @param string $theme theme name (must a be an existing directory in /themes/)
+	 * @param string $theme Theme name (must a be an existing directory in /themes/)
 	 */
 	public function setTheme($theme) {
 		if ($theme == '_blank') {
@@ -46,45 +36,47 @@ class WResponse {
 			$this->theme_name = $theme;
 			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
-			WNote::error('view_set_theme', "WView::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
+			WNote::error('response_set_theme', "WResponse::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
 		}
 	}
 	
 	/**
 	 * Returns current theme name
 	 * 
-	 * @return string current theme name
+	 * @return string Current theme name
 	 */
 	public function getTheme() {
 		return $this->theme_name;
 	}
 	
 	/**
-	 * Renders the final response to the client.
-	 * Response can be a valid HTML5 string with the WityCMS theme or, it can be a JSON structure for instance.
+	 * WityCMS's classic render with HTML theme.
 	 * 
-	 * @param array $model Model to be rendered (the view will be calculated in the plugin)
+	 * @param WView  $view  View to be rendered
+	 * @param string $theme Theme name to use to wrap the view
 	 */
-	public function render(WView $view = null, $theme) {
+	public function render(WView $view = null, $theme, $model = array()) {
 		// Check headers
-		$headers = $view->getHeaders();
-		foreach ($headers as $name => $value) {
-			header($name.': '.$value);
-		}
-		if (isset($headers['location'])) {
-			return true;
+		if (isset($model['headers'])) {
+			foreach ($model['headers'] as $name => $value) {
+				header($name.': '.$value);
+			}
+			if (isset($model['headers']['location'])) {
+				return true;
+			}
 		}
 		
 		// Load WTemplate
-		$this->tpl = WSystem::getTemplate();
-		if (is_null($this->tpl)) {
-			throw new Exception("WResponse::__construct(): WTemplate cannot be loaded.");
+		$tpl = WSystem::getTemplate();
+		if (is_null($tpl)) {
+			throw new Exception("WResponse::render(): WTemplate cannot be loaded.");
 		}
 		
 		// Default vars
 		$site_name = WConfig::get('config.site_name');
-		$this->tpl->assign('site_name', $site_name);
-		$this->tpl->assign('page_title', $site_name);
+		$tpl->assign('base_url', WRoute::getBase());
+		$tpl->assign('site_name', $site_name);
+		$tpl->assign('page_title', $site_name);
 		
 		$this->setTheme($theme);
 		
@@ -110,12 +102,12 @@ class WResponse {
 		
 		try {
 			// Define {$include} tpl's var
-			$this->tpl->assign('include', $view->render());
+			$tpl->assign('include', $view->render());
 			
 			// Handle notes
-			$this->tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
+			$tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
 			
-			$html = $this->tpl->parse($themeMainFile);
+			$html = $tpl->parse($themeMainFile);
 			
 			// Absolute links fix
 			echo $this->absoluteLinkFix($html);
@@ -147,6 +139,11 @@ class WResponse {
 		return $string;
 	}
 	
+	/**
+	 * Renders a model into a JSON view.
+	 * 
+	 * @param array $model Main application's model to display
+	 */
 	public function renderModel(array $model) {
 		// Store the plain notes
 		$plain_notes = WNote::getPlain();
@@ -162,6 +159,12 @@ class WResponse {
 		return true;
 	}
 	
+	/**
+	 * Renders the main application's view into a JSON structure, without the application's result.
+	 * 
+	 * @param array $model
+	 * @param WView $view
+	 */
 	public function renderView(array $model, WView $view) {
 		// Flush the notes waiting for their own view
 		$plain_view = WNote::getPlainView();
@@ -186,6 +189,12 @@ class WResponse {
 		return true;
 	}
 	
+	/**
+	 * Renders the main application's model + view into a JSON structure.
+	 * 
+	 * @param array $model
+	 * @param WView $view
+	 */
 	public function renderModelView(array $model, WView $view) {
 		// Flush the notes waiting for their own view
 		$plain_view = WNote::getPlainView();

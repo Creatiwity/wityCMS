@@ -43,6 +43,7 @@ class WRetriever {
 	 * 
 	 * @param string $app_name
 	 * @param array  $params
+	 * @param bool   $has_parent Defines if the app to retrieve is the main app (so does not have parent) or not
 	 * @return array
 	 */
 	public static function getModel($app_name, array $params = array(), $has_parent = true) {
@@ -71,12 +72,12 @@ class WRetriever {
 		
 		// Init model structure
 		$model = array(
-			'app-name'  => $app_name,
-			'action'    => '',
-			'params'    => $params,
-			'parent'    => $has_parent,
-			'signature' => '',
-			'result'    => null
+			'app-name'   => $app_name,
+			'action'     => '',
+			'params'     => $params,
+			'has-parent' => $has_parent,
+			'signature'  => '',
+			'result'     => null
 		);
 		
 		// Get model
@@ -109,6 +110,12 @@ class WRetriever {
 			
 			$model['action'] = $controller->getTriggeredAction();
 			
+			// Add headers to the model
+			$headers = $controller->getHeaders();
+			if (!empty($headers)) {
+				$model['headers'] = $headers;
+			}
+			
 			// Unlock the Request variables access
 			WRequest::unlock();
 			
@@ -126,9 +133,9 @@ class WRetriever {
 	 * The model will automatically be generated and the View will be prepared
 	 * (the corresponding method to the action will be executed in WView)
 	 * 
-	 * @param string $app_name  Application's name
-	 * @param array  $params    Some special parameters to send to the controller (optional)
-	 * @param string $view_size Size mode of the view expected (optional)
+	 * @param string $app_name   Application's name
+	 * @param array  $params     Some special parameters to send to the controller (optional)
+	 * @param bool   $has_parent Defines if the app to retrieve is the main app (so does not have parent) or not
 	 * @return WView
 	 */
 	public static function getView($app_name, array $params = array(), $has_parent = true) {
@@ -175,7 +182,8 @@ class WRetriever {
 	/**
 	 * If found, execute the application in the apps/$app_name directory
 	 * 
-	 * @param string $app_code Code of the application that will be launched: "admin/news" or "news"
+	 * @param string $app_code   Code of the application that will be launched: "admin/news" or "news"
+	 * @param bool   $has_parent Defines if the app to retrieve is the main app (so does not have parent) or not
 	 * @return WController App Controller
 	 */
 	public static function getController($app_code, $has_parent) {
@@ -245,14 +253,14 @@ class WRetriever {
 				return WNote::error('app_structure', "The application \"".$app_code."\" has to have a main class inheriting from WController abstract class.");
 			}
 		} else {
-			return WNote::error(404, "The page requested was not found.");
+			return WNote::error(404, "The requested page was not found.");
 		}
 	}
 	
 	/**
 	 * Returns a list of applications that contains a main.php file in their front directory
 	 * 
-	 * @return array(string)
+	 * @return array Array of string containing app's name
 	 */
 	public static function getAppsList() {
 		if (empty(self::$apps_list)) {

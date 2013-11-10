@@ -24,11 +24,6 @@ class WView {
 	public $tpl;
 	
 	/**
-	 * @var array List of headers for this view
-	 */
-	private $headers = array();
-	
-	/**
 	 * @var string Theme name for this view
 	 */
 	private $theme;
@@ -237,26 +232,6 @@ class WView {
 	}
 	
 	/**
-	 * Set a new header for the response
-	 * Will be assigned in WResponse::render()
-	 * 
-	 * @param string $name Header's name
-	 * @param string $value
-	 */
-	public function setHeader($name, $value) {
-		$this->headers[strtolower($name)] = $value;
-	}
-	
-	/**
-	 * Get the headers for this view
-	 * 
-	 * @return array
-	 */
-	public function getHeaders() {
-		return $this->headers;
-	}
-	
-	/**
 	 * Define the theme for this view
 	 * 
 	 * @param string $theme
@@ -277,7 +252,6 @@ class WView {
 	/**
 	 * Renders the view
 	 * 
-	 * @param  string $action Name of the action in the view to display
 	 * @return string The rendered string of the view
 	 */
 	public function render() {
