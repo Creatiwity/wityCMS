@@ -16,13 +16,17 @@ defined('IN_WITY') or die('Access denied');
 class ContactAdminView extends WView {
 
 	public function mail_history(array $model) {
+		$this->assign('css', '/apps/contact/admin/css/contact.css');
+
 		// SortingHelper Helper
 		$sort = $model['sortingHelper']->getSorting();
 		$this->assign($model['sortingHelper']->getTplVars());
 		
 		// Emails data
 		foreach ($model['emails'] as $key => $email) {
-			$model['emails'][$key]['abstract'] = $email['object'].'&nbsp;<span class="text-muted">-&nbsp;'.$email['message'].'</span>';
+			$msg = strip_tags($email['message']);
+			$msg = preg_replace('/^\s+|\n|\r|\s+$/m', '', $msg);
+			$model['emails'][$key]['abstract'] = $email['object'].'&nbsp;<span class="text-muted">-&nbsp;<span class="email-original">'.$msg.'</span></span>';
 		}
 
 		$this->assign('emails', $model['emails']);

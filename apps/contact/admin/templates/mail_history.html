@@ -14,8 +14,16 @@
 			{for $mail in $emails}
 			<tr>
 				<td><strong>{$mail.from}</strong></td>
-				<td>{$mail.abstract}</td>
-				<td>{$mail.date}</td>
+				<td>
+					<table class="email-abstract">
+						<tbody>
+							<tr>
+								<td>{$mail.abstract}</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td class="date-cell">{$mail.date}</td>
 			</tr>
 			{/for}
 			{empty}
