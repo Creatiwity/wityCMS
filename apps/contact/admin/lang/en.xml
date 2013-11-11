@@ -11,4 +11,11 @@
 	<item id="subject_thead">Subject</item>
 	<item id="date_thead">Date</item>
 	<item id="no_mail_found">No email found.</item>
+
+	<!-- Mail detail -->
+	<item id="missing_email_id">Email id is missing.</item>
+	<item id="not_found_email_id">Unable to find this email.</item>
+
+	<item id="from">From:</item>
+	<item id="close">Close</item>
 </lang>

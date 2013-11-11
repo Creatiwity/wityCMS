@@ -12,7 +12,7 @@
 		</thead>
 		<tbody>
 			{for $mail in $emails}
-			<tr>
+			<tr data-link-modal="/v/admin/contact/mail_detail/{$mail.id}" data-modal-container="modal_email">
 				<td><strong>{$mail.from}</strong></td>
 				<td>
 					<table class="email-abstract">
@@ -34,4 +34,6 @@
 		</tbody>
 	</table>
 	{$pagination}
+
+	<div id="modal_email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_email" aria-hidden="true"></div>
 </div>

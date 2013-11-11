@@ -36,8 +36,10 @@ class ContactAdminView extends WView {
 		$this->assign('pagination', $pagination->getHTML());
 	}
 
-	public function detail_mail(array $params) {
-
+	public function mail_detail(array $model) {
+		$this->assign('from', $model['from']);
+		$this->assign('object', $model['object']);
+		$this->assign('message', $model['message']);
 	}
 
 }

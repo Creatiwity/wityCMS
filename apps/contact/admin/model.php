@@ -71,11 +71,11 @@ class ContactAdminModel extends ContactModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT id, from, users.nickname AS from_nickname, to, name, organism, object, message, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date
+				SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, DATE_FORMAT(`contact`.`date`, "%d/%m/%Y %H:%i") AS date
 				FROM contact
 				LEFT JOIN users
 				ON from_id = users.id
-				WHERE id = :emailid
+				WHERE contact.id = :emailid
 			');
 		}
 		$prep->bindParam(':emailid', $emailid, PDO::PARAM_INT);

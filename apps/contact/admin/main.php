@@ -52,7 +52,18 @@ class ContactAdminController extends WController {
 	}
 
 	protected function mail_detail(array $params) {
+		if (!empty($params[0])) {
+			$id = intval($params[0]);
+			$model = $this->model->getEmail($id);
 
+			if (!$model) {
+				return WNote::error('not_found_email_id', WLang::_('not_found_email_id'));
+			}
+
+			return $model;
+		} else {
+			return WNote::error('missing_email_id', WLang::_('missing_email_id'));
+		}
 	}
 }
 

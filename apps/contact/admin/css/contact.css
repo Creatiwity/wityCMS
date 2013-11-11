@@ -1,3 +1,7 @@
+.contact-mail-history > table > tbody > tr {
+	cursor: pointer;
+}
+
 .contact-mail-history table table.email-abstract {
 	width: 100%;
 	table-layout: fixed;
