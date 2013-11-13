@@ -39,18 +39,18 @@ class UserController extends WController {
 	 */
 	protected function login($params) {
 		// Find redirect URL
-		$referer = WRoute::getReferer();
+		$referer = str_replace(WRoute::getBase(), '', WRoute::getReferer());
 		$redirect_request = WRequest::get('redirect');
 		if (empty($params[0])) {
 			$route = WRoute::route();
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
 			} else if ($route['app'] != 'user') { // Login form loaded from an external application
-				$redirect = WRoute::getURL();
+				$redirect = WRoute::getDir().WRoute::getQuery();
 			} else if (strpos($referer, 'user') === false) {
 				$redirect = $referer;
 			} else {
-				$redirect = WRoute::getBase();
+				$redirect = WRoute::getDir();
 			}
 		} else {
 			$redirect = $params[0];
@@ -114,7 +114,7 @@ class UserController extends WController {
 			$this->session->closeSession();
 		}
 		
-		$this->setHeader('Location', WRoute::getBase());
+		$this->setHeader('Location', WRoute::getDir());
 		return WNote::success('user_disconnected', WLang::get('user_disconnected'));
 	}
 	
@@ -252,7 +252,7 @@ class UserController extends WController {
 		// Retrieve the confirm code
 		$confirm_code = array_shift($params);
 		if (empty($confirm_code)) {
-			$this->setHeader('Location', WRoute::getBase());
+			$this->setHeader('Location', WRoute::getDir());
 			return;
 		}
 		
@@ -357,7 +357,7 @@ class UserController extends WController {
 				
 				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				$this->setHeader('Location', WRoute::getBase());
+				$this->setHeader('Location', WRoute::getDir());
 			}
 		}
 	}
