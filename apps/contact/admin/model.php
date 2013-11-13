@@ -14,9 +14,10 @@ include_once APPS_DIR.'contact'.DS.'front'.DS.'model.php';
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4-07-10-2013
+ * @version 0.4.0-07-10-2013
  */
 class ContactAdminModel extends ContactModel {
+	
 	public function __construct() {
 		parent::__construct();
 
@@ -82,6 +83,28 @@ class ContactAdminModel extends ContactModel {
 		$prep->execute();
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
+	
+	/**
+	 * Defines a config in contact_config table
+	 * 
+	 * @param string $key
+	 * @param string $value
+	 */
+	public function setConfig($key, $value) {
+		static $prep;
+		if (empty($prep)) {
+			$prep = $this->db->prepare('
+				UPDATE users_config
+				SET value = :value, modified = NOW(), edited_by = :userid
+				WHERE key = :key
+			');
+		}
+		$prep->bindParam(':key', $key);
+		$prep->bindParam(':value', $value);
+		$prep->bindParam(':userid', $_SESION['userid']);
+		return $prep->execute();
+	}
+	
 }
 
 ?>

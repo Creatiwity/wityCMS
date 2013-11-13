@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4-07-10-2013
+ * @version 0.4.0-07-10-2013
  */
 class ContactAdminController extends WController {
 	
@@ -65,6 +65,24 @@ class ContactAdminController extends WController {
 			return WNote::error('missing_email_id', WLang::_('missing_email_id'));
 		}
 	}
+	
+	/**
+	 * Configuration handler
+	 */
+	protected function config() {
+		$data = WRequest::getAssoc(array('update', 'config'));
+		$config = $this->model->getConfig();
+		if ($data['update'] == 'true') {
+			foreach ($config as $name => $value) {
+				$config[$name] = intval(!empty($data['config'][$name]));
+				$this->model->setConfig($name, $config[$name]);
+			}
+			WNote::success('user_config_updated', WLang::get('user_config_updated'));
+		}
+		
+		return $config;
+	}
+	
 }
 
 ?>

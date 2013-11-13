@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4-02-10-2013
+ * @version 0.4.0-02-10-2013
  */
 class ContactView extends WView {
 

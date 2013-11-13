@@ -25,5 +25,6 @@
 		<action desc="mail_history" default="default" menu="false">mail_history</action>
 		<action menu="false">mail_detail</action>
 		<!-- <action desc="new_mail" alias="reply">new_mail</action> -->
+		<action requires="config" desc="action_config">config</action>
 	</admin>
 </app>

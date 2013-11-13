@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4-07-10-2013
+ * @version 0.4.0-07-10-2013
  */
 class ContactAdminView extends WView {
 
@@ -41,7 +41,14 @@ class ContactAdminView extends WView {
 		$this->assign('object', $model['object']);
 		$this->assign('message', $model['message']);
 	}
-
+	
+	/**
+	 * Prepares the config view
+	 */
+	public function config($config) {
+		$this->assign('config', $config);
+	}
+	
 }
 
 ?>
