@@ -55,7 +55,7 @@ class ContactController extends WController {
 				}
 				
 				if ($this->sendMail($data)) {	
-					$this->view->setHeader('Location', Wroute::getDir());
+					$this->setHeader('Location', Wroute::getDir());
 					return WNote::success('email_sent', WLang::get('email_sent'));
 				} else {
 					return WNote::error('email_not_sent', WLang::get('email_not_sent'));
