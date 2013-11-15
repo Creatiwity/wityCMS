@@ -35,15 +35,15 @@ class View {
 	}
 	
 	private function push_message($state, $level, $id, $head_message, $message) {
-		if(empty($this->response) || !is_array(self::$this->response)) {
+		if(empty($this->response) || !is_array($this->response)) {
 			$this->response = array();
 		}
 		
-		if(empty($this->response[$level]) || !is_array(self::$this->response[$level])) {
+		if(empty($this->response[$level]) || !is_array($this->response[$level])) {
 			$this->response[$level] = array();
 		}
 		
-		if(empty($this->response[$level][$id]) || !is_array(self::$this->response[$level][$id])) {
+		if(empty($this->response[$level][$id]) || !is_array($this->response[$level][$id])) {
 			$this->response[$level][$id] = array();
 		}
 		
@@ -51,11 +51,11 @@ class View {
 	}
 	
 	public function push_content($id, $data) {
-		if(empty($this->response) || !is_array(self::$this->response)) {
+		if(empty($this->response) || !is_array($this->response)) {
 			$this->response = array();
 		}
 		
-		if(empty($this->response['content']) || !is_array(self::$this->response['content'])) {
+		if(empty($this->response['content']) || !is_array($this->response['content'])) {
 			$this->response['content'] = array();
 		}
 		
