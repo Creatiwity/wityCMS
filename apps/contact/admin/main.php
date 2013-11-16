@@ -72,12 +72,17 @@ class ContactAdminController extends WController {
 	protected function config() {
 		$data = WRequest::getAssoc(array('update', 'config'));
 		$config = $this->model->getConfig();
+		
 		if ($data['update'] == 'true') {
 			foreach ($config as $name => $value) {
-				$config[$name] = intval(!empty($data['config'][$name]));
-				$this->model->setConfig($name, $config[$name]);
+				if (isset($data['config'][$name])) {
+					$config[$name][0] = $data['config'][$name];
+					
+					$this->model->setConfig($name, $config[$name][0]);
+				}
 			}
-			WNote::success('user_config_updated', WLang::get('user_config_updated'));
+			
+			WNote::success('contact_config_updated', WLang::get('contact_config_updated'));
 		}
 		
 		return $config;

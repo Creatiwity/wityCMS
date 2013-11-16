@@ -94,14 +94,14 @@ class ContactAdminModel extends ContactModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				UPDATE users_config
+				UPDATE contact_config
 				SET value = :value, modified = NOW(), edited_by = :userid
-				WHERE key = :key
+				WHERE `key` = :key
 			');
 		}
 		$prep->bindParam(':key', $key);
 		$prep->bindParam(':value', $value);
-		$prep->bindParam(':userid', $_SESION['userid']);
+		$prep->bindParam(':userid', $_SESION['userid'], PDO::PARAM_INT);
 		return $prep->execute();
 	}
 	
