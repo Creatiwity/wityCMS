@@ -83,7 +83,6 @@ class UserController extends WController {
 							// Redirect
 							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
 							$this->setHeader('Location', $redirect);
-							return;
 						}
 						break;
 					
