@@ -1,14 +1,14 @@
 <?php
 /**
- * User Application - Admin Controller - /apps/user/admin/main.php
+ * User Application - Admin Controller
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserAdminController is the Admin Controller of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-26-04-2013
  */

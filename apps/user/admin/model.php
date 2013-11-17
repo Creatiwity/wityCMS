@@ -1,17 +1,19 @@
 <?php
 /**
- * User Application - Admin Model - /apps/user/admin/model.php
+ * User Application - Admin Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
-// Include Front Model for inheritance
+/**
+ * Include Front Model for inheritance
+ */
 include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 
 /**
  * UserAdminModel is the admin Model of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-15-02-2013
  */

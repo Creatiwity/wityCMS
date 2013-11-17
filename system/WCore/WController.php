@@ -3,7 +3,7 @@
  * WController.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WController is the base class that will be inherited by all the applications.

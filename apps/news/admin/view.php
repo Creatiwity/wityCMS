@@ -1,17 +1,17 @@
 <?php
 /**
- * News Application - Admin View - /apps/news/admin/view.php
+ * News Application - Admin View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsAdminView is the Admin View of the News Application
  * 
- * @package Apps
+ * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-19-04-2013
+ * @version 0.4.0-19-04-2013
  */
 class NewsAdminView extends WView {
 	public function listing($model) {

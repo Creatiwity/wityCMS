@@ -3,7 +3,7 @@
  * WLang.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WLang manages everything about languages.

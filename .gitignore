@@ -3,3 +3,4 @@ installer/bypass*
 system/config/config.php
 system/config/database.php
 system/config/route.php
+doc/

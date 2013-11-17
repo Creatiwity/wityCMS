@@ -1,14 +1,14 @@
 <?php
 /**
- * User Application - Admin View - /apps/user/admin/view.php
+ * User Application - Admin View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserAdminView is the Admin View of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-26-04-2013
  */
