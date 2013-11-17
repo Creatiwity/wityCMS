@@ -1,14 +1,14 @@
 <?php
 /**
- * User Application - Model - /apps/user/front/model.php
+ * User Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserModel is the front Model of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-15-02-2013
  */

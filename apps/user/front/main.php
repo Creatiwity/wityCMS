@@ -1,14 +1,14 @@
 <?php
 /**
- * User Application - Controller - /apps/user/front/main.php
+ * User Application - Front Controller
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserController is the front Controller of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-06-03-2013
  */

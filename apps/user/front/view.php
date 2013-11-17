@@ -1,14 +1,14 @@
 <?php
 /**
- * User Application - View - /apps/user/front/view.php
+ * User Application - Front View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserView is the front View of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-26-02-2013
  */

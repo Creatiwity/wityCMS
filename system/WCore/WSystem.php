@@ -3,7 +3,7 @@
  * WSystem.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WSystem keeps the session, template and database instances as singletons.

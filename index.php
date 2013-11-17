@@ -4,18 +4,15 @@
  * 
  * Content Management System for everyone.
  * 
- * @package System
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.4.0
  */
 
-define('WITY_VERSION', '0.4.0');
-
 /**
- * Security system to avoid direct access to the other php files
+ * WityCMS version number
  */
-define('IN_WITY', true);
+define('WITYCMS_VERSION', '0.4.0');
 
 /**
  * Error reporting level = MAXIMUM

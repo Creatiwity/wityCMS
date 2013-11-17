@@ -3,7 +3,7 @@
  * WConfig.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WConfig loads all configuration files, manages all configuration values.

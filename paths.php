@@ -2,16 +2,12 @@
 /**
  * WityCMS paths.php
  * 
- * Content Management System for everyone
- *
- * @package System
+ * Content Management System for everyone.
+ * 
  * @version 0.4.0
  */
 
-/**
- * Avoid direct access
- */
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * Directory Separator
