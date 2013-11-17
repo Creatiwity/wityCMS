@@ -132,6 +132,49 @@ CREATE TABLE IF NOT EXISTS `prefix_users_groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prefix_contact`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_contact` (
+  `id` mediumint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` mediumint(5) NOT NULL,
+  `hash` varchar(130) COLLATE utf8_unicode_ci NOT NULL,
+  `from` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
+  `from_id` mediumint(5) DEFAULT NULL,
+  `to` text COLLATE utf8_unicode_ci NOT NULL,
+  `cc` text COLLATE utf8_unicode_ci,
+  `bcc` text COLLATE utf8_unicode_ci,
+  `reply_to` text COLLATE utf8_unicode_ci,
+  `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `organism` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `object` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prefix_contact_config`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_contact_config` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `key` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(1000) COLLATE utf8_unicode_ci NOT NULL,
+  `modified` datetime NOT NULL,
+  `edited_by` mediumint(9) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `prefix_contact_config` (`id`, `key`, `value`, `modified`, `edited_by`) VALUES
+(1, 'site_from_name', 'Johan Dufau', '2013-11-16 19:37:14', 0),
+(2, 'site_from_email', 'johandufau@gmail.com', '2013-11-16 19:37:14', 0);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
