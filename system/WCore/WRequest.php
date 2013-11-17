@@ -81,9 +81,9 @@ class WRequest {
 	 * Returns an associative array of values in which keys are the $names
 	 * 
 	 * @see WRequest::get()
-	 * @param array     $names      variable names
-	 * @param type      $default    optional default values
-	 * @param string    $hash       name of the method used to send
+	 * @param array  $names   variable names
+	 * @param mixed  $default optional default values
+	 * @param string $hash    name of the method used to send
 	 * @return array array of values in which keys are the $names
 	 */
 	public static function getAssoc(array $names, $default = null, $hash = 'REQUEST') {

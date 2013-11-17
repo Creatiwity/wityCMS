@@ -8,23 +8,25 @@ defined('WITYCMS_VERSION') or die('Access denied');
 /**
  * WRoute calculates the route given in the URL to find out the right application to execute.
  * 
- * Traditionally, Apache URL Rewriting is used in WityCMS.
- * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :
- * - app = "news" (this param will be used as Application name in WMain)
- * - param1 = "see" - in this case, this parameter is called the action of the application
- * - param2 = "4" - in this case, it may be the id of the news to display
+ * <p>Traditionally, Apache URL Rewriting is used in WityCMS.
+ * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :</p>
+ * <ul>
+ *    <li>app = "news" (this param will be used as Application name in WMain)</li>
+ *    <li>param1 = "see" - in this case, this parameter is called the action of the application</li>
+ *    <li>param2 = "4" - in this case, it may be the id of the news to display</li>
+ * </ul>
  * 
- * WRoute can provide several informations about the URL of the page.
- * If we keep the example URL = http://mysite.com/wity/news/see/4
- * - Base = "http://mysite.com/wity" - Base contains the directory in which WityCMS is installed
- * - Dir = "/wity" - it is the directory in which WityCMS is installed (may be empty)
- * - Query = "/news/see/4"
- *     _ Params = array("news", "see", "4")
- * - URL = Base + Query - full URL of the page
- *       = "http://mysite.com/wity/news/see/4"
+ * <p>WRoute can provide several informations about the URL of the page.
+ * If we keep the example URL = http://mysite.com/wity/news/see/4</p>
+ * <ul>
+ *     <li>Base = "http://mysite.com/wity" - Base contains the directory in which WityCMS is installed</li>
+ *     <li>Dir = "/wity" - it is the directory in which WityCMS is installed (may be empty)</li>
+ *     <li>Query = "/news/see/4" [Params = array("news", "see", "4")]</li>
+ *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4") - full URL of the page</li>
+ * </ul>
  * 
- * Notice that every route information given by WRoute is formatted with the slash located at the beginning,
- * not at the end of the variables (except for the query if there is one "/" in the end).
+ * <p>Notice that every route information given by WRoute is formatted with the slash located at the beginning,
+ * not at the end of the variables (except for the query if there is one "/" in the end).</p>
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
@@ -38,8 +40,7 @@ class WRoute {
 	/**
 	 * If the URL is http://mysite.com/wity/user/login and if WityCMS is executed in /wity, 
 	 * then the $query will be set to "user/login".
-	 */
-	/**
+	 * 
 	 * @var string Request string of the page
 	 */
 	private static $query;
@@ -56,7 +57,7 @@ class WRoute {
 	}
 	
 	/**
-	 * Launches the calculation of the current Route
+	 * Launches the calculation of the current Route.
 	 * 
 	 * @return array The route
 	 */
@@ -162,7 +163,7 @@ class WRoute {
 	 * If the website address is http://mysite.com/wity/user/login,
 	 * it will return /wity.
 	 * 
-	 * @return string the partial root location of WityCMS
+	 * @return string The partial root location of WityCMS
 	 */
 	public static function getDir() {
 		// Remove the working directory of the script
@@ -178,7 +179,7 @@ class WRoute {
 	 * If the request URL is http://mysite.com/wity/user/login,
 	 * it will return /user/login.
 	 * 
-	 * @return string the partial root location of WityCMS
+	 * @return string The partial root location of WityCMS
 	 */
 	public static function getQuery() {
 		return self::$query;
@@ -189,7 +190,7 @@ class WRoute {
 	 * 
 	 * For example: http://mysite.com/wity/user/login
 	 * 
-	 * @return string the full URL
+	 * @return string The full URL
 	 */
 	public static function getURL() {
 		return self::getBase().self::$query;

@@ -8,10 +8,8 @@ defined('WITYCMS_VERSION') or die('Access denied');
 /**
  * WSystem keeps the session, template and database instances as singletons.
  * 
- * <p>If you need the WSession instance, just call :
+ * If you need the WSession instance, just call :
  * <code>WSystem::getSession();</code>
- * It's the same thing with WTemplate andWDatabase.
- * </p>
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
