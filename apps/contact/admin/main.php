@@ -3,12 +3,12 @@
  * Contact Application - Admin Controller - /apps/contact/admin/main.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * ContactAdminController is the Admin Controller of the Contact Application
  * 
- * @package Apps
+ * @package Apps\Contact\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.4.0-07-10-2013

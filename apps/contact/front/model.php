@@ -1,14 +1,14 @@
 <?php
 /**
- * Contact Application - Front Model - /apps/contact/front/model.php
+ * Contact Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * ContactModel is the Front Model of the Contact Application
  *
- * @package Apps
+ * @package Apps\Contact\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.4.0-02-10-2013

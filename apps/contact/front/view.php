@@ -1,14 +1,14 @@
 <?php
 /**
- * Contact Application - Front View - /apps/contact/front/view.php
+ * Contact Application - Front View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * ContactView is the Front View of the Contact Application
  * 
- * @package Apps
+ * @package Apps\Contact\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.4.0-02-10-2013
