@@ -16,10 +16,10 @@ class WDate extends DateTime {
 	/**
 	 * This function handles user's custom timezone.
 	 * 
-	 * @param string If empty, use the current date. See DateTime class for full documentation.
+	 * @param string $date If empty, use the current date. See DateTime class for full documentation.
 	 */
 	public function __construct($date = '') {
-		// Finally build the date
+		// Build the date
 		parent::__construct($date, $this->getUserTimezone());
 	}
 	
