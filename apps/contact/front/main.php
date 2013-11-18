@@ -23,7 +23,7 @@ class ContactController extends WController {
 			$errors = array();
 			
 			/**
-			 * BEGING VARIABLES CHECKING
+			 * BEGIN VARIABLES CHECKING
 			 */
 			if (empty($data['from_name'])) {
 				$errors[] = WLang::get("no_from_name");

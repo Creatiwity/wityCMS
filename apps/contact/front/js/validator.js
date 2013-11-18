@@ -1,3 +1,9 @@
+/**
+ * Contacts management script allowing ajax usage.
+ * 
+ * @author Julien Blatecky <julien.blatecky@creatiwity.net>
+ * @version 0.4.0
+ */
 $(document).ready(function() {
 	var setNote;
 
