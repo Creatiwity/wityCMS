@@ -37,7 +37,10 @@ class WResponse {
 			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
 			WNote::error('response_set_theme', "WResponse::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
+			return false;
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -55,15 +58,14 @@ class WResponse {
 	 * @param WView  $view  View to be rendered
 	 * @param string $theme Theme name to use to wrap the view
 	 */
-	public function render(WView $view = null, $theme, $model = array()) {
+	public function render(WView $view = null, $default_theme, $model = array()) {
 		// Check headers
-		if (isset($model['headers'])) {
-			foreach ($model['headers'] as $name => $value) {
-				header($name.': '.$value);
-			}
-			if (isset($model['headers']['location'])) {
-				return true;
-			}
+		foreach ($model['headers'] as $name => $value) {
+			header($name.': '.$value);
+		}
+		
+		if (isset($model['headers']['location'])) {
+			return true;
 		}
 		
 		// Load WTemplate
@@ -78,7 +80,11 @@ class WResponse {
 		$tpl->assign('site_name', $site_name);
 		$tpl->assign('page_title', $site_name);
 		
-		$this->setTheme($theme);
+		// Load in priority theme asked by the view
+		$view_theme = $view->getTheme();
+		if (empty($view_theme) || !$this->setTheme($view_theme)) {
+			$this->setTheme($default_theme);
+		}
 		
 		// Check theme
 		if (empty($this->theme_name)) {

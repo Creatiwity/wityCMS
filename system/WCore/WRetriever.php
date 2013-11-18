@@ -77,7 +77,8 @@ class WRetriever {
 			'params'     => $params,
 			'has-parent' => $has_parent,
 			'signature'  => '',
-			'result'     => null
+			'result'     => null,
+			'headers'    => array()
 		);
 		
 		// Get model
@@ -95,9 +96,11 @@ class WRetriever {
 			// Lock access to the Request variables for non targeted apps
 			$form_signature = WRequest::get('form_signature');
 			$form_action = WRequest::get('form_action');
+			
 			if (!empty($form_action)) {
 				// If form's action was specified, checks that it is equal to the current app
 				$action_route = WRoute::parseURL($form_action);
+				
 				if ($action_route['app'] != $app_name || (isset($action_route['params'][0]) && $action_route['params'][0] != $action)) {
 					WRequest::lock();
 				}
@@ -111,10 +114,7 @@ class WRetriever {
 			$model['action'] = $controller->getTriggeredAction();
 			
 			// Add headers to the model
-			$headers = $controller->getHeaders();
-			if (!empty($headers)) {
-				$model['headers'] = $headers;
-			}
+			$model['headers'] = $controller->getHeaders();
 			
 			// Unlock the Request variables access
 			WRequest::unlock();
