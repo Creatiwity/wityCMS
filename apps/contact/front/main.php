@@ -87,13 +87,13 @@ class ContactController extends WController {
 	private function sendMail(array $params) {
 		$config = $this->model->getConfig();
 		
-		if (empty($config) || empty($config['site_from_name']) || empty($config['site_from_name'][0]) || empty($config['site_from_email']) || empty($config['site_from_email'][0])) {
+		if (empty($config['site_from_name']) || empty($config['site_from_email'])) {
 			WNote::error('missing_configuration', WLang::get('missing_configuration', serialize($params)), 'email');
 			return false;
 		}
 		
 		$params['to'] = array();
-		$params['to'][] = array($config['site_from_email'][0], $config['site_from_name'][0]);
+		$params['to'][] = array($config['site_from_email'], $config['site_from_name']);
 		$params['reply_to'] = array();
 		$params['reply_to'][] = array($params['from_email'], $params['from_name']);
 
@@ -141,8 +141,8 @@ class ContactController extends WController {
 		// Send mail to expeditor
 		$phpmailer = WHelper::load("phpmailer");
 		$phpmailer->CharSet = 'utf-8';
-		$phpmailer->From = $config['site_from_email'][0];
-		$phpmailer->FromName = $config['site_from_name'][0];
+		$phpmailer->From = $config['site_from_email'];
+		$phpmailer->FromName = $config['site_from_name'];
 		
 		$universalAdd(array(array(array($params['from_email'], $params['from_name']))), 0, array($phpmailer, 'addAddress'));
 		

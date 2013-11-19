@@ -76,9 +76,9 @@ class ContactAdminController extends WController {
 		if ($data['update'] == 'true') {
 			foreach ($config as $name => $value) {
 				if (isset($data['config'][$name])) {
-					$config[$name][0] = $data['config'][$name];
+					$config[$name] = $data['config'][$name];
 					
-					$this->model->setConfig($name, $config[$name][0]);
+					$this->model->setConfig($name, $config[$name]);
 				}
 			}
 			

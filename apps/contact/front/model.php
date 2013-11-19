@@ -36,7 +36,13 @@ class ContactModel {
 				OR `key` = "site_from_name"
 		');
 		$prep->execute();
-		return $prep->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
+		$config = array();
+		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
+			if (!empty($data['key'])) {
+				$config[$data['key']] = $data['value'];
+			}
+		}
+		return $config;
 	}
 	
 	public function addMail(array $params) {
