@@ -20,7 +20,7 @@
 	<item id="sending">Sending...</item>
 
 	<!-- Auto reply -->
-	<item id="copy_subject">%s - Your contact request</item>
+	<item id="copy_subject">[%s] Your contact request</item>
 	<item id="auto_reply"><![CDATA[Hello,<br /><br />
 
 You just sent a contact request on the website {{site}}.<br /><br />
@@ -74,5 +74,4 @@ You can find the full list of contact request on <a href="{{base}}/admin/contact
 
 	<!-- Success -->
 	<item id="email_sent">E-mail successfully sent.</item>
-
 </lang>

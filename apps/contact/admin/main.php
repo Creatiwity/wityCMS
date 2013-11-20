@@ -1,6 +1,6 @@
 <?php
 /**
- * Contact Application - Admin Controller - /apps/contact/admin/main.php
+ * Contact Application - Admin Controller
  */
 
 defined('WITYCMS_VERSION') or die('Access denied');
@@ -34,40 +34,47 @@ class ContactAdminController extends WController {
 				$page = $page_input;
 			}
 		}
-
+		
 		// SortingHelper
 		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'from', 'name', 'organism', 'to', 'object', 'date'), 'date', 'DESC'));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		// Define model
 		$model = array(
-			'emails' => $this->model->getEmailList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC'),
-			'totalEmails' => $this->model->getEmailCount(),
-			'current_page' => $page,
+			'emails'         => $this->model->getEmailList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC'),
+			'totalEmails'    => $this->model->getEmailCount(),
+			'current_page'   => $page,
 			'users_per_page' => $n,
-			'sortingHelper' => $sortingHelper
+			'sortingHelper'  => $sortingHelper
 		);
 		
 		return $model;
 	}
-
+	
+	/**
+	 * Retrieves a detail of a contact request.
+	 * 
+	 * @param array $params Get parameters containing the request ID
+	 * @return array Contact request model
+	 */
 	protected function mail_detail(array $params) {
-		if (!empty($params[0])) {
-			$id = intval($params[0]);
-			$model = $this->model->getEmail($id);
-
-			if (!$model) {
-				return WNote::error('not_found_email_id', WLang::_('not_found_email_id'));
-			}
-
-			return $model;
-		} else {
+		$id = intval(array_shift($params));
+		if (empty($id)) {
 			return WNote::error('missing_email_id', WLang::_('missing_email_id'));
 		}
+		
+		$model = $this->model->getEmail($id);
+		if (!$model) {
+			return WNote::error('not_found_email_id', WLang::_('not_found_email_id'));
+		}
+		
+		return $model;
 	}
 	
 	/**
 	 * Configuration handler
+	 * 
+	 * @return array Config model
 	 */
 	protected function config() {
 		$data = WRequest::getAssoc(array('update', 'config'));

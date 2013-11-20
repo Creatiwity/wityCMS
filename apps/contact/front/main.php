@@ -44,7 +44,6 @@ class ContactController extends WController {
 			}
 			
 			$data['email_message'] = nl2br($data['email_message']);
-			
 			/**
 			 * END VARIABLES CHECKING
 			 */
@@ -67,14 +66,13 @@ class ContactController extends WController {
 		
 		// Load form
 		$model = array(
-			'from_name' => '',
+			'from_name'  => '',
 			'from_email' => ''
 		);
 		
 		if (!is_null($user_id)) { // Add name and email
-			$model['from_name'] = $_SESSION['firstname'];
-			if (!empty($model['from_name'])) {
-				$model['from_name'] .= ' '; // Add space after firstname
+			if (!empty($_SESSION['firstname'])) {
+				$model['from_name'] .= $_SESSION['firstname'].' ';
 			}
 			$model['from_name'] .= $_SESSION['lastname'];
 			
@@ -83,7 +81,13 @@ class ContactController extends WController {
 		
 		return $model;
 	}
-
+	
+	/**
+	 * Sends an email to the sender and the recipient.
+	 * 
+	 * @param array $params
+	 * @return bool Success state
+	 */
 	private function sendMail(array $params) {
 		$config = $this->model->getConfig();
 		
@@ -96,7 +100,7 @@ class ContactController extends WController {
 		$params['to'][] = array($config['site_from_email'], $config['site_from_name']);
 		$params['reply_to'] = array();
 		$params['reply_to'][] = array($params['from_email'], $params['from_name']);
-
+		
 		$universalAdd = function ($param, $key, $fn) {
 			if (isset($param[$key])) {
 				$param = $param[$key];

@@ -20,7 +20,7 @@
 	<item id="sending">Envoi...</item>
 
 	<!-- Auto reply -->
-	<item id="copy_subject">%s - Votre email de contact</item>
+	<item id="copy_subject">[%s] Votre email de contact</item>
 	<item id="auto_reply"><![CDATA[Bonjour,<br /><br />
 
 Vous venez d'envoyer un email de contact sur le site {{site}}.<br /><br />
@@ -74,5 +74,4 @@ Vous pouvez visualiser l'ensemble des demandes de contact à <a href="{{base}}/a
 
 	<!-- Success -->
 	<item id="email_sent">E-mail envoyé.</item>
-
 </lang>

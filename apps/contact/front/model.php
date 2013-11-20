@@ -23,11 +23,16 @@ class ContactModel {
 	public function __construct() {
 		$this->db = WSystem::getDB();
 		
-		// Declare table
+		// Declare tables
 		$this->db->declareTable('contact');
 		$this->db->declareTable('contact_config');
 	}
 	
+	/**
+	 * Retrieves the contact's configuration from the database.
+	 * 
+	 * @return array Array with two values: site_from_email and site_from_name
+	 */
 	public function getConfig() {
 		$prep = $this->db->prepare('
 			SELECT `key`, `value` 
@@ -36,6 +41,7 @@ class ContactModel {
 				OR `key` = "site_from_name"
 		');
 		$prep->execute();
+		
 		$config = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			if (!empty($data['key'])) {
@@ -45,6 +51,12 @@ class ContactModel {
 		return $config;
 	}
 	
+	/**
+	 * Saves a contact request in the database.
+	 * 
+	 * @param array $params Data of the contact request
+	 * @return bool
+	 */
 	public function addMail(array $params) {
 		$prep = $this->db->prepare('
 			INSERT INTO contact(`from`, `from_id`, `to`, `cc`, `bcc`, `reply_to`, `name`, `organism`, `object`, `message`, `date`) 
