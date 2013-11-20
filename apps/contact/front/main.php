@@ -129,8 +129,15 @@ class ContactController extends WController {
 		$universalAdd($params, 'reply_to', array($phpmailer, 'addReplyTo'));
 		
 		$phpmailer->isHTML(true);
-		$phpmailer->Subject = $params['email_subject'];
-		$phpmailer->Body = $params['email_message'];
+		$phpmailer->Subject = WLang::get('mail_for_admin_subject', array(WConfig::get('config.site_name'), $params['email_subject']));
+		$phpmailer->Body = WLang::get('mail_for_admin_body', array(
+			'site'    => WConfig::get('config.site_name'),
+			'base'    => WRoute::getBase(),
+			'name'    => $params['from_name'].' &lt;'.$params['from_email'].'&gt;',
+			'company' => $params['from_company'],
+			'subject' => $params['email_subject'],
+			'message' => $params['email_message']
+		));
 		
 		if (!$phpmailer->send()) {
 			return false;
@@ -147,8 +154,14 @@ class ContactController extends WController {
 		$universalAdd(array(array(array($params['from_email'], $params['from_name']))), 0, array($phpmailer, 'addAddress'));
 		
 		$phpmailer->isHTML(true);
-		$phpmailer->Subject = WLang::get('copy_subject');
-		$phpmailer->Body = WLang::get('auto_reply', array($params['email_subject'], WConfig::get('config.site_name')));
+		$phpmailer->Subject = WLang::get('copy_subject', WConfig::get('config.site_name'));
+		$phpmailer->Body = WLang::get('auto_reply', array(
+			'site'    => WConfig::get('config.site_name'),
+			'name'    => $params['from_name'].' &lt;'.$params['from_email'].'&gt;',
+			'company' => $params['from_company'],
+			'subject' => $params['email_subject'],
+			'message' => $params['email_message']
+		));
 		
 		if (!$phpmailer->send()) {
 			return false;
