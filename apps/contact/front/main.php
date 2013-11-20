@@ -53,7 +53,7 @@ class ContactController extends WController {
 					$data['userid'] = $user_id;
 				}
 				
-				if ($this->sendMail($data)) {	
+				if ($this->sendMail($data)) {
 					$this->setHeader('Location', Wroute::getDir());
 					return WNote::success('email_sent', WLang::get('email_sent'));
 				} else {
@@ -118,7 +118,7 @@ class ContactController extends WController {
 						}
 					}
 				}
-			}			
+			}
 		};
 		
 		// Send mail

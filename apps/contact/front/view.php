@@ -14,13 +14,13 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @version 0.4.0-02-10-2013
  */
 class ContactView extends WView {
-
+	
 	public function form($data) {
 		$this->assign('js', '/apps/contact/front/js/validator.js');
 		$this->assign('from_email', $data['from_email']);
 		$this->assign('from_name', $data['from_name']);
 	}
-
+	
 }
 
 ?>
