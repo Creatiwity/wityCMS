@@ -60,12 +60,14 @@ class WResponse {
 	 */
 	public function render(WView $view = null, $default_theme, $model = array()) {
 		// Check headers
-		foreach ($model['headers'] as $name => $value) {
-			header($name.': '.$value);
-		}
-		
-		if (isset($model['headers']['location'])) {
-			return true;
+		if (isset($model['headers']) {
+			foreach ($model['headers'] as $name => $value) {
+				header($name.': '.$value);
+			}
+			
+			if (isset($model['headers']['location'])) {
+				return true;
+			}
 		}
 		
 		// Load WTemplate
