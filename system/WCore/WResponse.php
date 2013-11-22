@@ -60,7 +60,7 @@ class WResponse {
 	 */
 	public function render(WView $view = null, $default_theme, $model = array()) {
 		// Check headers
-		if (isset($model['headers']) {
+		if (isset($model['headers'])) {
 			foreach ($model['headers'] as $name => $value) {
 				header($name.': '.$value);
 			}
