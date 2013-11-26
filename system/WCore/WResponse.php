@@ -66,6 +66,10 @@ class WResponse {
 			}
 			
 			if (isset($model['headers']['location'])) {
+				if (is_array($model['result']) && array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
+					WNote::raise($model['result']);
+				}
+				
 				return true;
 			}
 		}
