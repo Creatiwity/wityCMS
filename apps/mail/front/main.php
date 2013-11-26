@@ -113,17 +113,22 @@ class MailController extends WController {
 		$this->phpmailer->isHTML(true);
 
 		// Find mode : only defaults or defaults + while(specifics)
-		if (empty($params['specifics']) || !is_array($params['specifics'])) {
+		if (!empty($params['specifics']) && is_array($params['specifics'])) {
 			foreach ($params['specifics'] as $spec) {
 				$success = $success &&
-					$this->sendMail(array_replace_recursive(
-						array(),
+					$this->sendEmail(array_replace_recursive(
+						array(
+							'from' => '',
+							'to' => '',
+							'cc' => '',
+							'bcc' => ''
+						),
 						$params['defaults'],
 						$spec
 					));
 			}
 		} else {
-			$success = $this->sendMail($params['defaults']);
+			$success = $this->sendEmail($params['defaults']);
 		}
 
 		unset($this->phpmailer);
@@ -152,7 +157,7 @@ class MailController extends WController {
 		// Add addresses
 
 		// If POP3/IMAP enabled, mail app will manage responses, 'to' goes to CC, a placeholder goes to 'to'
-		if ($this->configuration['canReceive']) {
+		if ($this->configuration['canReceive'] == '0') {
 			$from = array($this->configuration['from']);
 
 			if (is_array($params['from'] && !empty($params['from'][1]))) {
@@ -227,37 +232,37 @@ class MailController extends WController {
 		$success = true;
 
 		// Assign the right function to use with these addresses
-		$func = $this->phpmailer->addAddress;
+		$func = array($this->phpmailer, 'addAddress');
 
 		switch ($type) {
 			case 'to':
-				$func = $this->phpmailer->addAddress;
+				$func[1] = 'addAddress';
 				break;
 
 			case 'cc':
-				$func = $this->phpmailer->addCC;
+				$func[1] = 'addCC';
 				break;
 
 			case 'bcc':
-				$func = $this->phpmailer->addBCC;
+				$func[1] = 'addBCC';
 				break;
 
 			case 'from':
-				$func = $this->phpmailer->setFrom;
+				$func[1] = 'setFrom';
 				break;
 
 			case 'replyTo':
-				$func = $this->phpmailer->addReplyTo;
+				$func[1] = 'addReplyTo';
 				break;
 
 			default:
-				$func = $this->phpmailer->addAddress;
+				$func[1] = 'addAddress';
 				break;
 		}
 
 		if (!is_array($addresses)) {
 			// 'email'
-			$success = $func($addresses);
+			$success = call_user_func($func, $addresses);
 		} else if (!is_array($addresses[0])) {
 			// array('email'[, 'name'])
 			$success = call_user_func_array($func, $addresses);
@@ -269,7 +274,9 @@ class MailController extends WController {
 		}
 
 		// TODO Update WNote message
-		WNote::warning('email_add_failure', 'email_add_failure: '.$this->phpmailer->ErrorInfo);
+		if (!$success) {
+			WNote::error('email_add_failure', 'email_add_failure: '.$this->phpmailer->ErrorInfo);
+		}
 
 		return $success;
 	}

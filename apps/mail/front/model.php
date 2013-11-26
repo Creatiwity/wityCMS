@@ -32,7 +32,7 @@ class MailModel {
 
 	public function getConfiguration() {
 		$prep = $this->db->prepare('
-			SELECT key, value
+			SELECT `key`, `value`
 			FROM mail_configuration
 		');
 		$prep->execute();
