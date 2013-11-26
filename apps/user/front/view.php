@@ -15,6 +15,8 @@ defined('WITYCMS_VERSION') or die('Access denied');
 class UserView extends WView {
 	public function __construct() {
 		parent::__construct();
+		
+		// CSS for all views
 		$this->assign('css', '/apps/user/front/css/user.css');
 	}
 	
@@ -33,7 +35,7 @@ class UserView extends WView {
 	 * 
 	 * @param array $model
 	 */
-	public function register($model = array()) {
+	public function register($model) {
 		$this->assign('base', WRoute::getBase());
 		$inputs = array('nickname', 'email', 'firstname', 'lastname', 'country');
 		foreach ($inputs as $name) {

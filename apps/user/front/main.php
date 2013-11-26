@@ -14,10 +14,10 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class UserController extends WController {
 	/*
-	 * Default session life when the user asks to remember his account = 1 week
+	 * Default session life when the user asks to remember his account
 	 * @type int
 	 */
-	const REMEMBER_TIME = 604800;
+	const REMEMBER_TIME = 604800; // 1 week
 	
 	/*
 	 * @var Instance of WSession
@@ -32,8 +32,7 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Login action handler
-	 * Triggered whenever a user asks to be connected
+	 * The Login action allows a user to connect to his account.
 	 * 
 	 * @param array $params Redirect is expected in this array
 	 * @return array Model containing the redirect link
@@ -104,7 +103,7 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Logout action handler
+	 * Logout action handler.
 	 * 
 	 * @todo Smartly find the redirecting URL based on the referer (watch out to app requiring special access)
 	 * @return array Success note
@@ -120,7 +119,7 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Register action handler
+	 * The Register action allows a user to register a new account.
 	 * 
 	 * @todo Captcha security
 	 * @return array Data given
@@ -136,7 +135,7 @@ class UserController extends WController {
 		if (!in_array(null, $data, true)) {
 			$errors = array();
 			
-			// Check nickname availabililty
+			// Check nickname availability
 			if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
 				$errors[] = WLang::get($e);
 			}
@@ -152,7 +151,7 @@ class UserController extends WController {
 				$errors[] = WLang::get('error_no_password');
 			}
 			
-			// Email availabililty
+			// Email availability
 			if (($e = $this->model->checkEmail($data['email'])) !== true) {
 				$errors[] = WLang::get($e);
 			}
@@ -297,7 +296,7 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * The password-lost action is triggered when a user wants to recover its password.
+	 * The Password-lost action is triggered when a user wants to recover its password.
 	 * 
 	 * @return array Model
 	 */

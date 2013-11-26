@@ -20,7 +20,7 @@ class UserAdminController extends WController {
 	 * @return array Model
 	 */
 	protected function listing($params) {
-		$n = 30; // number of users per page
+		$n = 30; // Number of users per page
 		
 		// Admin check
 		$admin_check = WRequest::get('admin_check');
@@ -77,7 +77,7 @@ class UserAdminController extends WController {
 			}
 		}
 		
-		// Sorting criterias given by URL
+		// Sorting criteria given in URL
 		$sort_by = '';
 		$sens = 'DESC';
 		$page = 1;
