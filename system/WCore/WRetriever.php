@@ -313,11 +313,6 @@ class WRetriever {
 	 */
 	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
-			$args = addslashes($args);
-			
-			// Replace all the template variables in the string
-			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
-			
 			$args = explode('?', $args);
 			
 			// Explode the route in several parts
@@ -329,7 +324,12 @@ class WRetriever {
 					$route['params']['querystring'] = $args[1];
 				}
 				
-				return 'WRetriever::getModel("'.$route['app'].'", '.var_export($route['params'], true).')';
+				$params_string = var_export($route['params'], true);
+				
+				// Replace all the template variables in the string
+				$params_string = WTemplateParser::replaceNodes($params_string, create_function('$s', "return '\'.'.WTemplateCompiler::parseVar(\$s).'.\'';"));
+				
+				return 'WRetriever::getModel("'.$route['app'].'", '.$params_string.')';
 			}
 		}
 		
