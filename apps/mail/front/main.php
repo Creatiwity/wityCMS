@@ -15,169 +15,301 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class MailController extends WController {
 
-	protected function form(array $params) {
-		$user_id = isset($_SESSION['userid']) ? $_SESSION['userid'] : null;
-
-		if (WRequest::hasData()) {
-			$data = WRequest::getAssoc(array('from_name', 'from_company', 'from_email', 'email_subject', 'email_message'));
-			$errors = array();
-
-			/**
-			 * BEGIN VARIABLES CHECKING
-			 */
-			if (empty($data['from_name'])) {
-				$errors[] = WLang::get("no_from_name");
-			}
-
-			if (empty($data['from_email'])) {
-				$errors[] = WLang::get("no_from_email");
-			} else if (!preg_match('#^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$#i', $data['from_email'])) {
-				$errors[] = WLang::get("invalid_from_email");
-			}
-
-			if (empty($data['email_subject'])) {
-				$errors[] = WLang::get("no_email_subject");
-			}
-
-			if (empty($data['email_message'])) {
-				$errors[] = WLang::get("no_email_message");
-			}
-
-			$data['email_message'] = nl2br($data['email_message']);
-			/**
-			 * END VARIABLES CHECKING
-			 */
-
-			if (empty($errors)) {
-				if (!is_null($user_id)) {
-					$data['userid'] = $user_id;
-				}
-
-				if ($this->sendMail($data)) {
-					$this->setHeader('Location', Wroute::getDir());
-					return WNote::success('email_sent', WLang::get('email_sent'));
-				} else {
-					return WNote::error('email_not_sent', WLang::get('email_not_sent'));
-				}
-			} else {
-				return WNote::error('data_errors', implode("<br />\n", $errors));
-			}
-		}
-
-		// Load form
-		$model = array(
-			'from_name'  => '',
-			'from_email' => ''
-		);
-
-		if (!is_null($user_id)) { // Add name and email
-			if (!empty($_SESSION['firstname'])) {
-				$model['from_name'] .= $_SESSION['firstname'].' ';
-			}
-			$model['from_name'] .= $_SESSION['lastname'];
-
-			$model['from_email'] = $_SESSION['email'];
-		}
-
-		return $model;
-	}
+	/**
+	 * @var PHPMailer phpMailer instance
+	 */
+	private $phpmailer;
 
 	/**
-	 * Sends an email to the sender and the recipient.
+	 * @var WTemplate WTemplate instance
+	 */
+	private $tpl;
+
+	/**
+	 * @var Hash variable that represents current mailing list
+	 */
+	private $hash_mailing_list;
+
+	/**
+	 * @var Hash variable that represents current mail
+	 */
+	private $hash_mail;
+
+	/**
+	 * @var Link expiration method
+	 */
+	private $expiration;
+
+	/**
+	 * @var Response mode, 'all' will answer to all, 'from' will answer to the from email field, 'none' is no-reply@...
+	 */
+	private $response_policy;
+
+	/**
+	 * @var Configuration parameters
+	 */
+	private $configuration;
+
+	/**
+	 * Sends email
+	 *
+	 * 	$params = array(
+	 * 		'response_policy' => 'all'|'from' (default)|'none',
+	 * 		'action_expiration' => 'one-time-action'|'one-time-mail'|DateInterval initializer ('P30D' default)|array(['one-time-action', 'one-time-mail', DateInterval initializer]),
+	 * 		'response_callback' => '/app_name[/action][/param1[/...]]?hash_mail=hash_mail&hash_action=hash_action[&...]'
+	 * 		'defaults' => array(
+	 * 			'from' => email|array(email[, name]),
+	 * 			'to' => array(email[, name])|array(array(email[, name])),
+	 * 			'cc' => array(email[, name])|array(array(email[, name])),
+	 * 			'bcc' => array(email[, name])|array(array(email[, name])),
+	 * 			'attachments' => array(url[, name])|array(array(url[, name])),
+	 * 			'subject' => string,
+	 * 			'body' => string|template_file,
+	 * 			'params' => array(key => value)
+	 * 		),
+	 * 		'specifics' => array([each line is similar to the 'defaults' array])
+	 * 	);
 	 *
 	 * @param array $params
-	 * @return bool Success state
+	 * @return array|WNote Email status or WNote
 	 */
-	private function sendMail(array $params) {
-		$config = $this->model->getConfig();
-
-		if (empty($config['site_from_name']) || empty($config['site_from_email'])) {
-			WNote::error('missing_configuration', WLang::get('missing_configuration', serialize($params)), 'email');
-			return false;
+	protected function send(array $params) {
+		// Check if this application is called from another, if not return
+		if (!$this->hasParent()) {
+			return WNote::error('direct_access_not_allowed', 'direct_access_not_allowed');
 		}
 
-		$params['to'] = array();
-		$params['to'][] = array($config['site_from_email'], $config['site_from_name']);
-		$params['reply_to'] = array();
-		$params['reply_to'][] = array($params['from_email'], $params['from_name']);
+		// Check that $params is not empty
+		if (empty($params) || !is_array($params)) {
+			return WNote::error('missing_parameters', 'missing_parameters');
+		}
 
-		$universalAdd = function ($param, $key, $fn) {
-			if (isset($param[$key])) {
-				$param = $param[$key];
+		if (empty($this->configuration)) {
+			$this->configuration = $this->model->getConfiguration();
+		}
 
-				if (!empty($param)) {
-					if (!is_array($param)) {
-						call_user_func($fn, $param);
-					} else {
-						foreach ($param as $val) {
-							if (is_array($val)) {
-								call_user_func($fn, $val[0], $val[1]);
-							} else {
-								call_user_func($fn, $val);
-							}
-						}
-					}
-				}
+		$success = true;
+
+		// Set the default response policy to 'from' if nothing is provided
+		if (!empty($params['response_policy'])) {
+			$this->response_policy = $params['response_policy'];
+		} else {
+			$this->response_policy = 'from';
+		}
+
+		// Set the default action expiration method if nothing is provided
+		if (!empty($params['action_expiration'])) {
+			$this->expiration = $params['action_expiration'];
+		} else {
+			$this->expiration = 'P30D';
+		}
+
+		// Generate uniqid and hash used to execute action from this mail
+		$mailing_list_id = uniqid('mail', true);
+		$this->hash_mailing_list = sha1($mailing_list_id);
+
+		$this->phpmailer = WHelper::load("phpmailer");
+		$this->phpmailer->CharSet = 'utf-8';
+		$this->phpmailer->isHTML(true);
+
+		// Find mode : only defaults or defaults + while(specifics)
+		if (empty($params['specifics']) || !is_array($params['specifics'])) {
+			foreach ($params['specifics'] as $spec) {
+				$success = $success &&
+					$this->sendMail(array_replace_recursive(
+						array(),
+						$params['defaults'],
+						$spec
+					));
 			}
-		};
-
-		// Send mail
-		$phpmailer = WHelper::load("phpmailer");
-		$phpmailer->CharSet = 'utf-8';
-		$phpmailer->From = $params['from_email'];
-		$phpmailer->FromName = $params['from_name'];
-
-		$universalAdd($params, 'to', array($phpmailer, 'addAddress'));
-		// $universalAdd($params, 'cc', array($phpmailer, 'addCC'));
-		// $universalAdd($params, 'bcc', array($phpmailer, 'addBCC'));
-		$universalAdd($params, 'reply_to', array($phpmailer, 'addReplyTo'));
-
-		$phpmailer->isHTML(true);
-		$phpmailer->Subject = WLang::get('mail_for_admin_subject', array(WConfig::get('config.site_name'), $params['email_subject']));
-		$phpmailer->Body = WLang::get('mail_for_admin_body', array(
-			'site'    => WConfig::get('config.site_name'),
-			'base'    => WRoute::getBase(),
-			'name'    => $params['from_name'].' &lt;'.$params['from_email'].'&gt;',
-			'company' => $params['from_company'],
-			'subject' => $params['email_subject'],
-			'message' => $params['email_message']
-		));
-
-		if (!$phpmailer->send()) {
-			return false;
+		} else {
+			$success = $this->sendMail($params['defaults']);
 		}
 
-		unset($phpmailer);
+		unset($this->phpmailer);
 
-		// Send mail to expeditor
-		$phpmailer = WHelper::load("phpmailer");
-		$phpmailer->CharSet = 'utf-8';
-		$phpmailer->From = $config['site_from_email'];
-		$phpmailer->FromName = $config['site_from_name'];
-
-		$universalAdd(array(array(array($params['from_email'], $params['from_name']))), 0, array($phpmailer, 'addAddress'));
-
-		$phpmailer->isHTML(true);
-		$phpmailer->Subject = WLang::get('copy_subject', WConfig::get('config.site_name'));
-		$phpmailer->Body = WLang::get('auto_reply', array(
-			'site'    => WConfig::get('config.site_name'),
-			'name'    => $params['from_name'].' &lt;'.$params['from_email'].'&gt;',
-			'company' => $params['from_company'],
-			'subject' => $params['email_subject'],
-			'message' => $params['email_message']
-		));
-
-		if (!$phpmailer->send()) {
-			return false;
+		if (!$success) {
+			return WNote::error('mail_send_error', 'mail_send_error');
+		} else {
+			return array('success' => true);
 		}
-
-		if (!$this->model->addMail($params)) {
-			WNote::error('unable_to_save_email', WLang::get('unable_to_save_email', serialize($params)), 'email');
-		}
-
-		return true;
 	}
 
+	private function sendEmail(array $params) {
+		$success = true;
+
+		// Prepare Template compiler
+		if (empty($this->tpl)) {
+			$this->tpl = WSystem::getTemplate();
+		}
+
+		$this->tpl->pushContext();
+
+		// Clean the PHPMailer instance
+		$this->phpmailer->clearAddresses();
+		$this->phpmailer->clearAttachments();
+
+		// Add addresses
+
+		// If POP3/IMAP enabled, mail app will manage responses, 'to' goes to CC, a placeholder goes to 'to'
+		if ($this->configuration['canReceive']) {
+			$from = array($this->configuration['from']);
+
+			if (is_array($params['from'] && !empty($params['from'][1]))) {
+				$from[] = $params['from'][1];
+			}
+
+			// From: array('notifications@domain.com', 'Real from name')
+			$this->addAddressesInField($from, 'from');
+
+			// To: array('site@no-reply.domain.com', 'A previously configured name')
+			$this->addAddressesInField($this->configuration['to'], 'to');
+
+			$this->addAddressesInField($params['to'], 'cc');
+			$this->addAddressesInField($params['cc'], 'cc');
+			$this->addAddressesInField($params['bcc'], 'bcc');
+
+			// Reply to: array('hash_mailing_list'.'hash_mail'@domain.com, 'A previously configured name')
+			$this->addAddressesInField(array($this->getInternalResponseAddress(), $this->configuration['name']), 'replyTo');
+		} else {
+			// No POP3/IMAP, classical e-mail system
+			$this->addAddressesInField($params['from'], 'from');
+			$this->addAddressesInField($params['to'], 'to');
+			$this->addAddressesInField($params['cc'], 'cc');
+			$this->addAddressesInField($params['bcc'], 'bcc');
+		}
+
+
+		$params['params']['mail_app'] = array();
+
+		// Generate hash used to execute action from this mail
+		$this->hash_mail = sha1(serialize($params['to']).$this->hash_mailing_list);
+		$params['params']['mail_app']['hash_mail'] = $this->hash_mail;
+
+		// Assign View variables
+		$this->tpl->assign($params['params']);
+
+		// Generates
+		$this->phpmailer->Subject = $this->tpl->parseString($params['subject']);
+
+		if (substr($params['body'], -5) === '.html' && file_exists(WITY_PATH.$params['body'])) {
+			// Use system directory separator
+			if (DS != '/') {
+				$params['body'] = str_replace('/', DS, $params['body']);
+			}
+
+			$this->phpmailer->msgHTML($this->tpl->parse($params['body']));
+		} else {
+			$this->phpmailer->msgHTML($this->tpl->parseString($params['body']));
+		}
+
+		if (!$this->phpmailer->send()) {
+			// TODO Change WNote::error handler and translate it
+			WNote::error('mail_send_fail', 'mail_send_fail: '.$this->phpmailer->ErrorInfo);
+			$success = false;
+		}
+
+		/*if (!$this->model->addMail($params)) {
+			WNote::error('unable_to_save_email', WLang::get('unable_to_save_email', serialize($params)), 'email');
+			$success = false;
+		}*/
+
+		$this->tpl->popContext();
+
+		return $success;
+	}
+
+	private function addAddressesInField($addresses, $type) {
+		if (empty($addresses)) {
+			return false;
+		}
+
+		$success = true;
+
+		// Assign the right function to use with these addresses
+		$func = $this->phpmailer->addAddress;
+
+		switch ($type) {
+			case 'to':
+				$func = $this->phpmailer->addAddress;
+				break;
+
+			case 'cc':
+				$func = $this->phpmailer->addCC;
+				break;
+
+			case 'bcc':
+				$func = $this->phpmailer->addBCC;
+				break;
+
+			case 'from':
+				$func = $this->phpmailer->setFrom;
+				break;
+
+			case 'replyTo':
+				$func = $this->phpmailer->addReplyTo;
+				break;
+
+			default:
+				$func = $this->phpmailer->addAddress;
+				break;
+		}
+
+		if (!is_array($addresses)) {
+			// 'email'
+			$success = $func($addresses);
+		} else if (!is_array($addresses[0])) {
+			// array('email'[, 'name'])
+			$success = call_user_func_array($func, $addresses);
+		} else {
+			// array(array('email'[,'name']))
+			foreach ($addresses as $address) {
+				$success = call_user_func_array($func, $address);
+			}
+		}
+
+		// TODO Update WNote message
+		WNote::warning('email_add_failure', 'email_add_failure: '.$this->phpmailer->ErrorInfo);
+
+		return $success;
+	}
+
+	private function getInternalResponseAddress() {
+		return $this->hash_mailing_list.'_'.$this->hash_mail.'@'.$this->configuration['domain'];
+	}
+
+	protected function redirect(array $params) {
+		$this->setHeader('Location', WRoute::getDir());
+	}
+
+	/*****************************************
+	 * WTemplateCompiler's new handlers part *
+	 *****************************************/
+	/**
+	 * Handles the {mail_action} node in WTemplate
+	 * {mail_action} gives access to email action
+	 *
+	 * Example: {action /news/admin/publish/{$news.id}}
+	 * Replaced by: /mail/[hash]
+	 *
+	 * @param string $args language identifier
+	 * @return string php string that calls the WLang::get()
+	 */
+	public static function compile_mail_action($args) {
+		if (!empty($args)) {
+			$url = array_shift($args);
+
+			// Replace the template variables in the string
+			$url = WTemplateParser::replaceNodes($url, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+
+			// Build final php lang string
+			if (strlen($url) > 0) {
+				return '<?php echo MailController::storeAction("'.$url.'"); ?>';
+			}
+		}
+
+		return '';
+	}
 }
 
 ?>
