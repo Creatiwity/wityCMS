@@ -197,7 +197,7 @@ class UserModel {
 			ON groupe = users_groups.id
 			'.$cond.'
 			ORDER BY users.'.$order.' '.($asc ? 'ASC' : 'DESC').'
-			'.($from != 0 && $number != 0 ? 'LIMIT :start, :number' : '')
+			'.($number > 0 ? 'LIMIT :start, :number' : '')
 		);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
