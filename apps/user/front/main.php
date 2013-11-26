@@ -6,7 +6,7 @@
 defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
- * UserController is the front Controller of the User Application.
+ * UserController is the Front Controller of the User Application.
  * 
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
@@ -15,6 +15,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 class UserController extends WController {
 	/*
 	 * Default session life when the user asks to remember his account = 1 week
+	 * @type int
 	 */
 	const REMEMBER_TIME = 604800;
 	
@@ -24,8 +25,7 @@ class UserController extends WController {
 	private $session;
 	
 	/**
-	 * UserController constructor
-	 * Basically instantiates session
+	 * UserController's constructor to initialize $session.
 	 */
 	public function __construct() {
 		$this->session = WSystem::getSession();
@@ -35,7 +35,8 @@ class UserController extends WController {
 	 * Login action handler
 	 * Triggered whenever a user asks to be connected
 	 * 
-	 * @param string $redirect URL to redirect the request
+	 * @param array $params Redirect is expected in this array
+	 * @return array Model containing the redirect link
 	 */
 	protected function login($params) {
 		// Find redirect URL
@@ -106,6 +107,7 @@ class UserController extends WController {
 	 * Logout action handler
 	 * 
 	 * @todo Smartly find the redirecting URL based on the referer (watch out to app requiring special access)
+	 * @return array Success note
 	 */
 	protected function logout() {
 		if ($this->session->isConnected()) {
@@ -121,6 +123,7 @@ class UserController extends WController {
 	 * Register action handler
 	 * 
 	 * @todo Captcha security
+	 * @return array Data given
 	 */
 	protected function register() {
 		// Check if inscriptions are open
@@ -166,7 +169,8 @@ class UserController extends WController {
 					$data['valid'] = 2; // value to require admin check
 				}
 				
-				if ($this->model->createUser($data)) {
+				$userid = $this->model->createUser($data);
+				if ($userid !== false) {
 					if ($config['email_conf']) {
 						// Send a validation email
 						$this->model->sendEmail(
@@ -197,7 +201,6 @@ class UserController extends WController {
 						// Send email to the administrators to warn them
 						$admin_emails = WConfig::get('config.email');
 						if (!empty($admin_emails)) {
-							$userid = $this->model->getLastUserId();
 							$this->model->sendEmail(
 								$admin_emails,
 								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
@@ -232,14 +235,16 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_data_errors', implode("<br />\n", $errors));
 			}
-			
-			return $data;
 		}
+		
+		return $data;
 	}
 	
 	/**
-	 * Confirm action handler
-	 * Allows the user to validate its account after registering
+	 * The Confirm action allows the user to validate its account after registering.
+	 * 
+	 * @param array $params
+	 * @return void
 	 */
 	protected function confirm($params) {
 		// Check if inscriptions are open
@@ -265,13 +270,12 @@ class UserController extends WController {
 				// Send email to the administrators to warn them
 				$admin_emails = WConfig::get('config.email');
 				if (!empty($admin_emails)) {
-					$userid = $this->model->getLastUserId();
 					$this->model->sendEmail(
 						$admin_emails,
 						WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
 						str_replace(
 							array('{site_name}', '{nickname}', '{base}', '{userid}'),
-							array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $userid),
+							array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $data['id']),
 							WLang::get('user_register_admin_warning')
 						)
 					);
@@ -293,8 +297,9 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Password-lost action handler
-	 * Triggered when a user wants to recover its password
+	 * The password-lost action is triggered when a user wants to recover its password.
+	 * 
+	 * @return array Model
 	 */
 	protected function password_lost() {
 		$data = WRequest::getAssoc(array('email', 'confirm'));
