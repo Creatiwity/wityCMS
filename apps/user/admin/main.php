@@ -311,14 +311,12 @@ Ceci est un message automatique.";
 		
 		if (WRequest::get('confirm', null, 'POST') === '1') {
 			$this->model->deleteUser($user_id);
-			WNote::success('user_deleted', WLang::get('user_deleted'));
+			
 			$this->setHeader('Location', WRoute::getDir().'/admin/user/');
+			WNote::success('user_deleted', WLang::get('user_deleted'));
 		}
 		
-		return array(
-			'user_id' => $user_id,
-			'user_data' => $this->model->getUser($user_id)
-		);
+		return $this->model->getUser($user_id);
 	}
 	
 	/**

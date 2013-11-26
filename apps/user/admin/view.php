@@ -54,7 +54,12 @@ class UserAdminView extends WView {
 		$this->assign('subURL', $subURL);
 		$this->assign($model['filters']);
 		
-		$pagination = WHelper::load('pagination', array($model['stats']['request'], $model['users_per_page'], $model['current_page'], '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
+		$pagination = WHelper::load('pagination', array(
+			$model['stats']['request'], 
+			$model['users_per_page'], 
+			$model['current_page'], 
+			'/admin/user/listing/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL)
+		);
 		$this->assign('pagination', $pagination->getHTML());
 	}
 	
@@ -129,8 +134,8 @@ class UserAdminView extends WView {
 	 * @param array $model
 	 */
 	public function del($model) {
-		$this->assign('nickname', $model['user_data']['nickname']);
-		$this->assign('confirm_delete_url', "/admin/user/del/".$model['user_id']);
+		$this->assign('nickname', $model['nickname']);
+		$this->assign('confirm_delete_url', "/admin/user/del/".$model['id']);
 	}
 	
 	/**
