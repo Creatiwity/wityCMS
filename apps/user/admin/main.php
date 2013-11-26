@@ -14,11 +14,13 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class UserAdminController extends WController {
 	/**
-	 * List action handler
-	 * Displays a list of users in the database
+	 * The listing action displays the list of users in the database.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
 	protected function listing($params) {
-		$n = 30; // number of users per page
+		$n = 30; // Number of users per page
 		
 		// Admin check
 		$admin_check = WRequest::get('admin_check');
@@ -75,7 +77,7 @@ class UserAdminController extends WController {
 			}
 		}
 		
-		// Sorting criterias given by URL
+		// Sorting criteria given in URL
 		$sort_by = '';
 		$sens = 'DESC';
 		$page = 1;
@@ -123,8 +125,13 @@ class UserAdminController extends WController {
 	}
 	
 	/**
-	 * Automatically creates the user or updates it depending on the data given
-	 * If needed, the User form is displayed
+	 * Manages a form to add or edit a user.
+	 * 
+	 * This function will trigger the SQL queries and display the add/edit form if needed.
+	 * 
+	 * @param int   $user_id
+	 * @param array $db_data Existing data of a user in case of an edit action
+	 * @return array Model
 	 */
 	protected function user_form($user_id = null, $db_data = array()) {
 		$add_case = empty($user_id);
@@ -256,14 +263,19 @@ Ceci est un message automatique.";
 	}
 	
 	/**
-	 * Creates a user
+	 * Creates a user.
+	 * 
+	 * @return array Model
 	 */
 	protected function add() {
 		return $this->user_form();
 	}
 	
 	/**
-	 * Edits a user in the database
+	 * Edits a user in the database.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
 	protected function edit($params) {
 		$user_id = intval(array_shift($params));
@@ -279,7 +291,10 @@ Ceci est un message automatique.";
 	}
 	
 	/**
-	 * Deletes a user
+	 * Deletes a user.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
 	protected function del($params) {
 		$user_id = intval(array_shift($params));
@@ -296,18 +311,19 @@ Ceci est un message automatique.";
 		
 		if (WRequest::get('confirm', null, 'POST') === '1') {
 			$this->model->deleteUser($user_id);
-			WNote::success('user_deleted', WLang::get('user_deleted'));
+			
 			$this->setHeader('Location', WRoute::getDir().'/admin/user/');
+			WNote::success('user_deleted', WLang::get('user_deleted'));
 		}
 		
-		return array(
-			'user_id' => $user_id,
-			'user_data' => $this->model->getUser($user_id)
-		);
+		return $this->model->getUser($user_id);
 	}
 	
 	/**
-	 * Groups listing/add/edit action
+	 * Groups listing/add/edit action.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
 	protected function groups($params) {
 		if (!empty($_POST)) {
@@ -382,7 +398,10 @@ Ceci est un message automatique.";
 	}
 	
 	/**
-	 * Deletes a group
+	 * Deletes a group.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
 	protected function group_del($params) {
 		$group_id = intval(array_shift($params));
@@ -406,7 +425,7 @@ Ceci est un message automatique.";
 	}
 	
 	/**
-	 * Makes the dif between old and new access to a group
+	 * Makes the dif between old and new access to a group.
 	 */
 	protected function group_diff() {
 		// Retrieve post data
@@ -459,6 +478,8 @@ Ceci est un message automatique.";
 	 * Display in a JSON format all the users whose nickname starts with a given letter.
 	 * 
 	 * Used for ajax method in group_diff action.
+	 * 
+	 * @return array Matching users
 	 */
 	protected function load_users_with_letter() {
 		$letter = WRequest::get('letter');
@@ -476,7 +497,9 @@ Ceci est un message automatique.";
 	}
 	
 	/**
-	 * Configuration handler
+	 * Configuration handler.
+	 * 
+	 * @return array Config Model
 	 */
 	protected function config() {
 		$data = WRequest::getAssoc(array('update', 'config'));

@@ -331,7 +331,7 @@ abstract class WController {
 	}
 	
 	/**
-	 * Parses a manifest file
+	 * Parses a manifest file.
 	 * 
 	 * @param string $manifest_href Href of the manifest file desired
 	 * @return array manifest parsed into an array representation
@@ -353,20 +353,25 @@ abstract class WController {
 			switch ($node) {
 				case 'action':
 					$manifest['actions'] = array();
+					
 					if (property_exists($xml, 'action')) {
 						foreach ($xml->action as $action) {
-							$attributes = $action->attributes();
 							$key = strtolower((string) $action);
+							
 							if (!empty($key)) {
+								$attributes = $action->attributes();
+								
 								if (!isset($manifest['actions'][$key])) {
 									$manifest['actions'][$key] = array(
-										'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
+										'desc'     => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
 										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
+								
 								if (isset($attributes['default']) && empty($manifest['default'])) {
 									$manifest['default'] = $key;
 								}
+								
 								if (isset($attributes['alias']) && !empty($attributes['alias'])) {
 									$alias = explode(',', $attributes['alias']);
 									foreach ($alias as $al) {
@@ -383,23 +388,26 @@ abstract class WController {
 				
 				case 'admin':
 					$manifest['admin'] = array();
+					
 					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'action')) {
 						foreach ($xml->admin->action as $action) {
-							if (!empty($action)) {
+							$key = strtolower((string) $action);
+							
+							if (!empty($key)) {
 								$attributes = $action->attributes();
-								$key = strtolower((string) $action);
-								if (!empty($key)) {
-									if (!isset($manifest['admin'][$key])) {
-										$manifest['admin'][$key] = array(
-											'desc' => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
-											'menu' => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
-											'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
-										);
-									}
+								
+								if (!isset($manifest['admin'][$key])) {
+									$manifest['admin'][$key] = array(
+										'desc'     => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
+										'menu'     => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
+										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+									);
 								}
+								
 								if (isset($attributes['default']) && empty($manifest['default_admin'])) {
 									$manifest['default_admin'] = $key;
 								}
+								
 								if (isset($attributes['alias']) && !empty($attributes['alias'])) {
 									$alias = explode(',', $attributes['alias']);
 									foreach ($alias as $al) {
@@ -418,10 +426,12 @@ abstract class WController {
 					$manifest['permissions'] = !empty($manifest['admin']) ? array('admin') : array();
 					if (property_exists($xml, 'permission')) {
 						foreach ($xml->permission as $permission) {
-							if (!empty($permission)) {
+							$key = (string) $attributes['name'];
+							
+							if (!empty($key)) {
 								$attributes = $permission->attributes();
 								if (!empty($attributes['name'])) {
-									$manifest['permissions'][] = (string) $attributes['name'];
+									$manifest['permissions'][] = $key;
 								}
 							}
 						}
@@ -437,6 +447,7 @@ abstract class WController {
 					break;
 			}
 		}
+		
 		return $manifest;
 	}
 	

@@ -3,7 +3,7 @@
 		<div class="col-md-9">
 		{if !empty({$users_waiting})}
 			<h2>{lang waiting}</h2>
-			<form id="admin-check-form" action="/admin/user/listing/" method="post">
+			<form id="admin-check-form" action="/admin/user/listing" method="post">
 				<table id="admin-check" class="table table-hover table-striped">
 					{for $count, $user in $users_waiting}
 					<tr class="waiting" data-title="{$user.nickname}" data-content="&lt;ul class='unstyled'&gt;&lt;li&gt;{$user.firstname} {$user.lastname}&lt;/li&gt;&lt;li&gt;{$user.email}&lt;/li&gt;&lt;/ul&gt;">
@@ -57,7 +57,7 @@
 						<td>{$user.date}</td>
 						<td>{$user.last_activity}</td>
 						<td>
-							<a href="/admin/user/edit/{$user.id}/" class="black" title="{lang edit}"><i class="glyphicon glyphicon-edit"></i></a>
+							<a href="/admin/user/edit/{$user.id}" class="black" title="{lang edit}"><i class="glyphicon glyphicon-edit"></i></a>
 							{if {$user.id} != $_SESSION['userid']}<span title="{lang article_delete}" class="link" data-link-modal="/v/admin/user/del/{$user.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>{/if}
 						</td>
 					</tr>
@@ -76,7 +76,7 @@
 		<div class="col-md-3">
 			<div id="search" class=" well well-sm">
 				<h4 class="text-center">{lang search}</h4>
-				<form action="/admin/user/listing/" method="get" class="form-horizontal">
+				<form action="/admin/user/listing" method="get" class="form-horizontal">
 					<div class="form-group">
 						<label for="nickname" class="control-label col-lg-5"><strong>{lang nickname}:</strong></label>
 						<div class="col-lg-7">
