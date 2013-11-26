@@ -20,7 +20,7 @@ class NewsAdminController extends WController {
 	protected function listing(array $params) {
 		$n = 30; // Number of news per page
 		$sort_by = 'news_date';
-		$sens = 'ASC';
+		$sens = 'DESC';
 		$page = 1;
 		
 		// Sorting criterias given by URL
