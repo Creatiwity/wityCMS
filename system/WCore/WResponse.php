@@ -80,11 +80,16 @@ class WResponse {
 			throw new Exception("WResponse::render(): WTemplate cannot be loaded.");
 		}
 		
-		// Default vars
-		$site_name = WConfig::get('config.site_name');
+		// Default template variables
 		$tpl->assign('base_url', WRoute::getBase());
+		
+		$site_name = WConfig::get('config.site_name');
 		$tpl->assign('site_name', $site_name);
-		$tpl->assign('page_title', $site_name);
+		
+		$page_title = $tpl->getVar('page_title');
+		if (empty($page_title)) { // Do not overwrite a value set by user
+			$tpl->assign('page_title', $site_name);
+		}
 		
 		// Load in priority theme asked by the view
 		$view_theme = $view->getTheme();
