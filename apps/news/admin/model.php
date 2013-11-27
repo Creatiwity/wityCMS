@@ -24,19 +24,6 @@ class NewsAdminModel extends NewsModel {
 	}
 	
 	/**
-	 * Retrieves last News_ID in the database
-	 * 
-	 * @return int
-	 */
-	public function getLastNewsId() {
-		$prep = $this->db->prepare('
-			SELECT id FROM news ORDER BY id DESC LIMIT 1
-		');
-		$prep->execute();
-		return intval($prep->fetchColumn());
-	}
-	
-	/**
 	 * Creates a News in the database from a set of data
 	 * 
 	 * @param array $data
@@ -55,7 +42,12 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':description', $data['news_description']);
 		$prep->bindParam(':edited_by', $_SESSION['userid']);
-		return $prep->execute();
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**

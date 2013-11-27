@@ -15,10 +15,14 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class NewsAdminView extends WView {
 	public function listing($model) {
-		$sorting = $model['sortingHelper']->getSorting();
-		$this->assign($model['sortingHelper']->getTplVars());
+		$this->assign($model['sorting_tpl']);
 		
-		$pagination = WHelper::load('pagination', array($model['total'], $model['news_per_page'], $model['current_page'], '/admin/news/'.$sorting[0].'-'.$sorting[1].'-%d/'));
+		$pagination = WHelper::load('pagination', array(
+			$model['total'], 
+			$model['per_page'], 
+			$model['current_page'], 
+			'/admin/news/listing/'.$model['sorting'][0].'-'.$model['sorting'][1].'-%d/'
+		));
 		$this->assign('pagination', $pagination->getHTML());
 		
 		$this->assign('news', $model['data']);
@@ -58,21 +62,25 @@ class NewsAdminView extends WView {
 				}
 			}
 		}
-		$this->assign('cats_list', $model['cats_list']);
+		$this->assign('cats', $model['cats']);
 		$this->assign('news_cats', $news_cats);
 		
 		$this->fillMainForm(array(
-			'news_author' => $_SESSION['nickname'],
-			'news_meta_title' => '',
-			'news_keywords' => '',
+			'news_author'      => $_SESSION['nickname'],
+			'news_meta_title'  => '',
+			'news_keywords'    => '',
 			'news_description' => '',
-			'news_title' => '',
-			'news_url' => '',
-			'news_content' => '',
-			'news_date' => '',
-			'news_modified' => ''
+			'news_title'       => '',
+			'news_url'         => '',
+			'news_content'     => '',
+			'news_date'        => '',
+			'news_modified'    => ''
 		), $model['data']);
 		$this->setTemplate('news_form');
+	}
+	
+	public function add($model) {
+		$this->news_form($model);
 	}
 	
 	public function edit($model) {
@@ -90,7 +98,10 @@ class NewsAdminView extends WView {
 	
 	public function categories_manager($model) {
 		$this->assign('js', '/apps/news/admin/js/categories_manager.js');
-		$this->assign($model['sortingHelper']->getTplVars());
+		
+		$this->assign($model['sorting_tpl']);
+		$this->assign('cats', $model['data']);
+		
 		$this->fillMainForm(array(
 			'news_cat_id' => '',
 			'news_cat_name' => '',
@@ -98,7 +109,6 @@ class NewsAdminView extends WView {
 			'news_cat_parent' => 0,
 			'news_cat_parent_name' => ""
 		), $model['post_data']);
-		$this->assign('cats', $model['data']);
 	}
 }
 

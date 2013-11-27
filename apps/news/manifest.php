@@ -23,7 +23,7 @@
 	<!-- Admin pages -->
 	<admin>
 		<action default="default" desc="articles_listing">listing</action>
-		<action requires="writer" desc="article_add" alias="add">news_form</action>
+		<action requires="writer" desc="article_add">add</action>
 		<action requires="writer" desc="article_edit" menu="false">edit</action>
 		<action requires="moderator" desc="article_delete" menu="false">news_delete</action>
 		<action requires="category_manager" desc="categories_management" >categories_manager</action>
