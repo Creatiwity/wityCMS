@@ -57,6 +57,14 @@ $(document).ready(function() {
 				} catch(e) {
 					// Debug code
 					// $('body').prepend('<pre>' + response + '</pre>');
+					setNote($form.parent(), {
+						'app-name': 'contact',
+						'notes': [{
+							level: 'danger',
+							code: 'unknown_error',
+							message: 'An unknown error occurred.'
+						}]
+					});
 					return;
 				}
 
