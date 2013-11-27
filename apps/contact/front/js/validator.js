@@ -1,6 +1,6 @@
 /**
  * Contacts management script allowing ajax usage.
- * 
+ *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.4.0
  */
@@ -40,6 +40,8 @@ $(document).ready(function() {
 		method = $form.attr('method');
 		data = $form.serialize();
 
+		$('.wity-app.app-contact :input').attr('disabled', true);
+
 		$.ajax({
 			type: method,
 			url: url,
@@ -48,6 +50,7 @@ $(document).ready(function() {
 				var jResponse;
 
 				$button.button('reset');
+				$('.wity-app.app-contact :input').attr('disabled', false);
 
 				try {
 					jResponse = $.parseJSON(response);
@@ -57,10 +60,14 @@ $(document).ready(function() {
 					return;
 				}
 
-				setNote($form, jResponse);
+				setNote($form.parent(), jResponse);
+
+				if (jResponse && jResponse.result && jResponse.result.code === 'email_sent') {
+					$form.remove();
+				}
 			}
 		});
-		
+
 		return false;
 	});
 
