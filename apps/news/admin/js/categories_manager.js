@@ -25,7 +25,7 @@ $(document).ready(function() {
 				}
 				dataName = model[ientry].substring(9);
 				dataName = dataName.charAt(0).toUpperCase() + dataName.slice(1);
-				row.append('<td><input type="text" name="' + model[ientry] + '" placeholder="' + dataName + '" value="' + currentData + '" /></td>');
+				row.append('<td><input type="text" class="form-control" name="' + model[ientry] + '" placeholder="' + dataName + '" value="' + currentData + '" /></td>');
 			} else {
 				if (datas) {
 					currentData = datas[model[ientry]];
@@ -37,7 +37,8 @@ $(document).ready(function() {
 			}
 		}
 
-		row.append('<td><button type="submit" class="btn btn-mini btn-success" title="Submit"><i class="icon-ok icon-white"></i></button> <button type="button" class="btn btn-mini btn-danger cancel_cat_edit" title="Cancel"><i class="icon-remove icon-white"></i></button></td>');
+		row.append('<td><button type="submit" class="btn btn-xs btn-success" title="Submit"><i class="glyphicon glyphicon-ok"></i></button> '
+			+'<button type="button" class="btn btn-xs btn-danger cancel_cat_edit" title="Cancel"><i class="glyphicon glyphicon-remove"></i></button></td>');
 		
 		if(datas) {
 			backupRow = existingRow;

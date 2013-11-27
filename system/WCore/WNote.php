@@ -3,7 +3,7 @@
  * WNote.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WNote manages all notes : stores, displays, ...
@@ -16,7 +16,7 @@ class WNote {
 	/**
 	 * Note levels
 	 */
-	const ERROR   = 'error';
+	const ERROR   = 'danger';
 	const INFO    = 'info';
 	const SUCCESS = 'success';
 	
@@ -133,23 +133,25 @@ class WNote {
 	 * @param array $note Note as returned by WNote::raise()
 	 */
 	public static function handle_die(array $note) {
-		static $died = false;
+		static $died = false; // prevent from looping
 		if (!$died) {
 			$died = true;
 			
-			self::handle_plain($note);
-			$plain_view = self::getPlainView();
-			
-			if (!is_null($plain_view)) {
-				$response = new WResponse('_blank');
-				if (!$response->render($plain_view)) {
-					// Error during Note View rendering so print it in html
-					echo self::handle_html($note);
+			try {
+				// Try to display the note an artistic way
+				self::handle_plain($note);
+				$plain_view = self::getPlainView();
+				
+				if (!is_null($plain_view)) {
+					$response = new WResponse();
+					if ($response->render($plain_view, '_blank')) {
+						die;
+					}
 				}
-			} else {
-				echo self::handle_html($note);
-			}
+			} catch (Exception $e) {}
 			
+			// Default HTML display
+			echo self::handle_html($note);
 			die;
 		}
 	}
@@ -162,31 +164,17 @@ class WNote {
 	 * @see WNote::get()
 	 */
 	public static function handle_assign(array $note) {
-		if (self::count($note['code']) == 0) {
+		if (!isset($_SESSION['notes'][$note['code']])) {
 			$_SESSION['notes'][$note['code']] = $note;
+		} else if (strlen($_SESSION['notes'][$note['code']]['message']) != strlen($note['message'])) {
+			// Note id exists but message changed so add the note to the stack
+			$_SESSION['notes'][] = $note;
 		}
 	}
 	
 	/**
-	 * Renders the note as the main application
-	 * 
-	 * @param array $note Note as returned by WNote::raise()
-	 */
-	public static function handle_display(array $note) {
-		// Prepare a new view with the note
-		$view = new WView();
-		$view->assign('css', '/themes/system/note/note.css');
-		$view->assign('notes_data', array($note));
-		$view->setTemplate('themes/system/note/note_view.html');
-		
-		// Render the response
-		$response = new WResponse('_blank');
-		$response->render($view);
-	}
-	
-	/**
 	 * Handles note to be displayed in a plain HTML View.
-	 * Oftenly used for failover purposes (a view did not manage to render since theme cannot be found for instance).
+	 * Often used for fail-over purposes (a view did not manage to render since theme cannot be found for instance).
 	 * 
 	 * @param array $note Note as returned by WNote::raise()
 	 */
@@ -202,8 +190,9 @@ class WNote {
 	 */
 	public static function handle_log(array $note) {
 		$file = fopen(SYS_DIR.'wity.log', 'a+');
+		$date = new WDate();
 		$text = sprintf("[%s] [%s] [user %s|%s] [route %s] %s - %s\r\n", 
-			date('d/m/Y H:i:s', time()), 
+			$date->__toString(), 
 			$note['level'], 
 			@$_SESSION['userid'], 
 			$_SERVER['REMOTE_ADDR'], 
@@ -261,24 +250,6 @@ class WNote {
 	}
 	
 	/**
-	 * Returns the number of notes in the SESSION stack whose $code is matching the $pattern
-	 * 
-	 * @param string $pattern optional pattern to find a note by its code
-	 * @return int number of notes whose $code is matching the $pattern
-	 */
-	public static function count($pattern = '*') {
-		$count = 0;
-		if (!empty($_SESSION['notes'])) {
-			foreach ($_SESSION['notes'] as $code => $note) {
-				if ($pattern == '*' || $code == $pattern || (strpos($pattern, '*') !== false && preg_match('#'.str_replace('*', '.*', $pattern).'#', $code))) {
-					$count++;
-				}
-			}
-		}
-		return $count;
-	}
-	
-	/**
 	 * Returns and unset from the SESSION stack all notes whose $code is matching the $pattern
 	 * 
 	 * @param string $pattern optional pattern to find a note by its code
@@ -317,7 +288,6 @@ class WNote {
 		}
 		
 		$view = new WView();
-		$view->assign('css', '/themes/system/note/note.css');
 		$view->assign('notes_data', $notes_data);
 		$view->setTemplate('themes/system/note/note_view.html');
 		
@@ -325,23 +295,28 @@ class WNote {
 	}
 	
 	/**
-	 * Prepares a view to display a set of notes in a fallback view
+	 * Gets the plain notes.
+	 * 
+	 * @return array
+	 */
+	public static function getPlain() {
+		$plain_notes = self::$plain_stack;
+		self::$plain_stack = array();
+		return $plain_notes;
+	}
+	
+	/**
+	 * Prepares a view to display a set of notes in a fall-back view
 	 * 
 	 * @return WView
 	 */
 	public static function getPlainView() {
 		// Generate view
 		if (!empty(self::$plain_stack)) {
-			$notes_data = self::$plain_stack;
-			self::$plain_stack = array();
-			
 			// Prepare a new view
 			$view = new WView();
-			$view->assign('css', '/themes/system/note/note.css');
 			$view->assign('css', '/themes/system/note/note_plain.css');
-			$view->assign('js', '/libraries/jquery-1.10.2/jquery-1.10.2.min.js');
-			$view->assign('js', '/themes/system/note/note.js');
-			$view->assign('notes_data', $notes_data);
+			$view->assign('notes_data', self::getPlain());
 			$view->setTemplate('themes/system/note/note_plain_view.html');
 			
 			return $view;

@@ -29,6 +29,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="always_remain_connected">Toujours rester connecté </item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>
+	<item id="more_options">Plus d'options</item>
 	
 	<!-- Register form -->
 	<item id="register_form_title">Création d'un nouveau compte</item>
@@ -100,15 +101,15 @@ Password : {password}</p>
 	<item id="submit">Envoyer</item>
 	<item id="user_password_lost_not_found">Cet email n'existe pas dans la base de données.</item>
 	<item id="user_password_lost_failure">Une erreur inconnue s'est produite lors de l'enregistrement de votre demande de changement de mot de passe dans la base de données.</item>
-	<item id="user_password_lost_email_sent">Un email vient de vous être envoyé. Il contient un lien pour passer à l'étape suivante pour la réinitialisation de votre mot de passe.</item>
+	<item id="user_password_lost_email_sent">&lt;strong&gt;Un email vient de vous être envoyé.&lt;/strong&gt; Il contient un lien pour passer à l'étape suivante pour la réinitialisation de votre mot de passe.</item>
 	<item id="user_password_lost_subject">%s - Réinitialisation de votre mot de passe</item>
 	<item id="user_password_lost_email"><![CDATA[
 <p>Bonjour,</p>
 <p>Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_name}.</p>
 <p>Pour passer à l'étape suivante, suivez ce lien :<br />
-<a href="{base}/user/password-lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a></p>
+<a href="{base}/user/password_lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a></p>
 <p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
-{base}/user/password-lost/?email={email}&amp;confirm={confirm}</p>
+{base}/user/password_lost/?email={email}&amp;confirm={confirm}</p>
 <p><strong>{site_name}</strong></p>]]></item>
 	<item id="user_password_lost_success"><![CDATA[<p>Votre mot de passe a été réinitialisé avec succès.</p>
 <p>Vous pouvez vous connecter en l'utlisant à <a href="/user/login/">cette adresse</a>.</p>]]></item>

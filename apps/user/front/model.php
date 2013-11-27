@@ -1,14 +1,14 @@
 <?php
 /**
- * User Application - Model - /apps/user/front/model.php
+ * User Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
- * UserModel is the front Model of the User Application.
+ * UserModel is the Front Model of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-15-02-2013
  */
@@ -25,10 +25,10 @@ class UserModel {
 	}
 	
 	/**
-	 * Checks whether a $userid truely exists in the database
+	 * Checks whether a User ID truly exists in the database.
 	 * 
-	 * @param string $userid
-	 * @return boolean Only one row must be returned
+	 * @param int $user_id
+	 * @return bool A unique user ID must match
 	 */
 	public function validId($user_id) {
 		if (empty($user_id)) {
@@ -43,10 +43,10 @@ class UserModel {
 	}
 	
 	/**
-	 * Checks whether a $userid truely exists in the database
+	 * Checks whether a Group ID truely exists in the database
 	 * 
-	 * @param string $userid
-	 * @return boolean Only one row must be returned
+	 * @param int $group_id
+	 * @return bool A unique group ID must match
 	 */
 	public function validGroupId($group_id) {
 		if (empty($group_id)) {
@@ -63,7 +63,7 @@ class UserModel {
 	/**
 	 * Checks whether a nickname is valid and available
 	 * 
-	 * @param string $nikcname
+	 * @param string $nickname
 	 * @return mixed true if valid or error string
 	 */
 	public function checkNickname($nickname) {
@@ -107,24 +107,10 @@ class UserModel {
 	}
 	
 	/**
-	 * Gets the id of the last user inserted
-	 * Useful when creating a new user
+	 * Counts the users in the database.
 	 * 
-	 * @return int The id of the lattest user
-	 */
-	public function getLastUserId() {
-		$prep = $this->db->prepare('
-			SELECT id FROM users ORDER BY id DESC LIMIT 1
-		');
-		$prep->execute();
-		return intval($prep->fetchColumn());
-	}
-	
-	/**
-	 * Counts the users in the database
-	 * 
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
-	 * @return array A list of information about the users found
+	 * @param array $filters List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
+	 * @return int Number of users
 	 */
 	public function countUsers(array $filters = array()) {
 		if (empty($filters)) {
@@ -166,13 +152,13 @@ class UserModel {
 	}
 	
 	/**
-	 * Retrieves a list of users
+	 * Retrieves a list of users.
 	 * 
 	 * @param int    $from     Position of the first user to return
 	 * @param int    $number   Number of users
 	 * @param string $order    Name of the ordering column
 	 * @param bool   $asc      Ascendent or descendent?
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array  $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function getUsersList($from, $number, $order = 'nickname', $asc = true, array $filters = array()) {
@@ -202,13 +188,16 @@ class UserModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, users.access, groupe, name AS groupe_name, DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity, ip
+			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe, users.access AS access, valid, 
+				DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
+				DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity,
+				ip, name AS groupe_name
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
 			'.$cond.'
 			ORDER BY users.'.$order.' '.($asc ? 'ASC' : 'DESC').'
-			'.($from != 0 && $number != 0 ? 'LIMIT :start, :number' : '')
+			'.($number > 0 ? 'LIMIT :start, :number' : '')
 		);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
@@ -217,16 +206,19 @@ class UserModel {
 	}
 	
 	/**
-	 * Retrieves informations about a specified user
+	 * Retrieves informations about for specific user.
 	 * 
-	 * @param int $userid Id of the user wanted
+	 * @param int $userid ID of the user
 	 * @return array Information about the user
 	 */
 	public function getUser($userid) {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT users.id, nickname, password, email, firstname, lastname, country, groupe, users_groups.name, users.access AS access, valid
+				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, users.access AS access, valid, 
+					DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
+					DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity,
+					ip, name AS groupe_name
 				FROM users
 				LEFT JOIN users_groups
 				ON groupe = users_groups.id
@@ -239,7 +231,7 @@ class UserModel {
 	}
 	
 	/**
-	 * Finds a user in the database matching with $nickname and $password
+	 * Finds a user in the database matching with $nickname and $password.
 	 * 
 	 * @param string $nickname
 	 * @param string $password
@@ -247,7 +239,7 @@ class UserModel {
 	 */
 	public function matchUser($nickname, $password) {
 		$prep = $this->db->prepare('
-			SELECT id, nickname, password, email, firstname, lastname, country, groupe, access
+			SELECT id, nickname, password, email, firstname, lastname, country, lang, groupe, access
 			FROM users
 			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
 		');
@@ -258,15 +250,15 @@ class UserModel {
 	}
 	
 	/**
-	 * Creates a user in the database
+	 * Creates a user in the database.
 	 * 
 	 * @param array $data
-	 * @return boolean Request success
+	 * @return mixed ID of the user just created or false on failure
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, groupe, valid, ip)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :groupe, :valid, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, lang, groupe, valid, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :lang, :groupe, :valid, :ip)
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);
@@ -279,20 +271,27 @@ class UserModel {
 		$prep->bindParam(':lastname', $lastname);
 		$country = isset($data['country']) ? $data['country'] : '';
 		$prep->bindParam(':country', $country);
+		$lang = isset($data['lang']) ? $data['lang'] : '';
+		$prep->bindParam(':lang', $lang);
 		$groupe = isset($data['groupe']) ? $data['groupe'] : '';
 		$prep->bindParam(':groupe', $groupe);
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		return $prep->execute();
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
-	 * Updates a user in the database
+	 * Updates a user in the database.
 	 * 
-	 * @param id $userid  Id of the user
-	 * @param array $data Informations to update
-	 * @return boolean Request success
+	 * @param int   $userid ID of the user
+	 * @param array $data   New data to assign
+	 * @return bool Request status
 	 */
 	public function updateUser($userid, array $data) {
 		if (empty($data)) {
@@ -312,10 +311,10 @@ class UserModel {
 	}
 	
 	/**
-	 * Updates the last_activity timestamp and the ip of a user in the database
+	 * Updates the last_activity timestamp and the ip of a user in the database.
 	 * 
-	 * @param id $userid  Id of the user
-	 * @return boolean Request success
+	 * @param int $userid ID of the user
+	 * @return bool Request status
 	 */
 	public function updateLastActivity($userid) {
 		$prep = $this->db->prepare('
@@ -329,7 +328,7 @@ class UserModel {
 	}
 	
 	/**
-	 * Find a user with its confirm code
+	 * Find a user with its confirm code.
 	 * 
 	 * @param string $confirm The confirm code of the user
 	 * @return array User data (array() if not found)
@@ -346,9 +345,9 @@ class UserModel {
 	}
 	
 	/**
-	 * Find a user with its email
+	 * Find a user with its email.
 	 * 
-	 * @param string $email Email of the user desired
+	 * @param string $email Email of the user
 	 * @return array User data (array() if not found)
 	 */
 	public function findUserWithEmail($email) {
@@ -363,7 +362,7 @@ class UserModel {
 	}
 	
 	/**
-	 * Find a user with its email and confirm code
+	 * Find a user with its email and confirm code.
 	 * 
 	 * @param string $email    Email of the user desired
 	 * @param string $confirm  Confirm code
@@ -382,7 +381,7 @@ class UserModel {
 	}
 	
 	/**
-	 * Send an email in html for user app purpose
+	 * Send an email in html for user app purpose.
 	 * 
 	 * @param string $to
 	 * @param string $subject
@@ -402,7 +401,7 @@ class UserModel {
 	}
 	
 	/**
-	 * Retrieves the User app configuration stored in the users_config table
+	 * Retrieves the User app's configuration stored in the users_config table.
 	 * 
 	 * @return array
 	 */

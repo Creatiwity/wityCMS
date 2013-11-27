@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="fr">
+	<!-- Actions -->
+	<item id="mail_history">Boîte de réception</item>
+	<item id="mail_reply">Répondre</item>
+	<item id="new_mail">Nouveau message</item>
+	<item id="action_config">Configuration</item>
+
+	<!-- Mail history -->
+	<item id="emails_total">%s emails</item>
+	<item id="from_thead">De</item>
+	<item id="subject_thead">Objet</item>
+	<item id="date_thead">Date</item>
+	<item id="no_mail_found">Aucun email trouvé.</item>
+
+	<!-- Mail detail -->
+	<item id="missing_email_id">L'identifiatn de l'email est manquant.</item>
+	<item id="not_found_email_id">Impossible de trouver cet email.</item>
+
+	<item id="from">De :</item>
+	<item id="close">Fermer</item>
+	
+	<!-- Configuration -->
+	<item id="config_site_from_name">Nom de l'expéditeur</item>
+	<item id="config_site_from_email">Email de l'expéditeur</item>
+	<item id="contact_config_updated">La configuration a été mise à jour.</item>
+</lang>

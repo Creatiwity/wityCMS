@@ -8,7 +8,7 @@
 	<item id="categories_management">Gestion des catégories</item>
 	<item id="category_edit">Édition d'une catégorie</item>
 	<item id="category_delete">Suppression d'une catégorie</item>
-	
+
 	<!-- News listing -->
 	<item id="actions">Actions</item>
 	<item id="title">Titre</item>
@@ -19,42 +19,43 @@
 	<item id="number_of_views">%s vues</item>
 	<item id="no_article_in_database">Aucune news trouvée dans la base de données.</item>
 	<item id="article_delete_confirmation">Suppresion de l'article "%s" ?</item>
-	
+
 	<!-- News management -->
 	<item id="title_of_article">Titre de l'article</item>
 	<item id="article_content">Contenu de la news </item>
 	<item id="metadata">Metadonnées</item>
+	<item id="meta_title">Titre de la page</item>
 	<item id="keywords">Mots clés</item>
-	<item id="article_created_on"><strong>Article créé</strong> le %s</item>
-	<item id="article_modified_on"><strong>Dernière édition</strong> le %s</item>
+	<item id="article_created_on">&lt;strong&gt;Article créé&lt;/strong&gt; le %s</item>
+	<item id="article_modified_on">&lt;strong&gt;Dernière édition&lt;/strong&gt; le %s</item>
 	<item id="category_of_article">Catégories de l'article</item>
 	<item id="article_not_found">L'article n°%s que vous tentez de manipuler n'existe pas.</item>
 	<item id="article_no_title">Il manque un titre à l'article.</item>
 	<item id="article_no_author">Il manque un auteur à l'article.</item>
 	<item id="article_no_permalink">Aucun permalien (lien vers l'article) n'a été défini.</item>
 	<item id="article_image_error">Erreur lors de l'upload de l'image à la une : %s</item>
-	<item id="article_added">L'article <strong>%s</strong> a été créé avec succès.</item>
+	<item id="article_added">L'article &lt;strong&gt;%s&lt;/strong&gt; a été créé avec succès.</item>
 	<item id="article_not_added">Une erreur inconnue s'est produite lors de l'ajout de l'article dans la base de données.</item>
-	<item id="article_edited">L'article <strong>%s</strong> a été modifié avec succès.</item>
+	<item id="article_edited">L'article &lt;strong&gt;%s&lt;/strong&gt; a été modifié avec succès.</item>
 	<item id="article_not_edited">Une erreur inconnue s'est produite lors de l'édition de l'article dans la base de données.</item>
-	<item id="article_deleted">L'article "<strong>%s</strong>" a été supprimé avec succès.</item>
-	
+	<item id="article_deleted">L'article "&lt;strong&gt;%s&lt;/strong&gt;" a été supprimé avec succès.</item>
+
 	<!-- Categories management -->
 	<item id="Name">Nom</item>
 	<item id="Shortname">Nom raccourci</item>
 	<item id="None">Aucune</item>
 	<item id="no_category_in_database">Aucune catégorie trouvée dans la base de données.</item>
 	<item id="category_no_name">Veuillez spécifier un nom pour la nouvelle catégorie.</item>
-	<item id="cat_added">La catégorie <strong>%s</strong> a été ajoutée avec succès.</item>
+	<item id="cat_added">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été ajoutée avec succès.</item>
 	<item id="cat_not_added">Une erreur inconnue s'est produite lors de l'ajout de la catégorie dans la base de données.</item>
-	<item id="cat_edited">La catégorie <strong>%s</strong> a été éditée avec succès.</item>
+	<item id="cat_edited">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été éditée avec succès.</item>
 	<item id="cat_not_edited">Une erreur inconnue s'est produite lors de l'édition de la catégorie dans la base de données.</item>
 	<item id="category_not_found">La catégorie que vous tentez de supprimer n'existe pas.</item>
 	<item id="category_deleted">La catégorie a été supprimée avec succès.</item>
-	
+
 	<item id="category_delete_confirmation">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
 	<item id="category_add_button">Ajouter une catégorie</item>
-	
+
 	<item id="cancel">Annuler</item>
 	<item id="delete">Supprimer</item>
 	<item id="submit">Sauver</item>

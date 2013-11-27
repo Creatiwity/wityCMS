@@ -1,17 +1,19 @@
 <?php
 /**
- * User Application - Admin Model - /apps/user/admin/model.php
+ * User Application - Admin Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
-// Include Front Model for inheritance
+/**
+ * Include Front Model for inheritance
+ */
 include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 
 /**
- * UserAdminModel is the admin Model of the User Application.
+ * UserAdminModel is the Admin Model of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-15-02-2013
  */
@@ -21,11 +23,12 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Creates a user in the database
-	 * This is a admin version able to change users.access
+	 * Creates a user in the database.
+	 * 
+	 * This is an admin version able to change the field `users.access`.
 	 * 
 	 * @param array $data
-	 * @return boolean Request success
+	 * @return bool Request status
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
@@ -53,9 +56,10 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Deletes a user
+	 * Deletes a user.
 	 * 
 	 * @param int $userid
+	 * @return bool Request status
 	 */
 	public function deleteUser($userid) {
 		static $prep;
@@ -69,25 +73,10 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Retrieves the list of user groups
-	 * 
-	 * @param string $order Name of the ordering column
-	 * @param string $asc   Ascendent or descendent?
-	 */
-	public function getGroupsList($order = 'name', $asc = true) {
-		$prep = $this->db->prepare('
-			SELECT id, name, access
-			FROM users_groups
-			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
-		);
-		$prep->execute();
-		return $prep->fetchAll(PDO::FETCH_ASSOC);
-	}
-	
-	/**
-	 * Retrieves details of a group
+	 * Retrieves details of a group.
 	 * 
 	 * @param int $groupid
+	 * @return array Data of the group
 	 */
 	public function getGroup($groupid) {
 		$prep = $this->db->prepare('
@@ -101,10 +90,28 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Retrieves the list of user groups with users_count row
+	 * Retrieves the list of user groups.
+	 * 
+	 * @param string $order Name of the ordering column
+	 * @param string $asc   Ascendant or descendent?
+	 * @return array Set of groups
+	 */
+	public function getGroupsList($order = 'name', $asc = true) {
+		$prep = $this->db->prepare('
+			SELECT id, name, access
+			FROM users_groups
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
+		);
+		$prep->execute();
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Retrieves the list of user groups with users_count row.
 	 * 
 	 * @param string $order Name of the ordering column
 	 * @param string $asc   Ascendent or descendent?
+	 * @return array Set of groups
 	 */
 	public function getGroupsListWithCount($order = 'name', $asc = true) {
 		$prep = $this->db->prepare('
@@ -128,9 +135,10 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Creates a new group in the database
+	 * Creates a new group in the database.
 	 * 
 	 * @param array $data array(nickname, access)
+	 * @return bool Request status
 	 */
 	public function createGroup($data) {
 		$prep = $this->db->prepare('
@@ -143,10 +151,11 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Updates a group in the database
+	 * Updates a group in the database.
 	 * 
-	 * @param int    $groupid  Group id
-	 * @param array  $data     Columns to update
+	 * @param int   $groupid Group ID
+	 * @param array $data    Columns to update
+	 * @return bool Request status
 	 */
 	public function updateGroup($groupid, $data) {
 		$prep = $this->db->prepare('
@@ -161,9 +170,10 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Deletes a group in the database
+	 * Deletes a group in the database.
 	 * 
-	 * @param int    $groupid  Group id
+	 * @param int $groupid Group ID
+	 * @return bool Request status
 	 */
 	public function deleteGroup($groupid) {
 		$prep = $this->db->prepare('
@@ -174,9 +184,10 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Removes all users who belonged to an obsolete group
+	 * Removes all users who belonged to an obsolete group.
 	 * 
-	 * @param int    $groupid  Group id
+	 * @param int $groupid Group ID
+	 * @return bool Request status
 	 */
 	public function resetUsersInGroup($groupid) {
 		$prep = $this->db->prepare('
@@ -189,10 +200,11 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Updates an array of users matching filters
+	 * Updates several users matching filters.
 	 * 
 	 * @param array $data     Columns to update in users table
-	 * @param array $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
+	 * @return bool Request status
 	 */
 	public function updateUsers(array $data, array $filters) {
 		if (empty($data)) {
@@ -231,7 +243,7 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Transforms access data obtained from the admin form into an access string
+	 * Transforms access data obtained from the admin form into an access string.
 	 * 
 	 * @param string $type    Type of the user (none|all|custom)
 	 * @param array  $access  List of app and perms whose user have access
@@ -255,9 +267,9 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Counts the users in the database having access different from their group's access
+	 * Counts the users in the database having different access from their group's access.
 	 * 
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array $filters List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function countUsersWithCustomAccess(array $filters = array()) {
@@ -293,9 +305,9 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Retrieves a list of users having access different from their group's access
+	 * Retrieves a list of users having different access from their group's access.
 	 * 
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array  $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function getUsersWithCustomAccess(array $filters = array()) {
@@ -331,10 +343,11 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Defines a config in users_config table
+	 * Defines a config in users_config table.
 	 * 
 	 * @param string $name
 	 * @param string $value
+	 * @return Request status
 	 */
 	public function setConfig($name, $value) {
 		static $prep;

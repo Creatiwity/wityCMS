@@ -1,0 +1,240 @@
+/**
+ * Grafx v1 theme for WityCMS
+ * 29/09/2013
+ */
+
+html {
+	font-size: 1em;
+}
+
+body {
+	font-family: Arial, Helvetica, FreeSans, sans-serif;
+	font-size: 0.8em;
+	color: #a0a0a0;
+	background: url('../img/bg.png') repeat-x;
+}
+
+.clear {
+	clear: both;
+}
+
+a {
+	color: #a0a0a0;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #91cadf;
+}
+
+h1 {
+	font-size: 1.1em;
+	background: url('../img/button-plus-green.png') no-repeat left center;
+	margin: 0;
+	padding: 10px 0 8px 28px;
+}
+
+h2, h3, h4, h5, h6 {
+	color: #91cadf;
+	font-size: 1.2em;
+	margin: 0 0 1em 0;
+	padding: 0;
+}
+
+ul.listing {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul.listing li {
+	background: #f5f5f5;
+	margin-bottom: 5px;
+	padding: 6px 10px;
+	border-radius: 4px;
+}
+
+ul.listing li:hover {
+	background: #f0f0f0;
+}
+
+/**
+ * Structure
+ */
+#column-content, #column-blocks {
+	padding: 0 15px;
+}
+
+.block {
+	background: white;
+	padding: 15px 30px;
+	margin-bottom: 15px;
+}
+
+/**
+ * Header
+ */
+
+header {
+	color: white;
+	font-weight: bold;
+	margin-top: 30px;
+}
+
+header img {
+	float: left;
+}
+
+header .inner {
+	display: inline-block;
+	text-align: right;
+	padding-top: 40px;
+}
+
+header p.site-name {
+	font-size: 3em;
+	letter-spacing: 4px;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+header p.slogan {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: -10px;
+	z-index: -5;
+}
+
+/**
+ * Navigation
+ */
+
+nav {
+	background: white; 
+}
+
+nav ul li a {
+	color: #a0a0a0;
+}
+
+.nav li a:hover {
+	color: #91cadf;
+	background: #f9fdff;
+}
+
+nav ul li a span {
+	font-size: 1.4em;
+}
+
+nav ul li em {
+	font-style: normal;
+}
+
+nav .navbar-toggle {
+	border-color: #dddddd;
+}
+
+nav .icon-bar {
+	background-color: #dddddd;
+}
+
+nav .navbar-form {
+	border: 1px solid #cfcfcf;
+	margin-top: 15px;
+	padding: 0;
+}
+
+nav .navbar-form input {
+	border: 0;
+	margin: 0;
+	padding: 0 0 0 10px;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+nav .navbar-form button {
+	width: 30px;
+	height: 32px;
+	overflow: hidden;
+	text-align: center;
+	border: 0;
+	border-radius: 0;
+	margin: 0 1px 0 0;
+	padding: 0;
+	background: #f5f5f5;
+	color: white;
+}
+
+nav .navbar-form button:hover {
+	color: white;
+	background: #f0f0f0;
+}
+
+/**
+ * News
+ */
+
+.app-news .item {
+	border-bottom: 1px solid #91cadf;
+	margin-bottom: 1em;
+}
+
+.app-news .item-meta {
+	font-size: 0.9em;
+	font-style: italic;
+	margin-bottom: 1em;
+	padding-left: 28px;
+	position: relative;
+	top: -10px;
+}
+
+.app-news .news-read-more {
+	text-align: right;
+}
+
+.app-news .news-read-more a {
+	background: url('../img/button-read-more.png') no-repeat left center;
+	padding-left: 20px;
+}
+
+/**
+ * Block user
+ */
+
+.block-user .buttons {
+	padding: 20px 0 10px 0;
+}
+
+.block-user .button-sign-in {
+	color: #91cadf;
+	text-transform: uppercase;
+	font-size: 1.2em;
+	line-height: 48px;
+	margin-right: 30px;
+	text-decoration: none;
+}
+
+.block-user .button-login {
+	color: #b9d794;
+	text-transform: uppercase;
+	font-size: 1.2em;
+	text-decoration: none;
+}
+
+#grafx-user .panel {
+	margin-bottom: 0px;
+	background-color: none;
+	border: 0px solid transparent;
+	border-radius: 0px;
+	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,0);
+	box-shadow: 0 0px 0px rgba(0,0,0,0);
+}
+
+.block-user h2 {
+	display: none;
+}
+

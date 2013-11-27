@@ -1,17 +1,17 @@
 <?php
 /**
- * News Application - Front Model - /apps/news/front/model.php
+ * News Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsModel is the Front Model of the News Application
  *
- * @package Apps
+ * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-19-04-2013
+ * @version 0.4.0-19-04-2013
  */
 class NewsModel {
 	/**
@@ -29,7 +29,9 @@ class NewsModel {
 			'news_title' => 'title',
 			'news_author' => 'author',
 			'news_content' => 'content',
+			'news_meta_title' => 'meta_title',
 			'news_keywords' => 'keywords',
+			'news_description' => 'description',
 			'news_date' => 'creation_date',
 			'news_modified' => 'modified_date',
 			'news_editor_id' => 'edited_by',
@@ -44,7 +46,9 @@ class NewsModel {
 			'title' => 'news_title',
 			'author' => 'news_author',
 			'content' => 'news_content',
+			'meta_title' => 'news_meta_title',
 			'keywords' => 'news_keywords',
+			'description' => 'news_description',
 			'creation_date' => 'news_date',
 			'modified_date' => 'news_modified',
 			'edited_by' => 'news_editor_id',
@@ -174,7 +178,7 @@ class NewsModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), url, title, author, content, 
+			SELECT DISTINCT(id), url, title, author, content, meta_title, keywords, description, 
 				DATE_FORMAT(creation_date, "%d/%m/%Y %H:%i") AS creation_date, 
 				DATE_FORMAT(modified_date, "%d/%m/%Y %H:%i") AS modified_date, 
 				edited_by, views, published, image
@@ -207,7 +211,7 @@ class NewsModel {
 	 */
 	public function getNews($news_id) {
 		$prep = $this->db->prepare('
-			SELECT id, url, title, author, content, keywords, 
+			SELECT id, url, title, author, content, meta_title, keywords, description, 
 				DATE_FORMAT(creation_date, "%d/%m/%Y %H:%i") AS creation_date, 
 				DATE_FORMAT(modified_date, "%d/%m/%Y %H:%i") AS modified_date, 
 				edited_by, views, published, image

@@ -1,0 +1,20 @@
+.contact-mail-history > table > tbody > tr {
+	cursor: pointer;
+}
+
+.contact-mail-history table table.email-abstract {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.contact-mail-history table table.email-abstract > tbody > tr > td {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	border-top: 0;
+	padding: 0;
+}
+
+td.date-cell {
+	white-space: nowrap;
+}

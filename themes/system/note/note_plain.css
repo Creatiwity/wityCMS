@@ -18,3 +18,14 @@ body {
 	background: white;
 	border: 1px solid #d7d7d7;
 }
+
+#errors {
+	max-height: 0;
+	-webkit-transition: all 1.5s ease 0s;
+	transition: all 1.5s ease 0s;
+	overflow: auto;
+}
+
+#errors:target {
+	max-height: 500px;
+}

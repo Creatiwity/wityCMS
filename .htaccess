@@ -2,19 +2,21 @@
 SetEnv PHP_VER 5
 SetEnv REGISTER_GLOBALS 0
 
-# Activation du module rewriting
-RewriteEngine on
-
 # Utilisation d'utf8 par défaut
 AddDefaultCharset UTF-8
 
 # Rules
-#RewriteCond %{HTTP_HOST} ^site\.com$
-#RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^[a-z]+(.*)?$ index.php [L]
+<IfModule mod_rewrite.c>
+	# Activation du module rewriting
+	RewriteEngine on
+	
+	#RewriteCond %{HTTP_HOST} ^site\.com$
+	#RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
+	
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule . index.php [L]
+</IfModule>
 
 # Erreurs
 #ErrorDocument 500 /Error/500 # Internal Server Error

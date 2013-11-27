@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="en">
+	<!-- Actions -->
+	<item id="mail_history">Inbox</item>
+	<item id="mail_reply">Reply</item>
+	<item id="new_mail">Compose</item>
+	<item id="action_config">Configuration</item>
+
+	<!-- Mail history -->
+	<item id="emails_total">%s emails</item>
+	<item id="from_thead">From</item>
+	<item id="subject_thead">Subject</item>
+	<item id="date_thead">Date</item>
+	<item id="no_mail_found">No email found.</item>
+
+	<!-- Mail detail -->
+	<item id="missing_email_id">Email id is missing.</item>
+	<item id="not_found_email_id">Unable to find this email.</item>
+
+	<item id="from">From:</item>
+	<item id="close">Close</item>
+	
+	<!-- Configuration -->
+	<item id="config_site_from_name">Sender's name</item>
+	<item id="config_site_from_email">Sender's email</item>
+	<item id="contact_config_updated">The configuration was updated.</item>
+</lang>

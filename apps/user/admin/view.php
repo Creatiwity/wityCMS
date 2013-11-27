@@ -1,20 +1,18 @@
 <?php
 /**
- * User Application - Admin View - /apps/user/admin/view.php
+ * User Application - Admin View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserAdminView is the Admin View of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-26-04-2013
  */
 class UserAdminView extends WView {
-	private $model;
-	
 	public function __construct() {
 		parent::__construct();
 		
@@ -23,7 +21,9 @@ class UserAdminView extends WView {
 	}
 	
 	/**
-	 * Setting up the users listing view
+	 * Setting up the users listing view.
+	 * 
+	 * @param array $model
 	 */
 	public function listing($model) {
 		// SortingHelper Helper
@@ -54,12 +54,19 @@ class UserAdminView extends WView {
 		$this->assign('subURL', $subURL);
 		$this->assign($model['filters']);
 		
-		$pagination = WHelper::load('pagination', array($model['stats']['request'], $model['users_per_page'], $model['current_page'], '/admin/user/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL));
+		$pagination = WHelper::load('pagination', array(
+			$model['stats']['request'], 
+			$model['users_per_page'], 
+			$model['current_page'], 
+			'/admin/user/listing/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL)
+		);
 		$this->assign('pagination', $pagination->getHTML());
 	}
 	
 	/**
-	 * Setup add form
+	 * Setting up the add/edit form
+	 * 
+	 * @param array $model
 	 */
 	public function user_form($model) {
 		if (empty($model['user_id'])) {
@@ -77,8 +84,7 @@ class UserAdminView extends WView {
 		}
 		
 		// Get admin apps
-		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminApps());
+		$this->assign('admin_apps', $model['admin_apps']);
 		
 		// Setup the form
 		$this->assign('js', '/apps/user/admin/js/access_form.js');
@@ -92,7 +98,9 @@ class UserAdminView extends WView {
 			'firstname' => '',
 			'lastname' => '',
 			'groupe' => 0,
-			'access' => ''
+			'access' => '',
+			'date' => '',
+			'last_activity' => ''
 		);
 		$data = !empty($model['user_data']) ? $model['user_data'] : $model['post_data'];
 		foreach ($default_model as $item => $default) {
@@ -102,25 +110,38 @@ class UserAdminView extends WView {
 		$this->setTemplate('user_form');
 	}
 	
+	/**
+	 * Handles the add view: triggers the user_form view with add setup.
+	 * 
+	 * @param array $model
+	 */
 	public function add($model) {
 		$this->user_form($model);
 	}
 	
+	/**
+	 * Handles the edit view: triggers the user_form view with edit setup.
+	 * 
+	 * @param array $model
+	 */
 	public function edit($model) {
 		$this->user_form($model);
 	}
 	
 	/**
-	 * Checks if the user really wanted to delete an account
+	 * Prepares a form to check if the user really wants to delete an account.
+	 * 
+	 * @param array $model
 	 */
 	public function del($model) {
-		$this->assign('nickname', $model['user_data']['nickname']);
-		$this->assign('confirm_delete_url', "/admin/user/del/".$model['user_id']);
-		$this->setTheme('_blank');
+		$this->assign('nickname', $model['nickname']);
+		$this->assign('confirm_delete_url', "/admin/user/del/".$model['id']);
 	}
 	
 	/**
-	 * Displays a groups listing
+	 * Prepares the listing of all the groups in the database.
+	 * 
+	 * @param array $model
 	 */
 	public function groups($model) {
 		if (!empty($model['group_diff'])) {
@@ -143,8 +164,11 @@ class UserAdminView extends WView {
 	}
 	
 	/**
-	 * Displays the group difference form
-	 * Allows to customize user access when modifying group access
+	 * Prepares the group difference form.
+	 * 
+	 * Allows to customize user access when modifying group access.
+	 * 
+	 * @param array $model
 	 */
 	public function group_diff($model) {
 		$group_id = $model['group_id'];
@@ -152,9 +176,7 @@ class UserAdminView extends WView {
 		$this->assign('js', '/apps/user/admin/js/access_form.js');
 		$this->assign('js', '/apps/user/admin/js/group_diff.js');
 		
-		// Get admin apps
-		$adminModel = new AdminController();
-		$this->assign('admin_apps', $adminModel->getAdminApps());
+		$this->assign('admin_apps', $model['admin_apps']);
 		$this->assign('group', $model['group']);
 		$this->assign('new_name', $model['group_name']);
 		$this->assign('new_access', $model['group_access']);
@@ -181,16 +203,19 @@ class UserAdminView extends WView {
 	}
 	
 	/**
-	 * Checks if the user really wanted to delete a group
+	 * Prepares a form to check if the user really wants to delete a group.
+	 * 
+	 * @param array $model
 	 */
 	public function group_del($model) {
 		$this->assign('group_name', $model['group_data']['name']);
 		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['group_id']);
-		$this->setTheme('_blank');
 	}
 	
 	/**
-	 * Prepares the config view
+	 * Prepares the config view.
+	 * 
+	 * @param array $config
 	 */
 	public function config($config) {
 		$this->assign('config', $config);

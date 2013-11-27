@@ -3,7 +3,7 @@
  * WSession.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WSession manages all session variables and anti flood system.
@@ -133,6 +133,9 @@ class WSession {
 		$_SESSION['nickname'] = $data['nickname'];
 		$_SESSION['email']    = $data['email'];
 		$_SESSION['groupe']   = $data['groupe'];
+		$_SESSION['lang']     = $data['lang'];
+		$_SESSION['firstname']	= $data['firstname'];
+		$_SESSION['lastname']	= $data['lastname'];
 		
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {
@@ -216,7 +219,7 @@ class WSession {
 	
 	/**
 	 * Generates a user-and-computer specific hash that will be stored in a cookie
-
+	 *
 	 * @param string $nick nickname
 	 * @param string $pass password
 	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
@@ -255,9 +258,9 @@ class WSession {
 			}
 			// Flood time limit checking
 			else if (empty($_SESSION['access'][0]) && !empty($_SESSION['flood_time']) && $_SESSION['flood_time'] > time()) {
-				// Liste des exceptions échappant à cette vérification
 				$exceptions = array('user');
-				if (!in_array(WRoute::getApp(), $exceptions)) {
+				$route = WRoute::route();
+				if (!in_array($route['app'], $exceptions)) { // Applications in $exceptions will bypass the flood checking
 					WNote::info('Modération', 'Veuillez respecter le délai de '.self::FLOOD_TIME.' secondes entre deux postes.', 'assign');
 					$flood = false;
 				}

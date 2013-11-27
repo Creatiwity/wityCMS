@@ -1,56 +1,74 @@
-<div id="register-form" class="container">
+<div class="wity-app wity-app-user wity-action-register-form">
 	<h2>{lang register_form_title}</h2>
 	<form action="/user/register/" method="post">
-		<div>
-			<label for="nickname">{lang nickname}:</label>
-			<input id="nickname" type="text" name="nickname" placeholder="{lang nickname}" value="{$nickname}" /> <span class="mandatory">*</span>
-			<br />
-			<label for="password">{lang password}:</label>
-			<input id="password" type="password" name="password" placeholder="{lang password}" /> <span class="mandatory">*</span>
-			<br />
-			<label for="password_conf">{lang password_conf}:</label>
-			<input id="password_conf" type="password" name="password_conf" placeholder="{lang password_conf}" /> <span class="mandatory">*</span>
-			<br />
-			<label for="email">{lang email}:</label>
-			<input id="email" type="email" name="email" placeholder="{lang email}" value="{$email}" /> <span class="mandatory">*</span>
-			<br />
-			<label for="firstname">{lang firstname}:</label>
-			<input id="firstname" type="text" name="firstname" placeholder="{lang firstname}" value="{$firstname}" />
-			<br />
-			<label for="lastname">{lang lastname}:</label>
-			<input id="lastname" type="text" name="lastname" placeholder="{lang lastname}" value="{$lastname}" />
-			<br />
-			<label for="country">{lang country}:</label>
-			<span id="flag-container"></span>
-			<select id="country" name="country" onchange="changeCountry(this.options[this.selectedIndex].value);">
-				<option value="0">N/A</option>
-				<option>France</option>
-				<option>United-Kingdom</option>
-{for $cntry in glob('themes/system/images/flags/*')}
-{set $cntry = substr({$cntry|basename}, 0, -4)}
-<option{if {$cntry} == {$country}} selected="selected"{/if}>{$cntry}</option> {/for}
-			</select>
-			<p class="text-center">
-				<input type="submit" value="{lang register}" />
-			</p>
-			<p><em><span class="mandatory">*</span> {lang mandatory_fields}</em></p>
+		<div class="form-group">
+			<label class="sr-only" for="nickname">{lang nickname}</label>
+			<input id="nickname" type="text" class="form-control" name="nickname" placeholder="{lang nickname}*" value="{$nickname}" />
+		</div>
+
+		<div class="form-group">
+			<label class="sr-only" for="email">{lang email}</label>
+			<input id="email" type="email" class="form-control" name="email" placeholder="{lang email}*" value="{$email}" />
+		</div>
+
+		<div class="form-group">
+			<label class="sr-only" for="password">{lang password}</label>
+			<input id="password" type="password" name="password" class="form-control signup-main signup-password" placeholder="{lang password}*" />
+			
+			<label class="sr-only" for="password_conf">{lang password_conf}</label>
+			<input id="password_conf" type="password" name="password_conf" class="form-control signup-main signup-confirm" placeholder="{lang password_conf}*" />
+		</div>
+		<hr/>
+		<div class="form-group">
+			<label class="sr-only" for="firstname">{lang firstname}</label>
+			<input id="firstname" type="text" class="form-control" name="firstname" placeholder="{lang firstname}" value="{$firstname}" />
+		</div>
+
+		<div class="form-group">
+			<label class="sr-only" for="lastname">{lang lastname}</label>
+			<input id="lastname" type="text" class="form-control" name="lastname" placeholder="{lang lastname}" value="{$lastname}" />
+		</div>
+
+		<div class="form-group">
+			<label class="sr-only" for="country">{lang country}</label>
+
+			<div class="input-group">
+				<span id="flag-container" class="input-group-addon">?</span>
+				<select id="country" class="form-control" name="country" onchange="changeCountry(this.options[this.selectedIndex].value);">
+					<option value="0">{lang country}</option>
+					<option>France</option>
+					<option>United-Kingdom</option>
+	{for $cntry in glob('themes/system/images/flags/*')}
+	{set $cntry = substr({$cntry|basename}, 0, -4)}
+	<option{if {$cntry} == {$country}} selected="selected"{/if}>{$cntry}</option> {/for}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<input type="submit" class="btn btn-primary btn-block" value="{lang register}" />
 		</div>
 	</form>
 	<script type="text/javascript">
 		var base = '{$base}';
 		function changeCountry(country) {
 			if (country != 0) {
-				var src = base+'/themes/system/images/flags/'+country+'.gif';
+				var container, src = base+'/themes/system/images/flags/'+country+'.gif';
 				if (document.getElementById('flag') != null) {
 					document.getElementById('flag').setAttribute('src', src);
 				} else {
 					var img = document.createElement('img');
 					img.setAttribute('id', 'flag');
 					img.setAttribute('src', src);
-					document.getElementById('flag-container').appendChild(img);
+					container = document.getElementById('flag-container');
+					if (container.firstChild) {
+						container.removeChild(container.firstChild);
+					}
+					container.appendChild(img);
 				}
 			} else {
 				document.getElementById('flag-container').removeChild(document.getElementById('flag'));
+				document.getElementById('flag-container').innerHTML = '?';
 			}
 		}
 	</script>

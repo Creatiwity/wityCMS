@@ -3,7 +3,7 @@
  * WHelper.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WHelper automatically instantiates for you small libraries.
@@ -65,7 +65,7 @@ class WHelper {
 		
 		// Return helper instance
 		if ($params_given > 0) {
-			$reflection_class = new ReflectionClass($helper['class']);
+			$reflection_class = new ReflectionClass(self::$helpers_loaded[$helper_name]['class']);
 			return $reflection_class->newInstanceArgs($params);
 		} else {
 			return new self::$helpers_loaded[$helper_name]['class']();

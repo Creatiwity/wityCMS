@@ -3,30 +3,25 @@
  * WView.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WView handles application's Views.
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-17-01-2013
+ * @version 0.4.0-12-10-2013
  */
 class WView {
 	/**
 	 * @var array Context of the application describing app's name, app's directory and app's main class
 	 */
-	public $context;
+	private $context = array();
 	
 	/**
 	 * @var WTemplate Instance of WTemplate
 	 */
 	public $tpl;
-	
-	/**
-	 * @var array List of headers for this view
-	 */
-	private $headers = array();
 	
 	/**
 	 * @var string Theme name for this view
@@ -57,6 +52,11 @@ class WView {
 	private $rendered_string;
 	
 	/**
+	 * @var Counts the number of times a view was rendered for each signature.
+	 */
+	private $render_counts = array();
+	
+	/**
 	 * Setup template
 	 */
 	public function __construct() {
@@ -71,6 +71,30 @@ class WView {
 	public function setContext($context) {
 		if (empty($this->context)) {
 			$this->context = $context;
+		}
+	}
+	
+	/**
+	 * Returns the application context
+	 * 
+	 * @return array Application's context
+	 */
+	public function getContext($field = '') {
+		if (!empty($field)) {
+			return (isset($this->context[$field])) ? $this->context[$field] : '';
+		}
+		
+		return $this->context;
+	}
+	
+	/**
+	 * Updates the signature of the view.
+	 * 
+	 * @param string $value Signature of the view to display in forms
+	 */
+	public function setSignature($value) {
+		if (empty($this->context['signature'])) {
+			$this->context['signature'] = $value;
 		}
 	}
 	
@@ -208,26 +232,6 @@ class WView {
 	}
 	
 	/**
-	 * Set a new header for the response
-	 * Will be assigned in WResponse::render()
-	 * 
-	 * @param string $name Header's name
-	 * @param string $value
-	 */
-	public function setHeader($name, $value) {
-		$this->headers[strtolower($name)] = $value;
-	}
-	
-	/**
-	 * Get the headers for this view
-	 * 
-	 * @return array
-	 */
-	public function getHeaders() {
-		return $this->headers;
-	}
-	
-	/**
 	 * Define the theme for this view
 	 * 
 	 * @param string $theme
@@ -248,15 +252,27 @@ class WView {
 	/**
 	 * Renders the view
 	 * 
-	 * @param  string $action Name of the action in the view to display
 	 * @return string The rendered string of the view
 	 */
 	public function render() {
+		$signature = $this->getContext('signature');
+		
 		// Check template file
 		if (empty($this->templateFile)) {
 			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
 			// A View can now be empty
 			return '';
+		}
+		
+		// Prevent Views from self inclusion more than 5 times
+		if (!isset($this->render_counts[$signature])) {
+			$this->render_counts[$signature] = 1;
+		} else {
+			if ($this->render_counts[$signature] >= 5) {
+				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times. ')))->render();
+			}
+			
+			$this->render_counts[$signature]++;
 		}
 		
 		// Treat global vars
@@ -274,15 +290,37 @@ class WView {
 		// Assign View variables
 		$this->tpl->assign($this->vars);
 		
-		// Get template file and clean it for next render
-		$file = $this->getTemplate();
-		$this->templateFile = "";
-		
 		// Render the view
+		$file = $this->getTemplate();
 		$this->rendered_string = $this->tpl->parse($file);
+		
+		// Add the signature to the forms within the view
+		$this->rendered_string = preg_replace_callback(
+			'#<form([^>]*)>(<input type="hidden" name="form_signature")?#', 
+			function($matches) use($signature) {
+				// Add action in the form values
+				preg_match('#action="([^"]*)"#', $matches[1], $matches_args);
+				$action = '';
+				if (!empty($matches_args[1])) {
+					$action = '<input type="hidden" name="form_action" value="'.trim($matches_args[1], ' /').'" />';
+				}
+				
+				// Prevent from overriding sub-forms signatures
+				if (empty($matches[2])) {
+					return '<form'.$matches[1].'><input type="hidden" name="form_signature" value="'.$signature.'" />'.$action;
+				} else {
+					return $matches[0];
+				}
+			},
+			$this->rendered_string
+		);
 		
 		// Come back to previous context
 		$this->tpl->popContext();
+		
+		// Clean the view for the next render
+		$this->templateFile = '';
+		$this->context['signature'] = '';
 		
 		return $this->rendered_string;
 	}

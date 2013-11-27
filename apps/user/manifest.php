@@ -1,22 +1,19 @@
-<?php defined('IN_WITY') or die('Access denied'); ?>
+<?php defined('WITYCMS_VERSION') or die('Access denied'); ?>
 <?xml version="1.0" encoding="utf-8" ?>
 <app>
 	<!-- Application name -->
 	<name>User</name>
 	
-	<version>0.3</version>
+	<version>0.4.0</version>
 	
 	<!-- Last update date -->
-	<date>26-04-2013</date>
-	
-	<!-- Tiny icone to be displayed in the admin board -->
-	<icone></icone>
+	<date>22-10-2013</date>
 	
 	<!-- Permissions -->
 	<permission name="add" />
 	<permission name="edit" />
 	<permission name="delete" />
-	<permission name="groups" />
+	<permission name="group_manager" />
 	<permission name="config" />
 	
 	<!-- Front actions -->
@@ -28,14 +25,14 @@
 	
 	<!-- Admin actions -->
 	<admin>
-		<action desc="action_listing" default="default">listing</action>
-		<action desc="action_add" requires="add">add</action>
-		<action desc="action_edit" menu="false" requires="edit">edit</action>
-		<action desc="action_delete" menu="false" requires="delete">del</action>
-		<action desc="action_groups" requires="groups">Groups</action>
-		<action desc="action_group_del" menu="false" requires="groups,delete">group_del</action>
-		<action menu="false" requires="groups,edit">group_diff</action>
-		<action menu="false" requires="groups,edit">load_users_with_letter</action>
-		<action desc="action_config" requires="config">config</action>
+		<action default="default" desc="action_listing">listing</action>
+		<action requires="add" desc="action_add">add</action>
+		<action requires="edit" desc="action_edit" menu="false">edit</action>
+		<action requires="delete" desc="action_delete" menu="false">del</action>
+		<action requires="group_manager" desc="action_groups">Groups</action>
+		<action requires="group_manager,delete" desc="action_group_del" menu="false">group_del</action>
+		<action requires="group_manager,edit" menu="false">group_diff</action>
+		<action requires="group_manager,edit" menu="false">load_users_with_letter</action>
+		<action requires="config" desc="action_config">config</action>
 	</admin>
 </app>

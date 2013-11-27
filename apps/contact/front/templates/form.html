@@ -1,0 +1,47 @@
+<div class="wity-app app-contact">
+	<form enctype="multipart/form-data" method="post" action="/m/contact/" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="from-name" class="col-md-2 control-label">{lang from_name_label}*</label>
+			<div class="col-md-10">
+				<input type="text" maxlength="200" class="form-control" id="from-name" name="from_name" placeholder="{lang from_name_placeholder}" value="{$from_name}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="from-company" class="col-md-2 control-label">{lang from_company_label}</label>
+			<div class="col-md-10">
+				<input type="text" maxlength="200" class="form-control" id="from-company" name="from_company" placeholder="{lang from_company_placeholder}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="from-email" class="col-md-2 control-label">{lang from_email_label}*</label>
+			<div class="col-md-10">
+				<input type="email" maxlength="300" class="form-control" id="from-email" name="from_email" placeholder="{lang from_email_placeholder}" value="{$from_email}">
+			</div>
+		</div>
+
+		<hr/>
+
+		<div class="form-group">
+			<label for="email-subject" class="col-md-2 control-label">{lang email_subject_label}*</label>
+			<div class="col-md-10">
+				<input type="text" maxlength="500" class="form-control" id="email-subject" name="email_subject" placeholder="{lang email_subject_placeholder}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<!--label for="email-message" class="col-md-2 control-label">{lang email_message_label}*</label-->
+			<div class="col-md-offset-2 col-md-10">
+				<textarea rows="12" cols="100" class="form-control" id="email-message" name="email_message" placeholder="{lang email_message_placeholder}"></textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<button type="submit" class="btn btn-default" data-loading-text="{lang sending}" data-witycms-submit="ajax">{lang send_button}</button>
+			</div>
+		</div>
+	</form>
+</div>

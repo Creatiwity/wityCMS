@@ -3,7 +3,7 @@
  * WDatabase.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WDate manages dates using the user's custom timezone.
@@ -16,10 +16,10 @@ class WDate extends DateTime {
 	/**
 	 * This function handles user's custom timezone.
 	 * 
-	 * @param string If empty, use the current date. See DateTime class for full documentation.
+	 * @param string $date If empty, use the current date. See DateTime class for full documentation.
 	 */
 	public function __construct($date = '') {
-		// Finally build the date
+		// Build the date
 		parent::__construct($date, $this->getUserTimezone());
 	}
 	

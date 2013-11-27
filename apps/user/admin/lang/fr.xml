@@ -22,12 +22,12 @@
 	
 	<!-- General -->
 	<item id="search">Rechercher</item>
-	<item id="nickname">Pseudo </item>
-	<item id="password">Mot de passe </item>
-	<item id="email">Email </item>
-	<item id="firstname">Prénom </item>
-	<item id="lastname">Nom </item>
-	<item id="group">Groupe </item>
+	<item id="nickname">Pseudo</item>
+	<item id="password">Mot de passe</item>
+	<item id="email">Email</item>
+	<item id="firstname">Prénom</item>
+	<item id="lastname">Nom</item>
+	<item id="group">Groupe</item>
 	<item id="statistics">Statistiques</item>
 	<item id="register_time">Date d'inscription</item>
 	<item id="last_connection">Dernière connexion</item>
@@ -62,11 +62,11 @@
 	<!-- User add/edit form -->
 	<item id="users_total">%s utilisateurs inscrits</item>
 	<item id="users_found">%s utilisateurs trouvés</item>
-	<item id="no_user_found">Aucun utilisateur trouvé</item>
+	<item id="no_user_found">Aucun utilisateur trouvé dans la base de données.</item>
 	<item id="leave_empty_to_leave_unchanged">Laisser vide pour ne pas effectuer de modification.</item>
 	<item id="confirmation">(confirmation)</item>
 	<item id="group_default">Aucun groupe</item>
-	<item id="user_rights">Droits d'accès </item>
+	<item id="user_rights">Droits d'accès</item>
 	<item id="access_none">Simple utilisateur</item>
 	<item id="access_all">Administrateur suprême</item>
 	<item id="access_custom">Mode personnalisé</item>
@@ -80,7 +80,7 @@
 	<item id="user_not_created">Une erreur inconnue s'est produite lors de la création du compte %s dans la base de données.</item>
 	<item id="user_edited"><![CDATA[L'utilisateur <strong>%s</strong> a été édité avec succès.]]></item>
 	<item id="user_not_edited">Une erreur inconnue s'est produite lors de l'édition du compte %s dans la base de données.</item>
-	<item id="send_email_confirmation">Envoyer une confirmation de création de compte par email ?</item>
+	<item id="send_email_confirmation">Envoyer les nouvelles informations par email ?</item>
 	<item id="user_edit_own">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
 	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
 	
@@ -95,7 +95,7 @@
 	<item id="group_default_access_for_users">Accès par défaut des utilisateurs du groupe</item>
 	<item id="group_users_count">Nombre d'utilisateurs dans le groupe</item>
 	<item id="actions">Actions</item>
-	<item id="no_group_found">Aucun groupe trouvé</item>
+	<item id="no_group_found">Aucun groupe trouvé dans la base de données.</item>
 	<item id="apply">Appliquer</item>
 	<item id="group_del_confirm">Voulez-vous vraiment supprimer la catégorie %s ?</item>
 	<item id="group_not_modified">Une erreur inconnue s'est produite lors du traitement du groupe dans la base de données.</item>
