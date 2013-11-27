@@ -15,8 +15,8 @@
 	<permission name="whitelist_manager" />
 
 	<!-- Front pages -->
-	<action>send</action>
-	<action default="default">redirect</action>
+	<action default="default">send</action>
+	<action>redirect</action>
 
 	<!-- Admin pages -->
 	<admin>

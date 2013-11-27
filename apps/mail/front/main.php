@@ -23,39 +23,49 @@ class MailController extends WController {
 	/**
 	 * @var WTemplate WTemplate instance
 	 */
-	private $tpl;
+	private static $tpl;
 
 	/**
 	 * @var Hash variable that represents current mailing list
 	 */
-	private $hash_mailing_list;
+	private static $hash_mailing_list;
 
 	/**
 	 * @var Hash variable that represents current mail
 	 */
-	private $hash_mail;
+	private static $hash_mail;
 
 	/**
 	 * @var Link expiration method
 	 */
-	private $expiration;
+	private static $expiration;
 
 	/**
 	 * @var Response mode, 'all' will answer to all, 'from' will answer to the from email field, 'none' is no-reply@...
 	 */
-	private $response_policy;
+	private static $response_policy;
 
 	/**
 	 * @var Configuration parameters
 	 */
-	private $configuration;
+	private static $configuration;
+
+	/**
+	 * @var Static model instance for mail_action node compilation
+	 */
+	private static $smodel;
 
 	/**
 	 * Sends email
 	 *
 	 * 	$params = array(
+	 * 		'origin' => array(
+	 * 			'app' => 'app_name',
+	 * 			'action' => 'action',
+	 * 			'parameters' => array(...)
+	 * 		),
 	 * 		'response_policy' => 'all'|'from' (default)|'none',
-	 * 		'action_expiration' => 'one-time-action'|'one-time-mail'|DateInterval initializer ('P30D' default)|array(['one-time-action', 'one-time-mail', DateInterval initializer]),
+	 * 		'action_expiration' => 'one-time-action'|'one-time-mail'|DateInterval initializer ('P30D' default)|array('one-time-action'|'one-time-mail', DateInterval initializer),
 	 * 		'response_callback' => '/app_name[/action][/param1[/...]]?hash_mail=hash_mail&hash_action=hash_action[&...]'
 	 * 		'defaults' => array(
 	 * 			'from' => email|array(email[, name]),
@@ -84,33 +94,87 @@ class MailController extends WController {
 			return WNote::error('missing_parameters', 'missing_parameters');
 		}
 
-		if (empty($this->configuration)) {
-			$this->configuration = $this->model->getConfiguration();
+		if (empty(self::$configuration)) {
+			self::$configuration = $this->model->getConfiguration();
 		}
 
 		$success = true;
 
 		// Set the default response policy to 'from' if nothing is provided
 		if (!empty($params['response_policy'])) {
-			$this->response_policy = $params['response_policy'];
+			self::$response_policy = $params['response_policy'];
 		} else {
-			$this->response_policy = 'from';
+			self::$response_policy = 'from';
 		}
 
 		// Set the default action expiration method if nothing is provided
 		if (!empty($params['action_expiration'])) {
-			$this->expiration = $params['action_expiration'];
+			if ($params['action_expiration'] == 'one-time-mail') {
+
+				// 'one-time-mail'
+				self::$expiration = array('expires' => '', 'one-time' => 'M');
+
+			} else if ($params['action_expiration'] == 'one-time-action') {
+
+				// 'one-time-action'
+				self::$expiration = array('expires' => '', 'one-time' => 'A');
+
+			} else if (is_array($params['action_expiration'])) {
+
+				// array(...)
+				if ($params['action_expiration'][0] == 'one-time-mail') {
+
+					// array('one-time-mail', DateInterval initializer)
+					self::$expiration = array('expires' => '', 'one-time' => 'M');
+
+				} else if ($params['action_expiration'][0] == 'one-time-action') {
+
+					// array('one-time-action', DateInterval initializer)
+					self::$expiration = array('expires' => '', 'one-time' => 'A');
+
+				}
+
+				$expires_date = new WDate();
+				$expires_date->add(new DateInterval($params['action_expiration'][1]));
+				self::$expiration = array('expires' => $expires_date, 'one-time' => '');
+			} else {
+
+				// DateInterval initializer
+				$expires_date = new WDate();
+				$expires_date->add(new DateInterval($params['action_expiration']));
+				self::$expiration = array('expires' => $expires_date, 'one-time' => '');
+			}
 		} else {
-			$this->expiration = 'P30D';
+
+			// Default: 'P30D' (DateInterval initializer)
+			$expires_date = new WDate();
+			$expires_date->add(new DateInterval('P30D'));
+			self::$expiration = array('expires' => $expires_date, 'one-time' => '');
+
+		}
+
+		if (empty($params['response_callback'])) {
+			$params['response_callback'] = '';
 		}
 
 		// Generate uniqid and hash used to execute action from this mail
-		$mailing_list_id = uniqid('mail', true);
-		$this->hash_mailing_list = sha1($mailing_list_id);
+		self::$hash_mailing_list = uniqid('mail', true);
+
+		$this->model->addMailing(
+			self::$hash_mailing_list,
+			self::$expiration,
+			self::$response_policy,
+			$params['response_callback'],
+			$params['origin']['app'],
+			$params['origin']['action'],
+			$params['origin']['parameters']
+		);
 
 		$this->phpmailer = WHelper::load("phpmailer");
 		$this->phpmailer->CharSet = 'utf-8';
 		$this->phpmailer->isHTML(true);
+
+		WTemplateCompiler::registerCompiler('mail_action', array('MailController', 'compile_mail_action'));
 
 		// Find mode : only defaults or defaults + while(specifics)
 		if (!empty($params['specifics']) && is_array($params['specifics'])) {
@@ -121,15 +185,33 @@ class MailController extends WController {
 							'from' => '',
 							'to' => '',
 							'cc' => '',
-							'bcc' => ''
+							'bcc' => '',
+							'attachments' => array(),
+							'subject' => '',
+							'body' => '',
+							'params' => array()
 						),
 						$params['defaults'],
 						$spec
 					));
 			}
 		} else {
-			$success = $this->sendEmail($params['defaults']);
+			$success = $this->sendEmail(array_replace_recursive(
+				array(
+					'from' => '',
+					'to' => '',
+					'cc' => '',
+					'bcc' => '',
+					'attachments' => array(),
+					'subject' => '',
+					'body' => '',
+					'params' => array()
+				),
+				$params['defaults'])
+			);
 		}
+
+		WTemplateCompiler::unregisterCompiler('mail_action');
 
 		unset($this->phpmailer);
 
@@ -144,11 +226,11 @@ class MailController extends WController {
 		$success = true;
 
 		// Prepare Template compiler
-		if (empty($this->tpl)) {
-			$this->tpl = WSystem::getTemplate();
+		if (empty(self::$tpl)) {
+			self::$tpl = WSystem::getTemplate();
 		}
 
-		$this->tpl->pushContext();
+		self::$tpl->pushContext();
 
 		// Clean the PHPMailer instance
 		$this->phpmailer->clearAddresses();
@@ -157,8 +239,8 @@ class MailController extends WController {
 		// Add addresses
 
 		// If POP3/IMAP enabled, mail app will manage responses, 'to' goes to CC, a placeholder goes to 'to'
-		if ($this->configuration['canReceive'] == '0') {
-			$from = array($this->configuration['from']);
+		if (self::$configuration['canReceive'] == '0') {
+			$from = array(self::$configuration['from']);
 
 			if (is_array($params['from'] && !empty($params['from'][1]))) {
 				$from[] = $params['from'][1];
@@ -168,14 +250,14 @@ class MailController extends WController {
 			$this->addAddressesInField($from, 'from');
 
 			// To: array('site@no-reply.domain.com', 'A previously configured name')
-			$this->addAddressesInField($this->configuration['to'], 'to');
+			$this->addAddressesInField(self::$configuration['to'], 'to');
 
 			$this->addAddressesInField($params['to'], 'cc');
 			$this->addAddressesInField($params['cc'], 'cc');
 			$this->addAddressesInField($params['bcc'], 'bcc');
 
 			// Reply to: array('hash_mailing_list'.'hash_mail'@domain.com, 'A previously configured name')
-			$this->addAddressesInField(array($this->getInternalResponseAddress(), $this->configuration['name']), 'replyTo');
+			$this->addAddressesInField(array($this->getInternalResponseAddress(), self::$configuration['name']), 'replyTo');
 		} else {
 			// No POP3/IMAP, classical e-mail system
 			$this->addAddressesInField($params['from'], 'from');
@@ -188,14 +270,18 @@ class MailController extends WController {
 		$params['params']['mail_app'] = array();
 
 		// Generate hash used to execute action from this mail
-		$this->hash_mail = sha1(serialize($params['to']).$this->hash_mailing_list);
-		$params['params']['mail_app']['hash_mail'] = $this->hash_mail;
+		while(!isset(self::$hash_mail) || $this->model->hashMailExists(self::$hash_mail)) {
+			$salt_part = rand();
+			self::$hash_mail = sha1(serialize($params['to']).self::$hash_mailing_list.'?*'.$salt_part);
+		}
+
+		$params['params']['mail_app']['hash_mail'] = self::$hash_mail;
 
 		// Assign View variables
-		$this->tpl->assign($params['params']);
+		self::$tpl->assign($params['params']);
 
 		// Generates
-		$this->phpmailer->Subject = $this->tpl->parseString($params['subject']);
+		$this->phpmailer->Subject = self::$tpl->parseString($params['subject']);
 
 		if (substr($params['body'], -5) === '.html' && file_exists(WITY_PATH.$params['body'])) {
 			// Use system directory separator
@@ -203,9 +289,9 @@ class MailController extends WController {
 				$params['body'] = str_replace('/', DS, $params['body']);
 			}
 
-			$this->phpmailer->msgHTML($this->tpl->parse($params['body']));
+			$this->phpmailer->msgHTML(self::$tpl->parse($params['body']));
 		} else {
-			$this->phpmailer->msgHTML($this->tpl->parseString($params['body']));
+			$this->phpmailer->msgHTML(self::$tpl->parseString($params['body']));
 		}
 
 		if (!$this->phpmailer->send()) {
@@ -214,12 +300,25 @@ class MailController extends WController {
 			$success = false;
 		}
 
-		/*if (!$this->model->addMail($params)) {
-			WNote::error('unable_to_save_email', WLang::get('unable_to_save_email', serialize($params)), 'email');
+		if (!$success || !$this->model->addMail(
+			self::$hash_mail,
+			self::$hash_mailing_list,
+			$params['from'],
+			$params['to'],
+			$params['cc'],
+			$params['bcc'],
+			$params['attachments'],
+			$params['subject'],
+			$params['body'],
+			$this->phpmailer->Subject,
+			$this->phpmailer->Body,
+			$params['params']
+		)) {
+			WNote::error('email_not_saved', 'email_not_saved');
 			$success = false;
-		}*/
+		}
 
-		$this->tpl->popContext();
+		self::$tpl->popContext();
 
 		return $success;
 	}
@@ -282,11 +381,39 @@ class MailController extends WController {
 	}
 
 	private function getInternalResponseAddress() {
-		return $this->hash_mailing_list.'_'.$this->hash_mail.'@'.$this->configuration['domain'];
+		return self::$hash_mail.'@'.self::$configuration['domain'];
 	}
 
 	protected function redirect(array $params) {
-		$this->setHeader('Location', WRoute::getDir());
+		$location = WRoute::getDir();
+
+		if (isset($params) && !empty($params[0])) {
+			$location .= $this->model->getActionURL($params[0]);
+		}
+
+		$this->setHeader('Location', $location);
+	}
+
+	public static function storeAction($url) {
+		if (empty($url)) {
+			return '';
+		}
+
+		if (empty(self::$smodel)) {
+			self::$smodel = new MailModel();
+		}
+
+		// Generate hash used to execute action from this mail
+		while(!isset($hash_action) || self::$smodel->hashActionExists($hash_action)) {
+			$salt_part = rand();
+			$hash_action = sha1($url.self::$hash_mail.'?*'.$salt_part);
+		}
+
+		if (self::$smodel->addAction($hash_action, self::$hash_mail, self::$expiration['one-time'], self::$expiration['expires'], $url)) {
+			return WRoute::getBase().'/mail/redirect/'.$hash_action;
+		} else {
+			return '';
+		}
 	}
 
 	/*****************************************
@@ -304,7 +431,7 @@ class MailController extends WController {
 	 */
 	public static function compile_mail_action($args) {
 		if (!empty($args)) {
-			$url = array_shift($args);
+			$url = $args;
 
 			// Replace the template variables in the string
 			$url = WTemplateParser::replaceNodes($url, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
