@@ -389,6 +389,7 @@ abstract class WController {
 
 				case 'admin':
 					$manifest['admin'] = array();
+					$manifest['admin_menu'] = false;
 
 					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'action')) {
 						foreach ($xml->admin->action as $action) {
@@ -398,10 +399,13 @@ abstract class WController {
 								$attributes = $action->attributes();
 
 								if (!isset($manifest['admin'][$key])) {
+									$menuState = isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true;
+									$manifest['admin_menu'] = $manifest['admin_menu'] || $menuState;
+
 									$manifest['admin'][$key] = array(
-										'desc'     => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
-										'menu'     => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
-										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+										'desc'			=> isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
+										'menu'			=> isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
+										'requires'		=> isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
 
