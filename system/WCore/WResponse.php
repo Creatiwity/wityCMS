@@ -37,7 +37,10 @@ class WResponse {
 			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
 			WNote::error('response_set_theme', "WResponse::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
+			return false;
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -55,13 +58,18 @@ class WResponse {
 	 * @param WView  $view  View to be rendered
 	 * @param string $theme Theme name to use to wrap the view
 	 */
-	public function render(WView $view = null, $theme, $model = array()) {
+	public function render(WView $view = null, $default_theme, $model = array()) {
 		// Check headers
 		if (isset($model['headers'])) {
 			foreach ($model['headers'] as $name => $value) {
 				header($name.': '.$value);
 			}
+			
 			if (isset($model['headers']['location'])) {
+				if (is_array($model['result']) && array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
+					WNote::raise($model['result']);
+				}
+				
 				return true;
 			}
 		}
@@ -72,13 +80,22 @@ class WResponse {
 			throw new Exception("WResponse::render(): WTemplate cannot be loaded.");
 		}
 		
-		// Default vars
-		$site_name = WConfig::get('config.site_name');
+		// Default template variables
 		$tpl->assign('base_url', WRoute::getBase());
-		$tpl->assign('site_name', $site_name);
-		$tpl->assign('page_title', $site_name);
 		
-		$this->setTheme($theme);
+		$site_name = WConfig::get('config.site_name');
+		$tpl->assign('site_name', $site_name);
+		
+		$page_title = $tpl->getVar('page_title');
+		if (empty($page_title)) { // Do not overwrite a value set by user
+			$tpl->assign('page_title', $site_name);
+		}
+		
+		// Load in priority theme asked by the view
+		$view_theme = $view->getTheme();
+		if (empty($view_theme) || !$this->setTheme($view_theme)) {
+			$this->setTheme($default_theme);
+		}
 		
 		// Check theme
 		if (empty($this->theme_name)) {
