@@ -17,10 +17,4 @@
 	<!-- Front pages -->
 	<action default="default">send</action>
 	<action>redirect</action>
-
-	<!-- Admin pages -->
-	<admin>
-		<action default="default" desc="mail_history">mail_history</action>
-		<action requires="whitelist_manager" desc="mail_whitelist">mail_whitelist</action>
-	</admin>
 </app>
