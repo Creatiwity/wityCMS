@@ -218,40 +218,56 @@ class WLang {
 	 * @return string value as it is after compiling the lang file
 	 */
 	public static function get($name, $params = null) {
-		if (!empty($name)) {
-			if (!isset(self::$values[$name])) {
-				foreach (self::$lang_dirs as $dir_name => $dir) {
-					foreach (self::$languages as $lang) {
-						if (isset($dir[$lang])) {
-							self::loadLangFile($dir[$lang]);
-							
-							// Remove the directory treated
-							unset(self::$lang_dirs[$dir_name][$lang]);
-						}
-					}
-					
-					// Load default file
-					if (!isset(self::$values[$name]) && isset($dir['default']) && isset(self::$lang_dirs[$dir_name][$dir['default']])) {
-						self::loadLangFile($dir[$dir['default']]);
+		$name = trim($name);
+		
+		if (empty($name)) {
+			return '';
+		}
+		
+		// Load the lang value if not already set
+		if (!isset(self::$values[$name])) {
+			foreach (self::$lang_dirs as $dir_name => $dir) {
+				foreach (self::$languages as $lang) {
+					if (isset($dir[$lang])) {
+						self::loadLangFile($dir[$lang]);
+						
+						// Remove the directory treated
+						unset(self::$lang_dirs[$dir_name][$lang]);
 					}
 				}
+				
+				// Load default file
+				if (!isset(self::$values[$name]) && isset($dir['default']) && isset(self::$lang_dirs[$dir_name][$dir['default']])) {
+					self::loadLangFile($dir[$dir['default']]);
+				}
 			}
-			
-			if (isset(self::$values[$name])) {
-				if (!empty($params)) {
+		}
+		
+		if (isset(self::$values[$name])) {
+			// Replace given parameters in the lang string
+			if (!empty($params)) {
+				if (strpos(self::$values[$name], '%s') !== false) {
 					if (!is_array($params)) {
 						$params = array(self::$values[$name], $params);
 					} else {
 						array_unshift($params, self::$values[$name]);
 					}
+					
 					return call_user_func_array('sprintf', $params);
 				} else {
-					return self::$values[$name];
+					$string = self::$values[$name];
+					foreach ($params as $key => $value) {
+						$string = str_replace('{{'.$key.'}}', $value, $string);
+					}
+					
+					return $string;
 				}
+			} else {
+				return self::$values[$name];
 			}
+		} else {
+			return ucwords(str_replace('_', ' ', $name));
 		}
-		
-		return ucwords(str_replace('_', ' ', $name));
 	}
 	
 	/**

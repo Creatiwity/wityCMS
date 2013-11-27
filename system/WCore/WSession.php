@@ -134,6 +134,8 @@ class WSession {
 		$_SESSION['email']    = $data['email'];
 		$_SESSION['groupe']   = $data['groupe'];
 		$_SESSION['lang']     = $data['lang'];
+		$_SESSION['firstname']	= $data['firstname'];
+		$_SESSION['lastname']	= $data['lastname'];
 		
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {
@@ -217,7 +219,7 @@ class WSession {
 	
 	/**
 	 * Generates a user-and-computer specific hash that will be stored in a cookie
-
+	 *
 	 * @param string $nick nickname
 	 * @param string $pass password
 	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
