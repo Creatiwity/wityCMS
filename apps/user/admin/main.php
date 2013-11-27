@@ -137,7 +137,7 @@ class UserAdminController extends WController {
 		$add_case = empty($user_id);
 		$post_data = array();
 		
-		if (!empty($_POST)) {
+		if (WRequest::hasData()) {
 			$post_data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
 			$errors = array();
 			
@@ -254,10 +254,10 @@ Ceci est un message automatique.";
 		
 		// Model
 		return array(
-			'user_id'   => $user_id, 
-			'user_data' => $db_data,
-			'post_data' => $post_data,
-			'groupes'   => $this->model->getGroupsList(),
+			'user_id'    => $user_id, 
+			'user_data'  => $db_data,
+			'post_data'  => $post_data,
+			'groupes'    => $this->model->getGroupsList(),
 			'admin_apps' => $this->getAdminApps()
 		);
 	}
@@ -267,7 +267,7 @@ Ceci est un message automatique.";
 	 * 
 	 * @return array Model
 	 */
-	protected function add() {
+	protected function add($params) {
 		return $this->user_form();
 	}
 	
@@ -280,10 +280,9 @@ Ceci est un message automatique.";
 	protected function edit($params) {
 		$user_id = intval(array_shift($params));
 		
-		if (empty($user_id) || !$this->model->validId($user_id)) {
-			WNote::error('user_not_found', WLang::get('user_not_found'));
+		if (!$this->model->validId($user_id)) {
 			$this->setHeader('Location', WRoute::getDir().'/admin/user/');
-			return false;
+			return WNote::error('user_not_found', WLang::get('user_not_found'));
 		}
 		
 		$user_data = $this->model->getUser($user_id);
@@ -300,14 +299,15 @@ Ceci est un message automatique.";
 		$user_id = intval(array_shift($params));
 		
 		if ($user_id == $_SESSION['userid']) {
-			WNote::error('user_self_delete', WLang::get('user_self_delete'), 'display');
-			return false;
+			return WNote::error('user_self_delete', WLang::get('user_self_delete'));
 		}
 		
-		if (empty($user_id) || !$this->model->validId($user_id)) {
-			WNote::error('user_not_found', WLang::get('user_not_found'), 'display');
-			return false;
+		if (!$this->model->validId($user_id)) {
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/');
+			return WNote::error('user_not_found', WLang::get('user_not_found'));
 		}
+		
+		$user_data = $this->model->getUser($user_id);
 		
 		if (WRequest::get('confirm', null, 'POST') === '1') {
 			$this->model->deleteUser($user_id);
@@ -316,7 +316,7 @@ Ceci est un message automatique.";
 			WNote::success('user_deleted', WLang::get('user_deleted'));
 		}
 		
-		return $this->model->getUser($user_id);
+		return $user_data;
 	}
 	
 	/**
@@ -407,21 +407,19 @@ Ceci est un message automatique.";
 		$group_id = intval(array_shift($params));
 		
 		if (!$this->model->validGroupId($group_id)) {
-			WNote::error('group_not_found', WLang::get('group_not_found'), 'display');
-			return false;
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups/');
+			return WNote::error('group_not_found', WLang::get('group_not_found'));
 		}
 		
 		if (WRequest::get('confirm', null, 'POST') === '1') {
 			$this->model->deleteGroup($group_id);
 			$this->model->resetUsersInGroup($group_id);
-			WNote::success('user_group_deleted', WLang::get('group_deleted'));
+			
 			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups/');
+			WNote::success('user_group_deleted', WLang::get('group_deleted'));
 		}
 		
-		return array(
-			'group_id' => $group_id,
-			'group_data' => $this->model->getGroup($group_id)
-		);
+		return $this->model->getGroup($group_id);
 	}
 	
 	/**
