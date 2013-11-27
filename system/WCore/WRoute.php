@@ -34,10 +34,6 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class WRoute {
 	/**
-	 * @todo Adds a fallback method without URLREWRITING http://MySite.com/index.php/News/1
-	 */
-	
-	/**
 	 * If the URL is http://mysite.com/wity/user/login and if WityCMS is executed in /wity, 
 	 * then the $query will be set to "user/login".
 	 * 
@@ -46,11 +42,23 @@ class WRoute {
 	private static $query;
 	
 	/**
+	 * Stores the calculated route.
+	 * 
+	 * @var array
+	 */
+	private static $route;
+	
+	/**
 	 * Initializes WRoute.
 	 */
 	public static function init() {
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
 		self::$query = str_replace(self::getDir(), '', $_SERVER['REQUEST_URI']);
+		
+		// Cleansing
+		self::$query = str_replace(array('index.php', '.html', '.htm'), '', self::$query);
+		self::$query = preg_replace('#\?.*$#', '', self::$query); // Remove query string
+		self::$query = trim(self::$query, '/');
 		
 		// Loading route config values
 		WConfig::load('route', SYS_DIR.'config'.DS.'route.php', 'php');
@@ -62,19 +70,18 @@ class WRoute {
 	 * @return array The route
 	 */
 	public static function route() {
-		$route = WConfig::get('route.route');
+		$route = self::$route;
 		if (!empty($route)) {
 			return $route;
 		}
 		
-		$query = trim(self::$query, '/');
 		$custom_routes = WConfig::get('route.custom');
 		
 		// Checking the existence of a custom route
-		if (isset($custom_routes[$query])) {
-			$route = self::parseURL($custom_routes[$query]);
+		if (isset($custom_routes[self::$query])) {
+			$route = self::parseURL($custom_routes[self::$query]);
 		} else {
-			$route = self::parseURL($query);
+			$route = self::parseURL(self::$query);
 			
 			if (empty($route['app'])) { // Use default
 				$mode = $route['mode']; // save mode asked by user
@@ -88,7 +95,7 @@ class WRoute {
 			}
 		}
 		
-		WConfig::set('route.route', $route);
+		self::$route = $route;
 		
 		return $route;
 	}
@@ -108,9 +115,6 @@ class WRoute {
 		);
 		
 		if (is_string($url)) {
-			// Cleaning
-			$url = str_replace(array('index.php', '.html', '.htm'), '', $url);
-			$url = preg_replace('#\?.*$#', '', $url); // Remove query string
 			$url = trim($url, '/');
 			
 			if (!empty($url)) {
