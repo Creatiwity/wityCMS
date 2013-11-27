@@ -142,14 +142,15 @@ class WRequest {
 			} else if (!is_null($default)) {
 				// Use default
 				$data[$name] = self::filter($default);
-			} else {
-				$data[$name] = null;
 			}
 			
 			// Variable is verified
-			self::$checked[$hash.$name] = true;
-			
-			return $data[$name];
+			if (isset($data[$name])) {
+				self::$checked[$hash.$name] = true;
+				return $data[$name];
+			} else {
+				return null;
+			}
 		}
 	}
 	
