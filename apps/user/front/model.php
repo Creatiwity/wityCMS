@@ -188,10 +188,8 @@ class UserModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe, users.access AS access, valid, 
-				DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
-				DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity,
-				ip, name AS groupe_name
+			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe, 
+				users.access, valid, ip, name AS groupe_name, last_activity, users.created_date
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
@@ -215,10 +213,8 @@ class UserModel {
 		static $prep;
 		if (empty($prep)) {
 			$prep = $this->db->prepare('
-				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, users.access AS access, valid, 
-					DATE_FORMAT(date, "%d/%m/%Y %H:%i") AS date, 
-					DATE_FORMAT(last_activity, "%d/%m/%Y %H:%i") AS last_activity,
-					ip, name AS groupe_name
+				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, 
+					users.access, valid, ip, name AS groupe_name, last_activity, users.created_date
 				FROM users
 				LEFT JOIN users_groups
 				ON groupe = users_groups.id
@@ -257,8 +253,8 @@ class UserModel {
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, lang, groupe, valid, ip)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :lang, :groupe, :valid, :ip)
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, lang, groupe, valid, ip, created_date)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :lang, :groupe, :valid, :ip, NOW())
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);

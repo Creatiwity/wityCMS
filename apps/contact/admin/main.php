@@ -36,7 +36,7 @@ class ContactAdminController extends WController {
 		}
 		
 		// SortingHelper
-		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'from', 'name', 'organism', 'to', 'object', 'date'), 'date', 'DESC'));
+		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'from', 'name', 'organism', 'to', 'object', 'created_date'), 'created_date', 'DESC'));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		// Define model

@@ -7,7 +7,7 @@
 			<tr>
 				<th><a href="/admin/contact/mail_history/from-{$from_sort}/"><i class="{$from_class}"></i> {lang from_thead}</a></th>
 				<th><a href="/admin/contact/mail_history/object-{$object_sort}/"><i class="{$object_class}"></i> {lang subject_thead}</a></th>
-				<th><a href="/admin/contact/mail_history/date-{$date_sort}/"><i class="{$date_class}"></i> {lang date_thead}</a></th>
+				<th><a href="/admin/contact/mail_history/created_date-{$created_date_sort}/"><i class="{$created_date_class}"></i> {lang date_thead}</a></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,7 +23,7 @@
 						</tbody>
 					</table>
 				</td>
-				<td class="date-cell">{$mail.date}</td>
+				<td class="date-cell">{$mail.created_date}</td>
 			</tr>
 			{/for}
 			{empty}

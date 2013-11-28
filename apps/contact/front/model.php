@@ -59,7 +59,7 @@ class ContactModel {
 	 */
 	public function addMail(array $params) {
 		$prep = $this->db->prepare('
-			INSERT INTO contact(`from`, `from_id`, `to`, `cc`, `bcc`, `reply_to`, `name`, `organism`, `object`, `message`, `date`) 
+			INSERT INTO contact(`from`, `from_id`, `to`, `cc`, `bcc`, `reply_to`, `name`, `organism`, `object`, `message`, `created_date`) 
 			VALUES (:from_email, :user_id, :to, :cc, :bcc, :reply_to, :from_name, :organism, :object, :message, NOW())
 		');
 		

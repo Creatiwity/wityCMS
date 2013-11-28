@@ -89,7 +89,7 @@ class UserAdminController extends WController {
 		}
 		
 		// SortingHelper
-		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
+		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'groupe', 'last_activity', 'created_date'), 'created_date', 'DESC'));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		// Filters
@@ -103,14 +103,14 @@ class UserAdminController extends WController {
 		
 		// Define model
 		$model = array(
-			'users' => $this->model->getUsersList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters),
+			'users'         => $this->model->getUsersList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters),
 			'users_waiting' => $this->model->getUsersList(0, 0, $sort[0], $sort[1] == 'ASC', array('valid' => 2)),
-			'groups' => $this->model->getGroupsList(),
-			'stats' => array(),
-			'current_page' => $page,
-			'users_per_page' => $n,
+			'groups'        => $this->model->getGroupsList(),
+			'stats'         => array(),
+			'current_page'  => $page,
+			'per_page'      => $n,
 			'sortingHelper' => $sortingHelper,
-			'filters' => $filters
+			'filters'       => $filters
 		);
 		
 		// Users count

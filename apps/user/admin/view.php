@@ -56,7 +56,7 @@ class UserAdminView extends WView {
 		
 		$pagination = WHelper::load('pagination', array(
 			$model['stats']['request'], 
-			$model['users_per_page'], 
+			$model['per_page'], 
 			$model['current_page'], 
 			'/admin/user/listing/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL)
 		);
@@ -99,8 +99,8 @@ class UserAdminView extends WView {
 			'lastname' => '',
 			'groupe' => 0,
 			'access' => '',
-			'date' => '',
-			'last_activity' => ''
+			'last_activity' => '',
+			'created_date' => ''
 		);
 		$data = !empty($model['user_data']) ? $model['user_data'] : $model['post_data'];
 		foreach ($default_model as $item => $default) {

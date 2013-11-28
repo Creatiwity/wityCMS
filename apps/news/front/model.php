@@ -32,12 +32,11 @@ class NewsModel {
 			'news_meta_title' => 'meta_title',
 			'news_keywords' => 'keywords',
 			'news_description' => 'description',
-			'news_date' => 'creation_date',
+			'news_date' => 'created_date',
 			'news_modified' => 'modified_date',
-			'news_editor_id' => 'edited_by',
+			'news_editor_id' => 'modified_by',
 			'news_views' => 'views',
 			'news_publish' => 'published',
-			'news_image' => 'image',
 			'news_cats' => 'cats'
 		),
 		'fromDB' => array(
@@ -49,12 +48,11 @@ class NewsModel {
 			'meta_title' => 'news_meta_title',
 			'keywords' => 'news_keywords',
 			'description' => 'news_description',
-			'creation_date' => 'news_date',
+			'created_date' => 'news_date',
 			'modified_date' => 'news_modified',
-			'edited_by' => 'news_editor_id',
+			'modified_by' => 'news_editor_id',
 			'views' => 'news_views',
 			'published' => 'news_publish',
-			'image' => 'news_image',
 			'cats' => 'news_cats'
 		)
 	);
@@ -178,10 +176,8 @@ class NewsModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), url, title, author, content, meta_title, keywords, description, 
-				DATE_FORMAT(creation_date, "%d/%m/%Y %H:%i") AS creation_date, 
-				DATE_FORMAT(modified_date, "%d/%m/%Y %H:%i") AS modified_date, 
-				edited_by, views, published, image
+			SELECT DISTINCT(id), url, title, author, content, meta_title, keywords, description, views, published,
+				news.created_date, news.modified_date, news.modified_by
 			FROM news
 			LEFT JOIN news_cats_relations
 			ON id = news_id
@@ -200,6 +196,7 @@ class NewsModel {
 			$this->renameNewsFieldsFromDb($data);
 			$result[] = $data;
 		}
+		
 		return $result;
 	}
 	
@@ -211,10 +208,8 @@ class NewsModel {
 	 */
 	public function getNews($news_id) {
 		$prep = $this->db->prepare('
-			SELECT id, url, title, author, content, meta_title, keywords, description, 
-				DATE_FORMAT(creation_date, "%d/%m/%Y %H:%i") AS creation_date, 
-				DATE_FORMAT(modified_date, "%d/%m/%Y %H:%i") AS modified_date, 
-				edited_by, views, published, image
+			SELECT id, url, title, author, content, meta_title, keywords, description, views, published,
+				created_date, modified_date, modified_by
 			FROM news
 			WHERE id = :news_id
 		');

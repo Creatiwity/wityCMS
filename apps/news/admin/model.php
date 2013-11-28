@@ -31,8 +31,8 @@ class NewsAdminModel extends NewsModel {
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, meta_title, keywords, description, creation_date, edited_by)
-			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :description, NOW(), :edited_by)
+			INSERT INTO news(url, title, author, content, meta_title, keywords, description, created_date, modified_by)
+			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :description, NOW(), :modified_by)
 		');
 		$prep->bindParam(':url', $data['news_url']);
 		$prep->bindParam(':title', $data['news_title']);
@@ -41,7 +41,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':description', $data['news_description']);
-		$prep->bindParam(':edited_by', $_SESSION['userid']);
+		$prep->bindParam(':modified_by', $_SESSION['userid']);
 		
 		if ($prep->execute()) {
 			return $this->db->lastInsertId();
@@ -61,7 +61,7 @@ class NewsAdminModel extends NewsModel {
 		$prep = $this->db->prepare('
 			UPDATE news
 			SET url = :url, title = :title, author = :author, content = :content, meta_title = :meta_title, 
-				keywords = :keywords, description = :description, modified_date = NOW(), edited_by = :edited_by
+				keywords = :keywords, description = :description, modified_by = :modified_by
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $news_id);
@@ -72,7 +72,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':description', $data['news_description']);
-		$prep->bindParam(':edited_by', $_SESSION['userid']);
+		$prep->bindParam(':modified_by', $_SESSION['userid']);
 		return $prep->execute();
 	}
 	
