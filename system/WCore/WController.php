@@ -431,13 +431,11 @@ abstract class WController {
 					$manifest['permissions'] = !empty($manifest['admin']) ? array('admin') : array();
 					if (property_exists($xml, 'permission')) {
 						foreach ($xml->permission as $permission) {
+							$attributes = $permission->attributes();
 							$key = (string) $attributes['name'];
 
 							if (!empty($key)) {
-								$attributes = $permission->attributes();
-								if (!empty($attributes['name'])) {
-									$manifest['permissions'][] = $key;
-								}
+								$manifest['permissions'][] = $key;
 							}
 						}
 					}
