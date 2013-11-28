@@ -204,11 +204,6 @@ class NewsAdminController extends WController {
 			$cat_id = intval($data['news_cat_id']);
 			$errors = array();
 			
-			// Check existing category
-			if (!$this->model->validExistingCatId($cat_id)) {
-				$errors[] = "The category you are trying to edit (#".$data['news_cat_id'].") does not exist in the database.";
-			}
-			
 			if (empty($data['news_cat_name'])) {
 				$errors[] = WLang::get('category_no_name');
 			}
@@ -231,6 +226,11 @@ class NewsAdminController extends WController {
 						WNote::error('cat_not_added', WLang::get('cat_not_added'));
 					}
 				} else { // Edit case
+					// Check existing category
+					if (!$this->model->validExistingCatId($cat_id)) {
+						$errors[] = "The category you are trying to edit (#".$cat_id.") does not exist in the database.";
+					}
+					
 					if ($this->model->updateCat($cat_id, $data)) {
 						$this->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager/');
 						WNote::success('cat_edited', WLang::get('cat_edited', $data['news_cat_name']));
