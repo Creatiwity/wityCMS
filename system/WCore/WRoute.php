@@ -58,7 +58,6 @@ class WRoute {
 		// Cleansing
 		self::$query = str_replace(array('index.php', '.html', '.htm'), '', self::$query);
 		self::$query = preg_replace('#\?.*$#', '', self::$query); // Remove query string
-		self::$query = trim(self::$query, '/');
 		
 		// Loading route config values
 		WConfig::load('route', SYS_DIR.'config'.DS.'route.php', 'php');
