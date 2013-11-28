@@ -3,11 +3,11 @@
  * Media Application - Front View - /apps/media/front/view.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * MediaView is the Front View of the Media Application
- * 
+ *
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -16,9 +16,9 @@ defined('IN_WITY') or die('Access denied');
 class MediaView extends WView {
 
 	public function listing($data) {
-		
+
 	}
-	
+
 }
 
 ?>

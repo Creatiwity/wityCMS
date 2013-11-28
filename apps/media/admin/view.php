@@ -3,11 +3,11 @@
  * Media Application - Admin View - /apps/media/front/view.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * MediaView is the Admin View of the Media Application
- * 
+ *
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -16,9 +16,9 @@ defined('IN_WITY') or die('Access denied');
 class MediaAdminView extends WView {
 
 	public function manager($data) {
-		
+
 	}
-	
+
 }
 
 ?>

@@ -3,7 +3,7 @@
  * Media Application - Front Model - /apps/media/front/model.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * MediaModel is the Front Model of the Media Application
@@ -15,10 +15,10 @@ defined('IN_WITY') or die('Access denied');
  */
 class MediaModel {
 	protected $db;
-	
+
 	public function __construct() {
 		$this->db = WSystem::getDB();
-		
+
 		// Declare table
 		$this->db->declareTable('media');
 	}

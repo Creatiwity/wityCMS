@@ -3,11 +3,11 @@
  * Media Application - Admin Controller - /apps/media/admin/main.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * MediaAdminController is the Admin Controller of the Media Application
- * 
+ *
  * @package Apps
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -16,13 +16,13 @@ defined('IN_WITY') or die('Access denied');
 class MediaAdminController extends WController {
 
 	protected function manager() {
-		
+		return array();
 	}
 
 	protected function cleaning() {
-		
+		return array();
 	}
-	
+
 }
 
 ?>
