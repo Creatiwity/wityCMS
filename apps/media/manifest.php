@@ -14,9 +14,9 @@
 
 	<!-- Front pages -->
 	<action default="default">listing</action>
-	<action>upload</action>
-	<action>upload_button</action>
-	<action>metaedit</action>
+	<action requires="connected">upload</action>
+	<action requires="connected">upload_button</action>
+	<action requires="connected">metaedit</action>
 	<action>relatives</action>
 	<action>link</action>
 	<action>get</action>
