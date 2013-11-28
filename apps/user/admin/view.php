@@ -156,7 +156,7 @@ class UserAdminView extends WView {
 		$this->assign('admin_apps', $model['admin_apps']);
 		
 		// SortingHelper
-		$this->assign($model['sortingHelper']->getTplVars());
+		$this->assign($model['sorting_vars']);
 		
 		$this->assign('groups', $model['groups']);
 		
@@ -208,8 +208,8 @@ class UserAdminView extends WView {
 	 * @param array $model
 	 */
 	public function group_del($model) {
-		$this->assign('group_name', $model['group_data']['name']);
-		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['group_id']);
+		$this->assign('group_name', $model['name']);
+		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['id']);
 	}
 	
 	/**

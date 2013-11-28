@@ -391,9 +391,9 @@ Ceci est un message automatique.";
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
 		return array(
-			'groups' => $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC'),
-			'admin_apps' => $this->getAdminApps(),
-			'sortingHelper' => $sortingHelper
+			'groups'       => $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC'),
+			'admin_apps'   => $this->getAdminApps(),
+			'sorting_vars' => $sortingHelper->getTplVars()
 		);
 	}
 	
