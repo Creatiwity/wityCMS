@@ -253,8 +253,8 @@ class UserModel {
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
-			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, lang, groupe, valid, ip, created_date)
-			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :lang, :groupe, :valid, :ip, NOW())
+			INSERT INTO users(nickname, password, confirm, email, firstname, lastname, country, lang, groupe, valid, ip)
+			VALUES (:nickname, :password, :confirm, :email, :firstname, :lastname, :country, :lang, :groupe, :valid, :ip)
 		');
 		$prep->bindParam(':nickname', $data['nickname']);
 		$prep->bindParam(':password', $data['password']);

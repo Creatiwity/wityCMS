@@ -90,12 +90,11 @@ class ContactAdminModel extends ContactModel {
 	public function setConfig($key, $value) {
 		$prep = $this->db->prepare('
 			UPDATE contact_config
-			SET value = :value, modified = NOW(), edited_by = :userid
+			SET value = :value
 			WHERE `key` = :key
 		');
 		$prep->bindParam(':key', $key);
 		$prep->bindParam(':value', $value);
-		$prep->bindParam(':userid', $_SESION['userid'], PDO::PARAM_INT);
 		return $prep->execute();
 	}
 	
