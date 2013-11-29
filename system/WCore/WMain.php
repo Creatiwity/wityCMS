@@ -74,6 +74,9 @@ class WMain {
 				);
 				break;
 
+			case 'o': // Only Model but nothing returned
+				break;
+
 			default: // Render in a theme
 				$response->render(
 					WRetriever::getView($route['app'], $route['params'], false),
