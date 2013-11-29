@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `prefix_users_config` (
 
 INSERT INTO `prefix_users_config` (`name`, `value`, `created_date`) VALUES
 ('register', '1', NOW()),
-('eprefix_mail_conf', '0', NOW()),
+('email_conf', '0', NOW()),
 ('admin_check', '0', NOW()),
 ('summary', '1', NOW()),
 ('keep_users', '1', NOW());
