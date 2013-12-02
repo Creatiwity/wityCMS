@@ -47,38 +47,51 @@ class MediaController extends WController {
 		}
 
 		// Save file
-		/**
-		 * $this->file_max_size
-		 * $this->allowed
-		 * $this->forbidden
-		 * $this->image_max_width
-		 * $this->image_min_width
-		 * $this->image_max_height
-		 * $this->image_min_height
-		 * $this->image_max_ratio
-		 * $this->image_min_ratio
-		 * $this->image_max_pixels
-		 * $this->image_min_pixels
-		 *
-		 * $this->file_new_name_body
-		 * $this->file_new_name_ext
-		 * $this->file_name_body_add
-		 * $this->file_name_body_pre
-		 *
-		 * $this->file_safe_name
-		 * $this->file_dst_pathname
-		 */
 		$h_upload = WHelper::load('upload', array($datas['media_file'], WConfig::get('config.lang')));
 
 		$h_upload->file_safe_name = true;
-		$h_upload->file_dst_pathname = UPLOAD_DIR.'media'.DS.'private';
 
-		$media_params = $this->model->create_new_media($h_upload->file_src_name);
+		// Generate file hash (sha1) and file hashID (to identify this file sha1(uniqid.hash.rand))
+		$file_hash = sha1_file($h_upload->file_src_pathname);
+
+		if ($file_hash == false) {
+			return WNote::error('file_hash_error', 'file_upload_error');
+		}
+
+		$fileID = $this->model->generateFileID($file_hash);
+
+		$h_upload->file_name_body_add = '.'.$fileID;
+
+		$h_upload->process(UPLOAD_DIR.'media'.DS.'private'.DS);
+		$h_upload->clean();
+
+		if (!$h_upload->processed) {
+			return WNote::error('file_upload_error', 'file_upload_error: '.$h_upload->error);
+		}
+
+		$dst_filename_wthID = str_replace($fileID.'.', '', $h_upload->file_dst_name);
+
+		$data = array(
+			'fileID' => $fileID,
+			'hash' => $file_hash,
+			'filename' => $h_upload->file_dst_name_body,
+			'mime' => $h_upload->file_src_mime,
+			'extension' => $h_upload->file_dst_name_ext,
+			'state' => 'ONLINE',
+			'link' => WRoute::getBase().'/o/media/'.$dst_filename_wthID.'?f='.$fileID.'&h='.$file_hash
+		);
+
+		$media_params = $this->model->createNewMedia($data);
+
+		if ($media_params == false) {
+			return WNote::error('unable_to_store_file_data', 'unable_to_store_file_data');
+		}
 
 		// Disallow access to anyone but the uploader
 		// Add a UID
 		// Store in DB
 		// Return JSON identifier and link
+		return $data;
 	}
 
 	/**
@@ -162,9 +175,96 @@ class MediaController extends WController {
 	 * @return array The link which will be used to access to a resource
 	 */
 	protected function link(array $params) {
-		// If resource is public, returns the real link
+		// If resource is public, returns the real link (not yet)
 		// Otherwise, find the resource id (in the name file name.this_is_the_id_of_this_file.ext)
-		// Returns (name.ext?=this_is_the_id_of_this_file)
+		// Check in .perm file if the user has access to this file (not yet)
+		// Returns (name.ext?f=this_is_the_id_of_this_file&h='sha1')
+		if (empty($params) || !is_array($params) || empty($params['fileID'])) {
+			return WNote::error('missing_fileID_parameter', 'missing_fileID_parameter');
+		}
+
+		$data = $this->model->getMediaData($params['fileID']);
+
+		if ($data == false) {
+			return WNote::error('file_not_found', 'file_not_found');
+		}
+
+		$data['filename'] = str_replace($data['fileID'].'.', '', $data['filename']);
+
+		return array(
+			'fileID' => $data['fileID'],
+			'hash' => $data['hash'],
+			'filename' => $data['filename'],
+			'mime' => $data['mime'],
+			'extension' => $data['extension'],
+			'state' => $data['state'],
+			'link' => WRoute::getBase().'/o/media/'.$data['filename'].'.'.$data['extension'].'?f='.$data['fileID'].'&h='.$data['hash']
+		);
+	}
+
+	/**
+	 * Triggers download of the file with the given id
+	 *
+	 * @param array $params Input parameters
+	 * @return array Nothing
+	 */
+	protected function get(array $params) {
+		// Must be fresh start
+		if (headers_sent()) {
+			WNote::error('media_headers_sent', 'media_headers_sent', 'debug');
+			$this->setHeader('Location', Wroute::getDir());
+			return array();
+		}
+
+		// Required for some browsers that don't handle uncompress correctly with zipped files
+		if (ini_get('zlib.output_compression')) {
+			ini_set('zlib.output_compression', 'Off');
+		}
+
+		// Check if file exists on the filesystem, if user has the right to access it, if the sha1 hash should be checked with the db
+		$filename = $this->model->getFile($params);
+
+		if ($filename == false) {
+			WNote::error('media_file_permissions_error', 'media_file_permissions_error', 'debug');
+			$this->setHeader('Location', Wroute::getDir());
+			return array();
+		}
+
+		if (!is_string($filename)) {
+			WNote::error('media_unknown_error', 'media_unknown_error', 'debug');
+			$this->setHeader('Location', Wroute::getDir());
+			return array();
+		}
+
+		if ($filename == 'corrupted') {
+			WNote::error('media_corrupted_file', 'media_corrupted_file', 'debug');
+			$this->setHeader('Location', Wroute::getDir());
+			return array();
+		}
+
+		// Using upload helper to determine the right MIME type
+		$h_file = WHelper::load('upload', array($filename, WConfig::get('config.lang')));
+
+		if (is_null($h_file->file_src_mime)) {
+			WNote::error('media_mime_unknown', 'media_mime_unknown', 'debug');
+			$this->setHeader('Location', Wroute::getDir());
+			return array();
+		}
+
+		header('Content-Description: File Transfer');
+		header("Pragma public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: private", false);
+		header("Content-Type: ".$h_file->file_src_mime);
+		header("Content-Disposition: attachment; filename=\"".$h_upload->file_src_name."\";");
+		header("Content-Transfer-Encoding: binary");
+		header("Content-Length: ".$h_file->file_src_size);
+		ob_clean();
+		flush();
+		readfile($filename);
+
+		return array();
 	}
 
 }
