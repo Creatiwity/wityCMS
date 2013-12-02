@@ -35,9 +35,9 @@ class MediaController extends WController {
 	 * @return array Unique identifier of the stored resource
 	 */
 	protected function upload(array $params) {
-		$datas = WRequest::get(array('media_file'), null, 'FILES');
+		$data = WRequest::get(array('media_file'), null, 'FILES');
 
-		if (in_array(null, $datas)) {
+		if (in_array(null, $data)) {
 			return WNote::error('no_file_sent', WLang::_('no_file_sent'));
 		}
 
@@ -47,7 +47,7 @@ class MediaController extends WController {
 		}
 
 		// Save file
-		$h_upload = WHelper::load('upload', array($datas['media_file'], WConfig::get('config.lang')));
+		$h_upload = WHelper::load('upload', array($data['media_file'], WConfig::get('config.lang')));
 
 		$h_upload->file_safe_name = true;
 
@@ -210,21 +210,21 @@ class MediaController extends WController {
 	 */
 	protected function get(array $params) {
 		// Retrieve fileID and hash in GET variables
-		$datas = WRequest::get(array('f', 'h'), null, 'GET');
-		
+		$data = WRequest::get(array('f', 'h'), null, 'GET');
+
 		if (is_null($data['f'])) {
 			$this->setHeader('Location', Wroute::getDir());
 			return array();
-		} else if (preg_match('/^[a-zA-Z0-9]+$/', $datas['f']) != 1) {
+		} else if (preg_match('/^[a-zA-Z0-9]+$/', $data['f']) != 1) {
 			WNote::error('media_fileID_missing', 'media_fileID_missing', 'debug');
 			$this->setHeader('Location', Wroute::getDir());
 			return array();
 		}
 
-		$params['fileID'] = $datas['f'];
+		$params['fileID'] = $data['f'];
 
-		if (!empty($datas['h']) && preg_match('/^[a-zA-Z0-9]+$/', $datas['h']) == 1) {
-			$params['hash'] = $datas['h'];
+		if (!empty($data['h']) && preg_match('/^[a-zA-Z0-9]+$/', $data['h']) == 1) {
+			$params['hash'] = $data['h'];
 		}
 
 		// Remove all forbidden chars
