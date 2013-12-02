@@ -170,6 +170,9 @@ class WSession {
 			$_SESSION['nickname'], 
 			$_SESSION['email'], 
 			$_SESSION['groupe'], 
+			$_SESSION['lang'], 
+			$_SESSION['firstname'], 
+			$_SESSION['lastname'], 
 			$_SESSION['access_string'], 
 			$_SESSION['access'],
 			$_SESSION['token_expiration']

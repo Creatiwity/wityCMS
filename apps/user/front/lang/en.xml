@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<lang value="fr">
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="en">
 	<item id="mandatory_fields">These fields are mandatory.</item>
 	
 	<!-- Errors -->
