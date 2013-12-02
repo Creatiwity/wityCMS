@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <lang value="en">
 	<!-- Errors -->
 	<item id="no_file_sent">Unable to detect any file in the request</item>

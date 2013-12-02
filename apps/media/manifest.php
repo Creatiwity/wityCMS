@@ -7,10 +7,7 @@
 	<version>0.4</version>
 
 	<!-- Last update date -->
-	<date>14-09-2013</date>
-
-	<!-- Tiny icone to be displayed in the admin board -->
-	<icone></icone>
+	<date>02-12-2013</date>
 
 	<!-- Front pages -->
 	<action>listing</action>

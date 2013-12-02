@@ -1,6 +1,6 @@
 <?php
 /**
- * Media Application - Front Model - /apps/media/front/model.php
+ * Media Application - Front Model
  */
 
 defined('WITYCMS_VERSION') or die('Access denied');
@@ -8,10 +8,10 @@ defined('WITYCMS_VERSION') or die('Access denied');
 /**
  * MediaModel is the Front Model of the Media Application
  *
- * @package Apps
+ * @package Apps/Media/Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-19-04-2013
+ * @version 0.4.0-02-12-2013
  */
 class MediaModel {
 	protected $db;

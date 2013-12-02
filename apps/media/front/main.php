@@ -1,6 +1,6 @@
 <?php
 /**
- * Media Application - Front Controller - /apps/media/front/main.php
+ * Media Application - Front Controller
  */
 
 defined('WITYCMS_VERSION') or die('Access denied');
@@ -8,10 +8,10 @@ defined('WITYCMS_VERSION') or die('Access denied');
 /**
  * MediaController is the Front Controller of the Media Application
  *
- * @package Apps
+ * @package Apps/Media/Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4-14-09-2013
+ * @version 0.4.0-02-12-2013
  */
 class MediaController extends WController {
 
@@ -29,7 +29,7 @@ class MediaController extends WController {
 	}
 
 	/**
-	 * Stores a file sent with an Ajax request and returns the corresponding id
+	 * Stores a file sent with an Ajax request and returns the corresponding id.
 	 *
 	 * @param array $params Input parameters
 	 * @return array Unique identifier of the stored resource
@@ -37,8 +37,8 @@ class MediaController extends WController {
 	protected function upload(array $params) {
 		$datas = WRequest::get(array('media_file'), null, 'FILES');
 
-		if(in_array(null, $datas)) {
-			return WNote::error("no_file_sent", WLang::_("no_file_sent"));
+		if (in_array(null, $datas)) {
+			return WNote::error('no_file_sent', WLang::_('no_file_sent'));
 		}
 
 		// Test if folders exist and create them
@@ -72,13 +72,13 @@ class MediaController extends WController {
 		$dst_filename_wthID = str_replace($fileID.'.', '', $h_upload->file_dst_name);
 
 		$data = array(
-			'fileID' => $fileID,
-			'hash' => $file_hash,
-			'filename' => substr($h_upload->file_dst_name_body, 0, strrpos($h_upload->file_dst_name_body, '.')),
-			'mime' => $h_upload->file_src_mime,
+			'fileID'    => $fileID,
+			'hash'      => $file_hash,
+			'filename'  => substr($h_upload->file_dst_name_body, 0, strrpos($h_upload->file_dst_name_body, '.')),
+			'mime'      => $h_upload->file_src_mime,
 			'extension' => $h_upload->file_dst_name_ext,
-			'state' => 'ONLINE',
-			'link' => WRoute::getBase().'/o/media/'.$dst_filename_wthID.'?f='.$fileID.'&h='.$file_hash
+			'state'     => 'ONLINE',
+			'link'      => WRoute::getBase().'/o/media/'.$dst_filename_wthID.'?f='.$fileID.'&h='.$file_hash
 		);
 
 		$media_params = $this->model->createNewMedia($data);
@@ -95,40 +95,40 @@ class MediaController extends WController {
 	}
 
 	/**
-	 * Returns true if upload folders are correctly created and secured, otherwise returns WNote
+	 * Returns true if upload folders are correctly created and secured, otherwise returns WNote.
 	 *
 	 * @return boolean|WNote
 	 */
 	private function checkFolders() {
 		if (!file_exists(UPLOAD_DIR.'media') || !is_dir(UPLOAD_DIR.'media')) {
 			if (!mkdir(UPLOAD_DIR.'media')) {
-				return WNote::error("unable_to_mkdir_media", WLang::_("server_configuration_error"));
+				return WNote::error('unable_to_mkdir_media', WLang::_('server_configuration_error'));
 			}
 		}
 
 		if (!file_exists(UPLOAD_DIR.'media'.DS.'public') || !is_dir(UPLOAD_DIR.'media'.DS.'public')) {
 			if (!mkdir(UPLOAD_DIR.'media'.DS.'public')) {
-				return WNote::error("unable_to_mkdir_public", WLang::_("server_configuration_error"));
+				return WNote::error('unable_to_mkdir_public', WLang::_('server_configuration_error'));
 			}
 		}
 
 		if (!file_exists(UPLOAD_DIR.'media'.DS.'private') || !is_dir(UPLOAD_DIR.'media'.DS.'private')) {
 			if (!mkdir(UPLOAD_DIR.'media'.DS.'private')) {
-				return WNote::error("unable_to_mkdir_private", WLang::_("server_configuration_error"));
+				return WNote::error('unable_to_mkdir_private', WLang::_('server_configuration_error'));
 			}
 
 			$htaccess_file = @fopen(UPLOAD_DIR.'media'.DS.'private'.DS.'.htaccess', "w+");
 
 			if ($htaccess_file === false) {
-				return WNote::error("unable_to_fopen_htaccess", WLang::_("server_configuration_error"));
+				return WNote::error('unable_to_fopen_htaccess', WLang::_('server_configuration_error'));
 			}
 
 			if (fwrite($htaccess_file, "deny from all") === false) {
-				return WNote::error("unable_to_fwrite_htaccess", WLang::_("server_configuration_error"));
+				return WNote::error('unable_to_fwrite_htaccess', WLang::_('server_configuration_error'));
 			}
 
 			if (fclose($htaccess_file) === false) {
-				return WNote::error("unable_to_fclose_htaccess", WLang::_("server_configuration_error"));
+				return WNote::error('unable_to_fclose_htaccess', WLang::_('server_configuration_error'));
 			}
 		}
 
@@ -136,7 +136,7 @@ class MediaController extends WController {
 	}
 
 	/**
-	 * Returns the logic needed to call a media upload in a view
+	 * Returns the logic needed to call a media upload in a view.
 	 *
 	 * @param array $params Input parameters
 	 * @return array Nothing
@@ -146,7 +146,7 @@ class MediaController extends WController {
 	}
 
 	/**
-	 * Edits the meta informations of a given resource
+	 * Edits the meta informations of a given resource.
 	 *
 	 * @param array $params New informations and id of the resource to edit
 	 * @return array Nothing
@@ -158,7 +158,7 @@ class MediaController extends WController {
 	}
 
 	/**
-	 * Returns the sources which relates to a given resource
+	 * Returns the sources which relates to a given resource.
 	 *
 	 * @param array $params Input parameters
 	 * @return array Array of resources which relates to a given source
@@ -169,7 +169,7 @@ class MediaController extends WController {
 	}
 
 	/**
-	 * Returns the link to a given resource
+	 * Returns the link to a given resource.
 	 *
 	 * @param array $params Input parameters
 	 * @return array The link which will be used to access to a resource
@@ -192,18 +192,18 @@ class MediaController extends WController {
 		$data['filename'] = str_replace($data['fileID'].'.', '', $data['filename']);
 
 		return array(
-			'fileID' => $data['fileID'],
-			'hash' => $data['hash'],
-			'filename' => $data['filename'],
-			'mime' => $data['mime'],
+			'fileID'    => $data['fileID'],
+			'hash'      => $data['hash'],
+			'filename'  => $data['filename'],
+			'mime'      => $data['mime'],
 			'extension' => $data['extension'],
-			'state' => $data['state'],
-			'link' => WRoute::getBase().'/o/media/'.$data['filename'].'.'.$data['extension'].'?f='.$data['fileID'].'&h='.$data['hash']
+			'state'     => $data['state'],
+			'link'      => WRoute::getBase().'/o/media/'.$data['filename'].'.'.$data['extension'].'?f='.$data['fileID'].'&h='.$data['hash']
 		);
 	}
 
 	/**
-	 * Triggers download of the file with the given id
+	 * Triggers download of the file with the given id.
 	 *
 	 * @param array $params Input parameters
 	 * @return array Nothing
@@ -211,8 +211,11 @@ class MediaController extends WController {
 	protected function get(array $params) {
 		// Retrieve fileID and hash in GET variables
 		$datas = WRequest::get(array('f', 'h'), null, 'GET');
-
-		if (is_null($datas['f']) || preg_match('/^[a-zA-Z0-9]+$/', $datas['f']) != 1) {
+		
+		if (is_null($data['f'])) {
+			$this->setHeader('Location', Wroute::getDir());
+			return array();
+		} else if (preg_match('/^[a-zA-Z0-9]+$/', $datas['f']) != 1) {
 			WNote::error('media_fileID_missing', 'media_fileID_missing', 'debug');
 			$this->setHeader('Location', Wroute::getDir());
 			return array();
@@ -224,7 +227,8 @@ class MediaController extends WController {
 			$params['hash'] = $datas['h'];
 		}
 
-		$params[0] = stripslashes($params[0]);
+		// Remove all forbidden chars
+		$params[0] = preg_replace('/[^a-zA-Z0-9_\.-]/', '', $params[0]);
 
 		// Must be fresh start
 		if (headers_sent()) {
@@ -268,7 +272,7 @@ class MediaController extends WController {
 			return array();
 		}
 
-		header('Content-Description: File Transfer');
+		header("Content-Description: File Transfer");
 		header("Pragma public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
