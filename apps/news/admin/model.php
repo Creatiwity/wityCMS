@@ -24,19 +24,6 @@ class NewsAdminModel extends NewsModel {
 	}
 	
 	/**
-	 * Retrieves last News_ID in the database
-	 * 
-	 * @return int
-	 */
-	public function getLastNewsId() {
-		$prep = $this->db->prepare('
-			SELECT id FROM news ORDER BY id DESC LIMIT 1
-		');
-		$prep->execute();
-		return intval($prep->fetchColumn());
-	}
-	
-	/**
 	 * Creates a News in the database from a set of data
 	 * 
 	 * @param array $data
@@ -44,8 +31,8 @@ class NewsAdminModel extends NewsModel {
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, meta_title, keywords, description, creation_date, edited_by)
-			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :description, NOW(), :edited_by)
+			INSERT INTO news(url, title, author, content, meta_title, keywords, description)
+			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :description)
 		');
 		$prep->bindParam(':url', $data['news_url']);
 		$prep->bindParam(':title', $data['news_title']);
@@ -54,8 +41,12 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':description', $data['news_description']);
-		$prep->bindParam(':edited_by', $_SESSION['userid']);
-		return $prep->execute();
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -69,7 +60,7 @@ class NewsAdminModel extends NewsModel {
 		$prep = $this->db->prepare('
 			UPDATE news
 			SET url = :url, title = :title, author = :author, content = :content, meta_title = :meta_title, 
-				keywords = :keywords, description = :description, modified_date = NOW(), edited_by = :edited_by
+				keywords = :keywords, description = :description
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $news_id);
@@ -80,7 +71,6 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':description', $data['news_description']);
-		$prep->bindParam(':edited_by', $_SESSION['userid']);
 		return $prep->execute();
 	}
 	

@@ -47,10 +47,9 @@ class ContactAdminModel extends ContactModel {
 	 * @param bool   $asc      Ascendent or descendent?
 	 * @return array A list of information about the emails found
 	 */
-	public function getEmailList($from, $number, $order = 'date', $asc = false) {
+	public function getEmailList($from, $number, $order = 'created_date', $asc = false) {
 		$prep = $this->db->prepare('
-			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, 
-				DATE_FORMAT(`contact`.`date`, "%d/%m/%Y %H:%i") AS date
+			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, `contact`.`created_date`
 			FROM contact
 			LEFT JOIN users
 			ON from_id = users.id
@@ -71,7 +70,7 @@ class ContactAdminModel extends ContactModel {
 	 */
 	public function getEmail($emailid) {
 		$prep = $this->db->prepare('
-			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, DATE_FORMAT(`contact`.`date`, "%d/%m/%Y %H:%i") AS date
+			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, `contact`.`created_date`
 			FROM contact
 			LEFT JOIN users
 			ON from_id = users.id
@@ -91,12 +90,11 @@ class ContactAdminModel extends ContactModel {
 	public function setConfig($key, $value) {
 		$prep = $this->db->prepare('
 			UPDATE contact_config
-			SET value = :value, modified = NOW(), edited_by = :userid
+			SET value = :value
 			WHERE `key` = :key
 		');
 		$prep->bindParam(':key', $key);
 		$prep->bindParam(':value', $value);
-		$prep->bindParam(':userid', $_SESION['userid'], PDO::PARAM_INT);
 		return $prep->execute();
 	}
 	

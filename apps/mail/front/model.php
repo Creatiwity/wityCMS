@@ -51,8 +51,8 @@ class MailModel {
 		}
 
 		$prep = $this->db->prepare('
-			INSERT INTO mail_mailing(internal_id, action_expiration, response_policy, response_callback, sender_id, origin_app, origin_action, origin_parameters, date)
-			VALUES (:internal_id, :action_expiration, :response_policy, :response_callback, :sender_id, :origin_app, :origin_action, :origin_parameters, NOW())
+			INSERT INTO mail_mailing(internal_id, action_expiration, response_policy, response_callback, sender_id, origin_app, origin_action, origin_parameters)
+			VALUES (:internal_id, :action_expiration, :response_policy, :response_callback, :sender_id, :origin_app, :origin_action, :origin_parameters)
 		');
 		$prep->bindParam(':internal_id', $id);
 		$_action_expiration = serialize($action_expiration);
@@ -71,8 +71,8 @@ class MailModel {
 	public function addMail($hash, $mailing_hash_id, $from, $to, $cc, $bcc, $attachments, $subject, $body, $compiled_subject, $compiled_body, $params) {
 
 		$prep = $this->db->prepare('
-			INSERT INTO mail_list(hash, mailing_hash_id, `from`, `to`, cc, bcc, attachments, subject, body, compiled_subject, compiled_body, params, state, date_state_modified, date)
-			VALUES (:hash, :mailing_hash_id, :from, :to, :cc, :bcc, :attachments, :subject, :body, :compiled_subject, :compiled_body, :params, :state, NOW(), NOW())
+			INSERT INTO mail_list(hash, mailing_hash_id, `from`, `to`, cc, bcc, attachments, subject, body, compiled_subject, compiled_body, params, state, date_state_modified)
+			VALUES (:hash, :mailing_hash_id, :from, :to, :cc, :bcc, :attachments, :subject, :body, :compiled_subject, :compiled_body, :params, :state, NOW())
 		');
 
 		$prep->bindParam(':hash', $hash);
@@ -189,8 +189,8 @@ class MailModel {
 		}
 
 		$prep = $this->db->prepare('
-			INSERT INTO mail_action_history(hash_action, hash_mail, user_id, email, url, date)
-			VALUES (:hash_action, :hash_mail, :user_id, :email, :url, NOW())
+			INSERT INTO mail_action_history(hash_action, hash_mail, user_id, email, url)
+			VALUES (:hash_action, :hash_mail, :user_id, :email, :url)
 		');
 		$prep->bindParam(':hash_action', $params['hash_action']);
 		$prep->bindParam(':hash_mail', $params['hash_mail']);

@@ -9,7 +9,7 @@
 					<tr class="waiting" data-title="{$user.nickname}" data-content="&lt;ul class='unstyled'&gt;&lt;li&gt;{$user.firstname} {$user.lastname}&lt;/li&gt;&lt;li&gt;{$user.email}&lt;/li&gt;&lt;/ul&gt;">
 						<td>{$user.id}</td>
 						<td><strong>{$user.nickname}</strong></td>
-						<td>{$user.date}</td>
+						<td>{$user.created_date}</td>
 						<td>
 							<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="validate" />
 							<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="refuse" />
@@ -43,7 +43,7 @@
 						<th><a href="/admin/user/listing/id-{$id_sort}/{$subURL}"><i class="{$id_class}"></i> #</a></th>
 						<th><a href="/admin/user/listing/nickname-{$nickname_sort}/{$subURL}"><i class="{$nickname_class}"></i> {lang nickname}</a></th>
 						<th><a href="/admin/user/listing/groupe-{$groupe_sort}/{$subURL}"><i class="{$groupe_class}"></i> {lang group}</a></th>
-						<th><a href="/admin/user/listing/date-{$date_sort}/{$subURL}"><i class="{$date_class}"></i> {lang register_time}</a></th>
+						<th><a href="/admin/user/listing/created_date-{$created_date_sort}/{$subURL}"><i class="{$created_date_class}"></i> {lang register_time}</a></th>
 						<th><a href="/admin/user/listing/last_activity-{$last_activity_sort}/{$subURL}"><i class="{$last_activity_class}"></i> {lang last_connection}</a></th>
 						<th>Actions</th>
 					</tr>
@@ -54,7 +54,7 @@
 						<td>{$user.id}</td>
 						<td><strong>{$user.nickname}</strong></td>
 						<td>{$user.groupe_name}</td>
-						<td>{$user.date}</td>
+						<td>{$user.created_date}</td>
 						<td>{$user.last_activity}</td>
 						<td>
 							<a href="/admin/user/edit/{$user.id}" class="black" title="{lang edit}"><i class="glyphicon glyphicon-edit"></i></a>

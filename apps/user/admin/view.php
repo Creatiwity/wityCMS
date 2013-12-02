@@ -56,7 +56,7 @@ class UserAdminView extends WView {
 		
 		$pagination = WHelper::load('pagination', array(
 			$model['stats']['request'], 
-			$model['users_per_page'], 
+			$model['per_page'], 
 			$model['current_page'], 
 			'/admin/user/listing/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL)
 		);
@@ -99,8 +99,8 @@ class UserAdminView extends WView {
 			'lastname' => '',
 			'groupe' => 0,
 			'access' => '',
-			'date' => '',
-			'last_activity' => ''
+			'last_activity' => '',
+			'created_date' => ''
 		);
 		$data = !empty($model['user_data']) ? $model['user_data'] : $model['post_data'];
 		foreach ($default_model as $item => $default) {
@@ -156,7 +156,7 @@ class UserAdminView extends WView {
 		$this->assign('admin_apps', $model['admin_apps']);
 		
 		// SortingHelper
-		$this->assign($model['sortingHelper']->getTplVars());
+		$this->assign($model['sorting_vars']);
 		
 		$this->assign('groups', $model['groups']);
 		
@@ -208,8 +208,8 @@ class UserAdminView extends WView {
 	 * @param array $model
 	 */
 	public function group_del($model) {
-		$this->assign('group_name', $model['group_data']['name']);
-		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['group_id']);
+		$this->assign('group_name', $model['name']);
+		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['id']);
 	}
 	
 	/**
