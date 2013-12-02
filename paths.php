@@ -59,4 +59,9 @@ define('LOGS_DIR', WITY_PATH.'helpers'.DS);
  */
 define('CACHE_DIR', WITY_PATH.'cache'.DS);
 
+/**
+ * Upload directory location
+ */
+define('UPLOAD_DIR', WITY_PATH.'upload'.DS);
+
 ?>
