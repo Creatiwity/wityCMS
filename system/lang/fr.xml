@@ -15,6 +15,6 @@
 	<item id="wdate_hour_ago">il y a une heure</item>
 	<item id="wdate_minutes_ago">il y a %s minutes</item>
 	<item id="wdate_minute_ago">il y a une minute</item>
-	<item id="wdate_seconds_ago">il y a %s seconde</item>
+	<item id="wdate_seconds_ago">il y a %s secondes</item>
 	<item id="wdate_second_ago">il y a une seconde</item>
 </lang>
