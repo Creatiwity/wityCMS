@@ -34,6 +34,7 @@ class WMain {
 		
 		// Initializing lang
 		WLang::init();
+		WLang::declareLangDir(SYS_DIR.'lang');
 		
 		// Initializing WRetrever
 		WRetriever::init();
