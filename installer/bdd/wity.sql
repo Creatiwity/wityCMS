@@ -152,6 +152,7 @@ CREATE TABLE IF NOT EXISTS `prefix_users_groups` (
 -- Table structure for table `prefix_contact`
 --
 
+DROP TABLE IF EXISTS `prefix_contact`;
 CREATE TABLE IF NOT EXISTS `prefix_contact` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `hash` varchar(130) NOT NULL,
@@ -178,6 +179,7 @@ CREATE TABLE IF NOT EXISTS `prefix_contact` (
 -- Table structure for table `prefix_contact_config`
 --
 
+DROP TABLE IF EXISTS `prefix_contact_config`;
 CREATE TABLE IF NOT EXISTS `prefix_contact_config` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(100) NOT NULL,
@@ -199,6 +201,7 @@ INSERT INTO `prefix_contact_config` (`key`, `value`, `created_date`) VALUES
 -- Table structure for table `prefix_mail_action_history`
 --
 
+DROP TABLE IF EXISTS `prefix_mail_action_history`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_action_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hash_action` varchar(40) NOT NULL,
@@ -219,6 +222,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_action_history` (
 -- Table structure for table `prefix_mail_available_actions`
 --
 
+DROP TABLE IF EXISTS `prefix_mail_available_actions`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hash_action` varchar(40) NOT NULL,
@@ -239,6 +243,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
 -- Table structure for table `prefix_mail_configuration`
 --
 
+DROP TABLE IF EXISTS `prefix_mail_configuration`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
   `key` varchar(100) NOT NULL,
   `value` varchar(500) NOT NULL,
@@ -255,6 +260,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
 -- Table structure for table `prefix_mail_list`
 --
 
+DROP TABLE IF EXISTS `prefix_mail_list`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hash` varchar(40) NOT NULL,
@@ -284,6 +290,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_list` (
 -- Table structure for table `prefix_mail_mailing`
 --
 
+DROP TABLE IF EXISTS `prefix_mail_mailing`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `internal_id` varchar(27) NOT NULL,
