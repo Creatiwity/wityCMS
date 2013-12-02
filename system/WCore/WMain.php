@@ -122,8 +122,12 @@ class WMain {
 			}
 		}
 		if ($error) {
-			header('HTTP/1.0 404 Not Found');
-			WNote::error(404, 'The resource could not be found.', 'die');
+			$route = WRoute::route();
+
+			if ($route['app'] != 'media') {
+				header('HTTP/1.0 404 Not Found');
+				WNote::error(404, 'The resource could not be found.', 'die');
+			}
 		}
 	}
 
