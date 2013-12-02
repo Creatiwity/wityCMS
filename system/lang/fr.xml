@@ -17,4 +17,9 @@
 	<item id="wdate_minute_ago">il y a une minute</item>
 	<item id="wdate_seconds_ago">il y a %s secondes</item>
 	<item id="wdate_second_ago">il y a une seconde</item>
+	
+	<!-- Errors -->
+	<item id="error_404"><![CDATA[Désolé mais WityCMS n'a pas été en mesure de trouver la page demandée...
+<br /><br />
+<a href="/">Retour à l'accueil</a>]]></item>
 </lang>

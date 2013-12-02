@@ -253,7 +253,7 @@ class WRetriever {
 				return WNote::error('app_structure', "The application \"".$app_code."\" has to have a main class inheriting from WController abstract class.");
 			}
 		} else {
-			return WNote::error(404, "The requested page was not found.");
+			return WNote::error(404, WLang::_('error_404', WRoute::getDir()));
 		}
 	}
 

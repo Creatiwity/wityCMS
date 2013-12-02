@@ -254,7 +254,7 @@ class WLang {
 					}
 					
 					return call_user_func_array('sprintf', $params);
-				} else {
+				} else if (is_array($params)) {
 					$string = self::$values[$name];
 					foreach ($params as $key => $value) {
 						$string = str_replace('{{'.$key.'}}', $value, $string);
@@ -262,9 +262,9 @@ class WLang {
 					
 					return $string;
 				}
-			} else {
-				return self::$values[$name];
 			}
+			
+			return self::$values[$name];
 		} else {
 			return ucwords(str_replace('_', ' ', $name));
 		}

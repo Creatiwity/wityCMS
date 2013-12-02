@@ -17,4 +17,9 @@
 	<item id="wdate_minute_ago">1 minute ago</item>
 	<item id="wdate_seconds_ago">%s seconds ago</item>
 	<item id="wdate_second_ago">1 second ago</item>
+	
+	<!-- Errors -->
+	<item id="error_404"><![CDATA[Sorry but WityCMS was not able to find the requested page...
+<br /><br />
+<a href="%s">Back to home</a>]]></item>
 </lang>
