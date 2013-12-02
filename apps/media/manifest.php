@@ -13,13 +13,13 @@
 	<icone></icone>
 
 	<!-- Front pages -->
-	<action default="default">listing</action>
+	<action>listing</action>
 	<action requires="connected">upload</action>
 	<action requires="connected">upload_button</action>
 	<action requires="connected">metaedit</action>
 	<action>relatives</action>
 	<action>link</action>
-	<action>get</action>
+	<action default="default">get</action>
 
 	<!-- Admin pages -->
 	<admin>

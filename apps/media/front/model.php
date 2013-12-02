@@ -128,9 +128,42 @@ class MediaModel {
 	 */
 	public function getFile($params) {
 		// Build complete filename (private and public)
+		$filename = $params[0];
+		$dotPosition = strrpos($filename, '.');
+
+		if ($dotPosition == false) {
+			return false;
+		}
+
+		$filename = substr_replace($filename, '.'.$params['fileID'], $dotPosition, 0);
+
+		$isPrivate = false;
+
 		// Do file_exists
+		if (is_dir(UPLOAD_DIR.'media'.DS.'private') && file_exists(UPLOAD_DIR.'media'.DS.'private'.DS.$filename)) {
+			$fullFilename = UPLOAD_DIR.'media'.DS.'private'.DS.$filename;
+			$isPrivate = true;
+		} else if (is_dir(UPLOAD_DIR.'media'.DS.'public') && file_exists(UPLOAD_DIR.'media'.DS.'public'.DS.$filename)) {
+			$fullFilename = UPLOAD_DIR.'media'.DS.'public'.DS.$filename;
+		} else {
+			return false;
+		}
+
 		// Test access for this user (only if private)
+		if ($isPrivate && file_exists(UPLOAD_DIR.'media'.DS.'private'.DS.$params['fileID'].'.perm')) {
+
+		}
+
 		// If needed test sha1 with the db one and/or the one in $params
+		if (!empty($params['hash'])) {
+			$realHash = sha1_file($fullFilename);
+
+			if ($realHash != $params['hash']) {
+				return 'corrupted';
+			}
+		}
+
 		// Returns complete filename
+		return $fullFilename;
 	}
 }
