@@ -66,8 +66,6 @@ class WRetriever {
 					WRequest::set($key, $value, "GET");
 				}
 			}
-
-			unset($params['querystring']);
 		}
 
 		// Init model structure
