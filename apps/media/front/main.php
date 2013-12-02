@@ -212,7 +212,7 @@ class MediaController extends WController {
 		// Retrieve fileID and hash in GET variables
 		$datas = WRequest::get(array('f', 'h'), null, 'GET');
 
-		if (is_null($datas['f'])) {
+		if (is_null($datas['f']) || preg_match('/^[a-zA-Z0-9]+$/', $datas['f']) != 1) {
 			WNote::error('media_fileID_missing', 'media_fileID_missing', 'debug');
 			$this->setHeader('Location', Wroute::getDir());
 			return array();
@@ -220,9 +220,11 @@ class MediaController extends WController {
 
 		$params['fileID'] = $datas['f'];
 
-		if (!empty($datas['h'])) {
+		if (!empty($datas['h']) && preg_match('/^[a-zA-Z0-9]+$/', $datas['h']) == 1) {
 			$params['hash'] = $datas['h'];
 		}
+
+		$params[0] = stripslashes($params[0]);
 
 		// Must be fresh start
 		if (headers_sent()) {

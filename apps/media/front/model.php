@@ -106,7 +106,7 @@ class MediaModel {
 	}
 
 	public function getMediaData($fileID, $onlyOnline = true) {
-		// Insert data in table
+		// Get file data in table
 		$prep = $this->db->prepare('
 			SELECT fileID, hash, filename, mime, extension, state
 			INTO media_list
@@ -117,6 +117,19 @@ class MediaModel {
 		$prep->execute();
 
 		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
+
+	private function setMediaDeleted($fileID, $body, $ext) {
+		$prep = $this->db->prepare('
+			UPDATE media_list
+			SET state = "DELETED"
+			WHERE fileID = :fileID AND filename = :filename AND extension = :extension'
+		);
+
+		$prep->bindParam(':fileID', $fileID);
+		$prep->bindParam(':filename', $body);
+		$prep->bindParam(':extension', $ext);
+		return $prep->execute();
 	}
 
 	/**
@@ -146,6 +159,10 @@ class MediaModel {
 		} else if (is_dir(UPLOAD_DIR.'media'.DS.'public') && file_exists(UPLOAD_DIR.'media'.DS.'public'.DS.$filename)) {
 			$fullFilename = UPLOAD_DIR.'media'.DS.'public'.DS.$filename;
 		} else {
+			$filenameBody = substr($params[0], 0, $dotPosition);
+			$filenameExt = substr($params[0], $dotPosition + 1);
+			$this->setMediaDeleted($params['fileID'], $filenameBody, $filenameExt);
+
 			return false;
 		}
 
