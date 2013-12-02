@@ -74,7 +74,7 @@ class MediaController extends WController {
 		$data = array(
 			'fileID' => $fileID,
 			'hash' => $file_hash,
-			'filename' => $h_upload->file_dst_name_body,
+			'filename' => substr($h_upload->file_dst_name_body, 0, strrpos($h_upload->file_dst_name_body, '.')),
 			'mime' => $h_upload->file_src_mime,
 			'extension' => $h_upload->file_dst_name_ext,
 			'state' => 'ONLINE',
