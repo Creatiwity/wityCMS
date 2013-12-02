@@ -105,6 +105,13 @@ class MediaModel {
 		return $prep->execute();
 	}
 
+	/**
+	 * Returns file metadata
+	 *
+	 * @param string $fileID is the ID of the file
+	 * @param boolean $onlyOnline specify if we want to get data only if the file exists
+	 * @return array|boolean This array contains ID, hash, filename, MIME type, extension and state, or FALSE if the file doesn't exist
+	 */
 	public function getMediaData($fileID, $onlyOnline = true) {
 		// Get file data in table
 		$prep = $this->db->prepare('
@@ -119,16 +126,52 @@ class MediaModel {
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 
-	private function setMediaDeleted($fileID, $body, $ext) {
+	private function fileExistsInDB($fileID, $body, $ext) {
 		$prep = $this->db->prepare('
-			UPDATE media_list
-			SET state = "DELETED"
-			WHERE fileID = :fileID AND filename = :filename AND extension = :extension'
-		);
-
+			SELECT COUNT(id)
+			FROM media_list
+			WHERE fileID = :fileID AND filename = :filename AND extension = :extension
+		');
 		$prep->bindParam(':fileID', $fileID);
 		$prep->bindParam(':filename', $body);
 		$prep->bindParam(':extension', $ext);
+		$prep->execute();
+
+		return $prep->fetchColumn() > 0;
+	}
+
+	private function setMediaDeleted($fileID) {
+		$prep = $this->db->prepare('
+			UPDATE media_list
+			SET state = "DELETED"
+			WHERE fileID = :fileID
+		');
+
+		$prep->bindParam(':fileID', $fileID);
+		return $prep->execute();
+	}
+
+	private function setMediaCorrupted($fileID) {
+		$prep = $this->db->prepare('
+			UPDATE media_list
+			SET state = "CORRUPTED"
+			WHERE fileID = :fileID
+		');
+
+		$prep->bindParam(':fileID', $fileID);
+		return $prep->execute();
+	}
+
+	private function addAccessEntry($fileID, $state = 'ONLINE') {
+		// Insert data in table
+		$prep = $this->db->prepare('
+			INSERT INTO media_access_history(file_id, state)
+			VALUES(:file_id, :state)
+		');
+
+		$prep->bindParam(':file_id', $fileID);
+		$prep->bindParam(':state', $state);
+
 		return $prep->execute();
 	}
 
@@ -161,7 +204,11 @@ class MediaModel {
 		} else {
 			$filenameBody = substr($params[0], 0, $dotPosition);
 			$filenameExt = substr($params[0], $dotPosition + 1);
-			$this->setMediaDeleted($params['fileID'], $filenameBody, $filenameExt);
+
+			if ($this->fileExistsInDB($params['fileID'], $filenameBody, $filenameExt)) {
+				$this->setMediaDeleted($params['fileID']);
+				$this->addAccessEntry($params['fileID'], 'DELETED');
+			}
 
 			return false;
 		}
@@ -176,9 +223,14 @@ class MediaModel {
 			$realHash = sha1_file($fullFilename);
 
 			if ($realHash != $params['hash']) {
+				$this->setMediaCorrupted($params['fileID']);
+				$this->addAccessEntry($params['fileID'], 'CORRUPTED');
+
 				return 'corrupted';
 			}
 		}
+
+		$this->addAccessEntry($params['fileID']);
 
 		// Returns complete filename
 		return $fullFilename;
