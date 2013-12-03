@@ -19,7 +19,11 @@
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
 
-		{set $require = 'bootstrap'}
+		<script type="text/javascript">
+			var require = {
+				deps: ['bootstrap']
+			}
+		</script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
