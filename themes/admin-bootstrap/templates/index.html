@@ -4,26 +4,26 @@
 		<title>{$page_title}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
+
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal-bs3patch.css" rel="stylesheet" />
 		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet" />
 		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
-		
+
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
-		
-		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modalmanager.js"></script>
-		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modal.js"></script>
-		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap3-patch.js"></script>
-		<script src="/themes/admin-bootstrap/js/core-admin.js"></script>
+
+		<script type="text/javascript">
+			var require = {
+				deps: ['bootstrap', 'themes!admin-bootstrap/core-admin']
+			};
+		</script>
+
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
@@ -74,7 +74,7 @@
 		{/if}
 			{$notes}
 			<div class="clearfix"></div>
-			{$include}			
+			{$include}
 		</div><!--/span-->
 		<div class="clearfix"></div>
 		<div class="col-md-12">

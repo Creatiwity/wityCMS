@@ -1,0 +1,21 @@
+{
+	"baseUrl": "{$base_url}/libraries",
+	"paths": {
+		"apps": "witycms/apps.plugin",
+		"themes": "witycms/themes.plugin",
+		"jquery": "jquery-1.10.2/jquery-1.10.2",
+		"bootstrap": "bootstrap-3.0.0/js/bootstrap",
+		"modal": "bootstrap-modal-2.2.0/js/bootstrap3-patch",
+		"bootstrap-modal-core": "bootstrap-modal-2.2.0/js/bootstrap-modal",
+		"wysihtml5": "wysihtml5-bootstrap/wrapper",
+		"wysihtml5-bootstrap-plugin": "wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.min",
+		"wysihtml5-core": "wysihtml5-bootstrap/wysihtml5.min"
+	},
+	"shim": {
+		"bootstrap": ["jquery"],
+		"wysihtml5": ["jquery", "wysihtml5-bootstrap-plugin"],
+		"wysihtml5-bootstrap-plugin": ["wysihtml5-core"],
+		"bootstrap-modal-core": ["jquery", "bootstrap", "bootstrap-modal-2.2.0/js/bootstrap-modalmanager"]
+	},
+	"waitSeconds": 15
+}
