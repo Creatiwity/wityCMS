@@ -242,8 +242,7 @@ class WView {
 				if (self::$global_vars['require']) {
 					$require .= 'require(["'
 						.implode('", "', self::$global_vars['require']);
-					$require = substr($require, 0, -3);
-					$require .= ']);'."\n";
+					$require .= '"]);'."\n";
 				}
 
 				$require .= '</script>'."\n";
