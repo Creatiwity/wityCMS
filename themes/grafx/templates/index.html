@@ -6,21 +6,20 @@
 		<meta name="description" content="{if isset({$site_desc})}{$site_desc}{/if}" />
 		<meta name="keywords" content="{if isset({$keywords})}{$keywords}{/if}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
+
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="/themes/grafx/css/style.css" rel="stylesheet" title="Grafx" />
 		<link href="/apps/user/front/css/user.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
-		
+
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
-		
-		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.js"></script>
+
+		{set $require = 'bootstrap'}
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>

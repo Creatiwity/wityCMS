@@ -1,0 +1,12 @@
+{
+	"baseUrl": "{$base_url}/libraries",
+	"paths": {
+		"apps": "witycms/apps.plugin",
+		"jquery": "jquery-1.10.2/jquery-1.10.2",
+		"bootstrap": "bootstrap-3.0.0/js/bootstrap"
+	},
+	"shim": {
+		"bootstrap": ["jquery"]
+	},
+	"waitSeconds": 15
+}
