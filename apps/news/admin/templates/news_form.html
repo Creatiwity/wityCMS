@@ -11,17 +11,14 @@
 						<input id="news_title" class="form-control input-lg" type="text" name="news_title" value="{$news_title}"  autocomplete="off" placeholder="{lang title_of_article}" />
 					</div>
 				</div>
-				
+
 				<div class="input-group">
 					<span class="input-group-addon">{$site_url}{$last_id}-</span>
 					<input id="news_url" class="form-control" type="text" name="news_url" value="{$news_url}" />
 				</div>
-				
+
 				<label for="news_content" class="sr-only">{lang article_content}:</label><br />
-				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
-				<script type="text/javascript">
-					$('#news_content').wysihtml5();
-				</script>
+				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80" data-witycms-wysiwyg="true">{$news_content}</textarea><br />
 			</div>
 			<div class="col-md-3">
 				<div class="well well-sm">

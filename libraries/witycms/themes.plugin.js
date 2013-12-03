@@ -1,7 +1,7 @@
 define({
 	load: function (name, req, onload) {
-		//Convert name from app_name[/sthg...] to ../apps/app_name/js/[main.js|sthg...]
-		var lib = '../apps/', slashPos = name.indexOf('/');
+		//Convert name from theme_name[/sthg...] to ../themes/theme_name/js/[main.js|sthg...]
+		var lib = '../themes/', slashPos = name.indexOf('/');
 
 		if (slashPos !== -1) {
 			lib += name.substring(0, slashPos) +

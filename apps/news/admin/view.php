@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsAdminView is the Admin View of the News Application
- * 
+ *
  * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -16,17 +16,17 @@ defined('WITYCMS_VERSION') or die('Access denied');
 class NewsAdminView extends WView {
 	public function listing($model) {
 		$this->assign($model['sorting_tpl']);
-		
+
 		$pagination = WHelper::load('pagination', array(
-			$model['total'], 
-			$model['per_page'], 
-			$model['current_page'], 
+			$model['total'],
+			$model['per_page'],
+			$model['current_page'],
 			'/admin/news/listing/'.$model['sorting'][0].'-'.$model['sorting'][1].'-%d/'
 		));
 		$this->assign('pagination', $pagination->getHTML());
-		
+
 		$this->assign('news', $model['data']);
-		
+
 		$this->setTemplate('news_listing');
 	}
 
@@ -38,19 +38,18 @@ class NewsAdminView extends WView {
 			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
 		}
 	}
-	
+
 	public function news_form($model) {
 		// JS / CSS
-		$this->assign('js', '/apps/news/admin/js/add_or_edit.js');
 		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
-		$this->assign('js', "/libraries/wysihtml5-bootstrap/wysihtml5.min.js");
-		$this->assign('js', "/libraries/wysihtml5-bootstrap/bootstrap3-wysihtml5.js");
-		
+		$this->assign('require', 'apps!news/add_or_edit');
+		$this->assign('require', "wysihtml5");
+
 		// Assign site URL for permalink management
 		$this->assign('site_url', WRoute::getBase() . '/news/');
 		$this->assign('news_id', $model['news_id']);
 		$this->assign('last_id', $model['last_id']);
-		
+
 		// Treat categories filled by user
 		$news_cats = array();
 		if (isset($model['data']['news_cats']) && is_array($model['data']['news_cats'])) {
@@ -64,7 +63,7 @@ class NewsAdminView extends WView {
 		}
 		$this->assign('cats', $model['cats']);
 		$this->assign('news_cats', $news_cats);
-		
+
 		$this->fillMainForm(array(
 			'news_author'      => $_SESSION['nickname'],
 			'news_meta_title'  => '',
@@ -78,30 +77,30 @@ class NewsAdminView extends WView {
 		), $model['data']);
 		$this->setTemplate('news_form');
 	}
-	
+
 	public function add($model) {
 		$this->news_form($model);
 	}
-	
+
 	public function edit($model) {
 		$this->news_form($model);
 	}
-	
+
 	public function news_delete($model) {
 		$this->assign('title', $model['news_title']);
 		$this->assign('confirm_delete_url', "/admin/news/news_delete/".$model['news_id']."/confirm");
 	}
-	
+
 	public function category_delete($model) {
 		$this->assign('confirm_delete_url', "/admin/news/category_delete/".$model['cat_id']."/confirm");
 	}
-	
+
 	public function categories_manager($model) {
-		$this->assign('js', '/apps/news/admin/js/categories_manager.js');
-		
+		$this->assign('require', 'apps!news/categories_manager');
+
 		$this->assign($model['sorting_tpl']);
 		$this->assign('cats', $model['data']);
-		
+
 		$this->fillMainForm(array(
 			'news_cat_id' => '',
 			'news_cat_name' => '',
