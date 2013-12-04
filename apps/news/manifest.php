@@ -22,11 +22,11 @@
 	
 	<!-- Admin pages -->
 	<admin>
-		<action default="default" desc="articles_listing">listing</action>
-		<action requires="writer" desc="article_add">add</action>
-		<action requires="writer" desc="article_edit" menu="false">edit</action>
-		<action requires="moderator" desc="article_delete" menu="false">news_delete</action>
-		<action requires="category_manager" desc="categories_management" >categories_manager</action>
-		<action requires="category_manager,moderator" desc="category_delete" menu="false">category_delete</action>
+		<action default="default" description="articles_listing">listing</action>
+		<action requires="writer" description="article_add">add</action>
+		<action requires="writer" description="article_edit" menu="false">edit</action>
+		<action requires="moderator" description="article_delete" menu="false">news_delete</action>
+		<action requires="category_manager" description="categories_management" >categories_manager</action>
+		<action requires="category_manager,moderator" description="category_delete" menu="false">category_delete</action>
 	</admin>
 </app>

@@ -121,7 +121,7 @@ abstract class WController {
 					));
 					$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
 						ucwords($manifest['name']),
-						isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['desc']) : ''
+						isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['description']) : ''
 					));
 				}
 
@@ -364,8 +364,8 @@ abstract class WController {
 
 								if (!isset($manifest['actions'][$key])) {
 									$manifest['actions'][$key] = array(
-										'desc'     => isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
-										'requires' => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+										'description' => isset($attributes['description']) ? (string) $attributes['description'] : $key,
+										'requires'    => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
 
@@ -403,9 +403,9 @@ abstract class WController {
 									$manifest['admin_menu'] = $manifest['admin_menu'] || $menuState;
 
 									$manifest['admin'][$key] = array(
-										'desc'			=> isset($attributes['desc']) ? (string) $attributes['desc'] : $key,
-										'menu'			=> isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
-										'requires'		=> isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
+										'description' => isset($attributes['description']) ? (string) $attributes['description'] : $key,
+										'menu'        => isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true,
+										'requires'    => isset($attributes['requires']) ? array_map('trim', explode(',', $attributes['requires'])) : array()
 									);
 								}
 

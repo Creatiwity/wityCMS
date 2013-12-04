@@ -8,9 +8,6 @@
 	
 	<!-- Last update date -->
 	<date>02-10-2013</date>
-	
-	<!-- Tiny icone to be displayed in the admin board -->
-	<icone></icone>
 
 	<!-- Dependencies -->
 	<dependencies>
@@ -22,9 +19,9 @@
 	
 	<!-- Admin pages -->
 	<admin>
-		<action desc="mail_history" default="default">mail_history</action>
+		<action description="mail_history" default="default">mail_history</action>
 		<action menu="false">mail_detail</action>
-		<!-- <action desc="new_mail" alias="reply">new_mail</action> -->
-		<action requires="config" desc="action_config">config</action>
+		<!-- <action description="new_mail" alias="reply">new_mail</action> -->
+		<action requires="config" description="action_config">config</action>
 	</admin>
 </app>

@@ -20,7 +20,7 @@
 
 	<!-- Admin pages -->
 	<admin>
-		<action desc="files_manager" default="default">manager</action>
-		<action desc="files_cleaning">cleaning</action>
+		<action default="default" description="files_manager">manager</action>
+		<action description="files_cleaning">cleaning</action>
 	</admin>
 </app>
