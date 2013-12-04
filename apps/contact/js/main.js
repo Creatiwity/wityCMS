@@ -18,7 +18,7 @@ require(['jquery'], function($) {
 				$('[data-wity-note-app="' + app + '"]').remove();
 
 				if (jsonResponse.notes.length > 0) {
-					$container = $('<div class="row" data-wity-note-app="' + app + '"></div>');
+					$container = $('<div data-wity-note-app="' + app + '"></div>');
 					$domObject.before($container);
 
 					for (_i = 0, _len = jsonResponse.notes.length; _i < _len; ++_i) {
