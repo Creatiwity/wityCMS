@@ -9,7 +9,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 include_once APPS_DIR.'contact'.DS.'front'.DS.'model.php';
 
 /**
- * ContactAdminModel is the Admin Model of the News Application
+ * ContactAdminModel is the Admin Model of the Contact Application
  * 
  * @package Apps\Contact\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
