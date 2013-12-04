@@ -74,7 +74,22 @@
 	<item id="no_permissions">Neither specific permissions, nor admin zone for this app.</item>
 	<item id="add_user">Create user</item>
 	<item id="edit_user">Edit user</item>
-	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_register_email_subject">%s - Your user account was created</item>
+	<item id="user_register_email_body"><![CDATA[
+<p>Dear user,</p>
+<p>An account was just created for you on the website {{site_name}}</p>
+<p></p>To login, proceed to <a href="{{base}}/user/login/">{{base}}/user/login/</a>.</p>
+<p>Here are you login data :</p>
+<ul>
+	<li><strong>ID :</strong> {{nickname}}</li>
+	<li><strong>Password :</strong> {{password}}</li>
+</ul>
+<p>These information are personnal.<br />
+To change them, go to your profile.</p>
+
+<p>{{site_name}}</p>
+--------------<br />
+This is an automatic message.]]></item>
 	<item id="user_created">The user %s was created successfully.</item>
 	<item id="user_not_created">An unknown error occured when trying to create your account in the database.</item>
 	<item id="user_edited"><![CDATA[The user <strong>%s</strong> was edited successfully.]]></item>

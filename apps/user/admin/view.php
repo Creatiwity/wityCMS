@@ -25,10 +25,9 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function listing($model) {
+	public function listing(array $model) {
 		// SortingHelper Helper
-		$sort = $model['sortingHelper']->getSorting();
-		$this->assign($model['sortingHelper']->getTplVars());
+		$this->assign($model['sorting_tpl']);
 
 		// Users data
 		$this->assign('users', $model['users']);
@@ -58,7 +57,7 @@ class UserAdminView extends WView {
 			$model['stats']['request'],
 			$model['per_page'],
 			$model['current_page'],
-			'/admin/user/listing/'.$sort[0].'-'.strtolower($sort[1]).'-%d/'.$subURL)
+			'/admin/user/listing/'.$model['sorting_vars'][0].'-'.strtolower($model['sorting_vars'][1]).'-%d/'.$subURL)
 		);
 		$this->assign('pagination', $pagination->getHTML());
 	}
@@ -68,13 +67,9 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function user_form($model) {
-		if (empty($model['user_id'])) {
-			$this->assign('add_form', true); // ADD form
-		}
-
+	public function user_form(array $model) {
 		// Display a warning message when user edits its own account
-		if ($model['user_id'] == $_SESSION['userid']) {
+		if (!empty($model['user_data']) && $model['user_data']['id'] == $_SESSION['userid']) {
 			WNote::info('user_edit_own', WLang::get('user_edit_own'));
 		}
 
@@ -83,29 +78,22 @@ class UserAdminView extends WView {
 			WNote::info('user_validating_account', WLang::get('user_validating_account'));
 		}
 
-		// Get admin apps
-		$this->assign('admin_apps', $model['admin_apps']);
-
 		// Setup the form
 		$this->assign('require', 'apps!user/access_form');
 		$this->assign('groups', $model['groupes']);
-		$this->assign('user_home', WRoute::getBase().'/admin/user/');
+		$this->assign('admin_apps', $model['admin_apps']);
 
-		$default_model = array(
-			'id' => 0,
-			'nickname' => '',
-			'email' => '',
-			'firstname' => '',
-			'lastname' => '',
-			'groupe' => 0,
-			'access' => '',
+		$this->assignRelative(array(
+			'id'            => 0,
+			'nickname'      => '',
+			'email'         => '',
+			'firstname'     => '',
+			'lastname'      => '',
+			'groupe'        => 0,
+			'access'        => '',
 			'last_activity' => '',
-			'created_date' => ''
-		);
-		$data = !empty($model['user_data']) ? $model['user_data'] : $model['post_data'];
-		foreach ($default_model as $item => $default) {
-			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
-		}
+			'created_date'  => ''
+		), !empty($model['user_data']) ? $model['user_data'] : $model['post_data']);
 
 		$this->setTemplate('user_form');
 	}
@@ -115,7 +103,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function add($model) {
+	public function add(array $model) {
 		$this->user_form($model);
 	}
 
@@ -124,7 +112,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function edit($model) {
+	public function edit(array $model) {
 		$this->user_form($model);
 	}
 
@@ -133,9 +121,9 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function del($model) {
+	public function delete(array $model) {
 		$this->assign('nickname', $model['nickname']);
-		$this->assign('confirm_delete_url', "/admin/user/del/".$model['id']);
+		$this->assign('confirm_delete_url', "/admin/user/delete/".$model['id']);
 	}
 
 	/**
@@ -143,7 +131,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function groups($model) {
+	public function groups(array $model) {
 		if (!empty($model['group_diff'])) {
 			$this->group_diff($model);
 			return;
@@ -151,14 +139,10 @@ class UserAdminView extends WView {
 
 		$this->assign('require', 'apps!user/access_form');
 		$this->assign('require', 'apps!user/groups');
-
-		// Get admin apps
-		$this->assign('admin_apps', $model['admin_apps']);
-
-		// SortingHelper
-		$this->assign($model['sorting_vars']);
+		$this->assign($model['sorting_tpl']);
 
 		$this->assign('groups', $model['groups']);
+		$this->assign('admin_apps', $model['admin_apps']);
 
 		$this->setTemplate('groups_listing');
 	}
@@ -170,7 +154,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function group_diff($model) {
+	public function group_diff(array $model) {
 		$group_id = $model['group_id'];
 
 		$this->assign('require', 'apps!user/access_form');
@@ -207,7 +191,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function group_del($model) {
+	public function group_del(array $model) {
 		$this->assign('group_name', $model['name']);
 		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['id']);
 	}
@@ -217,7 +201,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $config
 	 */
-	public function config($config) {
+	public function config(array $config) {
 		$this->assign('config', $config);
 	}
 }

@@ -161,6 +161,27 @@ class WView {
 			}
 		}
 	}
+	
+	/**
+	 * Assign values relatively to a model.
+	 * 
+	 * <code>
+	 *   $this->assignRelative(array(
+	 *     'var1' => 'default_value1',
+	 *     'var2' => 'default_value2'
+	 *   ), array(
+	 *     'var1' => 'final_value1'
+	 *   )); // Will assign var1 = final_value1 and var2 = default_value2
+	 * </code>
+	 * 
+	 * @param array $model Model values
+	 * @param array $values Values to use
+	 */
+	public function assignRelative(array $model, array $values) {
+		foreach ($model as $item => $default) {
+			$this->assign($item, isset($values[$item]) ? $values[$item] : $default);
+		}
+	}
 
 	/**
 	 * Assigns a variable whose name is $name to a $value

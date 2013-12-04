@@ -58,34 +58,33 @@ class UserAdminModel extends UserModel {
 	/**
 	 * Deletes a user.
 	 * 
-	 * @param int $userid
+	 * @param int $user_id
 	 * @return bool Request status
 	 */
-	public function deleteUser($userid) {
-		static $prep;
-		if (empty($prep)) {
-			$prep = $this->db->prepare('
-				DELETE FROM users WHERE id = :id
-			');
-		}
-		$prep->bindParam(':id', $userid, PDO::PARAM_INT);
+	public function deleteUser($user_id) {
+		$prep = $this->db->prepare('
+			DELETE FROM users WHERE id = :id
+		');
+		$prep->bindParam(':id', $user_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
 	/**
 	 * Retrieves details of a group.
 	 * 
-	 * @param int $groupid
+	 * @param int $group_id
 	 * @return array Data of the group
 	 */
-	public function getGroup($groupid) {
+	public function getGroup($group_id) {
 		$prep = $this->db->prepare('
 			SELECT id, name, access
 			FROM users_groups
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -93,16 +92,21 @@ class UserAdminModel extends UserModel {
 	 * Retrieves the list of user groups.
 	 * 
 	 * @param string $order Name of the ordering column
-	 * @param string $asc   Ascendant or descendent?
+	 * @param string $sens  Order: "ASC" or "DESC"
 	 * @return array Set of groups
 	 */
-	public function getGroupsList($order = 'name', $asc = true) {
+	public function getGroupsList($order = 'name', $sens = 'ASC') {
+		if (strtoupper($sens) != 'ASC') {
+			$sens = 'DESC';
+		}
+		
 		$prep = $this->db->prepare('
 			SELECT id, name, access
 			FROM users_groups
-			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
+			ORDER BY '.$order.' '.$sens
 		);
 		$prep->execute();
+		
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
@@ -123,6 +127,7 @@ class UserAdminModel extends UserModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
+		
 		$data = array();
 		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
 			if ($row['groupe'] == 0) {
@@ -131,6 +136,7 @@ class UserAdminModel extends UserModel {
 			unset($row['groupe']);
 			$data[] = $row;
 		}
+		
 		return $data;
 	}
 	
@@ -147,55 +153,59 @@ class UserAdminModel extends UserModel {
 		');
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
+		
 		return $prep->execute();
 	}
 	
 	/**
 	 * Updates a group in the database.
 	 * 
-	 * @param int   $groupid Group ID
-	 * @param array $data    Columns to update
+	 * @param int   $group_id Group ID
+	 * @param array $data     Columns to update
 	 * @return bool Request status
 	 */
-	public function updateGroup($groupid, $data) {
+	public function updateGroup($group_id, $data) {
 		$prep = $this->db->prepare('
 			UPDATE users_groups
 			SET name = :name, access = :access
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
+		
 		return $prep->execute();
 	}
 	
 	/**
 	 * Deletes a group in the database.
 	 * 
-	 * @param int $groupid Group ID
+	 * @param int $group_id Group ID
 	 * @return bool Request status
 	 */
-	public function deleteGroup($groupid) {
+	public function deleteGroup($group_id) {
 		$prep = $this->db->prepare('
 			DELETE FROM users_groups WHERE id = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
 	/**
 	 * Removes all users who belonged to an obsolete group.
 	 * 
-	 * @param int $groupid Group ID
+	 * @param int $group_id Group ID
 	 * @return bool Request status
 	 */
-	public function resetUsersInGroup($groupid) {
+	public function resetUsersInGroup($group_id) {
 		$prep = $this->db->prepare('
 			UPDATE users
 			SET groupe = 0
 			WHERE groupe = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -210,6 +220,7 @@ class UserAdminModel extends UserModel {
 		if (empty($data)) {
 			return true;
 		}
+		
 		// Add filters
 		$cond = '';
 		if (!empty($filters)) {
@@ -224,21 +235,25 @@ class UserAdminModel extends UserModel {
 				}
 			}
 		}
+		
 		if (empty($cond)) {
 			return true;
 		} else {
 			$cond = substr($cond, 0, -5);
 		}
+		
 		$string = '';
 		foreach ($data as $key => $value) {
 			$string .= $key.' = '.$this->db->quote($value).', ';
 		}
 		$string = substr($string, 0, -2);
+		
 		$prep = $this->db->prepare('
 			UPDATE users
 			SET '.$string.'
 			WHERE '.$cond
 		);
+		
 		return $prep->execute();
 	}
 	
@@ -262,6 +277,7 @@ class UserAdminModel extends UserModel {
 					$access_string .= $app.'['.implode('|', $perms).'],';
 				}
 			}
+			
 			return substr($access_string, 0, -1);
 		}
 	}
@@ -284,10 +300,12 @@ class UserAdminModel extends UserModel {
 						if (strpos($value, '%') === false) {
 							$value = '%'.$value.'%';
 						}
+						
 						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
+			
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
@@ -322,10 +340,12 @@ class UserAdminModel extends UserModel {
 						if (strpos($value, '%') === false) {
 							$value = '%'.$value.'%';
 						}
+						
 						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
+			
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
@@ -339,6 +359,7 @@ class UserAdminModel extends UserModel {
 			WHERE '.$cond.'users.access != users_groups.access
 		');
 		$prep->execute();
+		
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
@@ -350,16 +371,14 @@ class UserAdminModel extends UserModel {
 	 * @return Request status
 	 */
 	public function setConfig($name, $value) {
-		static $prep;
-		if (empty($prep)) {
-			$prep = $this->db->prepare('
-				UPDATE users_config
-				SET value = :value
-				WHERE name = :name
-			');
-		}
+		$prep = $this->db->prepare('
+			UPDATE users_config
+			SET value = :value
+			WHERE name = :name
+		');
 		$prep->bindParam(':name', $name);
 		$prep->bindParam(':value', $value);
+		
 		return $prep->execute();
 	}
 }

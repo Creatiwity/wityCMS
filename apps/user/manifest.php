@@ -28,7 +28,7 @@
 		<action default="default" description="action_listing">listing</action>
 		<action requires="add" description="action_add">add</action>
 		<action requires="edit" description="action_edit" menu="false">edit</action>
-		<action requires="delete" description="action_delete" menu="false">del</action>
+		<action requires="delete" description="action_delete" menu="false">delete</action>
 		<action requires="group_manager" description="action_groups">Groups</action>
 		<action requires="group_manager,delete" description="action_group_del" menu="false">group_del</action>
 		<action requires="group_manager,edit" menu="false">group_diff</action>

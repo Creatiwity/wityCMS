@@ -168,8 +168,8 @@ class UserController extends WController {
 					$data['valid'] = 2; // value to require admin check
 				}
 				
-				$userid = $this->model->createUser($data);
-				if ($userid !== false) {
+				$user_id = $this->model->createUser($data);
+				if ($user_id !== false) {
 					if ($config['email_conf']) {
 						// Send a validation email
 						$this->model->sendEmail(
@@ -205,7 +205,7 @@ class UserController extends WController {
 								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
 								str_replace(
 									array('{site_name}', '{nickname}', '{base}', '{userid}'),
-									array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $userid),
+									array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $user_id),
 									WLang::get('user_register_admin_warning')
 								)
 							);

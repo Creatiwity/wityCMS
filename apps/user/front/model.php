@@ -25,42 +25,6 @@ class UserModel {
 	}
 	
 	/**
-	 * Checks whether a User ID truly exists in the database.
-	 * 
-	 * @param int $user_id
-	 * @return bool A unique user ID must match
-	 */
-	public function validId($user_id) {
-		if (empty($user_id)) {
-			return false;
-		}
-		$prep = $this->db->prepare('
-			SELECT * FROM users WHERE id = :id
-		');
-		$prep->bindParam(':id', $user_id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->rowCount() == 1;
-	}
-	
-	/**
-	 * Checks whether a Group ID truely exists in the database
-	 * 
-	 * @param int $group_id
-	 * @return bool A unique group ID must match
-	 */
-	public function validGroupId($group_id) {
-		if (empty($group_id)) {
-			return false;
-		}
-		$prep = $this->db->prepare('
-			SELECT * FROM users_groups WHERE id = :group_id
-		');
-		$prep->bindParam(':group_id', $group_id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->rowCount() == 1;
-	}
-	
-	/**
 	 * Checks whether a nickname is valid and available
 	 * 
 	 * @param string $nickname
@@ -72,11 +36,13 @@ class UserModel {
 		} else if (preg_match('#[\.]+#', $nickname)) {
 			return 'nickname_invalid_char';
 		}
+		
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE nickname LIKE :nickname
 		');
 		$prep->bindParam(':nickname', $nickname);
 		$prep->execute();
+		
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
@@ -94,11 +60,13 @@ class UserModel {
 		if (empty($email) || !preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $email)) {
 			return 'email_not_valid';
 		}
+		
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE email LIKE :email
 		');
 		$prep->bindParam(':email', $email);
 		$prep->execute();
+		
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
@@ -128,11 +96,13 @@ class UserModel {
 					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
+			
 			if (isset($filters['valid'])) {
 				$cond .= 'valid = '.intval($filters['valid']).' AND ';
 			} else {
 				$cond .= 'valid = 1 AND ';
 			}
+			
 			if (!empty($filters['groupe'])) {
 				$cond = 'LEFT JOIN users_groups
 				ON groupe = users_groups.id
@@ -147,7 +117,9 @@ class UserModel {
 				'.$cond
 			);
 		}
+		
 		$prep->execute();
+		
 		return intval($prep->fetchColumn());
 	}
 	
@@ -157,11 +129,15 @@ class UserModel {
 	 * @param int    $from     Position of the first user to return
 	 * @param int    $number   Number of users
 	 * @param string $order    Name of the ordering column
-	 * @param bool   $asc      Ascendent or descendent?
+	 * @param bool   $sens     Order: "ASC" or "DESC"
 	 * @param array  $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
-	public function getUsersList($from, $number, $order = 'nickname', $asc = true, array $filters = array()) {
+	public function getUsersList($from, $number, $order = 'nickname', $sens = 'ASC', array $filters = array()) {
+		if (strtoupper($sens) != 'ASC') {
+			$sens = 'DESC';
+		}
+		
 		// Add filters
 		$cond = '';
 		if (!empty($filters)) {
@@ -174,14 +150,17 @@ class UserModel {
 					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
+			
 			if (isset($filters['valid'])) {
 				$cond .= 'valid = '.intval($filters['valid']).' AND ';
 			} else {
 				$cond .= 'valid = 1 AND ';
 			}
+			
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
+			
 			if (!empty($cond)) {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
@@ -194,35 +173,34 @@ class UserModel {
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
 			'.$cond.'
-			ORDER BY users.'.$order.' '.($asc ? 'ASC' : 'DESC').'
+			ORDER BY users.'.$order.' '.$sens.'
 			'.($number > 0 ? 'LIMIT :start, :number' : '')
 		);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
+		
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	/**
 	 * Retrieves informations about for specific user.
 	 * 
-	 * @param int $userid ID of the user
+	 * @param int $user_id ID of the user
 	 * @return array Information about the user
 	 */
-	public function getUser($userid) {
-		static $prep;
-		if (empty($prep)) {
-			$prep = $this->db->prepare('
-				SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, 
-					users.access, valid, ip, name AS groupe_name, last_activity, users.created_date
-				FROM users
-				LEFT JOIN users_groups
-				ON groupe = users_groups.id
-				WHERE users.id = :userid
-			');
-		}
-		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+	public function getUser($user_id) {
+		$prep = $this->db->prepare('
+			SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, 
+				users.access, valid, ip, name AS groupe_name, last_activity, users.created_date
+			FROM users
+			LEFT JOIN users_groups
+			ON groupe = users_groups.id
+			WHERE users.id = :userid
+		');
+		$prep->bindParam(':userid', $user_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -285,11 +263,11 @@ class UserModel {
 	/**
 	 * Updates a user in the database.
 	 * 
-	 * @param int   $userid ID of the user
-	 * @param array $data   New data to assign
+	 * @param int   $user_id ID of the user
+	 * @param array $data    New data to assign
 	 * @return bool Request status
 	 */
-	public function updateUser($userid, array $data) {
+	public function updateUser($user_id, array $data) {
 		if (empty($data)) {
 			return true;
 		}
@@ -302,23 +280,23 @@ class UserModel {
 		return $this->db->query('
 			UPDATE users
 			SET '.$string.'
-			WHERE id = '.$userid
+			WHERE id = '.$user_id
 		);
 	}
 	
 	/**
 	 * Updates the last_activity timestamp and the ip of a user in the database.
 	 * 
-	 * @param int $userid ID of the user
+	 * @param int $user_id ID of the user
 	 * @return bool Request status
 	 */
-	public function updateLastActivity($userid) {
+	public function updateLastActivity($user_id) {
 		$prep = $this->db->prepare('
 			UPDATE users
 			SET last_activity = NOW(), ip = :ip
 			WHERE id = :userid
 		');
-		$prep->bindParam(':userid', $userid, PDO::PARAM_INT);
+		$prep->bindParam(':userid', $user_id, PDO::PARAM_INT);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
 		return $prep->execute();
 	}
@@ -337,6 +315,7 @@ class UserModel {
 		');
 		$prep->bindParam(':confirm', $confirm);
 		$prep->execute();
+		
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -354,6 +333,7 @@ class UserModel {
 		');
 		$prep->bindParam(':email', $email);
 		$prep->execute();
+		
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -373,6 +353,7 @@ class UserModel {
 		$prep->bindParam(':email', $email);
 		$prep->bindParam(':confirm', $confirm);
 		$prep->execute();
+		
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -407,10 +388,12 @@ class UserModel {
 			FROM users_config
 		');
 		$prep->execute();
+		
 		$config = array();
 		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$config[$row['name']] = $row['value'];
 		}
+		
 		return $config;
 	}
 }
