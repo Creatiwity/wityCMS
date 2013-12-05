@@ -56,7 +56,7 @@
 				{/if}
 			</div><!--/.nav-collapse -->
 		</div>
-		{if {$adminMenu}}
+		{if !empty({$adminMenu})}
 		<div class="col-md-2">
 			<ul class="nav nav-pills nav-stacked">
 				{for $action, $desc in $actionsList}

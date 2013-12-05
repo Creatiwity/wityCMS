@@ -103,8 +103,6 @@ abstract class WController {
 
 				// Theme configuration for admin
 				if ($this->getAdminContext()) {
-					WConfig::set('config.theme', 'admin-bootstrap');
-
 					// These are template variables => direct assign in WTemplate
 					$tpl = WSystem::getTemplate();
 					$tpl->assign('appsList', $this->getAdminApps());

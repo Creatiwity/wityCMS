@@ -62,28 +62,22 @@ class WMain {
 				break;
 
 			case 'v': // Only view
-				$response->renderView(
-					$model,
-					WRetriever::getView($route['app'], $route['params'], false)
-				);
+				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$response->renderView($model, $view);
 				break;
 
 			case 'mv': // Model + View
-				$response->renderModelView(
-					$model,
-					WRetriever::getView($route['app'], $route['params'], false)
-				);
+				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$response->renderModelView($model, $view);
 				break;
 
 			case 'o': // Only Model but nothing returned
 				break;
 
 			default: // Render in a theme
-				$response->render(
-					WRetriever::getView($route['app'], $route['params'], false),
-					WConfig::get('config.theme'),
-					$model
-				);
+				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$theme = ($route['admin']) ? 'admin-bootstrap': WConfig::get('config.theme');
+				$response->render($view, $theme, $model);
 				break;
 		}
 	}
