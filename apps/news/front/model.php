@@ -121,6 +121,7 @@ class NewsModel {
 			FROM news
 		');
 		$prep->execute();
+		
 		return intval($prep->fetchColumn());
 	}
 	
@@ -145,12 +146,14 @@ class NewsModel {
 				}
 				$cond = sustr($cond, 0, -4).')';
 			}
+			
 			if (!empty($filters['published'])) {
 				if (!empty($cond)) {
 					$cond .= ' AND ';
 				}
 				$cond .= 'published = '.intval($filters['published']);
 			}
+			
 			if (!empty($cond)) {
 				$cond = 'WHERE '.$cond;
 			}
@@ -171,6 +174,7 @@ class NewsModel {
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
+		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$data['cats'] = $this->getCatsOfNews($data['id']);
@@ -196,9 +200,11 @@ class NewsModel {
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		$data = $prep->fetch(PDO::FETCH_ASSOC);
 		$data['cats'] = $this->getCatsOfNews($news_id);
 		$this->renameNewsFieldsFromDb($data);
+		
 		return $data;
 	}
 	
@@ -206,7 +212,7 @@ class NewsModel {
 	 * Retrieves a category from the database
 	 * 
 	 * @param int $cat_id
-	 * @return aray
+	 * @return array
 	 */
 	public function getCat($cat_id) {
 		if (empty($cat_id)) {
@@ -240,11 +246,13 @@ class NewsModel {
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$this->renameCatsFieldsFromDb($data);
 			$result[] = $data;
 		}
+		
 		return $result;
 	}
 	
@@ -263,6 +271,7 @@ class NewsModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
+		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$this->renameCatsFieldsFromDb($data);

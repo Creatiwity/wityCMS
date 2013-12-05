@@ -27,7 +27,7 @@ class NewsAdminModel extends NewsModel {
 	 * Creates a News in the database from a set of data
 	 * 
 	 * @param array $data
-	 * @return bool Success?
+	 * @return mixed ID of the new item or false on error
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
@@ -71,6 +71,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
 		$prep->bindParam(':description', $data['news_description']);
+		
 		return $prep->execute();
 	}
 	
@@ -85,6 +86,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news WHERE id = :news_id
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -102,6 +104,7 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -116,6 +119,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats_relations WHERE news_id = :news_id
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -130,6 +134,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats_relations WHERE cat_id = :cat_id
 		');
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -146,6 +151,7 @@ class NewsAdminModel extends NewsModel {
 			WHERE parent = :cat_id
 		');
 		$prep->bindParam(':cat_id', $parent_cat_id);
+		
 		return $prep->execute();
 	}
 	
@@ -153,7 +159,7 @@ class NewsAdminModel extends NewsModel {
 	 * Creates a news category in the database
 	 * 
 	 * @param array $data
-	 * @return bool Success?
+	 * @return mixed ID of the new item or false on error
 	 */
 	public function createCat($data) {
 		$prep = $this->db->prepare('
@@ -188,6 +194,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':shortname', $data['news_cat_shortname']);
 		$prep->bindParam(':parent', $data['news_cat_parent']);
 		$prep->bindParam(':cat_id', $cat_id);
+		
 		return $prep->execute();
 	}
 	
@@ -202,6 +209,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats WHERE cid = :cat_id
 		');
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 }
