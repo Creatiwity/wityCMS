@@ -52,7 +52,12 @@ class UserAdminModel extends UserModel {
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		return $prep->execute();
+		
+		if ($prep->execute()) { 
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -154,7 +159,11 @@ class UserAdminModel extends UserModel {
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
 		
-		return $prep->execute();
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**

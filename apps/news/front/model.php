@@ -125,25 +125,6 @@ class NewsModel {
 	}
 	
 	/**
-	 * Checks that a given ID matches a News_ID in the database
-	 * 
-	 * @param int $news_id
-	 * @return bool
-	 */
-	public function validExistingNewsId($news_id) {
-		if (empty($news_id)) {
-			return false;
-		}
-		
-		$prep = $this->db->prepare('
-			SELECT * FROM news WHERE id = :news_id
-		');
-		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->rowCount() == 1;
-	}
-	
-	/**
 	 * Retrieves a set of news
 	 * 
 	 * @param int $from
@@ -222,21 +203,25 @@ class NewsModel {
 	}
 	
 	/**
-	 * Checks that a given ID matches a News_Cat_ID in the database
+	 * Retrieves a category from the database
 	 * 
 	 * @param int $cat_id
-	 * @return bool
+	 * @return aray
 	 */
-	public function validExistingCatId($cat_id) {
+	public function getCat($cat_id) {
 		if (empty($cat_id)) {
 			return false;
 		}
+		
 		$prep = $this->db->prepare('
-			SELECT * FROM news_cats WHERE cid = :cat_id
+			SELECT cid, name, shortname
+			FROM news_cats 
+			WHERE cid = :cat_id
 		');
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->rowCount() == 1;
+		
+		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**

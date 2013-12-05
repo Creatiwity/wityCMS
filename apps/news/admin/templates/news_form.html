@@ -1,24 +1,20 @@
 <div class="wity-app wity-app-news wity-action-news-form">
 	<form method="post" enctype="multipart/form-data">
 		<div class="row">
-			<div class="col-md-9 form-horizontal">
+			<div class="col-md-9">
 				<h2 class="sr-only">{if empty({$news_id})}{lang article_add}{else}{lang article_edit}{/if}</h2>
 				<div class="form-group">
-					<div class="sr-only">
-						<label for="news_title" class="control-label">{lang title_of_article}</label>
-					</div>
-					<div class="col-md-12">
-						<input id="news_title" class="form-control input-lg" type="text" name="news_title" value="{$news_title}"  autocomplete="off" placeholder="{lang title_of_article}" />
-					</div>
+					<label for="news_title" class="sr-only control-label">{lang title_of_article}</label>
+					<input id="news_title" class="form-control input-lg" type="text" name="news_title" value="{$news_title}"  autocomplete="off" placeholder="{lang title_of_article}" />
 				</div>
 
 				<div class="input-group">
-					<span class="input-group-addon">{$site_url}{$last_id}-</span>
+					<span class="input-group-addon">{$site_url}{$news_id}-</span>
 					<input id="news_url" class="form-control" type="text" name="news_url" value="{$news_url}" />
 				</div>
 
 				<label for="news_content" class="sr-only">{lang article_content}:</label><br />
-				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80" data-witycms-wysiwyg="true">{$news_content}</textarea><br />
+				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80" data-witycms-wysiwyg="true">{$news_content}</textarea>
 			</div>
 			<div class="col-md-3">
 				<div class="well well-sm">
@@ -33,7 +29,7 @@
 					</div>
 					<div class="form-group">
 						<label for="news_keywords">{lang keywords}</label>
-						<input id="news_keywords" class="form-control" type="text" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}">
+						<input id="news_keywords" class="form-control" type="text" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}" />
 					</div>
 					<div class="form-group">
 						<label for="news_description">{lang description}</label>
@@ -51,7 +47,7 @@
 					<h4 class="text-center">{lang category_of_article}</h4>
 					{for $cat in $cats}
 					<label class="checkbox">
-						<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if}>
+						<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if} />
 						{$cat.news_cat_name}
 					</label>
 					{/for}

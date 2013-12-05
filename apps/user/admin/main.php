@@ -202,7 +202,9 @@ class UserAdminController extends WController {
 			
 			if (empty($errors)) {
 				if ($add_case) { // ADD case
-					if ($this->model->createUser($post_data)) {
+					$user_id = $this->model->createUser($post_data);
+					
+					if ($user_id !== false) {
 						// Send email if requested
 						if (WRequest::get('email_confirmation') == 'on') {
 							$mail = WHelper::load('phpmailer');
@@ -371,16 +373,17 @@ class UserAdminController extends WController {
 			}
 		}
 		
-		// Préparation tri colonnes
 		$sort_by = '';
-		$sens = 'DESC';
+		$sens = '';
 		if (!empty($params[0])) {
 			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by, $sens);
 		}
 		
 		// SortingHelper
-		$disp_fields = array('name', 'users_count');
-		$sortingHelper = WHelper::load('SortingHelper', array($disp_fields, 'name'));
+		$sortingHelper = WHelper::load('SortingHelper', array(
+			array('name', 'users_count'), 
+			'name', 'DESC'
+		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
 		return array(
@@ -412,7 +415,7 @@ class UserAdminController extends WController {
 			
 			return $db_data;
 		} else {
-			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups/');
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
 			return WNote::error('group_not_found', WLang::get('group_not_found'));
 		}
 	}

@@ -21,7 +21,7 @@ class NewsAdminView extends WView {
 			$model['total'],
 			$model['per_page'],
 			$model['current_page'],
-			'/admin/news/listing/'.$model['sorting'][0].'-'.$model['sorting'][1].'-%d/'
+			'/admin/news/listing/'.$model['sorting_vars'][0].'-'.$model['sorting_vars'][1].'-%d'
 		));
 		$this->assign('pagination', $pagination->getHTML());
 
@@ -30,25 +30,14 @@ class NewsAdminView extends WView {
 		$this->setTemplate('news_listing');
 	}
 
-	/**
-	 * Function to define template variable from a default array structure
-	 */
-	private function fillMainForm($model, $data) {
-		foreach ($model as $item => $default) {
-			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
-		}
-	}
-
 	public function news_form($model) {
 		// JS / CSS
 		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
 		$this->assign('require', 'apps!news/add_or_edit');
-		$this->assign('require', "wysihtml5");
+		$this->assign('require', 'wysihtml5');
 
 		// Assign site URL for permalink management
 		$this->assign('site_url', WRoute::getBase() . '/news/');
-		$this->assign('news_id', $model['news_id']);
-		$this->assign('last_id', $model['last_id']);
 
 		// Treat categories filled by user
 		$news_cats = array();
@@ -64,7 +53,8 @@ class NewsAdminView extends WView {
 		$this->assign('cats', $model['cats']);
 		$this->assign('news_cats', $news_cats);
 
-		$this->fillMainForm(array(
+		$this->assignRelative(array(
+			'news_id'          => 0,
 			'news_author'      => $_SESSION['nickname'],
 			'news_meta_title'  => '',
 			'news_keywords'    => '',
@@ -101,11 +91,11 @@ class NewsAdminView extends WView {
 		$this->assign($model['sorting_tpl']);
 		$this->assign('cats', $model['data']);
 
-		$this->fillMainForm(array(
-			'news_cat_id' => '',
-			'news_cat_name' => '',
-			'news_cat_shortname' => '',
-			'news_cat_parent' => 0,
+		$this->assignRelative(array(
+			'news_cat_id'          => '',
+			'news_cat_name'        => '',
+			'news_cat_shortname'   => '',
+			'news_cat_parent'      => 0,
 			'news_cat_parent_name' => ""
 		), $model['post_data']);
 	}

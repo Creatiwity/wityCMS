@@ -163,7 +163,12 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':name', $data['news_cat_name']);
 		$prep->bindParam(':shortname', $data['news_cat_shortname']);
 		$prep->bindParam(':parent', $data['news_cat_parent']);
-		return $prep->execute();
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
