@@ -16,6 +16,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 class ContactView extends WView {
 
 	public function form($data) {
+		$this->assign('css', '/apps/contact/front/css/contact.css');
 		$this->assign('require', 'apps!contact');
 		$this->assign('from_email', $data['from_email']);
 		$this->assign('from_name', $data['from_name']);
