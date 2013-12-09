@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<lang value="fr">
-	<!-- Actions -->
-	<item id="files_manager">Gestion des fichiers</item>
-	<item id="files_cleaning">Vider les fichiers non utilisés</item>
-</lang>
