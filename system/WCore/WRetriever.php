@@ -199,11 +199,13 @@ class WRetriever {
 			if ($admin) {
 				$app_name  = substr($app_code, 6);
 				$app_dir   = APPS_DIR.$app_name.DS.'admin'.DS;
-				$app_class = preg_replace('#[^a-zA-Z]+#', '_', ucfirst($app_name)).'AdminController';
+				$app_name_clear = str_replace(' ', '', ucwords(preg_replace('#[^a-zA-Z]+#', ' ', $app_name)));
+				$app_class = $app_name_clear.'AdminController';
 			} else {
 				$app_name  = $app_code;
 				$app_dir   = APPS_DIR.$app_code.DS.'front'.DS;
-				$app_class = preg_replace('#[^a-zA-Z]+#', '_', ucfirst($app_code)).'Controller';
+				$app_name_clear = str_replace(' ', '', ucwords(preg_replace('#[^a-zA-Z]+#', ' ', $app_code)));
+				$app_class = $app_name_clear.'Controller';
 			}
 
 			// Include the application Controller class
