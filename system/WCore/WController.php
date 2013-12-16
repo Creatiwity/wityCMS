@@ -503,7 +503,17 @@ abstract class WController {
 				}
 			}
 		} else { // Admin mode OFF
-			if (empty($action)) { // Asking for application access
+			// Assign default value for $action
+			if (empty($action)) {
+				if (!empty($manifest['default'])) {
+					$action = $manifest['default'];
+				} else {
+					return false;
+				}
+			}
+			
+			// Admin Supreme
+			if (isset($_SESSION['access']) && $_SESSION['access'] == 'all') {
 				return true;
 			} else if (isset($manifest['actions'][$action])) {
 				// Check permissions
