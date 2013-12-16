@@ -130,8 +130,6 @@ abstract class WController {
 					WNote::error('app_no_method', 'The method corresponding to the action "'.$action.'" cannot be found in '.$this->getAppName().' application.', 'debug');
 					return array();
 				}
-			} else if (is_array($access_result)) {
-				return $access_result; // hasAccess returned a note
 			} else {
 				// Display login form if not connected
 				if (!WSession::isConnected()) {
@@ -139,7 +137,11 @@ abstract class WController {
 					$userView = WRetriever::getView('user', array('login'));
 					$this->setView($userView);
 				} else {
-					return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
+					if (is_array($access_result)) {
+						return $access_result; // hasAccess returned a note
+					} else {
+						return WNote::error('app_no_access', 'You do not have access to the application '.$this->getAppName().'.');
+					}
 				}
 			}
 		} else {
