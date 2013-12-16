@@ -53,7 +53,7 @@ class NewsAdminView extends WView {
 		$this->assign('cats', $model['cats']);
 		$this->assign('news_cats', $news_cats);
 
-		$this->assignRelative(array(
+		$this->assignDefault(array(
 			'news_id'          => 0,
 			'news_author'      => $_SESSION['nickname'],
 			'news_meta_title'  => '',
@@ -91,7 +91,7 @@ class NewsAdminView extends WView {
 		$this->assign($model['sorting_tpl']);
 		$this->assign('cats', $model['data']);
 
-		$this->assignRelative(array(
+		$this->assignDefault(array(
 			'news_cat_id'          => '',
 			'news_cat_name'        => '',
 			'news_cat_shortname'   => '',

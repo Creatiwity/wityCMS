@@ -83,7 +83,7 @@ class UserAdminView extends WView {
 		$this->assign('groups', $model['groupes']);
 		$this->assign('admin_apps', $model['admin_apps']);
 
-		$this->assignRelative(array(
+		$this->assignDefault(array(
 			'id'            => 0,
 			'nickname'      => '',
 			'email'         => '',
