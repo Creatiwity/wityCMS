@@ -107,7 +107,7 @@ class WMain {
 			}
 		} else if (substr($query, $length-4, 1) == '.') {
 			$ext = substr($query, $length-3, 3);
-			if (in_array($ext, array('js', 'css', 'png', 'jpg', 'gif', 'svg', 'eot', 'ttf'))) {
+			if (in_array($ext, array('js', 'css', 'png', 'jpg', 'gif', 'ico', 'svg', 'eot', 'ttf'))) {
 				$error = true;
 			}
 		} else if (substr($query, $length-5, 1) == '.') {
