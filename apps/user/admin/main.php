@@ -3,7 +3,7 @@
  * User Application - Admin Controller
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * UserAdminController is the Admin Controller of the User Application.

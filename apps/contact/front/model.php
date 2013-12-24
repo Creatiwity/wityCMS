@@ -3,7 +3,7 @@
  * Contact Application - Front Model
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * ContactModel is the Front Model of the Contact Application

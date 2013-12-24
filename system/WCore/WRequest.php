@@ -3,7 +3,7 @@
  * WRequest.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WRequest manages all input variables.

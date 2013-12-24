@@ -3,7 +3,7 @@
  * WDatabase.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WDatabase manages all database interactions.

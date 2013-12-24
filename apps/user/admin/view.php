@@ -3,7 +3,7 @@
  * User Application - Admin View
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * UserAdminView is the Admin View of the User Application.

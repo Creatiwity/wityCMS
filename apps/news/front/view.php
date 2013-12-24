@@ -3,7 +3,7 @@
  * News Application - Front View
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * NewsView is the Front View of the News Application

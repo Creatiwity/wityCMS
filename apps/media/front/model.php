@@ -3,7 +3,7 @@
  * Media Application - Front Model
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * MediaModel is the Front Model of the Media Application

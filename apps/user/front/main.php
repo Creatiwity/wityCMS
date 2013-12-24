@@ -3,7 +3,7 @@
  * User Application - Front Controller
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * UserController is the Front Controller of the User Application.

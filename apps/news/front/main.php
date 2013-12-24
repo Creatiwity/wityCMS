@@ -3,7 +3,7 @@
  * News Application - Front Controller
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * NewsController is the Front Controller of the News Application

@@ -3,7 +3,7 @@
  * WRoute.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WRoute calculates the route given in the URL to find out the right application to execute.

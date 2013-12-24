@@ -3,7 +3,7 @@
  * WNote.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WNote manages all notes : stores, displays, ...

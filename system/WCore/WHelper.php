@@ -3,7 +3,7 @@
  * WHelper.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WHelper automatically instantiates for you small libraries.

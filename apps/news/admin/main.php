@@ -3,7 +3,7 @@
  * News Application - Admin Controller
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * NewsAdminController is the Admin Controller of the News Application

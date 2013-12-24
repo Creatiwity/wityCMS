@@ -3,7 +3,7 @@
  * Mail Application - Front Controller
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * MailController is the Front Controller of the Mail Application

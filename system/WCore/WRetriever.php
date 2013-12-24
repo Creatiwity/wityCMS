@@ -3,7 +3,7 @@
  * WRetriever.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WRetriever is the component to get the model or the view of an action from any WityCMS's application.

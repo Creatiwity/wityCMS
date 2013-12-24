@@ -3,7 +3,7 @@
  * User Application - Front View
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * UserView is the Front View of the User Application.

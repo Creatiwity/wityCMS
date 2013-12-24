@@ -3,7 +3,7 @@
  * Media Application - Front Controller
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * MediaController is the Front Controller of the Media Application

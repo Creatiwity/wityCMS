@@ -3,7 +3,7 @@
  * Contact Application - Front View
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * ContactView is the Front View of the Contact Application

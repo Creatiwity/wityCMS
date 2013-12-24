@@ -3,7 +3,7 @@
  * WDatabase.php
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * WDate manages dates using the user's custom timezone.

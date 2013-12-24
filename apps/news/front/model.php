@@ -3,7 +3,7 @@
  * News Application - Front Model
  */
 
-defined('WITYCMS_VERSION') or die('Access denied');
+defined('IN_WITY') or die('Access denied');
 
 /**
  * NewsModel is the Front Model of the News Application
