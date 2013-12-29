@@ -1,35 +1,34 @@
-<div class="wity-app wity-app-user wity-action-form-signin">
+<div class="wity-app wity-app-user wity-action-login">
 	<form action="/user/login/" method="post">
-		<h2 class="form-signin-heading">{lang login_form_title}</h2>
+		<h2>{lang login_form_title}</h2>
 
 		<input type="hidden" name="redirect" value="{$redirect}" />
 
-		<label class="sr-only" for="nickname">{lang nickname}</label>
-		<input type="text" class="form-control login-main login-nickname" name="nickname" placeholder="{lang nickname}" />
-		<label class="sr-only" for="password">{lang password}</label>
-		<input type="password" class="form-control login-main login-password" name="password" placeholder="{lang password}" />
-		<div class="row">
-			<div class="col-xs-10">
-				<label class="checkbox">
-					<input type="checkbox" value="remember" name="remember" onclick="document.getElementById('minutes').disabled = !document.getElementById('minutes').disabled;"> {lang always_remain_connected}
-				</label>
-			</div>
-			<div class="col-xs-2 plus-button">
-				<a data-toggle="collapse" href="#more-options" class="pull-right animate-transform rotate collapsed"><i class="glyphicon glyphicon-plus"></i></a>
-			</div>
+		<div class="form-group">
+			<label class="sr-only" for="nickname">{lang nickname}</label>
+			<input type="text" class="form-control" name="nickname" placeholder="{lang nickname}" />
 		</div>
 
-		<div id="more-options" class="collapse">
+		<div class="form-group">
+			<label class="sr-only" for="password">{lang password}</label>
+			<input type="password" class="form-control" name="password" placeholder="{lang password}" />
+		</div>
+
+		<label class="checkbox">
+			<input type="checkbox" value="remember" name="remember" checked="checked" onclick="if (this.checked) document.getElementById('more-options').className = ''; else document.getElementById('more-options').className = 'show';" /> {lang always_remain_connected}
+		</label>
+
+		<div id="more-options">
 			<div class="form-group">
 				<label for="minutes">{lang remain_connected_for}</label>
 				<div class="input-group">
 					<input id="minutes" class="form-control" type="number" name="time" min="1" value="60" />
-					<span class="input-group-addon">{lang minuts}</span>
+					<span class="input-group-addon">{lang minutes}</span>
 				</div>
 			</div>
-			<a class="btn btn-lg btn-default btn-block" href="/user/password-lost/">{lang password_lost}</a>
-			<br />
 		</div>
+
+		<p><a href="/user/password-lost/">{lang password_lost}</a></p>
 
 		<input class="btn btn-lg btn-primary btn-block" type="submit" value="{lang login_button}" />
 	</form>

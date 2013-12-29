@@ -1,64 +1,18 @@
-.form-signin, .register-form, .password-lost-resetting {
-	max-width: 360px;
+.wity-action-login, .wity-action-register {
+	max-width: 300px;
 	margin-right: auto;
 	margin-left: auto;
 }
 
-.plus-button {
-	min-height: 20px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	vertical-align: middle;
+#more-options {
+	height: 0;
+	overflow: hidden;
+	-webkit-transition: height 0.3s ease-in-out;
+	-moz-transition: height 0.3s ease-in-out;
+	-o-transition: height 0.3s ease-in-out;
+	transition: height 0.3s ease-in-out;
 }
 
-.form-signin .form-control.login-main, .password-lost-resetting .form-control.lost-main {
-	position: relative;
-	font-size: 16px;
-	height: auto;
-	padding: 10px;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-.register-form .form-control.signup-main {
-	position: relative;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-.form-signin .form-control:focus, .register-form .form-control:focus, .password-lost-resetting .form-control:focus {
-	z-index: 2;
-}
-
-.login-nickname, .signup-password, .lost-new-password {
-	margin-bottom: -1px;
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-}
-
-.login-password, .signup-confirm, .lost-new-confirm {
-	margin-bottom: 10px;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-}
-
-.rotate {
-	-webkit-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg); // IE9+
-	transform: rotate(-45deg);
-}
-
-.rotate.collapsed {
-	-webkit-transform: rotate(0deg);
-	-ms-transform: rotate(0deg); // IE9+
-	transform: rotate(0deg);
-}
-
-.animate-transform {
-	-webkit-transition: -webkit-transform 0.3s ease-in-out;
-	-moz-transition: -moz-transform 0.3s ease-in-out;
-	-o-transition: -o-transform 0.3s ease-in-out;
-	transition: transform 0.3s ease-in-out;
+#more-options.show {
+	height: 5em;
 }

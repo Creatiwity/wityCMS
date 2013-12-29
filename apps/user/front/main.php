@@ -41,8 +41,10 @@ class UserController extends WController {
 		// Find redirect URL
 		$referer = str_replace(WRoute::getBase(), '', WRoute::getReferer());
 		$redirect_request = WRequest::get('redirect');
+		
 		if (empty($params[0])) {
 			$route = WRoute::route();
+			
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
 			} else if ($route['app'] != 'user') { // Login form loaded from an external application
@@ -66,6 +68,7 @@ class UserController extends WController {
 		if (!in_array(null, $data, true)) {
 			$data += WRequest::getAssoc(array('remember', 'time'));
 			$cookie = true; // cookies accepted by browser?
+			
 			if (!empty($data['nickname']) && !empty($data['password'])) {
 				// User asks to be auto loged in => change the cookie lifetime to self::REMEMBER_TIME
 				$remember_time = !empty($data['remember']) ? self::REMEMBER_TIME : abs(intval($data['time'])) * 60;
@@ -97,6 +100,10 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
+		}
+		
+		if (strpos($referer, '/admin') !== false) {
+			$this->setHeader('Location', WRoute::getReferer());
 		}
 		
 		return array('redirect' => $redirect);

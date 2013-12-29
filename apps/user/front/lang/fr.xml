@@ -25,7 +25,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="nickname">Identifiant </item>
 	<item id="password">Mot de passe </item>
 	<item id="remain_connected_for">Rester connecté pendant... </item>
-	<item id="minuts">minutes</item>
+	<item id="minutes">minutes</item>
 	<item id="always_remain_connected">Toujours rester connecté </item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>

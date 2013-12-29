@@ -25,7 +25,7 @@ Please, wait a moment before trying again.</item>
 	<item id="nickname">Identifier</item>
 	<item id="password">Password</item>
 	<item id="remain_connected_for">Remain connected for...</item>
-	<item id="minuts">minuts</item>
+	<item id="minutes">minutes</item>
 	<item id="always_remain_connected">Always remain connected</item>
 	<item id="password_lost">Password lost?</item>
 	<item id="login_button">Connection</item>

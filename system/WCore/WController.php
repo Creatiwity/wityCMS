@@ -133,7 +133,7 @@ abstract class WController {
 			} else {
 				// Display login form if not connected
 				if (!WSession::isConnected()) {
-					WNote::info('user_login_required', 'This area requires to be logged in.', 'assign');
+					WNote::info('user_login_required', 'This area requires to be logged in.');
 					$userView = WRetriever::getView('user', array('login'));
 					$this->setView($userView);
 				} else {
