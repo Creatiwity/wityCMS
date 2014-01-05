@@ -84,7 +84,7 @@ class WConfig {
 		
 		$config[$nodes[$i]] = $value;
 		
-		// Notifying configuration modification
+		// Notify configuration modification
 		array_push(self::$modified, $nodes[0]);
 	}
 	

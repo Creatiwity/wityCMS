@@ -80,17 +80,6 @@ class WResponse {
 			throw new Exception("WResponse::render(): WTemplate cannot be loaded.");
 		}
 
-		// Default template variables
-		$tpl->assign('base_url', WRoute::getBase());
-
-		$site_name = WConfig::get('config.site_name');
-		$tpl->assign('site_name', $site_name);
-
-		$page_title = $tpl->getVar('page_title');
-		if (empty($page_title)) { // Do not overwrite a value set by user
-			$tpl->assign('page_title', $site_name);
-		}
-
 		// Load in priority theme asked by the view
 		$view_theme = $view->getTheme();
 		if (empty($view_theme) || !$this->setTheme($view_theme)) {
@@ -124,16 +113,18 @@ class WResponse {
 			// Handle notes
 			$tpl->assign('notes', WNote::getView(WNote::get('*'))->render());
 
-			// Render require configuration
-			$require = $tpl->parseString($tpl->getVar('require'));
-
 			$html = $tpl->parse($themeMainFile);
 
 			// Absolute links fix
 			$html = $this->absoluteLinkFix($html);
 
+			// Render require configuration
+			$require = $tpl->parseString($tpl->getVar('require'));
+
 			// Insert requireJS part
-			echo $this->insertRequireJS($html, $require);
+			$html = $this->insertRequireJS($html, $require);
+			
+			echo $html;
 		} catch (Exception $e) {
 			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
 			return false;

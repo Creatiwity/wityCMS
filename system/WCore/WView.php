@@ -239,6 +239,7 @@ class WView {
 				foreach (self::$global_vars['css'] as $file) {
 					$css .= '<link href="'.$file.'" rel="stylesheet" type="text/css" />'."\n";
 				}
+				
 				return $css;
 
 			case 'js':
@@ -246,6 +247,7 @@ class WView {
 				foreach (self::$global_vars['js'] as $file) {
 					$script .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 				}
+				
 				return $script;
 
 			case 'require':
@@ -253,17 +255,13 @@ class WView {
 					return '';
 				}
 
-				$require =
-					'<script type="text/javascript" src="{$base_url}/libraries/requirejs/require.js"></script>'."\n"
+				$require = '<script type="text/javascript" src="{$wity_base_url}/libraries/requirejs/require.js"></script>'."\n"
 					.'<script>'."\n"
-					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n"
-				;
+					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
 
 				// If array not empty
 				if (self::$global_vars['require']) {
-					$require .= 'require(["'
-						.implode('", "', self::$global_vars['require']);
-					$require .= '"]);'."\n";
+					$require .= 'require(["'.implode('", "', self::$global_vars['require']).'"]);'."\n";
 				}
 
 				$require .= '</script>'."\n";

@@ -178,12 +178,12 @@ nav .navbar-form button:hover {
  * News
  */
 
-.app-news .item {
+.wity-app-news .item {
 	border-bottom: 1px solid #91cadf;
 	margin-bottom: 1em;
 }
 
-.app-news .item-meta {
+.wity-app-news .item-meta {
 	font-size: 0.9em;
 	font-style: italic;
 	margin-bottom: 1em;
@@ -192,11 +192,11 @@ nav .navbar-form button:hover {
 	top: -10px;
 }
 
-.app-news .news-read-more {
+.wity-app-news .news-read-more {
 	text-align: right;
 }
 
-.app-news .news-read-more a {
+.wity-app-news .news-read-more a {
 	background: url('../img/button-read-more.png') no-repeat left center;
 	padding-left: 20px;
 }
@@ -206,26 +206,28 @@ nav .navbar-form button:hover {
  */
 
 .block-user .buttons {
-	padding: 20px 0 10px 0;
+	margin: 0;
+	padding: 0;
 }
 
-.block-user .button-sign-in {
-	color: #91cadf;
+.block-user .buttons a {
 	text-transform: uppercase;
 	font-size: 1.2em;
-	line-height: 48px;
-	margin-right: 30px;
+	display: inline-block;
 	text-decoration: none;
+	margin: 0 10px;
+	padding: 10px;
+}
+
+.block-user .button-register {
+	color: #91cadf;
 }
 
 .block-user .button-login {
 	color: #b9d794;
-	text-transform: uppercase;
-	font-size: 1.2em;
-	text-decoration: none;
 }
 
-#grafx-user .panel {
+.block-user .panel {
 	margin-bottom: 0px;
 	background-color: none;
 	border: 0px solid transparent;
@@ -233,8 +235,3 @@ nav .navbar-form button:hover {
 	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,0);
 	box-shadow: 0 0px 0px rgba(0,0,0,0);
 }
-
-.block-user h2 {
-	display: none;
-}
-
