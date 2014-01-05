@@ -250,10 +250,10 @@ class WRetriever {
 
 				return $controller;
 			} else {
-				return WNote::error('app_structure', "The application \"".$app_code."\" has to have a main class inheriting from WController abstract class.");
+				return WNote::error('app_structure', "The application \"".$app_code."\" contains a structural error: it has to have a controller class inheriting from the abstract class WController.");
 			}
 		} else {
-			return WNote::error(404, WLang::_('error_404'));
+			return WNote::info(404, WLang::_('error_404'));
 		}
 	}
 
