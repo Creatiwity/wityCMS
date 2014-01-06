@@ -534,7 +534,9 @@ abstract class WController {
 							break;
 
 						default:
-							if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
+							if (!WSession::isConnected()) {
+								return false;
+							} else if (!isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
 								return WNote::error('app_no_access', 'You need more privileges to access the action '.$action.' in the application '.$app.'.');
 							}
 							break;
