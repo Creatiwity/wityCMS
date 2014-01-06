@@ -171,14 +171,19 @@ class WMain {
 		$tpl = WSystem::getTemplate();
 
 		$site_name = WConfig::get('config.site_name');
+		$route = WRoute::route();
 
 		// Setup system template variables with $wity_ prefix
 		$tpl_vars = array(
-			'wity_base_url'      => WRoute::getBase(),
-			'wity_site_name'     => $site_name,
-			'wity_site_subtitle' => $site_name,
-			'wity_page_title'    => $site_name,
-			'wity_user'          => false
+			'wity_base_url'         => WRoute::getBase(),
+			'wity_site_name'        => $site_name,
+			'wity_site_subtitle'    => $site_name,
+			'wity_page_title'       => $site_name,
+			'wity_page_keywords'    => WConfig::get('config.keywords'),
+			'wity_page_description' => WConfig::get('config.description'),
+			'wity_user'             => false,
+			'wity_home'             => WRoute::getQuery() == '/',
+			'wity_app'              => $route['app']
 		);
 
 		if (WSession::isConnected()) {
