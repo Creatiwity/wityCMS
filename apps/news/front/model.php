@@ -192,6 +192,10 @@ class NewsModel {
 	 * @return array
 	 */
 	public function getNews($news_id) {
+		if (empty($news_id)) {
+			return false;
+		}
+		
 		$prep = $this->db->prepare('
 			SELECT id, url, title, author, content, meta_title, keywords, description, views, published,
 				created_date, modified_date, modified_by
@@ -202,8 +206,11 @@ class NewsModel {
 		$prep->execute();
 		
 		$data = $prep->fetch(PDO::FETCH_ASSOC);
-		$data['cats'] = $this->getCatsOfNews($news_id);
-		$this->renameNewsFieldsFromDb($data);
+		
+		if (!empty($data)) {
+			$data['cats'] = $this->getCatsOfNews($news_id);
+			$this->renameNewsFieldsFromDb($data);
+		}
 		
 		return $data;
 	}
@@ -283,7 +290,7 @@ class NewsModel {
 			$result[$key]['news_cat_parent_name'] = "";
 			if ($cat['news_cat_parent'] != 0) {
 				foreach ($result as $key2 => $cat2) {
-					if($cat2['news_cat_id'] == $cat['news_cat_parent']) {
+					if ($cat2['news_cat_id'] == $cat['news_cat_parent']) {
 						$result[$key]['news_cat_parent_name'] = $cat2['news_cat_name'];
 						break;
 					}

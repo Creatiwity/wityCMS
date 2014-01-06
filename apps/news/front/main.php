@@ -15,20 +15,9 @@ defined('IN_WITY') or die('Access denied');
  */
 class NewsController extends WController {
 	protected function listing(array $params) {
-		$news_id = -1;
+		$news_id = intval(array_shift($params));
 		
-		if (isset($params[0])) {
-			$id = intval($params[0]);
-			if (!empty($id)) {
-				$news_id = $id;
-			}
-		}
-		
-		if ($news_id != -1 && !$this->model->validExistingNewsId($news_id)) {
-			return WNote::error('news_not_found', "The news #".$news_id." was not found.");
-		}
-		
-		if ($news_id != -1) {
+		if (!empty($news_id)) {
 			return $this->display($news_id);
 		} else {
 			return $this->listNews();
@@ -40,7 +29,13 @@ class NewsController extends WController {
 	}
 	
 	protected function display($news_id) {
-		return array($this->model->getNews($news_id));
+		$news_data = $this->model->getNews($news_id);
+		
+		if (empty($news_data)) {
+			return WNote::error('news_not_found', WLang::get('news_not_found'));
+		}
+		
+		return array($news_data);
 	}
 }
 

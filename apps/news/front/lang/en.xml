@@ -2,4 +2,6 @@
 <lang value="en">
 	<item id="news_meta">Posted by %s, on %s</item>
 	<item id="read_more">Read more</item>
+	
+	<item id="news_not_found">The requested news cannot be found.</item>
 </lang>
