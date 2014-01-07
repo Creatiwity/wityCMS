@@ -10,9 +10,15 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-06-03-2013
+ * @version 0.4.0-07-01-2014
  */
 class WSession {
+	/*
+	 * Default session life when the user asks to remember his account
+	 * @type int
+	 */
+	const REMEMBER_TIME = 604800; // 1 week
+	
 	/**
 	 * Minimum time betwen two POST requests
 	 */
@@ -46,6 +52,7 @@ class WSession {
 		// No sid in HTML links
 		ini_set('session.use_trans_sid', '0');
 		session_name('wsid');
+		session_set_cookie_params(self::REMEMBER_TIME, WRoute::getDir());
 		
 		// Start sessions
 		session_start();
@@ -111,8 +118,8 @@ class WSession {
 			if ($remember > 0) {
 				$lifetime = time() + $remember;
 				// Cookie setup
-				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
-				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, '/');
+				setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
+				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, WRoute::getDir());
 			}
 			return self::LOGIN_SUCCESS; 
 		} else {
@@ -179,8 +186,8 @@ class WSession {
 		);
 		
 		// Reset cookies
-		setcookie('userid', '', time()-3600, '/');
-		setcookie('hash', '', time()-3600, '/');
+		setcookie('userid', '', time()-3600, WRoute::getDir());
+		setcookie('hash', '', time()-3600, WRoute::getDir());
 	}
 	
 	/**
@@ -193,7 +200,7 @@ class WSession {
 		session_destroy();
 		
 		// Reset cookies
-		setcookie(session_name(), '', time()-3600, '/');
+		setcookie(session_name(), '', time()-3600, WRoute::getDir());
 	}
 	
 	/**

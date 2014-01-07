@@ -14,12 +14,6 @@ defined('IN_WITY') or die('Access denied');
  */
 class UserController extends WController {
 	/*
-	 * Default session life when the user asks to remember his account
-	 * @type int
-	 */
-	const REMEMBER_TIME = 604800; // 1 week
-	
-	/*
 	 * @var Instance of WSession
 	 */
 	private $session;
@@ -70,8 +64,8 @@ class UserController extends WController {
 			$cookie = true; // cookies accepted by browser?
 			
 			if (!empty($data['nickname']) && !empty($data['password'])) {
-				// User asks to be auto loged in => change the cookie lifetime to self::REMEMBER_TIME
-				$remember_time = !empty($data['remember']) ? self::REMEMBER_TIME : abs(intval($data['time'])) * 60;
+				// User asks to be auto loged in => change the cookie lifetime to WSession::REMEMBER_TIME
+				$remember_time = !empty($data['remember']) ? WSession::REMEMBER_TIME : abs(intval($data['time'])) * 60;
 				
 				// Start login process
 				switch ($this->session->createSession($data['nickname'], $data['password'], $remember_time)) {
