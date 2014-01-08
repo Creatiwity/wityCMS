@@ -32,9 +32,8 @@ class NewsAdminView extends WView {
 
 	public function news_form($model) {
 		// JS / CSS
-		$this->assign('css', "/libraries/wysihtml5-bootstrap/bootstrap-wysihtml5-0.0.2.css");
 		$this->assign('require', 'apps!news/add_or_edit');
-		$this->assign('require', 'wysihtml5');
+		$this->assign('js', "/libraries/ckeditor-4.3.1/ckeditor.js");
 
 		// Assign site URL for permalink management
 		$this->assign('site_url', WRoute::getBase() . '/news/');

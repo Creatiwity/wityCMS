@@ -14,7 +14,12 @@
 				</div>
 
 				<label for="news_content" class="sr-only">{lang article_content}:</label><br />
-				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80" data-witycms-wysiwyg="true">{$news_content}</textarea>
+				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80">{$news_content}</textarea>
+				<script type="text/javascript">
+					CKEDITOR.replace( 'news_content', {
+						height: '500px'
+					});
+				</script>
 			</div>
 			<div class="col-md-3">
 				<div class="well well-sm">
