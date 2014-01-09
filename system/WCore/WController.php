@@ -83,6 +83,8 @@ abstract class WController {
 	 * Most of the time, the action given in URL is used.
 	 */
 	public function launch($action, array $params = array()) {
+		$action = preg_replace('#[^a-zA-Z]+#', '_', $action);
+		
 		// Trigger the corresponding method for the action given in URL
 		return $this->forward($action, $params);
 	}
