@@ -81,7 +81,7 @@ class NewsAdminView extends WView {
 	}
 
 	public function category_delete($model) {
-		$this->assign('confirm_delete_url', "/admin/news/category_delete/".$model['cat_id']."/confirm");
+		$this->assign('confirm_delete_url', "/admin/news/category_delete/".$model['cid']."/confirm");
 	}
 
 	public function categories_manager($model) {

@@ -45,7 +45,7 @@ class NewsAdminController extends WController {
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		return array(
-			'data'         => $this->model->getNewsList(($page-1)*$n, $n, $sort[0], $sort[1]),
+			'data'         => $this->model->getNewsList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC'),
 			'total'        => $this->model->countNews(),
 			'current_page' => $page,
 			'per_page'     => $n,
