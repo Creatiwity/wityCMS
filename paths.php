@@ -2,15 +2,11 @@
 /**
  * WityCMS paths.php
  * 
- * Content Management System for everyone
- *
- * @package System
+ * Content Management System for everyone.
+ * 
  * @version 0.4.0
  */
 
-/**
- * Avoid direct access
- */
 defined('IN_WITY') or die('Access denied');
 
 /**
@@ -62,5 +58,10 @@ define('LOGS_DIR', WITY_PATH.'helpers'.DS);
  * Cache directory location
  */
 define('CACHE_DIR', WITY_PATH.'cache'.DS);
+
+/**
+ * Upload directory location
+ */
+define('UPLOAD_DIR', WITY_PATH.'upload'.DS);
 
 ?>

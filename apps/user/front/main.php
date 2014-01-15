@@ -1,60 +1,59 @@
 <?php
 /**
- * User Application - Controller - /apps/user/front/main.php
+ * User Application - Front Controller
  */
 
 defined('IN_WITY') or die('Access denied');
 
 /**
- * UserController is the front Controller of the User Application.
+ * UserController is the Front Controller of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-06-03-2013
  */
 class UserController extends WController {
-	/*
-	 * Default session life when the user asks to remember his account = 1 week
-	 */
-	const REMEMBER_TIME = 604800;
-	
 	/*
 	 * @var Instance of WSession
 	 */
 	private $session;
 	
 	/**
-	 * UserController constructor
-	 * Basically instantiates session
+	 * UserController's constructor to initialize $session.
 	 */
 	public function __construct() {
 		$this->session = WSystem::getSession();
 	}
 	
 	/**
-	 * Login action handler
-	 * Triggered whenever a user asks to be connected
+	 * The Login action allows a user to connect to his account.
 	 * 
-	 * @param string $redirect URL to redirect the request
+	 * @param array $params Redirect is expected in this array
+	 * @return array Model containing the redirect link
 	 */
-	protected function login($redirect = '') {
+	protected function login($params) {
 		// Find redirect URL
-		$referer = WRoute::getReferer();
+		$referer = str_replace(WRoute::getBase(), '', WRoute::getReferer());
 		$redirect_request = WRequest::get('redirect');
-		if (empty($redirect)) {
+		
+		if (empty($params[0])) {
+			$route = WRoute::route();
+			
 			if (!empty($redirect_request)) {
 				$redirect = $redirect_request;
-			} else if (WRoute::getApp() != 'user') { // Login form loaded from an external application
-				$redirect = WRoute::getURL();
+			} else if ($route['app'] != 'user') { // Login form loaded from an external application
+				$redirect = WRoute::getDir().WRoute::getQuery();
 			} else if (strpos($referer, 'user') === false) {
 				$redirect = $referer;
 			} else {
-				$redirect = WRoute::getBase();
+				$redirect = WRoute::getDir();
 			}
+		} else {
+			$redirect = $params[0];
 		}
 		
 		if ($this->session->isConnected()) {
-			$this->view->setHeader('Location', $redirect);
+			$this->setHeader('Location', $redirect);
 			return WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.');
 		}
 		
@@ -63,9 +62,10 @@ class UserController extends WController {
 		if (!in_array(null, $data, true)) {
 			$data += WRequest::getAssoc(array('remember', 'time'));
 			$cookie = true; // cookies accepted by browser?
+			
 			if (!empty($data['nickname']) && !empty($data['password'])) {
-				// User asks to be auto loged in => change the cookie lifetime to self::REMEMBER_TIME
-				$remember_time = !empty($data['remember']) ? self::REMEMBER_TIME : abs(intval($data['time'])) * 60;
+				// User asks to be auto loged in => change the cookie lifetime to WSession::REMEMBER_TIME
+				$remember_time = !empty($data['remember']) ? WSession::REMEMBER_TIME : abs(intval($data['time'])) * 60;
 				
 				// Start login process
 				switch ($this->session->createSession($data['nickname'], $data['password'], $remember_time)) {
@@ -79,8 +79,7 @@ class UserController extends WController {
 						} else {
 							// Redirect
 							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
-							$this->view->setHeader('Location', $redirect);
-							return;
+							$this->setHeader('Location', $redirect);
 						}
 						break;
 					
@@ -95,21 +94,20 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
-			
-			// Login process triggered from an external application
-			if ($cookie && strpos($referer, 'user') === false) {
-				// Redirect to it
-				$this->view->setHeader('Location', $referer);
-			}
+		}
+		
+		if (strpos($referer, '/admin') !== false) {
+			$this->setHeader('Location', WRoute::getReferer());
 		}
 		
 		return array('redirect' => $redirect);
 	}
 	
 	/**
-	 * Logout action handler
+	 * Logout action handler.
 	 * 
 	 * @todo Smartly find the redirecting URL based on the referer (watch out to app requiring special access)
+	 * @return array Success note
 	 */
 	protected function logout() {
 		if ($this->session->isConnected()) {
@@ -117,14 +115,15 @@ class UserController extends WController {
 			$this->session->closeSession();
 		}
 		
-		$this->view->setHeader('Location', WRoute::getBase());
+		$this->setHeader('Location', WRoute::getDir());
 		return WNote::success('user_disconnected', WLang::get('user_disconnected'));
 	}
 	
 	/**
-	 * Register action handler
+	 * The Register action allows a user to register a new account.
 	 * 
 	 * @todo Captcha security
+	 * @return array Data given
 	 */
 	protected function register() {
 		// Check if inscriptions are open
@@ -137,7 +136,7 @@ class UserController extends WController {
 		if (!in_array(null, $data, true)) {
 			$errors = array();
 			
-			// Check nickname availabililty
+			// Check nickname availability
 			if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
 				$errors[] = WLang::get($e);
 			}
@@ -153,7 +152,7 @@ class UserController extends WController {
 				$errors[] = WLang::get('error_no_password');
 			}
 			
-			// Email availabililty
+			// Email availability
 			if (($e = $this->model->checkEmail($data['email'])) !== true) {
 				$errors[] = WLang::get($e);
 			}
@@ -170,7 +169,8 @@ class UserController extends WController {
 					$data['valid'] = 2; // value to require admin check
 				}
 				
-				if ($this->model->createUser($data)) {
+				$user_id = $this->model->createUser($data);
+				if ($user_id !== false) {
 					if ($config['email_conf']) {
 						// Send a validation email
 						$this->model->sendEmail(
@@ -201,13 +201,12 @@ class UserController extends WController {
 						// Send email to the administrators to warn them
 						$admin_emails = WConfig::get('config.email');
 						if (!empty($admin_emails)) {
-							$userid = $this->model->getLastUserId();
 							$this->model->sendEmail(
 								$admin_emails,
 								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
 								str_replace(
 									array('{site_name}', '{nickname}', '{base}', '{userid}'),
-									array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $userid),
+									array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $user_id),
 									WLang::get('user_register_admin_warning')
 								)
 							);
@@ -236,16 +235,18 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_data_errors', implode("<br />\n", $errors));
 			}
-			
-			return $data;
 		}
+		
+		return $data;
 	}
 	
 	/**
-	 * Confirm action handler
-	 * Allows the user to validate its account after registering
+	 * The Confirm action allows the user to validate its account after registering.
+	 * 
+	 * @param array $params
+	 * @return void
 	 */
-	protected function confirm() {
+	protected function confirm($params) {
 		// Check if inscriptions are open
 		$config = $this->model->getConfig();
 		if (!$config['register']) {
@@ -253,9 +254,9 @@ class UserController extends WController {
 		}
 		
 		// Retrieve the confirm code
-		$confirm_code = WRoute::getArg(1);
+		$confirm_code = array_shift($params);
 		if (empty($confirm_code)) {
-			$this->view->setHeader('Location', WRoute::getBase());
+			$this->setHeader('Location', WRoute::getDir());
 			return;
 		}
 		
@@ -269,13 +270,12 @@ class UserController extends WController {
 				// Send email to the administrators to warn them
 				$admin_emails = WConfig::get('config.email');
 				if (!empty($admin_emails)) {
-					$userid = $this->model->getLastUserId();
 					$this->model->sendEmail(
 						$admin_emails,
 						WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
 						str_replace(
 							array('{site_name}', '{nickname}', '{base}', '{userid}'),
-							array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $userid),
+							array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $data['id']),
 							WLang::get('user_register_admin_warning')
 						)
 					);
@@ -297,8 +297,9 @@ class UserController extends WController {
 	}
 	
 	/**
-	 * Password-lost action handler
-	 * Triggered when a user wants to recover its password
+	 * The Password-lost action is triggered when a user wants to recover its password.
+	 * 
+	 * @return array Model
 	 */
 	protected function password_lost() {
 		$data = WRequest::getAssoc(array('email', 'confirm'));
@@ -319,8 +320,8 @@ class UserController extends WController {
 							$data['email'],
 							WLang::get('user_password_lost_subject', WConfig::get('config.site_name')),
 							str_replace(
-								array('{site_name}', '{email}', '{confirm}'),
-								array(WConfig::get('config.site_name'), $user_data['email'], $confirm),
+								array('{base}', '{site_name}', '{email}', '{confirm}'),
+								array(WRoute::getBase(), WConfig::get('config.site_name'), $user_data['email'], $confirm),
 								WLang::get('user_password_lost_email')
 							)
 						);
@@ -360,7 +361,7 @@ class UserController extends WController {
 				
 				return array('step' => 2, 'email' => $data['email'], 'confirm' => $data['confirm']);
 			} else {
-				$this->view->setHeader('location: '.WRoute::getBase());
+				$this->setHeader('Location', WRoute::getDir());
 			}
 		}
 	}

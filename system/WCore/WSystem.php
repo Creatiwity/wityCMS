@@ -8,10 +8,8 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WSystem keeps the session, template and database instances as singletons.
  * 
- * <p>If you need the WSession instance, just call :
+ * If you need the WSession instance, just call :
  * <code>WSystem::getSession();</code>
- * It's the same thing with WTemplate andWDatabase.
- * </p>
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
@@ -77,9 +75,15 @@ class WSystem {
 			// Chargement des infos db
 			WConfig::load('database', SYS_DIR.'config'.DS.'database.php', 'php');
 			
-			$dsn = 'mysql:dbname='.WConfig::get('database.dbname').';host='.WConfig::get('database.server');
+			$server = WConfig::get('database.server');
+			$dbname = WConfig::get('database.dbname');
+			$dsn = 'mysql:dbname='.$dbname.';host='.$server;
 			$user = WConfig::get('database.user');
 			$password = WConfig::get('database.pw');
+			
+			if (empty($server) || empty($dbname) || empty($user)) {
+				WNote::error('system_database_init', "Information is missing to connect to the database: please, check the server, database name or the user name in system/config/database.php.", 'die');
+			}
 			
 			self::$dbInstance = new WDatabase($dsn, $user, $password);
 			self::$dbInstance->query("SET NAMES 'utf8'");

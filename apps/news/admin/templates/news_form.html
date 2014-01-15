@@ -1,56 +1,70 @@
-<form action="" method="post" enctype="multipart/form-data">
-	<div class="span9">	
-		<input id="news_title" class="input-block-level input-big" name="news_title" size="40" value="{$news_title}" type="text" placeholder="{lang title_of_article}"/>
-		<br/>
-		<div class="input-prepend">
-			<span class="add-on">{$siteURL}{$lastId}-</span>
-			<input class="span9" id="news_url" name="news_url" type="text" value="{$news_url}">
-		</div>
-		<br/>
-		<label for="news_content" class="hide">{lang article_content}:</label><br />
-		<textarea id="news_content" class="input-block-level" name="news_content" rows="20" cols="80">{$news_content}</textarea><br />
-		<script type="text/javascript">
-			$('#news_content').wysihtml5();
-		</script>
-	</div>
-	<div class="span3">
-		<div class="well">
-			<h4>{lang metadata}</h4>
-			<div class="control-group">
-				<label class="control-label" for="news_author">{lang author}</label>
-				<div class="controls">
-					<input type="text" id="news_author" class="input-block-level" name="news_author" value="{$news_author}" placeholder="{lang author}">
+<div class="wity-app wity-app-news wity-action-news-form">
+	<form method="post" enctype="multipart/form-data">
+		<div class="row">
+			<div class="col-md-9">
+				<h2 class="sr-only">{if empty({$news_id})}{lang article_add}{else}{lang article_edit}{/if}</h2>
+				<div class="form-group">
+					<label for="news_title" class="sr-only control-label">{lang title_of_article}</label>
+					<input id="news_title" class="form-control input-lg" type="text" name="news_title" value="{$news_title}"  autocomplete="off" placeholder="{lang title_of_article}" />
+				</div>
+
+				<div class="input-group">
+					<span class="input-group-addon">{$site_url}{$news_id}-</span>
+					<input id="news_url" class="form-control" type="text" name="news_url" value="{$news_url}" />
+				</div>
+
+				<label for="news_content" class="sr-only">{lang article_content}:</label><br />
+				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80">{$news_content}</textarea>
+				<script type="text/javascript">
+					CKEDITOR.replace( 'news_content', {
+						height: '500px'
+					});
+				</script>
+			</div>
+			<div class="col-md-3">
+				<div class="well well-sm">
+					<h4 class="text-center">{lang metadata}</h4>
+					<div class="form-group">
+						<label for="news_author" class="control-label">{lang author}</label>
+						<input id="news_author" class="form-control" type="text" name="news_author" value="{$news_author}" placeholder="{lang author}" />
+					</div>
+					<div class="form-group">
+						<label for="news_meta_title">{lang meta_title}</label>
+						<input id="news_meta_title" class="form-control" type="text" name="news_meta_title" value="{$news_meta_title}" placeholder="{lang meta_title}" />
+					</div>
+					<div class="form-group">
+						<label for="news_keywords">{lang keywords}</label>
+						<input id="news_keywords" class="form-control" type="text" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}" />
+					</div>
+					<div class="form-group">
+						<label for="news_description">{lang description}</label>
+						<textarea id="news_description" class="form-control" type="text" name="news_description" placeholder="{lang description}" rows="4" cols="40">{$news_description}</textarea>
+					</div>
+					{if !empty({$news_date})}
+					<hr />
+					<ul class="list-unstyled">
+						<li>{lang article_created_on|{$news_date}}</li>
+						<li>{lang article_modified_on|{$news_modified}}</li>
+					</ul>
+					{/if}
+				</div>
+				<div class="well well-sm">
+					<h4 class="text-center">{lang category_of_article}</h4>
+					{for $cat in $cats}
+					<label class="checkbox">
+						<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if} />
+						{$cat.news_cat_name}
+					</label>
+					{/for}
+					{empty}
+					<p>{lang no_category_in_database}</p>
+					{/empty}
+				</div>
+				<div class="well well-sm">
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang submit}</button>
+					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="news_keywords">{lang keywords}</label>
-				<div class="controls">
-					<input type="text" id="news_keywords" class="input-block-level" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}">
-				</div>
-			</div>
-			{if !empty({$news_date})}
-			<hr/>
-			<ul class="unstyled">
-				<li>{lang article_created_on|{$news_date}}</li>
-				<li>{lang article_modified_on|{$news_modified}}</li>
-			</ul>
-			{/if}
 		</div>
-		<div class="well">
-			<h4>{lang category_of_article}</h4>
-			{for $cat in $cats_list}
-			<label class="checkbox">
-				<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if}>
-				{$cat.news_cat_name}
-			</label>
-			{/for}
-			{empty}
-			<p>{lang no_category_in_database}</p>
-			{/empty}
-		</div>
-		<div class="well">
-			<button type="submit" class="btn btn-large btn-block btn-primary" type="button">{lang submit}</button>
-			<button class="btn btn-large btn-block" type="button" onclick="history.back();">{lang cancel}</button>
-		</div>
-	</div>
-</form>
+	</form>
+</div>

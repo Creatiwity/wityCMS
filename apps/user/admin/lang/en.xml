@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <lang value="en">
 	<!-- Actions -->
 	<item id="action_listing">Users listing</item>
@@ -22,7 +22,7 @@
 	<!-- General -->
 	<item id="search">Search</item>
 	<item id="nickname">Nickname</item>
-	<item id="password">Mot de passe</item>
+	<item id="password">Password</item>
 	<item id="email">Email</item>
 	<item id="firstname">Firstname</item>
 	<item id="lastname">Lastname</item>
@@ -61,7 +61,7 @@
 	<!-- User add/edit form -->
 	<item id="users_total">%s registered users</item>
 	<item id="users_found">%s users found</item>
-	<item id="no_user_found">No user found</item>
+	<item id="no_user_found">No user found in the database.</item>
 	<item id="leave_empty_to_leave_unchanged">Leave empty to let the password unchanged.</item>
 	<item id="confirmation">(confirmation)</item>
 	<item id="group_default">No group</item>
@@ -74,12 +74,27 @@
 	<item id="no_permissions">Neither specific permissions, nor admin zone for this app.</item>
 	<item id="add_user">Create user</item>
 	<item id="edit_user">Edit user</item>
-	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+	<item id="user_register_email_subject">%s - Your user account was created</item>
+	<item id="user_register_email_body"><![CDATA[
+<p>Dear user,</p>
+<p>An account was just created for you on the website {{site_name}}</p>
+<p></p>To login, proceed to <a href="{{base}}/user/login/">{{base}}/user/login/</a>.</p>
+<p>Here are you login data :</p>
+<ul>
+	<li><strong>ID :</strong> {{nickname}}</li>
+	<li><strong>Password :</strong> {{password}}</li>
+</ul>
+<p>These information are personnal.<br />
+To change them, go to your profile.</p>
+
+<p>{{site_name}}</p>
+--------------<br />
+This is an automatic message.]]></item>
 	<item id="user_created">The user %s was created successfully.</item>
 	<item id="user_not_created">An unknown error occured when trying to create your account in the database.</item>
 	<item id="user_edited"><![CDATA[The user <strong>%s</strong> was edited successfully.]]></item>
 	<item id="user_not_edited">An unknown error occured while trying to edit the account %s in the database.</item>
-	<item id="send_email_confirmation">Send an account creation confirmation by mail?</item>
+	<item id="send_email_confirmation">Send the new account's data by email?</item>
 	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
 	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
 	
@@ -94,15 +109,15 @@
 	<item id="group_default_access_for_users">Default access for users belonging to the group</item>
 	<item id="group_users_count">Users count in the group</item>
 	<item id="actions">Actions</item>
-	<item id="no_group_found">No group found</item>
+	<item id="no_group_found">No group found in the database.</item>
 	<item id="apply">Apply</item>
 	<item id="group_del_confirm">Do you really want to delete the group %s?</item>
 	<item id="group_not_modified">An unknow error occured while trying to apply changes to the group.</item>
 	
 	<!-- Group treatment -->
 	<item id="group_name_empty">No group name given</item>
-	<item id="group_added"><![CDATA[The group <strong>%s</strong> was edited successfully.]]></item>
-	<item id="group_edited"><![CDATA[The group <strong>%s</strong> was added successfully.]]></item>
+	<item id="group_added"><![CDATA[The group <strong>%s</strong> was added successfully.]]></item>
+	<item id="group_edited"><![CDATA[The group <strong>%s</strong> was edited successfully.]]></item>
 	<item id="group_not_added">An unknown error occured while trying to apply changes to the group in the database.</item>
 	<item id="group_deleted">The group selected was deleted successfully.</item>
 	<item id="group_delete_confirmation">Are you sure you want to delete the group %s?</item>

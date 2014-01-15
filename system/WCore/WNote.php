@@ -143,8 +143,8 @@ class WNote {
 				$plain_view = self::getPlainView();
 				
 				if (!is_null($plain_view)) {
-					$response = new WResponse('_blank');
-					if ($response->render($plain_view)) {
+					$response = new WResponse();
+					if ($response->render($plain_view, '_blank')) {
 						die;
 					}
 				}
@@ -166,12 +166,15 @@ class WNote {
 	public static function handle_assign(array $note) {
 		if (!isset($_SESSION['notes'][$note['code']])) {
 			$_SESSION['notes'][$note['code']] = $note;
+		} else if (strlen($_SESSION['notes'][$note['code']]['message']) != strlen($note['message'])) {
+			// Note id exists but message changed so add the note to the stack
+			$_SESSION['notes'][] = $note;
 		}
 	}
 	
 	/**
 	 * Handles note to be displayed in a plain HTML View.
-	 * Oftenly used for failover purposes (a view did not manage to render since theme cannot be found for instance).
+	 * Often used for fail-over purposes (a view did not manage to render since theme cannot be found for instance).
 	 * 
 	 * @param array $note Note as returned by WNote::raise()
 	 */
@@ -254,6 +257,7 @@ class WNote {
 	 */
 	public static function get($pattern = '*') {
 		$result = array();
+		
 		if (!empty($_SESSION['notes'])) {
 			foreach ($_SESSION['notes'] as $code => $note) {
 				if ($pattern == '*' || $code == $pattern || (strpos($pattern, '*') !== false && preg_match('#'.str_replace('*', '.*', $pattern).'#', $code))) {
@@ -263,6 +267,7 @@ class WNote {
 				}
 			}
 		}
+		
 		return $result;
 	}
 	
@@ -292,22 +297,28 @@ class WNote {
 	}
 	
 	/**
-	 * Prepares a view to display a set of notes in a fallback view
+	 * Gets the plain notes.
+	 * 
+	 * @return array
+	 */
+	public static function getPlain() {
+		$plain_notes = self::$plain_stack;
+		self::$plain_stack = array();
+		return $plain_notes;
+	}
+	
+	/**
+	 * Prepares a view to display a set of notes in a fall-back view
 	 * 
 	 * @return WView
 	 */
 	public static function getPlainView() {
 		// Generate view
 		if (!empty(self::$plain_stack)) {
-			$notes_data = self::$plain_stack;
-			self::$plain_stack = array();
-			
 			// Prepare a new view
 			$view = new WView();
 			$view->assign('css', '/themes/system/note/note_plain.css');
-			$view->assign('js', '/libraries/jquery-1.10.2/jquery-1.10.2.min.js');
-			$view->assign('js', '/themes/system/note/note.js');
-			$view->assign('notes_data', $notes_data);
+			$view->assign('notes_data', self::getPlain());
 			$view->setTemplate('themes/system/note/note_plain_view.html');
 			
 			return $view;

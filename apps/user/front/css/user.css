@@ -1,10 +1,18 @@
-
-#login-form label, #register-form label {
-	width: 200px;
-	float: left;
-	display: block;
+.wity-action-login, .wity-action-register {
+	max-width: 300px;
+	margin-right: auto;
+	margin-left: auto;
 }
 
-.mandatory {
-	color: red;
+#more-options {
+	height: 0;
+	overflow: hidden;
+	-webkit-transition: height 0.3s ease-in-out;
+	-moz-transition: height 0.3s ease-in-out;
+	-o-transition: height 0.3s ease-in-out;
+	transition: height 0.3s ease-in-out;
+}
+
+#more-options.show {
+	height: 5em;
 }

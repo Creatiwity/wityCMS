@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="fr">
+	<!-- WDate -->
+	<item id="now">now</item>
+	<item id="wdate_format">d/m/Y H:i:s</item>
+	<item id="wdate_years_ago">il y a %s ans</item>
+	<item id="wdate_year_ago">il y a un an</item>
+	<item id="wdate_months_ago">il y a %s mois</item>
+	<item id="wdate_month_ago">il y a un mois</item>
+	<item id="wdate_weeks_ago">il y a %s semaines</item>
+	<item id="wdate_week_ago">il y a une semaine</item>
+	<item id="wdate_days_ago">il y a %s jours</item>
+	<item id="wdate_day_ago">il y a un jour</item>
+	<item id="wdate_hours_ago">il y a %s heures</item>
+	<item id="wdate_hour_ago">il y a une heure</item>
+	<item id="wdate_minutes_ago">il y a %s minutes</item>
+	<item id="wdate_minute_ago">il y a une minute</item>
+	<item id="wdate_seconds_ago">il y a %s secondes</item>
+	<item id="wdate_second_ago">il y a une seconde</item>
+	
+	<!-- Errors -->
+	<item id="error_404"><![CDATA[Désolé mais WityCMS n'a pas été en mesure de trouver la page demandée.
+<br /><br />
+<a href="/">Retour à l'accueil</a>]]></item>
+</lang>

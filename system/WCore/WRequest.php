@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WRequest.php
  */
@@ -7,25 +7,35 @@ defined('IN_WITY') or die('Access denied');
 
 /**
  * WRequest manages all input variables.
- * 
+ *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-29-12-2011
  */
 class WRequest {
+	 /**
+	 * @var array Contains all checked variables to avoid infinite loop
+	 */
+	private static $checked = array();
+
+	/**
+	 * @var bool Variable to lock all read/write actions on the input values. Default values will be sent.
+	 */
+	private static $lock = false;
+
 	/**
 	 * Returns the values of all variables with name in $names sent by $hash method
-	 * 
+	 *
 	 * You can use the following hashes:
 	 * - "GET"
 	 * - "POST"
 	 * - "FILES"
 	 * - "COOKIE"
 	 * - "REQUEST" (default)
-	 * 
+	 *
 	 * The following syntax is allowed:
 	 * <code>list($v1, ...) = WRequest::get(array('v1', 'v2'));</code>
-	 * 
+	 *
 	 * @param string|array  $names      variable names
 	 * @param mixed         $default    optional default values
 	 * @param string        $hash       name of the method used to send
@@ -51,7 +61,7 @@ class WRequest {
 				$hash = 'REQUEST';
 				break;
 		}
-		
+
 		if (is_array($names)) {
 			// Going through the asked values in order to returns the array
 			$result = array();
@@ -60,20 +70,20 @@ class WRequest {
 				$result[] = $value;
 				$result[$name] = $value;
 			}
-			
+
 			return $result;
 		} else {
 			return self::getValue($data, $names, $default, $hash);
 		}
 	}
-	
+
 	/**
 	 * Returns an associative array of values in which keys are the $names
-	 * 
+	 *
 	 * @see WRequest::get()
-	 * @param array     $names      variable names
-	 * @param type      $default    optional default values
-	 * @param string    $hash       name of the method used to send
+	 * @param array  $names   variable names
+	 * @param mixed  $default optional default values
+	 * @param string $hash    name of the method used to send
 	 * @return array array of values in which keys are the $names
 	 */
 	public static function getAssoc(array $names, $default = null, $hash = 'REQUEST') {
@@ -96,46 +106,57 @@ class WRequest {
 				$hash = 'REQUEST';
 				break;
 		}
-		
+
 		// Going through the asked values in order to returns the array
 		$result = array();
 		foreach ($names as $name) {
 			$value = self::getValue($data, $name, isset($default[$name]) ? $default[$name] : null, $hash);
 			$result[$name] = $value;
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Returns the checked value associated to $name
-	 * 
-	 * @param &array $data      request array
-	 * @param string $name      variable name
-	 * @param string $default   optional default value
-	 * @param string $hash      name of the method used to send
+	 *
+	 * @param &array $data       request array
+	 * @param string $name       variable name
+	 * @param string $default    optional default value
+	 * @param string $hash       name of the method used to send
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {
-		if (isset($data[$name]) && !is_null($data[$name])) {
-			// Filter the variable value
-			$value = self::filter($data[$name]);
-		} else if (!is_null($default)) {
-			// Use default
-			$value = self::filter($default);
-		} else {
-			$value = null;
+		// Stop read action
+		if (self::$lock) {
+			return $default;
 		}
-		
-		// Remove the variable from the global stack
-		unset($data[$name]);
-		
-		return $value;
+
+		if (isset(self::$checked[$hash.$name])) {
+			// Directly get the verifed variable in data
+			return $data[$name];
+		} else {
+			if (isset($data[$name]) && !is_null($data[$name])) {
+				// Filter the variable value
+				$data[$name] = self::filter($data[$name]);
+			} else if (!is_null($default)) {
+				// Use default
+				$data[$name] = self::filter($default);
+			}
+
+			// Variable is verified
+			if (isset($data[$name])) {
+				self::$checked[$hash.$name] = true;
+				return $data[$name];
+			} else {
+				return null;
+			}
+		}
 	}
-	
+
 	/**
 	 * Sets a request value
-	 * 
+	 *
 	 * @param string    $name       variable name
 	 * @param mixed     $value      the value that will be set
 	 * @param string    $hash       name of the method used to initially send
@@ -143,14 +164,19 @@ class WRequest {
 	 * @return mixed previous value, may be null
 	 */
 	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
+		// Stop write action
+		if (self::$lock) {
+			return null;
+		}
+
 		// Check if overwriting is allowed
 		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
 			return $_REQUEST[$name];
 		}
-		
+
 		// Stores previous value
 		$previous = array_key_exists($name, $_REQUEST) ? $_REQUEST[$name] : null;
-		
+
 		switch (strtoupper($hash)) {
 			case 'GET':
 				$_GET[$name] = $value;
@@ -171,13 +197,15 @@ class WRequest {
 				$_REQUEST[$name] = $value;
 				break;
 		}
-		
+
+		self::$checked[$hash.$name] = true;
+
 		return $previous;
 	}
-	
+
 	/**
 	 * Returns the filtered variable after a tiny security check
-	 * 
+	 *
 	 * @param mixed $variable variable that we want to filter
 	 * @return mixed the filtered variable
 	 */
@@ -190,10 +218,43 @@ class WRequest {
 			// No special char direct input
 			$variable = str_replace('<>#', '', $variable);
 			// $variable = str_replace('&lt;script', '', $variable); // maybe XSS
-			$variable = stripslashes(htmlspecialchars($variable));
+			// $variable = stripslashes(htmlspecialchars($variable));
+			$variable = htmlspecialchars($variable);
 		}
-		
+
 		return $variable;
+	}
+
+	/**
+	 * Stops all read/write actions on the Request variables.
+	 */
+	public static function lock() {
+		self::$lock = true;
+	}
+
+	/**
+	 * Allows all read/write actions on the Request variables.
+	 */
+	public static function unlock() {
+		self::$lock = false;
+	}
+
+	/**
+	 * Tells the user if data is available.
+	 *
+	 * @return bool true if data available
+	 */
+	public static function hasData() {
+		return !empty($_REQUEST) && !in_array(null, $_REQUEST, true) && !self::$lock;
+	}
+	
+	/**
+	 * Retrieves the HTTP Method used by the client.
+	 * 
+	 * @return string Either GET|POST|PUT|DEL...
+	 */
+	public static function getMethod() {
+		return $_SERVER['REQUEST_METHOD'];
 	}
 }
 

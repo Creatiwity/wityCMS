@@ -16,10 +16,10 @@ class WDate extends DateTime {
 	/**
 	 * This function handles user's custom timezone.
 	 * 
-	 * @param string If empty, use the current date. See DateTime class for full documentation.
+	 * @param string $date If empty, use the current date. See DateTime class for full documentation.
 	 */
 	public function __construct($date = '') {
-		// Finally build the date
+		// Build the date
 		parent::__construct($date, $this->getUserTimezone());
 	}
 	
@@ -59,6 +59,61 @@ class WDate extends DateTime {
 	 */
 	public function __toString() {
 		return $this->format('Y-m-d H:i:s');
+	}
+	
+	/**
+	 * Calculates the time elapsed from this date.
+	 * 
+	 * @return string A phrase like this "3 seconds ago"
+	 */
+	public function getElapsedTime() {
+		$diff = $this->diff(new DateTime());
+		
+		if ($diff->invert == 1) {
+			return $this->format(WLang::_('wdate_format'));
+		}
+		
+		if ($diff->y > 1) {
+			return WLang::_('wdate_years_ago', $diff->y);
+		} else if ($diff->y > 1) {
+			return WLang::_('wdate_year_ago');
+		}
+		
+		if ($diff->m > 0) {
+			return WLang::_('wdate_months_ago', $diff->m);
+		} else if ($diff->m > 1) {
+			return WLang::_('wdate_month_ago');
+		}
+		
+		if ($diff->d >= 14) {
+			return WLang::_('wdate_weeks_ago', ceil($diff->d/7));
+		} else if ($diff->d >= 7) {
+			return WLang::_('wdate_week_ago');
+		} else if ($diff->d > 1) {
+			return WLang::_('wdate_days_ago', $diff->d);
+		} else if ($diff->d == 1) {
+			return WLang::_('wdate_day_ago');
+		}
+		
+		if ($diff->h > 1) {
+			return WLang::_('wdate_hours_ago', $diff->h);
+		} else if ($diff->h == 1) {
+			return WLang('wdate_hour_ago', $diff->h);
+		}
+		
+		if ($diff->i > 1) {
+			return WLang::_('wdate_minutes_ago', $diff->i);
+		} else if ($diff->i == 1) {
+			return WLang::_('wdate_minute_ago');
+		}
+		
+		if ($diff->s > 1) {
+			return WLang::_('wdate_seconds_ago', $diff->s);
+		} else if ($diff->s == 1) {
+			return WLang::_('wdate_second_ago', $diff->s);
+		}
+		
+		return WLang::_('now');
 	}
 }
 

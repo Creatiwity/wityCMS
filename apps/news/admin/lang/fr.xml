@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
 	<!-- Actions -->
 	<item id="articles_listing">Liste des articles</item>
@@ -8,7 +8,7 @@
 	<item id="categories_management">Gestion des catégories</item>
 	<item id="category_edit">Édition d'une catégorie</item>
 	<item id="category_delete">Suppression d'une catégorie</item>
-	
+
 	<!-- News listing -->
 	<item id="actions">Actions</item>
 	<item id="title">Titre</item>
@@ -19,15 +19,16 @@
 	<item id="number_of_views">%s vues</item>
 	<item id="no_article_in_database">Aucune news trouvée dans la base de données.</item>
 	<item id="article_delete_confirmation">Suppresion de l'article "%s" ?</item>
-	
+
 	<!-- News management -->
 	<item id="title_of_article">Titre de l'article</item>
 	<item id="article_content">Contenu de la news </item>
 	<item id="metadata">Metadonnées</item>
+	<item id="meta_title">Titre de la page</item>
 	<item id="keywords">Mots clés</item>
 	<item id="article_created_on">&lt;strong&gt;Article créé&lt;/strong&gt; le %s</item>
 	<item id="article_modified_on">&lt;strong&gt;Dernière édition&lt;/strong&gt; le %s</item>
-	<item id="category_of_article">Catégorie de l'article</item>
+	<item id="category_of_article">Catégories de l'article</item>
 	<item id="article_not_found">L'article n°%s que vous tentez de manipuler n'existe pas.</item>
 	<item id="article_no_title">Il manque un titre à l'article.</item>
 	<item id="article_no_author">Il manque un auteur à l'article.</item>
@@ -38,7 +39,7 @@
 	<item id="article_edited">L'article &lt;strong&gt;%s&lt;/strong&gt; a été modifié avec succès.</item>
 	<item id="article_not_edited">Une erreur inconnue s'est produite lors de l'édition de l'article dans la base de données.</item>
 	<item id="article_deleted">L'article "&lt;strong&gt;%s&lt;/strong&gt;" a été supprimé avec succès.</item>
-	
+
 	<!-- Categories management -->
 	<item id="Name">Nom</item>
 	<item id="Shortname">Nom raccourci</item>
@@ -51,10 +52,10 @@
 	<item id="cat_not_edited">Une erreur inconnue s'est produite lors de l'édition de la catégorie dans la base de données.</item>
 	<item id="category_not_found">La catégorie que vous tentez de supprimer n'existe pas.</item>
 	<item id="category_deleted">La catégorie a été supprimée avec succès.</item>
-	
+
 	<item id="category_delete_confirmation">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
 	<item id="category_add_button">Ajouter une catégorie</item>
-	
+
 	<item id="cancel">Annuler</item>
 	<item id="delete">Supprimer</item>
 	<item id="submit">Sauver</item>

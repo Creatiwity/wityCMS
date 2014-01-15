@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="en">
+	<!-- Form -->
+	<item id="from_name_label">Your name</item>
+	<item id="from_name_placeholder">Name</item>
+
+	<item id="from_company_label">Organism</item>
+	<item id="from_company_placeholder">Organism</item>
+
+	<item id="from_email_label">Your e-mail</item>
+	<item id="from_email_placeholder">E-mail</item>
+
+	<item id="email_subject_label">Subject</item>
+	<item id="email_subject_placeholder">Subject</item>
+
+	<item id="email_message_label">Message</item>
+	<item id="email_message_placeholder">Message</item>
+
+	<item id="send_button">Send</item>
+	<item id="sending">Sending...</item>
+
+	<!-- Auto reply -->
+	<item id="copy_subject">[%s] Your contact request</item>
+	<item id="auto_reply"><![CDATA[Hello,<br /><br />
+
+You just sent a contact request on the website {{site}}.<br /><br />
+There, is a summary:
+<ul>
+	<li><strong>Name :</strong> {{name}}</li>
+	<li><strong>Company :</strong> {{company}}</li>
+	<li><strong>Subject :</strong> {{subject}}</li>
+	<li><strong>Message :</strong><br />
+{{message}}</li>
+</ul>
+
+We will do our best to answer to your request as quickly as possible.<br /><br />
+
+Regards,<br />
+{{site}} team<br /><br />
+
+--<br />
+<em>This is an auto-generated email.</em>]]></item>
+	
+	<item id="mail_for_admin_subject">[%s] Contact - %s</item>
+	<item id="mail_for_admin_body"><![CDATA[Hello,<br /><br />
+
+A new contact request was just posted on the website {{site}} :
+
+<ul>
+	<li><strong>Name :</strong> {{name}}</li>
+	<li><strong>Company :</strong> {{company}}</li>
+	<li><strong>Subject :</strong> {{subject}}</li>
+	<li><strong>Message :</strong><br />
+{{message}}</li>
+</ul>
+
+You can find the full list of contact request on <a href="{{base}}/admin/contact/">this page</a>.<br /><br />
+
+--<br />
+<em>This is an auto-generated email.</em>]]></item>
+
+	<!-- Errors -->
+	<item id="no_from_name">Your name is missing.</item>
+	<item id="no_from_email">Your e-mail address is missing.</item>
+	<item id="invalid_from_email">Your e-mail address is invalid.</item>
+	<item id="no_email_subject">The subject of this e-mail is missing.</item>
+	<item id="no_email_message">The body of this e-mail is missing.</item>
+
+	<item id="email_not_sent">Sorry, unable to send this email. The administrator will be informed, please try again later.</item>
+
+	<item id="missing_configuration">The 'from' field is not configured in the 'contact' application. Unable to send mails. Here is the last e-mail that I tried to send: &lt;br/&gt;%s.</item>
+
+	<item id="unable_to_save_email">I was unable to save the last e-mail in the database but I sent it. Here is the last e-mail I tried to save: &lt;br/&gt;%s.</item>
+
+	<!-- Success -->
+	<item id="email_sent">E-mail successfully sent.</item>
+</lang>

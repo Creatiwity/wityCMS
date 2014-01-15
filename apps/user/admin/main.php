@@ -1,6 +1,6 @@
 <?php
 /**
- * User Application - Admin Controller - /apps/user/admin/main.php
+ * User Application - Admin Controller
  */
 
 defined('IN_WITY') or die('Access denied');
@@ -8,17 +8,19 @@ defined('IN_WITY') or die('Access denied');
 /**
  * UserAdminController is the Admin Controller of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-26-04-2013
  */
 class UserAdminController extends WController {
 	/**
-	 * List action handler
-	 * Displays a list of users in the database
+	 * The listing action displays the list of users in the database.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
-	protected function listing($params) {
-		$n = 30; // number of users per page
+	protected function listing(array $params) {
+		$n = 30; // Number of users per page
 		
 		// Admin check
 		$admin_check = WRequest::get('admin_check');
@@ -75,66 +77,75 @@ class UserAdminController extends WController {
 			}
 		}
 		
-		// Sorting criterias given by URL
+		// Sorting criteria given in URL
 		$sort_by = '';
-		$sens = 'DESC';
+		$sens = '';
 		$page = 1;
 		if (!empty($params[0])) {
-			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s %d', $sort_by, $sens, $page_crit);
-			if ($page > 1) {
-				$page = $page_crit;
+			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s %d', $sort_by, $sens, $page_input);
+			if ($page_input > 1) {
+				$page = $page_input;
 			}
 		}
 		
 		// SortingHelper
-		$sortingHelper = WHelper::load('SortingHelper', array(array('id', 'nickname', 'email', 'date', 'groupe', 'last_activity'), 'date', 'DESC'));
+		$sortingHelper = WHelper::load('SortingHelper', array(
+			array('id', 'nickname', 'email', 'groupe', 'last_activity', 'created_date'), 
+			'created_date', 'DESC'
+		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		// Filters
 		$filters = WRequest::getAssoc(array('nickname', 'email', 'firstname', 'lastname', 'groupe'));
 		$has_filter = false;
 		foreach ($filters as $name => $value) {
-			if (empty($value)) {
+			if (!empty($value)) {
 				$has_filter = true;
 			}
 		}
 		
 		// Define model
 		$model = array(
-			'users' => $this->model->getUsersList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC', $filters),
-			'users_waiting' => $this->model->getUsersList(0, 0, $sort[0], $sort[1] == 'ASC', array('valid' => 2)),
-			'groups' => $this->model->getGroupsList(),
-			'stats' => array(),
-			'current_page' => $page,
-			'users_per_page' => $n,
-			'sortingHelper' => $sortingHelper,
-			'filters' => $filters
+			'users'         => $this->model->getUsersList(($page-1)*$n, $n, $sort[0], $sort[1], $filters),
+			'users_waiting' => $this->model->getUsersList(0, 0, $sort[0], $sort[1], array('valid' => 2)),
+			'groups'        => $this->model->getGroupsList(),
+			'stats'         => array(),
+			'current_page'  => $page,
+			'per_page'      => $n,
+			'sorting_vars'  => $sort,
+			'sorting_tpl'   => $sortingHelper->getTplVars(),
+			'filters'       => $filters
 		);
 		
 		// Users count
 		$model['stats']['total'] = $this->model->countUsers();
-		$model['stats']['request'] = $model['stats']['total'];
 		if ($has_filter) {
-			$model['stats']['filtered'] = $this->model->countUsers($filters);
-			$model['stats']['request'] = $model['stats']['filtered'];
+			$model['stats']['request'] = $this->model->countUsers($filters);
+		} else {
+			$model['stats']['request'] = $model['stats']['total'];
 		}
 		
 		return $model;
 	}
 	
 	/**
-	 * Automatically creates the user or updates it depending on the data given
-	 * If needed, the User form is displayed
+	 * Manages a form to add or edit a user.
+	 * 
+	 * This function will trigger the SQL queries and display the add/edit form if needed.
+	 * 
+	 * @param int   $user_id
+	 * @param array $db_data Existing data of a user in case of an edit action
+	 * @return array Model
 	 */
-	protected function user_form($user_id = null, $db_data = array()) {
+	protected function user_form($user_id = 0, $db_data = array()) {
 		$add_case = empty($user_id);
 		$post_data = array();
 		
-		if (!empty($_POST)) {
+		if (WRequest::hasData()) {
 			$post_data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
 			$errors = array();
 			
-			// Check nickname availabililty
+			// Check nickname availability
 			if ($add_case || $post_data['nickname'] != $db_data['nickname']) {
 				if (($e = $this->model->checkNickname($post_data['nickname'])) !== true) {
 					$errors[] = WLang::get($e);
@@ -161,7 +172,7 @@ class UserAdminController extends WController {
 			}
 			unset($post_data['password_conf']);
 			
-			// Email availabililty
+			// Email availability
 			if ($add_case || $post_data['email'] != $db_data['email']) {
 				if (($e = $this->model->checkEmail($post_data['email'])) !== true) {
 					$errors[] = WLang::get($e);
@@ -191,7 +202,9 @@ class UserAdminController extends WController {
 			
 			if (empty($errors)) {
 				if ($add_case) { // ADD case
-					if ($this->model->createUser($post_data)) {
+					$user_id = $this->model->createUser($post_data);
+					
+					if ($user_id !== false) {
 						// Send email if requested
 						if (WRequest::get('email_confirmation') == 'on') {
 							$mail = WHelper::load('phpmailer');
@@ -199,31 +212,20 @@ class UserAdminController extends WController {
 							$mail->From = WConfig::get('config.email');
 							$mail->FromName = WConfig::get('config.site_name');
 							$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_name'));
-							$mail->Body = 
-"Bonjour,
-<br /><br />
-Un compte utilisateur vient de vous être créé sur le site ".WConfig::get('config.site_name').".<br /><br />
-Pour vous connecter, rendez-vous à l'adresse <a href=\"".WRoute::getBase()."/user/login/\">".WRoute::getBase()."/user/login/</a>.
-<br /><br />
-Voici vos données de connexion :<br />
-<strong>Identifiant :</strong> ".$post_data['nickname']."<br />
-<strong>Mot de passe :</strong> ".$password_original."
-<br /><br />
-Ces informations sont personnelles.<br />
-Pour tout changement, rendez-vous sur l'espace membre.
-<br /><br />
-".WConfig::get('config.site_name')."
-<br /><br />
---------------<br />
-Ceci est un message automatique.";
+							$mail->Body = WLang::get('user_register_email_body', array(
+								'site_name' => WConfig::get('config.site_name'),
+								'base'      => WRoute::getBase(),
+								'nickname'  => $post_data['nickname'],
+								'password'  => $password_original
+							));
 							$mail->IsHTML(true);
 							$mail->AddAddress($post_data['email']);
 							$mail->Send();
 							unset($mail);
 						}
 						
+						$this->setHeader('Location', WRoute::getDir().'/admin/user');
 						WNote::success('user_created', WLang::get('user_created', $post_data['nickname']));
-						$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
 					} else {
 						WNote::error('user_not_created', WLang::get('user_not_created', $post_data['nickname']));
 					}
@@ -234,8 +236,8 @@ Ceci est un message automatique.";
 							WSystem::getSession()->reloadSession($user_id);
 						}
 						
+						$this->setHeader('Location', WRoute::getDir().'/admin/user/edit/'.$user_id);
 						WNote::success('user_edited', WLang::get('user_edited', $db_data['nickname']));
-						$this->view->setHeader('Location', WRoute::getDir().'/admin/user/edit/'.$user_id);
 					} else {
 						WNote::error('user_not_edited', WLang::get('user_not_edited', $db_data['nickname']));
 					}
@@ -247,68 +249,78 @@ Ceci est un message automatique.";
 		
 		// Model
 		return array(
-			'user_id'   => $user_id, 
-			'user_data' => $db_data,
-			'post_data' => $post_data,
-			'groupes'   => $this->model->getGroupsList()
+			'user_data'  => $db_data,
+			'post_data'  => $post_data,
+			'groupes'    => $this->model->getGroupsList(),
+			'admin_apps' => $this->getAdminApps()
 		);
 	}
 	
 	/**
-	 * Creates a user
+	 * Creates a user.
+	 * 
+	 * @return array Model
 	 */
-	protected function add() {
+	protected function add(array $params) {
 		return $this->user_form();
 	}
 	
 	/**
-	 * Edits a user in the database
+	 * Edits a user in the database.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
-	protected function edit() {
-		$user_id = intval(WRoute::getArg(1));
+	protected function edit(array $params) {
+		$user_id = intval(array_shift($params));
 		
-		if (!$this->model->validId($user_id)) {
-			WNote::error('user_not_found', WLang::get('user_not_found'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
-			return false;
+		$db_data = $this->model->getUser($user_id);
+		
+		if ($db_data !== false) {
+			return $this->user_form($user_id, $db_data);
+		} else {
+			$this->setHeader('Location', WRoute::getDir().'/admin/user');
+			return WNote::error('user_not_found', WLang::get('user_not_found'));
 		}
-		
-		$user_data = $this->model->getUser($user_id);
-		return $this->user_form($user_id, $user_data);
 	}
 	
 	/**
-	 * Deletes a user
+	 * Deletes a user.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
-	protected function del() {
-		$user_id = intval(WRoute::getArg(1));
+	protected function delete(array $params) {
+		$user_id = intval(array_shift($params));
 		
 		if ($user_id == $_SESSION['userid']) {
-			WNote::error('user_self_delete', WLang::get('user_self_delete'), 'display');
-			return false;
+			return WNote::error('user_self_delete', WLang::get('user_self_delete'));
 		}
 		
-		if (!$this->model->validId($user_id)) {
-			WNote::error('user_not_found', WLang::get('user_not_found'), 'display');
-			return false;
-		}
+		$db_data = $this->model->getUser($user_id);
 		
-		if (WRequest::get('confirm', null, 'POST') === '1') {
-			$this->model->deleteUser($user_id);
-			WNote::success('user_deleted', WLang::get('user_deleted'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/user/');
+		if ($db_data !== false) {
+			if (WRequest::get('confirm', null, 'POST') === '1') {
+				$this->model->deleteUser($user_id);
+				
+				$this->setHeader('Location', WRoute::getDir().'/admin/user');
+				WNote::success('user_deleted', WLang::get('user_deleted'));
+			}
+			
+			return $db_data;
+		} else {
+			$this->setHeader('Location', WRoute::getDir().'/admin/user');
+			return WNote::error('user_not_found', WLang::get('user_not_found'));
 		}
-		
-		return array(
-			'user_id' => $user_id,
-			'user_data' => $this->model->getUser($user_id)
-		);
 	}
 	
 	/**
-	 * Groups listing/add/edit action
+	 * Groups listing/add/edit action.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
-	protected function groups($params) {
+	protected function groups(array $params) {
 		if (!empty($_POST)) {
 			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
 			$errors = array();
@@ -333,13 +345,20 @@ Ceci est un message automatique.";
 						$count_users = $this->model->countUsers(array('groupe' => $data['id']));
 						// There will be a change in group's default access affecting users
 						if ($data['access'] != $db_data['access'] && $count_users > 0) {
-							return array(
-								'group_diff'   => true,
-								'group_id'     => $data['id'],
-								'group_name'   => $data['name'],
-								'group_access' => $data['access'],
-								'group'        => $db_data
-							);
+							$group_diff_data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
+							if (!in_array(null, $group_diff_data, true)) {
+								$this->group_diff();
+								return;
+							} else {
+								return array(
+									'group_diff'   => true,
+									'group_id'     => $data['id'],
+									'group_name'   => $data['name'],
+									'group_access' => $data['access'],
+									'group'        => $db_data,
+									'admin_apps'   => $this->getAdminApps()
+								);
+							}
 						} else if ($this->model->updateGroup($data['id'], $data)) {
 							WNote::success('user_group_edited', WLang::get('group_edited', $data['name']));
 							$db_success = true;
@@ -354,53 +373,55 @@ Ceci est un message automatique.";
 			}
 		}
 		
-		// Préparation tri colonnes
 		$sort_by = '';
-		$sens = 'DESC';
+		$sens = '';
 		if (!empty($params[0])) {
 			$count = sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by, $sens);
 		}
 		
 		// SortingHelper
-		$disp_fields = array('name', 'users_count');
-		$sortingHelper = WHelper::load('SortingHelper', array($disp_fields, 'name'));
+		$sortingHelper = WHelper::load('SortingHelper', array(
+			array('name', 'users_count'), 
+			'name', 'DESC'
+		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
-		$adminController = new AdminController();
-		
 		return array(
-			'groups' => $this->model->getGroupsListWithCount($sort[0], $sort[1] == 'ASC'),
-			'admin_apps' => $adminController->getAdminApps(),
-			'sortingHelper' => $sortingHelper
+			'groups'      => $this->model->getGroupsListWithCount($sort[0], $sort[1]),
+			'admin_apps'  => $this->getAdminApps(),
+			'sorting_tpl' => $sortingHelper->getTplVars()
 		);
 	}
 	
 	/**
-	 * Deletes a group
+	 * Deletes a group.
+	 * 
+	 * @param array $params
+	 * @return array Model
 	 */
-	protected function group_del() {
-		$group_id = intval(WRoute::getArg(1));
+	protected function group_del(array $params) {
+		$group_id = intval(array_shift($params));
 		
-		if (!$this->model->validGroupId($group_id)) {
-			WNote::error('group_not_found', WLang::get('group_not_found'), 'display');
-			return false;
+		$db_data = $this->model->getGroup($group_id);
+
+		if ($db_data !== false) {
+			if (WRequest::get('confirm', null, 'POST') === '1') {
+				$this->model->deleteGroup($group_id);
+				$this->model->resetUsersInGroup($group_id);
+				
+				$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+				WNote::success('user_group_deleted', WLang::get('group_deleted'));
+			}
+			
+			return $db_data;
+		} else {
+			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+			return WNote::error('group_not_found', WLang::get('group_not_found'));
 		}
-		
-		if (WRequest::get('confirm', null, 'POST') === '1') {
-			$this->model->deleteGroup($group_id);
-			$this->model->resetUsersInGroup($group_id);
-			WNote::success('user_group_deleted', WLang::get('group_deleted'));
-			$this->view->setHeader('Location', WRoute::getDir().'/admin/groups/');
-		}
-		
-		return array(
-			'group_id' => $group_id,
-			'group_data' => $this->model->getGroup($group_id)
-		);
 	}
 	
 	/**
-	 * Makes the dif between old and new access to a group
+	 * Makes the dif between old and new access to a group.
 	 */
 	protected function group_diff() {
 		// Retrieve post data
@@ -446,39 +467,37 @@ Ceci est un message automatique.";
 			}
 		}
 		
-		$this->view->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+		$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
 	}
 	
 	/**
 	 * Display in a JSON format all the users whose nickname starts with a given letter.
 	 * 
 	 * Used for ajax method in group_diff action.
+	 * 
+	 * @return array Matching users
 	 */
 	protected function load_users_with_letter() {
 		$letter = WRequest::get('letter');
-		$groupid = intval(WRequest::get('groupe'));
-		$json = '{';
-		if (!empty($letter) && !empty($groupid)) {
+		$group_id = intval(WRequest::get('groupe'));
+		
+		if (!empty($letter) && !empty($group_id)) {
 			if ($letter == '#') {
-				$users = $this->model->getUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $groupid));
+				$users = $this->model->getUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $group_id));
 			} else {
-				$users = $this->model->getUsersWithCustomAccess(array('nickname' => $letter.'%', 'groupe' => $groupid));
-			}
-			foreach ($users as $user) {
-				$json .= '"'.$user['id'].'": {"nickname": "'.addslashes($user['nickname']).'", "access": "'.$user['access'].'"},';
-			}
-			if (strlen($json) > 1) {
-				$json = substr($json, 0, -1);
+				$users = $this->model->getUsersWithCustomAccess(array('nickname' => $letter.'%', 'groupe' => $group_id));
 			}
 		}
-		$json .= '}';
-		echo $json;
+		
+		return $users;
 	}
 	
 	/**
-	 * Configuration handler
+	 * Configuration handler.
+	 * 
+	 * @return array Config Model
 	 */
-	protected function config() {
+	protected function config(array $params) {
 		$data = WRequest::getAssoc(array('update', 'config'));
 		$config = $this->model->getConfig();
 		if ($data['update'] == 'true') {

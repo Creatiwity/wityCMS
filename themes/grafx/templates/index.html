@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
-		<title>{$page_title}</title>
+		<title>{$wity_page_title}</title>
 		<meta charset="utf-8" />
-		<meta name="description" content="{if isset({$site_desc})}{$site_desc}{/if}" />
-		<meta name="keywords" content="{if isset({$keywords})}{$keywords}{/if}" />
+		<meta name="description" content="{$wity_page_description}" />
+		<meta name="keywords" content="{$wity_page_keywords}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
+
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="/themes/grafx/css/style.css" rel="stylesheet" title="Grafx" />
+		<link href="/apps/user/front/css/user.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
-		
+
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
-		
-		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-		<script src="/themes/grafx/js/script.js"></script>
+
+		<script type="text/javascript">
+			var require = {
+				deps: ['bootstrap']
+			};
+		</script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
@@ -28,8 +31,8 @@
 			<header>
 				<img src="/themes/grafx/img/logo.png" alt="logo" />
 				<div class="inner">
-					<p class="site-name">{$site_name}</p>
-					<p class="slogan">your slogan here</p>
+					<p class="site-name">{$wity_site_name}</p>
+					<p class="slogan">{$wity_site_subtitle}</p>
 				</div>
 				<div class="clear"></div>
 			</header>
@@ -49,15 +52,15 @@
 					<ul class="nav navbar-nav">
 						<li><a href="/"><span>Home</span><br />
 							<em>starting page</em></a></li>
-						<li><a href="#"><span>About</span><br />
+						<li><a href="/about"><span>About</span><br />
 							<em>the company</em></a></li>
-						<li><a href="#"><span>Services</span><br />
+						<li><a href="/services"><span>Services</span><br />
 							<em>our skills</em></a></li>
-						<li><a href="#"><span>Portfolio</span><br />
+						<li><a href="/portfolio"><span>Portfolio</span><br />
 							<em>our works</em></a></li>
-						<li><a href="#"><span>Blog</span><br />
+						<li><a href="/news"><span>Blog</span><br />
 							<em>latest posts</em></a></li>
-						<li><a href="#"><span>Contact</span><br />
+						<li><a href="/contact/"><span>Contact</span><br />
 							<em>send us an email</em></a></li>
 					</ul>
 					<form class="navbar-form navbar-right" role="search">
@@ -76,33 +79,31 @@
 					</div>
 				</div>
 				<div id="column-blocks" class="col-md-4">
-					<?php if (empty($_SESSION['userid'])): ?>
-					<aside class="block-user block">
+					{if !{$wity_user}}
+					<aside id="grafx-user" class="block block-user">
 						<p class="text-center buttons">
-							<a class="button-sign-in" href="/user/register/">Sign in <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
-							<a class="button-login" href="/user/login/"><img src="/themes/grafx/img/login.png" alt="Login" /> Login</a>
+							<a class="button-register" href="#grafx-register" data-toggle="collapse" data-parent="#grafx-user">Sign up <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
+							<a class="button-login" href="#grafx-login" data-toggle="collapse" data-parent="#grafx-user"><img src="/themes/grafx/img/login.png" alt="Login" /> Login</a>
 						</p>
-						<div class="sign-in closed">
-							{retrieve_view user/register}
-						</div>
-						<div class="login closed">
-							{retrieve_view user/login}
+						<div class="panel">
+							<div id="grafx-register" class="register collapse">
+								{retrieve_view user/register}
+							</div>
+							<div id="grafx-login" class="login collapse">
+								{retrieve_view user/login}
+							</div>
 						</div>
 					</aside>
-					<?php endif; ?>
-					<aside class="block">
-						<h2>Titre du block</h2>
-						<ul class="listing">
-							<li>Test</li>
-							<li>Test</li>
-							<li>Test</li>
-							<li>Test</li>
-						</ul>
+					{else}
+					<aside class="block block-user text-center">
+						<p>Bienvenue {$wity_user.nickname} !</p>
+						<p><a href="/user/logout/">Logout</a>{if !empty({$wity_user_access})} - <a href="/admin/">Administration</a>{/if}</p>
 					</aside>
+					{/if}
 				</div>
 			</div>
 			<footer class="text-center">
-				<p>{$site_name}&copy; 2013<br />
+				<p>{$wity_site_name}&copy; 2013<br />
 					All rights reserved.</p>
 			</footer>
 		</div>

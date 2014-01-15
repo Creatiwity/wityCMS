@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="en">
+	<!-- WDate -->
+	<item id="now">now</item>
+	<item id="wdate_format">Y-m-d H:i:s</item>
+	<item id="wdate_years_ago">%s years ago</item>
+	<item id="wdate_year_ago">1 year ago</item>
+	<item id="wdate_months_ago">%s months ago</item>
+	<item id="wdate_month_ago">1 month ago</item>
+	<item id="wdate_weeks_ago">%s weeks ago</item>
+	<item id="wdate_week_ago">1 week ago</item>
+	<item id="wdate_days_ago">%s days ago</item>
+	<item id="wdate_day_ago">1 day ago</item>
+	<item id="wdate_hours_ago">%s hours ago</item>
+	<item id="wdate_hour_ago">1 hour ago</item>
+	<item id="wdate_minutes_ago">%s minutes ago</item>
+	<item id="wdate_minute_ago">1 minute ago</item>
+	<item id="wdate_seconds_ago">%s seconds ago</item>
+	<item id="wdate_second_ago">1 second ago</item>
+	
+	<!-- Errors -->
+	<item id="error_404"><![CDATA[Sorry but WityCMS was not able to find the requested page.
+<br /><br />
+<a href="/">Back to home</a>]]></item>
+</lang>

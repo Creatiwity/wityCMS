@@ -10,9 +10,15 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-06-03-2013
+ * @version 0.4.0-07-01-2014
  */
 class WSession {
+	/*
+	 * Default session life when the user asks to remember his account
+	 * @type int
+	 */
+	const REMEMBER_TIME = 604800; // 1 week
+	
 	/**
 	 * Minimum time betwen two POST requests
 	 */
@@ -46,6 +52,7 @@ class WSession {
 		// No sid in HTML links
 		ini_set('session.use_trans_sid', '0');
 		session_name('wsid');
+		session_set_cookie_params(self::REMEMBER_TIME, WRoute::getDir());
 		
 		// Start sessions
 		session_start();
@@ -111,8 +118,8 @@ class WSession {
 			if ($remember > 0) {
 				$lifetime = time() + $remember;
 				// Cookie setup
-				setcookie('userid', $_SESSION['userid'], $lifetime, '/');
-				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, '/');
+				setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
+				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, WRoute::getDir());
 			}
 			return self::LOGIN_SUCCESS; 
 		} else {
@@ -134,6 +141,8 @@ class WSession {
 		$_SESSION['email']    = $data['email'];
 		$_SESSION['groupe']   = $data['groupe'];
 		$_SESSION['lang']     = $data['lang'];
+		$_SESSION['firstname']	= $data['firstname'];
+		$_SESSION['lastname']	= $data['lastname'];
 		
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {
@@ -168,14 +177,17 @@ class WSession {
 			$_SESSION['nickname'], 
 			$_SESSION['email'], 
 			$_SESSION['groupe'], 
+			$_SESSION['lang'], 
+			$_SESSION['firstname'], 
+			$_SESSION['lastname'], 
 			$_SESSION['access_string'], 
 			$_SESSION['access'],
 			$_SESSION['token_expiration']
 		);
 		
 		// Reset cookies
-		setcookie('userid', '', time()-3600, '/');
-		setcookie('hash', '', time()-3600, '/');
+		setcookie('userid', '', time()-3600, WRoute::getDir());
+		setcookie('hash', '', time()-3600, WRoute::getDir());
 	}
 	
 	/**
@@ -188,7 +200,7 @@ class WSession {
 		session_destroy();
 		
 		// Reset cookies
-		setcookie(session_name(), '', time()-3600, '/');
+		setcookie(session_name(), '', time()-3600, WRoute::getDir());
 	}
 	
 	/**
@@ -217,7 +229,7 @@ class WSession {
 	
 	/**
 	 * Generates a user-and-computer specific hash that will be stored in a cookie
-
+	 *
 	 * @param string $nick nickname
 	 * @param string $pass password
 	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
@@ -256,9 +268,9 @@ class WSession {
 			}
 			// Flood time limit checking
 			else if (empty($_SESSION['access'][0]) && !empty($_SESSION['flood_time']) && $_SESSION['flood_time'] > time()) {
-				// Liste des exceptions échappant à cette vérification
 				$exceptions = array('user');
-				if (!in_array(WRoute::getApp(), $exceptions)) {
+				$route = WRoute::route();
+				if (!in_array($route['app'], $exceptions)) { // Applications in $exceptions will bypass the flood checking
 					WNote::info('Modération', 'Veuillez respecter le délai de '.self::FLOOD_TIME.' secondes entre deux postes.', 'assign');
 					$flood = false;
 				}

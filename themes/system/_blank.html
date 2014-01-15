@@ -4,18 +4,22 @@
 		<title>{$page_title}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
+
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
-		
+
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
-		
-		<script src="/libraries/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+
+		<script type="text/javascript">
+			var require = {
+				deps: ['bootstrap']
+			};
+		</script>
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>

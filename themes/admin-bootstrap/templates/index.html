@@ -1,82 +1,87 @@
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
-		<title>{$page_title}</title>
+		<title>{$wity_page_title}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
+
 		<!-- Bootstrap -->
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="/libraries/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link href="/libraries/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal-bs3patch.css" rel="stylesheet" />
 		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet" />
 		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet" />
 		{if isset({$css})}{$css}{/if}
-		
+
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
-		
-		<script src="/libraries/jquery-1.10.2/jquery-1.10.2.min.js"></script>
-		<script src="/libraries/bootstrap-2.3.2/js/bootstrap.min.js"></script>
-		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modalmanager.js"></script>
-		<script src="/libraries/bootstrap-modal-2.2.0/js/bootstrap-modal.js"></script>
-		<script src="/themes/admin-bootstrap/js/core-admin.js"></script>
+
+		<script type="text/javascript">
+			var require = {
+				deps: ['bootstrap', 'themes!admin-bootstrap/core-admin']
+			};
+		</script>
+
 		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container-fluid">
-					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="brand" href="/">{$site_name}</a>
-					<div class="nav-collapse collapse">
-						<p class="navbar-text pull-right">
-							Bienvenue <a href="#" class="navbar-link">{$userNickname}</a>
-							&nbsp;|&nbsp;
-							<a href="/user/deconnexion/" class="navbar-link">Déconnexion</a>
-						</p>
-						<ul class="nav">
-							{for $app, $details in $appsList}
-							<li {if {$app} == {$appSelected}} class="active"{/if}>
-								<a href="/admin/{$app}/">{lang {$details.name}}</a>
-							</li>
-							{/for}
-						</ul>
-					</div><!--/.nav-collapse -->
-				</div>
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-admin-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">{$wity_site_name}</a>
 			</div>
+
+			<div class="navbar-collapse collapse navbar-menu-admin-collapse">
+				{if !empty({$appsList})}
+				<ul class="nav navbar-nav">
+					{for $app, $details in $appsList}
+					<li {if {$app} == {$appSelected}} class="active"{/if}>
+						<a href="/admin/{$app}/">{lang {$details.name}}</a>
+					</li>
+					{/for}
+				</ul>
+				{/if}
+				{if !empty({$userNickname})}
+				<p class="navbar-text pull-right">
+					Bienvenue {$userNickname}
+					&nbsp;|&nbsp;
+					<a href="/user/logout/" class="navbar-link">Déconnexion</a>
+				</p>
+				{/if}
+			</div><!--/.nav-collapse -->
 		</div>
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<div class="span2">
-					<div class="well sidebar-nav">
-						<ul class="nav nav-list">
-							<li class="nav-header">{$appSelected}</li>
-							{for $action, $desc in $actionsList}
-							{if {$desc.menu}}
-							<li class="{if {$action} == {$actionAsked}}active{/if}">
-								<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.desc}}</a>
-							</li>
-							{/if}
-							{/for}
-						</ul>
-					</div><!--/.well -->
-				</div><!--/span-->
-				<div class="span10">
-					{$notes}
-					<div class="row-fluid">{$include}</div>				
-				</div><!--/span-->
-			</div><!--/row-->
+		{if !empty({$adminMenu})}
+		<div class="col-md-2">
+			<ul class="nav nav-pills nav-stacked">
+				{for $action, $desc in $actionsList}
+				{if {$desc.menu}}
+				<li class="{if {$action} == {$actionAsked}}active{/if}">
+					<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.description}}</a>
+				</li>
+				{/if}
+				{/for}
+			</ul>
+		</div><!--/span-->
+		<div class="col-md-10">
+		{else}
+		<div class="col-md-12">
+		{/if}
+			{$notes}
+			<div class="clearfix"></div>
+			{$include}
+		</div><!--/span-->
+		<div class="clearfix"></div>
+		<div class="col-md-12">
 			<hr />
 			<footer>
 				<p>&copy; WityCMS Administration 2013</p>
 			</footer>
-		</div><!--/.fluid-container-->
+		</div>
 	</body>
 </html>

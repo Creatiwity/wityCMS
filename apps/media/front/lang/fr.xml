@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="fr">
+	<!-- Erreurs -->
+	<item id="no_file_sent">Aucun fichier détecté dans la requête</item>
+	<item id="server_configuration_error">Il semblerait que ce serveur soit mal configuré</item>
+</lang>

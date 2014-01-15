@@ -1,0 +1,39 @@
+<div class="wity-app-contact contact-mail-history">
+	<h2 class="sr-only">{lang mail_history}</h2>
+	<span class="label label-info">{lang emails_total|{$totalEmails}}</span>
+		
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th><a href="/admin/contact/mail_history/from-{$from_sort}/"><i class="{$from_class}"></i> {lang from_thead}</a></th>
+				<th><a href="/admin/contact/mail_history/object-{$object_sort}/"><i class="{$object_class}"></i> {lang subject_thead}</a></th>
+				<th><a href="/admin/contact/mail_history/created_date-{$created_date_sort}/"><i class="{$created_date_class}"></i> {lang date_thead}</a></th>
+			</tr>
+		</thead>
+		<tbody>
+			{for $mail in $emails}
+			<tr data-link-modal="/v/admin/contact/mail_detail/{$mail.id}" data-modal-container="modal_email">
+				<td><strong>{$mail.from}</strong></td>
+				<td>
+					<table class="email-abstract">
+						<tbody>
+							<tr>
+								<td>{$mail.abstract}</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td class="date-cell">{$mail.created_date}</td>
+			</tr>
+			{/for}
+			{empty}
+			<tr>
+				<td colspan="6" class="text-center">{lang no_mail_found}</td>
+			</tr>
+			{/empty}
+		</tbody>
+	</table>
+	{$pagination}
+
+	<div id="modal_email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_email" aria-hidden="true"></div>
+</div>

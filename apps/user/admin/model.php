@@ -1,17 +1,19 @@
 <?php
 /**
- * User Application - Admin Model - /apps/user/admin/model.php
+ * User Application - Admin Model
  */
 
 defined('IN_WITY') or die('Access denied');
 
-// Include Front Model for inheritance
+/**
+ * Include Front Model for inheritance
+ */
 include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 
 /**
- * UserAdminModel is the admin Model of the User Application.
+ * UserAdminModel is the Admin Model of the User Application.
  * 
- * @package Apps
+ * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.4.0-15-02-2013
  */
@@ -21,11 +23,12 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Creates a user in the database
-	 * This is a admin version able to change users.access
+	 * Creates a user in the database.
+	 * 
+	 * This is an admin version able to change the field `users.access`.
 	 * 
 	 * @param array $data
-	 * @return boolean Request success
+	 * @return bool Request status
 	 */
 	public function createUser(array $data) {
 		$prep = $this->db->prepare('
@@ -49,62 +52,75 @@ class UserAdminModel extends UserModel {
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		return $prep->execute();
-	}
-	
-	/**
-	 * Deletes a user
-	 * 
-	 * @param int $userid
-	 */
-	public function deleteUser($userid) {
-		static $prep;
-		if (empty($prep)) {
-			$prep = $this->db->prepare('
-				DELETE FROM users WHERE id = :id
-			');
+		
+		if ($prep->execute()) { 
+			return $this->db->lastInsertId();
+		} else {
+			return false;
 		}
-		$prep->bindParam(':id', $userid, PDO::PARAM_INT);
+	}
+	
+	/**
+	 * Deletes a user.
+	 * 
+	 * @param int $user_id
+	 * @return bool Request status
+	 */
+	public function deleteUser($user_id) {
+		$prep = $this->db->prepare('
+			DELETE FROM users WHERE id = :id
+		');
+		$prep->bindParam(':id', $user_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
 	/**
-	 * Retrieves the list of user groups
+	 * Retrieves details of a group.
 	 * 
-	 * @param string $order Name of the ordering column
-	 * @param string $asc   Ascendent or descendent?
+	 * @param int $group_id
+	 * @return array Data of the group
 	 */
-	public function getGroupsList($order = 'name', $asc = true) {
-		$prep = $this->db->prepare('
-			SELECT id, name, access
-			FROM users_groups
-			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
-		);
-		$prep->execute();
-		return $prep->fetchAll(PDO::FETCH_ASSOC);
-	}
-	
-	/**
-	 * Retrieves details of a group
-	 * 
-	 * @param int $groupid
-	 */
-	public function getGroup($groupid) {
+	public function getGroup($group_id) {
 		$prep = $this->db->prepare('
 			SELECT id, name, access
 			FROM users_groups
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**
-	 * Retrieves the list of user groups with users_count row
+	 * Retrieves the list of user groups.
+	 * 
+	 * @param string $order Name of the ordering column
+	 * @param string $sens  Order: "ASC" or "DESC"
+	 * @return array Set of groups
+	 */
+	public function getGroupsList($order = 'name', $sens = 'ASC') {
+		if (strtoupper($sens) != 'ASC') {
+			$sens = 'DESC';
+		}
+		
+		$prep = $this->db->prepare('
+			SELECT id, name, access
+			FROM users_groups
+			ORDER BY '.$order.' '.$sens
+		);
+		$prep->execute();
+		
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	/**
+	 * Retrieves the list of user groups with users_count row.
 	 * 
 	 * @param string $order Name of the ordering column
 	 * @param string $asc   Ascendent or descendent?
+	 * @return array Set of groups
 	 */
 	public function getGroupsListWithCount($order = 'name', $asc = true) {
 		$prep = $this->db->prepare('
@@ -116,6 +132,7 @@ class UserAdminModel extends UserModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
+		
 		$data = array();
 		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
 			if ($row['groupe'] == 0) {
@@ -124,13 +141,15 @@ class UserAdminModel extends UserModel {
 			unset($row['groupe']);
 			$data[] = $row;
 		}
+		
 		return $data;
 	}
 	
 	/**
-	 * Creates a new group in the database
+	 * Creates a new group in the database.
 	 * 
 	 * @param array $data array(nickname, access)
+	 * @return bool Request status
 	 */
 	public function createGroup($data) {
 		$prep = $this->db->prepare('
@@ -139,65 +158,78 @@ class UserAdminModel extends UserModel {
 		');
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
-		return $prep->execute();
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
-	 * Updates a group in the database
+	 * Updates a group in the database.
 	 * 
-	 * @param int    $groupid  Group id
-	 * @param array  $data     Columns to update
+	 * @param int   $group_id Group ID
+	 * @param array $data     Columns to update
+	 * @return bool Request status
 	 */
-	public function updateGroup($groupid, $data) {
+	public function updateGroup($group_id, $data) {
 		$prep = $this->db->prepare('
 			UPDATE users_groups
 			SET name = :name, access = :access
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
+		
 		return $prep->execute();
 	}
 	
 	/**
-	 * Deletes a group in the database
+	 * Deletes a group in the database.
 	 * 
-	 * @param int    $groupid  Group id
+	 * @param int $group_id Group ID
+	 * @return bool Request status
 	 */
-	public function deleteGroup($groupid) {
+	public function deleteGroup($group_id) {
 		$prep = $this->db->prepare('
 			DELETE FROM users_groups WHERE id = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
 	/**
-	 * Removes all users who belonged to an obsolete group
+	 * Removes all users who belonged to an obsolete group.
 	 * 
-	 * @param int    $groupid  Group id
+	 * @param int $group_id Group ID
+	 * @return bool Request status
 	 */
-	public function resetUsersInGroup($groupid) {
+	public function resetUsersInGroup($group_id) {
 		$prep = $this->db->prepare('
 			UPDATE users
 			SET groupe = 0
 			WHERE groupe = :id
 		');
-		$prep->bindParam(':id', $groupid, PDO::PARAM_INT);
+		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
 	/**
-	 * Updates an array of users matching filters
+	 * Updates several users matching filters.
 	 * 
 	 * @param array $data     Columns to update in users table
-	 * @param array $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
+	 * @return bool Request status
 	 */
 	public function updateUsers(array $data, array $filters) {
 		if (empty($data)) {
 			return true;
 		}
+		
 		// Add filters
 		$cond = '';
 		if (!empty($filters)) {
@@ -212,26 +244,30 @@ class UserAdminModel extends UserModel {
 				}
 			}
 		}
+		
 		if (empty($cond)) {
 			return true;
 		} else {
 			$cond = substr($cond, 0, -5);
 		}
+		
 		$string = '';
 		foreach ($data as $key => $value) {
 			$string .= $key.' = '.$this->db->quote($value).', ';
 		}
 		$string = substr($string, 0, -2);
+		
 		$prep = $this->db->prepare('
 			UPDATE users
 			SET '.$string.'
 			WHERE '.$cond
 		);
+		
 		return $prep->execute();
 	}
 	
 	/**
-	 * Transforms access data obtained from the admin form into an access string
+	 * Transforms access data obtained from the admin form into an access string.
 	 * 
 	 * @param string $type    Type of the user (none|all|custom)
 	 * @param array  $access  List of app and perms whose user have access
@@ -250,14 +286,15 @@ class UserAdminModel extends UserModel {
 					$access_string .= $app.'['.implode('|', $perms).'],';
 				}
 			}
+			
 			return substr($access_string, 0, -1);
 		}
 	}
 	
 	/**
-	 * Counts the users in the database having access different from their group's access
+	 * Counts the users in the database having different access from their group's access.
 	 * 
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array $filters List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function countUsersWithCustomAccess(array $filters = array()) {
@@ -272,10 +309,12 @@ class UserAdminModel extends UserModel {
 						if (strpos($value, '%') === false) {
 							$value = '%'.$value.'%';
 						}
+						
 						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
+			
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
@@ -293,9 +332,9 @@ class UserAdminModel extends UserModel {
 	}
 	
 	/**
-	 * Retrieves a list of users having access different from their group's access
+	 * Retrieves a list of users having different access from their group's access.
 	 * 
-	 * @param array  $filters  List of criterias to add in the request (nickname, email, firstname, lastname and groupe)
+	 * @param array  $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
 	public function getUsersWithCustomAccess(array $filters = array()) {
@@ -310,10 +349,12 @@ class UserAdminModel extends UserModel {
 						if (strpos($value, '%') === false) {
 							$value = '%'.$value.'%';
 						}
+						
 						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
+			
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
@@ -327,26 +368,26 @@ class UserAdminModel extends UserModel {
 			WHERE '.$cond.'users.access != users_groups.access
 		');
 		$prep->execute();
+		
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	/**
-	 * Defines a config in users_config table
+	 * Defines a config in users_config table.
 	 * 
 	 * @param string $name
 	 * @param string $value
+	 * @return Request status
 	 */
 	public function setConfig($name, $value) {
-		static $prep;
-		if (empty($prep)) {
-			$prep = $this->db->prepare('
-				UPDATE users_config
-				SET value = :value
-				WHERE name = :name
-			');
-		}
+		$prep = $this->db->prepare('
+			UPDATE users_config
+			SET value = :value
+			WHERE name = :name
+		');
 		$prep->bindParam(':name', $name);
 		$prep->bindParam(':value', $value);
+		
 		return $prep->execute();
 	}
 }

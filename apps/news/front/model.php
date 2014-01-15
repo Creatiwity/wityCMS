@@ -1,6 +1,6 @@
 <?php
 /**
- * News Application - Front Model - /apps/news/front/model.php
+ * News Application - Front Model
  */
 
 defined('IN_WITY') or die('Access denied');
@@ -8,10 +8,10 @@ defined('IN_WITY') or die('Access denied');
 /**
  * NewsModel is the Front Model of the News Application
  *
- * @package Apps
+ * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-19-04-2013
+ * @version 0.4.0-19-04-2013
  */
 class NewsModel {
 	/**
@@ -29,13 +29,14 @@ class NewsModel {
 			'news_title' => 'title',
 			'news_author' => 'author',
 			'news_content' => 'content',
+			'news_meta_title' => 'meta_title',
 			'news_keywords' => 'keywords',
-			'news_date' => 'creation_date',
+			'news_description' => 'description',
+			'news_date' => 'created_date',
 			'news_modified' => 'modified_date',
-			'news_editor_id' => 'edited_by',
+			'news_editor_id' => 'modified_by',
 			'news_views' => 'views',
 			'news_publish' => 'published',
-			'news_image' => 'image',
 			'news_cats' => 'cats'
 		),
 		'fromDB' => array(
@@ -44,13 +45,14 @@ class NewsModel {
 			'title' => 'news_title',
 			'author' => 'news_author',
 			'content' => 'news_content',
+			'meta_title' => 'news_meta_title',
 			'keywords' => 'news_keywords',
-			'creation_date' => 'news_date',
+			'description' => 'news_description',
+			'created_date' => 'news_date',
 			'modified_date' => 'news_modified',
-			'edited_by' => 'news_editor_id',
+			'modified_by' => 'news_editor_id',
 			'views' => 'news_views',
 			'published' => 'news_publish',
-			'image' => 'news_image',
 			'cats' => 'news_cats'
 		)
 	);
@@ -119,26 +121,8 @@ class NewsModel {
 			FROM news
 		');
 		$prep->execute();
-		return intval($prep->fetchColumn());
-	}
-	
-	/**
-	 * Checks that a given ID matches a News_ID in the database
-	 * 
-	 * @param int $news_id
-	 * @return bool
-	 */
-	public function validExistingNewsId($news_id) {
-		if (empty($news_id)) {
-			return false;
-		}
 		
-		$prep = $this->db->prepare('
-			SELECT * FROM news WHERE id = :news_id
-		');
-		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
-		$prep->execute();
-		return $prep->rowCount() == 1;
+		return intval($prep->fetchColumn());
 	}
 	
 	/**
@@ -162,22 +146,22 @@ class NewsModel {
 				}
 				$cond = sustr($cond, 0, -4).')';
 			}
+			
 			if (!empty($filters['published'])) {
 				if (!empty($cond)) {
 					$cond .= ' AND ';
 				}
 				$cond .= 'published = '.intval($filters['published']);
 			}
+			
 			if (!empty($cond)) {
 				$cond = 'WHERE '.$cond;
 			}
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), url, title, author, content, 
-				DATE_FORMAT(creation_date, "%d/%m/%Y %H:%i") AS creation_date, 
-				DATE_FORMAT(modified_date, "%d/%m/%Y %H:%i") AS modified_date, 
-				edited_by, views, published, image
+			SELECT DISTINCT(id), url, title, author, content, meta_title, keywords, description, views, published,
+				news.created_date, news.modified_date, news.modified_by
 			FROM news
 			LEFT JOIN news_cats_relations
 			ON id = news_id
@@ -190,12 +174,14 @@ class NewsModel {
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
+		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$data['cats'] = $this->getCatsOfNews($data['id']);
 			$this->renameNewsFieldsFromDb($data);
 			$result[] = $data;
 		}
+		
 		return $result;
 	}
 	
@@ -206,38 +192,49 @@ class NewsModel {
 	 * @return array
 	 */
 	public function getNews($news_id) {
+		if (empty($news_id)) {
+			return false;
+		}
+		
 		$prep = $this->db->prepare('
-			SELECT id, url, title, author, content, keywords, 
-				DATE_FORMAT(creation_date, "%d/%m/%Y %H:%i") AS creation_date, 
-				DATE_FORMAT(modified_date, "%d/%m/%Y %H:%i") AS modified_date, 
-				edited_by, views, published, image
+			SELECT id, url, title, author, content, meta_title, keywords, description, views, published,
+				created_date, modified_date, modified_by
 			FROM news
 			WHERE id = :news_id
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		$data = $prep->fetch(PDO::FETCH_ASSOC);
-		$data['cats'] = $this->getCatsOfNews($news_id);
-		$this->renameNewsFieldsFromDb($data);
+		
+		if (!empty($data)) {
+			$data['cats'] = $this->getCatsOfNews($news_id);
+			$this->renameNewsFieldsFromDb($data);
+		}
+		
 		return $data;
 	}
 	
 	/**
-	 * Checks that a given ID matches a News_Cat_ID in the database
+	 * Retrieves a category from the database
 	 * 
 	 * @param int $cat_id
-	 * @return bool
+	 * @return array
 	 */
-	public function validExistingCatId($cat_id) {
+	public function getCat($cat_id) {
 		if (empty($cat_id)) {
 			return false;
 		}
+		
 		$prep = $this->db->prepare('
-			SELECT * FROM news_cats WHERE cid = :cat_id
+			SELECT cid, name, shortname
+			FROM news_cats 
+			WHERE cid = :cat_id
 		');
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
 		$prep->execute();
-		return $prep->rowCount() == 1;
+		
+		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	/**
@@ -256,11 +253,13 @@ class NewsModel {
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		$prep->execute();
+		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$this->renameCatsFieldsFromDb($data);
 			$result[] = $data;
 		}
+		
 		return $result;
 	}
 	
@@ -279,6 +278,7 @@ class NewsModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
+		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$this->renameCatsFieldsFromDb($data);
@@ -290,7 +290,7 @@ class NewsModel {
 			$result[$key]['news_cat_parent_name'] = "";
 			if ($cat['news_cat_parent'] != 0) {
 				foreach ($result as $key2 => $cat2) {
-					if($cat2['news_cat_id'] == $cat['news_cat_parent']) {
+					if ($cat2['news_cat_id'] == $cat['news_cat_parent']) {
 						$result[$key]['news_cat_parent_name'] = $cat2['news_cat_name'];
 						break;
 					}

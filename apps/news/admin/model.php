@@ -1,20 +1,22 @@
 <?php
 /**
- * News Application - Admin Model - /apps/news/admin/model.php
+ * News Application - Admin Model
  */
 
 defined('IN_WITY') or die('Access denied');
 
-// Include Front Model for inheritance
+/**
+ * Include Front Model for inheritance
+ */
 include_once APPS_DIR.'news'.DS.'front'.DS.'model.php';
 
 /**
  * NewsAdminModel is the Admin Model of the News Application
  *
- * @package Apps
+ * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.3-19-04-2013
+ * @version 0.4.0-19-04-2013
  */
 class NewsAdminModel extends NewsModel {
 	public function __construct() {
@@ -22,36 +24,29 @@ class NewsAdminModel extends NewsModel {
 	}
 	
 	/**
-	 * Retrieves last News_ID in the database
-	 * 
-	 * @return int
-	 */
-	public function getLastNewsId() {
-		$prep = $this->db->prepare('
-			SELECT id FROM news ORDER BY id DESC LIMIT 1
-		');
-		$prep->execute();
-		return intval($prep->fetchColumn());
-	}
-	
-	/**
 	 * Creates a News in the database from a set of data
 	 * 
 	 * @param array $data
-	 * @return bool Success?
+	 * @return mixed ID of the new item or false on error
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, title, author, content, keywords, creation_date, edited_by)
-			VALUES (:url, :title, :author, :content, :keywords, NOW(), :edited_by)
+			INSERT INTO news(url, title, author, content, meta_title, keywords, description)
+			VALUES (:url, :title, :author, :content, :meta_title, :keywords, :description)
 		');
 		$prep->bindParam(':url', $data['news_url']);
 		$prep->bindParam(':title', $data['news_title']);
 		$prep->bindParam(':author', $data['news_author']);
 		$prep->bindParam(':content', $data['news_content']);
+		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
-		$prep->bindParam(':edited_by', $_SESSION['userid']);
-		return $prep->execute();
+		$prep->bindParam(':description', $data['news_description']);
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -64,7 +59,8 @@ class NewsAdminModel extends NewsModel {
 	public function updateNews($news_id, $data) {
 		$prep = $this->db->prepare('
 			UPDATE news
-			SET url = :url, title = :title, author = :author, content = :content, keywords = :keywords, modified_date = NOW(), edited_by = :edited_by
+			SET url = :url, title = :title, author = :author, content = :content, meta_title = :meta_title, 
+				keywords = :keywords, description = :description
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $news_id);
@@ -72,8 +68,10 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':title', $data['news_title']);
 		$prep->bindParam(':author', $data['news_author']);
 		$prep->bindParam(':content', $data['news_content']);
+		$prep->bindParam(':meta_title', $data['news_meta_title']);
 		$prep->bindParam(':keywords', $data['news_keywords']);
-		$prep->bindParam(':edited_by', $_SESSION['userid']);
+		$prep->bindParam(':description', $data['news_description']);
+		
 		return $prep->execute();
 	}
 	
@@ -88,6 +86,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news WHERE id = :news_id
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -105,6 +104,7 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -119,6 +119,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats_relations WHERE news_id = :news_id
 		');
 		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -133,6 +134,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats_relations WHERE cat_id = :cat_id
 		');
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 	
@@ -149,6 +151,7 @@ class NewsAdminModel extends NewsModel {
 			WHERE parent = :cat_id
 		');
 		$prep->bindParam(':cat_id', $parent_cat_id);
+		
 		return $prep->execute();
 	}
 	
@@ -156,7 +159,7 @@ class NewsAdminModel extends NewsModel {
 	 * Creates a news category in the database
 	 * 
 	 * @param array $data
-	 * @return bool Success?
+	 * @return mixed ID of the new item or false on error
 	 */
 	public function createCat($data) {
 		$prep = $this->db->prepare('
@@ -166,7 +169,12 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':name', $data['news_cat_name']);
 		$prep->bindParam(':shortname', $data['news_cat_shortname']);
 		$prep->bindParam(':parent', $data['news_cat_parent']);
-		return $prep->execute();
+		
+		if ($prep->execute()) {
+			return $this->db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -186,6 +194,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':shortname', $data['news_cat_shortname']);
 		$prep->bindParam(':parent', $data['news_cat_parent']);
 		$prep->bindParam(':cat_id', $cat_id);
+		
 		return $prep->execute();
 	}
 	
@@ -200,6 +209,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats WHERE cid = :cat_id
 		');
 		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		
 		return $prep->execute();
 	}
 }
