@@ -215,11 +215,19 @@ class WRequest {
 				$variable[$key] = self::filter($val);
 			}
 		} else {
-			// No special char direct input
-			$variable = str_replace('<>#', '', $variable);
-			// $variable = str_replace('&lt;script', '', $variable); // maybe XSS
-			// $variable = stripslashes(htmlspecialchars($variable));
-			$variable = htmlspecialchars($variable);
+			// Prevent XSS abuse
+			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#', function($matches) {
+				// Allowed tags
+				if (in_array($matches[1], array('b', 'strong', 'i', 'em', 'u', 'a', 'img', 'br', 'font', 
+					'span', 'p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'div', 
+					'section', 'article', 'aside'))) {
+					return $matches[0];
+				} else if (in_array($matches[1], array('script', 'link'))) {
+					return '';
+				} else {
+					return htmlentities($matches[0]);
+				}
+			}, $variable);
 		}
 
 		return $variable;
