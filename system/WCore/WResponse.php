@@ -115,14 +115,19 @@ class WResponse {
 
 			$html = $tpl->parse($themeMainFile);
 
-			// Absolute links fix
-			$html = $this->absoluteLinkFix($html);
-
 			// Render require configuration
 			$require = $tpl->parseString($tpl->getVar('require'));
 
+			// Insert CSS + script configuration
+			$css = $tpl->getVar('css');
+			$script = $tpl->getVar('js');
+			$html = str_replace('</head>', $css.$script."\n".'</head>', $html);
+
 			// Insert requireJS part
 			$html = $this->insertRequireJS($html, $require);
+
+			// Absolute links fix
+			$html = $this->absoluteLinkFix($html);
 			
 			echo $html;
 		} catch (Exception $e) {
