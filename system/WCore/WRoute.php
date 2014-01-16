@@ -74,24 +74,31 @@ class WRoute {
 			return $route;
 		}
 
-		$custom_routes = WConfig::get('route.custom');
+		$route = self::parseURL(self::$query);
+		$mode = $route['mode'];
+
+		// Remove the mode from the URL
+		if ($route['mode'] != '') {
+			$clean_query = str_replace($route['mode'].'/', '', self::$query);
+		} else {
+			$clean_query = self::$query;
+		}
+		$clean_query = rtrim($clean_query, '/');
 
 		// Checking the existence of a custom route
-		if (isset($custom_routes[self::$query])) {
-			$route = self::parseURL($custom_routes[self::$query]);
-		} else {
-			$route = self::parseURL(self::$query);
-
-			if (empty($route['app'])) { // Use default
-				$mode = $route['mode']; // save mode asked by user
-				if ($route['admin']) {
-					$route = self::parseURL(WConfig::get('route.default_admin'));
-				} else {
-					$route = self::parseURL(WConfig::get('route.default_front'));
-				}
-
-				$route['mode'] = $mode;
+		$custom_routes = WConfig::get('route.custom');
+		if (isset($custom_routes[$clean_query])) {
+			$route = self::parseURL($custom_routes[$clean_query]);
+			$route['mode'] = $mode;
+		} else if (empty($route['app'])) {
+			// Use default route
+			if ($route['admin']) {
+				$route = self::parseURL(WConfig::get('route.default_admin'));
+			} else {
+				$route = self::parseURL(WConfig::get('route.default_front'));
 			}
+
+			$route['mode'] = $mode;
 		}
 
 		self::$route = $route;
