@@ -1,13 +1,25 @@
 /**
  * Script for Installer module
- * 
+ *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.4
  */
 $(document).ready(function() {
 
-	var Form, FormNode, NOT_YET_VALIDATED = 0, NOT_VALIDATED = 1, NOT_VALIDATED_EMPTY_REQUIRED = 2, VALIDATING = 3, VALIDATED = 4, EMPTY_NOT_REQUIRED = 5;
+	var Form, FormNode,
+		// FormNode states declaration (like enum)
+		NOT_YET_VALIDATED = 0,				// Field never focused
+		NOT_VALIDATED = 1,					// Field not validated
+		NOT_VALIDATED_EMPTY_REQUIRED = 2,	// Field required and empty
+		VALIDATING = 3,						// Field being validated, maybe ajax validation
+		VALIDATED = 4,						// Validated
+		EMPTY_NOT_REQUIRED = 5;				// Empty but not required
 
+	/**
+	 * Form class manages the whole form logic and view and initializes the FormNode elements
+	 *
+	 * @var options JSON object describing the form
+	 */
 	Form = (function() {
 
 		function Form(options) {
@@ -18,14 +30,17 @@ $(document).ready(function() {
 				return;
 			}
 
+			// Set the <form> action attribute
 			this.url = options.url ? options.url : document.location;
 
+			// Initialize the context that will be passed through each FormNode instance
 			this.context = {
 				id: id,
 				form: this,
 				indexed: {}
 			};
-			
+
+			// Register all form containers (alerts, submit button, ...)
 			this.$alert = $('[data-wity-form-alert="' + id + '"]');
 			this.$submit = $('[data-wity-form-submit="' + id + '"]');
 
@@ -41,9 +56,11 @@ $(document).ready(function() {
 
 			this.$content = $('[data-wity-form-content="' + id + '"]');
 			if (this.$content.length > 0) {
+				// Store a reference to the root container of this form
 				this.context.$content = this.$content;
 			}
 
+			// Register all success actions available in the DOM
 			$('[data-wity-form-' + id + '-onsuccess]').each(function () {
 				var $this = $(this), handler = $this.attr('data-wity-form-' + id + '-onsuccess');
 
@@ -51,6 +68,7 @@ $(document).ready(function() {
 				handlers.success.push([$this, handler]);
 			});
 
+			// Register all failure actions available in the DOM
 			$('[data-wity-form-' + id + '-onfailure]').each(function () {
 				var $this = $(this), handler = $this.attr('data-wity-form-' + id + '-onfailure');
 
@@ -58,8 +76,11 @@ $(document).ready(function() {
 				handlers.failure.push([$this, handler]);
 			});
 
+			// Root node
+			options.root = true;
 			this.node = new FormNode(options, this.context, this);
 
+			// Bind submit action
 			this.$submit.on('click', function() {
 				var $this = $(this);
 
@@ -68,15 +89,18 @@ $(document).ready(function() {
 				}
 			});
 
+			// Initialize all submit buttons statuses to disabled
 			this.setButtonStatus(false);
 		}
 
+		// Update form status (submit button enabled or not) based on root node status
 		Form.prototype.updateStatus = function() {
 			this.validated = (this.node.validated === VALIDATED || this.node.validated === EMPTY_NOT_REQUIRED);
 
 			this.setButtonStatus(this.validated);
 		};
 
+		// Set submit button to the correct state, enabled or disabled with the right text in it (Loading or Not validated)
 		Form.prototype.setButtonStatus = function(state) {
 			var that = this;
 
@@ -88,6 +112,7 @@ $(document).ready(function() {
 			}
 		};
 
+		// Execute a callback on ajax success
 		Form.prototype.getAjaxHtml = function (url, datas, callback, context) {
 			var _url = url || this.url;
 
@@ -99,29 +124,30 @@ $(document).ready(function() {
 			});
 		}
 
-		Form.prototype.ajax = function (datas, callback, context) {	
+		// Ajax internal function to test FormNode validity remotely when needed
+		Form.prototype.ajax = function (datas, callback, context) {
 			var realCallback, that = this;
-		
+
 			// show loading
-		
+
 			realCallback = function(data, textStatus, jqXHR) {
 				var json;
-				
+
 				try {
 					json = $.parseJSON(data);
 				} catch(e) {
 					// Display debug
 					return;
 				}
-				
+
 				// process json
-				
+
 				//process callback ?
 				if(callback) {
 					return callback.call(context, json);
 				}
 			};
-			
+
 			$.ajax({
 				url: this.url,
 				data: datas,
@@ -134,6 +160,13 @@ $(document).ready(function() {
 
 	})();
 
+	/**
+	 * FormNode is the base class of all form elements. It can be real or virtual and hierarchically organised.
+	 *
+	 * @var options JSON object describing this node and its descendent
+	 * @var context is the context initialized in the Form object. Used to call form methods and communicate with the whole form.
+	 * @var parent is the parent node instance
+	 */
 	FormNode = (function() {
 
 		var tabCounter = 0;
@@ -143,32 +176,43 @@ $(document).ready(function() {
 		 */
 
 		function FormNode(options, context, parent) {
-			var _i, _len, $tabTitle, $tabStatus, $tabContainer, 
-				$tabContent, $summaryLi, $summaryStatus, 
-				$alertContainer, $fieldContainer, $field, 
+			var _i, _len, $tabTitle, $tabStatus, $tabContainer,
+				$tabContent, $summaryLi, $summaryStatus,
+				$alertContainer, $fieldContainer, $field,
 				validationTimer, contentCache, that = this;
 
+			// Check context validity
 			if (!options || !context || !context.id || !context.form || !context.$content || context.$content.length === 0) {
 				console.debug("context passed to FormNode isn't valid.");
 				return false;
 			}
 
+			// Index this node in the context, will be used to access all nodes by their node's id
 			context.indexed[options.id] = this;
 
 			this.id = options.id;
+			// views lists all the views to update each time this node changes its status. Each view has an 'updater()' function.
 			this.views = [];
+			// Keep a pointer to the index in this node to have a faster access to the nodes of this Form
 			this.indexed = context.indexed;
 			this.parent = parent;
+			// The root node is only here as a container and do the relation between all FormNode instances and the related Form instance
 			this.root = (options.root === true);
 
 			this.name = options.name || this.id;
-			
+
+			// This node is required if specified or if it's the root node
 			this.required = (options.required === true) || (options.root === true);
+			// Initialize the status to not yet validated, to avoid empty required node to be not validated at the beginning of the process
 			this.validated = NOT_YET_VALIDATED;
+			// A summary (optional) can be bound to each node, by default it's initialized to false
+			// A real node will have a summary by default, a virtual not, will be treated after
 			this.summary = false;
 
+			// validateDatas store all the validation datas needed to validate this node locally and/or remotely
 			this.validateDatas = options.validate || {};
 
+			// Special treatment for the 'equals' validator that need to bind two nodes
 			if (this.validateDatas.local && this.validateDatas.local.type === "equals") {
 				$.extend(true, this.indexed[this.validateDatas.local.options].validateDatas, this.validateDatas);
 				this.indexed[this.validateDatas.local.options].validateDatas.options = this.id;
@@ -177,19 +221,26 @@ $(document).ready(function() {
 			// Build validate
 
 			// Build FormNode in DOM and in logic
+
+			// context.$content refers to the current DOM element on which children will append their content
+			// We have to cache it now, it will be restored to its initial value after children contruction
 			contentCache = context.$content;
 
 			if (options.root === true) {
 				// Do nothing
 			} else if (options.tab && options.tab === true) {
+				// Tab node: it's like a virtual node but with a tab view
 				if (context.$tabs.length > 0) {
+					// Add the tab only if a place has been reserved to place it
 					$tabStatus = $('<i class="glyphicon"></i>');
 					$tabTitle = $('<a href="#form_' + context.id + '_' + this.id + '" data-toggle="tab"></a>').append($tabStatus).append(' ' + this.name);
 					$tabTitle = $('<li></li>').append($tabTitle);
 
+					// Set tab content container
 					$tabContainer = $('<div class="tab-pane" id="form_' + context.id + '_' + this.id + '"></div>');
 					$tabContent = $('<fieldset class="form-horizontal"></fieldset>').appendTo($tabContainer);
-					
+
+					// Set the first tab added as active
 					if (tabCounter === 0) {
 						$tabTitle.addClass('active');
 						$tabContainer.addClass('active');
@@ -197,10 +248,14 @@ $(document).ready(function() {
 
 					context.$tabs.append($tabTitle);
 					context.$content.append($tabContainer);
-					context.$summary.append($('<h4>' + this.name + '</h4>'));
+
+					if (context.$summary.length > 0) {
+						context.$summary.append($('<h4>' + this.name + '</h4>'));
+					}
 
 					context.$content = $tabContent;
 
+					// Pushing view updater to update tab status
 					this.views.push({
 						updater: function() {
 							$tabStatus.removeClass('glyphicon-remove glyphicon-ok');
@@ -232,55 +287,70 @@ $(document).ready(function() {
 					tabCounter++;
 				}
 			} else if (!options.virtual) {
+				// A real node with a field
+
+				// Treat the summary option
 				this.summary = options.summary !== false;
+				// Field type is text by default
 				this.type = options.type || "text";
 
 				$alertContainer = $('<div></div>');
 				$fieldContainer = $('<div class="form-group"></div>');
 
 				if (this.type === "select") {
+					// Select field
 					$field = $('<select name="' + this.id + '" class="form-control"></select>');
 
 					if ($.isArray(options.options)) {
+						// Preconfigured values
 						for (_i = 0, _len = options.options.length; _i < _len; ++_i) {
 							$field.append('<option value="' + options.options[_i].value + '">' + options.options[_i].text + '</option>')
 						}
 
+						// Set the default specified value if it exists
 						if (options.value) {
 							$field.val(options.value);
 						}
 
 					} else if (options.options.url) {
+						// Ajax generated values
 						context.form.getAjaxHtml(options.options.url, null, function (data) {
 							$field.append(data);
 
+							// Set the default specified value if it exists
 							if (options.value) {
 								$field.val(options.value);
 							}
 
 						});
 					} else {
+						// No option provided, error?
 						console.debug("No option provided for " + this.name + " in the form named " + context.id);
 					}
 				} else {
+					// All other cases (text, number, email, ...)
 					$field = $('<input type="' + this.type + '" class="form-control"></input>');
 
 					if (options.placeholder) {
 						$field.attr('placeholder', options.placeholder);
 					}
 
+					// Set the default specified value if it exists
 					if (options.value) {
 						$field.val(options.value);
 					}
 				}
 
+				// Store the field
 				this.$field = $field;
 
+				// Add it in the view
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
 				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
 				$fieldContainer.append($('<div class="col-md-9"></div>').append($field));
 
+				// Push the field updater in the views stack
 				this.views.push({
 					updater: function() {
 						$fieldContainer.removeClass('has-success has-error has-warning');
@@ -310,19 +380,23 @@ $(document).ready(function() {
 					}
 				});
 
-				$field.on('blur changed', function() {
+				// Bind validator to the blur and change events
+				$field.on('blur change', function() {
 					if (validationTimer) {
 						clearTimeout(validationTimer);
 					}
 
-					validationTimer = setTimeout(function() {that.validate();}, 0);
+					// Calls the validation only one time at the end of all events treatment
+					validationTimer = setTimeout(function() {that.validate();}, 50);
 				});
 
 			} else {
+				// A virtual field can have a summary if specified (two password fields that have to appear only once in the summary)
 				this.summary = (options.summary === true);
 			}
 
-			if (this.summary) {
+			if (this.summary && context.$summary.length > 0) {
+				// Add the summary to the view
 				$summaryStatus = $('<i class="glyphicon"></i>');
 				$summaryLi = $('<li></li>');
 
@@ -331,6 +405,7 @@ $(document).ready(function() {
 
 				context.$summary.append($summaryLi);
 
+				// Push the summary view to the view stack of this node
 				this.views.push({
 					updater: function() {
 						$summaryLi.removeClass('text-success text-danger text-warning text-primary text-muted');
@@ -378,19 +453,26 @@ $(document).ready(function() {
 				}
 			}
 
+			// Restore $content reference in the context
 			context.$content = contentCache;
 
+			// Add an <hr /> separator if specified
 			if (options.hr === true) {
 				context.$content.append('<hr />');
 			}
 
+			// Render this node
 			this.render();
 		}
 
+		// Shortcut to compare current state with VALIDATED
 		FormNode.prototype.isValidated = function() {
 			return (this.validated === VALIDATED);
 		};
 
+		/**
+		 * Return a JSON object containing all the values of this node and its children as a {node_id: value} pair
+		 */
 		FormNode.prototype.getValues = function() {
 			var _i, _len, values = {};
 
@@ -405,11 +487,25 @@ $(document).ready(function() {
 			return values;
 		};
 
+		/**
+		 * Set a flag on this node to notify changes on the content of this node and propagate it to the parents nodes
+		 * The changed flag will be reset
+		 */
 		FormNode.prototype.setChanged = function() {
 			this.changed = true;
 			this.parent && this.parent.setChanged && this.parent.setChanged();
 		};
 
+		/**
+		 * Refresh and get the 'changed' flag state.
+		 *
+		 * For a real node, if the value of the field and the internal value are different, setChanged() is called and true returned,
+		 * and if swap is set to true, the internal value will be synchronized with the one in the field
+		 * For others, calling this method will reset the 'changed' flag if it was true. If not, if one children hasChanged(), we will return true.
+		 *
+		 * @var swap If true the current value of the field will be synchronized with
+		 * 				the internal value of the node, corresponding to the tested one (valid or not)
+		 */
 		FormNode.prototype.hasChanged = function(swap) {
 			var _i, _len, changed, currentValue;
 
@@ -443,6 +539,9 @@ $(document).ready(function() {
 			return false;
 		};
 
+		/**
+		 * Return true if this field is empty, or if it has children, if all of them are empty too, false otherwise
+		 */
 		FormNode.prototype.isEmpty = function() {
 			var value;
 
@@ -460,6 +559,9 @@ $(document).ready(function() {
 			return true;
 		};
 
+		/**
+		 * Return true if this node or one of its children have the focus
+		 */
 		FormNode.prototype.hasFocus = function() {
 			var _i, _len;
 
@@ -478,19 +580,27 @@ $(document).ready(function() {
 			return false;
 		};
 
+		/**
+		 * Key function that will choose to trigger validation or not in order to update the status of this node
+		 */
 		FormNode.prototype.updateStatus = function() {
 			var _i, _len, child, childrenValid = true, preventValidationIfFocus = false;
 
+			// Test all childs
 			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
 				child = this.childs[_i];
-				if (child.validated === NOT_VALIDATED 
+				if (child.validated === NOT_VALIDATED
 					|| child.validated === NOT_VALIDATED_EMPTY_REQUIRED) {
+					// Child not validated (empty and required or invalid)
 					childrenValid = false;
-				} else if (child.hasFocus() 
-					&& (child.validated !== EMPTY_NOT_REQUIRED 
+				} else if (child.hasFocus()
+					&& (child.validated !== EMPTY_NOT_REQUIRED
 						|| (child.validated === NOT_YET_VALIDATED && child.required === true))) {
+					// Child has focus and if required, already focused or not,
+					// prevent node validation, edition of the child could be in progress
 					preventValidationIfFocus = true;
 				} else if (child.validated === VALIDATING) {
+					// Validation pending, prevent node validation until the child finishes its validation process
 					preventValidationIfFocus = true;
 				}
 			}
@@ -499,52 +609,63 @@ $(document).ready(function() {
 				this.validated = NOT_VALIDATED;
 				this.render();
 				this.triggerParentUpdate();
-			} else if (false) {
-				this.validated = VALIDATING;
-				this.render();
-				this.triggerParentUpdate();
 			} else {
 				this.validate();
 			}
 		};
 
+		// Shortcut method to trigger an updateStatus() on the parent of this ndoe
 		FormNode.prototype.triggerParentUpdate = function() {
 			this.parent.updateStatus();
 		};
 
+		// Return true if the node formNodeId has the same value than the value of this node, change the validated status of formNodeId
 		FormNode.prototype.equals = function(formNodeId) {
 			var node = this.indexed[formNodeId], valid = (node.value === this.value);
 			node.validated = valid ? VALIDATED : NOT_VALIDATED;
 			node.render();
-			
+
 			return valid;
 		};
 
+		// Validate function
 		FormNode.prototype.validate = function() {
-			var _i, _len, empty, regexp, compareValue, localValid = true, localMessage, remoteValid = true;
+			var _i, _len, empty, regexp, compareValue,
+				localValid = true,	// If true, local validation passed successfully
+				localMessage,		// Contains the local message used to explain the failure to the user
+				remoteValid = true; // If true, remote validation passed successfully
 
 			empty = this.isEmpty();
 
+			// Check if the value changed and synchronize the field value with the internal one
+			// If the value didn't change, no need to try validating again
 			if (this.hasChanged(true)) {
+				// Validating state
 				this.validated = VALIDATING;
 
 				if (this.required && empty) {
+					// Empty and required
 					this.validated = NOT_VALIDATED_EMPTY_REQUIRED;
 					localValid = false;
 				} else if (empty) {
+					// Empty but not required
 					this.validated = EMPTY_NOT_REQUIRED;
 					localValid = false;
 				} else {
+					// Local validation needed
 					if (this.validateDatas.local) {
 						if (this.validateDatas.local.type === "regexp") {
+							// Regexp validation
 							regexp = new RegExp(this.validateDatas.local.options, "i");
 							localValid = regexp.test(this.value);
 							localMessage = this.validateDatas.local.message;
 						} else if (this.validateDatas.local.type === "equals") {
+							// Equals validation
 							localValid = this.equals(this.validateDatas.local.options);
 							localMessage = this.validateDatas.local.message;
 						}
 
+						// Local validation failed
 						if (!localValid) {
 							this.message = this.message || [];
 							this.message.push({
@@ -556,8 +677,10 @@ $(document).ready(function() {
 						}
 					}
 
+					// If remote validation needed
 					if (localValid && this.validateDatas.remote) {
-
+						// Send data to the server
+						// Register callback to expose returned message and set status
 					}
 				}
 
@@ -583,9 +706,12 @@ $(document).ready(function() {
 			// Otherwise, validate remote
 			// Update view (loading)
 			// On callback, if content changed, abort result
-			// If not 
+			// If not
 		};
 
+		/**
+		 * Render method will update all views that are placed in the views stack of this node
+		 */
 		FormNode.prototype.render = function() {
 			var _i, _len;
 
@@ -602,7 +728,6 @@ $(document).ready(function() {
 
 		var installer = {
 			id: "witycms",
-			root: true,
 
 			childs: [
 				{
@@ -817,7 +942,7 @@ $(document).ready(function() {
 									validate: {
 										local: {
 											type: "equals",
-											options: "password", 
+											options: "password",
 											message: "Password and confirmation are different."
 										}
 									},
