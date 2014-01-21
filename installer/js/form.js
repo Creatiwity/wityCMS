@@ -25,8 +25,13 @@ $(document).ready(function() {
 		function Form(options) {
 			var handlers = {}, id = options.id;
 
+			this.isDebug = options.debug || false;
+
+			this.debug('time', 'Form:' + id + ' initialize');
+
 			if (!options || !options.id) {
-				console.error("options parameter is missing or empty, unable to create form.");
+				this.debug('timeEnd', 'Form:%s initialize', id);
+				this.debug('error', "options parameter is missing or empty, unable to create form.");
 				return;
 			}
 
@@ -91,11 +96,15 @@ $(document).ready(function() {
 
 			// Initialize all submit buttons statuses to disabled
 			this.setButtonStatus(false);
+
+			this.debug('timeEnd', 'Form:' + id + ' initialize');
 		}
 
 		// Update form status (submit button enabled or not) based on root node status
 		Form.prototype.updateStatus = function() {
 			this.validated = (this.node.validated === VALIDATED || this.node.validated === EMPTY_NOT_REQUIRED);
+
+			this.debug('Form:%s is now %s.', this.id, (this.validated ? 'validated' : 'not validated'));
 
 			this.setButtonStatus(this.validated);
 		};
@@ -105,15 +114,17 @@ $(document).ready(function() {
 			var that = this;
 
 			if(!state) {
+				this.debug('Form:%s submit button DISABLED', this.id);
 				this.$submit.button('remaining')
 				setTimeout(function() {that.$submit.attr("disabled", "disabled");}, 0);
 			} else {
+				this.debug('Form:%s submit button ENABLED', this.id);
 				this.$submit.button('reset');
 			}
 		};
 
 		// Execute a callback on ajax success
-		Form.prototype.getAjaxHtml = function (url, datas, callback, context) {
+		Form.prototype.getAjaxHtml = function(url, datas, callback, context) {
 			var _url = url || this.url;
 
 			$.ajax({
@@ -125,7 +136,7 @@ $(document).ready(function() {
 		}
 
 		// Ajax internal function to test FormNode validity remotely when needed
-		Form.prototype.ajax = function (datas, callback, context) {
+		Form.prototype.ajax = function(sData, callback, context) {
 			var realCallback, that = this;
 
 			// show loading
@@ -137,6 +148,7 @@ $(document).ready(function() {
 					json = $.parseJSON(data);
 				} catch(e) {
 					// Display debug
+					this.debug('error', 'Form:ajax response error from url %s with data: %O\nResponse: %s', this.url, sData, data);
 					return;
 				}
 
@@ -150,10 +162,26 @@ $(document).ready(function() {
 
 			$.ajax({
 				url: this.url,
-				data: datas,
+				data: sData,
 				success: realCallback,
 				type: 'POST'
 			});
+		};
+
+		// Debug logger
+		Form.prototype.debug = function() {
+			var params, type = 'debug';
+			if (this.isDebug && arguments.length > 0) {
+				params = Array.prototype.slice.call(arguments);
+
+				if (console[params[0]]) {
+					type = params.shift();
+				}
+
+				if (params.length > 0) {
+					console[type].apply(console, params);
+				}
+			}
 		};
 
 		return Form;
@@ -728,6 +756,7 @@ $(document).ready(function() {
 
 		var installer = {
 			id: "witycms",
+			debug: true,
 
 			childs: [
 				{
