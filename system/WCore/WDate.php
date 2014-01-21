@@ -98,7 +98,7 @@ class WDate extends DateTime {
 		if ($diff->h > 1) {
 			return WLang::_('wdate_hours_ago', $diff->h);
 		} else if ($diff->h == 1) {
-			return WLang('wdate_hour_ago', $diff->h);
+			return WLang::_('wdate_hour_ago', $diff->h);
 		}
 		
 		if ($diff->i > 1) {
