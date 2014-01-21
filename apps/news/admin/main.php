@@ -168,7 +168,7 @@ class NewsAdminController extends WController {
 				$this->model->deleteNews($news_id);
 				
 				$this->setHeader('Location', WRoute::getDir() . '/admin/news');
-				WNote::success('article_deleted', WLang::get('article_deleted', $data['news_title']));
+				WNote::success('article_deleted', WLang::get('article_deleted', $db_data['news_title']));
 			}
 			
 			return $db_data;

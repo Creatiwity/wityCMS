@@ -237,9 +237,10 @@ class WSession {
 	 */
 	public function generate_hash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
-		// Rajout de quelques valeurs rendant le hash lié à l'environnement de l'utilisateur
+		
+		// Link the hash to the user's environment
 		if ($environment) {
-			$string .= $_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']."*";
+			$string .= $this->getIP().$_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']."*";
 		}
 		
 		return sha1($string);
@@ -303,6 +304,25 @@ class WSession {
 	 */
 	public function upgrade_flood($limit) {
 		$_SESSION['flood_time'] = $limit;
+	}
+	
+	/**
+	 * Get the IP of the client.
+	 * 
+	 * @return string Either an ipv4 or an ipv6 address
+	 */
+	public static function getIP() {
+		if ($ip = getenv('HTTP_CLIENT_IP')) {}
+		else if ($ip = getenv('HTTP_X_FORWARDED_FOR')) {}
+		else if ($ip = getenv('HTTP_X_FORWARDED')) {}
+		else if ($ip = getenv('HTTP_FORWARDED_FOR')) {}
+		else if ($ip = getenv('HTTP_FORWARDED')) {}
+		else if ($ip = getenv('HTTP_REMOTE_ADDR')) {}
+		else {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+		
+		return $ip;
 	}
 	
 	/*
