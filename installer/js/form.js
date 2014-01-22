@@ -25,12 +25,14 @@ $(document).ready(function() {
 		function Form(options) {
 			var handlers = {}, id = options.id;
 
+			this.id = id;
+
 			this.isDebug = options.debug || false;
 
 			this.debug('time', 'Form:' + id + ' initialize');
 
 			if (!options || !options.id) {
-				this.debug('timeEnd', 'Form:%s initialize', id);
+				this.debug('timeEnd', 'Form:' + id + ' initialize');
 				this.debug('error', "options parameter is missing or empty, unable to create form.");
 				return;
 			}
@@ -124,14 +126,16 @@ $(document).ready(function() {
 		};
 
 		// Execute a callback on ajax success
-		Form.prototype.getAjaxHtml = function(url, datas, callback, context) {
+		Form.prototype.getAjaxHtml = function(url, data, callback, context) {
 			var _url = url || this.url;
+
+			this.debug('GET ajax HTML request on %s with %O.', url, data);
 
 			$.ajax({
 				url: _url,
-				data: datas,
+				data: data,
 				success: callback,
-				type: 'POST'
+				type: 'GET'
 			});
 		}
 
@@ -140,6 +144,7 @@ $(document).ready(function() {
 			var realCallback, that = this;
 
 			// show loading
+			this.debug('POST ajax request on %s with %O.', this.url, sData);
 
 			realCallback = function(data, textStatus, jqXHR) {
 				var json;
@@ -207,13 +212,16 @@ $(document).ready(function() {
 			var _i, _len, $tabTitle, $tabStatus, $tabContainer,
 				$tabContent, $summaryLi, $summaryStatus,
 				$alertContainer, $fieldContainer, $field,
-				validationTimer, contentCache, that = this;
+				validationTimer, contentCache, that = this, willValidate = false;
 
 			// Check context validity
 			if (!options || !context || !context.id || !context.form || !context.$content || context.$content.length === 0) {
-				console.debug("context passed to FormNode isn't valid.");
-				return false;
+				throw "context passed to FormNode isn't valid.";
 			}
+
+			this.context = context;
+
+			this.debug('time', 'FormNode:' + options.id + ' initialize');
 
 			// Index this node in the context, will be used to access all nodes by their node's id
 			context.indexed[options.id] = this;
@@ -329,6 +337,8 @@ $(document).ready(function() {
 					// Select field
 					$field = $('<select name="' + this.id + '" class="form-control"></select>');
 
+					willValidate = true;
+
 					if ($.isArray(options.options)) {
 						// Preconfigured values
 						for (_i = 0, _len = options.options.length; _i < _len; ++_i) {
@@ -348,6 +358,9 @@ $(document).ready(function() {
 							// Set the default specified value if it exists
 							if (options.value) {
 								$field.val(options.value);
+
+								// Async call so willValidate will not be checked
+								that.validate();
 							}
 
 						});
@@ -366,6 +379,8 @@ $(document).ready(function() {
 					// Set the default specified value if it exists
 					if (options.value) {
 						$field.val(options.value);
+
+						willValidate = true;
 					}
 				}
 
@@ -409,13 +424,13 @@ $(document).ready(function() {
 				});
 
 				// Bind validator to the blur and change events
-				$field.on('blur change', function() {
+				$field.on('input propertychange', function() {
 					if (validationTimer) {
 						clearTimeout(validationTimer);
 					}
 
 					// Calls the validation only one time at the end of all events treatment
-					validationTimer = setTimeout(function() {that.validate();}, 50);
+					validationTimer = setTimeout(function() {that.validate();}, 1000);
 				});
 
 			} else {
@@ -491,6 +506,12 @@ $(document).ready(function() {
 
 			// Render this node
 			this.render();
+
+			if (willValidate) {
+				setTimeout(function() {that.validate();}, 250);
+			}
+
+			this.debug('timeEnd', 'FormNode:' + options.id + ' initialize');
 		}
 
 		// Shortcut to compare current state with VALIDATED
@@ -520,6 +541,8 @@ $(document).ready(function() {
 		 * The changed flag will be reset
 		 */
 		FormNode.prototype.setChanged = function() {
+			this.debug('warn', 'FormNode:%s has CHANGED.', this.id);
+
 			this.changed = true;
 			this.parent && this.parent.setChanged && this.parent.setChanged();
 		};
@@ -612,32 +635,45 @@ $(document).ready(function() {
 		 * Key function that will choose to trigger validation or not in order to update the status of this node
 		 */
 		FormNode.prototype.updateStatus = function() {
-			var _i, _len, child, childrenValid = true, preventValidationIfFocus = false;
+			var _i, _len, child, childrenValid = true, validating = false, causeId = '', cause = 0;
 
 			// Test all childs
 			for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
 				child = this.childs[_i];
+
+				// Not validated
+				// Validate
+
 				if (child.validated === NOT_VALIDATED
-					|| child.validated === NOT_VALIDATED_EMPTY_REQUIRED) {
-					// Child not validated (empty and required or invalid)
+					|| child.validated === NOT_VALIDATED_EMPTY_REQUIRED
+					|| (child.validated === NOT_YET_VALIDATED && child.required === true)) {
+					causeId = child.id;
+					cause = 1;
+					validating = false;
 					childrenValid = false;
-				} else if (child.hasFocus()
-					&& (child.validated !== EMPTY_NOT_REQUIRED
-						|| (child.validated === NOT_YET_VALIDATED && child.required === true))) {
-					// Child has focus and if required, already focused or not,
-					// prevent node validation, edition of the child could be in progress
-					preventValidationIfFocus = true;
+					break;
 				} else if (child.validated === VALIDATING) {
-					// Validation pending, prevent node validation until the child finishes its validation process
-					preventValidationIfFocus = true;
+					causeId = child.id;
+					cause = 2;
+					validating = true;
+					childrenValid = false;
 				}
 			}
 
-			if (!childrenValid || preventValidationIfFocus) {
-				this.validated = NOT_VALIDATED;
+			if (!childrenValid) {
+				this.debug('warn', "FormNode::%s has been INVALIDATED by FormNode:%s in an updateStatus call", this.id, causeId);
+
+				if (validating) {
+					this.validated = VALIDATING;
+				} else {
+					this.validated = NOT_VALIDATED;
+				}
+
 				this.render();
 				this.triggerParentUpdate();
 			} else {
+				this.debug('warn', "FormNode::%s VALIDATING (updateStatus call)", this.id);
+
 				this.validate();
 			}
 		};
@@ -713,6 +749,8 @@ $(document).ready(function() {
 				}
 
 				if (localValid && remoteValid) {
+					this.debug('warn', "FormNode::%s is VALIDATED", this.id);
+
 					this.validated = VALIDATED;
 				}
 
@@ -745,6 +783,12 @@ $(document).ready(function() {
 
 			for (_i = 0, _len = this.views.length; _i < _len; ++_i) {
 				this.views[_i].updater();
+			}
+		};
+
+		FormNode.prototype.debug = function() {
+			if (this.context && this.context.form && this.context.form) {
+				this.context.form.debug.apply(this.context.form, arguments);
 			}
 		};
 
