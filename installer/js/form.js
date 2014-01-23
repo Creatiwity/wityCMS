@@ -410,7 +410,7 @@ $(document).ready(function() {
 				// Add it in the view
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
-				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
+				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + (this.required ? '*' : '') + '</label>')
 				$fieldContainer.append($('<div class="col-md-9"></div>').append($field).append(this.$helpBlock));
 
 
@@ -473,7 +473,7 @@ $(document).ready(function() {
 				$summaryLi = $('<li></li>');
 
 				$summaryLi.append($summaryStatus);
-				$summaryLi.append(' ' + this.name);
+				$summaryLi.append(' ' + this.name + (this.required ? '*' : ''));
 
 				context.$summary.append($summaryLi);
 
