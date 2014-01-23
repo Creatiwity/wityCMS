@@ -18,50 +18,50 @@ class Installer {
 	private $THEMES_DIR;
 	private $APPS_DIR;
 	private $CONFIG_DIR;
-	
+
 	private $EXCLUDED_THEMES = array('system', 'admin-bootstrap');
 	private $EXCLUDED_APPS = array('admin');
 	private $EXCLUDED_DIRS = array('.', '..');
-	
+
 	private $view;
-	
+
 	/**
 	 * Security system
-	 * 
+	 *
 	 *  if (the lock file exists && the lock file is still valid) || lock file does not exist
 	 *      create lock file (again)
 	 *      execute control
 	 *  else
-	 *      return an error message (msg: delete lock file) 
-	 *  
+	 *      return an error message (msg: delete lock file)
+	 *
 	 */
 	public function launch() {
 		$this->THEMES_DIR = "themes";
 		$this->APPS_DIR = "apps";
 		$this->CONFIG_DIR = "system".DS."config";
-		
+
 		$this->view = new View();
-		
+
 		$data = WRequest::getAssoc(array('command', 'installer', 'group'), '', 'POST');
-		
+
 		switch ($data['command']) {
 			default:
 			case 'START':
 				$this->view->render();
 				return;
-			
+
 			case 'INIT_INSTALLER':
 				if (!class_exists('PDO')) {
 					$this->view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
 					return;
 				}
 				break;
-			
+
 			case 'FINISH_INSTALLATION':
 				// Store the data in config files
 				if ($this->installerValidation($data)) {
 					set_time_limit(0);
-					
+
 					// Get config data
 					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'lang'), '', 'POST');
 					$route = WRequest::getAssoc(array('default', 'admin'), '', 'POST');
@@ -73,7 +73,7 @@ class Installer {
 					$user['valid'] = 1;
 
 					$database['prefix'] = (!empty($database['prefix'])) ? $database['prefix']."_":"";
-					
+
 					// Create SQL Tables
 					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'wity.sql');
 					$sql_commands = str_replace('prefix_', $database['prefix'], $sql_commands); // configure prefix
@@ -83,7 +83,7 @@ class Installer {
 					if (!is_null($error[0]) && !$error[0]!=0) {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
 					}
-					
+
 					// Save Database configuration
 					WConfig::set('database.server', str_replace('localhost', '127.0.0.1', $database['server']));
 					WConfig::set('database.port', $database['port']);
@@ -92,7 +92,7 @@ class Installer {
 					WConfig::set('database.dbname', $database['dbname']);
 					WConfig::set('database.prefix', $database['prefix']);
 					WConfig::save('database', CONFIG_DIR.'database.php');
-					
+
 					// Create user account
 					$placeholder = false;
 					if ($this->isFrontApp('user', null, $placeholder)) {
@@ -104,7 +104,7 @@ class Installer {
 					} else {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of WityCMS.');
 					}
-					
+
 					// Save General configuration
 					WConfig::set('config.base', trim($config['base'], '/'));
 					WConfig::set('config.site_name', $config['site_name']);
@@ -114,12 +114,12 @@ class Installer {
 					WConfig::set('config.email', $user['email']);
 					WConfig::set('config.debug', false);
 					WConfig::save('config', CONFIG_DIR.'config.php');
-					
+
 					// Save Route configuration
 					WConfig::set('route.default', array($route['default'], array()));
 					WConfig::set('route.admin', array($route['admin'], array()));
 					WConfig::save('route', CONFIG_DIR.'route.php');
-					
+
 					// If success, Delete installer directory
 					if (file_exists(CONFIG_DIR.'config.php') && file_exists(CONFIG_DIR.'database.php') && file_exists(CONFIG_DIR.'route.php')) {
 						$dir = WITY_PATH.'installer';
@@ -136,7 +136,7 @@ class Installer {
 							}
 						}
 						rmdir($dir);
-						
+
 						$this->view->success('installer', $data['installer'], 'Congratulations', 'Installation finished !');
 					} else {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
@@ -145,44 +145,44 @@ class Installer {
 					$this->view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
 				}
 				break;
-			
+
 			// Remote
 			case 'REMOTE_VALIDATION':
 				$this->remoteValidation($data);
 				break;
-			
+
 			// Autocompletes
 			case 'GET_THEMES':
-				if ($themes = $this->getThemes()) {
+				if ($themes = $this->toOptions($this->getThemes())) {
 					$this->view->push_content("GET_THEMES", $themes);
 				} else {
 					$this->view->error('installer', $data['installer'], 'Fatal Error', 'Themes directory cannot be found.');
 				}
 				break;
-			
+
 			case 'GET_FRONT_APPS':
-				if ($themes = $this->getFrontApps()) {
+				if ($themes = $this->toOptions($this->getFrontApps())) {
 					$this->view->push_content("GET_FRONT_APPS", $themes);
 				} else {
 					$this->view->error('installer', $data['installer'], 'Fatal Error', 'Applications directory cannot be found.');
 				}
 				break;
-			
+
 			case 'GET_ADMIN_APPS':
-				if ($themes = $this->getAdminApps()) {
+				if ($themes = $this->toOptions($this->getAdminApps())) {
 					$this->view->push_content("GET_ADMIN_APPS", $themes);
 				} else {
 					$this->view->error('installer', $data['installer'], 'Fatal Error', 'Applications directory cannot be found.');
 				}
 				break;
 		}
-		
+
 		$this->view->respond();
 	}
-	
+
 	/**
 	 * Checks that every field sent is validated
-	 * 
+	 *
 	 * @param array $data
 	 * @return bool
 	 */
@@ -196,16 +196,16 @@ class Installer {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Remote validator
-	 * 
+	 *
 	 * @param array $data Contains the name of the validator
 	 * @return bool
 	 */
 	private function remoteValidation($data) {
 		$respond = true;
-		
+
 		switch ($data['group']) {
 			case 'site_name':
 				$site_name = WRequest::get('site_name', '', 'POST');
@@ -216,7 +216,7 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid site name", "The site name must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-			
+
 			case 'base_url':
 				$base_url = WRequest::get('base', '', 'POST');
 				if ($this->isURL($base_url, $data, $respond)) {
@@ -226,7 +226,7 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid base url", "The base url must be a valid URL representing the constant part of your site URL.");
 					return false;
 				}
-			
+
 			case 'theme':
 				$theme = WRequest::get('theme', '', 'POST');
 				if ($this->isTheme($theme, $data, $respond)) {
@@ -236,19 +236,19 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid theme", "Theme parameter must be an existing front theme, in 'themes' directory.");
 					return false;
 				}
-			
+
 			case 'language':
 				// TODO : auto-detect available languages and validate them
 				$this->view->success('group', $data['group'], "Validated !", "Language validated.");
 				return true;
-			
+
 			case 'timezone':
 				// TODO : auto-detect available languages and validate them
 				$this->view->success('group', $data['group'], "Validated !", "Timezone validated.");
 				return true;
-			
+
 			case 'front_app':
-				$front_app = WRequest::get('default', '', 'POST');
+				$front_app = WRequest::get('front_app', '', 'POST');
 				if ($this->isFrontApp($front_app, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Front application validated.");
 					return true;
@@ -256,9 +256,9 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid front application", "Starting front application parameter must an existing front application, in 'apps' directory.");
 					return false;
 				}
-			
+
 			case 'admin_app':
-				$admin_app = WRequest::get('admin', '', 'POST');
+				$admin_app = WRequest::get('admin_app', '', 'POST');
 				if ($this->isAdminApp($admin_app, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Admin application validated.");
 					return true;
@@ -266,9 +266,9 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid admin application", "Starting admin application parameter must an existing admin application, in 'apps' directory.");
 					return false;
 				}
-			
+
 			case 'db_credentials':
-				$r = WRequest::getAssoc(array('server', 'port', 'user', 'pw'), '', 'POST');
+				$r = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword'), '', 'POST');
 				if ($this->isSQLServer($r, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Database credentials validated.");
 					return true;
@@ -276,9 +276,9 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid database credentials", "Unable to connect to the database with the credentials you've just provided.");
 					return false;
 				}
-			
+
 			case 'db_name':
-				$r = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname'), '', 'POST');
+				$r = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword', 'dbname'), '', 'POST');
 				if ($this->isDatabase($r, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Database name validated.");
 					return true;
@@ -286,17 +286,17 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid database name", "Unable to find the database with the name you've just provided.");
 					return false;
 				}
-			
+
 			case 'tables_prefix':
-				$r = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
+				$r = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword', 'dbname', 'dbprefix'), '', 'POST');
 				if ($this->isPrefixNotExisting($r, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Tables prefix validated and not used.");
 				} else if ($respond) {
 					$this->view->warning('group', $data['group'], "Prefix already used", "Be careful, the prefix you provides is already used. Some existing tables will be overridden");
-					
+
 				}
 				return true;
-			
+
 			case 'user_nickname':
 				$user_nickname = WRequest::get('nickname', '', 'POST');
 				if ($this->isVerifiedString($user_nickname, $data, $respond)) {
@@ -306,12 +306,12 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid nickname", "Your nickname must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-			
+
 			case 'user_password':
-				$user_password = WRequest::get('password', '', 'POST');
+				$user_password = WRequest::get(array('password', 'confirm'), '', 'POST');
 				$this->view->success('group', $data['group'], "Validated !", "Password validated.");
 				return true;
-			
+
 			case 'user_email':
 				$user_email = WRequest::get('email', '', 'POST');
 				if ($this->isEmail($user_email, $data, $respond)) {
@@ -321,7 +321,7 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid email", "This email is not valid.");
 					return false;
 				}
-			
+
 			case 'user_firstname':
 				$user_firstname = WRequest::get('firstname', '', 'POST');
 				if ($this->isVerifiedString($user_firstname, $data, $respond)) {
@@ -331,7 +331,7 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid firstname", "Your firstname must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-			
+
 			case 'user_lastname':
 				$user_lastname = WRequest::get('lastname', '', 'POST');
 				if ($this->isVerifiedString($user_lastname, $data, $respond)) {
@@ -341,17 +341,17 @@ class Installer {
 					$this->view->error('group', $data['group'], "Invalid lastname", "Your lastname must be an alphanumeric string. (- and ' and spaces are allowed too)");
 					return false;
 				}
-			
+
 			default:
 				$this->view->error('installer', $data['installer'], 'Unknown group', "You're trying to validate an unknown group.");
 				return false;
 		}
 	}
-	
+
 	/**
 	 * URL Validator
 	 * Checks that a string is a URL where WityCMS can be installed
-	 * 
+	 *
 	 * @param string $url
 	 * @param array $data
 	 * @param $respond
@@ -360,11 +360,11 @@ class Installer {
 	private function isURL($url, $data, &$respond) {
 		return !empty($url) && preg_match("#^(http|https|ftp)\://[A-Z0-9][A-Z0-9_-]*(\.[A-Z0-9][A-Z0-9_-]*)*(:[0-9]+)?(/[A-Z0-9~\._-]+)*/?$#i", $url);
 	}
-	
+
 	/**
 	 * URL Validator
 	 * Checks that a string is ...
-	 * 
+	 *
 	 * @param string $string
 	 * @param array $data
 	 * @param $respond
@@ -373,11 +373,11 @@ class Installer {
 	private function isVerifiedString($string, $data, &$respond) {
 		return empty($url) || (!empty($url) && preg_match("/^[A-Z]?'?[- a-zA-Z]( [a-zA-Z])*$/i", $string));
 	}
-	
+
 	/**
 	 * Front App Validator
 	 * Checks that a string corresponds to an existing Front Application
-	 * 
+	 *
 	 * @param string $app Front application name
 	 * @param array $data
 	 * @param $respond
@@ -386,11 +386,11 @@ class Installer {
 	private function isFrontApp($app, $data, &$respond) {
 		return in_array(strtolower($app), $this->getFrontApps());
 	}
-	
+
 	/**
 	 * Admin App Validator
 	 * Checks that a string corresponds to an existing Admin Application
-	 * 
+	 *
 	 * @param string $app Admin application name
 	 * @param array $data
 	 * @param $respond
@@ -399,11 +399,11 @@ class Installer {
 	private function isAdminApp($app, $data, &$respond) {
 		return in_array(strtolower($app), $this->getAdminApps());
 	}
-	
+
 	/**
 	 * Theme Validator
 	 * Checks that a string corresponds to an existing Theme
-	 * 
+	 *
 	 * @param string $theme Theme name
 	 * @param array $data
 	 * @param $respond
@@ -412,10 +412,10 @@ class Installer {
 	private function isTheme($theme, $data, &$respond) {
 		return in_array(strtolower($theme), $this->getThemes());
 	}
-	
+
 	/**
 	 * Create the PDO Object to connect to the database
-	 * 
+	 *
 	 * @param array $credentials array(server, port, dbname, user, pw)
 	 * @return mixed true|PDOException
 	 */
@@ -425,21 +425,21 @@ class Installer {
 		if (!empty($credentials['dbname'])) {
 			$dsn .= $credentials['dbname'];
 		}
-		$dsn .= ';host='.$credentials['server'].';';
-		if (!empty($credentials['port']) && is_numeric($credentials['port'])) {
-			$dsn .=  'port='.$credentials['port'];
+		$dsn .= ';host='.$credentials['dbserver'].';';
+		if (!empty($credentials['dbport']) && is_numeric($credentials['dbport'])) {
+			$dsn .=  'port='.$credentials['dbport'];
 		}
-		
+
 		try {
-			return @new PDO($dsn, $credentials['user'], $credentials['pw']);
+			return @new PDO($dsn, $credentials['dbuser'], $credentials['dbpassword']);
 		} catch (PDOException $e) {
 			return $e;
 		}
 	}
-	
+
 	/**
 	 * Checks the SQL server credentials
-	 * 
+	 *
 	 * @param array $credentials MySQL Database credentials
 	 * @param array $data
 	 * @param bool  $respond
@@ -447,7 +447,7 @@ class Installer {
 	 */
 	private function isSQLServer($credentials, $data, &$respond) {
 		$db = $this->getSQLServerConnection($credentials);
-		
+
 		if ($db instanceof PDOException && strstr($db->getMessage(), 'SQLSTATE[')) {
 			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $db->getMessage(), $matches);
 			if ($matches[2] == "1049") {
@@ -461,10 +461,10 @@ class Installer {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Checks that a specified database exists on the SQL Server
-	 * 
+	 *
 	 * @param array $credentials MySQL Database credentials
 	 * @param array $data
 	 * @param bool  $respond
@@ -472,7 +472,7 @@ class Installer {
 	 */
 	private function isDatabase($credentials, $data, &$respond) {
 		$db = $this->getSQLServerConnection($credentials);
-		
+
 		if ($db instanceof PDOException && strstr($db->getMessage(), 'SQLSTATE[')) {
 			preg_match('/SQLSTATE\[(\w+)\] \[(\w+)\] (.*)/', $db->getMessage(), $matches);
 			if ($matches[2] == "1049") {
@@ -482,13 +482,13 @@ class Installer {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Checks that a prefix is available in the database
-	 * 
+	 *
 	 * @param array $credentials MySQL Database credentials
 	 * @param array $data
 	 * @param bool  $respond
@@ -496,25 +496,25 @@ class Installer {
 	 */
 	private function isPrefixNotExisting($credentials, $data, &$respond) {
 		$db = $this->getSQLServerConnection($credentials);
-		
+
 		if ($db instanceof PDO) {
-			$prefix = (!empty($credentials['prefix'])) ? $credentials['prefix']."_":"";
+			$prefix = (!empty($credentials['dbprefix'])) ? $credentials['dbprefix']."_":"";
 			$prefix .= "users";
-			
+
 			$prep = $db->prepare("SHOW TABLES LIKE :prefixedTable");
 			$prep->bindParam(":prefixedTable", $prefix);
 			$prep->execute();
 			$data = $prep->fetch();
 			return empty($data);
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Email Validator
 	 * Checks that a string corresponds to an email
-	 * 
+	 *
 	 * @param string $email Email address
 	 * @param array $data
 	 * @param $respond
@@ -523,57 +523,77 @@ class Installer {
 	private function isEmail($email, $data, &$respond) {
 		return !empty($email) && preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $email);
 	}
-	
+
 	/**
 	 * Get existing themes
-	 * 
+	 *
 	 * @return array List of themes
 	 */
 	private function getThemes() {
-		if ($result = scandir($this->THEMES_DIR)) {
-			foreach ($result as $key => $value) {
+		if ($themes = scandir($this->THEMES_DIR)) {
+			foreach ($themes as $key => $value) {
 				if (in_array($value, $this->EXCLUDED_THEMES) || !is_dir($this->THEMES_DIR.DS.$value) || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($result[$key]);
+					unset($themes[$key]);
 				}
 			}
-			$result[] = "_blank";
+			$themes[] = "_blank";
 		}
-		
-		return $result;
+
+		return $themes;
 	}
-	
+
 	/**
 	 * Get existing Front Apps
-	 * 
+	 *
 	 * @return array List of Front Apps
 	 */
 	private function getFrontApps() {
-		if ($result = scandir($this->APPS_DIR)) {
-			foreach ($result as $key => $value) {
+		if ($apps = scandir($this->APPS_DIR)) {
+			foreach ($apps as $key => $value) {
 				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."front") || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($result[$key]);
+					unset($apps[$key]);
 				}
 			}
 		}
-		
-		return $result;
+
+		return $apps;
 	}
-	
+
 	/**
 	 * Get existing Admin Apps
-	 * 
+	 *
 	 * @return array List of Admin Apps
 	 */
 	private function getAdminApps() {
-		if ($result = scandir($this->APPS_DIR)) {
-			foreach ($result as $key => $value) {
+		if ($apps = scandir($this->APPS_DIR)) {
+			foreach ($apps as $key => $value) {
 				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."admin") || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($result[$key]);
+					unset($apps[$key]);
 				}
 			}
 		}
-		
-		return $result;
+
+		return $apps;
+	}
+
+	/**
+	 * Transform an array of possibilities into an html-option list
+	 *
+	 * @param array
+	 * @return string <option></option> string
+	 */
+	private function toOptions($optArray) {
+		$result = '';
+
+		if ($optArray) {
+			foreach ($optArray as $value) {
+				$result .= '<option value="'.$value.'">'.$value.'</option>';
+			}
+
+			return $result;
+		} else {
+			return false;
+		}
 	}
 
 }

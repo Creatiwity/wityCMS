@@ -153,7 +153,7 @@ $(document).ready(function() {
 					json = $.parseJSON(data);
 				} catch(e) {
 					// Display debug
-					this.debug('error', 'Form:ajax response error from url %s with data: %O\nResponse: %s', this.url, sData, data);
+					that.debug('error', 'Form:ajax response error from url %s with data: %O\nResponse: %s', that.url, sData, data);
 					return;
 				}
 
@@ -245,6 +245,9 @@ $(document).ready(function() {
 			// A real node will have a summary by default, a virtual not, will be treated after
 			this.summary = false;
 
+			// Contains the help message to display on a field
+			this.helpMessage = '';
+
 			// validateDatas store all the validation datas needed to validate this node locally and/or remotely
 			this.validateDatas = options.validate || {};
 
@@ -253,8 +256,6 @@ $(document).ready(function() {
 				$.extend(true, this.indexed[this.validateDatas.local.options].validateDatas, this.validateDatas);
 				this.indexed[this.validateDatas.local.options].validateDatas.options = this.id;
 			}
-
-			// Build validate
 
 			// Build FormNode in DOM and in logic
 
@@ -358,11 +359,28 @@ $(document).ready(function() {
 							// Set the default specified value if it exists
 							if (options.value) {
 								$field.val(options.value);
+							}
+
+							// Async call so willValidate will not be checked
+							that.validate();
+						});
+					} else if (options.options.command) {
+						// Ajax generated values
+						context.form.ajax({
+							command: options.options.command,
+							installer: context.form.id
+						}, function (data) {
+							if (data.content && data.content[options.options.command]) {
+								$field.append(data.content[options.options.command]);
+
+								// Set the default specified value if it exists
+								if (options.value) {
+									$field.val(options.value);
+								}
 
 								// Async call so willValidate will not be checked
 								that.validate();
 							}
-
 						});
 					} else {
 						// No option provided, error?
@@ -387,11 +405,14 @@ $(document).ready(function() {
 				// Store the field
 				this.$field = $field;
 
+				this.$helpBlock = $('<div class="help-block"></div>');
+
 				// Add it in the view
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
 				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + '</label>')
-				$fieldContainer.append($('<div class="col-md-9"></div>').append($field));
+				$fieldContainer.append($('<div class="col-md-9"></div>').append($field).append(this.$helpBlock));
+
 
 				// Push the field updater in the views stack
 				this.views.push({
@@ -420,6 +441,14 @@ $(document).ready(function() {
 							case EMPTY_NOT_REQUIRED:
 							break;
 						}
+
+						if (that.helpMessage !== '') {
+							that.$helpBlock.removeClass('hidden');
+						} else {
+							that.$helpBlock.addClass('hidden');
+						}
+
+						that.$helpBlock.html(that.helpMessage);
 					}
 				});
 
@@ -642,7 +671,7 @@ $(document).ready(function() {
 				child = this.childs[_i];
 
 				// Not validated
-				// Validate
+				// Or Validate()
 
 				if (child.validated === NOT_VALIDATED
 					|| child.validated === NOT_VALIDATED_EMPTY_REQUIRED
@@ -697,7 +726,9 @@ $(document).ready(function() {
 			var _i, _len, empty, regexp, compareValue,
 				localValid = true,	// If true, local validation passed successfully
 				localMessage,		// Contains the local message used to explain the failure to the user
-				remoteValid = true; // If true, remote validation passed successfully
+				remoteValid = true,
+				that = this,
+				options; // If true, remote validation passed successfully
 
 			empty = this.isEmpty();
 
@@ -706,6 +737,8 @@ $(document).ready(function() {
 			if (this.hasChanged(true)) {
 				// Validating state
 				this.validated = VALIDATING;
+
+				this.helpMessage = '';
 
 				if (this.required && empty) {
 					// Empty and required
@@ -731,11 +764,7 @@ $(document).ready(function() {
 
 						// Local validation failed
 						if (!localValid) {
-							this.message = this.message || [];
-							this.message.push({
-								type: "danger",
-								message: localMessage
-							});
+							this.helpMessage += localMessage;
 
 							this.validated = NOT_VALIDATED;
 						}
@@ -745,11 +774,37 @@ $(document).ready(function() {
 					if (localValid && this.validateDatas.remote) {
 						// Send data to the server
 						// Register callback to expose returned message and set status
+						options = {
+							command: 'REMOTE_VALIDATION',
+							installer: this.context.form.id,
+							group: this.validateDatas.remote
+						};
+
+						$.extend(options, this.getValues());
+
+						this.context.form.ajax(options, function(response) {
+							that.debug('warn', 'FormNode:%s response received %O.', that.id, response);
+
+							if (that.decode(response)) {
+								that.debug('warn', "FormNode:%s is VALIDATED", that.id);
+
+								that.validated = VALIDATED;
+							} else {
+								that.debug('warn', "FormNode:%s is NOT VALIDATED", that.id);
+
+								that.validated = NOT_VALIDATED;
+							}
+
+							that.render();
+							that.triggerParentUpdate();
+						} ,this);
+
+						return;
 					}
 				}
 
 				if (localValid && remoteValid) {
-					this.debug('warn', "FormNode::%s is VALIDATED", this.id);
+					this.debug('warn', "FormNode:%s is VALIDATED", this.id);
 
 					this.validated = VALIDATED;
 				}
@@ -773,6 +828,64 @@ $(document).ready(function() {
 			// Update view (loading)
 			// On callback, if content changed, abort result
 			// If not
+		};
+
+		/**
+		 * Decode remote validation response
+		 */
+		FormNode.prototype.decode = function(response) {
+			var validated = false;
+
+			if (response.installer) {
+				//this.context.form.decode(response);
+			}
+
+			this.helpMessage = '';
+
+			if (response.group && response.group[this.validateDatas.remote]) {
+				if(response.group[this.validateDatas.remote].success) {
+					validated = true;
+				}
+
+				if(response.group[this.validateDatas.remote].warning) {
+					this.displayNotes(response.group[this.validateDatas.remote].warning, 'text-warning');
+				}
+
+				if(response.group[this.validateDatas.remote].error) {
+					validated = false;
+					this.displayNotes(response.group[this.validateDatas.remote].error, 'text-danger');
+				}
+
+				if(response.group[this.validateDatas.remote].info) {
+					this.displayNotes(response.group[this.validateDatas.remote].success, 'text-info');
+				}
+			}
+
+			return validated;
+		};
+
+		/**
+		 * Displays notes on the group
+		 *
+		 * @param array notes
+		 * @param string CSS Classes to be used for this set of notes (alert-error, alert-info)
+		 */
+		FormNode.prototype.displayNotes = function(notes, classes) {
+			var that = this;
+			$.each(notes, function(index, r) {
+				var alert = '<span class="' + classes + '">'
+								+ '<strong>'
+									+ r.head_message
+								+ '</strong> '
+								+ r.message
+							+ '</span>'
+
+				if (that.helpMessage !== '') {
+					that.helpMessage += '<br/>';
+				}
+
+				that.helpMessage += alert;
+			});
 		};
 
 		/**
@@ -837,10 +950,13 @@ $(document).ready(function() {
 							id: "theme",
 							name: "Theme",
 							required: true,
+							type: 'select',
+							options: {
+								command: "GET_THEMES"
+							},
 							validate: {
 								remote: 'theme'
-							},
-							autocomplete: "GET_THEMES"
+							}
 						},
 						{
 							id: "language",
@@ -872,7 +988,10 @@ $(document).ready(function() {
 							id: "front_app",
 							name: "Front app.",
 							required: true,
-							autocomplete: "GET_FRONT_APPS",
+							type: 'select',
+							options: {
+								command: "GET_FRONT_APPS"
+							},
 
 							validate: {
 								remote: 'front_app'
@@ -882,7 +1001,10 @@ $(document).ready(function() {
 							id: "admin_app",
 							name: "Admin app.",
 							required: true,
-							autocomplete: "GET_ADMIN_APPS",
+							type: 'select',
+							options: {
+								command: "GET_ADMIN_APPS"
+							},
 
 							validate: {
 								remote: 'admin_app'
@@ -996,6 +1118,10 @@ $(document).ready(function() {
 							required: true,
 							virtual: true,
 							summary: true,
+
+							validate: {
+								remote: 'user_password'
+							},
 
 							childs: [
 								{
