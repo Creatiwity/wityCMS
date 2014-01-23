@@ -23,9 +23,11 @@ $(document).ready(function() {
 	Form = (function() {
 
 		function Form(options) {
-			var handlers = {}, id = options.id;
+			var id = options.id, that = this;
 
 			this.id = id;
+
+			this.handlers = {};
 
 			this.isDebug = options.debug || false;
 
@@ -71,16 +73,16 @@ $(document).ready(function() {
 			$('[data-wity-form-' + id + '-onsuccess]').each(function () {
 				var $this = $(this), handler = $this.attr('data-wity-form-' + id + '-onsuccess');
 
-				handlers.success = handlers.success || [];
-				handlers.success.push([$this, handler]);
+				that.handlers.success = that.handlers.success || [];
+				that.handlers.success.push([$this, handler]);
 			});
 
 			// Register all failure actions available in the DOM
 			$('[data-wity-form-' + id + '-onfailure]').each(function () {
 				var $this = $(this), handler = $this.attr('data-wity-form-' + id + '-onfailure');
 
-				handlers.failure = handlers.failure || [];
-				handlers.failure.push([$this, handler]);
+				that.handlers.failure = that.handlers.failure || [];
+				that.handlers.failure.push([$this, handler]);
 			});
 
 			// Root node
@@ -91,16 +93,34 @@ $(document).ready(function() {
 			this.$submit.on('click', function() {
 				var $this = $(this);
 
-				if (this.validated) {
+				if (that.validated) {
 					$this.button('loading');
+					that.validate();
 				}
 			});
 
 			// Initialize all submit buttons statuses to disabled
 			this.setButtonStatus(false);
 
+			this.ajax({
+				installer: this.id,
+				command: 'INIT_INSTALLER'
+			}, null, this);
+
 			this.debug('timeEnd', 'Form:' + id + ' initialize');
 		}
+
+		Form.prototype.validate = function() {
+			var options = {
+				installer: this.id,
+				command: "FINISH_INSTALLATION"
+			};
+
+			$.extend(options, this.node.getValues());
+
+			// Trigger XHR request to launch the PHP installation
+			this.ajax(options, null, this);
+		};
 
 		// Update form status (submit button enabled or not) based on root node status
 		Form.prototype.updateStatus = function() {
@@ -147,7 +167,7 @@ $(document).ready(function() {
 			this.debug('POST ajax request on %s with %O.', this.url, sData);
 
 			realCallback = function(data, textStatus, jqXHR) {
-				var json;
+				var json, installerData;
 
 				try {
 					json = $.parseJSON(data);
@@ -158,6 +178,12 @@ $(document).ready(function() {
 				}
 
 				// process json
+				if (json.installer) {
+					installerData = json.installer;
+					delete json.installer;
+
+					that.decode(installerData);
+				}
 
 				//process callback ?
 				if(callback) {
@@ -171,6 +197,91 @@ $(document).ready(function() {
 				success: realCallback,
 				type: 'POST'
 			});
+		};
+
+		/**
+		 * Decode remote validation response
+		 */
+		Form.prototype.decode = function(installerData) {
+			var validated = false;
+
+			if (installerData && installerData[this.id]) {
+				if(installerData[this.id].success) {
+					validated = true;
+				}
+
+				if(installerData[this.id].warning) {
+					this.displayNotes(installerData[this.id].warning, 'alert-warning');
+				}
+
+				if(installerData[this.id].error) {
+					validated = false;
+					this.displayNotes(installerData[this.id].error, 'alert-danger');
+					this.finishError();
+				}
+
+				if(installerData[this.id].info) {
+					this.displayNotes(installerData[this.id].success, 'alert-info');
+				}
+			}
+
+			if (validated) {
+				this.finishSuccess();
+			}
+
+			return validated;
+		};
+
+		// Display notes
+		Form.prototype.displayNotes = function(notes) {
+			var that = this;
+
+			if (this.$alert) {
+				$.each(notes, function(index, r) {
+					var alert = $('<div class="alert alert-dismissable">'+
+						'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
+					'</div>');
+					$('<strong>'+r.head_message+'</strong>').appendTo(alert);
+					alert.append(' '+r.message);
+					alert.appendTo(that.alertContainer);
+					alert.addClass(classes);
+					that.$alert.append(alert);
+				});
+			}
+		};
+
+		Form.prototype.finishSuccess = function() {
+			// Do success
+			var _i, _len;
+
+			if (this.handlers && this.handlers.success) {
+				for (_i = 0, _len = this.handlers.success.length; _i < _len; ++_i) {
+					if (this.handlers.success[_i][1] === 'show') {
+						this.handlers.success[_i][0].removeClass('hide hidden').show();
+					} else if (this.handlers.success[_i][1] === 'hide') {
+						this.handlers.success[_i][0].hide();
+					} else if (this.handlers.success[_i][0][this.handlers.success[_i][1]]) {
+						this.handlers.success[_i][0][this.handlers.success[_i][1]]();
+					}
+				}
+			}
+		};
+
+		Form.prototype.finishError = function() {
+			// Do error
+			var _i, _len;
+
+			if (this.handlers && this.handlers.error) {
+				for (_i = 0, _len = this.handlers.error.length; _i < _len; ++_i) {
+					if (this.handlers.error[_i][1] === 'show') {
+						this.handlers.error[_i][0].removeClass('hide hidden').show();
+					} else if (this.handlers.error[_i][1] === 'hide') {
+						this.handlers.error[_i][0].hide();
+					} else if (this.handlers.error[_i][0][this.handlers.error[_i][1]]) {
+						this.handlers.error[_i][0][this.handlers.error[_i][1]]();
+					}
+				}
+			}
 		};
 
 		// Debug logger
@@ -814,20 +925,6 @@ $(document).ready(function() {
 
 			// Must be triggered in any case
 			this.triggerParentUpdate();
-
-			// Trigger updateStatus on parent
-
-			// Triggered on blur or changed or keyup && no focus
-
-			// Test empty, if required return false (always update view), else return true
-			// Not empty
-			// Validate local
-			// Test "requires" -> how ?
-			// If not return false
-			// Otherwise, validate remote
-			// Update view (loading)
-			// On callback, if content changed, abort result
-			// If not
 		};
 
 		/**

@@ -63,20 +63,20 @@ class Installer {
 					set_time_limit(0);
 
 					// Get config data
-					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'lang'), '', 'POST');
-					$route = WRequest::getAssoc(array('default', 'admin'), '', 'POST');
-					$database = WRequest::getAssoc(array('server', 'port', 'user', 'pw', 'dbname', 'prefix'), '', 'POST');
+					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language', 'timezone'), '', 'POST');
+					$route = WRequest::getAssoc(array('front_app', 'admin_app'), '', 'POST');
+					$database = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword', 'dbname', 'dbprefix'), '', 'POST');
 					$user = WRequest::getAssoc(array('nickname', 'password', 'email', 'firstname', 'lastname'), '', 'POST');
 					$user['password'] = sha1($user['password']);
 					$user['confirm'] = 0;
 					$user['access'] = 'all';
 					$user['valid'] = 1;
 
-					$database['prefix'] = (!empty($database['prefix'])) ? $database['prefix']."_":"";
+					$database['dbprefix'] = (!empty($database['dbprefix'])) ? $database['dbprefix']."_":"";
 
 					// Create SQL Tables
 					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'wity.sql');
-					$sql_commands = str_replace('prefix_', $database['prefix'], $sql_commands); // configure prefix
+					$sql_commands = str_replace('prefix_', $database['dbprefix'], $sql_commands); // configure prefix
 					$db = $this->getSQLServerConnection($database);
 					$db->exec($sql_commands);
 					$error = $db->errorInfo();
@@ -85,12 +85,12 @@ class Installer {
 					}
 
 					// Save Database configuration
-					WConfig::set('database.server', str_replace('localhost', '127.0.0.1', $database['server']));
-					WConfig::set('database.port', $database['port']);
-					WConfig::set('database.user', $database['user']);
-					WConfig::set('database.pw', $database['pw']);
+					WConfig::set('database.server', str_replace('localhost', '127.0.0.1', $database['dbserver']));
+					WConfig::set('database.port', $database['dbport']);
+					WConfig::set('database.user', $database['dbuser']);
+					WConfig::set('database.pw', $database['dbpassword']);
 					WConfig::set('database.dbname', $database['dbname']);
-					WConfig::set('database.prefix', $database['prefix']);
+					WConfig::set('database.prefix', $database['dbprefix']);
 					WConfig::save('database', CONFIG_DIR.'database.php');
 
 					// Create user account
@@ -109,15 +109,15 @@ class Installer {
 					WConfig::set('config.base', trim($config['base'], '/'));
 					WConfig::set('config.site_name', $config['site_name']);
 					WConfig::set('config.theme', $config['theme']);
-					WConfig::set('config.lang', $config['lang']);
-					WConfig::set('config.timezone', 'Europe/Paris');
+					WConfig::set('config.lang', $config['language']);
+					WConfig::set('config.timezone', $config['timezone']);
 					WConfig::set('config.email', $user['email']);
 					WConfig::set('config.debug', false);
 					WConfig::save('config', CONFIG_DIR.'config.php');
 
 					// Save Route configuration
-					WConfig::set('route.default', array($route['default'], array()));
-					WConfig::set('route.admin', array($route['admin'], array()));
+					WConfig::set('route.default_front', array($route['front_app'], array()));
+					WConfig::set('route.default_admin', array($route['admin_app'], array()));
 					WConfig::save('route', CONFIG_DIR.'route.php');
 
 					// If success, Delete installer directory
@@ -570,6 +570,8 @@ class Installer {
 				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."admin") || in_array($value, $this->EXCLUDED_DIRS)) {
 					unset($apps[$key]);
 				}
+
+				$apps[$key] = 'admin/'.$value;
 			}
 		}
 
