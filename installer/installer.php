@@ -116,8 +116,8 @@ class Installer {
 					WConfig::save('config', CONFIG_DIR.'config.php');
 
 					// Save Route configuration
-					WConfig::set('route.default_front', array($route['front_app'], array()));
-					WConfig::set('route.default_admin', array($route['admin_app'], array()));
+					WConfig::set('route.default_front', $route['front_app']);
+					WConfig::set('route.default_admin', $route['admin_app']);
 					WConfig::save('route', CONFIG_DIR.'route.php');
 
 					// If success, Delete installer directory
