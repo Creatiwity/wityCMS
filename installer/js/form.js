@@ -350,6 +350,10 @@ $(document).ready(function() {
 
 			// This node is required if specified or if it's the root node
 			this.required = (options.required === true) || (options.root === true);
+
+			// getValues will returns the values of the "requires" node
+			this.requires = options.requires;
+
 			// Initialize the status to not yet validated, to avoid empty required node to be not validated at the beginning of the process
 			this.validated = NOT_YET_VALIDATED;
 			// A summary (optional) can be bound to each node, by default it's initialized to false
@@ -365,7 +369,8 @@ $(document).ready(function() {
 			// Special treatment for the 'equals' validator that need to bind two nodes
 			if (this.validateDatas.local && this.validateDatas.local.type === "equals") {
 				$.extend(true, this.indexed[this.validateDatas.local.options].validateDatas, this.validateDatas);
-				this.indexed[this.validateDatas.local.options].validateDatas.options = this.id;
+				this.indexed[this.validateDatas.local.options].validateDatas.local.options = this.id;
+				this.indexed[this.validateDatas.local.options].validateDatas.local.options.message = '';
 			}
 
 			// Build FormNode in DOM and in logic
@@ -673,6 +678,10 @@ $(document).ready(function() {
 				$.extend(values, this.childs[_i].getValues());
 			}
 
+			if (this.requires && this.indexed[this.requires]) {
+				$.extend(values, this.indexed[this.requires].getValues());
+			}
+
 			return values;
 		};
 
@@ -945,6 +954,7 @@ $(document).ready(function() {
 				}
 
 				if(response.group[this.validateDatas.remote].warning) {
+					validated = true;
 					this.displayNotes(response.group[this.validateDatas.remote].warning, 'text-warning');
 				}
 
