@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
 	<!-- WDate -->
-	<item id="now">now</item>
+	<item id="now">maintenant</item>
 	<item id="wdate_format">d/m/Y H:i:s</item>
 	<item id="wdate_years_ago">il y a %s ans</item>
 	<item id="wdate_year_ago">il y a un an</item>
