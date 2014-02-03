@@ -42,10 +42,10 @@ class WDatabase extends PDO {
 		} catch (PDOException $e) {
 			$message = utf8_encode($e->getMessage());
 			if ($message == "could not find driver") {
-				$message = "WityCMS was unable to find the PHP's <strong>PDO extension</strong> on your system. Please, activate PDO to run the script.";
+				$message = WLang::get('error_could_not_find_pdo');
 			}
 			
-			WNote::error('sql_conn_error', "Impossible to connect to the database MySQL.<br />".$message, 'debug, die');
+			WNote::error('sql_conn_failed', WLang::get('error_sql_conn', $message), 'debug, die');
 		}
 		
 		$this->tablePrefix = WConfig::get('database.prefix');

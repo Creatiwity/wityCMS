@@ -52,14 +52,15 @@ class WSystem {
 		if (!is_object(self::$templateInstance)) {
 			require_once SYS_DIR.'WTemplate/WTemplate.php';
 			try {
-				self::$templateInstance = new WTemplate(WITY_PATH, CACHE_DIR.'templates'.DS);
+				$cache_dir = CACHE_DIR.'templates'.DS;
+				self::$templateInstance = new WTemplate(WITY_PATH, $cache_dir);
 				
 				// Checks the compile directory in Debug mode
-				if (self::$templateInstance->getCompileDir() == '' && WConfig::get('config.debug')) {
-					WNote::info('system_template_init', "Impossible to create cache directory in ".CACHE_DIR.'templates'.DS.".");
+				if (self::$templateInstance->getCompileDir() == '') {
+					WNote::info('cache_template_failed', WLang::get('error_cache_template_failed', $cache_dir), 'debug');
 				}
 			} catch (Exception $e) {
-				WNote::error('system_template_init', $e->getMessage(), 'die');
+				WNote::error('template_init_error', $e->getMessage(), 'die');
 			}
 		}
 		
@@ -72,17 +73,16 @@ class WSystem {
 	 */
 	public static function getDB() {
 		if (!is_object(self::$dbInstance)) {
-			// Chargement des infos db
 			WConfig::load('database', SYS_DIR.'config'.DS.'database.php', 'php');
 			
-			$server = WConfig::get('database.server');
-			$dbname = WConfig::get('database.dbname');
-			$dsn = 'mysql:dbname='.$dbname.';host='.$server;
-			$user = WConfig::get('database.user');
+			$server   = WConfig::get('database.server');
+			$dbname   = WConfig::get('database.dbname');
+			$dsn      = 'mysql:dbname='.$dbname.';host='.$server;
+			$user     = WConfig::get('database.user');
 			$password = WConfig::get('database.pw');
 			
 			if (empty($server) || empty($dbname) || empty($user)) {
-				WNote::error('system_database_init', "Information is missing to connect to the database: please, check the server, database name or the user name in system/config/database.php.", 'die');
+				WNote::error('system_database_init', WLang::get('error_database_bad_credentials'), 'die');
 			}
 			
 			self::$dbInstance = new WDatabase($dsn, $user, $password);

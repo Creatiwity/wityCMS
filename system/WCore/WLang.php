@@ -245,15 +245,12 @@ class WLang {
 		
 		if (isset(self::$values[$name])) {
 			// Replace given parameters in the lang string
-			if (!empty($params)) {
+			if (!is_null($params)) {
 				if (strpos(self::$values[$name], '%s') !== false) {
-					if (!is_array($params)) {
-						$params = array(self::$values[$name], $params);
-					} else {
-						array_unshift($params, self::$values[$name]);
-					}
+					$args = func_get_args();
+					$args[0] = self::$values[$name];
 					
-					return call_user_func_array('sprintf', $params);
+					return call_user_func_array('sprintf', $args);
 				} else if (is_array($params)) {
 					$string = self::$values[$name];
 					foreach ($params as $key => $value) {
@@ -296,28 +293,25 @@ class WLang {
 	 */
 	public static function compile_lang($args) {
 		if (!empty($args)) {
+			// Replace the template variables in the string
+			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			
 			$data = explode('|', $args);
 			$id = array_shift($data);
 			
-			// Replace the template variables in the string
-			$id = WTemplateParser::replaceNodes($id, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
-			
-			// Find parameters to replace the %s in the lang string
-			$params = "";
-			if (!empty($data)) {
-				$args = '';
-				foreach ($data as $var) {
-					$var_parsed = WTemplateCompiler::parseVar(trim($var, '{}'));
-					if (!empty($var_parsed)) {
-						$args .= $var_parsed.', ';
+			if (strlen($id) > 0) {
+				// Find parameters to replace the %s in the lang string
+				$params = '';
+				if (!empty($data)) {
+					$args = '';
+					foreach ($data as $var) {
+						$args .= '"'.$var.'", ';
 					}
+					
+					$params = ', '.substr($args, 0, -2);
 				}
 				
-				$params = ', array('.$args.')';
-			}
-			
-			// Build final php lang string
-			if (strlen($id) > 0) {
+				// Build final php lang string
 				return '<?php echo WLang::get("'.$id.'"'.$params.'); ?>';
 			}
 		}

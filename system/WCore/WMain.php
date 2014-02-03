@@ -119,12 +119,13 @@ class WMain {
 				$error = true;
 			}
 		}
+		
 		if ($error) {
 			$route = WRoute::route();
 
 			if ($route['app'] != 'media') {
 				header('HTTP/1.0 404 Not Found');
-				WNote::error(404, 'The resource could not be found.', 'die');
+				WNote::error(404, WLang::get('error_404'), 'die');
 			}
 		}
 	}

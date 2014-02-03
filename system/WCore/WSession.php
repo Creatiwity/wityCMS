@@ -20,7 +20,7 @@ class WSession {
 	const REMEMBER_TIME = 604800; // 1 week
 	
 	/**
-	 * Minimum time betwen two POST requests
+	 * Minimum time between two POST requests
 	 */
 	const FLOOD_TIME = 2;
 	
@@ -33,11 +33,6 @@ class WSession {
 	 * Maximum login attempts
 	 */
 	const MAX_LOGIN_ATTEMPT = 3;
-	
-	/*
-	 * Inactivity time (minuts)
-	 */
-	//const ACTIVITY = 3;
 	
 	/**
 	 * States
@@ -71,7 +66,7 @@ class WSession {
 	}
 	
 	/**
-	 * Returns if the user is logged in
+	 * Is the user logged in?
 	 * 
 	 * @return boolean true if the user is logged in, false otherwise
 	 */
@@ -136,13 +131,13 @@ class WSession {
 	 * @param array $data data to store into $_SESSION
 	 */
 	public function setupSession($userid, $data) {
-		$_SESSION['userid']   = $userid;
-		$_SESSION['nickname'] = $data['nickname'];
-		$_SESSION['email']    = $data['email'];
-		$_SESSION['groupe']   = $data['groupe'];
-		$_SESSION['lang']     = $data['lang'];
-		$_SESSION['firstname']	= $data['firstname'];
-		$_SESSION['lastname']	= $data['lastname'];
+		$_SESSION['userid']    = $userid;
+		$_SESSION['nickname']  = $data['nickname'];
+		$_SESSION['email']     = $data['email'];
+		$_SESSION['groupe']    = $data['groupe'];
+		$_SESSION['lang']      = $data['lang'];
+		$_SESSION['firstname'] = $data['firstname'];
+		$_SESSION['lastname']  = $data['lastname'];
 		
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {
@@ -215,15 +210,19 @@ class WSession {
 			include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 			$userModel = new UserModel();
 			$data = $userModel->getUser($userid);
+			
 			if (!empty($data)) {
 				// Check hash
 				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
 					$this->setupSession($userid, $data);
+					
 					return true;
 				}
 			}
 		}
+		
 		$this->closeSession();
+		
 		return false;
 	}
 	
@@ -232,7 +231,7 @@ class WSession {
 	 *
 	 * @param string $nick nickname
 	 * @param string $pass password
-	 * @param boolean $environment optional value: true if we want to use environnement specific values to generate the hash
+	 * @param boolean $environment optional value: true if we want to use environment specific values to generate the hash
 	 * @return string the generated hash
 	 */
 	public function generate_hash($nick, $pass, $environment = true) {
@@ -247,9 +246,9 @@ class WSession {
 	}
 	
 	/**
-	 * Antiflood method
+	 * Anti-flood method
 	 * 
-	 * Checking the $_POST content to avoid multiple and repeating similar sending
+	 * Checking the $_POST content to avoid multiple and repeating similar form submissions.
 	 * 
 	 * @return boolean true if flood detected, false otherwise
 	 */
@@ -264,15 +263,17 @@ class WSession {
 			}
 			// Last request checking
 			else if (!empty($_SESSION['last_query']) && md5(serialize($_POST)) == $_SESSION['last_query']) {
-				WNote::info("Modération", "Vous avez déjà envoyé ces informations.", 'assign');
+				WNote::info('flood_duplicate', WLang::get('info_flood_duplicate'));
 				$flood = false;
 			}
 			// Flood time limit checking
 			else if (empty($_SESSION['access'][0]) && !empty($_SESSION['flood_time']) && $_SESSION['flood_time'] > time()) {
 				$exceptions = array('user');
 				$route = WRoute::route();
-				if (!in_array($route['app'], $exceptions)) { // Applications in $exceptions will bypass the flood checking
-					WNote::info('Modération', 'Veuillez respecter le délai de '.self::FLOOD_TIME.' secondes entre deux postes.', 'assign');
+				
+				// Applications in $exceptions will bypass the flood checking
+				if (!in_array($route['app'], $exceptions)) {
+					WNote::info('flood_wait', WLang::get('info_flood_wait', self::FLOOD_TIME));
 					$flood = false;
 				}
 			}
@@ -298,9 +299,9 @@ class WSession {
 	}
 	
 	/**
-	 * Updates flood time
+	 * Updates flood time.
 	 * 
-	 * @param int $limit tiestamp limit
+	 * @param int $limit timestamp limit
 	 */
 	public function upgrade_flood($limit) {
 		$_SESSION['flood_time'] = $limit;
@@ -324,66 +325,6 @@ class WSession {
 		
 		return $ip;
 	}
-	
-	/*
-	// Gestion des sessions actives pour connaitre le nombre de connectés
-	private function set_activity()
-	{
-		$sess_id = session_id();
-		$now     = time();
-		$limit   = $now + $this->online_time * 60;
-		$sql     = Fc_SQL::instance();
-		
-		// Supprime les utilisateurs innactifs
-		$sql->query('DELETE FROM '.fc_prefix.'online WHERE time < '.$now);
-		
-		// Status de l'utilisateur
-		if (isset($_SESSION['access']))
-			$status = (!empty($_SESSION['access'][0])) ? 2 : 1; // Admin / Membre
-		else
-			$status = 0; // Visiteur
-		
-		$req = $sql->query('
-			SELECT id 
-			FROM '.fc_prefix.'online 
-			WHERE id = "'.$sess_id.'" OR ip = "'.$_SESSION['ip'].'"
-		');
-		if ($sql->num($req) > 0) // Vérifie s'il existe déjà dans la table
-		{
-			// Met à jour l'entrée (temps et status)
-			$sql->query('
-				UPDATE '.fc_prefix.'online 
-				SET id = "'.$sess_id.'", time = '.$limit.', status = '.$status.', ip = "'.$_SESSION['ip'].'" 
-				WHERE id = "'.$sess_id.'" OR ip = "'.$_SESSION['ip'].'"
-			');
-		}
-		else
-		{
-			$sql->query('
-				INSERT INTO '.fc_prefix.'online (id, time, status, ip) 
-				VALUES ("'.$sess_id.'", '.$limit.', '.$status.', "'.$_SESSION['ip'].'")
-			');
-		}
-	}
-	
-	// Renvoie un tableau contenant le nombre d'admins/membres/visiteurs actifs
-	public function get_activity()
-	{
-		$sql = Fc_SQL::instance();
-		
-		if (!isset($this->online))
-		{
-			$this->online = array(0, 0, 0);
-			$req = $sql->query('SELECT status, COUNT(*) FROM '.fc_prefix.'online GROUP BY status');
-			while (list($status, $count) = $this->sql->fetch($req))
-			{
-				$this->online[$status] = $count;
-			}
-		}
-		
-		return $this->online;
-	}
-	*/
 }
 
 ?>
