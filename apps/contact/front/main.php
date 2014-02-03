@@ -72,7 +72,7 @@ class ContactController extends WController {
 							array(
 								'from' => array($data['from_email'], $data['from_name']),
 								'to' => $data['to'],
-								'subject' => WLang::get('mail_for_admin_subject', array(WConfig::get('config.site_name'), $data['email_subject'])),
+								'subject' => WLang::get('mail_for_admin_subject', WConfig::get('config.site_name'), $data['email_subject']),
 								'body' => WLang::get('mail_for_admin_body', array(
 									'site'    => WConfig::get('config.site_name'),
 									'base'    => WRoute::getBase(),
