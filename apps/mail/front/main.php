@@ -228,10 +228,7 @@ class MailController extends WController {
 		} else {
 			return array(
 				'success' => true,
-				'hashes' => array(
-					'global' =>	self::$hash_mailing_list,
-					'specifics' => $specifics_hashes
-				)
+				'hashes' => $specifics_hashes
 			);
 		}
 	}
