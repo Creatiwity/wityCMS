@@ -18,8 +18,26 @@
 	<item id="wdate_seconds_ago">%s seconds ago</item>
 	<item id="wdate_second_ago">1 second ago</item>
 	
-	<!-- Errors -->
-	<item id="error_404"><![CDATA[Sorry but WityCMS was not able to find the requested page.
+	<!-- Notes -->
+	<item id="info_user_login_required">This area requires to be logged in.</item>
+	<item id="info_flood_duplicate">You already sent out this form data.</item>
+	<item id="info_flood_wait">Please, wait %s seconds between two posts.</item>
+	
+	<item id="error_404"><![CDATA[Sorry but WityCMS was not able to find the requested resource.
 <br /><br />
 <a href="/">Back to home</a>]]></item>
+	<item id="error_app_no_manifest">The manifest of the application "%s" cannot be found.</item>
+	<item id="error_app_no_method">The method corresponding to the action "%s" cannot be found in the %s application.</item>
+	<item id="error_app_no_suitable_action">No suitable action to trigger was found in the application %s.</item>
+	<item id="error_cache_manifest_failed">Unable to open the cache target "%s".</item>
+	<item id="error_cache_template_failed">Unable to create cache directory in "%s".</item>
+	<item id="error_app_no_access">You need more privileges to access the action "%s" in the application %s.</item>
+	<item id="error_app_logout_required">You need to be logged out to access the action "%s" in the application %s.</item>
+	<item id="error_could_not_find_pdo"><![CDATA[WityCMS was unable to find the PHP's <strong>PDO extension</strong> on your system. Please, activate PDO to run the script.]]></item>
+	<item id="error_sql_conn_failed"><![CDATA[Impossible to connect to the MySQL database.<br />%s]]></item>
+	<item id="error_database_bad_credentials">Information is missing to connect to the database: please, check the server, or the database name or the user name in "system/config/database.php".</item>
+	<item id="error_theme_not_found">WResponse::setTheme(): The theme "%s" does not exist.</item>
+	<item id="error_theme_empty">WResponse::render(): No theme given or it was not found.</item>
+	<item id="error_final_render_failed">An error was encountered during the final response rendering: %s.</item>
+	<item id="error_bad_app_structure">The application "%s" contains a structural error: it has to have a main controller class inheriting from the abstract class WController.</item>
 </lang>

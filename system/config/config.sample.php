@@ -1,17 +1,18 @@
 <?php
-
 /**
- * config configuration file
+ * Sample configuration file for system/config/config.php
+ * 
+ * This file defines the main configuration values for WityCMS.
  */
 
-$config = array (
-  'base' => 'http://localhost/WityCMS/',
+$config = array(
+  'base'      => 'http://www.mysite.com/WityCMS',
   'site_name' => 'WityCMS',
-  'theme' => 'grafx',
-  'lang' => 'fr-FR',
-  'timezone' => 'Europe/Paris',
-  'email' => 'no-reply@WityCMS.com',
-  'debug' => true,
+  'theme'     => 'grafx',
+  'lang'      => 'fr_FR',
+  'timezone'  => 'Europe/Paris',
+  'email'     => 'contact@mysite.com',
+  'debug'     => true
 );
 
 ?>

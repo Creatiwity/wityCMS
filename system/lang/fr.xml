@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
 	<!-- WDate -->
-	<item id="now">now</item>
+	<item id="now">maintenant</item>
 	<item id="wdate_format">d/m/Y H:i:s</item>
 	<item id="wdate_years_ago">il y a %s ans</item>
 	<item id="wdate_year_ago">il y a un an</item>
@@ -18,8 +18,26 @@
 	<item id="wdate_seconds_ago">il y a %s secondes</item>
 	<item id="wdate_second_ago">il y a une seconde</item>
 	
-	<!-- Errors -->
+	<!-- Notes -->
+	<item id="info_user_login_required">Cette zone nécessite une authentification.</item>
+	<item id="info_flood_duplicate">Vous avez déjà envoyé ces informations de formulaire.</item>
+	<item id="info_flood_wait">Merci d'attendre un délai de %s seconds entre deux envois de formulaire.</item>
+	
 	<item id="error_404"><![CDATA[Désolé mais WityCMS n'a pas été en mesure de trouver la page demandée.
 <br /><br />
 <a href="/">Retour à l'accueil</a>]]></item>
+	<item id="error_app_no_manifest">Le manifeste de l'application "%s" n'a pas pu être trouvé.</item>
+	<item id="error_app_no_method">La méthode PHP correspondant à l'action "%s" n'a pas pu être trouvée dans l'application %s.</item>
+	<item id="error_app_no_suitable_action">Aucune action appropriée n'a pu être trouvée dans l'application %s.</item>
+	<item id="error_cache_manifest_failed">Impossible d'ouvrir le fichier de cache "%s".</item>
+	<item id="error_cache_template_failed">Impossible de créer le répertoire de cache "%s".</item>
+	<item id="error_app_no_access">Vous avez besoin de plus de privilèges pour accéder à l'action "%s" dans l'application %s.</item>
+	<item id="error_app_logout_required">Vous devez vous déconnecter pour accéder à l'action "%s" dans l'application %s.</item>
+	<item id="error_could_not_find_pdo"><![CDATA[WityCMS n'a pas été en mesure de charger <strong>l'extension PDO de PHP</strong> sur votre système. Veuillez activier PDO pour exécuter le script.]]></item>
+	<item id="error_sql_conn_failed"><![CDATA[Impossible de se connecter à la base de données MySQL.<br />%s]]></item>
+	<item id="error_database_bad_credentials">Des informations sont manquantes pour se connecter à la base de données : veuillez vérifier les données serveur, dbname ou username dans le fichier "system/config/database.php".</item>
+	<item id="error_theme_not_found">WResponse::setTheme(): Le thème "%s" n'existe pas.</item>
+	<item id="error_theme_empty">WResponse::render(): Le thème n'a pas été spécifié ou n'a pas pu être trouvé.</item>
+	<item id="error_final_render_failed">Une erreur s'est produite lors de l'affichage final du site : %s.</item>
+	<item id="error_bad_app_structure">L'application "%s" contient une erreur structurelle : elle doit posséder une classe principale Controller héritant de la classe abstraite WController.</item>
 </lang>

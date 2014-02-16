@@ -36,7 +36,7 @@ class WResponse {
 			$this->theme_name = $theme;
 			$this->theme_dir = str_replace(WITY_PATH, '', THEMES_DIR).$theme.DS;
 		} else {
-			WNote::error('response_set_theme', "WResponse::setTheme(): The theme \"".$theme."\" does not exist.", 'plain');
+			WNote::error('theme_not_found', WLang::get('error_theme_not_found', $theme), 'plain');
 			return false;
 		}
 
@@ -88,7 +88,7 @@ class WResponse {
 
 		// Check theme
 		if (empty($this->theme_name)) {
-			WNote::error('response_theme', "WResponse::render(): No theme given or it was not found.", 'plain');
+			WNote::error('theme_empty', WLang::get('error_theme_empty'), 'plain');
 		}
 
 		// Flush the notes waiting for their own view
@@ -131,7 +131,7 @@ class WResponse {
 			
 			echo $html;
 		} catch (Exception $e) {
-			WNote::error('response_final_render', "An error was encountered during the final response rendering: ".$e->getMessage(), 'die');
+			WNote::error('final_render_failed', WLang::get('error_final_render_failed', $e->getMessage()), 'die');
 			return false;
 		}
 

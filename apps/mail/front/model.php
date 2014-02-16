@@ -224,7 +224,22 @@ class MailModel {
 			$this->storeExecutedAction($result);
 			$this->actionMail($result['hash_mail']);
 
-			return $result['url'];
+			$prepend = $result['url'];
+			$append = '';
+
+			if (strrpos($result['url'], '#')) {
+				$url_temp = explode('#', $result['url']);
+				$prepend = $url_temp[0];
+				$append = '#'.$url_temp[1];
+			}
+
+			if (!strrpos($prepend, '?')) {
+				$prepend .= '?'
+			} else {
+				$prepend .= '&'
+			}
+
+			return ($prepend.'hash_mail='.$result['hash_mail'].'&hash_action='.$result['hash_action'].$append);
 		}
 
 		return '';
