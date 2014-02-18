@@ -1,28 +1,20 @@
-# Config OVH
-SetEnv PHP_VER 5
-SetEnv REGISTER_GLOBALS 0
 
-# Utilisation d'utf8 par défaut
+# Use utf8 by default
 AddDefaultCharset UTF-8
 
-# Rules
 <IfModule mod_rewrite.c>
-	# Activation du module rewriting
+	# Activate rewriting
 	RewriteEngine on
 	
+	# Rule to redirect on www site
 	#RewriteCond %{HTTP_HOST} ^site\.com$
 	#RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
 	
+	# Redirect everything but a physical file to WityCMS
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule . index.php [L]
 </IfModule>
 
-# Erreurs
-#ErrorDocument 500 /Error/500 # Internal Server Error
-#ErrorDocument 408 /Error/408 # Serveur surchargé
-#ErrorDocument 405 /Error/405 # Method Not Allowed
-#ErrorDocument 404 /Error/404 # Page not found
-#ErrorDocument 403 /Error/403 # Forbidden
-#ErrorDocument 401 /Error/401 # Unauthorized
-#ErrorDocument 400 /Error/400 # Bad request
+# Errors
+ErrorDocument 404 index.php?app=404
