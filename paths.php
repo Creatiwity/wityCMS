@@ -52,7 +52,7 @@ define('THEMES_DIR', WITY_PATH.'themes'.DS);
 /**
  * Logs location
  */
-define('LOGS_DIR', WITY_PATH.'helpers'.DS);
+define('LOGS_DIR', SYS_DIR);
 
 /**
  * Cache directory location
