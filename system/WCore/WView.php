@@ -117,7 +117,9 @@ class WView {
 	 *
 	 * @param string $file file that will be used for template compiling
 	 */
-	public function setTemplate($file) {
+	public function setTemplate($template) {
+		$file = $template;
+		
 		// Use system directory separator
 		if (DS != '/') {
 			$file = str_replace('/', DS, $file);
@@ -126,6 +128,15 @@ class WView {
 		// Format the file asked
 		if (strpos($file, DS) === false) {
 			$file = $this->context['directory'].'templates'.DS.$file.'.html';
+			
+			if (!$this->context['admin']) {
+				$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->context['app-name'].DS.$template.'.html';
+				
+				// Allow template overriding from theme
+				if (file_exists($theme_tpl)) {
+					$file = $theme_tpl;
+				}
+			}
 		}
 
 		$file = str_replace(WITY_PATH, '', $file);
