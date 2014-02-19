@@ -53,7 +53,6 @@ class Installer {
 			case 'INIT_INSTALLER':
 				if (!class_exists('PDO')) {
 					$this->view->error('installer', $data['installer'], 'System failure', 'PDO class cannot be found. This feature has been introduced since PHP5.1+');
-					return;
 				}
 				break;
 
@@ -82,7 +81,7 @@ class Installer {
 					$error = $db->errorInfo();
 					if (!is_null($error[0]) && !$error[0]!=0) {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
-						return;
+						break;
 					}
 
 					// Save Database configuration
@@ -101,11 +100,11 @@ class Installer {
 						$userModel = new UserAdminModel();
 						if (!$userModel->createUser($user)) {
 							$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create your administrator account. Please, check your database credentials.');
-							return;
+							break;
 						}
 					} else {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of WityCMS.');
-						return;
+						break;
 					}
 
 					// Save General configuration
@@ -143,11 +142,11 @@ class Installer {
 						$this->view->success('installer', $data['installer'], 'Congratulations', 'Installation finished !');
 					} else {
 						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
-						return;
+						break;
 					}
 				} else {
 					$this->view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
-					return;
+					break;
 				}
 				break;
 
