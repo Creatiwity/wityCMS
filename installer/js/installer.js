@@ -191,7 +191,7 @@ $(window).ready(function() {
 					childs: [
 						{
 							id: "nickname",
-							name: "Pseudo",
+							name: "Nickname",
 							required: true,
 
 							validate: {
