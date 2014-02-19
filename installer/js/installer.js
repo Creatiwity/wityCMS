@@ -4,7 +4,6 @@ $(window).ready(function() {
 
 		var installer = {
 			id: "witycms",
-			debug: true,
 
 			childs: [
 				{
