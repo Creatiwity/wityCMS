@@ -77,12 +77,12 @@ var Form, FormNode;
 				that.handlers.success.push([$this, handler]);
 			});
 
-			// Register all failure actions available in the DOM
-			$('[data-wity-form-' + id + '-onfailure]').each(function () {
-				var $this = $(this), handler = $this.attr('data-wity-form-' + id + '-onfailure');
+			// Register all error actions available in the DOM
+			$('[data-wity-form-' + id + '-onerror]').each(function () {
+				var $this = $(this), handler = $this.attr('data-wity-form-' + id + '-onerror');
 
-				that.handlers.failure = that.handlers.failure || [];
-				that.handlers.failure.push([$this, handler]);
+				that.handlers.error = that.handlers.error || [];
+				that.handlers.error.push([$this, handler]);
 			});
 
 			// Root node
@@ -233,7 +233,7 @@ var Form, FormNode;
 		};
 
 		// Display notes
-		Form.prototype.displayNotes = function(notes) {
+		Form.prototype.displayNotes = function(notes, classes) {
 			var that = this;
 
 			if (this.$alert) {
@@ -845,7 +845,7 @@ var Form, FormNode;
 		FormNode.prototype.validate = function(force) {
 			var _i, _len, empty, regexp, compareValue,
 				localValid = true,	// If true, local validation passed successfully
-				localMessage,		// Contains the local message used to explain the failure to the user
+				localMessage,		// Contains the local message used to explain the error to the user
 				remoteValid = true, // If true, remote validation passed successfully
 				that = this,
 				options,
