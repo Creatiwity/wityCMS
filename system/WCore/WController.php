@@ -155,7 +155,7 @@ abstract class WController {
 	 * @return string application's name
 	 */
 	public function getAppName() {
-		return $this->context['name'];
+		return $this->context['app-name'];
 	}
 
 	/**

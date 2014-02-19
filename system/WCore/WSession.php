@@ -239,7 +239,7 @@ class WSession {
 		
 		// Link the hash to the user's environment
 		if ($environment) {
-			$string .= $this->getIP().$_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']."*";
+			$string .= $_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']."*";
 		}
 		
 		return sha1($string);

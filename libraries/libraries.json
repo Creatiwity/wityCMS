@@ -5,12 +5,10 @@
 		"themes": "witycms/themes.plugin",
 		"jquery": "jquery-1.11.0/jquery-1.11.0",
 		"bootstrap": "bootstrap-3.1.0/js/bootstrap",
-		"modal": "bootstrap-modal-2.2.0/js/bootstrap3-patch",
-		"bootstrap-modal-core": "bootstrap-modal-2.2.0/js/bootstrap-modal",
+		"modal": "bootstrap-modal-2.2.0/js/bootstrap3-patch"
 	},
 	"shim": {
-		"bootstrap": ["jquery"],
-		"bootstrap-modal-core": ["jquery", "bootstrap", "bootstrap-modal-2.2.0/js/bootstrap-modalmanager"]
+		"bootstrap": ["jquery"]
 	},
 	"waitSeconds": 15
 }

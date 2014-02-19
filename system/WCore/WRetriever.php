@@ -214,7 +214,7 @@ class WRetriever {
 			// App's controller must inherit WController
 			if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
 				$context = array(
-					'name'       => $app_name,
+					'app-name'   => $app_name,
 					'directory'  => $app_dir,
 					'controller' => $app_class,
 					'admin'      => $admin,

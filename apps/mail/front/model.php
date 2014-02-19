@@ -36,7 +36,7 @@ class MailModel {
 			FROM mail_configuration
 		');
 		$prep->execute();
-		$results = $prep->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
+		$results = $prep->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 		$results = array_map('reset', $results);
 
 		return $results;
@@ -234,9 +234,9 @@ class MailModel {
 			}
 
 			if (!strrpos($prepend, '?')) {
-				$prepend .= '?'
+				$prepend .= '?';
 			} else {
-				$prepend .= '&'
+				$prepend .= '&';
 			}
 
 			return ($prepend.'hash_mail='.$result['hash_mail'].'&hash_action='.$result['hash_action'].$append);

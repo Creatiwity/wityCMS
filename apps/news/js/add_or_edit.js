@@ -1,5 +1,8 @@
-require(['jquery'], function($) {
+/**
+ * Add or edit an article
+ */
 
+require(['jquery'], function($) {
 	$(document).ready( function() {
 		$("#news_title").on('keyup blur', function() {
 			var value = $(this).val();
@@ -23,5 +26,4 @@ require(['jquery'], function($) {
 			$("#news_url").val(value);
 		});
 	});
-
 });

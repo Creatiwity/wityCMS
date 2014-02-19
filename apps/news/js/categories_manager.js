@@ -1,5 +1,10 @@
-require(['jquery'], function($) {
+/**
+ * Category manager
+ * 
+ * @author Julien Blatecky <julien.blatecky@creatiwity.net>
+ */
 
+require(['jquery'], function($) {
 	$(document).ready(function() {
 		var model, currentEditedRow, backupRow, selectParent;
 
@@ -34,8 +39,18 @@ require(['jquery'], function($) {
 					} else {
 						currentData = "0";
 					}
+					
+					// Remove current cat value
+					if (datas != null && datas['news_cat_id']) {
+						var regexp = new RegExp('<option value="'+datas['news_cat_id']+'">[^<>]*</option>'),
+							select = selectParent.replace(regexp, '');
+					} else {
+						var select = selectParent;
+					}
+					
+					select = select.replace('value="'+currentData+'"', 'value="'+currentData+'" selected="selected"');
 
-					row.append($('<td>'+selectParent+'</td>').val(currentData));
+					row.append($('<td>'+select+'</td>'));
 				}
 			}
 
@@ -82,5 +97,4 @@ require(['jquery'], function($) {
 			clean();
 		});
 	});
-
 });
