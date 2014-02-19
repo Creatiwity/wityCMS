@@ -366,11 +366,23 @@ var Form, FormNode;
 			// validateDatas store all the validation datas needed to validate this node locally and/or remotely
 			this.validateDatas = options.validate || {};
 
+			// If true, synchronize not validated state view on childs
+			this.errorsOnChilds = options.errorsOnChilds;
+
 			// Special treatment for the 'equals' validator that need to bind two nodes
 			if (this.validateDatas.local && this.validateDatas.local.type === "equals") {
 				$.extend(true, this.indexed[this.validateDatas.local.options].validateDatas, this.validateDatas);
 				this.indexed[this.validateDatas.local.options].validateDatas.local.options = this.id;
 				this.indexed[this.validateDatas.local.options].validateDatas.local.options.message = '';
+			}
+
+			// Stores all fields that we must try to validate after this one
+			this.validateAfter = [];
+
+			this.validEmpty = options.validEmpty;
+
+			if (this.requires) {
+				this.indexed[this.requires].validateAfter.push(this.id);
 			}
 
 			// Build FormNode in DOM and in logic
@@ -410,10 +422,11 @@ var Form, FormNode;
 
 					// Pushing view updater to update tab status
 					this.views.push({
-						updater: function() {
+						updater: function(state) {
+							var vstate = state || that.validated;
 							$tabStatus.removeClass('glyphicon-remove glyphicon-ok');
 
-							switch (that.validated) {
+							switch (vstate) {
 								case NOT_YET_VALIDATED:
 								$tabStatus.addClass('glyphicon-remove');
 								break;
@@ -532,10 +545,11 @@ var Form, FormNode;
 
 				// Push the field updater in the views stack
 				this.views.push({
-					updater: function() {
+					updater: function(state) {
+						var vstate = state || that.validated;
 						$fieldContainer.removeClass('has-success has-error has-warning');
 
-						switch (that.validated) {
+						switch (vstate) {
 							case NOT_YET_VALIDATED:
 							break;
 
@@ -595,11 +609,12 @@ var Form, FormNode;
 
 				// Push the summary view to the view stack of this node
 				this.views.push({
-					updater: function() {
+					updater: function(state) {
+						var vstate = state || that.validated;
 						$summaryLi.removeClass('text-success text-danger text-warning text-primary text-muted');
 						$summaryStatus.removeClass('glyphicon-remove glyphicon-ok');
 
-						switch (that.validated) {
+						switch (vstate) {
 							case NOT_YET_VALIDATED:
 							if (that.required) {
 								$summaryLi.addClass('text-primary');
@@ -842,7 +857,8 @@ var Form, FormNode;
 		};
 
 		// Validate function
-		FormNode.prototype.validate = function() {
+		// force parameter forces validate to run even if the content hasn't changed
+		FormNode.prototype.validate = function(force) {
 			var _i, _len, empty, regexp, compareValue,
 				localValid = true,	// If true, local validation passed successfully
 				localMessage,		// Contains the local message used to explain the failure to the user
@@ -854,7 +870,7 @@ var Form, FormNode;
 
 			// Check if the value changed and synchronize the field value with the internal one
 			// If the value didn't change, no need to try validating again
-			if (this.hasChanged(true)) {
+			if ((((force && (this.validated !== NOT_YET_VALIDATED || this.validEmpty)) || !force) && this.hasChanged(true)) || (force && this.validated !== NOT_YET_VALIDATED)) {
 				// Validating state
 				this.validated = VALIDATING;
 
@@ -864,9 +880,12 @@ var Form, FormNode;
 					// Empty and required
 					this.validated = NOT_VALIDATED_EMPTY_REQUIRED;
 					localValid = false;
-				} else if (empty) {
+				} else if (empty && !this.validEmpty) {
 					// Empty but not required
 					this.validated = EMPTY_NOT_REQUIRED;
+					localValid = false;
+				} else if (this.requires && this.indexed[this.requires].validated !== VALIDATED) {
+					this.validated = NOT_VALIDATED;
 					localValid = false;
 				} else {
 					// Local validation needed
@@ -916,6 +935,11 @@ var Form, FormNode;
 							}
 
 							that.render();
+
+							for (_i = 0, _len = this.validateAfter.length; _i < _len; ++_i) {
+								this.indexed[this.validateAfter[_i]].validate(true);
+							}
+
 							that.triggerParentUpdate();
 						} ,this);
 
@@ -930,6 +954,10 @@ var Form, FormNode;
 				}
 
 				this.render();
+
+				for (_i = 0, _len = this.validateAfter.length; _i < _len; ++_i) {
+					this.indexed[this.validateAfter[_i]].validate(true);
+				}
 			}
 
 			// Must be triggered in any case
@@ -998,11 +1026,17 @@ var Form, FormNode;
 		/**
 		 * Render method will update all views that are placed in the views stack of this node
 		 */
-		FormNode.prototype.render = function() {
-			var _i, _len;
+		FormNode.prototype.render = function(state, onChilds) {
+			var _i, _len, realState = state || this.validated;
 
 			for (_i = 0, _len = this.views.length; _i < _len; ++_i) {
-				this.views[_i].updater();
+				this.views[_i].updater(state);
+			}
+
+			if (this.errorsOnChilds || onChilds) {
+				for (_i = 0, _len = this.childs.length; _i < _len; ++_i) {
+					this.childs[_i].render(realState, true);
+				}
 			}
 		};
 

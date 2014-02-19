@@ -116,6 +116,7 @@ $(window).ready(function() {
 							virtual: true,
 							required: true,
 							summary: true,
+							errorsOnChilds: true,
 							hr: true,
 
 							validate: {
@@ -175,6 +176,7 @@ $(window).ready(function() {
 							id: "dbprefix",
 							name: "Tables prefix",
 							requires: "dbname",
+							validEmpty: true,
 
 							validate: {
 								remote: 'tables_prefix'
