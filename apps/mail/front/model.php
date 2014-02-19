@@ -234,9 +234,9 @@ class MailModel {
 			}
 
 			if (!strrpos($prepend, '?')) {
-				$prepend .= '?'
+				$prepend .= '?';
 			} else {
-				$prepend .= '&'
+				$prepend .= '&';
 			}
 
 			return ($prepend.'hash_mail='.$result['hash_mail'].'&hash_action='.$result['hash_action'].$append);
