@@ -211,8 +211,13 @@ $(window).ready(function() {
 							required: true,
 							virtual: true,
 							summary: true,
+							errorsOnChilds: true,
 
 							validate: {
+								local: {
+									type: 'equals',
+									message: "Password and confirmation are different."
+								},
 								remote: 'user_password'
 							},
 
@@ -230,14 +235,6 @@ $(window).ready(function() {
 									name: "Confirmation",
 									required: true,
 									summary: false,
-
-									validate: {
-										local: {
-											type: "equals",
-											options: "password",
-											message: "Password and confirmation are different."
-										}
-									},
 
 									type: "password"
 								}

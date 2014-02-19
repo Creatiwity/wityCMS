@@ -369,13 +369,6 @@ var Form, FormNode;
 			// If true, synchronize not validated state view on childs
 			this.errorsOnChilds = options.errorsOnChilds;
 
-			// Special treatment for the 'equals' validator that need to bind two nodes
-			if (this.validateDatas.local && this.validateDatas.local.type === "equals") {
-				$.extend(true, this.indexed[this.validateDatas.local.options].validateDatas, this.validateDatas);
-				this.indexed[this.validateDatas.local.options].validateDatas.local.options = this.id;
-				this.indexed[this.validateDatas.local.options].validateDatas.local.options.message = '';
-			}
-
 			// Stores all fields that we must try to validate after this one
 			this.validateAfter = [];
 
@@ -847,24 +840,17 @@ var Form, FormNode;
 			this.parent.updateStatus();
 		};
 
-		// Return true if the node formNodeId has the same value than the value of this node, change the validated status of formNodeId
-		FormNode.prototype.equals = function(formNodeId) {
-			var node = this.indexed[formNodeId], valid = (node.value === this.value);
-			node.validated = valid ? VALIDATED : NOT_VALIDATED;
-			node.render();
-
-			return valid;
-		};
-
 		// Validate function
 		// force parameter forces validate to run even if the content hasn't changed
 		FormNode.prototype.validate = function(force) {
 			var _i, _len, empty, regexp, compareValue,
 				localValid = true,	// If true, local validation passed successfully
 				localMessage,		// Contains the local message used to explain the failure to the user
-				remoteValid = true,
+				remoteValid = true, // If true, remote validation passed successfully
 				that = this,
-				options; // If true, remote validation passed successfully
+				options,
+				values,
+				_val;
 
 			empty = this.isEmpty();
 
@@ -897,7 +883,15 @@ var Form, FormNode;
 							localMessage = this.validateDatas.local.message;
 						} else if (this.validateDatas.local.type === "equals") {
 							// Equals validation
-							localValid = this.equals(this.validateDatas.local.options);
+							values = this.getValues();
+
+							$.each(values, function(index) {
+								if (_val) {
+									localValid = localValid && (_val === values[index]);
+								} else {
+									_val = values[index];
+								}
+							});
 							localMessage = this.validateDatas.local.message;
 						}
 
