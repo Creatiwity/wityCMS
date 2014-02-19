@@ -569,9 +569,9 @@ class Installer {
 			foreach ($apps as $key => $value) {
 				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."admin") || in_array($value, $this->EXCLUDED_DIRS)) {
 					unset($apps[$key]);
+				} else {
+					$apps[$key] = 'admin/'.$value;
 				}
-
-				$apps[$key] = 'admin/'.$value;
 			}
 		}
 
