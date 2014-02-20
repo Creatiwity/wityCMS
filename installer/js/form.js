@@ -1,19 +1,19 @@
 /**
- * Script for Installer module
+ * Form generator
  *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4
+ * @version 0.4.0-20-02-2014
  */
 var Form, FormNode;
 
-	(function(){
-		// FormNode states declaration (like enum)
-	var	NOT_YET_VALIDATED = 0,				// Field never focused
-		NOT_VALIDATED = 1,					// Field not validated
-		NOT_VALIDATED_EMPTY_REQUIRED = 2,	// Field required and empty
-		VALIDATING = 3,						// Field being validated, maybe ajax validation
-		VALIDATED = 4,						// Validated
-		EMPTY_NOT_REQUIRED = 5;				// Empty but not required
+(function(){
+	// FormNode states declaration (like enum)
+	var	NOT_YET_VALIDATED = 0,            // Field never focused
+		NOT_VALIDATED = 1,                // Field not validated
+		NOT_VALIDATED_EMPTY_REQUIRED = 2, // Field required and empty
+		VALIDATING = 3,                   // Field being validated, maybe ajax validation
+		VALIDATED = 4,                    // Validated
+		EMPTY_NOT_REQUIRED = 5;           // Empty but not required
 
 	/**
 	 * Form class manages the whole form logic and view and initializes the FormNode elements
@@ -135,7 +135,7 @@ var Form, FormNode;
 		Form.prototype.setButtonStatus = function(state) {
 			var that = this;
 
-			if(!state) {
+			if (!state) {
 				this.debug('Form:%s submit button DISABLED', this.id);
 				this.$submit.button('remaining')
 				setTimeout(function() {that.$submit.attr("disabled", "disabled");}, 0);
@@ -187,7 +187,7 @@ var Form, FormNode;
 				}
 
 				//process callback ?
-				if(callback) {
+				if (callback) {
 					return callback.call(context, json);
 				}
 			};
@@ -207,21 +207,21 @@ var Form, FormNode;
 			var validated = false;
 
 			if (installerData && installerData[this.id]) {
-				if(installerData[this.id].success) {
+				if (installerData[this.id].success) {
 					validated = true;
 				}
 
-				if(installerData[this.id].warning) {
+				if (installerData[this.id].warning) {
 					this.displayNotes(installerData[this.id].warning, 'alert-warning');
 				}
 
-				if(installerData[this.id].error) {
+				if (installerData[this.id].error) {
 					validated = false;
 					this.displayNotes(installerData[this.id].error, 'alert-danger');
 					this.finishError();
 				}
 
-				if(installerData[this.id].info) {
+				if (installerData[this.id].info) {
 					this.displayNotes(installerData[this.id].success, 'alert-info');
 				}
 			}
@@ -545,25 +545,25 @@ var Form, FormNode;
 
 						switch (vstate) {
 							case NOT_YET_VALIDATED:
-							break;
+								break;
 
 							case NOT_VALIDATED:
-							$fieldContainer.addClass('has-error');
-							break;
+								$fieldContainer.addClass('has-error');
+								break;
 
 							case NOT_VALIDATED_EMPTY_REQUIRED:
-							$fieldContainer.addClass('has-error');
-							break;
+								$fieldContainer.addClass('has-error');
+								break;
 
 							case VALIDATING:
-							break;
+								break;
 
 							case VALIDATED:
-							$fieldContainer.addClass('has-success');
-							break;
+								$fieldContainer.addClass('has-success');
+								break;
 
 							case EMPTY_NOT_REQUIRED:
-							break;
+								break;
 						}
 
 						if (that.helpMessage !== '') {
@@ -610,32 +610,32 @@ var Form, FormNode;
 
 						switch (vstate) {
 							case NOT_YET_VALIDATED:
-							if (that.required) {
-								$summaryLi.addClass('text-primary');
-							}
-							break;
+								if (that.required) {
+									$summaryLi.addClass('text-primary');
+								}
+								break;
 
 							case NOT_VALIDATED:
-							$summaryLi.addClass('text-danger');
-							$summaryStatus.addClass('glyphicon-remove');
-							break;
+								$summaryLi.addClass('text-danger');
+								$summaryStatus.addClass('glyphicon-remove');
+								break;
 
 							case NOT_VALIDATED_EMPTY_REQUIRED:
-							$summaryLi.addClass('text-danger');
-							$summaryStatus.addClass('glyphicon-remove');
-							break;
+								$summaryLi.addClass('text-danger');
+								$summaryStatus.addClass('glyphicon-remove');
+								break;
 
 							case VALIDATING:
-							$summaryLi.addClass('text-info');
-							break;
+								$summaryLi.addClass('text-info');
+								break;
 
 							case VALIDATED:
-							$summaryLi.addClass('text-success');
-							$summaryStatus.addClass('glyphicon-ok');
-							break;
+								$summaryLi.addClass('text-success');
+								$summaryStatus.addClass('glyphicon-ok');
+								break;
 
 							case EMPTY_NOT_REQUIRED:
-							break;
+								break;
 						}
 					}
 				});
@@ -679,7 +679,7 @@ var Form, FormNode;
 		FormNode.prototype.getValues = function() {
 			var _i, _len, values = {};
 
-			if(this.$field && this.$field.length > 0) {
+			if (this.$field && this.$field.length > 0) {
 				values[this.id] = this.$field.val();
 			}
 
@@ -775,7 +775,7 @@ var Form, FormNode;
 			var _i, _len;
 
 			if (this.$field && this.$field.length > 0) {
-				if(this.$field.is(':focus')) {
+				if (this.$field.is(':focus')) {
 					return true;
 				}
 			}
@@ -845,8 +845,8 @@ var Form, FormNode;
 		// force parameter forces validate to run even if the content hasn't changed
 		FormNode.prototype.validate = function(force) {
 			var _i, _len, empty, regexp, compareValue,
-				localValid = true,	// If true, local validation passed successfully
-				localMessage,		// Contains the local message used to explain the error to the user
+				localValid = true,  // If true, local validation passed successfully
+				localMessage,       // Contains the local message used to explain the error to the user
 				remoteValid = true, // If true, remote validation passed successfully
 				that = this,
 				options,
@@ -972,21 +972,21 @@ var Form, FormNode;
 			this.helpMessage = '';
 
 			if (response.group && response.group[this.validateDatas.remote]) {
-				if(response.group[this.validateDatas.remote].success) {
+				if (response.group[this.validateDatas.remote].success) {
 					validated = true;
 				}
 
-				if(response.group[this.validateDatas.remote].warning) {
+				if (response.group[this.validateDatas.remote].warning) {
 					validated = true;
 					this.displayNotes(response.group[this.validateDatas.remote].warning, 'text-warning');
 				}
 
-				if(response.group[this.validateDatas.remote].error) {
+				if (response.group[this.validateDatas.remote].error) {
 					validated = false;
 					this.displayNotes(response.group[this.validateDatas.remote].error, 'text-danger');
 				}
 
-				if(response.group[this.validateDatas.remote].info) {
+				if (response.group[this.validateDatas.remote].info) {
 					this.displayNotes(response.group[this.validateDatas.remote].success, 'text-info');
 				}
 			}
