@@ -142,6 +142,7 @@ var Form, FormNode;
 			} else {
 				this.debug('Form:%s submit button ENABLED', this.id);
 				this.$submit.button('reset');
+				setTimeout(function() {that.$submit.removeAttr("disabled");}, 0);
 			}
 		};
 
