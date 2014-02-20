@@ -101,7 +101,7 @@ abstract class WController {
 		if (!empty($action)) {
 			$access_result = $this->hasAccess($this->getAppName(), $action);
 
-			if ($access_result) {
+			if ($access_result === true) {
 				$this->action = $action;
 
 				// Theme configuration for admin
