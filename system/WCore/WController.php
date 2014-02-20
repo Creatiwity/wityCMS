@@ -85,7 +85,7 @@ abstract class WController {
 	 */
 	public function launch($action, array $params = array()) {
 		$action = preg_replace('#[^a-zA-Z]+#', '_', $action);
-		
+
 		// Trigger the corresponding method for the action given in URL
 		return $this->forward($action, $params);
 	}
@@ -320,7 +320,7 @@ abstract class WController {
 
 			WConfig::set('manifest.'.$app_name, $manifest);
 		}
-		
+
 		return $manifest;
 	}
 
@@ -516,9 +516,13 @@ abstract class WController {
 					return false;
 				}
 			}
-			
+
 			// Supreme Admin -> access granted
 			if (isset($_SESSION['access']) && $_SESSION['access'] == 'all') {
+				if (isset($manifest['actions'][$action]) && in_array('not-connected', $manifest['actions'][$action]['requires'])) {
+					return WNote::error('app_logout_required', WLang::get('error_app_logout_required', $action, $app));
+				}
+
 				return true;
 			} else if (isset($manifest['actions'][$action])) {
 				// Check permissions
