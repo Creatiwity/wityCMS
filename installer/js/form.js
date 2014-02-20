@@ -459,7 +459,7 @@ var Form, FormNode;
 
 				if (this.type === "select") {
 					// Select field
-					$field = $('<select name="' + this.id + '" class="form-control"></select>');
+					$field = $('<select id="' + this.id + '" name="' + this.id + '" class="form-control"></select>');
 
 					willValidate = true;
 
@@ -511,7 +511,7 @@ var Form, FormNode;
 					}
 				} else {
 					// All other cases (text, number, email, ...)
-					$field = $('<input type="' + this.type + '" class="form-control"></input>');
+					$field = $('<input id="' + this.id + '" name="' + this.id + '" type="' + this.type + '" class="form-control"></input>');
 
 					if (options.placeholder) {
 						$field.attr('placeholder', options.placeholder);
