@@ -156,6 +156,18 @@ class WRoute {
 	}
 
 	/**
+	 * Returns the domain from which the user tried to acess WityCMS.
+	 * 
+	 * If the site is running on http://mysite.com/wity/,
+	 * it should return "mysite.com".
+	 * 
+	 * @return string Domain name
+	 */
+	public static function getDomain() {
+		return $_SERVER['HTTP_HOST'];
+	}
+	
+	/**
 	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php.
 	 *
 	 * If the website address is http://mysite.com/wity/user/login,
