@@ -122,7 +122,7 @@ class Installer {
 					WConfig::set('route.default_admin', $route['admin_app']);
 					WConfig::save('route', CONFIG_DIR.'route.php');
 
-					// If success, Delete installer directory
+					// If success, attempt to delete installer directory
 					if (file_exists(CONFIG_DIR.'config.php') && file_exists(CONFIG_DIR.'database.php') && file_exists(CONFIG_DIR.'route.php')) {
 						$dir = WITY_PATH.'installer';
 						$it = new RecursiveDirectoryIterator($dir);
@@ -132,16 +132,16 @@ class Installer {
 								continue;
 							}
 							if ($file->isDir()) {
-								rmdir($file->getRealPath());
+								@rmdir($file->getRealPath());
 							} else {
-								unlink($file->getRealPath());
+								@unlink($file->getRealPath());
 							}
 						}
-						rmdir($dir);
+						@rmdir($dir);
 
 						$this->view->success('installer', $data['installer'], 'Congratulations', 'Installation finished !');
 					} else {
-						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Data submitted cannot be validated. Please, restart the installation and fill in the form again.');
+						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The installation did not complete successfully. Please, set the chmod of the directory "system/config/" to 0775 and rerun the installation again.');
 						break;
 					}
 				} else {

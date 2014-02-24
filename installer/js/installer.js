@@ -83,7 +83,7 @@ $(window).ready(function() {
 						},
 						{
 							id: "front_app",
-							name: "Front app.",
+							name: "Default front app.",
 							required: true,
 							type: 'select',
 							options: {
@@ -96,7 +96,7 @@ $(window).ready(function() {
 						},
 						{
 							id: "admin_app",
-							name: "Admin app.",
+							name: "Default admin app.",
 							required: true,
 							type: 'select',
 							options: {
@@ -192,7 +192,7 @@ $(window).ready(function() {
 				},
 				{
 					id: "user",
-					name: "User",
+					name: "Admin account",
 					tab: true,
 					required: true,
 

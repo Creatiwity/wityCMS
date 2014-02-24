@@ -533,8 +533,8 @@ var Form, FormNode;
 				// Add it in the view
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
-				$fieldContainer.append('<label class="col-md-3 control-label" for="' + this.id + '">' + this.name + (this.required ? '*' : '') + '</label>')
-				$fieldContainer.append($('<div class="col-md-9"></div>').append($field).append(this.$helpBlock));
+				$fieldContainer.append('<label class="col-md-4 control-label" for="' + this.id + '">' + this.name + (this.required ? '*' : '') + '</label>')
+				$fieldContainer.append($('<div class="col-md-8"></div>').append($field).append(this.$helpBlock));
 
 
 				// Push the field updater in the views stack
