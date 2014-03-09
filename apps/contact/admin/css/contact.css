@@ -1,13 +1,13 @@
-.contact-mail-history > table > tbody > tr {
+.wity-action-mail-history > table > tbody > tr {
 	cursor: pointer;
 }
 
-.contact-mail-history table table.email-abstract {
+.wity-action-mail-history table table.email-abstract {
 	width: 100%;
 	table-layout: fixed;
 }
 
-.contact-mail-history table table.email-abstract > tbody > tr > td {
+.wity-action-mail-history table table.email-abstract > tbody > tr > td {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
