@@ -11,7 +11,7 @@ This CMS uses its own templating system, named [WTemplate](https://github.com/Cr
 * An **Apache server** with PHP 5.3+, *mod_rewrite* enabled and .htaccess files allowed;
 * A **SQL server**, like *MySQL* or *MariaDB*, with a database available;
 * A **FTP client**, like [Filezilla](https://filezilla-project.org/);
-* Download the latest version of **WityCMS**: [zip](https://github.com/Creatiwity/WityCMS/archive/0.3.0.zip).
+* Download the latest version of **WityCMS**: [zip](https://github.com/Creatiwity/WityCMS/archive/0.4.0.zip).
 
 ### Let's go
 
