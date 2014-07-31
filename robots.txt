@@ -1,4 +1,4 @@
-# robots.txt generated for WityCMS
+# robots.txt generated for wityCMS
 # http://creatiwity.net/
 # More information @ http://www.robotstxt.org
 User-agent: *

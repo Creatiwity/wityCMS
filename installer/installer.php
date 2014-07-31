@@ -12,7 +12,7 @@ require 'view.php';
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-17-01-2013
+ * @version 0.5.0-dev-17-01-2013
  */
 class Installer {
 	private $THEMES_DIR;
@@ -80,7 +80,7 @@ class Installer {
 					$db->exec($sql_commands);
 					$error = $db->errorInfo();
 					if (!is_null($error[0]) && !$error[0]!=0) {
-						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
+						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the wityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
 						break;
 					}
 
@@ -103,7 +103,7 @@ class Installer {
 							break;
 						}
 					} else {
-						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of WityCMS.');
+						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of wityCMS.');
 						break;
 					}
 
@@ -354,7 +354,7 @@ class Installer {
 
 	/**
 	 * URL Validator
-	 * Checks that a string is a URL where WityCMS can be installed
+	 * Checks that a string is a URL where wityCMS can be installed
 	 *
 	 * @param string $url
 	 * @param array $data

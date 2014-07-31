@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-25-01-2013
+ * @version 0.5.0-dev-25-01-2013
  */
 class View {
 	/**

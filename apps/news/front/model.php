@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-19-04-2013
+ * @version 0.5.0-dev-19-04-2013
  */
 class NewsModel {
 	/**

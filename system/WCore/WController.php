@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-02-02-2014
+ * @version 0.5.0-dev-02-02-2014
  */
 abstract class WController {
 	/**

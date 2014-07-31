@@ -10,7 +10,7 @@ AddDefaultCharset UTF-8
 	#RewriteCond %{HTTP_HOST} ^site\.com$
 	#RewriteRule ^(.*) http://www.site.com/$1 [QSA,L,R=301]
 	
-	# Redirect everything but a physical file to WityCMS
+	# Redirect everything but a physical file to wityCMS
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule . index.php [L]

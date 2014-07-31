@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-26-02-2013
+ * @version 0.5.0-dev-26-02-2013
  */
 class UserView extends WView {
 	public function __construct() {

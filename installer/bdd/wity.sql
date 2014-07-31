@@ -1,4 +1,4 @@
--- WityCMS Database Dump
+-- wityCMS Database Dump
 -- Version: 0.4
 -- Updated on: 28/11/2013
 
@@ -11,7 +11,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `WityCMS`
+-- Database: `wityCMS`
 --
 
 -- --------------------------------------------------------
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news` (
 --
 
 INSERT INTO `prefix_news` (`id`, `url`, `title`, `author`, `content`, `meta_title`, `keywords`, `description`, `views`, `published`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
-(4, 'witycms-was-successfully-installed', 'WityCMS was successfully installed!', '', '<p>Congratulations and welcome to WityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The WityCMS team</p>\r\n', '', '', '', 0, 1, NOW(), 1, '', 0);
+(4, 'witycms-was-successfully-installed', 'wityCMS was successfully installed!', '', '<p>Congratulations and welcome to wityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The wityCMS team</p>\r\n', '', '', '', 0, 1, NOW(), 1, '', 0);
 
 -- --------------------------------------------------------
 

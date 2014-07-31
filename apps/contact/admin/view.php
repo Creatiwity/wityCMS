@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\Contact\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-07-10-2013
+ * @version 0.5.0-dev-07-10-2013
  */
 class ContactAdminView extends WView {
 	

@@ -2,7 +2,7 @@
  * Contacts management script allowing ajax usage.
  *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0
+ * @version 0.5.0-dev
  */
 require(['jquery'], function($) {
 	$(document).ready(function() {

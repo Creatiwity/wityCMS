@@ -2,7 +2,7 @@
  * Installer form description
  * 
  * @package Installer
- * @version 0.4.0-20-02-2014
+ * @version 0.5.0-dev-20-02-2014
  */
 
 $(window).ready(function() {

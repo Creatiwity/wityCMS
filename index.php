@@ -1,19 +1,19 @@
 <?php
 /**
- * WityCMS index.php start-up file
+ * wityCMS index.php start-up file
  * 
  * Content Management System for everyone.
  * 
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0
+ * @version 0.5.0-dev
  */
 
 /**
- * WityCMS version number
+ * wityCMS version number
  */
 define('IN_WITY', true);
-define('WITYCMS_VERSION', '0.4.0');
+define('WITYCMS_VERSION', '0.5.0-dev');
 
 /**
  * Error reporting level = MAXIMUM

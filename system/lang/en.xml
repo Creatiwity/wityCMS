@@ -23,7 +23,7 @@
 	<item id="info_flood_duplicate">You already sent out this form data.</item>
 	<item id="info_flood_wait">Please, wait %s seconds between two posts.</item>
 	
-	<item id="error_404"><![CDATA[Sorry but WityCMS was not able to find the requested resource.
+	<item id="error_404"><![CDATA[Sorry but wityCMS was not able to find the requested resource.
 <br /><br />
 <a href="/">Back to home</a>]]></item>
 	<item id="error_app_no_manifest">The manifest of the application "%s" cannot be found.</item>
@@ -33,7 +33,7 @@
 	<item id="error_cache_template_failed">Unable to create cache directory in "%s".</item>
 	<item id="error_app_no_access">You need more privileges to access the action "%s" in the application %s.</item>
 	<item id="error_app_logout_required">You need to be logged out to access the action "%s" in the application %s.</item>
-	<item id="error_could_not_find_pdo"><![CDATA[WityCMS was unable to find the PHP's <strong>PDO extension</strong> on your system. Please, activate PDO to run the script.]]></item>
+	<item id="error_could_not_find_pdo"><![CDATA[wityCMS was unable to find the PHP's <strong>PDO extension</strong> on your system. Please, activate PDO to run the script.]]></item>
 	<item id="error_sql_conn_failed"><![CDATA[Impossible to connect to the MySQL database.<br />%s]]></item>
 	<item id="error_database_bad_credentials">Information is missing to connect to the database: please, check the server, or the database name or the user name in "system/config/database.php".</item>
 	<item id="error_theme_not_found">WResponse::setTheme(): The theme "%s" does not exist.</item>

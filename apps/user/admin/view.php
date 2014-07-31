@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-26-04-2013
+ * @version 0.5.0-dev-26-04-2013
  */
 class UserAdminView extends WView {
 	public function __construct() {

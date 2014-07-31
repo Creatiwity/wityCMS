@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-29-11-2013
+ * @version 0.5.0-dev-29-11-2013
  */
 class WDatabase extends PDO {
 	/**

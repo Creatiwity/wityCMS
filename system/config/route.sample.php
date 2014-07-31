@@ -2,7 +2,7 @@
 /**
  * Sample configuration file for system/config/route.php
  * 
- * This file defines the WityCMS's routes configuration.
+ * This file defines the wityCMS's routes configuration.
  * Can be defined the front application to execute by default,
  * and the admin application to execute by default.
  * 

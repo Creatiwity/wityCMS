@@ -6,11 +6,11 @@
 defined('IN_WITY') or die('Access denied');
 
 /**
- * WResponse compiles the final render of WityCMS that will be sent to the browser.
+ * WResponse compiles the final render of wityCMS that will be sent to the browser.
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-28-10-2013
+ * @version 0.5.0-dev-28-10-2013
  */
 class WResponse {
 	/**
@@ -53,7 +53,7 @@ class WResponse {
 	}
 
 	/**
-	 * WityCMS's classic render with HTML theme.
+	 * wityCMS's classic render with HTML theme.
 	 *
 	 * @param WView  $view  View to be rendered
 	 * @param string $theme Theme name to use to wrap the view

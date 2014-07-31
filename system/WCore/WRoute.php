@@ -8,7 +8,7 @@ defined('IN_WITY') or die('Access denied');
 /**
  * WRoute calculates the route given in the URL to find out the right application to execute.
  *
- * <p>Traditionally, Apache URL Rewriting is used in WityCMS.
+ * <p>Traditionally, Apache URL Rewriting is used in wityCMS.
  * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :</p>
  * <ul>
  *    <li>app = "news" (this param will be used as Application name in WMain)</li>
@@ -19,8 +19,8 @@ defined('IN_WITY') or die('Access denied');
  * <p>WRoute can provide several informations about the URL of the page.
  * If we keep the example URL = http://mysite.com/wity/news/see/4</p>
  * <ul>
- *     <li>Base = "http://mysite.com/wity" - Base contains the directory in which WityCMS is installed</li>
- *     <li>Dir = "/wity" - it is the directory in which WityCMS is installed (may be empty)</li>
+ *     <li>Base = "http://mysite.com/wity" - Base contains the directory in which wityCMS is installed</li>
+ *     <li>Dir = "/wity" - it is the directory in which wityCMS is installed (may be empty)</li>
  *     <li>Query = "/news/see/4" [Params = array("news", "see", "4")]</li>
  *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4") - full URL of the page</li>
  * </ul>
@@ -30,11 +30,11 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-18-10-2013
+ * @version 0.5.0-dev-18-10-2013
  */
 class WRoute {
 	/**
-	 * If the URL is http://mysite.com/wity/user/login and if WityCMS is executed in /wity,
+	 * If the URL is http://mysite.com/wity/user/login and if wityCMS is executed in /wity,
 	 * then the $query will be set to "user/login".
 	 *
 	 * @var string Request string of the page
@@ -140,7 +140,7 @@ class WRoute {
 
 						$app = array_shift($params);
 						if (!empty($app)) {
-							// In WityCMS, to trigger an admin app, the app must be equal to "admin/news"
+							// In wityCMS, to trigger an admin app, the app must be equal to "admin/news"
 							$route['app'] = 'admin/'.$app;
 						}
 					} else {
@@ -156,7 +156,7 @@ class WRoute {
 	}
 
 	/**
-	 * Returns the domain from which the user tried to acess WityCMS.
+	 * Returns the domain from which the user tried to acess wityCMS.
 	 * 
 	 * If the site is running on http://mysite.com/wity/,
 	 * it should return "mysite.com".
@@ -168,24 +168,24 @@ class WRoute {
 	}
 	
 	/**
-	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php.
+	 * Returns the full root location in which wityCMS is installed, as defined in /system/config/config.php.
 	 *
 	 * If the website address is http://mysite.com/wity/user/login,
 	 * it should return http://mysite.com/wity.
 	 *
-	 * @return string the full root location of WityCMS
+	 * @return string the full root location of wityCMS
 	 */
 	public static function getBase() {
 		return rtrim(WConfig::get('config.base'), '/');
 	}
 
 	/**
-	 * Returns the partial WityCMS root directory.
+	 * Returns the partial wityCMS root directory.
 	 *
 	 * If the website address is http://mysite.com/wity/user/login,
 	 * it will return /wity.
 	 *
-	 * @return string The partial root location of WityCMS
+	 * @return string The partial root location of wityCMS
 	 */
 	public static function getDir() {
 		// Remove the working directory of the script
@@ -196,12 +196,12 @@ class WRoute {
 	}
 
 	/**
-	 * Returns the query asked to WityCMS in the URL.
+	 * Returns the query asked to wityCMS in the URL.
 	 *
 	 * If the request URL is http://mysite.com/wity/user/login,
 	 * it will return /user/login.
 	 *
-	 * @return string The partial root location of WityCMS
+	 * @return string The partial root location of wityCMS
 	 */
 	public static function getQuery() {
 		return self::$query;

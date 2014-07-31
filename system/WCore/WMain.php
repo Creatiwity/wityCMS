@@ -13,7 +13,7 @@ require_once SYS_DIR.'WCore'.DS.'WView.php';
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-27-09-2013
+ * @version 0.5.0-dev-27-09-2013
  */
 class WMain {
 	/**
@@ -144,7 +144,7 @@ class WMain {
 	}
 
 	/**
-	 * Setup WityCMS timezone for dates
+	 * Setup wityCMS timezone for dates
 	 * Will change PHP and MySQL configuration
 	 */
 	private function setupTimezone() {

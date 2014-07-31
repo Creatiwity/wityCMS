@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-15-02-2013
+ * @version 0.5.0-dev-15-02-2013
  */
 class UserModel {
 	protected $db;
