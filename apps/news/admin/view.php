@@ -33,7 +33,7 @@ class NewsAdminView extends WView {
 	public function news_form($model) {
 		// JS / CSS
 		$this->assign('require', 'apps!news/add_or_edit');
-		$this->assign('js', "/libraries/ckeditor-4.3.1/ckeditor.js");
+		$this->assign('js', "/libraries/ckeditor-4.4.3/ckeditor.js");
 
 		// Assign site URL for permalink management
 		$this->assign('site_url', WRoute::getBase() . '/news/');
