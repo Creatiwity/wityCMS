@@ -9,19 +9,19 @@ defined('IN_WITY') or die('Access denied');
  * WRoute calculates the route given in the URL to find out the right application to execute.
  *
  * <p>Traditionally, Apache URL Rewriting is used in wityCMS.
- * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :</p>
+ * Example: the URL "http://mysite.com/wity/news/see/4" would be translated this way:</p>
  * <ul>
  *    <li>app = "news" (this param will be used as Application name in WMain)</li>
  *    <li>param1 = "see" - in this case, this parameter is called the action of the application</li>
  *    <li>param2 = "4" - in this case, it may be the id of the news to display</li>
  * </ul>
  *
- * <p>WRoute can provide several informations about the URL of the page.
+ * <p>WRoute provides several informations about the URL of the page.
  * If we keep the example URL = http://mysite.com/wity/news/see/4</p>
  * <ul>
- *     <li>Base = "http://mysite.com/wity" - Base contains the directory in which wityCMS is installed</li>
- *     <li>Dir = "/wity" - it is the directory in which wityCMS is installed (may be empty)</li>
- *     <li>Query = "/news/see/4" [Params = array("news", "see", "4")]</li>
+ *     <li>Base = "http://mysite.com/wity/" - Base contains the host + directory in which wityCMS is installed</li>
+ *     <li>Dir = "/wity/" - it is the directory in which wityCMS is installed (contains at least '/')</li>
+ *     <li>Query = "news/see/4" [Params = array("news", "see", "4")]</li>
  *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4") - full URL of the page</li>
  * </ul>
  *
@@ -52,10 +52,16 @@ class WRoute {
 	 * Initializes WRoute.
 	 */
 	public static function init() {
+		self::$query = $_SERVER['REQUEST_URI'];
+		
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
-		self::$query = str_replace(self::getDir(), '', $_SERVER['REQUEST_URI']);
+		$dir = self::getDir();
+		if ($dir != '/') {
+			self::$query = str_replace($dir, '', $_SERVER['REQUEST_URI']);
+		}
 
 		// Cleansing
+		self::$query = ltrim(self::$query, '/');
 		self::$query = str_replace(array('index.php', '.html', '.htm'), '', self::$query);
 		self::$query = preg_replace('#\?.*$#', '', self::$query); // Remove query string
 
@@ -171,12 +177,12 @@ class WRoute {
 	 * Returns the full root location in which wityCMS is installed, as defined in /system/config/config.php.
 	 *
 	 * If the website address is http://mysite.com/wity/user/login,
-	 * it should return http://mysite.com/wity.
+	 * it should return http://mysite.com/wity/.
 	 *
 	 * @return string the full root location of wityCMS
 	 */
 	public static function getBase() {
-		return rtrim(WConfig::get('config.base'), '/');
+		return rtrim(WConfig::get('config.base'), '/').'/';
 	}
 
 	/**
@@ -189,9 +195,9 @@ class WRoute {
 	 */
 	public static function getDir() {
 		// Remove the working directory of the script
-		// example: $_SERVER['SCRIPT_NAME'] = http://mysite.com/wity/index.php
+		// example: $_SERVER['SCRIPT_NAME'] = /wity/index.php
 		$dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
-		$dir = rtrim($dir, '/');
+		
 		return $dir;
 	}
 

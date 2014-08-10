@@ -150,7 +150,7 @@ class WResponse {
 		if (!empty($dir)) {
 			$string = str_replace(
 				array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
-				array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
+				array('src="'.$dir, 'href="'.$dir, 'action="'.$dir, 'data-link-modal="'.$dir),
 				$string
 			);
 		}

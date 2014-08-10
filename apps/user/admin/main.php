@@ -224,7 +224,7 @@ class UserAdminController extends WController {
 							unset($mail);
 						}
 						
-						$this->setHeader('Location', WRoute::getDir().'/admin/user');
+						$this->setHeader('Location', WRoute::getDir().'admin/user');
 						WNote::success('user_created', WLang::get('user_created', $post_data['nickname']));
 					} else {
 						WNote::error('user_not_created', WLang::get('user_not_created', $post_data['nickname']));
@@ -236,7 +236,7 @@ class UserAdminController extends WController {
 							WSystem::getSession()->reloadSession($user_id);
 						}
 						
-						$this->setHeader('Location', WRoute::getDir().'/admin/user/edit/'.$user_id);
+						$this->setHeader('Location', WRoute::getDir().'admin/user/edit/'.$user_id);
 						WNote::success('user_edited', WLang::get('user_edited', $db_data['nickname']));
 					} else {
 						WNote::error('user_not_edited', WLang::get('user_not_edited', $db_data['nickname']));
@@ -279,7 +279,7 @@ class UserAdminController extends WController {
 		if ($db_data !== false) {
 			return $this->user_form($user_id, $db_data);
 		} else {
-			$this->setHeader('Location', WRoute::getDir().'/admin/user');
+			$this->setHeader('Location', WRoute::getDir().'admin/user');
 			return WNote::error('user_not_found', WLang::get('user_not_found'));
 		}
 	}
@@ -303,13 +303,13 @@ class UserAdminController extends WController {
 			if (WRequest::get('confirm', null, 'POST') === '1') {
 				$this->model->deleteUser($user_id);
 				
-				$this->setHeader('Location', WRoute::getDir().'/admin/user');
+				$this->setHeader('Location', WRoute::getDir().'admin/user');
 				WNote::success('user_deleted', WLang::get('user_deleted'));
 			}
 			
 			return $db_data;
 		} else {
-			$this->setHeader('Location', WRoute::getDir().'/admin/user');
+			$this->setHeader('Location', WRoute::getDir().'admin/user');
 			return WNote::error('user_not_found', WLang::get('user_not_found'));
 		}
 	}
@@ -409,13 +409,13 @@ class UserAdminController extends WController {
 				$this->model->deleteGroup($group_id);
 				$this->model->resetUsersInGroup($group_id);
 				
-				$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+				$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
 				WNote::success('user_group_deleted', WLang::get('group_deleted'));
 			}
 			
 			return $db_data;
 		} else {
-			$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+			$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
 			return WNote::error('group_not_found', WLang::get('group_not_found'));
 		}
 	}
@@ -467,7 +467,7 @@ class UserAdminController extends WController {
 			}
 		}
 		
-		$this->setHeader('Location', WRoute::getDir().'/admin/user/groups');
+		$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
 	}
 	
 	/**

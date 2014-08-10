@@ -46,15 +46,18 @@ require_once SYS_DIR.'WCore'.DS.'WMain.php';
  */
 if (file_exists(WITY_PATH.'installer/installer.php') && !file_exists(CONFIG_DIR.'config.php')) {
 	WRoute::init();
-	if (WRoute::getQuery() != '/') {
+	
+	// Redirect user to root directory if not already on it
+	if (WRoute::getQuery() != '') {
 		header('Location: '.WRoute::getDir());
+		exit();
 	}
 
 	require 'installer/installer.php';
 	$installer = new Installer();
 	$installer->launch();
 
-	return;
+	exit();
 }
 
 /**
