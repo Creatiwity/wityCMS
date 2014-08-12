@@ -25,5 +25,14 @@ require(['jquery'], function($) {
 
 			$("#news_url").val(value);
 		});
+		
+		// Prevents user from accidentally refreshing or leaving the page
+		window.onbeforeunload = function() {
+			return "Warning: if you leave without saving, all modifications will be lost.";
+		};
+		
+		$('.wity-app button[type="submit"]').click(function() {
+			window.onbeforeunload = null;
+		});
 	});
 });
