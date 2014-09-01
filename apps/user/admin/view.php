@@ -69,7 +69,7 @@ class UserAdminView extends WView {
 	 */
 	public function user_form(array $model) {
 		// Display a warning message when user edits its own account
-		if (!empty($model['user_data']) && $model['user_data']['id'] == $_SESSION['userid']) {
+		if (!empty($model['user_data']) && isset($_SESSION['userid']) && $model['user_data']['id'] == $_SESSION['userid']) {
 			WNote::info('user_edit_own', WLang::get('user_edit_own'));
 		}
 
