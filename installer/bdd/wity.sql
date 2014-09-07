@@ -247,19 +247,27 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `prefix_mail_configuration`
+-- Structure de la table `mail_configuration`
 --
 
-DROP TABLE IF EXISTS `prefix_mail_configuration`;
-CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
-  `key` varchar(100) NOT NULL,
-  `value` varchar(500) NOT NULL,
+CREATE TABLE IF NOT EXISTS `mail_configuration` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` mediumint(9) NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `mail_configuration`
+--
+
+INSERT INTO `mail_configuration` (`id`, `key`, `value`, `user_id`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
+(1, 'canReceive', '0', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 

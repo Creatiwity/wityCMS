@@ -250,7 +250,7 @@ class MailController extends WController {
 		// Add addresses
 
 		// If POP3/IMAP enabled, mail app will manage responses, 'to' goes to CC, a placeholder goes to 'to'
-		if (self::$configuration['canReceive'] == '0') {
+		if (self::$configuration['canReceive'] == '1') {
 			$from = array(self::$configuration['from']);
 
 			if (is_array($params['from'] && !empty($params['from'][1]))) {
@@ -276,7 +276,6 @@ class MailController extends WController {
 			$this->addAddressesInField($params['cc'], 'cc');
 			$this->addAddressesInField($params['bcc'], 'bcc');
 		}
-
 
 		$params['params']['mail_app'] = array();
 
@@ -309,11 +308,11 @@ class MailController extends WController {
 
 		if (!$this->phpmailer->send()) {
 			// TODO Change WNote::error handler and translate it
-			WNote::error('mail_send_fail', 'mail_send_fail: '.$this->phpmailer->ErrorInfo);
+			WNote::error('mail_send_fail', 'mail_send_fail: '.$this->phpmailer->ErrorInfo, 'email, log');
 			$success = false;
 		}
 
-		if (!$success || !$this->model->addMail(
+		if (!$this->model->addMail(
 			self::$hash_mail,
 			self::$hash_mailing_list,
 			$params['from'],
@@ -327,7 +326,7 @@ class MailController extends WController {
 			$this->phpmailer->Body,
 			$params['params']
 		)) {
-			WNote::error('email_not_saved', 'email_not_saved');
+			WNote::error('email_not_saved', 'email_not_saved', 'email, log');
 			$success = false;
 		}
 
