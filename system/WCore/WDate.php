@@ -18,9 +18,13 @@ class WDate extends DateTime {
 	 * 
 	 * @param string $date If empty, use the current date. See DateTime class for full documentation.
 	 */
-	public function __construct($date = '') {
+	public function __construct($date = '', $timezone = null) {
+		if (empty($timezone)) {
+			$timezone = $this->getUserTimezone();
+		}
+		
 		// Build the date
-		parent::__construct($date, $this->getUserTimezone());
+		parent::__construct($date, $timezone);
 	}
 	
 	public static function getUserTimezone() {
