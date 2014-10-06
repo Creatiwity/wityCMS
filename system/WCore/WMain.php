@@ -183,7 +183,7 @@ class WMain {
 			'wity_page_keywords'    => WConfig::get('config.keywords'),
 			'wity_page_description' => WConfig::get('config.description'),
 			'wity_user'             => false,
-			'wity_home'             => WRoute::getQuery() == '/',
+			'wity_home'             => WRoute::getQuery() == '',
 			'wity_app'              => $route['app']
 		);
 
