@@ -1,5 +1,5 @@
 {
-	"baseUrl": "{$wity_base_url}/libraries",
+	"baseUrl": "{$wity_base_url}libraries",
 	"paths": {
 		"apps": "witycms/apps.plugin",
 		"themes": "witycms/themes.plugin",
