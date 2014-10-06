@@ -247,10 +247,10 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `mail_configuration`
+-- Structure de la table `prefix_mail_configuration`
 --
 
-CREATE TABLE IF NOT EXISTS `mail_configuration` (
+CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `mail_configuration` (
 -- Contenu de la table `mail_configuration`
 --
 
-INSERT INTO `mail_configuration` (`id`, `key`, `value`, `user_id`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
+INSERT INTO `prefix_mail_configuration` (`id`, `key`, `value`, `user_id`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
 (1, 'canReceive', '0', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
