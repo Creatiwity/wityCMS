@@ -314,9 +314,15 @@ class WRetriever {
 	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
 			$args = explode('?', $args);
+			$url = trim($args[0], '/');
 
 			// Explode the route in several parts
-			$route = WRoute::parseURL($args[0]);
+			$custom_routes = WConfig::get('route.custom');
+			if (isset($custom_routes[$url])) {
+				$route = WRoute::parseURL($custom_routes[$url]);
+			} else {
+				$route = WRoute::parseURL($url);
+			}
 
 			if (!empty($route['app'])) {
 				// Format the querystring PHP code if a querystring is given
