@@ -252,7 +252,7 @@ class WRoute {
 	 * @return boolean true if the redirection was applied
 	 */
 	public static function defineCustom($uri, $redirection) {
-		$uri = '/'.trim($uri, '/');
+		$uri = trim($uri, '/');
 		if (!empty($uri)) {
 			WConfig::set('route.custom.'.$uri, $redirection);
 			WConfig::save('route');
@@ -269,7 +269,7 @@ class WRoute {
 	 * @param string $uri The custom route to remove
 	 */
 	public static function deleteCustom($uri) {
-		$uri = '/'.trim($uri, '/');
+		$uri = trim($uri, '/');
 		if (!empty($uri) && !is_null(WConfig::get('route.custom.'.$uri))) {
 			$custom_routes = WConfig::get('route.custom');
 			unset($custom_routes[$uri]);
