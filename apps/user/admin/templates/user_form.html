@@ -57,7 +57,7 @@
 							{/for}
 							};
 						</script>
-						<select id="groupe" class="form-control" name="groupe" onchange="accessGroup(this.options[this.selectedIndex].value);">
+						<select id="groupe" class="form-control" name="groupe">
 							<option value="0">{lang group_default}</option>
 						{for $group in $groups}
 							<option value="{$group.id}"{if {$group.id} == {$groupe}} selected="selected"{/if}>{$group.name}</option>

@@ -468,6 +468,8 @@ class UserAdminController extends WController {
 		}
 		
 		$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
+		
+		return array();
 	}
 	
 	/**

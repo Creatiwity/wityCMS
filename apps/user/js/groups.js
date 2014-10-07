@@ -5,8 +5,7 @@
  * It handles the javascript animations for group management.
  */
 
-require(['jquery'], function($) {
-
+require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 	/**
 	 * Resets all the forms opened
 	 */
@@ -43,19 +42,43 @@ require(['jquery'], function($) {
 			$('#group-edit-'+groupid).removeClass('impair').addClass($('#group-'+groupid).attr('class'));
 
 			// Bind change events to every inputs
-			bindEvents('group-edit-'+groupid);
+			accessForm.bindEvents('group-edit-'+groupid);
 
 			// Assign group permissions to inputs
-			assignPermissions('group-edit-'+groupid, access);
+			accessForm.assignPermissions('group-edit-'+groupid, access);
 		}
+		
 		resetGroupForms();
+		
 		if ($('#group-edit-'+groupid+' form').css('display') == 'none') {
 			$('#group-edit-'+groupid+' form').slideDown();
 		}
 	}
 
 	$(document).ready(function() {
-		bindEvents('group-add');
+		accessForm.bindEvents('group-add');
 	});
-
+	
+	$('#add_group_button').click(function() {
+		showAddForm();
+		
+		return false;
+	});
+	
+	$('body').on('click', '.group-edit-button', function() {
+		var $this = $(this),
+			groupId = $this.attr('data-group-id'),
+			groupName = $this.attr('data-group-name'),
+			groupAccess = $this.attr('data-group-access');
+		
+		showEditForm(groupId, groupName, groupAccess);
+		
+		return false;
+	});
+	
+	$('body').on('click', '[data-reset-group-form]', function() {
+		resetGroupForms();
+		
+		return false;
+	});
 });

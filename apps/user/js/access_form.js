@@ -12,8 +12,7 @@
  *            type to custom showing the new access in the permissions table.
  */
 
-require(['jquery'], function($) {
-
+define(['jquery'], function($) {
 	/**
 	 * Checks all input access in the permissions table
 	 *
@@ -114,19 +113,22 @@ require(['jquery'], function($) {
 	 *
 	 * @param int id Id of the div to be affected containing the form
 	 */
-	function bindEvents(id) {
+	var bindEvents = function(id) {
 		// Whenever the user type is changed
 		$('#'+id+' .access-type').change(function() {
 			changeType(id, $(this).val());
 		});
+		
 		// Whenever the check or uncheck buttons are used
 		$('#'+id+' .check-all').click(function() {
 			changeType(id, 'custom');
 			accessSelectAll(id);
 		});
+		
 		$('#'+id+' .uncheck-all').click(function() {
 			changeType(id, 'none');
 		});
+		
 		// Whenever a checkbox is changed
 		$('#'+id+' input[type="checkbox"]').change(function() {
 			if ($('#'+id+' .user-rights input:checked').size() == 0) {
@@ -147,6 +149,7 @@ require(['jquery'], function($) {
 		if (group_id == 0) {
 			return;
 		}
+		
 		// global var group_access is defined in the template file
 		assignPermissions('user-access', group_access[group_id]);
 	}
@@ -158,11 +161,16 @@ require(['jquery'], function($) {
 		if (typeof user_access != 'undefined') {
 			if (user_access != '') {
 				assignPermissions('user-access', user_access);
-			} else {
-				// var select = document.getElementById('groupe');
-				// accessGroup(select.options[select.selectedIndex].value);
 			}
 		}
 	});
+	
+	$('#groupe').change(function() {
+		accessGroup(this.options[this.selectedIndex].value);
+	});
 
+	return {
+		bindEvents: bindEvents,
+		assignPermissions: assignPermissions
+	};
 });

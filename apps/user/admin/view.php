@@ -137,7 +137,6 @@ class UserAdminView extends WView {
 			return;
 		}
 
-		$this->assign('require', 'apps!user/access_form');
 		$this->assign('require', 'apps!user/groups');
 		$this->assign($model['sorting_tpl']);
 
