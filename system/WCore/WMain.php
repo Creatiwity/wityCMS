@@ -184,7 +184,8 @@ class WMain {
 			'wity_page_description' => WConfig::get('config.description'),
 			'wity_user'             => false,
 			'wity_home'             => WRoute::getQuery() == '',
-			'wity_app'              => $route['app']
+			'wity_app'              => $route['app'],
+			'wity_query'            => WRoute::getQuery()
 		);
 
 		if (WSession::isConnected()) {
