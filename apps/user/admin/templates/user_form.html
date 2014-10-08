@@ -66,44 +66,46 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<strong>{lang user_rights}*</strong>
-					<div id="user-access">
-						<div class="radio">
-							<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
-						</div>
-						<div class="radio">
-							<label><input class="access-type all" type="radio" name="type" value="all"{if {$access} == 'all'} checked="checked"{/if} /> {lang access_all}</label>
-						</div>
-						<div class="radio">
-							<label><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang access_custom}</label>
-						</div>
-						<br />
-						
-						<div class="text-right">
-							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
-						</div>
-						<table class="user-rights" cellpadding="0" cellspacing="0">
-							<colgroup><col width="25%" /></colgroup>
-							{for $app, $details in $admin_apps}
-							<tr>
-								<td><p class="text-center"><strong>{$details.name}</strong></p></td>
-								<td>
-									<table class="permissions" cellpadding="0" cellspacing="0">
-										<tr>
-										{for $perm in {$details.permissions}}
-											<td><p class="text-center"><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></p></td>
-										{/for}
-										{empty}
-											<td><p class="text-center"><em>{lang no_permissions}</em></p></td>
-										{/empty}
-										</tr>
-									</table>
-								</td>
-							</tr>
-							{/for}
-						</table>
-						<div class="text-right">
-							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+					<div class="col-md-12">
+						<strong>{lang user_rights}*</strong>
+						<div id="user-access">
+							<div class="radio">
+								<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
+							</div>
+							<div class="radio">
+								<label><input class="access-type all" type="radio" name="type" value="all"{if {$access} == 'all'} checked="checked"{/if} /> {lang access_all}</label>
+							</div>
+							<div class="radio">
+								<label><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang access_custom}</label>
+							</div>
+							<br />
+							
+							<div class="text-right">
+								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+							</div>
+							<table class="user-rights" cellpadding="0" cellspacing="0">
+								<colgroup><col width="25%" /></colgroup>
+								{for $app, $details in $admin_apps}
+								<tr>
+									<td><p class="text-center"><strong>{$details.name}</strong></p></td>
+									<td>
+										<table class="permissions" cellpadding="0" cellspacing="0">
+											<tr>
+											{for $perm in {$details.permissions}}
+												<td><p class="text-center"><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></p></td>
+											{/for}
+											{empty}
+												<td><p class="text-center"><em>{lang no_permissions}</em></p></td>
+											{/empty}
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{/for}
+							</table>
+							<div class="text-right">
+								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
+							</div>
 						</div>
 					</div>
 				</div>
