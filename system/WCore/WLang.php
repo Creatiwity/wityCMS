@@ -263,7 +263,7 @@ class WLang {
 			
 			return self::$values[$name];
 		} else {
-			return ucwords(str_replace('_', ' ', $name));
+			return ucfirst(str_replace('_', ' ', $name));
 		}
 	}
 	
