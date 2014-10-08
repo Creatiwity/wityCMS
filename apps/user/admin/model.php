@@ -310,7 +310,7 @@ class UserAdminModel extends UserModel {
 							$value = '%'.$value.'%';
 						}
 						
-						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+						$cond .= $name." COLLATE UTF8_GENERAL_CI LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
@@ -350,7 +350,7 @@ class UserAdminModel extends UserModel {
 							$value = '%'.$value.'%';
 						}
 						
-						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+						$cond .= $name." COLLATE UTF8_GENERAL_CI LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}

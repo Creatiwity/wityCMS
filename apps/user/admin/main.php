@@ -321,9 +321,11 @@ class UserAdminController extends WController {
 	 * @return array Model
 	 */
 	protected function groups(array $params) {
-		if (!empty($_POST)) {
-			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
+		$data = WRequest::getAssoc(array('id', 'name', 'type'), null, 'POST');
+		
+		if (!in_array(null, $data, true)) {
 			$errors = array();
+			$data['access'] = WRequest::get('access', null, 'POST');
 			
 			if (empty($data['name'])) {
 				$errors[] = WLang::get('group_name_empty');
@@ -334,6 +336,7 @@ class UserAdminController extends WController {
 			
 			if (empty($errors)) {
 				$db_success = false;
+				
 				if (empty($data['id'])) { // Adding a group
 					if ($this->model->createGroup($data)) {
 						WNote::success('user_group_added', WLang::get('group_added', $data['name']));
@@ -341,14 +344,16 @@ class UserAdminController extends WController {
 					}
 				} else { // Editing a group
 					$db_data = $this->model->getGroup($data['id']);
+					
 					if (!empty($db_data)) {
 						$count_users = $this->model->countUsers(array('groupe' => $data['id']));
-						// There will be a change in group's default access affecting users
+						
+						// There will be a change in default group's access affecting users
 						if ($data['access'] != $db_data['access'] && $count_users > 0) {
 							$group_diff_data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
+							
 							if (!in_array(null, $group_diff_data, true)) {
-								$this->group_diff();
-								return;
+								return $this->group_diff($group_diff_data);
 							} else {
 								return array(
 									'group_diff'   => true,
@@ -426,8 +431,10 @@ class UserAdminController extends WController {
 	protected function group_diff() {
 		// Retrieve post data
 		$data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
+		
 		if (!in_array(null, $data, true)) {
 			$data = array_merge($data, WRequest::getAssoc(array('apply_to_regular', 'apply_to_custom', 'user', 'type', 'access')));
+			
 			if ($data['apply_to_regular'] == 'on' && $data['apply_to_custom'] == 'on') {
 				$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid']));
 			} else {
@@ -445,6 +452,7 @@ class UserAdminController extends WController {
 					
 					foreach ($users as $user) {
 						$user_id = $user['id'];
+						
 						if (array_key_exists($user_id, $data['user'])) {
 							$this->model->updateUser($user_id, array('access' => $data['new_access']));
 						} else if (!empty($data['type'][$user_id])) {

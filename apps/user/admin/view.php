@@ -156,7 +156,6 @@ class UserAdminView extends WView {
 	public function group_diff(array $model) {
 		$group_id = $model['group_id'];
 
-		$this->assign('require', 'apps!user/access_form');
 		$this->assign('require', 'apps!user/group_diff');
 
 		$this->assign('admin_apps', $model['admin_apps']);
@@ -176,6 +175,7 @@ class UserAdminView extends WView {
 			}
 			$count_custom += $alphabet[$c];
 		}
+		
 		$this->assign('alphabet', $alphabet);
 		$count_total = $model->countUsers(array('groupe' => $group_id));
 		$this->assign('count_total', $count_total);

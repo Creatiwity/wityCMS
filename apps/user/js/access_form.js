@@ -113,7 +113,7 @@ define(['jquery'], function($) {
 	 *
 	 * @param int id Id of the div to be affected containing the form
 	 */
-	var bindEvents = function(id) {
+	function bindEvents(id) {
 		// Whenever the user type is changed
 		$('#'+id+' .access-type').change(function() {
 			changeType(id, $(this).val());
@@ -171,6 +171,8 @@ define(['jquery'], function($) {
 
 	return {
 		bindEvents: bindEvents,
-		assignPermissions: assignPermissions
+		assignPermissions: assignPermissions,
+		changeType: changeType,
+		parseAccess: parseAccess
 	};
 });

@@ -1,5 +1,5 @@
 
-require(['jquery'], function($) {
+require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 
 	/**
 	 * This function configures the acces form based on the access string
@@ -32,11 +32,11 @@ require(['jquery'], function($) {
 			$('#'+id+' .access-type.'+group_type).parent().addClass('minus');
 		}
 
-		changeType(id, user_type); // Change to custom access type
+		accessForm.changeType(id, user_type); // Change to custom access type
 
 		// Convert the acces_string into an array
-		var group_access_array = parseAccess(group_access);
-		var access_array = parseAccess(user_access);
+		var group_access_array = accessForm.parseAccess(group_access);
+		var access_array = accessForm.parseAccess(user_access);
 
 		// Iterates every acces input to check whether they match with the group access
 		$('#'+id+' .permissions input').each(function(index, input) {
@@ -112,6 +112,7 @@ require(['jquery'], function($) {
 					// Config
 					dt_clone.show();
 					dd_clone.attr('id', 'user-'+data[i].id);
+					dd_clone.attr('data-user-access', data[i].access);
 					dt_clone.find('input').attr('name', 'user['+data[i].id+']');
 					dd_clone.find('input').each(function(index, el) {
 						$(el).attr('name', $(el).attr('name').replace('[]', '['+data[i].id+']'));
@@ -129,12 +130,16 @@ require(['jquery'], function($) {
 					});
 
 					// Bind change events to every inputs
-					bindEvents('user-'+data[i].id);
+					accessForm.bindEvents('user-'+data[i].id);
+					
 					$('#user-'+data[i].id+' a.reset').click(function() {
-						var el_id = $(this).parent().attr('id');
-						var id = el_id.substring(5);
-						assignDiffPermissions(el_id, group_access, data[i].access);
+						var $parent = $(this).parent(),
+							el_id = $parent.attr('id'),
+							access = $parent.attr('data-user-access');
+						
+						assignDiffPermissions(el_id, group_access, access);
 					});
+					
 					// Assign group permissions to inputs
 					assignDiffPermissions('user-'+data[i].id, group_access, data[i].access);
 				}
