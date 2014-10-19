@@ -422,7 +422,7 @@ class MailController extends WController {
 		}
 
 		if (self::$smodel->addAction($hash_action, self::$hash_mail, self::$expiration['one-time'], self::$expiration['expires'], $url)) {
-			return WRoute::getBase().'/mail/redirect/'.$hash_action;
+			return WRoute::getBase().'mail/redirect/'.$hash_action;
 		} else {
 			return '';
 		}
