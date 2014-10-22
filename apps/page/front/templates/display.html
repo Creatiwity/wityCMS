@@ -1,0 +1,23 @@
+<div class="wity-app wity-app-page wity-action-display">
+	{if !empty({$image})}<img class="image-border img-responsive" src="/upload/page/{$image}" alt="{$title}" />{/if}
+	<article class="item">
+		{if {$wity_home}}
+		<h1>
+			{$title}
+			{if !empty($_SESSION['access'])}<em class="edit-page"><a href="/admin/page/edit/{$id}"><i class="glyphicon glyphicon-pencil"></i></a></em>{/if}
+		</h1>
+		{else}
+		<div class="app-description">
+			<p class="title">
+				{$title}
+				{if !empty($_SESSION['access'])}<em class="edit-page"><a href="/admin/page/edit/{$id}"><i class="glyphicon glyphicon-pencil"></i></a></em>{/if}
+			</p>
+			<ol class="breadcrumb">
+				<li><a href="/">Accueil</a></li>
+				<li class="active">{$title}</li>
+			</ol>
+		</div>
+		{/if}
+		<div class="item-content">{$content}</div>
+	</article>
+</div>

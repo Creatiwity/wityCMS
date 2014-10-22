@@ -399,6 +399,34 @@ CREATE TABLE IF NOT EXISTS `prefix_media_tags` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `prefix_page`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_page` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` tinytext CHARACTER SET utf8 NOT NULL,
+  `title` tinytext CHARACTER SET utf8 NOT NULL,
+  `subtitle` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `author` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `content` text CHARACTER SET utf8 NOT NULL,
+  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `short_title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `keywords` mediumtext CHARACTER SET utf8 NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `views` int(11) NOT NULL DEFAULT '0',
+  `parent` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `menu` tinyint(4) NOT NULL DEFAULT '0',
+  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
