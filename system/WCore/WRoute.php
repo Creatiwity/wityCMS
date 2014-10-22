@@ -9,7 +9,7 @@ defined('IN_WITY') or die('Access denied');
  * WRoute calculates the route given in the URL to find out the right application to execute.
  *
  * <p>Traditionally, Apache URL Rewriting is used in wityCMS.
- * Example: the URL "http://mysite.com/wity/news/see/4" would be translated this way:</p>
+ * Example: the URL "http://mysite.com/wity/news/see/4?published=1" would be translated this way:</p>
  * <ul>
  *    <li>app = "news" (this param will be used as Application name in WMain)</li>
  *    <li>param1 = "see" - in this case, this parameter is called the action of the application</li>
@@ -17,12 +17,13 @@ defined('IN_WITY') or die('Access denied');
  * </ul>
  *
  * <p>WRoute provides several informations about the URL of the page.
- * If we keep the example URL = http://mysite.com/wity/news/see/4</p>
+ * If we keep the example URL = http://mysite.com/wity/news/see/4?published=1</p>
  * <ul>
  *     <li>Base = "http://mysite.com/wity/" - Base contains the host + directory in which wityCMS is installed</li>
  *     <li>Dir = "/wity/" - it is the directory in which wityCMS is installed (contains at least '/')</li>
  *     <li>Query = "news/see/4" [Params = array("news", "see", "4")]</li>
- *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4") - full URL of the page</li>
+ *     <li>QueryString = "published=1"</li>
+ *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4?published=1") - full URL of the page</li>
  * </ul>
  *
  * <p>Notice that every route information given by WRoute is formatted with the slash located at the beginning,
@@ -40,6 +41,14 @@ class WRoute {
 	 * @var string Request string of the page
 	 */
 	private static $query;
+	
+	/**
+	 * Stores the query string given in the URL.
+	 * Example: "published=1"
+	 * 
+	 * @var string URL Query String
+	 */
+	private static $queryString;
 
 	/**
 	 * Stores the calculated route.
@@ -62,8 +71,13 @@ class WRoute {
 
 		// Cleansing
 		self::$query = ltrim(self::$query, '/');
-		self::$query = str_replace(array('index.php', '.html', '.htm'), '', self::$query);
-		self::$query = preg_replace('#\?.*$#', '', self::$query); // Remove query string
+		
+		// Extract query string
+		$split_query = explode('?', self::$query);
+		if (count($split_query) > 1) {
+			self::$query = $split_query[0];
+			self::$queryString = $split_query[1];
+		}
 
 		// Loading route config values
 		WConfig::load('route', SYS_DIR.'config'.DS.'route.php', 'php');
@@ -188,8 +202,8 @@ class WRoute {
 	/**
 	 * Returns the partial wityCMS root directory.
 	 *
-	 * If the website address is http://mysite.com/wity/user/login,
-	 * it will return /wity.
+	 * If the website address is "http://mysite.com/wity/news/see/4?published=1",
+	 * it will return "/wity/".
 	 *
 	 * @return string The partial root location of wityCMS
 	 */
@@ -204,24 +218,36 @@ class WRoute {
 	/**
 	 * Returns the query asked to wityCMS in the URL.
 	 *
-	 * If the request URL is http://mysite.com/wity/user/login,
-	 * it will return /user/login.
+	 * If the request URL is "http://mysite.com/wity/news/see/4?published=1",
+	 * it will return "/news/see/4".
 	 *
 	 * @return string The partial root location of wityCMS
 	 */
 	public static function getQuery() {
 		return self::$query;
 	}
+	
+	/**
+	 * Returns the query string given in URL (without '?' char).
+	 *
+	 * If the request URL is "http://mysite.com/wity/news/see/4?published=1",
+	 * it will return "published=1".
+	 *
+	 * @return string The partial root location of wityCMS
+	 */
+	public static function getQueryString() {
+		return self::$queryString;
+	}
 
 	/**
 	 * Returns the full URL of the page.
 	 *
-	 * For example: http://mysite.com/wity/user/login
+	 * For example: "http://mysite.com/wity/news/see/4?published=1"
 	 *
 	 * @return string The full URL
 	 */
 	public static function getURL() {
-		return self::getBase().self::$query;
+		return self::getBase().self::$query.'?'.self::$queryString;
 	}
 
 	/**
@@ -245,7 +271,7 @@ class WRoute {
 	/**
 	 * Defines a custom route to redirect to a specific application.
 	 *
-	 * <code>WRoute::defineCustomRoute('/test/', 'news/see/13');</code>
+	 * <code>WRoute::defineCustomRoute('test', 'news/see/13');</code>
 	 *
 	 * @param  string  $uri         The custom route to catch
 	 * @param  array   $redirection Redirection URI
