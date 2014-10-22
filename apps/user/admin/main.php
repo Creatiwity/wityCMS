@@ -139,10 +139,10 @@ class UserAdminController extends WController {
 	 */
 	protected function user_form($user_id = 0, $db_data = array()) {
 		$add_case = empty($user_id);
-		$post_data = array();
+		$post_data = WRequest::getAssoc(array('nickname', 'email'), null, 'POST');
 		
-		if (WRequest::hasData()) {
-			$post_data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'groupe', 'type', 'access'));
+		if (!in_array(null, $post_data, true)) {
+			$post_data += WRequest::getAssoc(array('password', 'password_conf', 'firstname', 'lastname', 'groupe', 'type', 'access'), null, 'POST');
 			$errors = array();
 			
 			// Check nickname availability

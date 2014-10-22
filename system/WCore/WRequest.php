@@ -252,15 +252,6 @@ class WRequest {
 	public static function unlock() {
 		self::$lock = false;
 	}
-
-	/**
-	 * Tells the user if data is available.
-	 *
-	 * @return bool true if data available
-	 */
-	public static function hasData() {
-		return !empty($_REQUEST) && !in_array(null, $_REQUEST, true) && !self::$lock;
-	}
 	
 	/**
 	 * Retrieves the HTTP Method used by the client.
