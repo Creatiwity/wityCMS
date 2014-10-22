@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="fr">
+	<!-- Actions -->
+	<item id="configure">Configuration</item>
+	
+	<!-- Configure -->
+	<item id="site_title">Titre du site</item>
+	<item id="site_keywords">Mots clés (séparer par des virgules)</item>
+	<item id="site_description">Description (référencement)</item>
+	<item id="site_email">Email de l'administrateur</item>
+	<item id="submit">Envoyer</item>
+	
+	<!-- Messages -->
+	<item id="settings_updated">La configuration a été mise à jour avec succès.</item>
+</lang>
