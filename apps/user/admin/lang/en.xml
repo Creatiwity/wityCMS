@@ -41,20 +41,20 @@
 	<item id="notify_these_users">Notify these users</item>
 	<item id="user_account_validated_subject">%s - User account validated</item>
 	<item id="user_account_validated_email"><![CDATA[
-<p>Welcome on {site_name}!</p>
-<p>Your account on {site_name} got validated by an administrator.</p>
+<p>Welcome on {site_title}!</p>
+<p>Your account on {site_title} got validated by an administrator.</p>
 <p>You can login with your account on the website:
 <a href="{base}/user/login/">Login</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
 {base}/user/login/</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_account_validated">The user %s was validated.</item>
 	<item id="user_account_refused_subject">%s - Your inscription has been refused</item>
 	<item id="user_account_refused_email"><![CDATA[
 <p>Dear user,</p>
-<p>Your inscription on {site_name} was not accepted.</p>
+<p>Your inscription on {site_title} was not accepted.</p>
 <p>For further information, please, contact an administrator.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_account_refused">The user %s was refused.</item>
 	<item id="user_account_invalid">The user %s is not to be checked.</item>
 	
@@ -77,7 +77,7 @@
 	<item id="user_register_email_subject">%s - Your user account was created</item>
 	<item id="user_register_email_body"><![CDATA[
 <p>Dear user,</p>
-<p>An account was just created for you on the website {{site_name}}</p>
+<p>An account was just created for you on the website {{site_title}}</p>
 <p></p>To login, proceed to <a href="{{base}}/user/login/">{{base}}/user/login/</a>.</p>
 <p>Here are you login data :</p>
 <ul>
@@ -87,7 +87,7 @@
 <p>These information are personnal.<br />
 To change them, go to your profile.</p>
 
-<p>{{site_name}}</p>
+<p>{{site_title}}</p>
 --------------<br />
 This is an automatic message.]]></item>
 	<item id="user_created">The user %s was created successfully.</item>

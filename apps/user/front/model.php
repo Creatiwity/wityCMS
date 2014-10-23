@@ -368,7 +368,7 @@ class UserModel {
 		$mail = WHelper::load('phpmailer');
 		$mail->CharSet = 'utf-8';
 		$mail->From = WConfig::get('config.email');
-		$mail->FromName = WConfig::get('config.site_name');
+		$mail->FromName = WConfig::get('config.site_title');
 		$mail->Subject = $subject;
 		$mail->Body = $body;
 		$mail->IsHTML(true);

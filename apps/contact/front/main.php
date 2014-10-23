@@ -73,9 +73,9 @@ class ContactController extends WController {
 							array(
 								'from' => array($data['from_email'], $data['from_name']),
 								'to' => $data['to'],
-								'subject' => WLang::get('mail_for_admin_subject', WConfig::get('config.site_name'), $data['email_subject']),
+								'subject' => WLang::get('mail_for_admin_subject', WConfig::get('config.site_title'), $data['email_subject']),
 								'body' => WLang::get('mail_for_admin_body', array(
-									'site'    => WConfig::get('config.site_name'),
+									'site'    => WConfig::get('config.site_title'),
 									'base'    => WRoute::getBase(),
 									'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
 									'company' => $data['from_company'],
@@ -86,9 +86,9 @@ class ContactController extends WController {
 							array(
 								'from' => array($config['site_from_email'], $config['site_from_name']),
 								'to' => array($data['from_email'], $data['from_name']),
-								'subject' => WLang::get('copy_subject', WConfig::get('config.site_name')),
+								'subject' => WLang::get('copy_subject', WConfig::get('config.site_title')),
 								'body' => WLang::get('auto_reply', array(
-									'site'    => WConfig::get('config.site_name'),
+									'site'    => WConfig::get('config.site_title'),
 									'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
 									'company' => $data['from_company'],
 									'subject' => $data['email_subject'],

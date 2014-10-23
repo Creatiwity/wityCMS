@@ -43,19 +43,19 @@
 	<item id="user_account_validated_subject">%s - Votre compte utilisateur a été validé</item>
 	<item id="user_account_validated_email"><![CDATA[
 <p>Bonjour,</p>
-<p>Votre compte sur le site {site_name} vient d'être validé par un administrateur.</p>
+<p>Votre compte sur le site {site_title} vient d'être validé par un administrateur.</p>
 <p>Vous pouvez vous connecter à l'adresse suivante :<br />
 <a href="{base}/user/connexion/">Se connecter</a></p>
 <p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
 {base}/user/connexion/</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_account_validated">L'utilisateur %s a été validé.</item>
 	<item id="user_account_refused_subject">%s - Votre inscription a été refusée</item>
 	<item id="user_account_refused_email"><![CDATA[
 <p>Bonjour,</p>
-<p>Votre inscription sur le site {site_name} n'a pas été acceptée.</p>
+<p>Votre inscription sur le site {site_title} n'a pas été acceptée.</p>
 <p>Pour plus d'informations, merci de contacter un administrateur.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_account_refused">L'utilisateur %s a été refusé.</item>
 	<item id="user_account_invalid">L'utilisateur %s ne correspond pas au processus de validation.</item>
 	
@@ -78,7 +78,7 @@
 	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
 	<item id="user_register_email_body"><![CDATA[
 <p>Bonjour,</p>
-<p>Un compte utilisateur vient de vous être créé sur le site {{site_name}}</p>
+<p>Un compte utilisateur vient de vous être créé sur le site {{site_title}}</p>
 <p></p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}/user/login/">{{base}}/user/login/</a>.</p>
 <p>Voici vos données de connexion :</p>
 <ul>
@@ -88,7 +88,7 @@
 <p>Ces informations sont personnelles.<br />
 Pour tout changement, rendez-vous sur l'espace membre.</p>
 
-<p>{{site_name}}</p>
+<p>{{site_title}}</p>
 --------------<br />
 Ceci est un message automatique.]]></item>
 	<item id="user_created">L'utilisateur %s a été créé avec succès.</item>

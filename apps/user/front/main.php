@@ -175,10 +175,10 @@ class UserController extends WController {
 						// Send a validation email
 						$this->model->sendEmail(
 							$data['email'],
-							WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+							WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
 							str_replace(
-								array('{site_name}', '{nickname}', '{password}', '{base}', '{confirm}'),
-								array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $data['confirm']),
+								array('{site_title}', '{nickname}', '{password}', '{base}', '{confirm}'),
+								array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $data['confirm']),
 								WLang::get('user_register_email_confirm')
 							)
 						);
@@ -189,10 +189,10 @@ class UserController extends WController {
 							// Send an email to the user to remind him its login data
 							$this->model->sendEmail(
 								$data['email'],
-								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+								WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
 								str_replace(
-									array('{site_name}', '{nickname}', '{password}'),
-									array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf']),
+									array('{site_title}', '{nickname}', '{password}'),
+									array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf']),
 									WLang::get('user_register_email_admin')
 								)
 							);
@@ -203,10 +203,10 @@ class UserController extends WController {
 						if (!empty($admin_emails)) {
 							$this->model->sendEmail(
 								$admin_emails,
-								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+								WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
 								str_replace(
-									array('{site_name}', '{nickname}', '{base}', '{userid}'),
-									array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $user_id),
+									array('{site_title}', '{nickname}', '{base}', '{userid}'),
+									array(WConfig::get('config.site_title'), $data['nickname'], WRoute::getBase(), $user_id),
 									WLang::get('user_register_admin_warning')
 								)
 							);
@@ -218,10 +218,10 @@ class UserController extends WController {
 							// Send a validation email
 							$this->model->sendEmail(
 								$data['email'],
-								WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+								WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
 								str_replace(
-									array('{site_name}', '{nickname}', '{password}', '{base}'),
-									array(WConfig::get('config.site_name'), $data['nickname'], $data['password_conf'], WRoute::getBase()),
+									array('{site_title}', '{nickname}', '{password}', '{base}'),
+									array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase()),
 									WLang::get('user_register_email')
 								)
 							);
@@ -272,10 +272,10 @@ class UserController extends WController {
 				if (!empty($admin_emails)) {
 					$this->model->sendEmail(
 						$admin_emails,
-						WLang::get('user_register_email_subject', WConfig::get('config.site_name')),
+						WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
 						str_replace(
-							array('{site_name}', '{nickname}', '{base}', '{userid}'),
-							array(WConfig::get('config.site_name'), $data['nickname'], WRoute::getBase(), $data['id']),
+							array('{site_title}', '{nickname}', '{base}', '{userid}'),
+							array(WConfig::get('config.site_title'), $data['nickname'], WRoute::getBase(), $data['id']),
 							WLang::get('user_register_admin_warning')
 						)
 					);
@@ -318,10 +318,10 @@ class UserController extends WController {
 						// Send it by email
 						$this->model->sendEmail(
 							$data['email'],
-							WLang::get('user_password_lost_subject', WConfig::get('config.site_name')),
+							WLang::get('user_password_lost_subject', WConfig::get('config.site_title')),
 							str_replace(
-								array('{base}', '{site_name}', '{email}', '{confirm}'),
-								array(WRoute::getBase(), WConfig::get('config.site_name'), $user_data['email'], $confirm),
+								array('{base}', '{site_title}', '{email}', '{confirm}'),
+								array(WRoute::getBase(), WConfig::get('config.site_title'), $user_data['email'], $confirm),
 								WLang::get('user_password_lost_email')
 							)
 						);

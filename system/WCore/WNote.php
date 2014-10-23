@@ -216,9 +216,9 @@ class WNote {
 			$mail = WHelper::load('phpmailer');
 			$mail->CharSet = 'utf-8';
 			$mail->From = $email;
-			$mail->FromName = WConfig::get('config.site_name');
+			$mail->FromName = WConfig::get('config.site_title');
 			$mail->AddAddress($email);
-			$mail->Subject = "[".WConfig::get('config.site_name')."] ".$note['level']." note - ".$note['code'];
+			$mail->Subject = "[".WConfig::get('config.site_title')."] ".$note['level']." note - ".$note['code'];
 			$mail->Body = 
 "<p>Dear developper,</p>
 <p>A new <strong>".$note['level']."</strong> note was triggered:</p>

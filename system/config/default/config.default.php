@@ -6,13 +6,13 @@
  */
 
 $config = array(
-  'base'      => 'http://www.mysite.com',
-  'site_name' => 'wityCMS',
-  'theme'     => 'grafx',
-  'lang'      => 'fr_FR',
-  'timezone'  => 'Europe/Paris',
-  'email'     => 'contact@mysite.com',
-  'debug'     => true
+  'base'       => 'https://www.mysite.com',
+  'site_title' => 'wityCMS',
+  'theme'      => 'grafx',
+  'lang'       => 'en_EN',
+  'timezone'   => 'Europe/Paris',
+  'email'      => 'contact@mysite.com',
+  'debug'      => true
 );
 
 ?>

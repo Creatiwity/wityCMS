@@ -44,7 +44,7 @@ Please, wait a moment before trying again.</item>
 	<!-- Register - EMAIL CONFIRMATION -->
 	<item id="user_register_email_subject">%s - Your user account creation</item>
 	<item id="user_register_email_confirm"><![CDATA[
-<p>Welcome on {site_name}!</p>
+<p>Welcome on {site_title}!</p>
 <p>There are your user account credentials:<br />
 Nickname: {nickname}<br />
 Password: {password}</p>
@@ -55,24 +55,24 @@ Password: {password}</p>
 <p>If the link does not work, paste this link in your browser:<br />
 {base}/user/confirm/{confirm}</p>
 
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_confirm">To finish your account creation, you have to click on the link in the email you are going to receive.</item>
 	<item id="user_validated">Your account got validated successfully.</item>
 	
 	<!-- Register: ADMIN CHECK -->
 	<item id="user_register_email_admin"><![CDATA[
-<p>Welcome on {site_name}!</P>
+<p>Welcome on {site_title}!</P>
 <p>There are your user account credentials:<br />
 Nickname: {nickname}<br />
 Password: {password}</p>
 <p>First, your account <strong>needs to be validated by an administrator</strong> to be activated.<br />
 You will be noticed as soon as it will be done.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin_warning"><![CDATA[
 <p>Hello,</p>
-<p>The account <strong>{nickname}</strong> needs to be validated on {site_name}.<br />
+<p>The account <strong>{nickname}</strong> needs to be validated on {site_title}.<br />
 To check it, <a href="{base}/admin/user/edit/{userid}">follow this link</a>.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin"><![CDATA[Your account got registered.<br />
 It needs to be validated by an administrator.<br />
 You will be notified once it will be done.]]></item>
@@ -83,7 +83,7 @@ You will be notified once it will be done.]]></item>
 	
 	<!-- Register - AUTO -->
 	<item id="user_register_email"><![CDATA[
-<p>Welcome on {site_name}!</p>
+<p>Welcome on {site_title}!</p>
 <p>There are your user account credentials:<br />
 Nickname: {nickname}<br />
 Password: {password}</p>
@@ -91,7 +91,7 @@ Password: {password}</p>
 <a href="{base}/user/login/">Login</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
 {base}/user/login/</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_success"><![CDATA[<p>Your account was created successfully.</p>
 <p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
 	
@@ -105,12 +105,12 @@ Password: {password}</p>
 	<item id="user_password_lost_subject">%s - Password reset request</item>
 	<item id="user_password_lost_email"><![CDATA[
 <p>Hello,</p>
-<p>You just ask for a password change on {site_name}.</p>
+<p>You just ask for a password change on {site_title}.</p>
 <p>To get to the next step, please, follow this link:<br />
 <a href="{base}/user/password-lost/?email={email}&amp;confirm={confirm}">Change your password</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
 {base}/user/password-lost/?email={email}&amp;confirm={confirm}</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_password_lost_success"><![CDATA[<p>Your password was changed successfully.</p>
 <p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
 </lang>

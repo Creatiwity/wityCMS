@@ -62,7 +62,7 @@ class Installer {
 					set_time_limit(0);
 
 					// Get config data
-					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language', 'timezone'), '', 'POST');
+					$config = WRequest::getAssoc(array('site_title', 'base', 'theme', 'language', 'timezone'), '', 'POST');
 					$route = WRequest::getAssoc(array('front_app', 'admin_app'), '', 'POST');
 					$database = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword', 'dbname', 'dbprefix'), '', 'POST');
 					$user = WRequest::getAssoc(array('nickname', 'password', 'email', 'firstname', 'lastname'), '', 'POST');
@@ -109,7 +109,7 @@ class Installer {
 
 					// Save General configuration
 					WConfig::set('config.base', trim($config['base'], '/'));
-					WConfig::set('config.site_name', $config['site_name']);
+					WConfig::set('config.site_title', $config['site_title']);
 					WConfig::set('config.theme', $config['theme']);
 					WConfig::set('config.lang', $config['language']);
 					WConfig::set('config.timezone', $config['timezone']);
@@ -191,7 +191,7 @@ class Installer {
 	 * @return bool
 	 */
 	private function installerValidation($data) {
-		$inputs = array('site_name', 'base_url', 'theme', 'language', 'front_app', 'admin_app', 'db_credentials', 'db_name', 'tables_prefix', 'user_password', 'user_nickname', 'user_email');
+		$inputs = array('site_title', 'base_url', 'theme', 'language', 'front_app', 'admin_app', 'db_credentials', 'db_name', 'tables_prefix', 'user_password', 'user_nickname', 'user_email');
 		foreach ($inputs as $input_name) {
 			$data['group'] = $input_name;
 			if (!$this->remoteValidation($data)) {
@@ -211,9 +211,9 @@ class Installer {
 		$respond = true;
 
 		switch ($data['group']) {
-			case 'site_name':
-				$site_name = WRequest::get('site_name', '', 'POST');
-				if ($this->isVerifiedString($site_name, $data, $respond)) {
+			case 'site_title':
+				$site_title = WRequest::get('site_title', '', 'POST');
+				if ($this->isVerifiedString($site_title, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Site name validated.");
 					return true;
 				} else if ($respond) {

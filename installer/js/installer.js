@@ -21,11 +21,11 @@ $(window).ready(function() {
 
 					childs: [
 						{
-							id: "site_name",
+							id: "site_title",
 							name: "Site name",
 							required: true,
 							validate: {
-								remote: 'site_name'
+								remote: 'site_title'
 							}
 						},
 						{

@@ -45,7 +45,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
 	<item id="user_register_email_confirm"><![CDATA[
 <p>Bonjour,</p>
-<p>Vous venez de vous inscrire sur le site {site_name}.</p>
+<p>Vous venez de vous inscrire sur le site {site_title}.</p>
 <p>Voici un rappel de vos données de connexion :<br />
 Identifiant : {nickname}<br />
 Mot de passe : {password}</p>
@@ -53,25 +53,25 @@ Mot de passe : {password}</p>
 <a href="{base}/user/confirm/{confirm}">Valider la demande</a></p>
 <p>Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navigateur :<br />
 {base}/user/confirm/{confirm}</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_confirm">Pour terminer la création de votre compte, vous devez cliquer sur le lien de confirmation dans l'email que vous allez recevoir.</item>
 	<item id="user_validated">Votre compte a été validé avec succès.</item>
 	
 	<!-- Register: ADMIN CHECK -->
 	<item id="user_register_email_admin"><![CDATA[
 <p>Bonjour,</p>
-<p>Vous venez de vous inscrire sur le site {site_name}.</p>
+<p>Vous venez de vous inscrire sur le site {site_title}.</p>
 <p>Voici un rappel de vos données de connexion :<br />
 Identifiant : {nickname}<br />
 Mot de passe : {password}</p>
 <p>Votre compte <strong>requiert la validation d'un administrateur</strong> avant de pouvoir être utilisé.<br />
 Vous serez notifié par email lorsque cela sera fait.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin_warning"><![CDATA[
 <p>Bonjour,</p>
-<p>L'utilisateur <strong>{nickname}</strong> vient de demander la création d'un compte sur le site {site_name}.<br />
+<p>L'utilisateur <strong>{nickname}</strong> vient de demander la création d'un compte sur le site {site_title}.<br />
 Pour l'étudier, <a href="{base}/admin/user/edit/{userid}">cliquez ici</a>.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin"><![CDATA[Votre compte a bien été enregistrée.<br />
 Son activation nécessite l'intervention d'un administrateur.<br />
 Vous serez notifié par email lorsqu'il sera validé.]]></item>
@@ -83,7 +83,7 @@ Vous serez notifié par email lorsqu'il sera validé.]]></item>
 	<!-- Register - AUTO -->
 	<item id="user_register_email"><![CDATA[
 <p>Bonjour,</p>
-<p>Vous venez de vous inscrire sur le site {site_name}.</p>
+<p>Vous venez de vous inscrire sur le site {site_title}.</p>
 <p>Voici un rappel de vos données de connexion :<br />
 Identifiant : {nickname}<br />
 Password : {password}</p>
@@ -91,7 +91,7 @@ Password : {password}</p>
 <a href="{base}/user/connexion/">Se connecter</a></p>
 <p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
 {base}/user/connexion/</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_success"><![CDATA[<p>Votre compte utilisateur a été créé avec succès.</p>
 <p>Vous pouvez vous connecter en <a href="/user/login/">cliquant ici</a>.</p>]]></item>
 	
@@ -105,12 +105,12 @@ Password : {password}</p>
 	<item id="user_password_lost_subject">%s - Réinitialisation de votre mot de passe</item>
 	<item id="user_password_lost_email"><![CDATA[
 <p>Bonjour,</p>
-<p>Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_name}.</p>
+<p>Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_title}.</p>
 <p>Pour passer à l'étape suivante, suivez ce lien :<br />
 <a href="{base}/user/password_lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a></p>
 <p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
 {base}/user/password_lost/?email={email}&amp;confirm={confirm}</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_password_lost_success"><![CDATA[<p>Votre mot de passe a été réinitialisé avec succès.</p>
 <p>Vous pouvez vous connecter en l'utlisant à <a href="/user/login/">cette adresse</a>.</p>]]></item>
 </lang>

@@ -38,10 +38,10 @@ class UserAdminController extends WController {
 						if ($notify) {
 							$this->model->sendEmail(
 								$db_data['email'],
-								WLang::get('user_account_validated_subject', WConfig::get('config.site_name')),
+								WLang::get('user_account_validated_subject', WConfig::get('config.site_title')),
 								str_replace(
-									array('{site_name}', '{base}'),
-									array(WConfig::get('config.site_name'), WRoute::getBase()),
+									array('{site_title}', '{base}'),
+									array(WConfig::get('config.site_title'), WRoute::getBase()),
 									WLang::get('user_account_validated_email')
 								)
 							);
@@ -60,10 +60,10 @@ class UserAdminController extends WController {
 						if ($notify) {
 							$this->model->sendEmail(
 								$db_data['email'],
-								WLang::get('user_account_refused_subject', WConfig::get('config.site_name')),
+								WLang::get('user_account_refused_subject', WConfig::get('config.site_title')),
 								str_replace(
-									array('{site_name}', '{base}'),
-									array(WConfig::get('config.site_name'), WRoute::getBase()),
+									array('{site_title}', '{base}'),
+									array(WConfig::get('config.site_title'), WRoute::getBase()),
 									WLang::get('user_account_refused_email')
 								)
 							);
@@ -210,10 +210,10 @@ class UserAdminController extends WController {
 							$mail = WHelper::load('phpmailer');
 							$mail->CharSet = 'utf-8';
 							$mail->From = WConfig::get('config.email');
-							$mail->FromName = WConfig::get('config.site_name');
-							$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_name'));
+							$mail->FromName = WConfig::get('config.site_title');
+							$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_title'));
 							$mail->Body = WLang::get('user_register_email_body', array(
-								'site_name' => WConfig::get('config.site_name'),
+								'site_title' => WConfig::get('config.site_title'),
 								'base'      => WRoute::getBase(),
 								'nickname'  => $post_data['nickname'],
 								'password'  => $password_original

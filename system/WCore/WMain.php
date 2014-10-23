@@ -171,15 +171,18 @@ class WMain {
 	private function setupTemplate() {
 		$tpl = WSystem::getTemplate();
 
-		$site_name = WConfig::get('config.site_name');
+		$site_title = WConfig::get('config.site_title');
 		$route = WRoute::route();
 
 		// Setup system template variables with $wity_ prefix
+		// @TODO: distinguish site_title and page_title values
 		$tpl_vars = array(
 			'wity_base_url'         => WRoute::getBase(),
-			'wity_site_name'        => $site_name,
-			'wity_site_subtitle'    => $site_name,
-			'wity_page_title'       => $site_name,
+			'wity_site_title'       => $site_title,
+			'wity_site_subtitle'    => $site_title,
+			'wity_site_keywords'    => WConfig::get('config.keywords'),
+			'wity_site_description' => WConfig::get('config.description'),
+			'wity_page_title'       => $site_title,
 			'wity_page_keywords'    => WConfig::get('config.keywords'),
 			'wity_page_description' => WConfig::get('config.description'),
 			'wity_user'             => false,
