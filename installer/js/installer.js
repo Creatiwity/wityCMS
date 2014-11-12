@@ -134,7 +134,8 @@ $(window).ready(function() {
 									id: "dbserver",
 									name: "Server",
 									required: true,
-									summary: false
+									summary: false,
+									value: 'localhost'
 								},
 								{
 									id: "dbport",
@@ -157,7 +158,8 @@ $(window).ready(function() {
 									name: "User",
 
 									required: true,
-									summary: false
+									summary: false,
+									value: 'root'
 								},
 								{
 									id: "dbpassword",
