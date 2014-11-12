@@ -1,3 +1,6 @@
+#############
+## wityCMS
+#############
 cache/[^.]*/
 system/config/config.php
 system/config/database.php
