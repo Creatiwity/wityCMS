@@ -30,13 +30,13 @@
 			</form>
 			<hr />
 		{/if}
-			
+
 			<h2 class="sr-only">{lang action_listing}</h2>
 			<span class="label label-info">{lang users_total|{$stats.total}}</span>
 		{if {$stats.request} < {$stats.total}}
 			<span class="label label-warning">{lang users_found|{$stats.request}}</span>
 		{/if}
-			
+
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
@@ -118,5 +118,5 @@
 		</div>
 	</div>
 
-	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete" aria-hidden="true"></div>
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete_label" aria-hidden="true"></div>
 </div>

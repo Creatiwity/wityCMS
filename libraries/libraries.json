@@ -3,9 +3,8 @@
 	"paths": {
 		"apps": "witycms/apps.plugin",
 		"themes": "witycms/themes.plugin",
-		"jquery": "jquery-1.11.0/jquery-1.11.0",
-		"bootstrap": "bootstrap-3.1.1/js/bootstrap",
-		"modal": "bootstrap-modal-2.2.0/js/bootstrap3-patch"
+		"jquery": "jquery-1.11.1/jquery-1.11.1",
+		"bootstrap": "bootstrap-3.3.0/js/bootstrap"
 	},
 	"shim": {
 		"bootstrap": ["jquery"]
