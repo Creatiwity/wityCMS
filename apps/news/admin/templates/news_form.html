@@ -51,10 +51,12 @@
 				<div class="well well-sm">
 					<h4 class="text-center">{lang category_of_article}</h4>
 					{for $cat in $cats}
-					<label class="checkbox">
-						<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if} />
-						{$cat.news_cat_name}
-					</label>
+					<div class="checkbox">
+						<label>
+							<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if} />
+							{$cat.news_cat_name}
+						</label>
+					</div>
 					{/for}
 					{empty}
 					<p>{lang no_category_in_database}</p>
