@@ -100,7 +100,10 @@ class UserController extends WController {
 			$this->setHeader('Location', WRoute::getReferer());
 		}
 		
-		return array('redirect' => $redirect);
+		return array(
+			'redirect' => $redirect,
+			'config'   => $this->model->getConfig()
+		);
 	}
 	
 	/**

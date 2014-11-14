@@ -27,6 +27,7 @@ class UserView extends WView {
 	 */
 	public function login($model) {
 		$this->assign('redirect', $model['redirect']);
+		$this->assign('config', $model['config']);
 		$this->setTemplate('connexion_form');
 	}
 	
