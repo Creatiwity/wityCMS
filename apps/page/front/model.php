@@ -24,8 +24,6 @@ class PageModel {
 		
 		// Declare tables
 		$this->db->declareTable('page');
-		$this->db->declareTable('cats');
-		$this->db->declareTable('cats_relations');
 	}
 	
 	/**
