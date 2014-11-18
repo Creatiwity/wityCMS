@@ -37,14 +37,14 @@ CREATE TABLE IF NOT EXISTS `prefix_news` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Content in the table `prefix_news`
 --
 
 INSERT INTO `prefix_news` (`id`, `url`, `title`, `author`, `content`, `meta_title`, `keywords`, `description`, `views`, `published`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
-(4, 'witycms-was-successfully-installed', 'wityCMS was successfully installed!', '', '<p>Congratulations and welcome to wityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The wityCMS team</p>\r\n', '', '', '', 0, 1, NOW(), 1, '', 0);
+(1, 'witycms-was-successfully-installed', 'wityCMS was successfully installed!', '', '<p>Congratulations and welcome to wityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The wityCMS team</p>\r\n', '', '', '', 0, 1, NOW(), 1, '', 0);
 
 -- --------------------------------------------------------
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
 DROP TABLE IF EXISTS `prefix_users`;
 CREATE TABLE IF NOT EXISTS `prefix_users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `nickname` varchar(100) COLLATE utf8_bin NOT NULL,
+  `nickname` varchar(100) NOT NULL,
   `password` varchar(50) NOT NULL,
   `confirm` varchar(25) NOT NULL DEFAULT '0',
   `email` varchar(100) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `prefix_users` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `prefix_users_config` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `prefix_users_groups` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `prefix_contact` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `prefix_contact_config` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO `prefix_contact_config` (`key`, `value`, `created_date`) VALUES
 ('site_from_name', '', NOW()),
@@ -210,7 +210,7 @@ INSERT INTO `prefix_contact_config` (`key`, `value`, `created_date`) VALUES
 
 DROP TABLE IF EXISTS `prefix_mail_action_history`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_action_history` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `hash_action` varchar(40) NOT NULL,
   `hash_mail` varchar(40) NOT NULL,
   `user_id` mediumint(9) NOT NULL,
@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_action_history` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin ;
 
 -- --------------------------------------------------------
 
@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_action_history` (
 
 DROP TABLE IF EXISTS `prefix_mail_available_actions`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `hash_action` varchar(40) NOT NULL,
   `hash_mail` varchar(40) NOT NULL,
   `one_time` varchar(1) NOT NULL,
@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin ;
 
 -- --------------------------------------------------------
 
@@ -251,16 +251,16 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
 --
 
 CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(100) NOT NULL,
+  `value` varchar(500) NOT NULL,
   `user_id` mediumint(9) NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin ;
 
 --
 -- Contenu de la table `mail_configuration`
@@ -277,7 +277,7 @@ INSERT INTO `prefix_mail_configuration` (`id`, `key`, `value`, `user_id`, `creat
 
 DROP TABLE IF EXISTS `prefix_mail_list`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_list` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `hash` varchar(40) NOT NULL,
   `mailing_hash_id` varchar(27) NOT NULL,
   `from` text NOT NULL,
@@ -297,7 +297,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_list` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin ;
 
 -- --------------------------------------------------------
 
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_list` (
 
 DROP TABLE IF EXISTS `prefix_mail_mailing`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `internal_id` varchar(27) NOT NULL,
   `action_expiration` varchar(150) NOT NULL,
   `response_policy` varchar(5) NOT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin ;
 
 -- --------------------------------------------------------
 
@@ -330,26 +330,26 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
 --
 
 CREATE TABLE IF NOT EXISTS `prefix_page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` tinytext CHARACTER SET utf8 NOT NULL,
-  `title` tinytext CHARACTER SET utf8 NOT NULL,
-  `subtitle` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `author` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `content` text CHARACTER SET utf8 NOT NULL,
-  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `short_title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `keywords` mediumtext CHARACTER SET utf8 NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `url` tinytext NOT NULL,
+  `title` tinytext NOT NULL,
+  `subtitle` tinytext NOT NULL,
+  `author` varchar(30) NOT NULL,
+  `content` text NOT NULL,
+  `meta_title` tinytext NOT NULL,
+  `short_title` varchar(200) NOT NULL,
+  `keywords` mediumtext NOT NULL,
+  `description` text NOT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
-  `parent` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `parent` varchar(20) NOT NULL,
   `menu` tinyint(4) NOT NULL DEFAULT '0',
-  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(200) NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
