@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`news_id`,`cat_id`)
+  PRIMARY KEY (`id_news`,`id_cat`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
