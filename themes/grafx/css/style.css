@@ -75,23 +75,23 @@ ul.listing li:hover {
  * Header
  */
 
-header {
+header.theme-header {
 	color: white;
 	font-weight: bold;
 	margin-top: 30px;
 }
 
-header img {
+header.theme-header img {
 	float: left;
 }
 
-header .inner {
+header.theme-header .inner {
 	display: inline-block;
 	text-align: right;
 	padding-top: 40px;
 }
 
-header p.site-name {
+header.theme-header p.site-name {
 	font-size: 3em;
 	letter-spacing: 4px;
 	text-transform: uppercase;
@@ -100,7 +100,7 @@ header p.site-name {
 	display: inline;
 }
 
-header p.slogan {
+header.theme-header p.slogan {
 	margin: 0;
 	padding: 0;
 	position: relative;
@@ -172,33 +172,6 @@ nav .navbar-form button {
 nav .navbar-form button:hover {
 	color: white;
 	background: #f0f0f0;
-}
-
-/**
- * News
- */
-
-.wity-app-news .item {
-	border-bottom: 1px solid #91cadf;
-	margin-bottom: 1em;
-}
-
-.wity-app-news .item-meta {
-	font-size: 0.9em;
-	font-style: italic;
-	margin-bottom: 1em;
-	padding-left: 28px;
-	position: relative;
-	top: -10px;
-}
-
-.wity-app-news .news-read-more {
-	text-align: right;
-}
-
-.wity-app-news .news-read-more a {
-	background: url('../img/button-read-more.png') no-repeat left center;
-	padding-left: 20px;
 }
 
 /**

@@ -15,7 +15,8 @@ defined('IN_WITY') or die('Access denied');
  */
 class NewsView extends WView {
 	public function listing($data) {
-		$this->assign('news', $data);
+		$this->assign('css', '/apps/news/front/css/news.css');
+		$this->assign($data);
 	}
 }
 

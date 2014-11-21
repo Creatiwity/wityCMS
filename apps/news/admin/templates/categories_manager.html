@@ -14,13 +14,13 @@
 					</thead>
 					<tbody id="categories_body">
 						{for $c in $cats}
-						<tr data-wity-category='{"news_cat_id":"{$c.news_cat_id}", "news_cat_name":"{$c.news_cat_name}", "news_cat_shortname":"{$c.news_cat_shortname}", "news_cat_parent":"{$c.news_cat_parent}"}'>
-							<td>{$c.news_cat_name}</td>
-							<td>{$c.news_cat_shortname}</td>
-							<td>{$c.news_cat_parent_name}</td>
+						<tr data-wity-category='{"cid":"{$c.cid}", "name":"{$c.name}", "shortname":"{$c.shortname}", "parent":"{$c.parent}"}'>
+							<td>{$c.name}</td>
+							<td>{$c.shortname}</td>
+							<td>{$c.parent_name}</td>
 							<td>
 								<span title="{lang category_edit}" class="link wity_edit_category"><i class="glyphicon glyphicon-edit"></i></span>
-								<span title="{lang category_delete}" class="link" data-link-modal="/v/admin/news/category_delete/{$c.news_cat_id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>
+								<span title="{lang category_delete}" class="link" data-link-modal="/v/admin/news/category_delete/{$c.cid}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>
 							</td>
 						</tr>
 						{/for}
@@ -43,10 +43,10 @@
 
 	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete_label" aria-hidden="true"></div>
 	<div id="selectParent" class="hide">
-		<select id="news_cat_parent" name="news_cat_parent" class="form-control">
+		<select id="parent" name="parent" class="form-control">
 			<option value="0">{lang None}</option>
 			{for $c in $cats}
-			<option value="{$c.news_cat_id}">{$c.news_cat_name}</option>
+			<option value="{$c.cid}">{$c.name}</option>
 			{/for}
 		</select>
 	</div>

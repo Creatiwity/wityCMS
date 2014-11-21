@@ -2,59 +2,78 @@
 	<form method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-9">
-				<h2 class="sr-only">{if empty({$news_id})}{lang article_add}{else}{lang article_edit}{/if}</h2>
+				<h2 class="sr-only">{if empty({$id})}{lang article_add}{else}{lang article_edit}{/if}</h2>
 				<div class="form-group">
-					<label for="news_title" class="sr-only control-label">{lang title_of_article}</label>
-					<input id="news_title" class="form-control input-lg" type="text" name="news_title" value="{$news_title}"  autocomplete="off" placeholder="{lang title_of_article}" />
+					<label for="title" class="sr-only control-label">{lang title_of_article}*</label>
+					<input id="title" class="form-control input-lg" type="text" name="title" value="{$title}" autocomplete="off" placeholder="{lang title_of_article}" />
 				</div>
 
 				<div class="input-group">
-					<span class="input-group-addon">{$site_url}{$news_id}-</span>
-					<input id="news_url" class="form-control" type="text" name="news_url" value="{$news_url}" />
+					<span class="input-group-addon">{$site_url}{$id}-</span>
+					<input id="url" class="form-control" type="text" name="url" value="{$url}" />
 				</div>
 
-				<label for="news_content" class="sr-only">{lang article_content}:</label><br />
-				<textarea id="news_content" class="form-control" name="news_content" rows="20" cols="80">{$news_content}</textarea>
+				<label for="content" class="sr-only">{lang article_content}:</label><br />
+				<textarea id="content" class="form-control" name="content" rows="20" cols="80">{$content}</textarea>
 				<script type="text/javascript">
-					CKEDITOR.replace( 'news_content', {
-						height: '500px'
-					});
+					var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
+						options = {
+							filebrowserBrowseUrl: roxyFileman,
+							filebrowserImageBrowseUrl: roxyFileman + '?type=image',
+							removeDialogTabs: 'link:upload;image:upload',
+							height: '500px'
+						};
+					
+					CKEDITOR.replace('content', options);
 				</script>
 			</div>
 			<div class="col-md-3">
 				<div class="well well-sm">
 					<h4 class="text-center">{lang metadata}</h4>
-					<div class="form-group">
-						<label for="news_author" class="control-label">{lang author}</label>
-						<input id="news_author" class="form-control" type="text" name="news_author" value="{$news_author}" placeholder="{lang author}" />
+					<div class="checkbox">
+						<label for="published">
+							<input id="published" type="checkbox" name="published"{if {$published}} checked="checked"{/if} />
+							{lang published}
+						</label>
 					</div>
 					<div class="form-group">
-						<label for="news_meta_title">{lang meta_title}</label>
-						<input id="news_meta_title" class="form-control" type="text" name="news_meta_title" value="{$news_meta_title}" placeholder="{lang meta_title}" />
+						<label for="author">{lang author}*</label>
+						<input id="author" type="text" class="form-control" name="author" value="{$author}"  autocomplete="off" placeholder="{lang author}" />
 					</div>
 					<div class="form-group">
-						<label for="news_keywords">{lang keywords}</label>
-						<input id="news_keywords" class="form-control" type="text" name="news_keywords" value="{$news_keywords}" placeholder="{lang keywords}" />
+						<label for="meta_title">{lang meta_title}</label>
+						<input id="meta_title" type="text" class="form-control" name="meta_title" value="{$meta_title}"  autocomplete="off" placeholder="{lang meta_title}" />
 					</div>
 					<div class="form-group">
-						<label for="news_description">{lang description}</label>
-						<textarea id="news_description" class="form-control" type="text" name="news_description" placeholder="{lang description}" rows="4" cols="40">{$news_description}</textarea>
+						<label for="keywords">{lang keywords}</label>
+						<input id="keywords" type="text" class="form-control" name="keywords" value="{$keywords}"  autocomplete="off" placeholder="{lang keywords}" />
 					</div>
-					{if !empty({$news_date})}
+					<div class="form-group">
+						<label for="description">{lang description}</label>
+						<textarea id="description" type="text" class="form-control" name="description" placeholder="{lang description}" rows="4" cols="40">{$description}</textarea>
+					</div>
+					
+					{if !empty({$image})}
+					<img class="img-responsive" src="/upload/news/{$image}" alt="{$title}" />
+					{/if}
+					<label for="image">{lang image}</label>
+					<input id="image" type="file" name="image" />
+					
+					{if !empty({$date})}
 					<hr />
 					<ul class="list-unstyled">
-						<li>{lang article_created_on|{$news_date}}</li>
-						<li>{lang article_modified_on|{$news_modified}}</li>
+						<li>{lang article_created_on|{$date}}</li>
+						<li>{lang article_modified_on|{$modified}}</li>
 					</ul>
 					{/if}
 				</div>
 				<div class="well well-sm">
 					<h4 class="text-center">{lang category_of_article}</h4>
-					{for $cat in $cats}
+					{for $cat in $categories}
 					<div class="checkbox">
 						<label>
-							<input id="cat{$cat.news_cat_id}" type="checkbox" name="news_cats[{$cat.news_cat_id}]"{if in_array({$cat.news_cat_id}, {$news_cats})} checked="checked"{/if} />
-							{$cat.news_cat_name}
+							<input id="cat{$cat.cid}" type="checkbox" name="cats[{$cat.cid}]"{if in_array({$cat.cid}, {$cats})} checked="checked"{/if} />
+							{$cat.name}
 						</label>
 					</div>
 					{/for}

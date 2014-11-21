@@ -14,6 +14,12 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.5.0-dev-19-04-2013
  */
 class NewsAdminView extends WView {
+	public function __construct() {
+		parent::__construct();
+		
+		$this->assign('css', '/apps/news/admin/css/news-admin.css');
+	}
+	
 	public function listing($model) {
 		$this->assign($model['sorting_tpl']);
 
@@ -32,38 +38,42 @@ class NewsAdminView extends WView {
 
 	public function news_form($model) {
 		// JS / CSS
-		$this->assign('require', 'apps!news/add_or_edit');
 		$this->assign('js', "/libraries/ckeditor-4.4.3/ckeditor.js");
+		$this->assign('require', 'apps!news/add_or_edit');
 
 		// Assign site URL for permalink management
-		$this->assign('site_url', WRoute::getBase() . '/news/');
+		$this->assign('site_url', WRoute::getBase() . 'news/');
 
 		// Treat categories filled by user
-		$news_cats = array();
-		if (isset($model['data']['news_cats']) && is_array($model['data']['news_cats'])) {
-			foreach ($model['data']['news_cats'] as $key => $cat) {
+		$cats = array();
+		if (!empty($model['data']['cats']) && is_array($model['data']['cats'])) {
+			foreach ($model['data']['cats'] as $key => $cat) {
 				if ($cat === 'on') {
-					$news_cats[] = $key;
+					$cats[] = $key;
 				} else if (is_array($cat)) {
-					$news_cats[] = $cat['news_cat_id'];
+					$cats[] = $cat['cid'];
 				}
 			}
 		}
-		$this->assign('cats', $model['cats']);
-		$this->assign('news_cats', $news_cats);
-
-		$this->assignDefault(array(
-			'news_id'          => 0,
-			'news_author'      => $_SESSION['nickname'],
-			'news_meta_title'  => '',
-			'news_keywords'    => '',
-			'news_description' => '',
-			'news_title'       => '',
-			'news_url'         => '',
-			'news_content'     => '',
-			'news_date'        => '',
-			'news_modified'    => ''
-		), $model['data']);
+		$this->assign('categories', $model['cats']);
+		$this->assign('cats', $cats);
+		
+		$default = array(
+			'id'            => 0,
+			'url'           => '',
+			'image'         => '',
+			'created_date'  => '',
+			'modified_date' => '',
+			'author'      => $_SESSION['nickname'],
+			'meta_title'  => '',
+			'keywords'    => '',
+			'description' => '',
+			'title'       => '',
+			'content'     => '',
+			'published'   => true,
+		);
+		
+		$this->assignDefault($default, $model['data']);
 		$this->setTemplate('news_form');
 	}
 
@@ -76,8 +86,8 @@ class NewsAdminView extends WView {
 	}
 
 	public function news_delete($model) {
-		$this->assign('title', $model['news_title']);
-		$this->assign('confirm_delete_url', "/admin/news/news_delete/".$model['news_id']."/confirm");
+		$this->assign('title', $model['title_1']);
+		$this->assign('confirm_delete_url', "/admin/news/news_delete/".$model['id']."/confirm");
 	}
 
 	public function category_delete($model) {
@@ -91,11 +101,11 @@ class NewsAdminView extends WView {
 		$this->assign('cats', $model['data']);
 
 		$this->assignDefault(array(
-			'news_cat_id'          => '',
-			'news_cat_name'        => '',
-			'news_cat_shortname'   => '',
-			'news_cat_parent'      => 0,
-			'news_cat_parent_name' => ""
+			'id'          => '',
+			'name'        => '',
+			'shortname'   => '',
+			'parent'      => 0,
+			'parent_name' => ""
 		), $model['post_data']);
 	}
 }

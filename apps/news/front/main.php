@@ -15,27 +15,55 @@ defined('IN_WITY') or die('Access denied');
  */
 class NewsController extends WController {
 	protected function listing(array $params) {
-		$news_id = intval(array_shift($params));
+		$cat_shortname = '';
+		$news_id = 0;
+		$listing_view = true;
+		$categories = $this->model->getCatsList();
+		
+		// URL may contain either a category, either a news ID:
+		// Ex 1: /news/cat/test
+		// Ex 2: /news/64-news-test
+		if (!empty($params[0])) {
+			if ($params[0] == 'cat') {
+				$category = $this->model->getCatByShortname($params[1]);
+				
+				if (!empty($category)) {
+					$cat_shortname = $category['shortname'];
+				}
+			} else {
+				$news_id = intval($params[0]);
+			}
+		}
 		
 		if (!empty($news_id)) {
-			return $this->display($news_id);
+			$news_data = $this->model->getNews($news_id);
+			
+			if (empty($news_data)) {
+				return WNote::error('news_not_found', WLang::get('news_not_found'));
+			}
+			
+			if (!empty($news_data['cats'])) {
+				$category = $news_data['cats'][0];
+				$cat_shortname = $category['shortname'];
+			}
+			
+			$news = array($news_data);
+			
+			// Increase views
+			$this->model->increaseViews($news_id);
+			
+			$listing_view = false;
 		} else {
-			return $this->listNews();
-		}
-	}
-	
-	protected function listNews() {
-		return $this->model->getNewsList(0, 3);
-	}
-	
-	protected function display($news_id) {
-		$news_data = $this->model->getNews($news_id);
-		
-		if (empty($news_data)) {
-			return WNote::error('news_not_found', WLang::get('news_not_found'));
+			$filter_cats = (empty($cat_shortname)) ? array() : array('cats' => array($cat_shortname));
+			$news = $this->model->getNewsList(0, 4, 'created_date', false, $filter_cats);
 		}
 		
-		return array($news_data);
+		return array(
+			'news'            => $news,
+			'categories'      => $categories,
+			'cat_selected'    => $cat_shortname,
+			'listing_view'    => $listing_view
+		);
 	}
 }
 

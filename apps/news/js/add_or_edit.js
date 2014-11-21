@@ -4,11 +4,11 @@
 
 require(['jquery'], function($) {
 	$(document).ready( function() {
-		$("#news_title").on('keyup blur', function() {
+		$("#title").on('keyup blur', function() {
 			var value = $(this).val();
 
 			if (value === '') {
-				$("#news_url").val(value);
+				$("#url").val(value);
 				return;
 			}
 
@@ -23,7 +23,7 @@ require(['jquery'], function($) {
 				return;
 			}
 
-			$("#news_url").val(value);
+			$("#url").val(value);
 		});
 		
 		// Prevents user from accidentally refreshing or leaving the page

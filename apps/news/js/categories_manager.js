@@ -8,7 +8,7 @@ require(['jquery'], function($) {
 	$(document).ready(function() {
 		var model, currentEditedRow, backupRow, selectParent;
 
-		model = ['news_cat_id', 'news_cat_name', 'news_cat_shortname', 'news_cat_parent'];
+		model = ['cid', 'name', 'shortname', 'parent'];
 		selectParent = $("#selectParent").html();
 
 		function buildEditRow(existingRow) {

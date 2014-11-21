@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `prefix_news_cats` (
 
 DROP TABLE IF EXISTS `prefix_news_cats_relations`;
 CREATE TABLE IF NOT EXISTS `prefix_news_cats_relations` (
-  `news_id` int(11) unsigned NOT NULL,
-  `cat_id` int(11) unsigned NOT NULL,
+  `id_news` int(11) unsigned NOT NULL,
+  `id_cat` int(11) unsigned NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
