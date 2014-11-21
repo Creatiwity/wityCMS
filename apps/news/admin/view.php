@@ -86,7 +86,7 @@ class NewsAdminView extends WView {
 	}
 
 	public function news_delete($model) {
-		$this->assign('title', $model['title_1']);
+		$this->assign('title', $model['title']);
 		$this->assign('confirm_delete_url', "/admin/news/news_delete/".$model['id']."/confirm");
 	}
 
