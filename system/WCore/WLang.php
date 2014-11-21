@@ -128,11 +128,31 @@ class WLang {
 	 * @return string Top priority language
 	 */
 	public static function getLang() {
-		if (isset(self::$languages[0])) {
-			return self::$languages[0];
+		if (!empty($_SESSION['lang'])) {
+			return $_SESSION['lang'];
+		} else {
+			if (isset(self::$languages[0])) {
+				return self::$languages[0];
+			}
+			
+			return '';
 		}
+	}
+	
+	public static function getLangID() {
+		$lang = self::getLang();
 		
-		return '';
+		switch ($lang) {
+			default:
+			case 'fr':
+				return 1;
+			
+			case 'en':
+				return 2;
+			
+			case 'es':
+				return 3;
+		}
 	}
 	
 	/**
