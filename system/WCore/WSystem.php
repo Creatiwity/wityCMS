@@ -77,7 +77,13 @@ class WSystem {
 			
 			$server   = WConfig::get('database.server');
 			$dbname   = WConfig::get('database.dbname');
+			$port     = WConfig::get('database.port');
 			$dsn      = 'mysql:dbname='.$dbname.';host='.$server;
+			
+			if (!empty($port)) {
+				$dsn .= ';port='.$port;
+			}
+			
 			$user     = WConfig::get('database.user');
 			$password = WConfig::get('database.pw');
 			
