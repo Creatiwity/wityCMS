@@ -118,11 +118,6 @@ class WResponse {
 			// Render require configuration
 			$require = $tpl->parseString($tpl->getVar('require'));
 
-			// Insert CSS + script configuration
-			$css = $tpl->getVar('css');
-			$script = $tpl->getVar('js');
-			$html = str_replace('</head>', $css.$script."\n".'</head>', $html);
-
 			// Insert requireJS part
 			$html = $this->insertRequireJS($html, $require);
 
