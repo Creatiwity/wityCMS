@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{if !empty({$wity_lang})}{$wity_lang}{else}en{/if}">
 	<head>
-		<title>{$wity_page_title}</title>
+		<title>{if !empty({$wity_page_title})}{$wity_page_title}{else}wityCMS error page{/if}</title>
 		<meta charset="utf-8" />
 		<meta name="description" content="{$wity_page_description}" />
 		<meta name="keywords" content="{$wity_page_keywords}" />
@@ -11,6 +11,7 @@
 
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+		{if isset({$css})}{$css}{/if}
 
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
@@ -23,6 +24,7 @@
 				deps: ['bootstrap']
 			};
 		</script>
+		{if isset({$js})}{$js}{/if}
 	</head>
 	<body>
 		<div class="container">

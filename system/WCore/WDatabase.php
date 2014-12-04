@@ -45,7 +45,7 @@ class WDatabase extends PDO {
 				$message = WLang::get('error_could_not_find_pdo');
 			}
 			
-			WNote::error('sql_conn_failed', WLang::get('error_sql_conn', $message), 'debug, die');
+			WNote::error('error_sql_conn_failed', WLang::get('error_sql_conn_failed', $message), 'debug, die');
 		}
 		
 		$this->tablePrefix = WConfig::get('database.prefix');

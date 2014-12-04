@@ -22,6 +22,10 @@ class WMain {
 	public function __construct() {
 		// Loading config
 		$this->loadConfigs();
+		
+		// Initializing lang
+		WLang::init();
+		WLang::declareLangDir(SYS_DIR.'lang');
 
 		// Initializing the route
 		$this->route();
@@ -31,10 +35,6 @@ class WMain {
 
 		// Setup Timezone
 		$this->setupTimezone();
-
-		// Initializing lang
-		WLang::init();
-		WLang::declareLangDir(SYS_DIR.'lang');
 
 		// Setup Template
 		$this->setupTemplate();
