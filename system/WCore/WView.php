@@ -127,11 +127,11 @@ class WView {
 
 		// Format the file asked
 		if (strpos($file, DS) === false) {
-			$file = $this->context['directory'].'templates'.DS.$file.'.html';
+			$file = $this->getContext('directory').'templates'.DS.$file.'.html';
 		}
 		
-		if (!$this->context['admin']) {
-			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->context['app-name'].DS.basename($template);
+		if (!$this->getContext('admin')) {
+			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->getContext('app-name').DS.basename($template);
 			
 			// Allow template overriding from theme
 			if (file_exists($theme_tpl)) {
