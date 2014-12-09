@@ -174,6 +174,9 @@ class WMain {
 		$site_title = WConfig::get('config.site_title');
 		$route = WRoute::route();
 
+		// Load language file from template
+		WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
+
 		// Setup system template variables with $wity_ prefix
 		// @TODO: distinguish site_title and page_title values
 		$tpl_vars = array(
