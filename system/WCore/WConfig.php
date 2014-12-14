@@ -238,6 +238,31 @@ class WConfig {
 	public static function unload($field) {
 		unset(self::$configs[$field], self::$files[$field]);
 	}
+	
+	/*****************************************
+	 * WTemplateCompiler's new handlers part *
+	 *****************************************/
+	/**
+	 * Handles the {config} node in WTemplate.
+	 * {config} gives access to config variables.
+	 * {config config.email}
+	 * 
+	 * @param string $args config identifier
+	 * @return string php string that calls the WConfig::get()
+	 */
+	public static function compile_config($args) {
+		if (!empty($args)) {
+			// Replace the template variables in the string
+			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			
+			if (!empty($args)) {
+				// Build final php lang string
+				return '<?php echo WConfig::get("'.$args.'"); ?>';
+			}
+		}
+		
+		return '';
+	}
 }
 
 ?>

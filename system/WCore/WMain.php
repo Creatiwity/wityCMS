@@ -90,6 +90,10 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
+		
+		// Init template handler
+		WSystem::getTemplate();
+		WTemplateCompiler::registerCompiler('config', array('WConfig', 'compile_config'));
 	}
 
 	/**
