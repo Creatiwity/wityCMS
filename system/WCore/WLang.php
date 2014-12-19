@@ -51,6 +51,9 @@ class WLang {
 		
 		// Add config lang
 		self::addLang(WConfig::get('config.lang'));
+		
+		// Configure locale
+		setlocale(LC_ALL, WConfig::get('config.lang'));
 	}
 	
 	/**
