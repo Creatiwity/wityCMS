@@ -106,23 +106,28 @@ abstract class WController {
 
 				// Theme configuration for admin
 				if ($this->getAdminContext()) {
-					// These are template variables => direct assign in WTemplate
-					$tpl = WSystem::getTemplate();
-					$tpl->assign('appsList', $this->getAdminApps());
+					$context = $this->getContext();
 
-					$manifest = $this->getManifest();
-					$action_asked = $this->getTriggeredAction();
+					if (!$context['parent']) {
+						// These are template variables => direct assign in WTemplate
+						$tpl = WSystem::getTemplate();
+						$tpl->assign('appsList', $this->getAdminApps());
 
-					$tpl->assign(array(
-						'appSelected' => $this->getAppName(),
-						'actionsList' => $manifest['admin'],
-						'adminMenu'   => $manifest['admin_menu'],
-						'actionAsked' => $action_asked
-					));
-					$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
-						ucwords($manifest['name']),
-						isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['description']) : ''
-					));
+						$manifest = $this->getManifest();
+						$action_asked = $this->getTriggeredAction();
+
+						$tpl->assign(array(
+							'appSelected' => $this->getAppName(),
+							'actionsList' => $manifest['admin'],
+							'adminMenu'   => $manifest['admin_menu'],
+							'actionAsked' => $action_asked
+						));
+
+						$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
+							ucwords($manifest['name']),
+							isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['description']) : ''
+						));
+					}
 				}
 
 				// Execute action
