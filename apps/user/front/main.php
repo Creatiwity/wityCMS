@@ -33,7 +33,7 @@ class UserController extends WController {
 	 */
 	protected function login($params) {
 		// Find redirect URL
-		$referer = str_replace(WRoute::getBase(), '', WRoute::getReferer());
+		$referer = WRoute::getReferer();
 		$redirect_request = WRequest::get('redirect');
 		
 		if (empty($params[0])) {
