@@ -192,7 +192,9 @@ class WMain {
 			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
 			'wity_app'              => $route['app'],
 			'wity_query'            => WRoute::getQuery(),
-			'wity_lang'             => WLang::getLang()
+			'wity_lang'             => WLang::getLang(),
+			'wity_site_favicon'     => WConfig::get('config.favicon'),
+			'wity_site_icon'        => WConfig::get('config.icon')
 		);
 
 		if (WSession::isConnected()) {

@@ -7,8 +7,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content="wityCMS 0.5" />
 		<meta name="robots" content="index,follow" />
-		<link rel="icon" type="image/x-icon" href="{config config.favicon}" />
-		<link rel="apple-touch-icon" href="{config config.icon}" />
+		{if !empty({$wity_site_favicon})}<link rel="icon" type="image/x-icon" href="{$wity_site_favicon}" />{/if}
+		{if !empty({$wity_site_icon})}<link rel="apple-touch-icon" href="{$wity_site_icon}" />{/if}
 
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
