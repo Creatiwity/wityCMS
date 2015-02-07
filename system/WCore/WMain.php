@@ -186,14 +186,10 @@ class WMain {
 		$tpl_vars = array(
 			'wity_base_url'         => WRoute::getBase(),
 			'wity_site_title'       => $site_title,
-			'wity_site_subtitle'    => $site_title,
-			'wity_site_keywords'    => WConfig::get('config.keywords'),
-			'wity_site_description' => WConfig::get('config.description'),
 			'wity_page_title'       => $site_title,
-			'wity_page_keywords'    => WConfig::get('config.keywords'),
 			'wity_page_description' => WConfig::get('config.description'),
 			'wity_user'             => false,
-			'wity_home'             => WRoute::getQuery() == '',
+			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
 			'wity_app'              => $route['app'],
 			'wity_query'            => WRoute::getQuery(),
 			'wity_lang'             => WLang::getLang()

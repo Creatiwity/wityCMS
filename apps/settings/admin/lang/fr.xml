@@ -5,9 +5,11 @@
 	
 	<!-- Configure -->
 	<item id="site_title">Titre du site</item>
-	<item id="site_keywords">Mots clés (séparer par des virgules)</item>
-	<item id="site_description">Description (référencement)</item>
-	<item id="site_email">Email de l'administrateur</item>
+	<item id="description">Description pour le référencement (environ 125 caractères)</item>
+	<item id="email">Email par défaut du site</item>
+	<item id="icons">Icônes</item>
+	<item id="favicon">Favicon (.ico)</item>
+	<item id="icon">Icône du site (32x32 px)</item>
 	<item id="submit">Envoyer</item>
 	
 	<!-- Messages -->

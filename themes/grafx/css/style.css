@@ -100,14 +100,6 @@ header.theme-header p.site-name {
 	display: inline;
 }
 
-header.theme-header p.slogan {
-	margin: 0;
-	padding: 0;
-	position: relative;
-	top: -10px;
-	z-index: -5;
-}
-
 /**
  * Navigation
  */
