@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="fr">
+	<!-- Form -->
+	<item id="from_name_label">Votre nom</item>
+	<item id="from_name_placeholder">Nom</item>
+
+	<item id="from_company_label">Organisme</item>
+	<item id="from_company_placeholder">Organisme</item>
+
+	<item id="from_email_label">Votre e-mail</item>
+	<item id="from_email_placeholder">E-mail</item>
+
+	<item id="email_subject_label">Objet</item>
+	<item id="email_subject_placeholder">Objet</item>
+
+	<item id="email_message_label">Message</item>
+	<item id="email_message_placeholder">Message</item>
+
+	<item id="send_button">Envoyer</item>
+	<item id="sending">Envoi...</item>
+
+	<!-- Auto reply -->
+	<item id="copy_subject">[%s] Votre email de contact</item>
+	<item id="auto_reply"><![CDATA[Bonjour,<br /><br />
+
+Vous venez d'envoyer un email de contact sur le site {{site}}.<br /><br />
+En voici un récapitulatif :
+<ul>
+	<li><strong>Nom :</strong> {{name}}</li>
+	<li><strong>Organisme :</strong> {{company}}</li>
+	<li><strong>Objet :</strong> {{subject}}</li>
+	<li><strong>Message :</strong><br />
+{{message}}</li>
+</ul>
+
+Nous nous efforçons d'y répondre dans les plus brefs délais.<br /><br />
+
+Merci,<br />
+L'équipe du site {{site}}<br /><br />
+
+--<br />
+<em>Ceci est un message automatique.</em>]]></item>
+	
+	<item id="mail_for_admin_subject">[%s] Contact - %s</item>
+	<item id="mail_for_admin_body"><![CDATA[Bonjour,<br /><br />
+
+Une nouvelle demande de contact vient d'être postée sur le site {{site}} :
+
+<ul>
+	<li><strong>Nom :</strong> {{name}}</li>
+	<li><strong>Organisme :</strong> {{company}}</li>
+	<li><strong>Objet :</strong> {{subject}}</li>
+	<li><strong>Message :</strong><br />
+{{message}}</li>
+</ul>
+
+Vous pouvez visualiser l'ensemble des demandes de contact à <a href="{{base}}/admin/contact/">cette adresse</a>.<br /><br />
+
+--<br />
+<em>Ceci est un message automatique.</em>]]></item>
+
+	<!-- Errors -->
+	<item id="no_from_name">Il manque votre nom.</item>
+	<item id="no_from_email">Il manque votre adresse mail.</item>
+	<item id="invalid_from_email">Votre adresse mail semble invalide.</item>
+	<item id="no_email_subject">Il manque l'objet du mail.</item>
+	<item id="no_email_message">Il manque le corps de ce mail.</item>
+
+	<item id="email_not_sent">Nous sommes désolés mais ce mail n'a pas pu être envoyé. Cependant l'administrateur a été prévenu de l'erreur, nous vous invitons donc à réessayer plus tard.</item>
+
+	<item id="missing_configuration">Le champs 'De' n'est pas configuré dans l'application contact. Il est donc impossible d'envoyer un mail depuis cette application. Voici le dernier mail que j'ai essayé d'envoyer : &lt;br/&gt;%s.</item>
+
+	<item id="unable_to_save_email">J'ai été incapable d'enregistrer le dernier mail dans la base de données mais je l'ai tout de même envoyé. Voici le dernier mail que j'ai essayé d'enregistrer : &lt;br/&gt;%s.</item>
+
+	<!-- Success -->
+	<item id="email_sent">E-mail envoyé.</item>
+</lang>

@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_action_history` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Contenu de la table `mail_configuration`
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_list` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -331,6 +331,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
 -- Structure de la table `prefix_page`
 --
 
+DROP TABLE IF EXISTS `prefix_page`;
 CREATE TABLE IF NOT EXISTS `prefix_page` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `url` tinytext NOT NULL,
@@ -351,7 +352,66 @@ CREATE TABLE IF NOT EXISTS `prefix_page` (
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Structure de la table `prefix_slideshow_slide`
+--
+
+DROP TABLE IF EXISTS `prefix_slideshow_slide`;
+CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `url` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) NOT NULL,
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `prefix_slideshow_slide_lang`
+--
+
+DROP TABLE IF EXISTS `prefix_slideshow_slide_lang`;
+CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide_lang` (
+  `id_slide` int(10) unsigned NOT NULL,
+  `id_lang` int(11) unsigned NOT NULL,
+  `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `legend` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) NOT NULL,
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) NOT NULL,
+  PRIMARY KEY (`id_slide`,`id_lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Structure de la table `prefix_slideshow_config`
+--
+
+DROP TABLE IF EXISTS `prefix_slideshow_config`;
+CREATE TABLE IF NOT EXISTS `prefix_slideshow_config` (
+  `key` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `value` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) NOT NULL,
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Contenu de la table `prefix_slideshow_config`
+--
+
+INSERT INTO `prefix_slideshow_config` (`key`, `value`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
+('autoplay', '0', NOW(), 0, '0000-00-00 00:00:00', 1),
+('time_pause', '4000', NOW(), 0, '0000-00-00 00:00:00', 1),
+('time_transition', '500', NOW(), 0, '0000-00-00 00:00:00', 1)
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
