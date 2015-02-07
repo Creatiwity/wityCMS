@@ -185,6 +185,7 @@ $(window).ready(function() {
 							name: "Tables prefix",
 							requires: "dbname",
 							validEmpty: true,
+							value: 'wity',
 
 							validate: {
 								remote: 'tables_prefix'
