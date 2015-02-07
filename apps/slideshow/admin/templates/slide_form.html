@@ -1,0 +1,63 @@
+<div class="wity-app wity-app-slideshow wity-action-form">
+	<form method="post" enctype="multipart/form-data">
+		<div role="tabpanel">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs translatable-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#lang_1" class="lang">{lang french}</a></li>
+			</ul>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-8">
+				<h2 class="sr-only">Ajout d'une slide</h2>
+				<div class="form-group translatable">
+					<label for="title_1" class="sr-only control-label">{lang title}</label>
+					<input id="title_1" class="form-control input-lg lang lang_1" type="text" name="title_1" value="{$title_1}" autocomplete="off" placeholder="{lang title}" />
+				</div>
+				<div class="translatable">
+					<label for="legend_1" class="sr-only">{lang legend}:</label><br />
+					<div class="lang lang_1">
+						<textarea id="legend_1" class="form-control" name="legend_1" rows="20" cols="80">{$legend_1}</textarea>
+					</div>
+				</div>
+				<script type="text/javascript">
+					var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
+						options = {
+							filebrowserBrowseUrl: roxyFileman,
+							filebrowserImageBrowseUrl: roxyFileman + '?type=image',
+							removeDialogTabs: 'link:upload;image:upload',
+							height: '200px'
+						};
+					
+					CKEDITOR.replace('legend_1', options);
+				</script>
+				<br />
+				<div class="form-group">
+					<label for="url" class="control-label">{lang URL}</label>
+					<input id="url" class="form-control" type="text" name="url" value="{$url}" autocomplete="off" placeholder="{lang URL}" />
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="well well-sm">
+					<div class="form-group">
+						<label for="image" class="control-label">
+							Image
+							<br />
+							<small>(PNG ou JPEG | 1600x450 px | ~170 ko)</small>
+						</label>
+						
+						{if !empty({$image})}
+						<p><img class="img-responsive" src="/upload/slideshow/{$image}" alt="{$name}" /></p>
+						{/if}
+						
+						<input id="image" type="file" name="image" class="form-control" />
+					</div>
+				</div>
+				<div class="well well-sm">
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">Envoyer</button>
+					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">Annuler</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

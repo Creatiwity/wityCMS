@@ -33,7 +33,11 @@ class WNote {
 	 * @param  string $handlers  handlers (several handlers separated by a comma can be specified)
 	 * @return array array(level, code, message, handlers)
 	 */
-	public static function error($code, $message, $handlers = 'assign') {
+	public static function error($code, $message = '', $handlers = 'assign') {
+		if (empty($message)) {
+			$message = WLang::get($code);
+		}
+
 		return self::raise(array(
 			'level'    => self::ERROR,
 			'code'     => $code, 
@@ -50,7 +54,11 @@ class WNote {
 	 * @param  string $handlers  handlers (several handlers separated by a comma can be specified)
 	 * @return array array(level, code, message, handlers)
 	 */
-	public static function info($code, $message, $handlers = 'assign') {
+	public static function info($code, $message = '', $handlers = 'assign') {
+		if (empty($message)) {
+			$message = WLang::get($code);
+		}
+
 		return self::raise(array(
 			'level'    => self::INFO,
 			'code'     => $code, 
@@ -67,7 +75,11 @@ class WNote {
 	 * @param  string $handlers  handlers (several handlers separated by a comma can be specified)
 	 * @return array array(level, code, message, handlers)
 	 */
-	public static function success($code, $message, $handlers = 'assign') {
+	public static function success($code, $message = '', $handlers = 'assign') {
+		if (empty($message)) {
+			$message = WLang::get($code);
+		}
+
 		return self::raise(array(
 			'level'    => self::SUCCESS,
 			'code'     => $code, 
