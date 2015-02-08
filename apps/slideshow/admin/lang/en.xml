@@ -8,6 +8,7 @@
 	<item id="title">Title</item>
 	<item id="legend">Legend</item>
 	<item id="image">Image</item>
+	<item id="position">Position</item>
 	<item id="last_modification">Last modification</item>
 	<item id="actions">Actions</item>
 	<item id="URL">URL</item>
