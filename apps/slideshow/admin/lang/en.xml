@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="en">
-	<!-- Actions -->
+	<item id="slide_add">Add a slide</item>
+	<item id="slide_edit">Edit a slide</item>
+	<item id="slide_delete">Delete a slide</item>
+	<item id="no_slide_in_database">No slide found in the database</item>
+
+	<item id="title">Title</item>
+	<item id="legend">Legend</item>
+	<item id="image">Image</item>
+	<item id="last_modification">Last modification</item>
+	<item id="actions">Actions</item>
+	<item id="URL">URL</item>
+	<item id="save">Save</item>
+	<item id="cancel">Cancel</item>
+
+	<item id="delete_confirm">Do you really want to delete the slide %s?</item>
+	<item id="delete">Delete</item>
+
+	<item id="slide_added">The slide was successfully added.</item>
+	<item id="slide_not_added">An unknown error occured.</item>
+	<item id="slide_edited">The slide was successfully edited.</item>
+	<item id="slide_not_edited">An unknown error occured.</item>
+	<item id="slide_not_found">The slide you are trying to edit does not exist.</item>
+	<item id="slide_deleted">The slide was successfully deleted.</item>
+
 	<item id="config_time_pause">Pause time between two slides (ms)</item>
 	<item id="config_time_transition">Transition time between two slides (ms)</item>
 	<item id="config_autoplay">Enable slides autoplaying</item>

@@ -59,6 +59,7 @@ class SlideshowModel {
 			FROM `slideshow_slide` s
 			LEFT JOIN `slideshow_slide_lang` sl
 			ON `id` = id_slide AND `id_lang` = :id_lang
+			ORDER BY s.`position` ASC
 		');
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();

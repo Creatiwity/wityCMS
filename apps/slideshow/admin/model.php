@@ -48,14 +48,35 @@ class SlideshowAdminModel extends SlideshowModel {
 		
 		return $slide;
 	}
+
+	/**
+	 * Find overview max position
+	 *
+	 * @return int
+	 */
+	public function getNewSlidePosition() {
+		$prep = $this->db->prepare('
+			SELECT MAX(`position`)
+			FROM `slideshow_slide`
+		');
+		$prep->execute();
+
+		$position = $prep->fetchColumn();
+
+		return is_null($position) ? 0 : intval($position) + 1;
+	}
 	
 	public function insertSlide($data, $data_translatable) {
+		// Get position
+		$position = $this->getNewSlidePosition();
+
 		$prep = $this->db->prepare('
-			INSERT INTO `slideshow_slide`(`image`, `url`)
-			VALUES(:image, :url)
+			INSERT INTO `slideshow_slide`(`image`, `url`, `position`)
+			VALUES(:image, :url, :position)
 		');
 		$prep->bindParam(':image', $data['image']);
 		$prep->bindParam(':url', $data['url']);
+		$prep->bindParam(':position', $position);
 		
 		if (!$prep->execute()) {
 			return false;
@@ -147,6 +168,20 @@ class SlideshowAdminModel extends SlideshowModel {
 		$exec2 = $prep->execute();
 		
 		return $exec1 && $exec2;
+	}
+
+	public function reorderSlide($id, $position) {
+		// Set new position
+		$prep = $this->db->prepare('
+			UPDATE `slideshow_slide`
+			SET `position` = :position
+			WHERE `id` = :id
+		');
+
+		$prep->bindParam(':position', $position);
+		$prep->bindParam(':id', $id);
+
+		return $prep->execute();
 	}
 	
 	/**

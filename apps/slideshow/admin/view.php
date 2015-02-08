@@ -22,6 +22,7 @@ class SlideshowAdminView extends WView {
 	
 	public function slides($model) {
 		$this->assign('slides', $model);
+		$this->assign('require', "witycms/admin");
 	}
 	
 	private function slide_form($model) {

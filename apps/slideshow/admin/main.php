@@ -155,6 +155,31 @@ class SlideshowAdminController extends WController {
 
 		return array();
 	}
+
+	/**
+	 * Reorders elements
+	 *
+	 * @return array WNote
+	 */
+	protected function slides_reorder(array $params) {
+		$post_data = WRequest::getAssoc(array('positions'), null, 'POST');
+
+		if (!in_array(null, $post_data, true)) {
+			foreach ($post_data['positions'] as $id => $position) {
+				$id = intval($id);
+
+				if (!empty($id)) {
+					$position = intval($position);
+
+					$this->model->reorderSlide($id, $position);
+				}
+			}
+
+			return WNote::success('reordering_success');
+		} else {
+			return WNote::error('data_missing');
+		}
+	}
 	
 	protected function configuration(array $params) {
 		$config = $this->model->getConfig();

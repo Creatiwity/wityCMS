@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
+	<item id="slide_add">Ajouter une slide</item>
+	<item id="slide_edit">Editer une slide</item>
+	<item id="slide_delete">Supprimer une slide</item>
+	<item id="no_slide_in_database">Aucune slide dans la base de données</item>
+
+	<item id="title">Titre</item>
+	<item id="legend">Légende</item>
+	<item id="image">Image</item>
+	<item id="last_modification">Dernière modification</item>
+	<item id="actions">Actions</item>
+	<item id="URL">URL</item>
+	<item id="save">Sauvegarder</item>
+	<item id="cancel">Annuler</item>
+
+	<item id="delete_confirm">Êtes-vous sûr de vouloir supprimer la slide %s ?</item>
+	<item id="delete">Supprimer</item>
+
 	<item id="slide_added">La slide a été ajoutée avec succès.</item>
 	<item id="slide_not_added">Une erreur inconnue s'est produite.</item>
 	<item id="slide_edited">La slide a été éditée avec succès.</item>
