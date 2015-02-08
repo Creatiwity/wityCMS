@@ -360,9 +360,10 @@ CREATE TABLE IF NOT EXISTS `prefix_page` (
 
 DROP TABLE IF EXISTS `prefix_slideshow_slide`;
 CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `url` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) NOT NULL,
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
@@ -378,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide` (
 
 DROP TABLE IF EXISTS `prefix_slideshow_slide_lang`;
 CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide_lang` (
-  `id_slide` int(10) unsigned NOT NULL,
+  `id_slide` int(11) unsigned NOT NULL,
   `id_lang` int(11) unsigned NOT NULL,
   `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `legend` text COLLATE utf8_unicode_ci NOT NULL,
