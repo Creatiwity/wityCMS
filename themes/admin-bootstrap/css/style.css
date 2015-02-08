@@ -16,3 +16,34 @@ a.black {
 		width: 100%;
 	}
 }
+
+/* Drag handler */
+.drag-handler .drag-group {
+	width: 80px;
+	cursor: move;
+	text-align: center;
+	position: relative;
+	font-size: 14px;
+	padding: 4px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.drag-handler .drag-group:hover {
+	color: #fff;
+	background-color: #00aff0;
+}
+
+.drag-handler .drag-group .position {
+	display: inline-block;
+	border: solid 1px #ccc;
+	background-color: #eee;
+	padding: 0 5px;
+	color: #aaa;
+	width: 43px;
+	text-shadow: #fff 1px 1px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: rgba(0,0,0,0.2) 0 1px 3px inset;
+	box-shadow: rgba(0,0,0,0.2) 0 1px 3px inset;
+}
