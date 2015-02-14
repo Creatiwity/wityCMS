@@ -54,7 +54,7 @@ Une nouvelle demande de contact vient d'être postée sur le site {{site}} :
 {{message}}</li>
 </ul>
 
-Vous pouvez visualiser l'ensemble des demandes de contact à <a href="{{base}}/admin/contact/">cette adresse</a>.<br /><br />
+Vous pouvez visualiser l'ensemble des demandes de contact à <a href="{{base}}admin/contact/">cette adresse</a>.<br /><br />
 
 --<br />
 <em>Ceci est un message automatique.</em>]]></item>

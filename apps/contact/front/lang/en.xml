@@ -54,7 +54,7 @@ A new contact request was just posted on the website {{site}} :
 {{message}}</li>
 </ul>
 
-You can find the full list of contact request on <a href="{{base}}/admin/contact/">this page</a>.<br /><br />
+You can find the full list of contact request on <a href="{{base}}admin/contact/">this page</a>.<br /><br />
 
 --<br />
 <em>This is an auto-generated email.</em>]]></item>
