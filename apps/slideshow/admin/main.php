@@ -78,7 +78,7 @@ class SlideshowAdminController extends WController {
 			} else if (!empty($id_slide)) {
 				$post_data['image'] = $db_data['image'];
 			} else {
-				$errors[] = "Veuillez fournir une image.";
+				$errors[] = WLang::get('no_image');
 			}
 
 			if (empty($errors)) {
