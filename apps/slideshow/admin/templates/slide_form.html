@@ -10,16 +10,20 @@
 		<div class="row">
 			<div class="col-md-8">
 				<h2 class="sr-only">{lang slide_add}</h2>
+
 				<div class="form-group translatable">
 					<label for="title_1" class="control-label">{lang title}*</label><br />
 					<input id="title_1" class="form-control lang lang_1" type="text" name="title_1" value="{$title_1}" autocomplete="off" placeholder="{lang title}" />
 				</div>
+
 				<div class="translatable">
 					<label for="legend_1">{lang legend}</label><br />
 					<div class="lang lang_1">
 						<textarea id="legend_1" class="form-control" name="legend_1" rows="20" cols="80">{$legend_1}</textarea>
 					</div>
 				</div>
+				<br />
+
 				<script type="text/javascript">
 					var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
 						options = {
@@ -31,7 +35,7 @@
 					
 					CKEDITOR.replace('legend_1', options);
 				</script>
-				<br />
+				
 				<div class="form-group">
 					<label for="url" class="control-label">{lang URL}</label>
 					<input id="url" class="form-control" type="text" name="url" value="{$url}" autocomplete="off" placeholder="{lang URL}" />
@@ -53,6 +57,7 @@
 						<input id="image" type="file" name="image" class="form-control" />
 					</div>
 				</div>
+				
 				<div class="well well-sm">
 					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang save}</button>
 					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>

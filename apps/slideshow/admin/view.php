@@ -37,7 +37,7 @@ class SlideshowAdminView extends WView {
 			'title'  => '',
 			'legend' => '',
 		);
-		$lang_list = array(1, 2, 3);
+		$lang_list = array(1);
 		
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
