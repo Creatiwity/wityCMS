@@ -125,7 +125,7 @@ class SlideshowAdminController extends WController {
 			return $this->slide_form($id_slide, $db_data);
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/slideshow');
-			WNote::success('slide_not_found');
+			WNote::error('slide_not_found');
 			return array();
 		}
 	}
@@ -150,7 +150,7 @@ class SlideshowAdminController extends WController {
 			return $slide;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/slideshow');
-			WNote::success('slide_not_found');
+			WNote::error('slide_not_found');
 		}
 
 		return array();
