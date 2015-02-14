@@ -145,6 +145,9 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
+
+		// Variable for Roxy file manager
+		$_SESSION['upload_dir'] = WRoute::getDir().'upload/';
 	}
 
 	/**
