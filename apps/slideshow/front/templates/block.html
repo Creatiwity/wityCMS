@@ -2,7 +2,7 @@
 	<div class="slideshow" data-wity-slider='{ "bullet_point_position": "none", "controls": "true", "width": 1600, "height": 450, "fluid": true, "pause": {$config.time_pause}, "speed": {$config.time_transition}}'>
 		{for $slide in $slides}
 		<div class="slide">
-			<div class="slide-inner" style="background-image: url({$slide.image})">
+			<div class="slide-inner" style="background-image: url({$wity_base_url}{$slide.image})">
 				{if (!empty({$slide.title}) || !empty({$slide.legend}))}
 				<div class="description">
 					{if !empty({$slide.title})}

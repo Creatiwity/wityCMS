@@ -68,7 +68,7 @@ class SlideshowAdminController extends WController {
 				if (!$upload->processed) {
 					$errors[] = $upload->error;
 				} else {
-					$post_data['image'] = 'upload/slideshow/'.$upload->file_dst_name;
+					$post_data['image'] = '/upload/slideshow/'.$upload->file_dst_name;
 
 					// Erase the previous image
 					if (!empty($db_data['image'])) {

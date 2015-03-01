@@ -19,10 +19,6 @@ class SlideshowView extends WView {
 		$this->assign('css', '/libraries/wityslider-1.2.2/wityslider.css');
 		$this->assign('require', 'apps!slideshow/slideshow');
 
-		foreach ($model['slides'] as $key => $slide) {
-			$model['slides'][$key]['image'] = WRoute::getBase().$slide['image'];
-		}
-
 		$this->assign("slides", $model["slides"]);
 		$this->assign("config", $model["config"]);
 	}
