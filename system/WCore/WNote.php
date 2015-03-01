@@ -237,6 +237,7 @@ class WNote {
 <ul>
 	<li>Userid: ".@$_SESSION['userid']."</li>
 	<li>Client ip: ".$_SERVER['REMOTE_ADDR']."</li>
+	<li>Base: ".WConfig::get('config.base')."</li>
 	<li>Route: ".$_SERVER['REQUEST_URI']."</li>
 	<li><strong>Code:</strong> ".$note['code']."</li>
 	<li><strong>Message:</strong> ".$note['message']."</li>
