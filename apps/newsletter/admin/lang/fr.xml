@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="fr">
+	<!-- Actions -->
+	<item id="action_listing">Liste des abonnés</item>
+	<item id="action_delete">Suppression d'un abonné</item>
+	<item id="action_export">Exporter la liste des abonnés</item>
+	
+	<!-- page listing -->
+	<item id="actions">Actions</item>
+	<item id="email">Adresse email</item>
+	<item id="date">Date</item>
+	<item id="no_subs_in_database">Aucune abonné trouvé dans la base de données.</item>
+	<item id="sub_delete_confirmation">Confirmez-vous la suppression de l'abonné &lt;strong&gt;%s&lt;/strong&gt; ?</item>
+	
+	<!-- page management -->
+	<item id="sub_deleted">L'abonné &lt;strong&gt;%s&lt;/strong&gt; a été supprimé avec succès.</item>
+	
+	<item id="cancel">Annuler</item>
+	<item id="delete">Supprimer</item>
+	<item id="submit">Sauver</item>
+	<item id="none">N/A</item>
+</lang>

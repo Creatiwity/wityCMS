@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang value="en">
+	<item id="bad_email">Incorrect e-mail.</item>
+	<item id="already_in_db">This e-mail address is already subscribed.</item>
+	<item id="email_added">E-mail address successfully added.</item>
+	<item id="unknown_error">An unknown error happened.</item>
+	<item id="no_data">No address has been submitted.</item>
+</lang>

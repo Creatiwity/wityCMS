@@ -412,7 +412,24 @@ CREATE TABLE IF NOT EXISTS `prefix_slideshow_config` (
 INSERT INTO `prefix_slideshow_config` (`key`, `value`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
 ('autoplay', '0', NOW(), 0, '0000-00-00 00:00:00', 1),
 ('time_pause', '4000', NOW(), 0, '0000-00-00 00:00:00', 1),
-('time_transition', '500', NOW(), 0, '0000-00-00 00:00:00', 1)
+('time_transition', '500', NOW(), 0, '0000-00-00 00:00:00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `prefix_newsletter`
+--
+
+DROP TABLE IF EXISTS `prefix_newsletter`;
+CREATE TABLE IF NOT EXISTS `prefix_newsletter` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
