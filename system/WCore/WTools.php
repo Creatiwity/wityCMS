@@ -36,6 +36,12 @@ class WTools {
 	public static function isEmail($string) {
 		return (!empty($string) && preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $string));
 	}
+
+	public static function secureURL($url) {
+		if (strpos($url, 'http') === false) {
+			return 'http://'.$url;
+		}
+	}
 }
 
 ?>
