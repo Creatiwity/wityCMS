@@ -37,10 +37,18 @@ class WTools {
 		return (!empty($string) && preg_match('#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i', $string));
 	}
 
+	/**
+	 * Transforms a string into HTTP request
+	 * 
+	 * @param string $url
+	 * @return string starting with http://
+	 */
 	public static function secureURL($url) {
-		if (strpos($url, 'http') === false) {
+		if (!empty($url) && strpos($url, 'http') === false) {
 			return 'http://'.$url;
 		}
+		
+		return $url;
 	}
 }
 
