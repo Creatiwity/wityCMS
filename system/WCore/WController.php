@@ -122,21 +122,21 @@ abstract class WController {
 
 			$this->action = $action;
 
+			$tpl = WSystem::getTemplate();
+			$tpl->assign('wity_action', $this->action);
+
 			// Theme configuration for admin
 			if ($this->getAdminContext()) {
 				$context = $this->getContext();
 
 				if (!$context['parent']) {
-					$tpl = WSystem::getTemplate();
-					$tpl->assign('appsList', $this->getAdminApps());
+					$tpl->assign('wity_admin_apps', $this->getAdminApps());
 
 					$manifest = $this->getManifest();
 
 					$tpl->assign(array(
-						'appSelected' => $this->getAppName(),
-						'actionsList' => $manifest['admin'],
-						'adminMenu'   => $manifest['admin_menu'],
-						'actionAsked' => $this->action
+						'wity_admin_has_submenu' => $manifest['admin_has_submenu'],
+						'wity_admin_actions'     => $manifest['admin']
 					));
 
 					$tpl->assign('wity_page_title', sprintf('Admin &raquo; %s%s',
@@ -400,7 +400,7 @@ abstract class WController {
 
 				case 'admin':
 					$manifest['admin'] = array();
-					$manifest['admin_menu'] = false;
+					$manifest['admin_has_submenu'] = false;
 
 					if (property_exists($xml, 'admin') && property_exists($xml->admin, 'action')) {
 						foreach ($xml->admin->action as $action) {
@@ -411,7 +411,7 @@ abstract class WController {
 
 								if (!isset($manifest['admin'][$key])) {
 									$menuState = isset($attributes['menu']) ? (string) $attributes['menu'] == 'true' : true;
-									$manifest['admin_menu'] = $manifest['admin_menu'] || $menuState;
+									$manifest['admin_has_submenu'] = $manifest['admin_has_submenu'] || $menuState;
 
 									$manifest['admin'][$key] = array(
 										'description' => isset($attributes['description']) ? (string) $attributes['description'] : $key,
@@ -576,7 +576,7 @@ abstract class WController {
 		static $admin_apps = array();
 		if (empty($admin_apps)) {
 			$apps = WRetriever::getAppsList();
-			
+
 			foreach ($apps as $app) {
 				if (substr($app, 0, 5) == 'admin') {
 					$app_name = substr($app, 6);
