@@ -84,8 +84,6 @@ abstract class WController {
 	 * Most of the time, the action given in URL is used.
 	 */
 	public function launch($action, array $params = array()) {
-		$action = preg_replace('#[^a-zA-Z]+#', '_', $action);
-
 		// Trigger the corresponding method for the action given in URL
 		return $this->forward($action, $params);
 	}
@@ -147,10 +145,11 @@ abstract class WController {
 			}
 
 			// Execute action
-			if (method_exists($this, $action)) {
-				return $this->$action($params);
+			$executable_action = preg_replace('#[^a-z]#', '', $action);
+			if (method_exists($this, $executable_action)) {
+				return $this->$executable_action($params);
 			} else {
-				WNote::error('app_no_method', WLang::get('error_app_no_method', $action, $this->getAppName()), 'debug');
+				WNote::error('app_no_method', WLang::get('error_app_no_method', $executable_action, $this->getAppName()), 'debug');
 				return array();
 			}
 		} else {
@@ -243,7 +242,7 @@ abstract class WController {
 	 * @return string action's name asked in the URL
 	 */
 	public function getAskedAction(&$params) {
-		$action = isset($params[0]) ? $params[0] : '';
+		$action = isset($params[0]) ? strtolower($params[0]) : '';
 
 		if ($this->getAdminContext()) {
 			$actions_key = 'admin';
@@ -257,14 +256,11 @@ abstract class WController {
 
 		// $action exists ? Otherwise, check alias and finally, use default action if exists?
 		if (!empty($action) && !isset($this->manifest[$actions_key][$action])) {
-			// check alias
+			// Check alias
 			if (isset($this->manifest['alias'][$alias_prefix.$action])) {
 				$action = $this->manifest['alias'][$alias_prefix.$action];
-			} else { // try to guess
-				$action = str_replace('-', '_', $action);
-				if (!isset($this->manifest[$actions_key][$action])) {
-					$action = '';
-				}
+			} else {
+				$action = '';
 			}
 		}
 
