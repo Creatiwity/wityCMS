@@ -247,12 +247,15 @@ class UserAdminController extends WController {
 			}
 		}
 		
+		$default_admin_route = WRoute::parseURL(WConfig::get('route.default_admin'));
+
 		// Model
 		return array(
-			'user_data'  => $db_data,
-			'post_data'  => $post_data,
-			'groupes'    => $this->model->getGroupsList(),
-			'admin_apps' => $this->getAdminApps()
+			'user_data'     => $db_data,
+			'post_data'     => $post_data,
+			'groupes'       => $this->model->getGroupsList(),
+			'admin_apps'    => $this->getAdminApps(),
+			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
 		);
 	}
 	

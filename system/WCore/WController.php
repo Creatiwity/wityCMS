@@ -101,53 +101,57 @@ abstract class WController {
 		if (!empty($action)) {
 			$access_result = $this->hasAccess($this->getAppName(), $action);
 
-			if ($access_result === true) {
-				$this->action = $action;
-
-				// Theme configuration for admin
-				if ($this->getAdminContext()) {
-					$context = $this->getContext();
-
-					if (!$context['parent']) {
-						// These are template variables => direct assign in WTemplate
-						$tpl = WSystem::getTemplate();
-						$tpl->assign('appsList', $this->getAdminApps());
-
-						$manifest = $this->getManifest();
-						$action_asked = $this->getTriggeredAction();
-
-						$tpl->assign(array(
-							'appSelected' => $this->getAppName(),
-							'actionsList' => $manifest['admin'],
-							'adminMenu'   => $manifest['admin_menu'],
-							'actionAsked' => $action_asked
-						));
-
-						$this->view->assign('page_title', sprintf('Admin &raquo; %s%s',
-							ucwords($manifest['name']),
-							isset($manifest['admin'][$action_asked]) ? ' &raquo; '.WLang::get($manifest['admin'][$action_asked]['description']) : ''
-						));
-					}
-				}
-
-				// Execute action
-				if (method_exists($this, $action)) {
-					return $this->$action($params);
-				} else {
-					WNote::error('app_no_method', WLang::get('error_app_no_method', $action, $this->getAppName()), 'debug');
-					return array();
-				}
-			} else {
+			if ($access_result !== true) {
 				// Display login form if not connected
 				if (!WSession::isConnected()) {
-					WNote::info('user_login_required', WLang::get('info_user_login_required'));
 					$userView = WRetriever::getView('user', array('login'));
 					$this->setView($userView);
-				} else if (is_array($access_result)) {
-					return $access_result; // $this->hasAccess() returned a note
-				} else {
-					return WNote::error('app_no_access', WLang::get('error_app_no_access', $this->action, $this->getAppName()));
+					return;
 				}
+
+				if (is_array($access_result)) {
+					return $access_result; // $this->hasAccess() returned a note
+				}
+
+				if ($this->getAdminContext() && empty($_SESSION['access'])) {
+					return WNote::error('not_an_admin', WLang::get('error_not_an_admin'));
+				}
+				
+				return WNote::error('app_no_access', WLang::get('error_app_no_access', $action, $this->getAppName()));
+			}
+
+			$this->action = $action;
+
+			// Theme configuration for admin
+			if ($this->getAdminContext()) {
+				$context = $this->getContext();
+
+				if (!$context['parent']) {
+					$tpl = WSystem::getTemplate();
+					$tpl->assign('appsList', $this->getAdminApps());
+
+					$manifest = $this->getManifest();
+
+					$tpl->assign(array(
+						'appSelected' => $this->getAppName(),
+						'actionsList' => $manifest['admin'],
+						'adminMenu'   => $manifest['admin_menu'],
+						'actionAsked' => $this->action
+					));
+
+					$tpl->assign('wity_page_title', sprintf('Admin &raquo; %s%s',
+						ucwords($manifest['name']),
+						isset($manifest['admin'][$this->action]) ? ' &raquo; '.WLang::get($manifest['admin'][$this->action]['description']) : ''
+					));
+				}
+			}
+
+			// Execute action
+			if (method_exists($this, $action)) {
+				return $this->$action($params);
+			} else {
+				WNote::error('app_no_method', WLang::get('error_app_no_method', $action, $this->getAppName()), 'debug');
+				return array();
 			}
 		} else {
 			return WNote::error('app_no_suitable_action', WLang::get('error_app_no_suitable_action', $this->getAppName()));
@@ -489,7 +493,9 @@ abstract class WController {
 
 			if ($_SESSION['access'] == 'all') {
 				return true;
-			} else if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
+			}
+
+			if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
 				if (empty($action)) {
 					// Asking for application access
 					return true;
@@ -503,6 +509,7 @@ abstract class WController {
 
 							default:
 								if (!in_array($req, $_SESSION['access'][$app])) {
+									$this->setHeader('Location', WRoute::getReferer());
 									return false;
 								}
 								break;
@@ -529,7 +536,9 @@ abstract class WController {
 				}
 
 				return true;
-			} else if (isset($manifest['actions'][$action])) {
+			}
+
+			if (isset($manifest['actions'][$action])) {
 				// Check permissions
 				foreach ($manifest['actions'][$action]['requires'] as $req) {
 					switch ($req) {
@@ -567,9 +576,11 @@ abstract class WController {
 		static $admin_apps = array();
 		if (empty($admin_apps)) {
 			$apps = WRetriever::getAppsList();
+			
 			foreach ($apps as $app) {
 				if (substr($app, 0, 5) == 'admin') {
 					$app_name = substr($app, 6);
+
 					if ($this->hasAccess($app_name, '', true)) {
 						$admin_apps[$app_name] = $this->loadManifest($app_name);
 					}

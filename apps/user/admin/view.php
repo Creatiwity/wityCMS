@@ -82,6 +82,7 @@ class UserAdminView extends WView {
 		$this->assign('require', 'apps!user/access_form');
 		$this->assign('groups', $model['groupes']);
 		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('default_admin', $model['default_admin']);
 
 		$this->assignDefault(array(
 			'id'            => 0,

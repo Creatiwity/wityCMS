@@ -28,24 +28,15 @@
 	border: 1px solid black;
 }
 
-.user-rights > tbody > tr > td {
-	border-top: 1px solid black;
-	padding: 0;
+.user-rights tbody tr td {
+	border: 1px solid black;
+	padding: 10px;
 }
 
 .user-rights .permissions {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-.user-rights .permissions td {
-	border-top: none;
-	border-left: 1px solid black;
-	padding: 8px;
-}
-
-.user-rights .permissions label {
-	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 /**
