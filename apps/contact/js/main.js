@@ -80,6 +80,35 @@ require(['jquery'], function($) {
 			return false;
 		});
 
+		var namespace = '.wity-app-contact.wity-action-form ',
+			$uploadDocumentButton = $(namespace + '.upload-document'),
+			$uploadDocumentInput = $(namespace + '.upload-document-input'),
+			$uploadDocumentDelete = $(namespace + '.upload-document-delete');
+
+		/* Document */
+		$uploadDocumentButton.click(function() {
+			$uploadDocumentInput.click();
+		});
+
+		$uploadDocumentInput.change(function() {
+			var value = $uploadDocumentInput.val();
+
+			if (!value || value === '') {
+				$uploadDocumentDelete.addClass('hidden');
+				$uploadDocumentButton.prop('disabled', false);
+			} else {
+				$uploadDocumentDelete.find('span.text').text(' ' + $uploadDocumentInput[0].files[0].name);
+				$uploadDocumentDelete.removeClass('hidden');
+				$uploadDocumentButton.prop('disabled', true);
+			}
+		});
+
+		$uploadDocumentDelete.click(function() {
+			$uploadDocumentInput.replaceWith($uploadDocumentInput = $uploadDocumentInput.clone(true));
+			$uploadDocumentDelete.addClass('hidden');
+			$uploadDocumentButton.prop('disabled', false);
+		});
+
 	});
 
 });

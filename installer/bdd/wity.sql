@@ -175,6 +175,7 @@ CREATE TABLE IF NOT EXISTS `prefix_contact` (
   `organism` varchar(200) DEFAULT NULL,
   `object` varchar(500) NOT NULL,
   `message` text NOT NULL,
+  `attachment` varchar(200),
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,

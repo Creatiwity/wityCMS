@@ -39,6 +39,18 @@
 		</div>
 
 		<div class="form-group">
+			<div class="upload-input">
+				<input type="file" class="upload-document-input" name="document" />
+			</div>
+
+			<button type="button" class="upload-document-delete btn btn-default hidden">
+				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {lang Document} -<span class="text"></span>
+			</button>
+
+			<button type="button" class="upload-document btn btn-default">{lang Upload a document}</button>
+		</div>
+
+		<div class="form-group">
 			<div class="col-md-offset-2 col-md-10">
 				<button type="submit" class="btn btn-default" data-loading-text="{lang sending}" data-witycms-submit="ajax">{lang send_button}</button>
 			</div>

@@ -18,6 +18,7 @@
 	<item id="not_found_email_id">Unable to find this email.</item>
 
 	<item id="from">From:</item>
+	<item id="attachment">Download attachment</item>
 	<item id="close">Close</item>
 	
 	<!-- Configuration -->

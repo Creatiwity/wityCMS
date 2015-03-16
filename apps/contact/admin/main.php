@@ -14,6 +14,12 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.5.0-dev-07-10-2013
  */
 class ContactAdminController extends WController {
+
+	private $upload_dir;
+
+	public function __construct() {
+		$this->upload_dir = WITY_PATH.'upload'.DS.'contact'.DS;
+	}
 	
 	/**
 	 * Returns the corresponding mails (page and sorting) stored in the database
@@ -69,6 +75,37 @@ class ContactAdminController extends WController {
 		}
 		
 		return $model;
+	}
+
+	protected function download(array $params) {
+		$id = intval(array_shift($params));
+		if (empty($id)) {
+			return WNote::error('missing_email_id', WLang::_('missing_email_id'));
+		}
+
+		$model = $this->model->getEmail($id);
+
+		if (!empty($model)) {
+			if (file_exists($model['attachment'])) {
+				$finfo = finfo_open(FILEINFO_MIME_TYPE);
+				$mime = finfo_file($finfo, $model['attachment']);
+				finfo_close($finfo);
+
+				header('Content-Description: File Transfer');
+				header('Content-Type: '.$mime);
+				header('Content-Disposition: attachment; filename='.basename($model['attachment']));
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
+				header('Content-Length: ' . filesize($model['attachment']));
+				readfile($model['attachment']);
+				exit;
+			} else {
+				$this->setHeader('Location', Wroute::getDir().'contact');
+			}
+		}
+
+		return array();
 	}
 	
 	/**

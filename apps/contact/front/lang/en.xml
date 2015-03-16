@@ -16,6 +16,9 @@
 	<item id="email_message_label">Message</item>
 	<item id="email_message_placeholder">Message</item>
 
+	<item id="Document">Document</item>
+	<item id="Upload a document">Join a document</item>
+
 	<item id="send_button">Send</item>
 	<item id="sending">Sending...</item>
 

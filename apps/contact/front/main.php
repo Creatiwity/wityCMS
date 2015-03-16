@@ -15,6 +15,12 @@ defined('IN_WITY') or die('Access denied');
  */
 class ContactController extends WController {
 
+	private $upload_dir;
+
+	public function __construct() {
+		$this->upload_dir = WITY_PATH.'upload'.DS.'contact'.DS;
+	}
+
 	protected function form(array $params) {
 		$user_id = isset($_SESSION['userid']) ? $_SESSION['userid'] : null;
 		$data = WRequest::getAssoc(array('from_name', 'from_email', 'email_subject', 'email_message'));
@@ -45,6 +51,35 @@ class ContactController extends WController {
 			}
 
 			$data['email_message'] = nl2br($data['email_message']);
+
+			// Attachment
+			if (!empty($_FILES['document']['name'])) {
+				$this->makeUploadDir();
+
+				$upload = WHelper::load('upload', array($_FILES['document']));
+				$upload->allowed = array(
+					'application/vnd.ms-excel',
+					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+					'application/vnd.ms-powerpoint',
+					'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+					'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+					'application/vnd.ms-word',
+					'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+					'application/pdf',
+					'image/*');
+				
+				$upload->Process($this->upload_dir);
+
+				if (!$upload->processed) {
+					$errors[] = WLang::get('upload_error');
+					// TODO : Manage upload helper errors
+				} else {
+					$data['attachment'] = $upload->file_dst_pathname;
+				}
+			} else {
+				$data['attachment'] = '';
+			}
+
 			/**
 			 * END VARIABLES CHECKING
 			 */
@@ -81,7 +116,8 @@ class ContactController extends WController {
 									'company' => $data['from_company'],
 									'subject' => $data['email_subject'],
 									'message' => $data['email_message']
-								))
+								)),
+								'attachments' => !empty($data['attachment']) ? array($data['attachment']) : array()
 							),
 							array(
 								'from' => array($config['site_from_email'], $config['site_from_name']),
@@ -133,6 +169,14 @@ class ContactController extends WController {
 		}
 
 		return $model;
+	}
+
+	private function makeUploadDir($suffix = '') {
+		if (!is_dir($this->upload_dir.$suffix) && mkdir($this->upload_dir.$suffix, 0775, true)) {
+			$htaccess = fopen($this->upload_dir.$suffix.'.htaccess', 'a+');
+			fwrite($htaccess, 'deny from all');
+			fclose($htaccess);
+		}
 	}
 
 }

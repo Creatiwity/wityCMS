@@ -6,6 +6,7 @@
 		</div>
 		<div class="modal-body">
 			<p>{lang from} <b>{$from}</b></p>
+			{if !empty({$attachment})}<p><b><a href="/admin/contact/download/{$id}"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> {lang attachment}</a></b></p>{/if}
 			<span>{$message}</span>
 		</div>
 		<div class="modal-footer">

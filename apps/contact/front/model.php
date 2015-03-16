@@ -59,8 +59,8 @@ class ContactModel {
 	 */
 	public function addMail(array $params) {
 		$prep = $this->db->prepare('
-			INSERT INTO contact(`from`, `from_id`, `to`, `cc`, `bcc`, `reply_to`, `name`, `organism`, `object`, `message`) 
-			VALUES (:from_email, :user_id, :to, :cc, :bcc, :reply_to, :from_name, :organism, :object, :message)
+			INSERT INTO contact(`from`, `from_id`, `to`, `cc`, `bcc`, `reply_to`, `name`, `organism`, `object`, `message`, `attachment`) 
+			VALUES (:from_email, :user_id, :to, :cc, :bcc, :reply_to, :from_name, :organism, :object, :message, :attachment)
 		');
 		
 		$to = serialize($params['to']);
@@ -78,6 +78,7 @@ class ContactModel {
 		$prep->bindParam(':organism', $params['from_company']);
 		$prep->bindParam(':object', $params['email_subject']);
 		$prep->bindParam(':message', $params['email_message']);
+		$prep->bindParam(':attachment', $params['attachment']);
 		
 		return $prep->execute();
 	}

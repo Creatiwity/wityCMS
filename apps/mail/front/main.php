@@ -277,6 +277,20 @@ class MailController extends WController {
 			$this->addAddressesInField($params['bcc'], 'bcc');
 		}
 
+		if (!empty($params['attachments']) && is_array($params['attachments'])) {
+			$func = array($this->phpmailer, 'addAttachment');
+
+			if (!is_array($params['attachments'][0])) {
+				// array('email'[, 'name'])
+				call_user_func_array($func, $params['attachments']);
+			} else {
+				// array(array('email'[,'name']))
+				foreach ($attachments as $attachment) {
+					call_user_func_array($func, $attachment);
+				}
+			}
+		}
+
 		$params['params']['mail_app'] = array();
 
 		// Generate hash used to execute action from this mail

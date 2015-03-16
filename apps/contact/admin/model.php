@@ -49,7 +49,7 @@ class ContactAdminModel extends ContactModel {
 	 */
 	public function getEmailList($from, $number, $order = 'created_date', $asc = false) {
 		$prep = $this->db->prepare('
-			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, `contact`.`created_date`
+			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, `attachment`, `contact`.`created_date`
 			FROM contact
 			LEFT JOIN users
 			ON from_id = users.id
@@ -70,7 +70,7 @@ class ContactAdminModel extends ContactModel {
 	 */
 	public function getEmail($emailid) {
 		$prep = $this->db->prepare('
-			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, `contact`.`created_date`
+			SELECT `contact`.`id`, `from`, `users`.`nickname` AS from_nickname, `to`, `name`, `organism`, `object`, `message`, `attachment`, `contact`.`created_date`
 			FROM contact
 			LEFT JOIN users
 			ON from_id = users.id

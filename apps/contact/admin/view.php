@@ -42,9 +42,11 @@ class ContactAdminView extends WView {
 	}
 	
 	public function mail_detail(array $model) {
+		$this->assign('id', $model['id']);
 		$this->assign('from', $model['from']);
 		$this->assign('object', $model['object']);
 		$this->assign('message', $model['message']);
+		$this->assign('attachment', $model['attachment']);
 	}
 	
 	/**

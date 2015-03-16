@@ -18,6 +18,7 @@
 	<item id="not_found_email_id">Impossible de trouver cet email.</item>
 
 	<item id="from">De :</item>
+	<item id="attachment">Télécharger la pièce jointe</item>
 	<item id="close">Fermer</item>
 	
 	<!-- Configuration -->

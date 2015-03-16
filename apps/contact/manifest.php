@@ -23,5 +23,6 @@
 		<action menu="false">mail_detail</action>
 		<!-- <action description="new_mail" alias="reply">new_mail</action> -->
 		<action requires="config" description="action_config">config</action>
+		<action menu="false">download</action>
 	</admin>
 </app>

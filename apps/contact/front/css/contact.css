@@ -2,3 +2,9 @@
 #email-message {
 	max-width: 100%;
 }
+
+.wity-app.wity-app-contact.wity-action-form .upload-input {
+	visibility: hidden;
+	height: 0;
+	overflow: hidden;
+}
