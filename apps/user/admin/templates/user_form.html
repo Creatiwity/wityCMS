@@ -5,11 +5,9 @@
 				<h2 class="sr-only">{if empty({$id})}{lang action_add}{else}{lang action_edit}{/if}</h2>
 				<input type="hidden" name="id" value="{$id}" />
 				
-				<div class="form-group">
-					<div class="sr-only">
-						<label for="nickname">{lang nickname}*</label>
-					</div>
-					<div class="col-md-12">
+				<div class="form-group form-group-lg">
+					<label for="nickname" class="control-label col-md-3">{lang nickname}*</label>
+					<div class="col-md-9">
 						<input id="nickname" class="form-control input-lg" type="text" name="nickname" value="{$nickname}"  autocomplete="off" placeholder="{lang nickname}" />
 					</div>
 				</div>
@@ -18,12 +16,12 @@
 					<label for="password" class="control-label col-md-3">{lang password}{if empty({$id})}*{/if}</label>
 					<div class="col-md-9">
 						<input id="password" class="form-control" type="password" name="password" autocomplete="off" />
-						{if !empty({$id})}<span class="help-block">{lang leave_empty_to_leave_unchanged}</span>{/if}
+						{if !empty({$id})}<em class="help-block">{lang leave_empty_to_leave_unchanged}</em>{/if}
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="password_conf" class="control-label col-md-3"><em>{lang confirmation}{if empty({$id})}*{/if}</em></label>
+					<label for="password_conf" class="control-label col-md-3">{lang password} <em>{lang confirmation}{if empty({$id})}*{/if}</em></label>
 					<div class="col-md-9">
 						<input id="password_conf" class="form-control" type="password" name="password_conf" autocomplete="off"/>
 					</div>
@@ -87,18 +85,27 @@
 								<colgroup><col width="25%" /></colgroup>
 								{for $app, $details in $admin_apps}
 								<tr>
-									<td><p class="text-center"><strong>{$details.name}</strong></p></td>
+									<td><strong>{$details.name}</strong></td>
 									<td>
-										<table class="permissions" cellpadding="0" cellspacing="0">
-											<tr>
+										{if !empty({$details.permissions})}
+										<ul class="permissions">
 											{for $perm in {$details.permissions}}
-												<td><p class="text-center"><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></p></td>
+											<li>
+												{if {$app} == {$default_admin} && {$perm} == 'admin'}
+												<input type="hidden" name="access[{$app}][{$perm}]" value="on" />
+												<em>Admin ({lang default_admin_app})</em>
+												{else}
+												<label>
+													<input type="checkbox" name="access[{$app}][{$perm}]" />
+													{$perm|ucfirst}
+												</label>
+												{/if}
+											</li>
 											{/for}
-											{empty}
-												<td><p class="text-center"><em>{lang no_permissions}</em></p></td>
-											{/empty}
-											</tr>
-										</table>
+										</ul>
+										{else}
+											<p class="text-center"><em>{lang no_permissions}</em></p>
+										{/if}
 									</td>
 								</tr>
 								{/for}

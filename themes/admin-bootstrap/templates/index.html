@@ -37,48 +37,53 @@
 			</div>
 
 			<div class="navbar-collapse collapse navbar-menu-admin-collapse">
-				{if !empty({$appsList})}
+				{if !empty({$wity_admin_apps})}
 				<ul class="nav navbar-nav">
-					{for $app, $details in $appsList}
-					<li {if {$app} == {$appSelected}} class="active"{/if}>
-						<a href="/admin/{$app}/">{lang {$details.name}}</a>
-					</li>
+					{for $app, $details in $wity_admin_apps}
+						<li {if 'admin/'.{$app} == {$wity_app}} class="active"{/if}>
+							<a href="/admin/{$app}/">{lang {$details.name}}</a>
+						</li>
 					{/for}
 				</ul>
 				{/if}
+
 				{if !empty({$wity_user_nickname})}
 				<p class="navbar-text pull-right">
-					Bienvenue {$wity_user_nickname}
+					{lang Welcome} {$wity_user_nickname}
 					&nbsp;|&nbsp;
-					<a href="/user/logout/" class="navbar-link">Déconnexion</a>
+					<a href="/user/logout/" class="navbar-link">{lang Logout}</a>
 				</p>
 				{/if}
 			</div><!--/.nav-collapse -->
 		</div>
-		{if !empty({$adminMenu})}
-		<div class="col-md-2">
-			<ul class="nav nav-pills nav-stacked">
-				{for $action, $desc in $actionsList}
-				{if {$desc.menu}}
-				<li class="{if {$action} == {$actionAsked}}active{/if}">
-					<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.description}}</a>
-				</li>
+
+		<div class="container">
+			<div class="row">
+				{if !empty({$wity_admin_has_submenu})}
+				<div class="col-md-2">
+					<ul class="nav nav-pills nav-stacked">
+					{for $action, $desc in $wity_admin_actions}
+						{if {$desc.menu}}
+						<li class="{if {$action} == {$wity_action}}active{/if}">
+							<a href="/{$wity_app}/{$action}/">{lang {$desc.description}}</a>
+						</li>
+						{/if}
+					{/for}
+					</ul>
+				</div>
+
+				<div class="col-md-10">
+				{else}
+				<div class="col-md-12">
 				{/if}
-				{/for}
-			</ul>
-		</div><!--/span-->
-		<div class="col-md-10">
-		{else}
-		<div class="col-md-12">
-		{/if}
-			{$notes}
-			<div class="clearfix"></div>
-			{$include}
-		</div><!--/span-->
-		<div class="clearfix"></div>
-		<div class="col-md-12">
-			<hr />
+					{$notes}
+					<div class="clearfix"></div>
+					{$include}
+				</div>
+			</div>
+
 			<footer>
+				<hr />
 				<p>&copy; wityCMS Administration 2015</p>
 			</footer>
 		</div>

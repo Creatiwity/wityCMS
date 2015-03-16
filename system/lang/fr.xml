@@ -32,6 +32,7 @@
 	<item id="error_cache_manifest_failed">Impossible d'ouvrir le fichier de cache "%s".</item>
 	<item id="error_cache_template_failed">Impossible de créer le répertoire de cache "%s".</item>
 	<item id="error_app_no_access">Vous avez besoin de plus de privilèges pour accéder à l'action "%s" dans l'application %s.</item>
+	<item id="error_not_an_admin">Désolé mais vous devez être un administrateur pour accéder à cette zone.</item>
 	<item id="error_app_logout_required">Vous devez vous déconnecter pour accéder à l'action "%s" dans l'application %s.</item>
 	<item id="error_could_not_find_pdo"><![CDATA[wityCMS n'a pas été en mesure de charger <strong>l'extension PDO de PHP</strong> sur votre système. Veuillez activier PDO pour exécuter le script.]]></item>
 	<item id="error_sql_conn_failed"><![CDATA[Impossible de se connecter à la base de données MySQL.<br />%s]]></item>
