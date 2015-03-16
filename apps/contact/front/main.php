@@ -99,12 +99,14 @@ class ContactController extends WController {
 					$data['to'] = array($config['site_from_email'], $config['site_from_name']);
 
 					if (!empty($data['extras'])) {
-						$extras = json_decode($data['extras'], true);
-					} else {
-						$extras = array();
+						$data['extras'] = json_decode($data['extras'], true);
 					}
 
-					$mail_params = array_merge($extras, array(
+					if (!is_array($data['extras'])) {
+						$data['extras'] = array();
+					}
+
+					$mail_params = array_merge($data['extras'], array(
 						'site'    => WConfig::get('config.site_title'),
 						'base'    => WRoute::getBase(),
 						'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
