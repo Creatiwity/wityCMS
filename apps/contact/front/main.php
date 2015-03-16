@@ -27,6 +27,7 @@ class ContactController extends WController {
 		
 		if (!in_array(null, $data, true)) {
 			$data['from_company'] = WRequest::get('from_company');
+			$data['extras'] = WRequest::get('extras');
 			$errors = array();
 
 			/**
@@ -97,6 +98,23 @@ class ContactController extends WController {
 				} else {
 					$data['to'] = array($config['site_from_email'], $config['site_from_name']);
 
+					if (!empty($data['extras'])) {
+						$extras = json_decode($data['extras'], true);
+					} else {
+						$extras = array();
+					}
+
+					$mail_params = array_merge($extras, array(
+						'site'    => WConfig::get('config.site_title'),
+						'base'    => WRoute::getBase(),
+						'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
+						'company' => $data['from_company'],
+						'subject' => $data['email_subject'],
+						'message' => $data['email_message']
+					));
+
+					$email_message = WLang::get('mail_for_admin_body', $mail_params);
+
 					$mail = array(
 						'origin' => array(
 							'app' => 'contact',
@@ -109,32 +127,21 @@ class ContactController extends WController {
 								'from' => array($data['from_email'], $data['from_name']),
 								'to' => $data['to'],
 								'subject' => WLang::get('mail_for_admin_subject', WConfig::get('config.site_title'), $data['email_subject']),
-								'body' => WLang::get('mail_for_admin_body', array(
-									'site'    => WConfig::get('config.site_title'),
-									'base'    => WRoute::getBase(),
-									'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
-									'company' => $data['from_company'],
-									'subject' => $data['email_subject'],
-									'message' => $data['email_message']
-								)),
+								'body' => $email_message,
 								'attachments' => !empty($data['attachment']) ? array($data['attachment']) : array()
 							),
 							array(
 								'from' => array($config['site_from_email'], $config['site_from_name']),
 								'to' => array($data['from_email'], $data['from_name']),
 								'subject' => WLang::get('copy_subject', WConfig::get('config.site_title')),
-								'body' => WLang::get('auto_reply', array(
-									'site'    => WConfig::get('config.site_title'),
-									'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
-									'company' => $data['from_company'],
-									'subject' => $data['email_subject'],
-									'message' => $data['email_message']
-								))
+								'body' => WLang::get('auto_reply', $mail_param)
 							)
 						)
 					);
 
 					$mail_app = WRetriever::getModel('mail', $mail);
+
+					$data['email_message'] = $email_message;
 
 					if (!$this->model->addMail($data)) {
 						WNote::error('unable_to_save_email', WLang::get('unable_to_save_email', serialize($data)), 'email');
