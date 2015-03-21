@@ -2,7 +2,6 @@
 # http://creatiwity.net/
 # More information @ http://www.robotstxt.org
 User-agent: *
-Disallow: /apps/
 Disallow: /cache/
 Disallow: /helpers/
 Disallow: /system/
