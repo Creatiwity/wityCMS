@@ -5,5 +5,4 @@ User-agent: *
 Disallow: /apps/
 Disallow: /cache/
 Disallow: /helpers/
-Disallow: /libraries/
 Disallow: /system/
