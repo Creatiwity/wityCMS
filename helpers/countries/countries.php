@@ -104,6 +104,7 @@ $countries = array(
 	"LR" => "Liberia",
 	"LS" => "Lesotho",
 	"LT" => "Lithuania",
+	"LU" => "Luxembourg",
 	"LV" => "Latvia",
 	"LY" => "Libya",
 	"MA" => "Morocco",

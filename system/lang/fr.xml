@@ -79,7 +79,7 @@
 	<item id="country_BT">Bhoutan</item>
 	<item id="country_BV">Île Bouvet</item>
 	<item id="country_BW">Botswana</item>
-	<item id="country_BY">Bélarus</item>
+	<item id="country_BY">Biélorussie</item>
 	<item id="country_BZ">Belize</item>
 	<item id="country_CA">Canada</item>
 	<item id="country_CC">Îles Cocos - Keeling</item>
@@ -297,5 +297,5 @@
 	<item id="country_YT">Mayotte</item>
 	<item id="country_ZA">Afrique du Sud</item>
 	<item id="country_ZM">Zambie</item>
-	<item id="country_ZW">Zimbabw</item>
+	<item id="country_ZW">Zimbabwe</item>
 </lang>
