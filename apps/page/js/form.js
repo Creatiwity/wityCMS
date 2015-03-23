@@ -27,14 +27,12 @@ require(['jquery'], function($) {
 			var value = $(namespace + '#title').val();
 			
 			if (value === '') {
-				$(namespace + '#url').val('');
 				$(namespace + '#meta_title').val('');
-				$(namespace + '#short_title').val('');
+				$(namespace + '#url').val('');
 				return;
 			}
 			
 			$(namespace + '#meta_title').val(value);
-			$(namespace + '#short_title').val(value);
 			
 			// Treat value
 			value = value.latinise().toLowerCase();
@@ -53,11 +51,17 @@ require(['jquery'], function($) {
 			}
 		}
 		
-		$(namespace + '#title').on('keyup change', function() {
-			formatURL();
+		$(namespace + '#title').on('blur', function() {
+			if ($(namespace + '#url').val() == '') {
+				formatURL();
+			}
 		});
 		
 		$(namespace + '#parent').on('change', function() {
+			formatURL();
+		});
+
+		$('.update-url').click(function() {
 			formatURL();
 		});
 	});

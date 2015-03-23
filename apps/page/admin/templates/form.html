@@ -2,98 +2,117 @@
 	<form method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-9 form-horizontal">
-				<h2 class="sr-only">{if empty({$id})}{lang action_add}{else}{lang action_edit}{/if}</h2>
+				<h1>{if empty({$id})}{lang action_add}{else}{lang action_edit}{/if}</h1>
+
 				<div class="form-group">
-					<div class="sr-only">
-						<label for="title" class="control-label">{lang title_of_article}</label>
-					</div>
-					<div class="col-md-12">
-						<input id="title" class="form-control input-lg" type="text" name="title" value="{$title}" autocomplete="off" placeholder="{lang title_of_article}" />
+					<label for="title" class="col-sm-2 control-label">{lang title}</label>
+					<div class="col-sm-10">
+						<input id="title" class="form-control" type="text" name="title" value="{$title}" autocomplete="off" placeholder="{lang title}" />
 					</div>
 				</div>
 				
-				<div class="input-group">
-					<span class="input-group-addon">{$wity_base_url}</span>
-					<input id="url" class="form-control" type="text" name="url" value="{$url}" />
-					{if !empty({$id})}<span class="input-group-addon"><a href="{$wity_base_url}{$url}">{lang preview}</a></span>{/if}
+				<div class="form-group">
+					<label for="url" class="col-sm-2 control-label">{lang url}</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">{$wity_base_url}</span>
+							<input id="url" class="form-control" type="text" name="url" value="{$url}" />
+							<span class="input-group-addon"><a href="javascript:void(0)" class="update-url"><i class="glyphicon glyphicon-refresh"></i></a></span>
+						</div>
+					</div>
 				</div>
 				
-				<label for="content" class="sr-only">{lang article_content}:</label><br />
-				<textarea id="content" class="form-control" name="content" rows="20" cols="80">{$content}</textarea><br />
-				<script type="text/javascript">
-					var roxyFileman = '{$wity_base_url}libraries/fileman/index.html';
-					CKEDITOR.replace('content', {
-						filebrowserBrowseUrl: roxyFileman,
-						filebrowserImageBrowseUrl: roxyFileman + '?type=image',
-						removeDialogTabs: 'link:upload;image:upload',
-						height: '500px'
-					});
-				</script>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">{lang content}</label>
+					<div class="col-sm-10">
+						<textarea id="content" class="form-control" name="content" rows="20" cols="80">{$content}</textarea>
+
+						<script type="text/javascript">
+							var roxyFileman = '{$wity_base_url}libraries/fileman/index.html';
+
+							CKEDITOR.replace('content', {
+								filebrowserBrowseUrl: roxyFileman,
+								filebrowserImageBrowseUrl: roxyFileman + '?type=image',
+								removeDialogTabs: 'link:upload;image:upload',
+								height: '500px'
+							});
+						</script>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="well well-sm">
-					<h4 class="text-center">{lang metadata}</h4>
-					<div class="form-group">
-						<label for="subtitle" class="control-label">{lang subtitle}</label>
-						<input id="subtitle" class="form-control" type="text" name="subtitle" value="{$subtitle}" placeholder="{lang subtitle}" />
-					</div>
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang submit}</button>
+					{if !empty({$id})}<a href="{$wity_base_url}{$url}" target="_blank" class="btn btn-info btn-lg btn-block">{lang preview}</a>{/if}
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="history.back();">{lang cancel}</button>
+				</div>
+
+				<div class="well well-sm">
+					<h4 class="text-center">{lang details}</h4>
+
 					<div class="form-group">
 						<label for="author" class="control-label">{lang author}</label>
 						<input id="author" class="form-control" type="text" name="author" value="{$author}" placeholder="{lang author}" />
 					</div>
+
+					<div class="form-group">
+						<label for="subtitle" class="control-label">{lang subtitle}</label>
+						<input id="subtitle" class="form-control" type="text" name="subtitle" value="{$subtitle}" placeholder="{lang subtitle}" />
+					</div>
+					
+					<div class="form-group">
+						<label for="parent">{lang mother_page}</label>
+						<select id="parent" name="parent" class="form-control">
+							<option value="0">{lang none}</option>
+
+							{for $page in $pages}
+								{if {$page.id} != {$id}}
+									{if !empty({$page.parent})}
+										{set $page_parent = {$page.parent}.'/'.{$page.id}}
+									{else}
+										{set $page_parent = {$page.id}}
+									{/if}
+									<option value="{$page_parent}" data-page-url="{$page.url}"{if {$page_parent} == {$parent}} selected="selected"{/if}>
+										{range $i = 1..{$page.level}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{/range}{$page.title}
+									</option>
+								{/if}
+							{/for}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="image">{lang image}</label>
+
+						{if !empty({$image})}
+						<p><img class="img-responsive" src="{$image}" alt="{$title}" /></p>
+						{/if}
+
+						<input id="image" type="file" name="image" />
+					</div>
+
+					<hr />
+
+					<ul class="list-unstyled">
+						<li>{lang page_created_on|{$page.created_date}}</li>
+
+						{if {$page.modified_date} != '0000-00-00 00:00:00'}
+						<li>{lang page_modified_on|{$page.modified_date}}</li>
+						{/if}
+					</ul>
+				</div>
+
+				<div class="well well-sm">
+					<h4 class="text-center">{lang SEO}</h4>
+
 					<div class="form-group">
 						<label for="meta_title">{lang meta_title}</label>
 						<input id="meta_title" class="form-control" type="text" name="meta_title" value="{$meta_title}" placeholder="{lang meta_title}" />
 					</div>
+
 					<div class="form-group">
-						<label for="short_title">{lang short_title}</label>
-						<input id="short_title" class="form-control" type="text" name="short_title" value="{$short_title}" placeholder="{lang short_title}" />
+						<label for="meta_description">{lang meta_description}</label>
+						<textarea id="meta_description" class="form-control" type="text" name="meta_description" placeholder="{lang meta_description}" rows="4" cols="40">{$meta_description}</textarea>
 					</div>
-					<div class="form-group">
-						<label for="keywords">{lang keywords}</label>
-						<input id="keywords" class="form-control" type="text" name="keywords" value="{$keywords}" placeholder="{lang keywords}">
-					</div>
-					<div class="form-group">
-						<label for="description">{lang description}</label>
-						<textarea id="description" class="form-control" type="text" name="description" placeholder="{lang description}" rows="4" cols="40">{$description}</textarea>
-					</div>
-					<div class="form-group">
-						<label for="description">{lang mother_page}</label>
-						<select id="parent" name="parent" class="form-control">
-							<option value="0">{lang none}</option>
-							{define_block select_parent $id $pages $level $current_parent}
-								{for $sub_id, $page in $pages}
-									{if {$sub_id} != {$id}}
-									<option value="{if !empty({$page.parent})}{$page.parent}/{/if}{$sub_id}" data-page-url="{$page.url}"
-										{if preg_replace("#^0/#", "", {$page.parent}."/".{$sub_id}) == {$current_parent}} selected="selected"{/if}>
-										{range $i = 1..{$level}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{/range}{$page.short_title}
-									</option>
-										{block select_parent {$id} {$page.childs} {$level}+1 {$current_parent}}
-									{/if}
-								{/for}
-							{/define_block}
-							
-							{block select_parent {$id} {$pages} 0 {$parent}}
-						</select>
-					</div>
-					<div class="form-group">
-						{if !empty({$image})}
-						<img class="img-responsive" src="/upload/page/{$image}" alt="{$title}" />
-						{/if}
-						<label for="image">Image d'en-tête</label>
-						<input id="image" type="file" name="image" />
-					</div>
-					{if !empty({$date})}
-					<hr />
-					<ul class="list-unstyled">
-						<li>{lang article_created_on|{$date}}</li>
-						<li>{lang article_modified_on|{$modified}}</li>
-					</ul>
-					{/if}
-				</div>
-				<div class="well well-sm">
-					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang submit}</button>
-					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>
 				</div>
 			</div>
 		</div>

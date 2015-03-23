@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang value="fr">
 	<!-- Actions -->
-	<item id="action_listing">Liste des pages</item>
 	<item id="action_add">Ajouter une page</item>
 	<item id="action_edit">Editer une page</item>
 	<item id="action_delete">Suppression d'une page</item>
 	
-	<!-- page listing -->
+	<!-- Page listing -->
 	<item id="actions">Actions</item>
 	<item id="title">Titre</item>
 	<item id="author">Auteur</item>
 	<item id="category">Catégorie</item>
-	<item id="date">Date</item>
+	<item id="last_modification">Dernière modification</item>
 	<item id="views">Vues</item>
 	<item id="number_of_views">%s vues</item>
 	<item id="no_page_in_database">Aucune page trouvée dans la base de données.</item>
 	<item id="page_delete_confirmation">Confirmez-vous la suppression de la page &lt;strong&gt;%s&lt;/strong&gt; ?</item>
 	
-	<!-- page management -->
-	<item id="title_of_article">Titre de la page</item>
-	<item id="page_content">Contenu de la page </item>
-	<item id="metadata">Metadonnées</item>
+	<!-- Page management -->
+	<item id="url">URL</item>
+	<item id="preview">Prévisualiser</item>
+	<item id="content">Contenu</item>
+
+	<item id="SEO">Référencement</item>
+	<item id="meta_title">Balise titre</item>
+	<item id="meta_description">Balise description</item>
+
+	<item id="details">Détails</item>
 	<item id="subtitle">Sous-titre</item>
-	<item id="meta_title">Titre de la page</item>
-	<item id="short_title">Titre court</item>
-	<item id="keywords">Mots clés</item>
-	<item id="page_created_on">&lt;strong&gt;Page créé&lt;/strong&gt; le %s</item>
-	<item id="page_modified_on">&lt;strong&gt;Dernière édition&lt;/strong&gt; le %s</item>
 	<item id="mother_page">Page mère</item>
-	<item id="category_of_article">Catégories de la page</item>
-	<item id="page_not_found">La page n°%s que vous tentez d'ouvrir n'existe pas.</item>
+	<item id="image">Image</item>
+
+	<item id="page_created_on">&lt;strong&gt;Créée&lt;/strong&gt; le %s</item>
+	<item id="page_modified_on">&lt;strong&gt;Modifiée&lt;/strong&gt; le %s</item>
+
+	<item id="page_not_found">La page n'a pas été trouvée.</item>
 	<item id="page_no_title">Il manque un titre à la page.</item>
 	<item id="page_no_author">Il manque un auteur à la page.</item>
-	<item id="page_no_permalink">Aucun permalien (lien vers la page) n'a été défini.</item>
-	<item id="page_image_error">Erreur lors de l'upload de l'image à la une : %s</item>
+	<item id="page_no_permalink">Aucune URL (lien vers la page) n'a été définie.</item>
+	<item id="page_image_error">Erreur lors de l'upload de l'image : %s</item>
 	<item id="page_added">La page &lt;strong&gt;%s&lt;/strong&gt; a été créée avec succès.</item>
 	<item id="page_not_added">Une erreur inconnue s'est produite lors de l'ajout de la page dans la base de données.</item>
 	<item id="page_edited">La page &lt;strong&gt;%s&lt;/strong&gt; a été modifiée avec succès.</item>
@@ -42,6 +46,6 @@
 	
 	<item id="cancel">Annuler</item>
 	<item id="delete">Supprimer</item>
-	<item id="submit">Sauver</item>
+	<item id="submit">Sauvegarder</item>
 	<item id="none">N/A</item>
 </lang>

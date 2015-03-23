@@ -11,31 +11,19 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Page\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-07-10-2014
+ * @version 0.5.0-dev-23-03-2015
  */
 class PageAdminView extends WView {
-	public function listing($model) {
-		$sorting = $model['sortingHelper']->getSorting();
-		$this->assign($model['sortingHelper']->getTplVars());
-		
+	public function pages($model) {
 		$pagination = WHelper::load('pagination', array(
 			$model['total'], 
 			$model['page_per_page'], 
 			$model['current_page'], 
-			'/admin/page/'.$sorting[0].'-'.$sorting[1].'-%d/'
+			'/admin/page/%d'
 		));
 		$this->assign('pagination', $pagination->getHTML());
 		
 		$this->assign('pages', $model['data']);
-	}
-
-	/**
-	 * Function to define template variable from a default array structure
-	 */
-	private function fillMainForm($model, $data) {
-		foreach ($model as $item => $default) {
-			$this->assign($item, isset($data[$item]) ? $data[$item] : $default);
-		}
 	}
 	
 	public function form($model) {
@@ -48,20 +36,18 @@ class PageAdminView extends WView {
 		
 		$this->assign('pages', $model['pages']);
 		
-		$this->fillMainForm(array(
-			'author'        => $_SESSION['nickname'],
-			'meta_title'    => '',
-			'short_title'   => '',
-			'keywords'      => '',
-			'description'   => '',
+		$this->assignDefault(array(
 			'title'         => '',
-			'subtitle'      => '',
-			'url'           => '',
 			'content'       => '',
+			'url'           => '',
+			'meta_title'    => '',
+			'meta_description' => '',
+			'author'        => $_SESSION['nickname'],
+			'subtitle'      => '',
 			'parent'        => '',
-			'date'          => '',
+			'image'         => '',
+			'created_date'  => '',
 			'modified_date' => '',
-			'image'         => ''
 		), $model['data']);
 		
 		$this->setTemplate('form');

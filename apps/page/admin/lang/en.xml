@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang value="en">
 	<!-- Actions -->
-	<item id="action_listing">page list</item>
 	<item id="action_add">Add a page</item>
 	<item id="action_edit">Edit a page</item>
 	<item id="action_delete">Delete a page</item>
 	
-	<!-- page listing -->
+	<!-- Page listing -->
 	<item id="actions">Actions</item>
 	<item id="title">Title</item>
 	<item id="author">Author</item>
 	<item id="category">Category</item>
-	<item id="date">Date</item>
+	<item id="last_modification">Last modification</item>
 	<item id="views">Views</item>
 	<item id="number_of_views">%s views</item>
 	<item id="no_page_in_database">No page found in the database.</item>
 	<item id="page_delete_confirmation">Delete "%s"?</item>
 	
-	<!-- page management -->
-	<item id="title_of_article">Article's title</item>
-	<item id="page_content">page content</item>
-	<item id="metadata">Metadata</item>
+	<!-- Page management -->
+	<item id="url">URL</item>
+	<item id="preview">Preview</item>
+	<item id="content">Content</item>
+
+	<item id="SEO">SEO</item>
+	<item id="meta_title">Metatag title</item>
+	<item id="meta_description">Metatag description</item>
+
+	<item id="details">Details</item>
 	<item id="subtitle">Subtitle</item>
-	<item id="meta_title">Page's title</item>
-	<item id="short_title">Short title</item>
-	<item id="keywords">Keywords</item>
-	<item id="page_created_on">&lt;strong&gt;page created&lt;/strong&gt; on %s</item>
-	<item id="page_modified_on">&lt;strong&gt;Last edition&lt;/strong&gt; on %s</item>
 	<item id="mother_page">Mother page</item>
-	<item id="category_of_article">Article's categories</item>
+	<item id="image">Image</item>
+
+	<item id="page_created_on">&lt;strong&gt;Created&lt;/strong&gt; on %s</item>
+	<item id="page_modified_on">&lt;strong&gt;Edited&lt;/strong&gt; on %s</item>
+
 	<item id="page_not_found">The page #%s that you are trying to modify cannot be found.</item>
 	<item id="page_no_title">Title is missing</item>
 	<item id="page_no_author">Author is missing</item>
@@ -42,6 +46,6 @@
 	
 	<item id="cancel">Cancel</item>
 	<item id="delete">Delete</item>
-	<item id="submit">Submit</item>
+	<item id="submit">Save</item>
 	<item id="none">N/A</item>
 </lang>

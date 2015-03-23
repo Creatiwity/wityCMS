@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Page\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-07-10-2014
+ * @version 0.5.0-dev-23-03-2015
  */
 class PageModel {
 	/**
@@ -27,11 +27,11 @@ class PageModel {
 	}
 	
 	/**
-	 * Counts page in the database
+	 * Counts pages in the database.
 	 * 
 	 * @return int
 	 */
-	public function countPage() {
+	public function countPages() {
 		$prep = $this->db->prepare('
 			SELECT COUNT(*)
 			FROM page
@@ -44,25 +44,21 @@ class PageModel {
 	/**
 	 * Checks that a given ID matches a ID in the database
 	 * 
-	 * @param int $page_id
+	 * @param int $id_page
 	 * @return bool
 	 */
-	public function validExistingPageId($page_id) {
-		$page_id = intval($page_id);
-		
-		if ($page_id <= 0) {
-			return false;
-		}
-		
+	public function validExistingPageId($id_page) {
 		$prep = $this->db->prepare('
-			SELECT * FROM page WHERE id = :id
+			SELECT *
+			FROM page
+			WHERE id = :id
 		');
-		$prep->bindParam(':id', $page_id, PDO::PARAM_INT);
+		$prep->bindParam(':id', $id_page, PDO::PARAM_INT);
 		$prep->execute();
 		
 		return $prep->rowCount() == 1;
 	}
-	
+
 	/**
 	 * Retrieves a set of page.
 	 * 
@@ -72,25 +68,29 @@ class PageModel {
 	 * @param bool $asc true = ASC order / false = DESC order
 	 * @return array
 	 */
-	public function getPageList($from, $number, $order = 'virtual_parent', $asc = false) {
+	public function getPages($from = 0, $number = 0, $order = 'virtual_parent', $asc = true) {
 		$prep = $this->db->prepare('
-			SELECT id, url, title, subtitle, author, content, meta_title, short_title, keywords, 
-				description, views, parent, image, created_date, created_by, modified_date,
+			SELECT *, 
 				CASE
 					WHEN parent = 0 THEN id
-					ELSE parent
+					ELSE CONCAT(parent, "/")
 				END AS virtual_parent
 			FROM page
-			ORDER BY page.'.$order.' '.($asc ? 'ASC' : 'DESC').'
-			LIMIT :start, :number
-		');
-		$prep->bindParam(':start', $from, PDO::PARAM_INT);
-		$prep->bindParam(':number', $number, PDO::PARAM_INT);
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC').'
+			'.($number > 0 ? 'LIMIT :start, :number' : '')
+		);
+
+		if ($number > 0) {
+			$prep->bindParam(':start', $from, PDO::PARAM_INT);
+			$prep->bindParam(':number', $number, PDO::PARAM_INT);
+		}
+		
 		$prep->execute();
 		
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$data['level'] = substr_count($data['parent'], '/');
+
 			if ($data['parent'] != '0') {
 				$data['level'] += 1;
 			}
@@ -100,18 +100,42 @@ class PageModel {
 		
 		return $result;
 	}
+
+	/**
+	 * Retrieves all data linked to a page
+	 * 
+	 * @param int $id_page
+	 * @return array
+	 */
+	public function getPage($id_page) {
+		$prep = $this->db->prepare('
+			SELECT *
+			FROM page
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $id_page, PDO::PARAM_INT);
+		$prep->execute();
+		
+		return $prep->fetch(PDO::FETCH_ASSOC);
+	}
 	
-	public function increaseView($page_id) {
+	public function increaseView($id_page) {
 		$prep = $this->db->prepare('
 			UPDATE page
 			SET views = views + 1
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $page_id);
+		$prep->bindParam(':id', $id_page);
 		
 		return $prep->execute();
 	}
 	
+	/**
+	 * Transforms a set of pages into a PHP multidimensionnal array.
+	 * 
+	 * @param array $params Set of pages returned by DB
+	 * @return array
+	 */
 	private function formatPages($pages) {
 		$result = array();
 		
@@ -119,23 +143,23 @@ class PageModel {
 		$map = array();
 		
 		foreach ($pages as $data) {
-			$page_id = intval($data['id']);
+			$id_page = intval($data['id']);
 			
 			if (empty($data['parent'])) {
-				$result[$page_id] = $data;
-				$result[$page_id]['childs'] = array();
+				$result[$id_page] = $data;
+				$result[$id_page]['childs'] = array();
 				
-				$map[$page_id] = &$result[$page_id];
+				$map[$id_page] = &$result[$id_page];
 			} else if (!isset($map[$data['parent']])) {
-				$result[$page_id] = $data;
-				$result[$page_id]['childs'] = array();
+				$result[$id_page] = $data;
+				$result[$id_page]['childs'] = array();
 				
-				$map[$data['parent'].'/'.$page_id] = &$result[$page_id];
+				$map[$data['parent'].'/'.$id_page] = &$result[$id_page];
 			} else {
-				$map[$data['parent']]['childs'][$page_id] = $data;
-				$map[$data['parent']]['childs'][$page_id]['childs'] = array();
+				$map[$data['parent']]['childs'][$id_page] = $data;
+				$map[$data['parent']]['childs'][$id_page]['childs'] = array();
 				
-				$map[$data['parent'].'/'.$page_id] = &$map[$data['parent']]['childs'][$page_id];
+				$map[$data['parent'].'/'.$id_page] = &$map[$data['parent']]['childs'][$id_page];
 			}
 		}
 		
@@ -143,54 +167,19 @@ class PageModel {
 	}
 	
 	/**
-	 * Retrieves the full listing of pages in the database.
+	 * Retrieves the child pages of $id_parent as a PHP multidimensionnal array.
 	 * 
 	 * @return array
 	 */
-	public function getPages($menu = false) {
+	public function getChildPages($id_parent) {
 		$prep = $this->db->prepare('
-			SELECT id, url, title, subtitle, author, content, meta_title, short_title, keywords, description, views, parent, image, created_date, created_by, modified_date, modified_by
+			SELECT *
 			FROM page
-			'.($menu ? 'WHERE menu = 1' : '').'
+			WHERE id = :parent OR parent LIKE :parent OR parent LIKE :parent_regexp
 			ORDER BY parent ASC, id ASC
 		');
-		$prep->execute();
-		
-		return $this->formatPages($prep->fetchAll(PDO::FETCH_ASSOC));
-	}
-	
-	/**
-	 * Retrieves all data linked to a page
-	 * 
-	 * @param int $page_id
-	 * @return array
-	 */
-	public function getPage($page_id) {
-		$prep = $this->db->prepare('
-			SELECT id, url, title, subtitle, author, content, meta_title, short_title, keywords, description, views, parent, image, created_date, created_by, modified_date
-			FROM page
-			WHERE id = :id
-		');
-		$prep->bindParam(':id', $page_id, PDO::PARAM_INT);
-		$prep->execute();
-		
-		return $prep->fetch(PDO::FETCH_ASSOC);
-	}
-	
-	/**
-	 * Retrieves the full listing of pages in the database.
-	 * 
-	 * @return array
-	 */
-	public function getChildPages($parent_id) {
-		$prep = $this->db->prepare('
-			SELECT id, url, title, subtitle, author, content, meta_title, short_title, keywords, description, views, parent, image, created_date, created_by, modified_date, modified_by
-			FROM page
-			WHERE parent LIKE :parent_id OR parent LIKE :parent_regexp OR id = :parent_id
-			ORDER BY parent ASC, id ASC
-		');
-		$prep->bindParam(':parent_id', $parent_id);
-		$parent = $parent_id.'/%';
+		$prep->bindParam(':parent', $id_parent);
+		$parent = $id_parent.'/%';
 		$prep->bindParam(':parent_regexp', $parent);
 		$prep->execute();
 		
