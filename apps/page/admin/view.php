@@ -37,17 +37,17 @@ class PageAdminView extends WView {
 		$this->assign('pages', $model['pages']);
 		
 		$this->assignDefault(array(
-			'title'         => '',
-			'content'       => '',
-			'url'           => '',
-			'meta_title'    => '',
+			'title'            => '',
+			'content'          => '',
+			'url'              => '',
+			'meta_title'       => '',
 			'meta_description' => '',
-			'author'        => $_SESSION['nickname'],
-			'subtitle'      => '',
-			'parent'        => '',
-			'image'         => '',
-			'created_date'  => '',
-			'modified_date' => '',
+			'author'           => !empty($_SESSION['firstname']) || !empty($_SESSION['lastname']) ? trim($_SESSION['firstname'].' '.$_SESSION['lastname']) : $_SESSION['nickname'],
+			'subtitle'         => '',
+			'parent'           => '',
+			'image'            => '',
+			'created_date'     => '',
+			'modified_date'    => '',
 		), $model['data']);
 		
 		$this->setTemplate('form');
