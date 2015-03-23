@@ -145,7 +145,7 @@ abstract class WController {
 			}
 
 			// Execute action
-			$executable_action = preg_replace('#[^a-z]#', '', $action);
+			$executable_action = preg_replace('#[^a-z_]#', '', $action);
 			if (method_exists($this, $executable_action)) {
 				return $this->$executable_action($params);
 			} else {
