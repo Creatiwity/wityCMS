@@ -90,15 +90,17 @@
 						<input id="image" type="file" name="image" />
 					</div>
 
+					{if !empty({$id})}
 					<hr />
 
 					<ul class="list-unstyled">
-						<li>{lang page_created_on|{$page.created_date}}</li>
+						<li>{lang page_created_on|{$created_date}}</li>
 
-						{if {$page.modified_date} != '0000-00-00 00:00:00'}
-						<li>{lang page_modified_on|{$page.modified_date}}</li>
+						{if {$modified_date} != '0000-00-00 00:00:00'}
+						<li>{lang page_modified_on|{$modified_date}}</li>
 						{/if}
 					</ul>
+					{/if}
 				</div>
 
 				<div class="well well-sm">
