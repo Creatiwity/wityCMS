@@ -4,12 +4,10 @@
 	<!-- Application name -->
 	<name>News</name>
 	
-	<version>0.4.0</version>
+	<version>0.5.0</version>
 	
 	<!-- Last update date -->
-	<date>22-10-2013</date>
-	
-	<default_lang>fr</default_lang>
+	<date>24-03-2015</date>
 	
 	<!-- Permissions -->
 	<permission name="writer" />
@@ -22,11 +20,11 @@
 	
 	<!-- Admin pages -->
 	<admin>
-		<action default="default" description="articles_listing">listing</action>
-		<action requires="writer" description="article_add">add</action>
-		<action requires="writer" description="article_edit" menu="false">edit</action>
-		<action requires="moderator" description="article_delete" menu="false">news_delete</action>
-		<action requires="category_manager" description="categories_management" >categories_manager</action>
-		<action requires="category_manager,moderator" description="category_delete" menu="false">category_delete</action>
+		<action default="default">news</action>
+		<action requires="writer" menu="false">news-add</action>
+		<action requires="writer" menu="false">news-edit</action>
+		<action requires="moderator" menu="false">news-delete</action>
+		<action requires="category_manager">categories</action>
+		<action requires="category_manager, moderator" menu="false">category-delete</action>
 	</admin>
 </app>

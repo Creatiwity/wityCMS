@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-19-04-2013
+ * @version 0.5.0-dev-24-03-2015
  */
 class NewsModel {
 	/**
@@ -76,7 +76,7 @@ class NewsModel {
 	 * @param array $filters Set of filters: cats(array), published(int(1|0))
 	 * @return array
 	 */
-	public function getNewsList($from, $number, $order = 'created_date', $asc = false, array $filters = array()) {
+	public function getAllNews($from, $number, $order = 'created_date', $asc = false, array $filters = array()) {
 		$cond = '';
 		if (!empty($filters['cats'])) {
 			$cond .= 'AND (1 = 0 ';
@@ -96,8 +96,7 @@ class NewsModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), url, views, image, news.created_date, news.modified_date, news.modified_by,
-				title, author, content, meta_title, keywords, description, published
+			SELECT DISTINCT(id), news.*
 			FROM news
 			LEFT JOIN news_cats_relations
 			ON id = news_cats_relations.id_news
@@ -114,12 +113,6 @@ class NewsModel {
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$data['cats'] = $this->getCatsOfNews($data['id']);
-			
-			$date = new WDate($data['created_date']);
-			$timestamp = $date->getTimestamp();
-			$data['date_day'] = strftime('%d', $timestamp);
-			$data['date_month'] = substr(strftime('%B', $timestamp), 0, 3);
-			$data['date_year'] = strftime('%Y', $timestamp);
 			
 			$result[] = $data;
 		}
@@ -139,8 +132,7 @@ class NewsModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT id, url, views, image, created_date, modified_date, modified_by,
-				title, author, content, meta_title, keywords, description, published
+			SELECT *
 			FROM news
 			WHERE id = :id_news
 		');
@@ -152,12 +144,6 @@ class NewsModel {
 		if (!empty($data)) {
 			$data['cats'] = $this->getCatsOfNews($id_news);
 		}
-		
-		$date = new WDate($data['created_date']);
-		$timestamp = $date->getTimestamp();
-		$data['date_day'] = strftime('%d', $timestamp);
-		$data['date_month'] = strftime('%B', $timestamp);
-		$data['date_year'] = strftime('%Y', $timestamp);
 		
 		return $data;
 	}
@@ -174,7 +160,7 @@ class NewsModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname
+			SELECT *
 			FROM news_cats 
 			WHERE cid = :id_cat
 		');
@@ -187,7 +173,7 @@ class NewsModel {
 	/**
 	 * Retrieves a category by its shortname from the database.
 	 * 
-	 * @param int $cat_id
+	 * @param string $shortname
 	 * @return array
 	 */
 	public function getCatByShortname($shortname) {
@@ -196,7 +182,7 @@ class NewsModel {
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname, parent
+			SELECT *
 			FROM news_cats
 			WHERE shortname = :shortname
 		');
@@ -216,7 +202,7 @@ class NewsModel {
 	 */
 	public function getCatsOfNews($id_news) {
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname
+			SELECT *
 			FROM news_cats_relations
 			LEFT JOIN news_cats
 			ON id_cat = cid
@@ -235,9 +221,9 @@ class NewsModel {
 	 * @param bool $asc
 	 * @return array
 	 */
-	public function getCatsList($order = 'name', $asc = true) {
+	public function getCatsStructure($order = 'name', $asc = true) {
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname, parent
+			SELECT *
 			FROM news_cats
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
@@ -261,13 +247,13 @@ class NewsModel {
 		return $result;
 	}
 	
-	public function increaseViews($news_id) {
+	public function increaseViews($id_news) {
 		$prep = $this->db->prepare('
 			UPDATE news
 			SET views = views + 1
 			WHERE id = :id
 		');
-		$prep->bindParam(':id', $news_id);
+		$prep->bindParam(':id', $id_news);
 		
 		return $prep->execute();
 	}

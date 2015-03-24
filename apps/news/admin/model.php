@@ -16,11 +16,63 @@ include_once APPS_DIR.'news'.DS.'front'.DS.'model.php';
  * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-19-04-2013
+ * @version 0.5.0-dev-24-03-2015
  */
 class NewsAdminModel extends NewsModel {
 	public function __construct() {
 		parent::__construct();
+	}
+
+	/**
+	 * Retrieves a set of news
+	 * 
+	 * @param int $from
+	 * @param int $number
+	 * @param string $order Ordering field name
+	 * @param bool $asc true = ASC order / false = DESC order
+	 * @param array $filters Set of filters: cats(array), published(int(1|0))
+	 * @return array
+	 */
+	public function getAllNews($from, $number, $order = 'created_date', $asc = false, array $filters = array()) {
+		$cond = '';
+		if (!empty($filters['cats'])) {
+			$cond .= 'AND (1 = 0 ';
+			foreach ($filters['cats'] as $cat) {
+				$cond .= 'OR shortname = "'.$cat.'" ';
+			}
+			$cond .= ') ';
+		}
+		
+		if (!empty($filters['published'])) {
+			$published = intval($filters['published']);
+			if ($published == 0 || $published == 1) {
+				$cond .= 'AND published = '.$published.' ';
+			}
+		}
+		
+		$prep = $this->db->prepare('
+			SELECT DISTINCT(id), news.*
+			FROM news
+			LEFT JOIN news_cats_relations
+			ON id = news_cats_relations.id_news
+			LEFT JOIN news_cats
+			ON id_cat = cid
+			WHERE 1 = 1 '.$cond.'
+			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
+			LIMIT :start, :number
+		');
+		$prep->bindParam(':start', $from, PDO::PARAM_INT);
+		$prep->bindParam(':number', $number, PDO::PARAM_INT);
+		$prep->execute();
+		
+		$result = array();
+		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
+			$data['cats'] = $this->getCatsOfNews($data['id']);
+			
+			$result[] = $data;
+		}
+		
+		return $result;
 	}
 	
 	/**
@@ -31,8 +83,8 @@ class NewsAdminModel extends NewsModel {
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, image, title, author, content, meta_title, keywords, description, published)
-			VALUES (:url, :image, :title, :author, :content, :meta_title, :keywords, :description, :published)
+			INSERT INTO news(url, image, title, author, content, meta_title, meta_description, published)
+			VALUES (:url, :image, :title, :author, :content, :meta_title, :meta_description, :published)
 		');
 		$prep->bindParam(':url', $data['url']);
 		$prep->bindParam(':image', $data['image']);
@@ -40,8 +92,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':author', $data['author']);
 		$prep->bindParam(':content', $data['content']);
 		$prep->bindParam(':meta_title', $data['meta_title']);
-		$prep->bindParam(':keywords', $data['keywords']);
-		$prep->bindParam(':description', $data['description']);
+		$prep->bindParam(':meta_description', $data['meta_description']);
 		$prep->bindParam(':published', $data['published']);
 		
 		if ($prep->execute()) {
@@ -62,7 +113,7 @@ class NewsAdminModel extends NewsModel {
 		$prep = $this->db->prepare('
 			UPDATE news
 			SET url = :url, image = :image, title = :title, author = :author, content = :content, 
-				meta_title = :meta_title, keywords = :keywords, description = :description, published = :published
+				meta_title = :meta_title, meta_description = :meta_description, published = :published
 			WHERE id = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news);
@@ -72,8 +123,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':author', $data['author']);
 		$prep->bindParam(':content', $data['content']);
 		$prep->bindParam(':meta_title', $data['meta_title']);
-		$prep->bindParam(':keywords', $data['keywords']);
-		$prep->bindParam(':description', $data['description']);
+		$prep->bindParam(':meta_description', $data['meta_description']);
 		$prep->bindParam(':published', $data['published']);
 		
 		return $prep->execute();

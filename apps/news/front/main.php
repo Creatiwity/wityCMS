@@ -11,14 +11,14 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-19-04-2013
+ * @version 0.5.0-dev-24-03-2015
  */
 class NewsController extends WController {
 	protected function listing(array $params) {
 		$cat_shortname = '';
 		$news_id = 0;
 		$listing_view = true;
-		$categories = $this->model->getCatsList();
+		$categories = $this->model->getCatsStructure();
 		
 		// URL may contain either a category, either a news ID:
 		// Ex 1: /news/cat/test
@@ -55,7 +55,7 @@ class NewsController extends WController {
 			$listing_view = false;
 		} else {
 			$filter_cats = (empty($cat_shortname)) ? array() : array('cats' => array($cat_shortname));
-			$news = $this->model->getNewsList(0, 4, 'created_date', false, $filter_cats);
+			$news = $this->model->getAllNews(0, 4, 'created_date', false, $filter_cats);
 		}
 		
 		return array(

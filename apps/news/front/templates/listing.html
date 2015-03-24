@@ -1,17 +1,20 @@
 <div class="wity-app wity-app-news wity-action-listing">
 	{for $n in $news}
 		<article class="news">
-			<header>
+			<header class="news-header">
 				{if !empty({$n.image})}
-				<div class="image"><img class="img-responsive" src="/upload/news/{$n.image}" alt="{$n.title}" /></div>
+				<div class="news-image"><img class="img-responsive" src="{$n.image}" alt="{$n.title}" /></div>
 				{/if}
+
 				<h2>{$n.title}</h2>
-				<span class="item-meta">{lang news_meta|{$n.author}|{$n.created_date}}</span>
+
+				<p class="news-meta">{lang news_meta|{$n.author}|{$n.created_date}}</p>
 			</header>
-			<div class="item-content">{$n.content}</div>
+
+			<div class="news-content">{$n.content}</div>
 		</article>
 	{/for}
 	{empty}
-		<p>Cette catégorie est vide.</p>
+		<p>{lang no_news_in_category}</p>
 	{/empty}
 </div>

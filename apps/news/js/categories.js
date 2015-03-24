@@ -50,7 +50,7 @@ require(['jquery'], function($) {
 					
 					select = select.replace('value="'+currentData+'"', 'value="'+currentData+'" selected="selected"');
 
-					row.append($('<td>'+select+'</td>'));
+					row.append($('<td>'+select+'<input type="hidden" name="id" value="'+datas[model[0]]+'" /></td>'));
 				}
 			}
 

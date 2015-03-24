@@ -1,0 +1,121 @@
+<div class="wity-app wity-app-news wity-action-news-form">
+	<form method="post" enctype="multipart/form-data">
+		<div class="row">
+			<div class="col-md-9 form-horizontal">
+				<h1>{if empty({$id})}{lang news_add}{else}{lang news_edit}{/if}</h1>
+
+				<div class="form-group">
+					<label for="title" class="col-sm-2 control-label">*{lang title}</label>
+					<div class="col-sm-10">
+						<input id="title" class="form-control" type="text" name="title" value="{$title}" autocomplete="off" placeholder="{lang title}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="url" class="col-sm-2 control-label">*{lang URL}</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">{$site_url}{$id}-</span>
+							<input id="url" class="form-control" type="text" name="url" value="{$url}" />
+							<span class="input-group-addon"><a href="javascript:void(0)" class="update-url"><i class="glyphicon glyphicon-refresh"></i></a></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">{lang content}</label>
+					<div class="col-sm-10">
+						<textarea id="content" class="form-control" name="content" rows="20" cols="80">{$content}</textarea>
+						<script type="text/javascript">
+							var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
+								options = {
+									filebrowserBrowseUrl: roxyFileman,
+									filebrowserImageBrowseUrl: roxyFileman + '?type=image',
+									removeDialogTabs: 'link:upload;image:upload',
+									height: '500px'
+								};
+							
+							CKEDITOR.replace('content', options);
+						</script>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="well well-sm">
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang submit}</button>
+					{if !empty({$id})}<a href="{$site_url}{$id}-{$url}" target="_blank" class="btn btn-info btn-lg btn-block">{lang preview}</a>{/if}
+					<button type="button" class="btn btn-default btn-lg btn-block" onclick="history.back();">{lang cancel}</button>
+				</div>
+
+				<div class="well well-sm">
+					<h4 class="text-center">{lang details}</h4>
+
+					<div class="checkbox">
+						<label for="published">
+							<input id="published" type="checkbox" name="published"{if {$published}} checked="checked"{/if} />
+							{lang published}
+						</label>
+					</div>
+
+					<div class="form-group">
+						<label for="author" class="control-label">{lang author}</label>
+						<input id="author" class="form-control" type="text" name="author" value="{$author}" placeholder="{lang author}" />
+					</div>
+
+					<div class="form-group">
+						<label for="image">{lang image}</label>
+
+						{if !empty({$image})}
+						<p><img class="img-responsive" src="{$image}" alt="{$title}" /></p>
+						{/if}
+
+						<input id="image" type="file" name="image" />
+					</div>
+
+					{if !empty({$id})}
+					<hr />
+
+					<ul class="list-unstyled">
+						<li>{lang news_created_on|{$created_date}}</li>
+
+						{if {$modified_date} != '0000-00-00 00:00:00'}
+						<li>{lang news_modified_on|{$modified_date}}</li>
+						{/if}
+					</ul>
+					{/if}
+				</div>
+
+				<div class="well well-sm">
+					<h4 class="text-center">{lang categories}</h4>
+
+					{for $cat in $categories}
+					<div class="checkbox">
+						<label>
+							<input id="cat{$cat.cid}" type="checkbox" name="cats[{$cat.cid}]"{if in_array({$cat.cid}, {$cats})} checked="checked"{/if} />
+							{$cat.name}
+						</label>
+					</div>
+					{/for}
+					{empty}
+					<p>{lang no_category_in_database}</p>
+					{/empty}
+				</div>
+
+				<div class="well well-sm">
+					<h4 class="text-center">{lang SEO}</h4>
+
+					<div class="form-group">
+						<label for="meta_title">{lang meta_title}</label>
+						<input id="meta_title" class="form-control" type="text" name="meta_title" value="{$meta_title}" placeholder="{lang meta_title}" />
+					</div>
+
+					<div class="form-group">
+						<label for="meta_description">{lang meta_description}</label>
+						<textarea id="meta_description" class="form-control" type="text" name="meta_description" placeholder="{lang meta_description}" rows="4" cols="40">{$meta_description}</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
