@@ -71,6 +71,7 @@ class WRoute {
 
 		// Cleansing
 		self::$query = ltrim(self::$query, '/');
+		self::$query = str_replace(array('index.php', 'index.html'), '', self::$query);
 		
 		// Extract query string
 		$split_query = explode('?', self::$query);
