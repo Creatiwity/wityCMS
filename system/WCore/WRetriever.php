@@ -157,9 +157,11 @@ class WRetriever {
 					$view->setTemplate($actionTemplateFile);
 				}
 
+				$executable_action = preg_replace('#[^a-z_]#', '', $model['action']);
+
 				// Prepare the view
-				if (method_exists($view, $model['action'])) {
-					$view->$model['action']($model['result']);
+				if (method_exists($view, $executable_action)) {
+					$view->$executable_action($model['result']);
 				}
 
 				// Update the context
