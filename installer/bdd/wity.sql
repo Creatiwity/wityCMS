@@ -23,16 +23,15 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `prefix_news`;
 CREATE TABLE IF NOT EXISTS `prefix_news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `url` tinytext NOT NULL,
-  `title` tinytext NOT NULL,
-  `author` varchar(100) NOT NULL,
-  `content` text NOT NULL,
-  `meta_title` tinytext NOT NULL,
-  `keywords` mediumtext NOT NULL,
-  `description` text NOT NULL,
+  `url` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `author` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `meta_description` text COLLATE utf8_unicode_ci NOT NULL,
   `views` int(11) unsigned NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',
-  `image` varchar(200) NOT NULL,
+  `image` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
@@ -44,8 +43,8 @@ CREATE TABLE IF NOT EXISTS `prefix_news` (
 -- Content in the table `prefix_news`
 --
 
-INSERT INTO `prefix_news` (`id`, `url`, `title`, `author`, `content`, `meta_title`, `keywords`, `description`, `views`, `published`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
-(1, 'witycms-was-successfully-installed', 'wityCMS was successfully installed!', '', '<p>Congratulations and welcome to wityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The wityCMS team</p>\r\n', '', '', '', 0, 1, NOW(), 1, '', 0);
+INSERT INTO `prefix_news` (`id`, `url`, `title`, `author`, `content`, `meta_title`, `meta_description`, `views`, `published`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
+(1, 'witycms-was-successfully-installed', 'wityCMS was successfully installed!', '', '<p>Congratulations and welcome to wityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The wityCMS team</p>\r\n', '', '', 0, 1, NOW(), 1, '', 0);
 
 -- --------------------------------------------------------
 
