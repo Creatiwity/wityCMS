@@ -147,7 +147,7 @@ class WMain {
 		}
 
 		// Variable for Roxy file manager
-		$_SESSION['upload_dir'] = WRoute::getDir().'upload/';
+		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
 	}
 
 	/**
