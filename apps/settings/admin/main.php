@@ -65,13 +65,6 @@ class SettingsAdminController extends WController {
 					} else {
 						$old_file = WConfig::get('config.'.$file);
 
-						// Erase the previous image
-						if (!empty($old_file)) {
-							$old_file_split = explode('?', $old_file);
-							$old_file = array_shift($old_file_split);
-							@unlink($this->upload_dir.basename($old_file));
-						}
-						
 						WConfig::set('config.'.$file, '/upload/settings/'.$upload->file_dst_name.'?'.time());
 					}
 				}
