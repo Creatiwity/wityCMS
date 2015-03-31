@@ -6,7 +6,7 @@
 				<div class="news-image"><img class="img-responsive" src="{$n.image}" alt="{$n.title}" /></div>
 				{/if}
 
-				<h2>{$n.title}</h2>
+				<h2><a href="{$n.url}">{$n.title}</a></h2>
 
 				<p class="news-meta">{lang news_meta|{$n.author}|{$n.created_date}}</p>
 			</header>
