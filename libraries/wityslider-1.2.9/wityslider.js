@@ -1,5 +1,5 @@
 /**
- * WitySlider v1.2.2
+ * WitySlider v1.2.9
  * Copyright 2015, Creatiwity - https://creatiwity.net
  */
 
@@ -31,6 +31,7 @@
 			width: 1500, // Useless with fluid set to false
 			height: 560,
 			minHeight: 0, // Useless with fluid set to false
+			resize: 'fixed', // Possible values : 'ratio', 'content', 'fixed', 'none'
 			bullet_point_position: "top-left",
 			controls: false,
 			keyboard: true,
@@ -38,9 +39,9 @@
 			cols: 1,
 			speed: 500,
 			pause: 3000,
-			fluid: false, // Fixed height per column (false), ratio based height
 			touch: true, // Use dragging to move slides
 			auto: true,
+			loop: true,
 			specifics: {
 				// 'sm': {width: 800} (example)
 			}
@@ -72,7 +73,6 @@
 		// Handle page visibility change
 		document.addEventListener(visibilityChange, handleVisibilityChange, false);
 	}
-
 
 	Slider = (function () {
 
@@ -111,7 +111,7 @@
 			this.getScale = function() {
 				var result = _options.fallbackMediaScale;
 
-				if (window && window.matchMedia) {
+				if (window && typeof window.matchMedia != 'undefined') {
 					$.each(_options.mediaScales, function(scale, mediaQuery) {
 						if (mediaQuery === true || window.matchMedia(mediaQuery).matches) {
 							result = scale;
@@ -132,7 +132,7 @@
 		}
 
 		Slider.prototype.resize = function() {
-			var globalWidth = this.$element.width(),
+			var globalWidth = this.$element[0].getBoundingClientRect().width, // Fixes jQuery rounding bug
 				globalHeight,
 				itemWidth,
 				itemHeight,
@@ -141,25 +141,38 @@
 
 			this.currentScale = this.getScale();
 
+			itemWidth = globalWidth / options.cols;
+
 			if (options.fluid) {
 				globalHeight = globalWidth / (options.width / options.height);
+			} else if (options.contentHeight) {
+				if (!previousScale || this.currentScale === previousScale) {
+					this.$children.width(itemWidth);
+				}
+				globalHeight = this.$wrapper.find(".wslider-current").outerHeight(true);
 			} else {
 				globalHeight = options.height;
 			}
 
-			if (options.fluid && globalHeight < options.minHeight) {
+			if ((options.contentHeight || options.fluid) && globalHeight < options.minHeight) {
 				globalHeight = options.minHeight;
 			}
 
-			itemWidth = globalWidth / options.cols;
 			itemHeight = globalHeight / options.rows;
 
 			if (previousScale && this.currentScale !== previousScale) {
 				this.reload();
 			} else {
+				globalHeight -= (parseInt(this.$element.css('padding-top')) + parseInt(this.$element.css('padding-bottom')));
+				itemWidth -= (parseInt(this.$children.css('padding-left')) + parseInt(this.$children.css('padding-right')));
 				this.$element.height(globalHeight);
 				this.$children.width(itemWidth);
-				this.$children.height(itemHeight);
+
+				if (!options.contentHeight) {
+					this.$children.height(itemHeight);
+				} else {
+					this.$children.height('auto');
+				}
 			}
 		};
 
@@ -183,13 +196,17 @@
 
 			this.$element.addClass("wity-slider");
 
+			if (_options.contentHeight) {
+				this.$element.addClass('animate-height');
+			} else {
+				this.$element.removeClass('animate-height');
+			}
+
 			this.$children = this.$element.children();
 			this.$children.detach();
 
 			this.$wrapper = $('<div>').addClass('wrapper');
 			this.$wrapper.appendTo(this.$element);
-
-			this.resize();
 
 			this.$children.filter(':not(.inactive)').each(function(index, element) {
 				var $wrapper = $('<div>'),
@@ -219,6 +236,10 @@
 				}
 
 				if (newRow) {
+					if ($currentRow && $currentRow.length > 0) {
+						$currentRow.append('<div class="clearfix"></div>');
+					}
+
 					$currentRow = $('<div>').addClass("wslider-row wslider-row-" + row);
 					$currentRow.appendTo($currentPage);
 				}
@@ -233,6 +254,8 @@
 
 				col++;
 			});
+
+			this.resize();
 
 			setTimeout(function() {
 				that.ready = true;
@@ -313,12 +336,15 @@
 					bindMove,
 					unbindMove,
 					onTouchMove,
-					lastTime = 0;
+					lastTime = 0,
+					offsetValue = 5; // Constant
 
 				bindMove = function(position, $element) {
 					var firstPageX = position.pageX,
+						firstPageY = position.pageY,
+						canMove,
 						lastPageX = firstPageX,
-						maxDrag = $element.width(),
+						maxDrag = $element[0].getBoundingClientRect().width, // Fixes jQuery rounding bug
 						$prev = $element.prev(".wslider-page"),
 						$next = $element.next(".wslider-page");
 
@@ -331,58 +357,74 @@
 					lastTime = (new Date()).getTime();
 
 					onTouchMove = function(event) {
+						var firstDX = 0,
+							firstDY = 0;
+
 						if (that.ready) {
-							var currentPageX = event.originalEvent.changedTouches[0].pageX;
 
-							dragValue =  currentPageX - firstPageX; // > 0 from right to left
+							if (canMove === undefined) {
+								firstDX = Math.abs(event.originalEvent.changedTouches[0].pageX - firstPageX);
+								firstDY = Math.abs(event.originalEvent.changedTouches[0].pageY - firstPageY);
 
-							// max drag = $element.width()
-							if (Math.abs(dragValue) > maxDrag) {
-								if (dragValue < 0) {
-									dragValue = -maxDrag;
-								} else {
-									dragValue = maxDrag;
+								if (firstDY > offsetValue || firstDX > offsetValue) {
+									// Allow slider to move only if the first delta X is greater than the delta Y and greater than the offset
+									canMove = firstDX > firstDY;
 								}
 							}
 
-							if (dragValue > 0 && $prev.length <= 0) {
-								dragValue = 0;
-							} else if (dragValue < 0 && $next.length <=0) {
-								dragValue = 0;
+							if (canMove) {
+								var currentPageX = event.originalEvent.changedTouches[0].pageX;
+
+								dragValue =  currentPageX - firstPageX; // > 0 from right to left
+
+								// max drag = $element.width()
+								if (Math.abs(dragValue) > maxDrag) {
+									if (dragValue < 0) {
+										dragValue = -maxDrag;
+									} else {
+										dragValue = maxDrag;
+									}
+								}
+
+								if (dragValue > 0 && $prev.length <= 0) {
+									dragValue = 0;
+								} else if (dragValue < 0 && $next.length <=0) {
+									dragValue = 0;
+								}
+
+								lastDelta = currentPageX - lastPageX; // > 0 from right to left
+								dragPercentage = dragValue / maxDrag * 100; // > 0 from right to left
+								lastTime = (new Date()).getTime();
+
+								lastPageX = currentPageX;
+
+								$prev.css({
+									'-webkit-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
+									'-moz-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
+									'-ms-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
+									'-o-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
+									'transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)'
+								});
+
+								$element.css({
+									'-webkit-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
+									'-moz-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
+									'-ms-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
+									'-o-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
+									'transform': 'translate3d(' + dragPercentage + '%, 0, 0)'
+								});
+
+								$next.css({
+									'-webkit-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
+									'-moz-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
+									'-ms-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
+									'-o-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
+									'transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)'
+								});
+
+								return false;
 							}
-
-							lastDelta = currentPageX - lastPageX; // > 0 from right to left
-							dragPercentage = dragValue / maxDrag * 100; // > 0 from right to left
-							lastTime = (new Date()).getTime();
-
-							lastPageX = currentPageX;
-
-							$prev.css({
-								'-webkit-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
-								'-moz-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
-								'-ms-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
-								'-o-transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)',
-								'transform': 'translate3d(' + (-100 + dragPercentage) + '%, 0, 0)'
-							});
-
-							$element.css({
-								'-webkit-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
-								'-moz-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
-								'-ms-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
-								'-o-transform': 'translate3d(' + dragPercentage + '%, 0, 0)',
-								'transform': 'translate3d(' + dragPercentage + '%, 0, 0)'
-							});
-
-							$next.css({
-								'-webkit-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
-								'-moz-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
-								'-ms-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
-								'-o-transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)',
-								'transform': 'translate3d(' + (100 + dragPercentage) + '%, 0, 0)'
-							});
 						}
-
-						return false;
 					};
 
 					$('body').on('touchmove', onTouchMove);
@@ -447,6 +489,8 @@
 
 				$('body').on('touchend', unbindMove);
 			}
+
+			this.$element.trigger('ws.moved', [0]);
 		};
 
 		Slider.prototype.left = function(index) {
@@ -471,6 +515,11 @@
 				if (index !== undefined) {
 					$next = this.$wrapper.children("[data-wity-slider-index='" + index+"']");
 				} else if (!$next || $next.length <= 0) {
+					if (!this.options().loop) {
+						this.ready = true;
+						return false;
+					}
+
 					$next = direction === 'left' ? this.$wrapper.children(".wslider-page").last() : this.$wrapper.children(".wslider-page").first();
 					$next.removeAttr("style");
 				}
@@ -523,6 +572,10 @@
 
 						if (that.$pointer) {
 							that.$pointer.css("margin-left", that.pointerStep * page);
+						}
+
+						if (that.options().contentHeight) {
+							that.$element.height($next.outerHeight(true));
 						}
 
 						setTimeout(function() {

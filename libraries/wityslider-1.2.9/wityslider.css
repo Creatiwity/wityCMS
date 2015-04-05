@@ -4,6 +4,14 @@
 	height: 500px;
 }
 
+.wity-slider.animate-height {
+	-webkit-transition: height 0.3s ease-in-out;
+	   -moz-transition: height 0.3s ease-in-out;
+	    -ms-transition: height 0.3s ease-in-out;
+	     -o-transition: height 0.3s ease-in-out;
+	        transition: height 0.3s ease-in-out;
+}
+
 .wity-slider .wrapper {
 	position: relative;
 	width: 100%;
@@ -103,6 +111,10 @@
 	    -ms-transform:translate3d(0, 0, 0);
 	     -o-transform:translate3d(0, 0, 0);
 	        transform:translate3d(0, 0, 0);
+}
+
+.wity-slider.animate-height .wslider-page {
+	height: auto;
 }
 
 .wity-slider .wslider-page.wslider-animate {
