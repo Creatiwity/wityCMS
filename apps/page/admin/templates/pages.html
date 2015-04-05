@@ -31,8 +31,16 @@
 					{/if}
 				</td>
 				<td>
-					<a title="{lang page_edit}" href="/admin/page/edit/{$page.id}-{$page.url}" class="black"><i class="glyphicon glyphicon-edit"></i></a>
-					<span title="{lang page_delete}" class="link" data-link-modal="/v/admin/page/delete/{$page.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>
+					<div class="btn-group">
+						<a href="/admin/page/edit/{$page.id}-{$page.url}" title="{lang page_edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang edit}</a>
+						<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu pull-right" role="menu">
+							<li><a href="javascript:void(0)" title="{lang page_delete}" class="link" data-link-modal="/v/admin/page/delete/{$page.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang delete}</a></li>
+						</ul>
+					</div>
 				</td>
 			</tr>
 		{/for}

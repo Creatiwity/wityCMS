@@ -1,6 +1,6 @@
 /**
  * Category manager
- * 
+ *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  */
 
@@ -12,13 +12,15 @@ require(['jquery'], function($) {
 		selectParent = $("#selectParent").html();
 
 		function buildEditRow(existingRow) {
-			var row, datas, currentData, dataName;
+			var row, datas, currentData, currentId, dataName;
 
 			if (existingRow) {
 				datas = $.parseJSON(existingRow.attr('data-wity-category'));
 				$('#'+model[0]).val(datas[model[0]]);
+				currentId = datas[model[0]];
 			} else {
 				datas = null;
+				currentId = "0";
 			}
 
 			row = $('<tr class="warning"></tr>');
@@ -39,7 +41,7 @@ require(['jquery'], function($) {
 					} else {
 						currentData = "0";
 					}
-					
+
 					// Remove current cat value
 					if (datas != null && datas['news_cat_id']) {
 						var regexp = new RegExp('<option value="'+datas['news_cat_id']+'">[^<>]*</option>'),
@@ -47,10 +49,10 @@ require(['jquery'], function($) {
 					} else {
 						var select = selectParent;
 					}
-					
+
 					select = select.replace('value="'+currentData+'"', 'value="'+currentData+'" selected="selected"');
 
-					row.append($('<td>'+select+'<input type="hidden" name="id" value="'+datas[model[0]]+'" /></td>'));
+					row.append($('<td>'+select+'<input type="hidden" name="id" value="'+currentId+'" /></td>'));
 				}
 			}
 

@@ -13,6 +13,7 @@
 	<item id="cancel">Annuler</item>
 	<item id="delete">Supprimer</item>
 	<item id="submit">Sauvegarder</item>
+	<item id="edit">Modifier</item>
 
 	<!-- News -->
 	<item id="title">Titre</item>

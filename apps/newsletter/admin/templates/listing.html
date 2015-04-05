@@ -14,7 +14,7 @@
 				<td>{$sub.email}</td>
 				<td>{$sub.created_date}</td>
 				<td>
-					<span title="{lang sub_delete}" class="link" data-link-modal="/v/admin/newsletter/delete/{$sub.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>
+					<a href="javascript:void(0)" title="{lang sub_delete}" class="btn btn-default btn-sm" data-link-modal="/v/admin/newsletter/delete/{$sub.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang delete}</a>
 				</td>
 			</tr>
 		{/for}

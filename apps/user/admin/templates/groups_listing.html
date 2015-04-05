@@ -8,8 +8,8 @@
 	<table id="groups-list" class="table table-striped table-hover" cellpadding="0" cellspacing="0">
 		<colgroup>
 			<col style="width: 45%;" />
-			<col style="width: 45%;" />
-			<col style="width: 10%;" />
+			<col style="width: 40%;" />
+			<col style="width: 15%;" />
 		</colgroup>
 		<thead>
 			<tr>
@@ -73,8 +73,16 @@
 			<td><strong>{$group.name}</strong></td>
 			<td>{$group.users_count}</td>
 			<td>
-				<a class="black group-edit-button" href="#edit" title="{lang edit}" data-group-id="{$group.id}" data-group-name="{$group.name}" data-group-access="{$group.access}"><i class="glyphicon glyphicon-edit"></i></a>
-				<span title="{lang delete}" class="link" data-link-modal="/v/admin/user/group_del/{$group.id}/" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i></span>
+				<div class="btn-group">
+					<a href="#edit" title="{lang edit}" class="btn btn-default btn-sm group-edit-button" data-group-id="{$group.id}" data-group-name="{$group.name}" data-group-access="{$group.access}"><i class="glyphicon glyphicon-pencil"></i> {lang edit}</a>
+					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu pull-right" role="menu">
+						<li><a href="javascript:void(0)" title="{lang delete}" class="link" data-link-modal="/v/admin/user/group_del/{$group.id}/" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang delete}</a></li>
+					</ul>
+				</div>
 			</td>
 		</tr>
 {/for}
