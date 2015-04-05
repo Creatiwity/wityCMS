@@ -16,10 +16,10 @@ defined('IN_WITY') or die('Access denied');
 class NewsAdminView extends WView {
 	public function __construct() {
 		parent::__construct();
-		
+
 		$this->assign('css', '/apps/news/admin/css/news-admin.css');
 	}
-	
+
 	public function news($model) {
 		$this->assign($model['sorting_tpl']);
 
@@ -36,7 +36,7 @@ class NewsAdminView extends WView {
 
 	public function newsForm($model) {
 		// JS / CSS
-		$this->assign('js', '/libraries/ckeditor-4.4.5/ckeditor.js');
+		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
 		$this->assign('require', 'apps!news/news-form');
 
 		// Assign site URL for permalink management
@@ -55,7 +55,7 @@ class NewsAdminView extends WView {
 		}
 		$this->assign('categories', $model['cats']);
 		$this->assign('cats', $cats);
-		
+
 		$default = array(
 			'id'               => 0,
 			'url'              => '',
@@ -69,7 +69,7 @@ class NewsAdminView extends WView {
 			'created_date'     => '',
 			'modified_date'    => '',
 		);
-		
+
 		$this->assignDefault($default, $model['data']);
 		$this->setTemplate('news-form');
 	}
