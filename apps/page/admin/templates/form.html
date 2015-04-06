@@ -2,17 +2,17 @@
 	<form method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-9 form-horizontal">
-				<h1>{if empty({$id})}{lang action_add}{else}{lang action_edit}{/if}</h1>
+				<h1>{if empty({$id})}{lang page_add}{else}{lang page_edit}{/if}</h1>
 
 				<div class="form-group">
-					<label for="title" class="col-sm-2 control-label">{lang title}</label>
+					<label for="title" class="col-sm-2 control-label">*{lang title}</label>
 					<div class="col-sm-10">
 						<input id="title" class="form-control" type="text" name="title" value="{$title}" autocomplete="off" placeholder="{lang title}" />
 					</div>
 				</div>
 				
 				<div class="form-group">
-					<label for="url" class="col-sm-2 control-label">{lang url}</label>
+					<label for="url" class="col-sm-2 control-label">*{lang url}</label>
 					<div class="col-sm-10">
 						<div class="input-group">
 							<span class="input-group-addon">{$wity_base_url}</span>

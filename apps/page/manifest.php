@@ -19,8 +19,8 @@
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">pages</action>
-		<action requires="writer" description="action_add" alias="add" menu="false">form</action>
-		<action requires="writer" description="action_edit" menu="false">edit</action>
-		<action requires="moderator" description="action_delete" menu="false">delete</action>
+		<action requires="writer" description="page_add" menu="false">add</action>
+		<action requires="writer" description="page_edit" menu="false">edit</action>
+		<action requires="moderator" description="page_delete" menu="false">delete</action>
 	</admin>
 </app>

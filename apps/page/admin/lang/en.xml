@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang value="en">
 	<!-- Actions -->
-	<item id="action_add">Add a page</item>
-	<item id="action_edit">Edit a page</item>
-	<item id="action_delete">Delete a page</item>
+	<item id="page_add">Add a page</item>
+	<item id="page_edit">Edit a page</item>
+	<item id="page_delete">Delete a page</item>
 	
 	<!-- Page listing -->
 	<item id="actions">Actions</item>
@@ -44,6 +44,7 @@
 	<item id="page_not_edited">An unknown error occurred while editing the page in the database.</item>
 	<item id="page_deleted">The page "&lt;strong&gt;%s&lt;/strong&gt;" was successfully deleted.</item>
 	
+	<item id="edit">Edit</item>
 	<item id="cancel">Cancel</item>
 	<item id="delete">Delete</item>
 	<item id="submit">Save</item>

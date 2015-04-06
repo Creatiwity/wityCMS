@@ -47,7 +47,7 @@ class PageAdminController extends WController {
 	 * - Handles Add action
 	 * - Prepares page form
 	 */
-	protected function form($id_page = 0, $db_data = array()) {
+	private function form($id_page = 0, $db_data = array()) {
 		$data = array();
 
 		if (!empty($_POST)) {
@@ -57,10 +57,6 @@ class PageAdminController extends WController {
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data['title'])) {
 				$errors[] = WLang::get('page_no_title');
-			}
-			
-			if (empty($data['author'])) {
-				$errors[] = WLang::get('page_no_author');
 			}
 			
 			// Treat custom page URL
@@ -135,6 +131,13 @@ class PageAdminController extends WController {
 			'data'  => $db_data,
 			'pages' => $this->model->getPages()
 		);
+	}
+
+	/**
+	 * Handles Add action
+	 */
+	protected function add($params) {
+		return $this->form();
 	}
 	
 	/**

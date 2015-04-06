@@ -53,6 +53,10 @@ class PageAdminView extends WView {
 		$this->setTemplate('form');
 	}
 
+	public function add($model) {
+		$this->form($model);
+	}
+
 	public function edit($model) {
 		$this->form($model);
 	}
