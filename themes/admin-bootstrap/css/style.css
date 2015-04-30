@@ -47,3 +47,15 @@ a.black {
 	-webkit-box-shadow: rgba(0,0,0,0.2) 0 1px 3px inset;
 	box-shadow: rgba(0,0,0,0.2) 0 1px 3px inset;
 }
+
+.btn-group {
+	white-space: nowrap;
+}
+
+.btn-group a.btn {
+	margin-right: -4px;
+}
+
+.btn-group .btn {
+	float: none;
+}
