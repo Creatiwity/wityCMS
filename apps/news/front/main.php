@@ -38,6 +38,13 @@ class NewsController extends WController {
 			$news = $this->model->getNews($id_news);
 			
 			if (empty($news)) {
+				$this->setHeader('Location', WRoute::getDir().'news');
+				return WNote::error('news_not_found', WLang::get('news_not_found'));
+			}
+
+			// Forbid access to non published news to non admin users
+			if ($news['published'] != 1 && !$this->hasAccess('news', '', true)) {
+				$this->setHeader('Location', WRoute::getDir().'news');
 				return WNote::error('news_not_found', WLang::get('news_not_found'));
 			}
 			
@@ -52,7 +59,12 @@ class NewsController extends WController {
 			$this->model->increaseViews($id_news);
 		} else {
 			$filter_cats = (empty($cat_shortname)) ? array() : array('cats' => array($cat_shortname));
-			
+
+			// Display unpublished news to admin
+			if ($this->hasAccess('news', '', true)) {
+				$filter_cats['published'] = -1;
+			}
+
 			$news_set = $this->model->getAllNews(0, 4, 'created_date', false, $filter_cats);
 		}
 		
