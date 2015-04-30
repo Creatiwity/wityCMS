@@ -17,12 +17,14 @@
 	<!-- Front pages -->
 	<action default="default">listing</action>
 	<action>detail</action>
+	<action>preview</action>
 	
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">news</action>
 		<action requires="writer" menu="false">news-add</action>
 		<action requires="writer" menu="false">news-edit</action>
+		<action requires="writer" menu="false">news-save-preview</action>
 		<action requires="moderator" menu="false">news-delete</action>
 		<action requires="category_manager">categories</action>
 		<action requires="category_manager, moderator" menu="false">category-delete</action>

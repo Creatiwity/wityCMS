@@ -14,10 +14,9 @@ defined('IN_WITY') or die('Access denied');
  * @version 0.5.0-dev-24-03-2015
  */
 class NewsController extends WController {
-	protected function listing(array $params) {
+	protected function listing($params) {
 		$cat_shortname = '';
-		$news_id = 0;
-		$listing_view = true;
+		$id_news = 0;
 		$categories = $this->model->getCatsStructure();
 		
 		// URL may contain either a category, either a news ID:
@@ -31,39 +30,49 @@ class NewsController extends WController {
 					$cat_shortname = $category['shortname'];
 				}
 			} else {
-				$news_id = intval($params[0]);
+				$id_news = intval($params[0]);
 			}
 		}
 		
-		if (!empty($news_id)) {
-			$news_data = $this->model->getNews($news_id);
+		if (!empty($id_news)) {
+			$news = $this->model->getNews($id_news);
 			
-			if (empty($news_data)) {
+			if (empty($news)) {
 				return WNote::error('news_not_found', WLang::get('news_not_found'));
 			}
 			
-			if (!empty($news_data['cats'])) {
-				$category = $news_data['cats'][0];
+			if (!empty($news['cats'])) {
+				$category = $news['cats'][0];
 				$cat_shortname = $category['shortname'];
 			}
 			
-			$news = array($news_data);
+			$news_set = array($news);
 			
 			// Increase views
-			$this->model->increaseViews($news_id);
-			
-			$listing_view = false;
+			$this->model->increaseViews($id_news);
 		} else {
 			$filter_cats = (empty($cat_shortname)) ? array() : array('cats' => array($cat_shortname));
-			$news = $this->model->getAllNews(0, 4, 'created_date', false, $filter_cats);
+			
+			$news_set = $this->model->getAllNews(0, 4, 'created_date', false, $filter_cats);
 		}
 		
 		return array(
-			'news'            => $news,
+			'news'            => $news_set,
 			'categories'      => $categories,
-			'cat_selected'    => $cat_shortname,
-			'listing_view'    => $listing_view
+			'cat_selected'    => $cat_shortname
 		);
+	}
+
+	protected function preview($params) {
+		if (!empty($_SESSION['access']) && !empty($_SESSION['news_preview'])) {
+			$news = $_SESSION['news_preview'];
+
+			unset($_SESSION['news_preview']);
+
+			return array(
+				'news' => array($news)
+			);
+		}
 	}
 }
 

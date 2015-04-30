@@ -53,6 +53,28 @@ require(['jquery'], function($) {
 		formatURL();
 	});
 
+	$('.btn.preview').click(function() {
+		$.post(wityBaseURL + 'm/admin/news/news-save-preview', 
+			{
+				title: $('#title').val(),
+				content: CKEDITOR.instances.content.getData()
+			},
+			function(data) {
+				if (data) {
+					try {
+						var dataJSON = JSON.parse(data);
+
+						if (dataJSON.result && dataJSON.result === 'ok') {
+							window.open(wityBaseURL + 'news/preview');
+						}
+					} catch (e) {}
+				}
+			}
+		);
+
+		return false;
+	});
+
 	// Prevents user from accidentally refreshing or leaving the page
 	window.onbeforeunload = function() {
 		return "Warning: if you leave without saving, all modifications will be lost.";

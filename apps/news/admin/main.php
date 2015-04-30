@@ -183,6 +183,21 @@ class NewsAdminController extends WController {
 			return WNote::error('news_not_found', WLang::get('news_not_found', $id_news));
 		}
 	}
+
+	protected function newsSavePreview($params) {
+		$data = WRequest::getAssoc(array('title', 'content'), null, 'POST');
+
+		if (!empty($data['title']) && !empty($data['content'])) {
+			$data['author'] = trim($_SESSION['firstname'].' '.$_SESSION['lastname']);
+			$data['created_date'] = date(WLang::get('wdate_format'), time());
+
+			$_SESSION['news_preview'] = $data;
+
+			return 'ok';
+		}
+
+		return 'ko';
+	}
 	
 	/**
 	 * Handles news-delete action
@@ -197,7 +212,7 @@ class NewsAdminController extends WController {
 		if ($db_data !== false) {
 			if (in_array('confirm', $params)) {
 				if (!empty($db_data['image'])) {
-					@unlink(WITY_PATH.$this->upload_dir.$data['image']);
+					@unlink($this->upload_dir.$data['image']);
 				}
 				
 				$this->model->removeCatsFromNews($id_news);
