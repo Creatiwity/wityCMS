@@ -33,6 +33,8 @@
 
 	<item id="details">Détails</item>
 	<item id="published">Publier l'article</item>
+	<item id="publish_date">Date de publication</item>
+	<item id="publish_time">Heure de publication</item>
 	<item id="image">Image</item>
 
 	<item id="SEO">Référencement</item>
@@ -43,9 +45,10 @@
 	<item id="news_modified_on">&lt;strong&gt;Modifié&lt;/strong&gt; le %s</item>
 
 	<item id="news_not_found">L'article n°%s que vous tentez de modifier n'existe pas.</item>
-	<item id="news_no_title">Il manque un titre à l'article.</item>
-	<item id="news_no_author">Il manque un auteur à l'article.</item>
-	<item id="news_no_permalink">Aucun permalien (lien vers l'article) n'a été défini.</item>
+	<item id="news_no_title">Il manque un titre.</item>
+	<item id="news_no_author">Il manque un auteur.</item>
+	<item id="news_no_permalink">Il manque un URL.</item>
+	<item id="news_no_publish_date">Il manque une date de publication.</item>
 	<item id="news_image_error">Erreur lors de l'upload de l'image : %s</item>
 	<item id="news_added">L'article &lt;strong&gt;%s&lt;/strong&gt; a été créé avec succès.</item>
 	<item id="news_not_added">Une erreur inconnue s'est produite lors de l'ajout de l'article dans la base de données.</item>

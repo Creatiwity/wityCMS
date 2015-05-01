@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `prefix_news` (
   `meta_description` text COLLATE utf8_unicode_ci NOT NULL,
   `views` int(11) unsigned NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',
+  `publish_date` datetime NOT NULL,
   `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',

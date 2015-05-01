@@ -83,8 +83,8 @@ class NewsAdminModel extends NewsModel {
 	 */
 	public function createNews($data) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, image, title, author, content, meta_title, meta_description, published)
-			VALUES (:url, :image, :title, :author, :content, :meta_title, :meta_description, :published)
+			INSERT INTO news(url, image, title, author, content, meta_title, meta_description, published, publish_date)
+			VALUES (:url, :image, :title, :author, :content, :meta_title, :meta_description, :published, :publish_date)
 		');
 		$prep->bindParam(':url', $data['url']);
 		$prep->bindParam(':image', $data['image']);
@@ -94,6 +94,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['meta_title']);
 		$prep->bindParam(':meta_description', $data['meta_description']);
 		$prep->bindParam(':published', $data['published']);
+		$prep->bindParam(':publish_date', $data['publish_date']);
 		
 		if ($prep->execute()) {
 			return $this->db->lastInsertId();
@@ -113,7 +114,7 @@ class NewsAdminModel extends NewsModel {
 		$prep = $this->db->prepare('
 			UPDATE news
 			SET url = :url, image = :image, title = :title, author = :author, content = :content, 
-				meta_title = :meta_title, meta_description = :meta_description, published = :published
+				meta_title = :meta_title, meta_description = :meta_description, published = :published, publish_date = :publish_date
 			WHERE id = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news);
@@ -125,6 +126,7 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':meta_title', $data['meta_title']);
 		$prep->bindParam(':meta_description', $data['meta_description']);
 		$prep->bindParam(':published', $data['published']);
+		$prep->bindParam(':publish_date', $data['publish_date']);
 		
 		return $prep->execute();
 	}

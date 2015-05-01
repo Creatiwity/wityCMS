@@ -63,6 +63,7 @@ class NewsController extends WController {
 			// Display unpublished news to admin
 			if ($this->hasAccess('news', '', true)) {
 				$filter_cats['published'] = -1;
+				$filter_cats['publish_date'] = -1;
 			}
 
 			$news_set = $this->model->getAllNews(0, 4, 'created_date', false, $filter_cats);

@@ -49,11 +49,11 @@ require(['jquery'], function($) {
 		}
 	});
 
-	$('.update-url').click(function() {
+	$(namespace + '.update-url').click(function() {
 		formatURL();
 	});
 
-	$('.btn.preview').click(function() {
+	$(namespace + '.btn.preview').click(function() {
 		$.post(wityBaseURL + 'm/admin/news/news-save-preview', 
 			{
 				title: $('#title').val(),
@@ -73,6 +73,16 @@ require(['jquery'], function($) {
 		);
 
 		return false;
+	});
+
+	$(namespace + '#published').change(function() {
+		var $this = $(this);
+
+		if ($this.prop('checked')) {
+			$(namespace + '.publish_datetime_group').show();
+		} else {
+			$(namespace + '.publish_datetime_group').hide();
+		}
 	});
 
 	// Prevents user from accidentally refreshing or leaving the page

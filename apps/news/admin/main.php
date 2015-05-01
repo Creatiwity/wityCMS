@@ -71,7 +71,7 @@ class NewsAdminController extends WController {
 		
 		if (!in_array(null, $post_data, true)) {
 			$errors = array();
-			$post_data += WRequest::getAssoc(array('cats', 'author', 'meta_title', 'meta_description', 'title', 'content', 'published'));
+			$post_data += WRequest::getAssoc(array('cats', 'author', 'meta_title', 'meta_description', 'title', 'content', 'published', 'publish_date', 'publish_time'));
 			
 			/* BEGING VARIABLES CHECKING */
 			if (empty($post_data['title'])) {
@@ -92,6 +92,16 @@ class NewsAdminController extends WController {
 			}
 			
 			$post_data['published'] = ($post_data['published'] == 'on') ? 1 : 0;
+
+			if (!$post_data['published']) {
+				$post_data['publish_date'] = '';
+			} else if (empty($post_data['publish_date']) || empty($post_data['publish_time'])) {
+				$errors[] = WLang::get('news_no_publish_date');
+			} else {
+				$post_data['publish_date'] .= ' '.$post_data['publish_time'];
+			}
+
+			unset($post_data['publish_time']);
 			/* END VARIABLES CHECKING */
 			
 			// Image
@@ -185,18 +195,14 @@ class NewsAdminController extends WController {
 	}
 
 	protected function newsSavePreview($params) {
-		$data = WRequest::getAssoc(array('title', 'content'), null, 'POST');
+		$data = WRequest::getAssoc(array('title', 'content'), '', 'POST');
 
-		if (!empty($data['title']) && !empty($data['content'])) {
-			$data['author'] = trim($_SESSION['firstname'].' '.$_SESSION['lastname']);
-			$data['created_date'] = date(WLang::get('wdate_format'), time());
+		$data['author'] = trim($_SESSION['firstname'].' '.$_SESSION['lastname']);
+		$data['created_date'] = date(WLang::get('wdate_format'), time());
 
-			$_SESSION['news_preview'] = $data;
+		$_SESSION['news_preview'] = $data;
 
-			return 'ok';
-		}
-
-		return 'ko';
+		return 'ok';
 	}
 	
 	/**

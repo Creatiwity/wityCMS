@@ -53,8 +53,21 @@ class NewsAdminView extends WView {
 				}
 			}
 		}
+
 		$this->assign('categories', $model['cats']);
 		$this->assign('cats', $cats);
+
+		if (!empty($model['data']['publish_date'])) {
+			if ($model['data']['publish_date'] == '0000-00-00 00:00:00') {
+				$model['data']['publish_date'] = date('Y-m-d', time());
+				$model['data']['publish_time'] = date('H:i', time());
+			} else {
+				$datetime = explode(' ', $model['data']['publish_date']);
+
+				$model['data']['publish_date'] = $datetime[0];
+				$model['data']['publish_time'] = $datetime[1];
+			}
+		}
 
 		$default = array(
 			'id'               => 0,
@@ -65,6 +78,8 @@ class NewsAdminView extends WView {
 			'meta_title'       => '',
 			'meta_description' => '',
 			'published'        => true,
+			'publish_date'     => date('Y-m-d', time()),
+			'publish_time'     => date('H:i', time()),
 			'image'            => '',
 			'created_date'     => '',
 			'modified_date'    => '',

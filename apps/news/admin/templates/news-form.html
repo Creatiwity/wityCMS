@@ -60,6 +60,16 @@
 						</label>
 					</div>
 
+					<div class="form-group publish_datetime_group"{if !{$published}} style="display: none;"{/if}>
+						<label for="publish_date" class="control-label">*{lang publish_date}</label>
+						<input id="publish_date" class="form-control" type="date" name="publish_date" value="{$publish_date}" placeholder="{lang publish_date}" />
+					</div>
+
+					<div class="form-group publish_datetime_group"{if !{$published}} style="display: none;"{/if}>
+						<label for="publish_time" class="control-label">*{lang publish_time}</label>
+						<input id="publish_time" class="form-control" type="time" name="publish_time" value="{$publish_time}" placeholder="{lang publish_time}" />
+					</div>
+
 					<div class="form-group">
 						<label for="author" class="control-label">{lang author}</label>
 						<input id="author" class="form-control" type="text" name="author" value="{$author}" placeholder="{lang author}" />

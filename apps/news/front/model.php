@@ -51,6 +51,12 @@ class NewsModel {
 		} else {
 			$cond .= 'AND published = 1 ';
 		}
+
+		if (empty($filters['publish_date'])) {
+			$cond .= 'AND publish_date <= NOW()';
+		} else if ($filters['publish_date'] != -1) {
+			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
+		}
 		
 		$prep = $this->db->prepare('
 			SELECT COUNT(*)
@@ -93,6 +99,12 @@ class NewsModel {
 			}
 		} else {
 			$cond .= 'AND published = 1 ';
+		}
+
+		if (empty($filters['publish_date'])) {
+			$cond .= 'AND publish_date <= NOW()';
+		} else if ($filters['publish_date'] != -1) {
+			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
 		}
 		
 		$prep = $this->db->prepare('
