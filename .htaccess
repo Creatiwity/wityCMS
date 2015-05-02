@@ -15,6 +15,3 @@ AddDefaultCharset UTF-8
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule . index.php [L]
 </IfModule>
-
-# Errors
-ErrorDocument 404 index.php?app=404
