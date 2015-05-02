@@ -49,7 +49,7 @@
 
 				{if !empty({$wity_user_nickname})}
 				<p class="navbar-text pull-right">
-					{lang Welcome} {$wity_user_nickname}
+					{lang welcome} {if !empty({$wity_user_firstname}) || !empty({$wity_user_lastname})} {$wity_user_firstname} {$wity_user_lastname}{else}{$wity_user_nickname}{/if}
 					&nbsp;|&nbsp;
 					<a href="/user/logout/" class="navbar-link">{lang Logout}</a>
 				</p>
