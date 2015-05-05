@@ -30,7 +30,13 @@
 						</div>
 					</div>
 				</td>
-				<td>{$slide.modified_date}</td>
+				<td>
+					{if {$slide.modified_date} != '0000-00-00 00:00:00'}
+						{$slide.modified_date}
+					{else}
+						{$slide.created_date}
+					{/if}
+				</td>
 				<td>
 					<div class="btn-group">
 						<a href="/admin/slideshow/slide_edit/{$slide.id}" title="{lang slide_edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang edit}</a>

@@ -48,7 +48,7 @@ class SlideshowAdminController extends WController {
 			
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data_translatable[$lang_list[0]]['title'])) {
-				$errors[] = WLang::get("no_title");
+				$errors[] = WLang::get('no_title');
 			}
 			
 			if (!empty($post_data['url']) && strpos($post_data['url'], '://') === false) {
@@ -104,8 +104,21 @@ class SlideshowAdminController extends WController {
 					}
 				}
 			} else {
-				WNote::error('slide_data_error', implode("\n<br />", $errors));
+				WNote::error('slide_data_error', implode('\n<br />', $errors));
+
+				if (!empty($post_data['image'])) {
+					@unlink($this->upload_dir.basename($post_data['image']));
+					$post_data['image'] = '';
+				}
+				
+				// Restore fields
 				$db_data = $post_data;
+
+				foreach ($data_translatable as $id_lang => $values) {
+					foreach ($values as $key => $value) {
+						$db_data[$key.'_'.$id_lang] = $value;
+					}
+				}
 			}
 		}
 

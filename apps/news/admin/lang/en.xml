@@ -44,9 +44,9 @@
 	<item id="news_modified_on">&lt;strong&gt;Edited&lt;/strong&gt; on %s</item>
 
 	<item id="news_not_found">The news #%s that you are trying to modify cannot be found.</item>
-	<item id="news_no_title">Title is missing.</item>
-	<item id="news_no_author">Author is missing.</item>
-	<item id="news_no_url">URL is missing.</item>
+	<item id="news_no_title">The title is missing.</item>
+	<item id="news_no_author">The author is missing.</item>
+	<item id="news_no_url">The URL is missing.</item>
 	<item id="news_no_publish_date">Date of publication is missing.</item>
 	<item id="news_image_error">Image upload error : %s</item>
 	<item id="news_added">The news "&lt;strong&gt;%s&lt;/strong&gt;" was successfully created.</item>

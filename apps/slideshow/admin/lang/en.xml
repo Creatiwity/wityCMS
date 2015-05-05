@@ -25,6 +25,8 @@
 	<item id="slide_not_edited">An unknown error occured.</item>
 	<item id="slide_not_found">The slide you are trying to edit does not exist.</item>
 	<item id="slide_deleted">The slide was successfully deleted.</item>
+	<item id="no_title">The title is missing.</item>
+	<item id="no_image">The image is missing.</item>
 
 	<item id="config_time_pause">Pause time between two slides (ms)</item>
 	<item id="config_time_transition">Transition time between two slides (ms)</item>
