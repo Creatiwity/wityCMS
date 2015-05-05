@@ -219,7 +219,7 @@ class WRequest {
 			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#', function($matches) {
 				// Allowed tags
 				if (in_array($matches[1], array(
-					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'img', 'br', 
+					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'button', 'img', 'br', 
 					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 'hr', 
 					'audio', 'video', 'source', 'iframe', 
 					'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
