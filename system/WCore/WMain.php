@@ -142,9 +142,9 @@ class WMain {
 		$session = WSystem::getSession();
 
 		// Anti-flood checking
-		/*if (!$session->check_flood()) {
+		if (!$session->check_flood()) {
 			$_POST = array();
-		}*/
+		}
 
 		// Variable for Roxy file manager
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
