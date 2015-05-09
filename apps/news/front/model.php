@@ -24,6 +24,7 @@ class NewsModel {
 		
 		// Declare table
 		$this->db->declareTable('news');
+		$this->db->declareTable('news_lang');
 		$this->db->declareTable('news_cats');
 		$this->db->declareTable('news_cats_relations');
 	}
@@ -57,6 +58,8 @@ class NewsModel {
 		} else if ($filters['publish_date'] != -1) {
 			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
 		}
+
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT COUNT(*)
@@ -65,8 +68,11 @@ class NewsModel {
 			ON id = news_cats_relations.id_news
 			LEFT JOIN news_cats
 			ON id_cat = cid
+			LEFT JOIN news_lang
+			ON id = news_lang.id_news AND id_lang = :id_lang
 			WHERE 1 = 1 '.$cond.'
 		');
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
 		
 		return intval($prep->fetchColumn());
@@ -92,13 +98,13 @@ class NewsModel {
 			$cond .= ') ';
 		}
 		
-		if (!empty($filters['published'])) {
+		if (empty($filters['published'])) {
+			$cond .= 'AND published = 1 ';
+		} else if ($filters['published'] != -1) {
 			$published = intval($filters['published']);
 			if ($published == 0 || $published == 1) {
 				$cond .= 'AND published = '.$published.' ';
 			}
-		} else {
-			$cond .= 'AND published = 1 ';
 		}
 
 		if (empty($filters['publish_date'])) {
@@ -106,10 +112,14 @@ class NewsModel {
 		} else if ($filters['publish_date'] != -1) {
 			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
 		}
+
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), news.*
+			SELECT DISTINCT(id), news.*, news_lang.*
 			FROM news
+			LEFT JOIN news_lang
+			ON id = news_lang.id_news AND id_lang = :id_lang
 			LEFT JOIN news_cats_relations
 			ON id = news_cats_relations.id_news
 			LEFT JOIN news_cats
@@ -118,6 +128,7 @@ class NewsModel {
 			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
 			LIMIT :start, :number
 		');
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
@@ -142,13 +153,18 @@ class NewsModel {
 		if (empty($id_news)) {
 			return false;
 		}
+
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT *
 			FROM news
+			LEFT JOIN news_lang
+			ON id = id_news AND id_lang = :id_lang
 			WHERE id = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
 		
 		$data = $prep->fetch(PDO::FETCH_ASSOC);

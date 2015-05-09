@@ -24,80 +24,93 @@ class NewsAdminModel extends NewsModel {
 	}
 
 	/**
-	 * Retrieves a set of news
+	 * Retrieves all data linked to a News
 	 * 
-	 * @param int $from
-	 * @param int $number
-	 * @param string $order Ordering field name
-	 * @param bool $asc true = ASC order / false = DESC order
-	 * @param array $filters Set of filters: cats(array), published(int(1|0))
+	 * @param int $id_news
 	 * @return array
 	 */
-	public function getAllNews($from, $number, $order = 'created_date', $asc = false, array $filters = array()) {
-		$cond = '';
-		if (!empty($filters['cats'])) {
-			$cond .= 'AND (1 = 0 ';
-			foreach ($filters['cats'] as $cat) {
-				$cond .= 'OR shortname = "'.$cat.'" ';
-			}
-			$cond .= ') ';
-		}
-		
-		if (!empty($filters['published'])) {
-			$published = intval($filters['published']);
-			if ($published == 0 || $published == 1) {
-				$cond .= 'AND published = '.$published.' ';
-			}
+	public function getNews($id_news) {
+		if (empty($id_news)) {
+			return false;
 		}
 		
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), news.*
+			SELECT *
 			FROM news
-			LEFT JOIN news_cats_relations
-			ON id = news_cats_relations.id_news
-			LEFT JOIN news_cats
-			ON id_cat = cid
-			WHERE 1 = 1 '.$cond.'
-			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
-			LIMIT :start, :number
+			WHERE id = :id_news
 		');
-		$prep->bindParam(':start', $from, PDO::PARAM_INT);
-		$prep->bindParam(':number', $number, PDO::PARAM_INT);
+		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->execute();
 		
-		$result = array();
-		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
-			$data['cats'] = $this->getCatsOfNews($data['id']);
-			
-			$result[] = $data;
+		$news = $prep->fetch(PDO::FETCH_ASSOC);
+		
+		if (!empty($news)) {
+			$news['cats'] = $this->getCatsOfNews($id_news);
 		}
 		
-		return $result;
+		// Get lang fields
+		$prep = $this->db->prepare('
+			SELECT *
+			FROM news_lang
+			WHERE id_news = :id_news
+		');
+		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+		$prep->execute();
+		
+		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
+			foreach ($data as $key => $value) {
+				$news[$key.'_'.$data['id_lang']] = $value;
+			}
+		}
+		
+		return $news;
 	}
 	
 	/**
 	 * Creates a News in the database from a set of data
 	 * 
 	 * @param array $data
+	 * @param array $data_translatable
 	 * @return mixed ID of the new item or false on error
 	 */
-	public function createNews($data) {
+	public function createNews($data, $data_translatable) {
 		$prep = $this->db->prepare('
-			INSERT INTO news(url, image, title, author, content, meta_title, meta_description, published, publish_date)
-			VALUES (:url, :image, :title, :author, :content, :meta_title, :meta_description, :published, :publish_date)
+			INSERT INTO news(image)
+			VALUES (:image)
 		');
-		$prep->bindParam(':url', $data['url']);
 		$prep->bindParam(':image', $data['image']);
-		$prep->bindParam(':title', $data['title']);
-		$prep->bindParam(':author', $data['author']);
-		$prep->bindParam(':content', $data['content']);
-		$prep->bindParam(':meta_title', $data['meta_title']);
-		$prep->bindParam(':meta_description', $data['meta_description']);
-		$prep->bindParam(':published', $data['published']);
-		$prep->bindParam(':publish_date', $data['publish_date']);
 		
-		if ($prep->execute()) {
-			return $this->db->lastInsertId();
+		if (!$prep->execute()) {
+			return false;
+		}
+		
+		$id_news = $this->db->lastInsertId();
+		
+		// Create language lines
+		$exec = true;
+		foreach ($data_translatable as $id_lang => $values) {
+			$prep = $this->db->prepare('
+				INSERT INTO news_lang(id_news, id_lang, title, author, content, url, meta_title, meta_description, published, publish_date)
+				VALUES (:id_news, :id_lang, :title, :author, :content, :url, :meta_title, :meta_description, :published, :publish_date)
+			');
+			$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
+			$prep->bindParam(':title', $values['title']);
+			$prep->bindParam(':author', $values['author']);
+			$prep->bindParam(':content', $values['content']);
+			$prep->bindParam(':url', $values['url']);
+			$prep->bindParam(':meta_title', $values['meta_title']);
+			$prep->bindParam(':meta_description', $values['meta_description']);
+			$prep->bindParam(':published', $values['published']);
+			$prep->bindParam(':publish_date', $values['publish_date']);
+			
+			if (!$prep->execute()) {
+				$exec = false;
+			}
+		}
+		
+		if ($exec) {
+			return $id_news;
 		} else {
 			return false;
 		}
@@ -108,27 +121,47 @@ class NewsAdminModel extends NewsModel {
 	 * 
 	 * @param int $id_news
 	 * @param array $data
+	 * @param array $data_translatable
 	 * @return bool Success?
 	 */
-	public function updateNews($id_news, $data) {
+	public function updateNews($id_news, $data, $data_translatable) {
 		$prep = $this->db->prepare('
 			UPDATE news
-			SET url = :url, image = :image, title = :title, author = :author, content = :content, 
-				meta_title = :meta_title, meta_description = :meta_description, published = :published, publish_date = :publish_date
+			SET image = :image
 			WHERE id = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news);
-		$prep->bindParam(':url', $data['url']);
 		$prep->bindParam(':image', $data['image']);
-		$prep->bindParam(':title', $data['title']);
-		$prep->bindParam(':author', $data['author']);
-		$prep->bindParam(':content', $data['content']);
-		$prep->bindParam(':meta_title', $data['meta_title']);
-		$prep->bindParam(':meta_description', $data['meta_description']);
-		$prep->bindParam(':published', $data['published']);
-		$prep->bindParam(':publish_date', $data['publish_date']);
 		
-		return $prep->execute();
+		if (!$prep->execute()) {
+			return false;
+		}
+		
+		// Create language lines
+		$exec = true;
+		foreach ($data_translatable as $id_lang => $values) {
+			$prep = $this->db->prepare('
+				UPDATE news_lang
+				SET title = :title, author = :author, content = :content, url = :url, meta_title = :meta_title, meta_description = :meta_description, published = :published, publish_date = :publish_date
+				WHERE id_news = :id_news AND id_lang = :id_lang
+			');
+			$prep->bindParam(':title', $values['title']);
+			$prep->bindParam(':author', $values['author']);
+			$prep->bindParam(':content', $values['content']);
+			$prep->bindParam(':url', $values['url']);
+			$prep->bindParam(':meta_title', $values['meta_title']);
+			$prep->bindParam(':meta_description', $values['meta_description']);
+			$prep->bindParam(':published', $values['published']);
+			$prep->bindParam(':publish_date', $values['publish_date']);
+			$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
+			
+			if (!$prep->execute()) {
+				$exec = false;
+			}
+		}
+		
+		return $exec;
 	}
 	
 	/**
@@ -142,8 +175,15 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news WHERE id = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+		$exec1 = $prep->execute();
 		
-		return $prep->execute();
+		$prep = $this->db->prepare('
+			DELETE FROM news_lang WHERE id_news = :id_news
+		');
+		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+		$exec2 = $prep->execute();
+		
+		return $exec1 && $exec2;
 	}
 	
 	/**

@@ -51,7 +51,7 @@ class NewsAdminController extends WController {
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 		
 		return array(
-			'data'         => $this->model->getAllNews(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC'),
+			'data'         => $this->model->getAllNews(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC', array('published' => -1, 'publish_date' => -1)),
 			'total'        => $this->model->countNews(),
 			'current_page' => $page,
 			'per_page'     => $n,
@@ -67,41 +67,56 @@ class NewsAdminController extends WController {
 	 * @param array $db_data
 	 */
 	private function newsForm($id_news = 0, $db_data = array()) {
-		$post_data = WRequest::getAssoc(array('url'), null, 'POST');
-		
-		if (!in_array(null, $post_data, true)) {
+		if (WRequest::getMethod() == 'POST') {
 			$errors = array();
-			$post_data += WRequest::getAssoc(array('cats', 'author', 'meta_title', 'meta_description', 'title', 'content', 'published', 'publish_date', 'publish_time'));
+			$post_data = WRequest::getAssoc(array('cats'));
+			$data_translatable = array();
+			
+			// Format translatable fields
+			$translatable_fields = array('title', 'content', 'author', 'url', 'meta_title', 'meta_description', 'published', 'publish_date', 'publish_time');
+			$lang_list = array(1, 2);
+			foreach ($translatable_fields as $field) {
+				foreach ($lang_list as $i => $id_lang) {
+					$value = WRequest::get($field.'_'.$id_lang);
+
+					if ($field == 'published') {
+						$value = ($value == 'on') ? 1 : 0;
+					} else if ($field == 'url') {
+						$value = strtolower(WTools::stripAccents($value));
+						$value = preg_replace('#[^a-zA-Z0-9\/\._-]+#', '-', $value);
+						$value = trim($value, '-');
+					}
+					
+					if (($value === null || $value === '') && $i > 0) {
+						// Use the value of the default lang
+						$data_translatable[$id_lang][$field] = $data_translatable[$lang_list[0]][$field];
+					} else {
+						$data_translatable[$id_lang][$field] = $value;
+					}
+				}
+			}
 			
 			/* BEGING VARIABLES CHECKING */
-			if (empty($post_data['title'])) {
+			if (empty($data_translatable[$lang_list[0]]['title'])) {
 				$errors[] = WLang::get('news_no_title');
 			}
 			
-			if (empty($post_data['author'])) {
+			if (empty($data_translatable[$lang_list[0]]['author'])) {
 				$errors[] = WLang::get('news_no_author');
 			}
 			
-			// Treat custom news URL
-			if (empty($post_data['url'])) {
-				$errors[] = WLang::get('news_no_permalink');
-			} else {
-				$post_data['url'] = strtolower(WTools::stripAccents($post_data['url']));
-				$post_data['url'] = preg_replace('#[^a-zA-Z0-9\/\._-]+#', '-', $post_data['url']);
-				$post_data['url'] = trim($post_data['url'], '-');
-			}
-			
-			$post_data['published'] = ($post_data['published'] == 'on') ? 1 : 0;
+			foreach ($data_translatable as $id_lang => $fields) {
+				if (!$data_translatable[$id_lang]['published']) {
+					$data_translatable[$id_lang]['publish_date'] = '';
+				} else if (empty($data_translatable[$id_lang]['publish_date']) || empty($data_translatable[$id_lang]['publish_time'])) {
+					var_dump($data_translatable[$id_lang]);
+					$errors[] = WLang::get('news_no_publish_date');
+				} else {
+					$data_translatable[$id_lang]['publish_date'] .= ' '.$data_translatable[$id_lang]['publish_time'];
+				}
 
-			if (!$post_data['published']) {
-				$post_data['publish_date'] = '';
-			} else if (empty($post_data['publish_date']) || empty($post_data['publish_time'])) {
-				$errors[] = WLang::get('news_no_publish_date');
-			} else {
-				$post_data['publish_date'] .= ' '.$post_data['publish_time'];
+				unset($data_translatable[$id_lang]['publish_time']);
 			}
-
-			unset($post_data['publish_time']);
 			/* END VARIABLES CHECKING */
 			
 			// Image
@@ -132,7 +147,7 @@ class NewsAdminController extends WController {
 			
 			if (empty($errors)) {
 				if (empty($id_news)) { // Add case
-					if ($id_news = $this->model->createNews($post_data)) {
+					if ($id_news = $this->model->createNews($post_data, $data_translatable)) {
 						// Treat categories
 						if (!empty($post_data['cats'])) {
 							foreach ($post_data['cats'] as $id_cat => $v) {
@@ -141,12 +156,12 @@ class NewsAdminController extends WController {
 						}
 						
 						$this->setHeader('Location', Wroute::getDir().'admin/news');
-						WNote::success('news_added', WLang::get('news_added', $post_data['title']));
+						WNote::success('news_added', WLang::get('news_added', $data_translatable[$lang_list[0]]['title']));
 					} else {
 						WNote::error('news_not_added', WLang::get('news_not_added'));
 					}
 				} else { // Edit case
-					if ($this->model->updateNews($id_news, $post_data)) {
+					if ($this->model->updateNews($id_news, $post_data, $data_translatable)) {
 						// Treat categories
 						$this->model->removeCatsFromNews($id_news);
 
@@ -157,7 +172,7 @@ class NewsAdminController extends WController {
 						}
 						
 						$this->setHeader('Location', Wroute::getDir().'admin/news');
-						WNote::success('news_edited', WLang::get('news_edited', $post_data['title']));
+						WNote::success('news_edited', WLang::get('news_edited', $data_translatable[$lang_list[0]]['title']));
 					} else {
 						WNote::error('news_not_edited', WLang::get('news_not_edited'));
 					}
@@ -225,7 +240,7 @@ class NewsAdminController extends WController {
 				$this->model->deleteNews($id_news);
 				
 				$this->setHeader('Location', WRoute::getDir().'admin/news');
-				WNote::success('news_deleted', WLang::get('news_deleted', $db_data['title']));
+				WNote::success('news_deleted', WLang::get('news_deleted', $db_data['title_1']));
 			}
 			
 			return $db_data;

@@ -38,6 +38,7 @@ class NewsAdminView extends WView {
 		// JS / CSS
 		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
 		$this->assign('require', 'apps!news/news-form');
+		$this->assign('require', 'witycms/admin');
 
 		// Assign site URL for permalink management
 		$this->assign('site_url', WRoute::getBase().'news/');
@@ -57,33 +58,45 @@ class NewsAdminView extends WView {
 		$this->assign('categories', $model['cats']);
 		$this->assign('cats', $cats);
 
-		if (!empty($model['data']['publish_date'])) {
-			if ($model['data']['publish_date'] == '0000-00-00 00:00:00') {
-				$model['data']['publish_date'] = date('Y-m-d', time());
-				$model['data']['publish_time'] = date('H:i', time());
-			} else {
-				$datetime = explode(' ', $model['data']['publish_date']);
+		$lang_list = array(1, 2);
 
-				$model['data']['publish_date'] = $datetime[0];
-				$model['data']['publish_time'] = $datetime[1];
+		foreach ($lang_list as $id_lang) {
+			if (!empty($model['data']['publish_date_'.$id_lang])) {
+				if ($model['data']['publish_date_'.$id_lang] == '0000-00-00 00:00:00') {
+					$model['data']['publish_date_'.$id_lang] = date('Y-m-d', time());
+					$model['data']['publish_time_'.$id_lang] = date('H:i', time());
+				} else {
+					$datetime = explode(' ', $model['data']['publish_date_'.$id_lang]);
+
+					$model['data']['publish_date_'.$id_lang] = $datetime[0];
+					$model['data']['publish_time_'.$id_lang] = $datetime[1];
+				}
 			}
 		}
 
 		$default = array(
-			'id'               => 0,
-			'url'              => '',
+			'id'            => 0,
+			'image'         => '',
+			'created_date'  => '',
+			'modified_date' => ''
+		);
+		$default_translatable = array(
 			'title'            => '',
-			'author'           => !empty($_SESSION['firstname']) || !empty($_SESSION['lastname']) ? trim($_SESSION['firstname'].' '.$_SESSION['lastname']) : $_SESSION['nickname'],
 			'content'          => '',
+			'author'           => !empty($_SESSION['firstname']) || !empty($_SESSION['lastname']) ? trim($_SESSION['firstname'].' '.$_SESSION['lastname']) : $_SESSION['nickname'],
+			'url'              => '',
 			'meta_title'       => '',
 			'meta_description' => '',
 			'published'        => true,
 			'publish_date'     => date('Y-m-d', time()),
 			'publish_time'     => date('H:i', time()),
-			'image'            => '',
-			'created_date'     => '',
-			'modified_date'    => '',
 		);
+		
+		foreach ($default_translatable as $key => $value) {
+			foreach ($lang_list as $id_lang) {
+				$default[$key.'_'.$id_lang] = $value;
+			}
+		}
 
 		$this->assignDefault($default, $model['data']);
 		$this->setTemplate('news-form');
@@ -98,7 +111,7 @@ class NewsAdminView extends WView {
 	}
 
 	public function newsDelete($model) {
-		$this->assign('title', $model['title']);
+		$this->assign('title', $model['title_1']);
 		$this->assign('confirm_delete_url', '/admin/news/news-delete/'.$model['id'].'/confirm');
 	}
 

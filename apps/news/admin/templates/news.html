@@ -30,7 +30,7 @@
 					</ul>
 				</td>
 				<td class="text-center">{if {$n.published}}Y{else}N{/if}</td>
-				<td class="text-center">{lang number_of_views|{$n.views}}</td>
+				<td class="text-center">{$n.views}</td>
 				<td>
 					{if {$n.modified_date} != '0000-00-00 00:00:00'}
 						{$n.modified_date}
@@ -54,7 +54,7 @@
 		{/for}
 		{empty}
 			<tr>
-				<td colspan="6" class="text-center">{lang no_news_in_database}</td>
+				<td colspan="8" class="text-center">{lang no_news_in_database}</td>
 			</tr>
 		{/empty}
 		</tbody>
