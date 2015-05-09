@@ -4,4 +4,5 @@
 	<item id="read_more">Read more</item>
 	
 	<item id="news_not_found">The requested news cannot be found.</item>
+	<item id="no_news_in_category">No news in this category.</item>
 </lang>
