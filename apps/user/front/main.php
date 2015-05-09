@@ -10,7 +10,7 @@ defined('IN_WITY') or die('Access denied');
  * 
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-06-03-2013
+ * @version 0.5.0-dev-09-05-2015
  */
 class UserController extends WController {
 	/*
@@ -62,6 +62,7 @@ class UserController extends WController {
 		if (!in_array(null, $data, true)) {
 			$data += WRequest::getAssoc(array('remember', 'time'));
 			$cookie = true; // cookies accepted by browser?
+			$error = true;
 			
 			if (!empty($data['nickname']) && !empty($data['password'])) {
 				// User asks to be auto loged in => change the cookie lifetime to WSession::REMEMBER_TIME
@@ -72,6 +73,8 @@ class UserController extends WController {
 					case WSession::LOGIN_SUCCESS:
 						// Update activity
 						$this->model->updateLastActivity($_SESSION['userid']);
+
+						$error = false;
 						
 						if (empty($_COOKIE['wsid'])) {
 							WNote::info('user_cookie_not_accepted', WLang::get('cookie_not_accepted'));
@@ -94,6 +97,11 @@ class UserController extends WController {
 			} else {
 				WNote::error('user_bad_data', WLang::get('bad_data'));
 			}
+
+			// Reload the page with GET method
+			if ($error) {
+				$this->setHeader('Location', WRoute::getDir().'/user/login');
+			}
 		}
 		
 		if (strpos($referer, '/admin') !== false) {
@@ -109,7 +117,6 @@ class UserController extends WController {
 	/**
 	 * Logout action handler.
 	 * 
-	 * @todo Smartly find the redirecting URL based on the referer (watch out to app requiring special access)
 	 * @return array Success note
 	 */
 	protected function logout() {
@@ -125,7 +132,6 @@ class UserController extends WController {
 	/**
 	 * The Register action allows a user to register a new account.
 	 * 
-	 * @todo Captcha security
 	 * @return array Data given
 	 */
 	protected function register() {

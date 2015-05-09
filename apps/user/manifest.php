@@ -4,10 +4,10 @@
 	<!-- Application name -->
 	<name>User</name>
 	
-	<version>0.4.0</version>
+	<version>0.5.0</version>
 	
 	<!-- Last update date -->
-	<date>22-10-2013</date>
+	<date>09-05-2015</date>
 	
 	<!-- Permissions -->
 	<permission name="add" />
