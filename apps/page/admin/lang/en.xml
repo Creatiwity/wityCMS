@@ -12,7 +12,6 @@
 	<item id="category">Category</item>
 	<item id="last_modification">Last modification</item>
 	<item id="views">Views</item>
-	<item id="number_of_views">%s views</item>
 	<item id="no_page_in_database">No page found in the database.</item>
 	<item id="page_delete_confirmation">Delete "%s"?</item>
 	

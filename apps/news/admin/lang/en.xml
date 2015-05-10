@@ -21,7 +21,6 @@
 	<item id="last_modification">Last modification</item>
 	<item id="views">Views</item>
 	<item id="actions">Actions</item>
-	<item id="number_of_views">%s views</item>
 	<item id="no_news_in_database">No news found in the database.</item>
 	<item id="news_delete_confirmation">Do you really want to delete the news &lt;strong&gt;%s&lt;/strong&gt;?</item>
 
