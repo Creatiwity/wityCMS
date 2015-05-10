@@ -47,7 +47,7 @@ require(['jquery'], function($) {
 		var $this = $(this),
 			idLang = $this.data('lang');
 
-		if ($(namespace + '.url.lang_' + idLang).val() == '') {
+		if ($(namespace + '.lang_' + idLang + ' .url').val() == '') {
 			formatURL(idLang);
 		}
 	});
@@ -90,6 +90,10 @@ require(['jquery'], function($) {
 		} else {
 			$(namespace + '.publish_datetime_group.lang_'+lang).hide();
 		}
+	});
+
+	$(namespace + 'form').on('submit', function() {
+		window.onbeforeunload = null;
 	});
 
 	// Prevents user from accidentally refreshing or leaving the page

@@ -331,8 +331,6 @@ class NewsAdminController extends WController {
 	
 	/**
 	 * Handles category-delete
-	 * 
-	 * @todo Handle properly the category_not_found case with Bootstrap
 	 */
 	protected function categoryDelete($params) {
 		$id_cat = intval(array_shift($params));

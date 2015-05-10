@@ -24,6 +24,7 @@ class PageModel {
 		
 		// Declare tables
 		$this->db->declareTable('page');
+		$this->db->declareTable('page_lang');
 	}
 	
 	/**
@@ -69,6 +70,8 @@ class PageModel {
 	 * @return array
 	 */
 	public function getPages($from = 0, $number = 0, $order = 'virtual_parent', $asc = true) {
+		$id_lang = WLang::getLangID();
+
 		$prep = $this->db->prepare('
 			SELECT *, 
 				CASE
@@ -76,6 +79,8 @@ class PageModel {
 					ELSE CONCAT(parent, "/")
 				END AS virtual_parent
 			FROM page
+			LEFT JOIN page_lang
+			ON id = id_page AND id_lang = :id_lang
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC').'
 			'.($number > 0 ? 'LIMIT :start, :number' : '')
 		);
@@ -85,6 +90,7 @@ class PageModel {
 			$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		}
 		
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
 		
 		$result = array();
@@ -108,12 +114,17 @@ class PageModel {
 	 * @return array
 	 */
 	public function getPage($id_page) {
+		$id_lang = WLang::getLangID();
+
 		$prep = $this->db->prepare('
 			SELECT *
 			FROM page
+			LEFT JOIN page_lang
+			ON id = id_page AND id_lang = :id_lang
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $id_page, PDO::PARAM_INT);
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
 		
 		return $prep->fetch(PDO::FETCH_ASSOC);
@@ -172,9 +183,13 @@ class PageModel {
 	 * @return array
 	 */
 	public function getChildPages($id_parent) {
+		$id_lang = WLang::getLangID();
+		
 		$prep = $this->db->prepare('
 			SELECT *
 			FROM page
+			LEFT JOIN page_lang
+			ON id = id_page AND id_lang = :id_lang
 			WHERE id = :parent OR parent LIKE :parent OR parent LIKE :parent_regexp
 			ORDER BY parent ASC, id ASC
 		');
