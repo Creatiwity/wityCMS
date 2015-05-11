@@ -202,11 +202,11 @@ class WNote {
 	 */
 	public static function handle_log(array $note) {
 		// Log file rotation
-        if (file_exists(LOGS_DIR.'wity.log') && filesize(LOGS_DIR.'wity.log') > 1000000) {
-            $log_files_count = count(glob(LOGS_DIR.'*.log'));
-            rename(LOGS_DIR.'wity.log', LOGS_DIR.'wity.'.$log_files_count.'.log');
-        }
-        
+		if (file_exists(LOGS_DIR.'wity.log') && filesize(LOGS_DIR.'wity.log') > 1000000) {
+			$log_files_count = count(glob(LOGS_DIR.'*.log'));
+			rename(LOGS_DIR.'wity.log', LOGS_DIR.'wity.'.$log_files_count.'.log');
+		}
+		
 		$file = fopen(LOGS_DIR.'wity.log', 'a+');
 		$date = new WDate();
 		$text = sprintf("[%s] [%s] [user %s|%s] [route %s] %s - %s\r\n", 
