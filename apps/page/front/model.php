@@ -196,6 +196,7 @@ class PageModel {
 		$prep->bindParam(':parent', $id_parent);
 		$parent = $id_parent.'/%';
 		$prep->bindParam(':parent_regexp', $parent);
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
 		
 		$data = $prep->fetchAll(PDO::FETCH_ASSOC);
