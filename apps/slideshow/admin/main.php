@@ -32,7 +32,7 @@ class SlideshowAdminController extends WController {
 			
 			// Format translatable fields
 			$translatable_fields = array('title', 'legend');
-			$lang_list = array(1);
+			$lang_list = array(1, 2);
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);
