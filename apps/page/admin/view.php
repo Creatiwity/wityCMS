@@ -38,6 +38,7 @@ class PageAdminView extends WView {
 		$lang_list = array(1, 2);
 		$default = array(
 			'id'            => 0,
+			'parent'        => '',
 			'image'         => '',
 			'created_date'  => '',
 			'modified_date' => ''

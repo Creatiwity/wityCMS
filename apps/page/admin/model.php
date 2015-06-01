@@ -40,8 +40,6 @@ class PageAdminModel extends PageModel {
 		$prep->bindParam(':id', $id_page, PDO::PARAM_INT);
 		$prep->execute();
 		
-		$prep->execute();
-		
 		$page = $prep->fetch(PDO::FETCH_ASSOC);
 		
 		// Get lang fields
