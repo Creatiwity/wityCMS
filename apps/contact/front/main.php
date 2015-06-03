@@ -136,7 +136,7 @@ class ContactController extends WController {
 								'from' => array($config['site_from_email'], $config['site_from_name']),
 								'to' => array($data['from_email'], $data['from_name']),
 								'subject' => WLang::get('copy_subject', WConfig::get('config.site_title')),
-								'body' => WLang::get('auto_reply', $mail_param)
+								'body' => WLang::get('auto_reply', $mail_params)
 							)
 						)
 					);
