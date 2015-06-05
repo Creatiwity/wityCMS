@@ -52,7 +52,7 @@ class SlideshowModel {
 	}
 	
 	public function getSlides() {
-		$id_lang = 1;
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT s.*, sl.`title`, sl.`legend`
@@ -72,7 +72,7 @@ class SlideshowModel {
 			return false;
 		}
 		
-		$id_lang = 1;
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT s.*, sl.`title`, sl.`legend`
