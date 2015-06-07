@@ -1,0 +1,98 @@
+<div class="wity-app wity-app-team wity-action-member-form">
+	<form action="/admin/team/{if empty({$id})}member-add{else}member-edit/{$id}{/if}" method="post" enctype="multipart/form-data">
+		<div role="tabpanel" style="margin-bottom: 1em;">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs translatable-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#lang_1" class="lang">{lang french}</a></li>
+				<li role="presentation"><a href="#lang_2" class="lang">{lang english}</a></li>
+			</ul>
+		</div>
+
+		<div class="row">
+			<div class="col-md-9 form-horizontal">
+				<h2 class="sr-only">{if empty({$id})}{lang member_add}{else}{lang member_edit}{/if}</h2>
+				
+				<input type="hidden" name="id" value="{$id}" />
+				
+				<div class="form-group">
+					<label for="name" class="control-label col-md-3">{lang name}*</label>
+					<div class="col-md-9">
+						<input id="name" class="form-control" type="text" name="name" value="{$name}" />
+					</div>
+				</div>
+
+				<div class="form-group translatable">
+					<label for="title_1" class="control-label col-md-3">{lang title}*</label>
+					<div class="col-md-9">
+						<input id="title_1" class="form-control lang lang_1" type="text" name="title_1" value="{$title_1}" placeholder="{lang title}" />
+						<input id="title_2" class="form-control lang lang_2 hidden" type="text" name="title_2" value="{$title_2}" placeholder="{lang title}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="description" class="control-label col-md-3">{lang description}</label>
+					<div class="col-md-9">
+						<textarea id="description" class="form-control" name="description" rows="20" cols="80">{$description}</textarea>
+						<script type="text/javascript">
+							CKEDITOR.replace('description', {
+								height: '200px'
+							});
+						</script>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="email" class="control-label col-md-3">{lang email}</label>
+					<div class="col-md-9">
+						<input id="email" class="form-control" type="email" name="email" value="{$email}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="linkedin" class="control-label col-md-3">{lang linkedin}</label>
+					<div class="col-md-9">
+						<input id="linkedin" class="form-control" type="text" name="linkedin" value="{$linkedin}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="twitter" class="control-label col-md-3">{lang twitter}</label>
+					<div class="col-md-9">
+						<input id="twitter" class="form-control" type="text" name="twitter" value="{$twitter}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="image" class="control-label col-md-3">
+						{lang image}
+						<br />
+						<small>(PNG ou JPEG | 180x180 px | ~20 ko)</small>
+					</label>
+					<div class="col-md-9">
+						{if !empty({$image})}<p><img src="{$image}" alt="{$name}" /></p>{/if}
+						<input id="image" type="file" name="image" class="form-control" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="image_hover" class="control-label col-md-3">
+						{lang image_hover}
+						<br />
+						<small>(PNG ou JPEG | 180x180 px | ~20 ko)</small>
+					</label>
+					<div class="col-md-9">
+						{if !empty({$image_hover})}<p><img src="{$image_hover}" alt="{$name}" /></p>{/if}
+						<input id="image_hover" type="file" name="image_hover" class="form-control" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="well well-sm">
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang submit}</button>
+					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
