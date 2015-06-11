@@ -113,7 +113,7 @@ class TeamAdminController extends WController {
 			if (empty($errors)) {
 				if (empty($id_member)) { // Add case
 					if ($id_member = $this->model->createMember($data, $data_translatable)) { 
-						WNote::success('member_added', WLang::get('member_added', $data_translatable[$lang_list[0]]['name']));
+						WNote::success('member_added', WLang::get('member_added', $data['name']));
 					} else {
 						WNote::error('member_not_added', WLang::get('db_unknown_error'));
 					}
@@ -121,7 +121,7 @@ class TeamAdminController extends WController {
 					$this->setHeader('Location', WRoute::getDir().'admin/team/member-edit/'.$id_member);
 				} else { // Edit case
 					if ($this->model->updateMember($id_member, $data, $data_translatable)) {
-						WNote::success('member_edited', WLang::get('member_edited', $data_translatable[$lang_list[0]]['name']));
+						WNote::success('member_edited', WLang::get('member_edited', $data['name']));
 					} else {
 						WNote::error('member_not_edited', WLang::get('db_unknown_error'));
 					}
