@@ -24,28 +24,88 @@ class PageAdminModel extends PageModel {
 	}
 	
 	/**
+	 * Retrieves all data linked to a page
+	 * 
+	 * @param int $id_page
+	 * @return array
+	 */
+	public function getPage($id_page) {
+		$id_lang = WLang::getLangID();
+
+		$prep = $this->db->prepare('
+			SELECT *
+			FROM page
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $id_page, PDO::PARAM_INT);
+		$prep->execute();
+		
+		$page = $prep->fetch(PDO::FETCH_ASSOC);
+		
+		// Get lang fields
+		$prep = $this->db->prepare('
+			SELECT *
+			FROM page_lang
+			WHERE id_page = :id_page
+		');
+		$prep->bindParam(':id_page', $id_page, PDO::PARAM_INT);
+		$prep->execute();
+		
+		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
+			foreach ($data as $key => $value) {
+				$page[$key.'_'.$data['id_lang']] = $value;
+			}
+		}
+		
+		return $page;
+	}
+
+	/**
 	 * Creates a page in the database.
 	 * 
 	 * @param array $data
+	 * @param array $data_translatable
 	 * @return bool
 	 */
-	public function createPage($data) {
+	public function createPage($data, $data_translatable) {
 		$prep = $this->db->prepare('
-			INSERT INTO page(url, title, subtitle, author, content, meta_title, meta_description, parent, image)
-			VALUES (:url, :title, :subtitle, :author, :content, :meta_title, :meta_description, :parent, :image)
+			INSERT INTO page(parent, menu, image)
+			VALUES (:parent, :menu, :image)
 		');
-		$prep->bindParam(':url', $data['url']);
-		$prep->bindParam(':title', $data['title']);
-		$prep->bindParam(':subtitle', $data['subtitle']);
-		$prep->bindParam(':author', $data['author']);
-		$prep->bindParam(':content', $data['content']);
-		$prep->bindParam(':meta_title', $data['meta_title']);
-		$prep->bindParam(':meta_description', $data['meta_description']);
 		$prep->bindParam(':parent', $data['parent']);
+		$prep->bindParam(':menu', $data['menu']);
 		$prep->bindParam(':image', $data['image']);
 		
-		if ($prep->execute()) {
-			return $this->db->lastInsertId();
+		if (!$prep->execute()) {
+			return false;
+		}
+		
+		$id_page = $this->db->lastInsertId();
+		
+		// Create language lines
+		$exec = true;
+		foreach ($data_translatable as $id_lang => $values) {
+			$prep = $this->db->prepare('
+				INSERT INTO page_lang(id_page, id_lang, title, subtitle, author, content, url, meta_title, meta_description)
+				VALUES (:id_page, :id_lang, :title, :subtitle, :author, :content, :url, :meta_title, :meta_description)
+			');
+			$prep->bindParam(':id_page', $id_page, PDO::PARAM_INT);
+			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
+			$prep->bindParam(':title', $values['title']);
+			$prep->bindParam(':subtitle', $values['subtitle']);
+			$prep->bindParam(':author', $values['author']);
+			$prep->bindParam(':content', $values['content']);
+			$prep->bindParam(':url', $values['url']);
+			$prep->bindParam(':meta_title', $values['meta_title']);
+			$prep->bindParam(':meta_description', $values['meta_description']);
+			
+			if (!$prep->execute()) {
+				$exec = false;
+			}
+		}
+		
+		if ($exec) {
+			return $id_page;
 		} else {
 			return false;
 		}
@@ -56,34 +116,55 @@ class PageAdminModel extends PageModel {
 	 * 
 	 * @param int $id_page
 	 * @param array $data
-	 * @return bool
+	 * @param array $data_translatable
+	 * @return bool Success?
 	 */
-	public function updatePage($id_page, $data) {
+	public function updatePage($id_page, $data, $data_translatable) {
 		$prep = $this->db->prepare('
 			UPDATE page
-			SET url = :url, title = :title, subtitle = :subtitle, author = :author, content = :content, meta_title = :meta_title, 
-				meta_description = :meta_description, parent = :parent, image = :image
-			WHERE id = :id
+			SET parent = :parent, menu = :menu, image = :image
+			WHERE id = :id_page
 		');
-		$prep->bindParam(':id', $id_page);
-		$prep->bindParam(':url', $data['url']);
-		$prep->bindParam(':title', $data['title']);
-		$prep->bindParam(':subtitle', $data['subtitle']);
-		$prep->bindParam(':author', $data['author']);
-		$prep->bindParam(':content', $data['content']);
-		$prep->bindParam(':meta_title', $data['meta_title']);
-		$prep->bindParam(':meta_description', $data['meta_description']);
+		$prep->bindParam(':id_page', $id_page);
 		$prep->bindParam(':parent', $data['parent']);
+		$prep->bindParam(':menu', $data['menu']);
 		$prep->bindParam(':image', $data['image']);
 		
-		return $prep->execute();
+		if (!$prep->execute()) {
+			return false;
+		}
+		
+		// Create language lines
+		$exec = true;
+		foreach ($data_translatable as $id_lang => $values) {
+			$prep = $this->db->prepare('
+				UPDATE page_lang
+				SET title = :title, subtitle = :subtitle, author = :author, content = :content, url = :url, meta_title = :meta_title, meta_description = :meta_description
+				WHERE id_page = :id_page AND id_lang = :id_lang
+			');
+			$prep->bindParam(':title', $values['title']);
+			$prep->bindParam(':subtitle', $values['subtitle']);
+			$prep->bindParam(':author', $values['author']);
+			$prep->bindParam(':content', $values['content']);
+			$prep->bindParam(':url', $values['url']);
+			$prep->bindParam(':meta_title', $values['meta_title']);
+			$prep->bindParam(':meta_description', $values['meta_description']);
+			$prep->bindParam(':id_page', $id_page, PDO::PARAM_INT);
+			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
+			
+			if (!$prep->execute()) {
+				$exec = false;
+			}
+		}
+		
+		return $exec;
 	}
 	
 	/**
 	 * Deletes a page in the database
 	 * 
 	 * @param int $id_page
-	 * @return bool
+	 * @return bool Success?
 	 */
 	public function deletePage($id_page) {
 		$prep = $this->db->prepare('
@@ -91,7 +172,15 @@ class PageAdminModel extends PageModel {
 		');
 		$prep->bindParam(':id', $id_page, PDO::PARAM_INT);
 		
-		return $prep->execute();
+		$exec1 = $prep->execute();
+		
+		$prep = $this->db->prepare('
+			DELETE FROM page_lang WHERE id_page = :id_page
+		');
+		$prep->bindParam(':id_page', $id_page, PDO::PARAM_INT);
+		$exec2 = $prep->execute();
+		
+		return $exec1 && $exec2;
 	}
 	
 	/**

@@ -3,7 +3,7 @@
  * Slideshow Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * SlideshowModel is the Front Model of the Slideshow Application
@@ -52,7 +52,7 @@ class SlideshowModel {
 	}
 	
 	public function getSlides() {
-		$id_lang = 1;
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT s.*, sl.`title`, sl.`legend`
@@ -72,7 +72,7 @@ class SlideshowModel {
 			return false;
 		}
 		
-		$id_lang = 1;
+		$id_lang = WLang::getLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT s.*, sl.`title`, sl.`legend`

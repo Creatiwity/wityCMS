@@ -11,7 +11,7 @@
 				<th style="width: 5%;">ID</th>
 				<th style="width: 50%;">{lang title}</th>
 				<th style="width: 10%;">{lang author}</th>
-				<th style="width: 10%;">{lang views}</th>
+				<th style="width: 10%;" class="text-center">{lang views}</th>
 				<th style="width: 15%;">{lang last_modification}</th>
 				<th style="width: 10%;">{lang actions}</th>
 			</tr>
@@ -22,7 +22,7 @@
 				<td>{$page.id}</td>
 				<td>{range $i = 1..{$page.level}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{/range}<strong>{$page.title}</strong></td>
 				<td>{$page.author}</td>
-				<td>{lang number_of_views|{$page.views}}</td>
+				<td class="text-center">{$page.views}</td>
 				<td>
 					{if {$page.modified_date} != '0000-00-00 00:00:00'}
 						{$page.modified_date}

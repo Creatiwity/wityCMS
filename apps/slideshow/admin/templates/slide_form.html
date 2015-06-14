@@ -4,6 +4,7 @@
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs translatable-tabs" role="tablist">
 				<li role="presentation" class="active"><a href="#lang_1" class="lang">{lang french}</a></li>
+				<li role="presentation"><a href="#lang_2" class="lang">{lang english}</a></li>
 			</ul>
 		</div>
 		
@@ -14,12 +15,16 @@
 				<div class="form-group translatable">
 					<label for="title_1" class="control-label">{lang title}*</label><br />
 					<input id="title_1" class="form-control lang lang_1" type="text" name="title_1" value="{$title_1}" autocomplete="off" placeholder="{lang title}" />
+					<input id="title_2" class="form-control lang lang_2 hidden" type="text" name="title_2" value="{$title_2}" autocomplete="off" placeholder="{lang title}" />
 				</div>
 
 				<div class="translatable">
 					<label for="legend_1">{lang legend}</label><br />
 					<div class="lang lang_1">
 						<textarea id="legend_1" class="form-control" name="legend_1" rows="20" cols="80">{$legend_1}</textarea>
+					</div>
+					<div class="lang lang_2 hidden">
+						<textarea id="legend_2" class="form-control" name="legend_2" rows="20" cols="80">{$legend_2}</textarea>
 					</div>
 				</div>
 				<br />
@@ -34,6 +39,7 @@
 						};
 					
 					CKEDITOR.replace('legend_1', options);
+					CKEDITOR.replace('legend_2', options);
 				</script>
 				
 				<div class="form-group">

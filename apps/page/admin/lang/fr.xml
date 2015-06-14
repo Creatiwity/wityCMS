@@ -12,7 +12,6 @@
 	<item id="category">Catégorie</item>
 	<item id="last_modification">Dernière modification</item>
 	<item id="views">Vues</item>
-	<item id="number_of_views">%s vues</item>
 	<item id="no_page_in_database">Aucune page trouvée dans la base de données.</item>
 	<item id="page_delete_confirmation">Confirmez-vous la suppression de la page &lt;strong&gt;%s&lt;/strong&gt; ?</item>
 	

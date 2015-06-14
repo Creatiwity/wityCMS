@@ -3,7 +3,7 @@
  * WMain.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 require_once SYS_DIR.'WCore'.DS.'WController.php';
 require_once SYS_DIR.'WCore'.DS.'WView.php';
@@ -148,6 +148,11 @@ class WMain {
 
 		// Variable for Roxy file manager
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
+
+		// Set session lang as top priority
+		if (!empty($_SESSION['lang'])) {
+			WLang::setLang($_SESSION['lang'], true);
+		}
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * WResponse.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WResponse compiles the final render of wityCMS that will be sent to the browser.

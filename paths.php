@@ -7,7 +7,7 @@
  * @version 0.5.0-dev
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * Directory Separator

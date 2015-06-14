@@ -21,17 +21,17 @@ require(['jquery'], function($) {
 	};
 	
 	var namespace = '.wity-app-page.wity-action-form ';
-	
-	function formatURL() {
-		var value = $(namespace + '#title').val();
+
+	function formatURL(idLang) {
+		var value = $(namespace + '.title.lang_' + idLang).val();
 		
 		if (value === '') {
-			$(namespace + '#meta_title').val('');
-			$(namespace + '#url').val('');
+			$(namespace + '.meta_title.lang_' + idLang).val('');
+			$(namespace + '.lang_' + idLang + ' .url').val('');
 			return;
 		}
 		
-		$(namespace + '#meta_title').val(value);
+		$(namespace + '.meta_title.lang_' + idLang).val(value);
 		
 		// Treat value
 		value = value.latinise().toLowerCase();
@@ -45,22 +45,38 @@ require(['jquery'], function($) {
 			} else {
 				parent = '';
 			}
-			
-			$(namespace + '#url').val(parent+value);
+
+			$(namespace + '.lang_' + idLang + ' .url').val(parent+value);
 		}
 	}
 	
-	$(namespace + '#title').on('blur', function() {
-		if ($(namespace + '#url').val() == '') {
-			formatURL();
+	$(namespace + '.title').on('blur', function() {
+		var $this = $(this),
+			idLang = $this.data('lang');
+
+		if ($(namespace + '.lang_' + idLang + ' .url').val() == '') {
+			formatURL(idLang);
 		}
 	});
-	
+
 	$(namespace + '#parent').on('change', function() {
-		formatURL();
+		formatURL(1);
+		formatURL(2);
 	});
 
-	$('.update-url').click(function() {
-		formatURL();
+	$(namespace + '.update-url').click(function() {
+		var $this = $(this),
+			idLang = $this.data('lang');
+
+		formatURL(idLang);
 	});
+
+	$(namespace + 'form').on('submit', function() {
+		window.onbeforeunload = null;
+	});
+
+	// Prevents user from accidentally refreshing or leaving the page
+	window.onbeforeunload = function() {
+		return "Warning: if you leave without saving, all modifications will be lost.";
+	};
 });

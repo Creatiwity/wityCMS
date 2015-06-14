@@ -22,16 +22,16 @@ require(['jquery'], function($) {
 	
 	var namespace = '.wity-app-news.wity-action-news-form ';
 	
-	function formatURL() {
-		var value = $(namespace + '#title').val();
+	function formatURL(idLang) {
+		var value = $(namespace + '.title.lang_' + idLang).val();
 		
 		if (value === '') {
-			$(namespace + '#meta_title').val('');
-			$(namespace + '#url').val('');
+			$(namespace + '.meta_title.lang_' + idLang).val('');
+			$(namespace + '.lang_' + idLang + ' .url').val('');
 			return;
 		}
 		
-		$(namespace + '#meta_title').val(value);
+		$(namespace + '.meta_title.lang_' + idLang).val(value);
 		
 		// Treat value
 		value = value.latinise().toLowerCase();
@@ -39,18 +39,24 @@ require(['jquery'], function($) {
 		value = value.replace(/(^-|-$)/g, '');
 		
 		if (value !== '') {
-			$(namespace + '#url').val(value);
+			$(namespace + '.lang_' + idLang + ' .url').val(value);
 		}
 	}
 	
-	$(namespace + '#title').on('blur', function() {
-		if ($(namespace + '#url').val() == '') {
-			formatURL();
+	$(namespace + '.title').on('blur', function() {
+		var $this = $(this),
+			idLang = $this.data('lang');
+
+		if ($(namespace + '.lang_' + idLang + ' .url').val() == '') {
+			formatURL(idLang);
 		}
 	});
 
 	$(namespace + '.update-url').click(function() {
-		formatURL();
+		var $this = $(this),
+			idLang = $this.data('lang');
+
+		formatURL(idLang);
 	});
 
 	$(namespace + '.btn.preview').click(function() {
@@ -75,14 +81,19 @@ require(['jquery'], function($) {
 		return false;
 	});
 
-	$(namespace + '#published').change(function() {
-		var $this = $(this);
+	$(namespace + '.published').change(function() {
+		var $this = $(this),
+			lang = $this.data('lang');
 
 		if ($this.prop('checked')) {
-			$(namespace + '.publish_datetime_group').show();
+			$(namespace + '.publish_datetime_group.lang_'+lang).show();
 		} else {
-			$(namespace + '.publish_datetime_group').hide();
+			$(namespace + '.publish_datetime_group.lang_'+lang).hide();
 		}
+	});
+
+	$(namespace + 'form').on('submit', function() {
+		window.onbeforeunload = null;
 	});
 
 	// Prevents user from accidentally refreshing or leaving the page

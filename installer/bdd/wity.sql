@@ -23,29 +23,38 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `prefix_news`;
 CREATE TABLE IF NOT EXISTS `prefix_news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `url` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `title` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `author` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `meta_description` text COLLATE utf8_unicode_ci NOT NULL,
   `views` int(11) unsigned NOT NULL DEFAULT '0',
-  `published` tinyint(1) NOT NULL DEFAULT '0',
-  `publish_date` datetime NOT NULL,
-  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) unsigned NOT NULL DEFAULT '0',
   `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+
+-- --------------------------------------------------------
 
 --
--- Content in the table `prefix_news`
+-- Table structure for table `prefix_news_lang`
 --
 
-INSERT INTO `prefix_news` (`id`, `url`, `title`, `author`, `content`, `meta_title`, `meta_description`, `views`, `published`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
-(1, 'witycms-was-successfully-installed', 'wityCMS was successfully installed!', '', '<p>Congratulations and welcome to wityCMS system.</p>\r\n\r\n<p>This article is a sample message. You can edit or delete it from the administration side of the site.</p>\r\n\r\n<p>Enjoy your development!</p>\r\n\r\n<p>The wityCMS team</p>\r\n', '', '', 0, 1, NOW(), 1, '', 0);
+CREATE TABLE IF NOT EXISTS `prefix_news_lang` (
+  `id_news` int(11) unsigned NOT NULL,
+  `id_lang` int(11) unsigned NOT NULL,
+  `title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `author` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `url` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `meta_description` text COLLATE utf8_unicode_ci NOT NULL,
+  `published` tinyint(1) NOT NULL,
+  `publish_date` datetime NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_news`,`id_lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -129,7 +138,9 @@ CREATE TABLE IF NOT EXISTS `prefix_users_config` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------------------------------------
+--
+-- Content of table `prefix_users_config`
+--
 
 INSERT INTO `prefix_users_config` (`name`, `value`, `created_date`) VALUES
 ('register', '1', NOW()),
@@ -137,6 +148,8 @@ INSERT INTO `prefix_users_config` (`name`, `value`, `created_date`) VALUES
 ('admin_check', '0', NOW()),
 ('summary', '1', NOW()),
 ('keep_users', '1', NOW());
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `prefix_users_groups`
@@ -250,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_available_actions` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `prefix_mail_configuration`
+-- Table structure for table `prefix_mail_configuration`
 --
 
 CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
@@ -266,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Contenu de la table `mail_configuration`
+-- Content of table `mail_configuration`
 --
 
 INSERT INTO `prefix_mail_configuration` (`id`, `key`, `value`, `user_id`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
@@ -329,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `prefix_page`
+-- Table structure for table `prefix_page`
 --
 
 DROP TABLE IF EXISTS `prefix_page`;
@@ -353,8 +366,52 @@ CREATE TABLE IF NOT EXISTS `prefix_page` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Structure de la table `prefix_slideshow_slide`
+-- Table structure for table `prefix_page`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_page` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `views` int(11) NOT NULL DEFAULT '0',
+  `parent` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `menu` tinyint(4) NOT NULL DEFAULT '0',
+  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prefix_page_lang`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_page_lang` (
+  `id_page` int(11) unsigned NOT NULL,
+  `id_lang` int(11) unsigned NOT NULL,
+  `title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `subtitle` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `author` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `url` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `meta_description` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_page`,`id_lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prefix_slideshow_slide`
 --
 
 DROP TABLE IF EXISTS `prefix_slideshow_slide`;
@@ -373,7 +430,7 @@ CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `prefix_slideshow_slide_lang`
+-- Table structure for table `prefix_slideshow_slide_lang`
 --
 
 DROP TABLE IF EXISTS `prefix_slideshow_slide_lang`;
@@ -390,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `prefix_slideshow_slide_lang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Structure de la table `prefix_slideshow_config`
+-- Table structure for table `prefix_slideshow_config`
 --
 
 DROP TABLE IF EXISTS `prefix_slideshow_config`;
@@ -405,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `prefix_slideshow_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Contenu de la table `prefix_slideshow_config`
+-- Content of table `prefix_slideshow_config`
 --
 
 INSERT INTO `prefix_slideshow_config` (`key`, `value`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
@@ -416,7 +473,7 @@ INSERT INTO `prefix_slideshow_config` (`key`, `value`, `created_date`, `created_
 -- --------------------------------------------------------
 
 --
--- Structure de la table `prefix_newsletter`
+-- Table structure for table `prefix_newsletter`
 --
 
 DROP TABLE IF EXISTS `prefix_newsletter`;
@@ -429,6 +486,47 @@ CREATE TABLE IF NOT EXISTS `prefix_newsletter` (
   `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prefix_team_member`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_team_member` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `linkedin` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `twitter` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `image_hover` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) NOT NULL,
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `prefix_team_member_lang`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_team_member_lang` (
+  `id_member` int(10) unsigned NOT NULL,
+  `id_lang` int(11) unsigned NOT NULL,
+  `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) NOT NULL,
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) NOT NULL,
+  PRIMARY KEY (`id_member`,`id_lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

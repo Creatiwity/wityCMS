@@ -12,7 +12,6 @@
 /**
  * wityCMS version number
  */
-define('IN_WITY', true);
 define('WITYCMS_VERSION', '0.5.0-dev');
 
 /**

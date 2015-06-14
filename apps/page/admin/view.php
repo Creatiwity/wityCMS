@@ -30,25 +30,37 @@ class PageAdminView extends WView {
 		// JS & CSS
 		$this->assign('require', 'apps!page/form');
 		$this->assign('js', "/libraries/ckeditor-4.4.7/ckeditor.js");
+		$this->assign('require', 'witycms/admin');
 
-		// Assign site URL for permalink management
 		$this->assign('id', $model['id']);
-
 		$this->assign('pages', $model['pages']);
 
-		$this->assignDefault(array(
+		$lang_list = array(1, 2);
+		$default = array(
+			'id'            => 0,
+			'parent'        => '',
+			'image'         => '',
+			'created_date'  => '',
+			'modified_date' => ''
+		);
+		$default_translatable = array(
 			'title'            => '',
+			'subtitle'         => '',
 			'content'          => '',
+			'author'           => !empty($_SESSION['firstname']) || !empty($_SESSION['lastname']) ? trim($_SESSION['firstname'].' '.$_SESSION['lastname']) : $_SESSION['nickname'],
 			'url'              => '',
 			'meta_title'       => '',
 			'meta_description' => '',
-			'author'           => !empty($_SESSION['firstname']) || !empty($_SESSION['lastname']) ? trim($_SESSION['firstname'].' '.$_SESSION['lastname']) : $_SESSION['nickname'],
-			'subtitle'         => '',
-			'parent'           => '',
-			'image'            => '',
-			'created_date'     => '',
-			'modified_date'    => '',
-		), $model['data']);
+			'published'        => true,
+		);
+		
+		foreach ($default_translatable as $key => $value) {
+			foreach ($lang_list as $id_lang) {
+				$default[$key.'_'.$id_lang] = $value;
+			}
+		}
+
+		$this->assignDefault($default, $model['data']);
 
 		$this->setTemplate('form');
 	}
@@ -62,7 +74,7 @@ class PageAdminView extends WView {
 	}
 
 	public function delete($model) {
-		$this->assign('title', $model['title']);
+		$this->assign('title', $model['title_1']);
 		$this->assign('confirm_delete_url', '/admin/page/delete/'.$model['id'].'/confirm');
 	}
 }

@@ -3,7 +3,7 @@
  * Slideshow Application - Front Controller
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * SlideshowController is the Front Controller of the Slideshow Application

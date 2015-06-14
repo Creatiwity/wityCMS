@@ -3,7 +3,7 @@
  * User Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserModel is the Front Model of the User Application.
