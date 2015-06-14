@@ -97,6 +97,8 @@ abstract class WController {
 	 */
 	public final function forward($action, array $params = array()) {
 		if (!empty($action)) {
+			$tpl = WSystem::getTemplate();
+
 			$access_result = $this->hasAccess($this->getAppName(), $action);
 
 			if ($access_result !== true) {
@@ -105,6 +107,8 @@ abstract class WController {
 					$userView = WRetriever::getView('user', array('login'));
 					$this->setView($userView);
 					return;
+				} else if (!empty($_SESSION['access'])) {
+					$tpl->assign('wity_admin_apps', $this->getAdminApps());
 				}
 
 				if (is_array($access_result)) {
@@ -120,7 +124,6 @@ abstract class WController {
 
 			$this->action = $action;
 
-			$tpl = WSystem::getTemplate();
 			$tpl->assign('wity_action', $this->action);
 
 			// Theme configuration for admin
