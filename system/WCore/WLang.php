@@ -21,7 +21,7 @@ class WLang {
 	/**
 	 * @var array Languages to use in order of priority
 	 */
-	private static $languages = array();
+	private static $lang = '';
 	
 	/**
 	 * @var array List of language directories registered
@@ -40,17 +40,9 @@ class WLang {
 		// Init template handler
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
-		
-		// Set session lang as top priority
-		if (!empty($_SESSION['lang'])) {
-			self::addLang($_SESSION['lang']);
-		}
-		
-		// Use browser languages
-		self::addLang(self::getBrowserLang());
-		
+
 		// Add config lang
-		self::addLang(WConfig::get('config.lang'));
+		self::setLang(WConfig::get('config.lang'));
 		
 		// Configure locale
 		setlocale(LC_ALL, WConfig::get('config.lang'));
@@ -108,38 +100,21 @@ class WLang {
 	}
 	
 	/**
-	 * Adds a language to load for the current session.
+	 * Sets the language to load for the current session.
 	 * 
 	 * @param string $lang Language name (2 letters identifier)
 	 */
-	public static function addLang($lang) {
-		if (is_array($lang)) {
-			foreach ($lang as $l) {
-				self::addLang($l);
-			}
-		} else {
-			$lang = strtolower(substr($lang, 0, 2));
-			if (!in_array($lang, self::$languages)) {
-				self::$languages[] = $lang;
-			}
-		}
+	public static function setLang($lang) {
+		self::$lang = strtolower(substr($lang, 0, 2));
 	}
 	
 	/**
-	 * Returns the top priority language for the user.
+	 * Returns curent language of the user.
 	 * 
-	 * @return string Top priority language
+	 * @return string
 	 */
 	public static function getLang() {
-		if (!empty($_SESSION['lang'])) {
-			return $_SESSION['lang'];
-		} else {
-			if (isset(self::$languages[0])) {
-				return self::$languages[0];
-			}
-			
-			return '';
-		}
+		return self::$lang;
 	}
 	
 	public static function getLangID() {
@@ -156,15 +131,6 @@ class WLang {
 			case 'es':
 				return 3;
 		}
-	}
-	
-	/**
-	 * Returns the list of the prefered languages according to the user configuration.
-	 * 
-	 * @return array List of prioritized languages
-	 */
-	public static function getPriorityLang() {
-		return self::$languages;
 	}
 	
 	/**
@@ -187,7 +153,7 @@ class WLang {
 	 * @param string $dir language directory
 	 * @return boolean true if $dir is a directory, false otherwise
 	 */
-	public static function declareLangDir($dir, $default_lang = '') {
+	public static function declareLangDir($dir) {
 		if (is_dir($dir)) {
 			$dir = rtrim($dir, DS).DS;
 			$files = glob($dir.'*');
@@ -199,12 +165,6 @@ class WLang {
 				foreach ($files as $file) {
 					$lang = substr(basename($file), 0, 2);
 					$lang_files[$lang] = $file;
-				}
-				
-				// Define default lang for this dir
-				$default_lang = trim($default_lang);
-				if (!empty($default_lang)) {
-					$lang_files['default'] = $default_lang;
 				}
 				
 				self::$lang_dirs[str_replace(WITY_PATH, '', $dir)] = $lang_files;
@@ -248,22 +208,13 @@ class WLang {
 		}
 		
 		// Load the lang value if not already set
-		if (!isset(self::$values[$name])) {
-			foreach (self::$lang_dirs as $dir_name => $dir) {
-				foreach (self::$languages as $lang) {
-					if (isset($dir[$lang])) {
-						self::loadLangFile($dir[$lang]);
-						
-						// Remove the directory treated
-						unset(self::$lang_dirs[$dir_name][$lang]);
-					}
-				}
-				
-				// Load default file
-				if (!isset(self::$values[$name]) && isset($dir['default']) && isset(self::$lang_dirs[$dir_name][$dir['default']])) {
-					self::loadLangFile($dir[$dir['default']]);
-				}
+		foreach (self::$lang_dirs as $dir_name => $dir) {
+			if (isset($dir[self::$lang])) {
+				self::loadLangFile($dir[self::$lang]);
 			}
+
+			// Remove the directory treated
+			unset(self::$lang_dirs[$dir_name]);
 		}
 		
 		if (isset(self::$values[$name])) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
+	<item id="Team">Equipe</item>
 	<item id="members">Membres</item>
 	<item id="member_add">Ajouter un membre</item>
 	<item id="member_edit">Modifier un membre</item>

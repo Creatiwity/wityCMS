@@ -73,7 +73,7 @@ abstract class WController {
 
 		// Automatically declare the language directory
 		if (is_dir($this->context['directory'].'lang')) {
-			WLang::declareLangDir($this->context['directory'].'lang', $this->manifest['default_lang']);
+			WLang::declareLangDir($this->context['directory'].'lang');
 		}
 	}
 
@@ -128,7 +128,13 @@ abstract class WController {
 				$context = $this->getContext();
 
 				if (!$context['parent']) {
-					$tpl->assign('wity_admin_apps', $this->getAdminApps());
+					$admin_apps = $this->getAdminApps();
+					$tpl->assign('wity_admin_apps', $admin_apps);
+
+					// Load lang
+					foreach ($admin_apps as $admin_app) {
+						WLang::declareLangDir(APPS_DIR.strtolower($admin_app['name']).DS.'admin'.DS.'lang');
+					}
 
 					$manifest = $this->getManifest();
 
@@ -356,7 +362,7 @@ abstract class WController {
 		$manifest = array();
 
 		// Nodes to look for
-		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission', 'default_lang');
+		$nodes = array('name', 'version', 'date', 'icone', 'action', 'admin', 'permission');
 		foreach ($nodes as $node) {
 			switch ($node) {
 				case 'action':
