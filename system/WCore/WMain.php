@@ -151,7 +151,7 @@ class WMain {
 
 		// Set session lang as top priority
 		if (!empty($_SESSION['lang'])) {
-			WLang::addLang($_SESSION['lang'], true);
+			WLang::setLang($_SESSION['lang'], true);
 		}
 	}
 
