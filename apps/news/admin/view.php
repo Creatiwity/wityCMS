@@ -3,7 +3,7 @@
  * News Application - Admin View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsAdminView is the Admin View of the News Application

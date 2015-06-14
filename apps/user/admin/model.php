@@ -3,7 +3,7 @@
  * User Application - Admin Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * Include Front Model for inheritance

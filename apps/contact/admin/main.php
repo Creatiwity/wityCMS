@@ -3,7 +3,7 @@
  * Contact Application - Admin Controller
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * ContactAdminController is the Admin Controller of the Contact Application

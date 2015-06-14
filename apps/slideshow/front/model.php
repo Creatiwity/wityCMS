@@ -3,7 +3,7 @@
  * Slideshow Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * SlideshowModel is the Front Model of the Slideshow Application
