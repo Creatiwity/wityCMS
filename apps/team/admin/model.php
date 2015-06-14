@@ -108,11 +108,10 @@ class TeamAdminModel extends TeamModel {
 		$position = $this->getNewPosition();
 
 		$prep = $this->db->prepare('
-			INSERT INTO team_member(name, description, email, linkedin, twitter, image, image_hover, position)
-			VALUES (:name, :description, :email, :linkedin, :twitter, :image, :image_hover,:position)
+			INSERT INTO team_member(name, email, linkedin, twitter, image, image_hover, position)
+			VALUES (:name, :email, :linkedin, :twitter, :image, :image_hover,:position)
 		');
 		$prep->bindParam(':name', $data['name']);
-		$prep->bindParam(':description', $data['description']);
 		$prep->bindParam(':email', $data['email']);
 		$prep->bindParam(':linkedin', $data['linkedin']);
 		$prep->bindParam(':twitter', $data['twitter']);
@@ -130,12 +129,13 @@ class TeamAdminModel extends TeamModel {
 		$exec = true;
 		foreach ($data_translatable as $id_lang => $values) {
 			$prep = $this->db->prepare('
-				INSERT INTO team_member_lang(id_member, id_lang, title)
-				VALUES (:id_member, :id_lang, :title)
+				INSERT INTO team_member_lang(id_member, id_lang, title, description)
+				VALUES (:id_member, :id_lang, :title, :description)
 			');
 			$prep->bindParam(':id_member', $id_member, PDO::PARAM_INT);
 			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 			$prep->bindParam(':title', $values['title']);
+			$prep->bindParam(':description', $values['description']);
 			
 			if (!$prep->execute()) {
 				$exec = false;
@@ -162,13 +162,12 @@ class TeamAdminModel extends TeamModel {
 		
 		$prep = $this->db->prepare('
 			UPDATE team_member
-			SET name = :name, description = :description, email = :email, 
+			SET name = :name, email = :email, 
 				linkedin = :linkedin, twitter = :twitter, image = :image, image_hover = :image_hover
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $id_member, PDO::PARAM_INT);
 		$prep->bindParam(':name', $data['name']);
-		$prep->bindParam(':description', $data['description']);
 		$prep->bindParam(':email', $data['email']);
 		$prep->bindParam(':linkedin', $data['linkedin']);
 		$prep->bindParam(':twitter', $data['twitter']);
@@ -184,10 +183,11 @@ class TeamAdminModel extends TeamModel {
 		foreach ($data_translatable as $id_lang => $values) {
 			$prep = $this->db->prepare('
 				UPDATE team_member_lang
-				SET title = :title
+				SET title = :title, description = :description
 				WHERE id_member = :id_member AND id_lang = :id_lang
 			');
 			$prep->bindParam(':title', $values['title']);
+			$prep->bindParam(':description', $values['description']);
 			$prep->bindParam(':id_member', $id_member, PDO::PARAM_INT);
 			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 			

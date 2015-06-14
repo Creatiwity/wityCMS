@@ -26,7 +26,6 @@ class TeamAdminView extends WView {
 		$default = array(
 			'id'          => '',
 			'name'        => '',
-			'description' => '',
 			'email'       => '',
 			'linkedin'    => '',
 			'twitter'     => '',
@@ -34,6 +33,7 @@ class TeamAdminView extends WView {
 		);
 		$default_translatable = array(
 			'title'       => '',
+			'description' => '',
 		);
 		$lang_list = array(1, 2);
 		

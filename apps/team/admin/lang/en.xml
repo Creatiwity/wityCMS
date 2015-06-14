@@ -2,6 +2,7 @@
 <lang value="en">
 	<item id="members">Members</item>
 	<item id="member_add">Add a member</item>
+	<item id="member_edit">Edit a member</item>
 
 	<item id="cancel">Cancel</item>
 	<item id="delete">Delete</item>

@@ -29,11 +29,11 @@ class TeamAdminController extends WController {
 	private function memberForm($id_member = 0, $db_data = array()) {
 		if (WRequest::getMethod() == 'POST') {
 			$errors = array();
-			$data = WRequest::getAssoc(array('name', 'description', 'email', 'linkedin', 'twitter'), null, 'POST');
+			$data = WRequest::getAssoc(array('name', 'email', 'linkedin', 'twitter'), null, 'POST');
 			$data_translatable = array();
 
 			// Format translatable fields
-			$translatable_fields = array('title');
+			$translatable_fields = array('title', 'description');
 			$lang_list = array(1, 2);
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
