@@ -1,4 +1,4 @@
-require(['jquery'], function($) {
+require(['jquery', 'bootstrap'], function($) {
 
 	$(document).ready(function() {
 		var button_admin_check = false;
