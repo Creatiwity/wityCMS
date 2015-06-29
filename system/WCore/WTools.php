@@ -50,6 +50,18 @@ class WTools {
 		
 		return $url;
 	}
+
+	/**
+	 * Move elements in array
+	 * 
+	 * @param array $array Array to reorder (reference)
+	 * @param int $a From position
+	 * @param int $b To new position
+	 */
+	public static function moveElementInArray(&$array, $a, $b) {
+		$out = array_splice($array, $a, 1);
+		array_splice($array, $b, 0, $out);
+	}
 }
 
 ?>
