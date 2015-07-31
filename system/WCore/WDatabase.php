@@ -142,6 +142,52 @@ class WDatabase extends PDO {
 		
 		return parent::prepare($querystring, $driver_options);
 	}
+
+	/** 
+	 * Insert a new row in table and return its id
+	 *
+	 * @param string        $table table name
+	 * @param array(string) $fields fields to insert
+	 * @param array(*)      $data data to insert (same key as in $fields)
+	 *
+	 * @return int or false id of inserted row or failure
+	 */
+	public function insertInto($table, $fields, $data) {
+		$req = 'INSERT INTO '.$table.'(';
+
+		foreach ($fields as $key) {
+			$req .= $key.', ';
+		}
+
+		if (count($fields) > 1) {
+			$req = substr($req, 0, -2);
+		}
+
+		$req .= ') VALUES (';
+
+		foreach ($fields as $key) {
+			$req .= ':'.$key.', ';
+		}
+
+		if (count($fields) > 1) {
+			$req = substr($req, 0, -2);
+		}
+
+		$req .= ')';
+
+		$prep = $this->prepare($req);
+
+		foreach ($fields as $key) {
+			$data[$key] = isset($data[$key]) ? $data[$key] : '';
+			$prep->bindParam(':'.$key, $data[$key]);
+		}
+		
+		if ($prep->execute()) {
+			return $this->lastInsertId();
+		} else {
+			return false;
+		}
+	}
 }
 
 ?>
