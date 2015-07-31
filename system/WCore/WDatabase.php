@@ -188,6 +188,39 @@ class WDatabase extends PDO {
 			return false;
 		}
 	}
+
+	/** 
+	 * Update a table and return the numbers of row affected
+	 *
+	 * @param string        $table table name
+	 * @param array(string) $fields fields to insert
+	 * @param array(*)      $data data to insert (same key as in $fields)
+	 * @param string        $cond condition of update (all rows by default)
+	 *
+	 * @return int or false id of inserted row or failure
+	 */
+	public function update($table, $fields, $data, $cond = '1') {
+		$req = 'UPDATE '.$table.' SET ';
+
+		foreach ($fields as $key) {
+			$req .= $key.' = :'.$key.', ';
+		}
+
+		if (count($fields) > 1) {
+			$req = substr($req, 0, -2);
+		}
+
+		$req .= ' WHERE '.$cond;
+
+		$prep = $this->prepare($req);
+
+		foreach ($fields as $key) {
+			$data[$key] = isset($data[$key]) ? $data[$key] : '';
+			$prep->bindParam(':'.$key, $data[$key]);
+		}
+		
+		return $prep->execute();
+	}
 }
 
 ?>
