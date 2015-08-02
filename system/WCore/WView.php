@@ -266,7 +266,7 @@ class WView {
 					return '';
 				}
 
-				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.js"></script>'."\n"
+				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.min.js"></script>'."\n"
 					.'<script>'."\n"
 					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
 
