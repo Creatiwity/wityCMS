@@ -4,8 +4,8 @@
 	<item id="from_name_label">Your name</item>
 	<item id="from_name_placeholder">Name</item>
 
-	<item id="from_company_label">Organism</item>
-	<item id="from_company_placeholder">Organism</item>
+	<item id="from_company_label">Organization</item>
+	<item id="from_company_placeholder">Organization</item>
 
 	<item id="from_email_label">Your e-mail</item>
 	<item id="from_email_placeholder">E-mail</item>
@@ -30,7 +30,7 @@ You just sent a contact request on the website {{site}}.<br /><br />
 There, is a summary:
 <ul>
 	<li><strong>Name :</strong> {{name}}</li>
-	<li><strong>Company :</strong> {{company}}</li>
+	<li><strong>Organization :</strong> {{company}}</li>
 	<li><strong>Subject :</strong> {{subject}}</li>
 	<li><strong>Message :</strong><br />
 {{message}}</li>
