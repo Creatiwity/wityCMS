@@ -118,13 +118,13 @@ abstract class WController {
 				if ($this->getAdminContext() && empty($_SESSION['access'])) {
 					return WNote::error('not_an_admin', WLang::get('error_not_an_admin'));
 				}
-				
+
 				return WNote::error('app_no_access', WLang::get('error_app_no_access', $action, $this->getAppName()));
 			}
 
 			$this->action = $action;
 
-			$tpl->assign('wity_action', $this->action);
+			$tpl->assign('wity_action', $this->action, true);
 
 			// Theme configuration for admin
 			if ($this->getAdminContext()) {
