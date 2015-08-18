@@ -160,7 +160,7 @@ class WDatabase extends PDO {
 			$req .= $key.', ';
 		}
 
-		if (count($fields) > 1) {
+		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
 
@@ -170,7 +170,7 @@ class WDatabase extends PDO {
 			$req .= ':'.$key.', ';
 		}
 
-		if (count($fields) > 1) {
+		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
 
@@ -207,7 +207,7 @@ class WDatabase extends PDO {
 			$req .= $key.' = :'.$key.', ';
 		}
 
-		if (count($fields) > 1) {
+		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
 
