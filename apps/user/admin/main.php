@@ -394,10 +394,14 @@ class UserAdminController extends WController {
 		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 		
+
+		$default_admin_route = WRoute::parseURL(WConfig::get('route.default_admin'));
+
 		return array(
-			'groups'      => $this->model->getGroupsListWithCount($sort[0], $sort[1]),
-			'admin_apps'  => $this->getAdminApps(),
-			'sorting_tpl' => $sortingHelper->getTplVars()
+			'groups'        => $this->model->getGroupsListWithCount($sort[0], $sort[1]),
+			'admin_apps'    => $this->getAdminApps(),
+			'sorting_tpl'   => $sortingHelper->getTplVars(),
+			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
 		);
 	}
 	

@@ -42,12 +42,7 @@
 /**
  * Groups listing
  */
-#groups-list .group-form td {
-	padding: 0;
-}
-
-#groups-list .group-form form {
-	padding: 8px;
+#groups-list .group-form {
 	display: none;
 }
 
