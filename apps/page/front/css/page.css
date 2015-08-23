@@ -1,0 +1,13 @@
+/**
+ * Display
+ */
+
+.wity-app-page.wity-action-display .page {
+	position: relative;
+}
+
+.wity-app-page.wity-action-display .page-edit {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
