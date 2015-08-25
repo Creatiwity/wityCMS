@@ -154,29 +154,21 @@ class WDatabase extends PDO {
 	 */
 	public function insertInto($table, $fields, $data) {
 		$req = 'INSERT INTO '.$table.'(';
-
 		foreach ($fields as $key) {
 			$req .= $key.', ';
 		}
-
-		if (count($fields) > 1) {
+		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
-
 		$req .= ') VALUES (';
-
 		foreach ($fields as $key) {
 			$req .= ':'.$key.', ';
 		}
-
-		if (count($fields) > 1) {
+		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
-
 		$req .= ')';
-
 		$prep = $this->prepare($req);
-
 		foreach ($fields as $key) {
 			$data[$key] = isset($data[$key]) ? $data[$key] : '';
 			$prep->bindParam(':'.$key, $data[$key]);
@@ -188,7 +180,6 @@ class WDatabase extends PDO {
 			return false;
 		}
 	}
-
 	/** 
 	 * Update a table and return the numbers of row affected
 	 *
@@ -201,19 +192,14 @@ class WDatabase extends PDO {
 	 */
 	public function update($table, $fields, $data, $cond = '1') {
 		$req = 'UPDATE '.$table.' SET ';
-
 		foreach ($fields as $key) {
 			$req .= $key.' = :'.$key.', ';
 		}
-
-		if (count($fields) > 1) {
+		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
-
 		$req .= ' WHERE '.$cond;
-
 		$prep = $this->prepare($req);
-
 		foreach ($fields as $key) {
 			$data[$key] = isset($data[$key]) ? $data[$key] : '';
 			$prep->bindParam(':'.$key, $data[$key]);

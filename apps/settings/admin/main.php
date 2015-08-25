@@ -80,6 +80,118 @@ class SettingsAdminController extends WController {
 		return $settings;
 	}
 
+	/**
+	 * Languages handler
+	 * 
+	 * @return array languages
+	 */
+	public function languages($params) {
+
+		$action = array_shift($params);
+
+		if ($action == 'language_add') {
+			return $this->language_form();
+		} else {
+			return Array(
+				'form'      => false,
+				'languages' => $this->model->getLanguages());
+		}
+	}
+
+	private function language_form($id_language = 0, $db_data = array()) {
+		if (!empty($_POST)) {
+			$errors = array();
+			$post_data = WRequest::getAssoc(array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled'), null, 'POST');
+			$required = array('name', 'iso');
+
+			/* BEGING VARIABLES CHECKING */
+			foreach ($required as $req) {
+				if (empty($post_data[$req])) {
+					$errors[] = WLang::get('no_'.$req);
+				}
+			}
+			/* END VARIABLES CHECKING */
+
+			if ($post_data['enabled'] == 'on') {
+				$post_data['enabled'] = true;
+			} else {
+				$post_data['enabled'] = false;
+			}
+
+			if (empty($errors)) {
+				if (empty($id_language)) { // Add case
+					$id_language = $this->model->insertLanguage($post_data);
+
+					if ($id_language) {
+						$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
+						WNote::success('language_added');
+
+						$db_data = $this->model->getLanguage($id_language);
+					} else {
+						$db_data = $post_data;
+						WNote::error('language_not_added');
+					}
+				} else { // Edit case
+					if ($this->model->updateLanguage($id_language, $post_data)) {
+						$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
+						WNote::success('language_edited');
+					} else {
+						$db_data = $post_data;
+						WNote::error('language_not_edited');
+					}
+				}
+			} else {
+				WNote::error('language_data_error', implode('<br />', $errors));
+				
+				// Restore fields
+				$db_data = $post_data;
+			}
+		}
+		$db_data['form'] = true;
+		return $db_data;
+	}
+
+	protected function language_add(array $params) {
+		return $this->language_form();
+	}
+
+	protected function language_edit(array $params) {
+		$id_language = intval(array_shift($params));
+
+		$db_data = $this->model->getLanguage($id_language);
+
+		if (!empty($db_data)) {
+			return $this->language_form($id_language, $db_data);
+		} else {
+			$this->setHeader('Location', WRoute::getDir().'admin/language');
+			WNote::error('language_not_found');
+			return array();
+		}
+	}
+
+	public function language_delete(array $params) {
+		$id_language = intval(array_shift($params));
+
+		$language = $this->model->getLanguage($id_language);
+
+		if (!empty($language)) {
+			if (in_array('confirm', $params)) {
+				
+				$this->model->deleteLanguage($id_language);
+
+				$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
+				WNote::success('language_deleted');
+			}
+
+			return $language;
+		} else {
+			$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
+			WNote::error('language_not_found');
+		}
+
+		return array();
+	}
+
 	private function makeUploadDir() {
 		if (!is_dir($this->upload_dir)) {
 			mkdir($this->upload_dir, 0777, true);

@@ -12,5 +12,10 @@
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">configure</action>
+		<action>languages</action>
+		<action menu="false">language_add</action>
+		<action menu="false">language_edit</action>
+		<action menu="false">language_delete</action>
+		<action menu="false">languages_reorder</action>
 	</admin>
 </app>

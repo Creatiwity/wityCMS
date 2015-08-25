@@ -20,6 +20,40 @@ class SettingsAdminView extends WView {
 	public function configure($model) {
 		$this->assign('settings', $model);
 	}
+
+	public function languages($data) {
+		if ($data['form']) {
+			$this->setTemplate('language_form');
+		}
+		$this->assign($data);
+	}
+
+	private function language_form($model) {
+		$this->assign('css', '/apps/settings/admin/css/settings.css');
+		$this->assign('require', "witycms/admin");
+		$default = array(
+			'name'              => '',
+			'iso'               => '',
+			'code'              => '',
+			'date_format_short' => '',
+			'date_format_long'  => ''
+		);
+		$this->assignDefault($default, $model);
+		$this->setTemplate('language_form');
+	}
+
+	public function language_add($model) {
+		$this->language_form($model);
+	}
+
+	public function language_edit($model) {
+		$this->language_form($model);
+	}
+
+	public function language_delete($model) {
+		$this->assign('name', $model['name']);
+		$this->assign('confirm_delete_url', '/admin/settings/languages/language_delete/'.$model['id'].'/confirm');
+	}
 }
 
 ?>
