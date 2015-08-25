@@ -124,7 +124,9 @@ abstract class WController {
 
 			$this->action = $action;
 
-			$tpl->assign('wity_action', $this->action, true);
+			if (!$this->context['parent']) {
+				$tpl->assign('wity_action', $this->action, true);
+			}
 
 			// Theme configuration for admin
 			if ($this->getAdminContext()) {
