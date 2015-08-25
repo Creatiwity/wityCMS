@@ -74,7 +74,7 @@ class NewsAdminController extends WController {
 			
 			// Format translatable fields
 			$translatable_fields = array('title', 'content', 'author', 'url', 'meta_title', 'meta_description', 'published', 'publish_date', 'publish_time');
-			$lang_list = array(1, 2);
+			$lang_list = WLang::getLangIDS();
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);

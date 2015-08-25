@@ -120,17 +120,23 @@ class WLang {
 	public static function getLangID() {
 		$lang = self::getLang();
 		
-		switch ($lang) {
-			default:
-			case 'fr':
-				return 1;
-			
-			case 'en':
-				return 2;
-			
-			case 'es':
-				return 3;
-		}
+		$db = WSystem::getDB();
+
+		$pre = $db->prepare('SELECT id FROM languages WHERE iso = ?');
+		$pre->execute(array(strtoupper($lang)));
+		return $pre->fetch(PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * Returns list of lang IDs
+	 * 
+	 * @return array
+	 */
+	public static function getLangIDS() {
+		$db = WSystem::getDB();
+
+		$que = $db->query('SELECT id FROM languages');
+		return $que->fetchAll(PDO::FETCH_COLUMN);
 	}
 	
 	/**
