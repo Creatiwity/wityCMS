@@ -36,7 +36,8 @@ class SettingsAdminView extends WView {
 			'iso'               => '',
 			'code'              => '',
 			'date_format_short' => '',
-			'date_format_long'  => ''
+			'date_format_long'  => '',
+			'enabled'           => 1
 		);
 		$this->assignDefault($default, $model);
 		$this->setTemplate('language_form');

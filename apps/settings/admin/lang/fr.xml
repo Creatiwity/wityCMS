@@ -11,7 +11,17 @@
 	<item id="favicon">Favicon (.ico)</item>
 	<item id="icon">Icône du site (32x32 px)</item>
 	<item id="submit">Envoyer</item>
-	
+
+	<!-- Language -->
+	<item id="delete_confirm">Êtes vous sur de vouloir supprimer la langue :</item>	
+	<item id="language">Langue</item>
+	<item id="languages">Langues</item>
+	<item id="enabled">Activé</item>
+	<item id="date_format_short">Date (format court)</item>
+	<item id="date_format_long">Date (format long)</item>
+	<item id="how it works">Comment ça marche ?</item>
+	<item id="language_add">Ajouter une langue</item>
+
 	<!-- Messages -->
 	<item id="settings_updated">La configuration a été mise à jour avec succès.</item>
 </lang>

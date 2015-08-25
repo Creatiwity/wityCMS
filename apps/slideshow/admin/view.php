@@ -59,7 +59,7 @@ class SlideshowAdminView extends WView {
 	}
 
 	public function slide_delete($model) {
-		$this->assign('title', $model['title_1']);
+		$this->assign('name', $model['name']);
 		$this->assign('confirm_delete_url', '/admin/slideshow/slide_delete/'.$model['id'].'/confirm');
 	}
 
