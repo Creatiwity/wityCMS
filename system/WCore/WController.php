@@ -191,6 +191,19 @@ abstract class WController {
 	}
 
 	/**
+	 * Defines a new application's context
+	 *
+	 * @param array $context
+	 */
+	public function setContext($context) {
+		$this->context = $context;
+
+		if (!empty($this->view)) {
+			$this->view->setContext($context);
+		}
+	}
+
+	/**
 	 * Returns true if there is a parent in the context, false otherwise
 	 *
 	 * @return bool true if there is a parent in the context, false otherwise

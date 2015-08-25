@@ -189,6 +189,10 @@ class WRetriever {
 	public static function getController($app_code, $has_parent) {
 		// Check if app not already instantiated
 		if (isset(self::$controllers[$app_code])) {
+			$context = self::$controllers[$app_code]->getContext();
+			$context['parent'] = $has_parent;
+			self::$controllers[$app_code]->setContext($context);
+
 			return self::$controllers[$app_code];
 		}
 
