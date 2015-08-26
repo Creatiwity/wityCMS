@@ -152,6 +152,18 @@ class WLang {
 	}
 
 	/**
+	 * Returns the ID of default lang.
+	 * 
+	 * @return int
+	 */
+	public static function getDefaultLangID() {
+		$db = WSystem::getDB();
+
+		$que = $db->query('SELECT id FROM languages WHERE is_default = 1');
+		return $que->fetch(PDO::FETCH_COLUMN);
+	}
+
+	/**
 	 * Returns list of lang IDs
 	 *
 	 * @param  bool take only enabled ?
@@ -165,7 +177,7 @@ class WLang {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = $db->query('SELECT id FROM languages'.$cond);
+		$que = $db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC'); //Force default to be first
 		return $que->fetchAll(PDO::FETCH_COLUMN);
 	}
 	

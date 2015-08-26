@@ -58,6 +58,9 @@ class SettingsAdminModel {
 	 * @return Bool success
 	 */
 	public function insertLanguage($data) {
+		if ($data['is_default']) {
+			$data['enabled'] = true;
+		}
 		return $this->db->insertInto('languages', array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled'), $data);
 	}
 
@@ -68,7 +71,22 @@ class SettingsAdminModel {
 	 * @return Bool success
 	 */
 	public function updateLanguage($id, $data) {
+		if ($id == WLang::getDefaultLangID()||$data['is_default']) {
+			$data['enabled'] = true;
+		}
 		return $this->db->update('languages', array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled'), $data, 'id = '.$id);
+	}
+
+	/**
+	 * Change default language
+	 * 
+	 * @param int Id
+	 * @return Bool success
+	 */
+	public function setDefaultLanguage($id) {
+		$this->db->update('languages', array('is_default'), array('is_default'=>0));
+		$this->db->update('languages', array('is_default', 'enabled'), array('is_default'=>1,'enabled'=>1), 'id = '.$id);
+		return true;
 	}
 }
 

@@ -11,6 +11,7 @@
 				<th>Iso</th>
 				<th>Code</th>
 				<th>{lang enabled}</th>
+				<th>{lang default}</th>
 				<th>{lang actions}</th>
 			</tr>
 		</thead>
@@ -21,7 +22,13 @@
 				<td><strong>{$language.name}</strong></td>
 				<td>{$language.iso}</td>
 				<td>{$language.code}</td>
-				<td><span class="glyphicon glyphicon-{if {$language.enabled} == 0}ban-circle{else}ok-circle{/if}" aria-hidden="true"></span></td>
+				<td>{if {$language.enabled} == 0}
+						<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" style="color:red"></span>
+					{else}
+						<span class="glyphicon glyphicon-ok-circle" aria-hidden="true" style="color:green"></span>
+					{/if}
+				</td>
+				<td>{if {$language.is_default} == 1}<span class="glyphicon glyphicon-record" aria-hidden="true" style="color:#337ab7"></span>{/if}</td>
 				<td>
 					<div class="btn-group">
 						<a href="/admin/settings/language_edit/{$language.id}" title="{lang language_edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang edit}</a>

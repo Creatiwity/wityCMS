@@ -8,10 +8,15 @@ require(['jquery'], function($) {
 	
 	var translatable_html = '<div role="tabpanel" style="margin-bottom: 1em;"><ul class="nav nav-tabs translatable-tabs" role="tablist">';
 
-	translatable_html += '<li role="presentation" class="active"><a href="#lang_'+wity_enabled_langs[0].id+'" class="lang">'+wity_enabled_langs[0].name+'</a></li>';
+	for (var i=0;i<wity_enabled_langs.length;++i) {
 
-	for (var i=1;i<wity_enabled_langs.length;++i) {
-		translatable_html += '<li role="presentation"><a href="#lang_'+wity_enabled_langs[i].id+'" class="lang">'+wity_enabled_langs[i].name+'</a></li>';
+		var act = '';
+
+		if (wity_enabled_langs[i].id == wity_default_lang_id) {
+			act = ' class="active"';
+		}
+
+		translatable_html += '<li role="presentation"'+act+'><a href="#lang_'+wity_enabled_langs[i].id+'" class="lang">'+wity_enabled_langs[i].name+'</a></li>';
 	}
 	
 	translatable_html += '</ul></div>';
@@ -63,7 +68,7 @@ require(['jquery'], function($) {
 			});
 
 			var classes = 'lang_' + wity_enabled_langs[i].id;
-			if (i > 0) {
+			if (wity_enabled_langs[i].id != wity_default_lang_id) {
 				classes += ' hidden';
 			}
 

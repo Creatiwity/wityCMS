@@ -75,6 +75,8 @@ class NewsAdminController extends WController {
 			// Format translatable fields
 			$translatable_fields = array('title', 'content', 'author', 'url', 'meta_title', 'meta_description', 'published', 'publish_date', 'publish_time');
 			$lang_list = WLang::getLangIDS(true);
+			$default_id = WLang::getDefaultLangID();
+
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);
@@ -87,9 +89,9 @@ class NewsAdminController extends WController {
 						$value = trim($value, '-');
 					}
 					
-					if (($value === null || $value === '') && $i > 0) {
+					if (($value === null || $value === '') && $id_lang != $default_id) {
 						// Use the value of the default lang
-						$data_translatable[$id_lang][$field] = $data_translatable[$lang_list[0]][$field];
+						$data_translatable[$id_lang][$field] = $data_translatable[$default_id][$field];
 					} else {
 						$data_translatable[$id_lang][$field] = $value;
 					}
@@ -97,11 +99,11 @@ class NewsAdminController extends WController {
 			}
 			
 			/* BEGING VARIABLES CHECKING */
-			if (empty($data_translatable[$lang_list[0]]['title'])) {
+			if (empty($data_translatable[$default_id]['title'])) {
 				$errors[] = WLang::get('news_no_title');
 			}
 			
-			if (empty($data_translatable[$lang_list[0]]['author'])) {
+			if (empty($data_translatable[$default_id]['author'])) {
 				$errors[] = WLang::get('news_no_author');
 			}
 			
@@ -156,7 +158,7 @@ class NewsAdminController extends WController {
 						}
 						
 						$this->setHeader('Location', Wroute::getDir().'admin/news');
-						WNote::success('news_added', WLang::get('news_added', $data_translatable[$lang_list[0]]['title']));
+						WNote::success('news_added', WLang::get('news_added', $data_translatable[$default_id]['title']));
 					} else {
 						WNote::error('news_not_added', WLang::get('news_not_added'));
 					}
@@ -172,7 +174,7 @@ class NewsAdminController extends WController {
 						}
 						
 						$this->setHeader('Location', Wroute::getDir().'admin/news');
-						WNote::success('news_edited', WLang::get('news_edited', $data_translatable[$lang_list[0]]['title']));
+						WNote::success('news_edited', WLang::get('news_edited', $data_translatable[$default_id]['title']));
 					} else {
 						WNote::error('news_not_edited', WLang::get('news_not_edited'));
 					}

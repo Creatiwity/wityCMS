@@ -153,9 +153,9 @@ class WDatabase extends PDO {
 	 * @return int or false id of inserted row or failure
 	 */
 	public function insertInto($table, $fields, $data) {
-		$req = 'INSERT INTO '.$table.'(';
+		$req = 'INSERT INTO `'.$table.'`(';
 		foreach ($fields as $key) {
-			$req .= $key.', ';
+			$req .= '`'.$key.'`, ';
 		}
 		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
@@ -191,9 +191,9 @@ class WDatabase extends PDO {
 	 * @return int or false number of inserted row or failure
 	 */
 	public function update($table, $fields, $data, $cond = '1') {
-		$req = 'UPDATE '.$table.' SET ';
+		$req = 'UPDATE `'.$table.'` SET ';
 		foreach ($fields as $key) {
-			$req .= $key.' = :'.$key.', ';
+			$req .= '`'.$key.'` = :'.$key.', ';
 		}
 		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);

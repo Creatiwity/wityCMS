@@ -101,7 +101,7 @@ class SettingsAdminController extends WController {
 	private function language_form($id_language = 0, $db_data = array()) {
 		if (!empty($_POST)) {
 			$errors = array();
-			$post_data = WRequest::getAssoc(array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled'), null, 'POST');
+			$post_data = WRequest::getAssoc(array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled', 'is_default'), null, 'POST');
 			$required = array('name', 'iso');
 
 			/* BEGING VARIABLES CHECKING */
@@ -116,6 +116,12 @@ class SettingsAdminController extends WController {
 				$post_data['enabled'] = true;
 			} else {
 				$post_data['enabled'] = false;
+			}
+
+			if ($post_data['is_default'] == 'on') {
+				$post_data['is_default'] = true;
+			} else {
+				$post_data['is_default'] = false;
 			}
 
 			if (empty($errors)) {
@@ -140,6 +146,10 @@ class SettingsAdminController extends WController {
 						WNote::error('language_not_edited');
 					}
 				}
+
+				if ($post_data['is_default']) {
+					$this->model->setDefaultLanguage($db_data['id']);
+				}
 			} else {
 				WNote::error('language_data_error', implode('<br />', $errors));
 				
@@ -148,6 +158,7 @@ class SettingsAdminController extends WController {
 			}
 		}
 		$db_data['form'] = true;
+
 		return $db_data;
 	}
 

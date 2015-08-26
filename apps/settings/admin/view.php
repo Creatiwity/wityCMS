@@ -29,6 +29,7 @@ class SettingsAdminView extends WView {
 	}
 
 	private function language_form($model) {
+
 		$this->assign('css', '/apps/settings/admin/css/settings.css');
 		$this->assign('require', "witycms/admin");
 		$default = array(
@@ -37,7 +38,8 @@ class SettingsAdminView extends WView {
 			'code'              => '',
 			'date_format_short' => '',
 			'date_format_long'  => '',
-			'enabled'           => 1
+			'enabled'           => 1,
+			'is_default'        => 0
 		);
 		$this->assignDefault($default, $model);
 		$this->setTemplate('language_form');

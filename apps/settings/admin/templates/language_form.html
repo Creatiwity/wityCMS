@@ -28,14 +28,31 @@
 					<label for="date_format_long" class="control-label">{lang date_format_long}</label><br />
 					<input id="date_format_long" class="form-control lang" type="text" name="date_format_long" value="{$date_format_long}" autocomplete="off" placeholder="%d-%m-%Y %H:%M" />
 				</div>
+				{if {$is_default}}
+				<i>{lang This is your default language, you can't disable it}.</i>
+				<div class="hidden">
+				{else}
+				<div>
+				{/if}
+					<label class="control-label">{lang enabled}</label><br />
+					<p><i>{lang Default language can not be disabled}</i></p>
+					<div class="onoffswitch">
+						<input type="checkbox" name="enabled" class="onoffswitch-checkbox" id="enabled" {if {$enabled}}checked{/if}>
+						<label class="onoffswitch-label" for="enabled">
+							<span class="onoffswitch-inner"></span>
+							<span class="onoffswitch-switch"></span>
+						</label>
+					</div>
 
-				<label class="control-label">{lang enabled}</label><br />
-				<div class="onoffswitch">
-					<input type="checkbox" name="enabled" class="onoffswitch-checkbox" id="enabled" {if {$enabled}}checked{/if}>
-					<label class="onoffswitch-label" for="enabled">
-						<span class="onoffswitch-inner"></span>
-						<span class="onoffswitch-switch"></span>
-					</label>
+					<label class="control-label">{lang Use as default}</label><br />
+					<p><i>{lang To change default language, please select another one}</i></p>
+					<div class="onoffswitch">
+						<input type="checkbox" name="is_default" class="onoffswitch-checkbox" id="is_default" {if {$is_default}}checked{/if}>
+						<label class="onoffswitch-label" for="is_default">
+							<span class="onoffswitch-inner"></span>
+							<span class="onoffswitch-switch"></span>
+						</label>
+					</div>
 				</div>
 
 			</div>
