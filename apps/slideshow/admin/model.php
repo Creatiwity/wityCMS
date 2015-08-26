@@ -129,19 +129,18 @@ class SlideshowAdminModel extends SlideshowModel {
 		// Create language lines
 		$exec = true;
 		foreach ($data_translatable as $id_lang => $values) {
+
 			$prep = $this->db->prepare('
-				UPDATE `slideshow_slide_lang`
-				SET `title` = :title, `legend` = :legend
-				WHERE `id_slide` = :id_slide AND `id_lang` = :id_lang
+				DELETE FROM slideshow_slide_lang
+				WHERE id_slide = ? AND id_lang = ?
 			');
-			$prep->bindParam(':title', $values['title']);
-			$prep->bindParam(':legend', $values['legend']);
-			$prep->bindParam(':id_slide', $id_slide, PDO::PARAM_INT);
-			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
-			
-			if (!$prep->execute()) {
-				$exec = false;
-			}
+
+			$prep->execute(array($id_slide, $id_lang));
+
+			$values['id_slide'] = $id_slide;
+			$values['id_lang'] = $id_lang;
+
+			$this->db->insertInto('slideshow_slide_lang', array('id_slide', 'id_lang', 'title', 'legend'), $values);
 		}
 		
 		return $exec;

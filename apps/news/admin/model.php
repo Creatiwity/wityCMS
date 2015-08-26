@@ -140,25 +140,18 @@ class NewsAdminModel extends NewsModel {
 		// Create language lines
 		$exec = true;
 		foreach ($data_translatable as $id_lang => $values) {
+
 			$prep = $this->db->prepare('
-				UPDATE news_lang
-				SET title = :title, author = :author, content = :content, url = :url, meta_title = :meta_title, meta_description = :meta_description, published = :published, publish_date = :publish_date
-				WHERE id_news = :id_news AND id_lang = :id_lang
+				DELETE FROM news_lang
+				WHERE id_news = ? AND id_lang = ?
 			');
-			$prep->bindParam(':title', $values['title']);
-			$prep->bindParam(':author', $values['author']);
-			$prep->bindParam(':content', $values['content']);
-			$prep->bindParam(':url', $values['url']);
-			$prep->bindParam(':meta_title', $values['meta_title']);
-			$prep->bindParam(':meta_description', $values['meta_description']);
-			$prep->bindParam(':published', $values['published']);
-			$prep->bindParam(':publish_date', $values['publish_date']);
-			$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
-			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
-			
-			if (!$prep->execute()) {
-				$exec = false;
-			}
+
+			$prep->execute(array($id_news, $id_lang));
+
+			$values['id_news'] = $id_news;
+			$values['id_lang'] = $id_lang;
+
+			$this->db->insertInto('news_lang', array('id_news', 'id_lang', 'title', 'author', 'content', 'url', 'meta_title', 'meta_description', 'published', 'publish_date'), $values);
 		}
 		
 		return $exec;

@@ -181,19 +181,18 @@ class TeamAdminModel extends TeamModel {
 		// Create language lines
 		$exec = true;
 		foreach ($data_translatable as $id_lang => $values) {
+
 			$prep = $this->db->prepare('
-				UPDATE team_member_lang
-				SET title = :title, description = :description
-				WHERE id_member = :id_member AND id_lang = :id_lang
+				DELETE FROM team_member_lang
+				WHERE id_member = ? AND id_lang = ?
 			');
-			$prep->bindParam(':title', $values['title']);
-			$prep->bindParam(':description', $values['description']);
-			$prep->bindParam(':id_member', $id_member, PDO::PARAM_INT);
-			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
-			
-			if (!$prep->execute()) {
-				$exec = false;
-			}
+
+			$prep->execute(array($id_member, $id_lang));
+
+			$values['id_member'] = $id_member;
+			$values['id_lang'] = $id_lang;
+
+			$this->db->insertInto('team_member_lang', array('id_member', 'id_lang', 'title', 'description'), $values);
 		}
 		
 		return $exec;
