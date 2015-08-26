@@ -30,8 +30,8 @@ require(['jquery'], function($) {
 		$('.translatable .lang.' + lang).removeClass('hidden');
 	});
 
-	// Add translatable fields 
-	
+	// Add translatable fields
+
 	$('.translatable').each(function () {
 		var $this = $(this);
 		var $base = $this.clone();
@@ -50,16 +50,16 @@ require(['jquery'], function($) {
 				var $that = $(this);
 				$that.data('lang', wity_enabled_langs[i].id);
 
-				if (js_values) {
-					if ($that.is('input')) {
-						$that.value = js_values[$that.attr('name') + '_' + wity_enabled_langs[i].id];
-					} else {
-						$that.html(js_values[$that.attr('name') + '_' + wity_enabled_langs[i].id]);
-					}
-				}
-
 				$that.attr('name', $that.attr('name') + '_' + wity_enabled_langs[i].id);
 				$that.attr('id', $that.attr('id') + '_' + wity_enabled_langs[i].id);
+
+				if (js_values) {
+					if ($that.is('input')) {
+						$that.attr('value', js_values[$that.attr('name')]);
+					} else {
+						$that.html(js_values[$that.attr('name')]);
+					}
+				}
 			});
 
 			var classes = 'lang_' + wity_enabled_langs[i].id;
