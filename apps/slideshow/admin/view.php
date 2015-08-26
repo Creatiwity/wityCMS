@@ -38,13 +38,24 @@ class SlideshowAdminView extends WView {
 			'title'  => '',
 			'legend' => '',
 		);
-		$lang_list = array(1, 2);
+		$lang_list = WLang::getLangIDS(true);
+
+		$js_translatable = array();
 
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
 				$default[$key.'_'.$id_lang] = $value;
+				$js_translatable[$key.'_'.$id_lang] = $value;
 			}
 		}
+
+		$js_values = array();
+
+		foreach ($js_translatable as $item => $def) {
+			$js_values[$item] = isset($model[$item]) ? $model[$item] : $def;
+		}
+
+		$this->assign('js_values', json_encode($js_values));
 
 		$this->assignDefault($default, $model);
 

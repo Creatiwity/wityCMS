@@ -120,25 +120,18 @@ class WLang {
 	/**
 	 * Returns langs data.
 	 * 
+	 * @param  bool take only enabled ?
 	 * @return array
 	 */
-	public static function getLangs() {
+	public static function getLangs($enabled = false) {
 		$db = WSystem::getDB();
 
-		$que = $db->query('SELECT * FROM languages');
+		$cond = '';
+		if ($enabled) {
+			$cond = ' WHERE enabled = 1'
+		}
 
-		return $que->fetchAll();
-	}
-
-	/**
-	 * Returns enabled langs data.
-	 * 
-	 * @return array
-	 */
-	public static function getEnabledLangs() {
-		$db = WSystem::getDB();
-
-		$que = $db->query('SELECT * FROM languages WHERE enabled = 1');
+		$que = $db->query('SELECT * FROM languages'.$cond);
 
 		return $que->fetchAll();
 	}
@@ -160,13 +153,19 @@ class WLang {
 
 	/**
 	 * Returns list of lang IDs
-	 * 
+	 *
+	 * @param  bool take only enabled ?
 	 * @return array
 	 */
-	public static function getLangIDS() {
+	public static function getLangIDS($enabled = false) {
 		$db = WSystem::getDB();
 
-		$que = $db->query('SELECT id FROM languages');
+		$cond = '';
+		if ($enabled) {
+			$cond = ' WHERE enabled = 1'
+		}
+
+		$que = $db->query('SELECT id FROM languages'.$cond);
 		return $que->fetchAll(PDO::FETCH_COLUMN);
 	}
 	

@@ -58,7 +58,7 @@ class NewsAdminView extends WView {
 		$this->assign('categories', $model['cats']);
 		$this->assign('cats', $cats);
 
-		$lang_list = WLang::getLangIDS();
+		$lang_list = WLang::getLangIDS(true);
 
 		foreach ($lang_list as $id_lang) {
 			if (!empty($model['data']['publish_date_'.$id_lang])) {

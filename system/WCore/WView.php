@@ -268,7 +268,7 @@ class WView {
 
 				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.js"></script>'."\n"
 					.'<script>'."\n"
-					.'var wity_enabled_langs ='.json_encode(WLang::getEnabledLangs()).";\n"
+					.'var wity_enabled_langs ='.json_encode(WLang::getLangs(true)).";\n"
 					.'var wity_base_url = "'.WRoute::getBase().'"'.";\n"
 					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
 

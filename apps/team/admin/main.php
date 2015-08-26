@@ -34,7 +34,7 @@ class TeamAdminController extends WController {
 
 			// Format translatable fields
 			$translatable_fields = array('title', 'description');
-			$lang_list = WLang::getLangIDS();
+			$lang_list = WLang::getLangIDS(true);
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);
