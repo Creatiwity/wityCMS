@@ -1,12 +1,6 @@
 <div class="wity-app wity-app-news wity-action-news-form">
 	<form method="post" enctype="multipart/form-data">
-		<div role="tabpanel" style="margin-bottom: 1em;">
-			<!-- Nav tabs -->
-			<ul class="nav nav-tabs translatable-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#lang_1" class="lang">{lang french}</a></li>
-				<li role="presentation"><a href="#lang_2" class="lang">{lang english}</a></li>
-			</ul>
-		</div>
+		<div id="translatable-tabs"></div>
 
 		<div class="row">
 			<div class="col-md-9 form-horizontal">
@@ -15,23 +9,17 @@
 				<div class="form-group">
 					<label for="title" class="col-sm-2 control-label">*{lang title}</label>
 					<div class="col-sm-10 translatable">
-						<input id="title_1" data-lang="1" class="form-control title lang lang_1" type="text" name="title_1" value="{$title_1}" autocomplete="off" placeholder="{lang title}" />
-						<input id="title_2" data-lang="2" class="form-control title lang lang_2 hidden" type="text" name="title_2" value="{$title_2}" autocomplete="off" placeholder="{lang title}" />
+						<input id="title" class="form-control title" type="text" name="title" autocomplete="off" placeholder="{lang title}" />
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="url" class="col-sm-2 control-label">*{lang URL}</label>
 					<div class="col-sm-10 translatable">
-						<div class="input-group lang lang_1">
+						<div class="input-group">
 							<span class="input-group-addon">{$site_url}{$id}-</span>
-							<input id="url" class="form-control url" type="text" name="url_1" value="{$url_1}" />
-							<span class="input-group-addon"><a href="javascript:void(0)" data-lang="1" class="update-url"><i class="glyphicon glyphicon-refresh"></i></a></span>
-						</div>
-						<div class="input-group lang lang_2 hidden">
-							<span class="input-group-addon">{$site_url}{$id}-</span>
-							<input id="url" class="form-control url" type="text" name="url_2" value="{$url_2}" />
-							<span class="input-group-addon"><a href="javascript:void(0)" data-lang="2" class="update-url"><i class="glyphicon glyphicon-refresh"></i></a></span>
+							<input id="url" class="form-control url" type="text" name="url" />
+							<span class="input-group-addon"><a href="javascript:void(0)" class="update-url"><i class="glyphicon glyphicon-refresh"></i></a></span>
 						</div>
 					</div>
 				</div>
@@ -39,24 +27,7 @@
 				<div class="form-group">
 					<label for="content" class="col-sm-2 control-label">{lang content}</label>
 					<div class="col-sm-10 translatable">
-						<div class="lang lang_1">
-							<textarea id="content_1" class="form-control" name="content_1" rows="20" cols="80">{$content_1}</textarea>
-						</div>
-						<div class="lang lang_2 hidden">
-							<textarea id="content_2" class="form-control" name="content_2" rows="20" cols="80">{$content_2}</textarea>
-						</div>
-						<script type="text/javascript">
-							var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
-								options = {
-									filebrowserBrowseUrl: roxyFileman,
-									filebrowserImageBrowseUrl: roxyFileman + '?type=image',
-									removeDialogTabs: 'link:upload;image:upload',
-									height: '500px'
-								};
-							
-							CKEDITOR.replace('content_1', options);
-							CKEDITOR.replace('content_2', options);
-						</script>
+						<textarea id="content" class="form-control ckedit" name="content" rows="20" cols="80"></textarea>
 					</div>
 				</div>
 			</div>
@@ -74,46 +45,29 @@
 					<h4 class="text-center">{lang details}</h4>
 
 					<div class="checkbox translatable">
-						<label for="published_1" class="lang lang_1">
-							<input id="published_1" data-lang="1" class="published" type="checkbox" name="published_1"{if {$published_1}} checked="checked"{/if} />
-							{lang published}
-						</label>
-						<label for="published_2" class="lang lang_2 hidden">
-							<input id="published_2" data-lang="2" class="published" type="checkbox" name="published_2"{if {$published_2}} checked="checked"{/if} />
+						<label for="published">
+							<input id="published" class="published" type="checkbox" name="published" />
 							{lang published}
 						</label>
 					</div>
 
 					<div class="translatable">
-						<div class="lang lang_1 publish_datetime_group"{if !{$published_1}} style="display: none;"{/if}>
+						<div class="publish_datetime_group">
 							<div class="form-group">
-								<label for="publish_date_1" class="control-label">*{lang publish_date}</label>
-								<input id="publish_date_1" class="form-control" type="date" name="publish_date_1" value="{$publish_date_1}" placeholder="{lang publish_date}" />
+								<label for="publish_date" class="control-label">*{lang publish_date}</label>
+								<input id="publish_date" class="form-control" type="date" name="publish_date" placeholder="{lang publish_date}" />
 							</div>
 
 							<div class="form-group">
-								<label for="publish_time_1" class="control-label">*{lang publish_time}</label>
-								<input id="publish_time_1" class="form-control" type="time" name="publish_time_1" value="{$publish_time_1}" placeholder="{lang publish_time}" />
-							</div>
-						</div>
-
-						<div class="lang lang_2 hidden publish_datetime_group"{if !{$published_2}} style="display: none;"{/if}>
-							<div class="form-group">
-								<label for="publish_date_2" class="control-label">*{lang publish_date}</label>
-								<input id="publish_date_2" class="form-control" type="date" name="publish_date_2" value="{$publish_date_2}" placeholder="{lang publish_date}" />
-							</div>
-
-							<div class="form-group">
-								<label for="publish_time_2" class="control-label">*{lang publish_time}</label>
-								<input id="publish_time_2" class="form-control" type="time" name="publish_time_2" value="{$publish_time_2}" placeholder="{lang publish_time}" />
+								<label for="publish_time" class="control-label">*{lang publish_time}</label>
+								<input id="publish_time" class="form-control" type="time" name="publish_time" placeholder="{lang publish_time}" />
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group translatable">
-						<label for="author_1" class="control-label">{lang author}</label>
-						<input id="author_1" class="form-control lang lang_1" type="text" name="author_1" value="{$author_1}" placeholder="{lang author_1}" />
-						<input id="author_2" class="form-control lang lang_2 hidden" type="text" name="author_2" value="{$author_2}" placeholder="{lang author_2}" />
+						<label for="author" class="control-label">{lang author}</label>
+						<input id="author" class="form-control" type="text" name="author" placeholder="{lang author}" />
 					</div>
 
 					<div class="form-group">
@@ -159,15 +113,13 @@
 					<h4 class="text-center">{lang SEO}</h4>
 
 					<div class="form-group translatable">
-						<label for="meta_title_1">{lang meta_title}</label>
-						<input id="meta_title_1" class="form-control meta_title lang lang_1" type="text" name="meta_title_1" value="{$meta_title_1}" placeholder="{lang meta_title}" />
-						<input id="meta_title_2" class="form-control meta_title lang lang_2 hidden" type="text" name="meta_title_2" value="{$meta_title_2}" placeholder="{lang meta_title}" />
+						<label for="meta_title">{lang meta_title}</label>
+						<input id="meta_title" class="form-control meta_title" type="text" name="meta_title" placeholder="{lang meta_title}" />
 					</div>
 
 					<div class="form-group translatable">
-						<label for="meta_description_1">{lang meta_description}</label>
-						<textarea id="meta_description_1" class="form-control lang lang_1" type="text" name="meta_description_1" placeholder="{lang meta_description}" rows="4" cols="40">{$meta_description_1}</textarea>
-						<textarea id="meta_description_2" class="form-control lang lang_2 hidden" type="text" name="meta_description_2" placeholder="{lang meta_description}" rows="4" cols="40">{$meta_description_2}</textarea>
+						<label for="meta_description">{lang meta_description}</label>
+						<textarea id="meta_description" class="form-control" type="text" name="meta_description" placeholder="{lang meta_description}" rows="4" cols="40"></textarea>
 					</div>
 				</div>
 			</div>
@@ -177,4 +129,5 @@
 
 <script type="text/javascript">
 	var wityBaseURL = '{$wity_base_url}';
+	var js_values = '{$js_values}';
 </script>

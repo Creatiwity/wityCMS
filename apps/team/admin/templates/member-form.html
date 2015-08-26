@@ -1,12 +1,6 @@
 <div class="wity-app wity-app-team wity-action-member-form">
 	<form action="/admin/team/{if empty({$id})}member-add{else}member-edit/{$id}{/if}" method="post" enctype="multipart/form-data">
-		<div role="tabpanel" style="margin-bottom: 1em;">
-			<!-- Nav tabs -->
-			<ul class="nav nav-tabs translatable-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#lang_1" class="lang">{lang french}</a></li>
-				<li role="presentation"><a href="#lang_2" class="lang">{lang english}</a></li>
-			</ul>
-		</div>
+		<div id="translatable-tabs"></div>
 
 		<div class="row">
 			<div class="col-md-9 form-horizontal">
@@ -22,34 +16,16 @@
 				</div>
 
 				<div class="form-group translatable">
-					<label for="title_1" class="control-label col-md-2">{lang title}*</label>
+					<label for="title" class="control-label col-md-2">{lang title}*</label>
 					<div class="col-md-10">
-						<input id="title_1" class="form-control lang lang_1" type="text" name="title_1" value="{$title_1}" placeholder="{lang title}" />
-						<input id="title_2" class="form-control lang lang_2 hidden" type="text" name="title_2" value="{$title_2}" placeholder="{lang title}" />
+						<input id="title" class="form-control" type="text" name="title" placeholder="{lang title}" />
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="description" class="control-label col-md-2">{lang description}</label>
 					<div class="col-sm-10 translatable">
-						<div class="lang lang_1">
-							<textarea id="description_1" class="form-control" name="description_1" rows="20" cols="80">{$description_1}</textarea>
-						</div>
-						<div class="lang lang_2 hidden">
-							<textarea id="description_2" class="form-control" name="description_2" rows="20" cols="80">{$description_2}</textarea>
-						</div>
-						<script type="text/javascript">
-							var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
-								options = {
-									filebrowserBrowseUrl: roxyFileman,
-									filebrowserImageBrowseUrl: roxyFileman + '?type=image',
-									removeDialogTabs: 'link:upload;image:upload',
-									height: '200px'
-								};
-							
-							CKEDITOR.replace('description_1', options);
-							CKEDITOR.replace('description_2', options);
-						</script>
+						<textarea id="description" class="form-control" name="description" rows="20" cols="80"></textarea>
 					</div>
 				</div>
 				

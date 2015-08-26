@@ -26,6 +26,7 @@ class SlideshowAdminView extends WView {
 	}
 
 	private function slide_form($model) {
+		$this->assign('langs', WLang::getLangs());
 		$this->assign('js', "/libraries/ckeditor-4.4.7/ckeditor.js");
 		$this->assign('require', "witycms/admin");
 

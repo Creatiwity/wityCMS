@@ -116,7 +116,38 @@ class WLang {
 	public static function getLang() {
 		return self::$lang;
 	}
+
+	/**
+	 * Returns langs data.
+	 * 
+	 * @return array
+	 */
+	public static function getLangs() {
+		$db = WSystem::getDB();
+
+		$que = $db->query('SELECT * FROM languages');
+
+		return $que->fetchAll();
+	}
+
+	/**
+	 * Returns enabled langs data.
+	 * 
+	 * @return array
+	 */
+	public static function getEnabledLangs() {
+		$db = WSystem::getDB();
+
+		$que = $db->query('SELECT * FROM languages WHERE enabled = 1');
+
+		return $que->fetchAll();
+	}
 	
+	/**
+	 * Returns the ID of current lang.
+	 * 
+	 * @return int
+	 */
 	public static function getLangID() {
 		$lang = self::getLang();
 		

@@ -22,6 +22,7 @@ class TeamAdminView extends WView {
 	private function memberForm(array $model) {
 		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
 		$this->assign('require', 'witycms/admin');
+		$this->assign('langs', WLang::getLangs());
 		
 		$default = array(
 			'id'          => '',
