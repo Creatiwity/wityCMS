@@ -50,10 +50,12 @@ require(['jquery'], function($) {
 				var $that = $(this);
 				$that.data('lang', wity_enabled_langs[i].id);
 
-				if ($that.is('input')) {
-					$that.value = js_values[$that.attr('name') + '_' + wity_enabled_langs[i].id];
-				} else {
-					$that.html(js_values[$that.attr('name') + '_' + wity_enabled_langs[i].id]);
+				if (js_values) {
+					if ($that.is('input')) {
+						$that.value = js_values[$that.attr('name') + '_' + wity_enabled_langs[i].id];
+					} else {
+						$that.html(js_values[$that.attr('name') + '_' + wity_enabled_langs[i].id]);
+					}
 				}
 
 				$that.attr('name', $that.attr('name') + '_' + wity_enabled_langs[i].id);

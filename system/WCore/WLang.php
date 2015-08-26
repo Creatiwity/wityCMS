@@ -128,7 +128,7 @@ class WLang {
 
 		$cond = '';
 		if ($enabled) {
-			$cond = ' WHERE enabled = 1'
+			$cond = ' WHERE enabled = 1';
 		}
 
 		$que = $db->query('SELECT * FROM languages'.$cond);
@@ -162,7 +162,7 @@ class WLang {
 
 		$cond = '';
 		if ($enabled) {
-			$cond = ' WHERE enabled = 1'
+			$cond = ' WHERE enabled = 1';
 		}
 
 		$que = $db->query('SELECT id FROM languages'.$cond);
