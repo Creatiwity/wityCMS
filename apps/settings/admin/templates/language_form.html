@@ -20,13 +20,13 @@
 				</div>
 
 				<div class="form-group ">
-					<label for="date_format_short" class="control-label">{lang date_format_short}</label> <a href="http://php.net/manual/fr/function.date.php" target="_blank">{lang how it works}</a><br />
-					<input id="date_format_short" class="form-control lang" type="text" name="date_format_short" value="{$date_format_short}" autocomplete="off" placeholder="d-m-y" />
+					<label for="date_format_short" class="control-label">{lang date_format_short}</label> <a href="http://php.net/manual/fr/function.strftime.php" target="_blank">{lang how it works}</a><br />
+					<input id="date_format_short" class="form-control lang" type="text" name="date_format_short" value="{$date_format_short}" autocomplete="off" placeholder="%d-%m-%Y" />
 				</div>
 
 				<div class="form-group ">
 					<label for="date_format_long" class="control-label">{lang date_format_long}</label><br />
-					<input id="date_format_long" class="form-control lang" type="text" name="date_format_long" value="{$date_format_long}" autocomplete="off" placeholder="d-m-y H:i" />
+					<input id="date_format_long" class="form-control lang" type="text" name="date_format_long" value="{$date_format_long}" autocomplete="off" placeholder="%d-%m-%Y %H:%M" />
 				</div>
 
 				<label class="control-label">{lang enabled}</label><br />

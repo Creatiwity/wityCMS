@@ -46,7 +46,7 @@ require(['jquery'], function($) {
 				$that.attr('for', $that.attr('for') + '_' + wity_enabled_langs[i].id);
 			})
 
-			$current.find('input, textarea').each(function(){
+			$current.find('input, select, textarea').each(function(){
 				var $that = $(this);
 				$that.data('lang', wity_enabled_langs[i].id);
 
@@ -54,7 +54,7 @@ require(['jquery'], function($) {
 				$that.attr('id', $that.attr('id') + '_' + wity_enabled_langs[i].id);
 
 				if (js_values) {
-					if ($that.is('input')) {
+					if ($that.is('input') || $that.is('select')) {
 						$that.attr('value', js_values[$that.attr('name')]);
 					} else {
 						$that.html(js_values[$that.attr('name')]);
