@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WLang.php
  */
@@ -7,11 +7,11 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WLang manages everything about languages.
- * 
+ *
  * Language values are defined within application in XML files.
  * This class will calculate the most suitable language for the current user
  * and load the corresponding language files.
- * 
+ *
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johan.dufau@creatiwity.net>
@@ -22,17 +22,22 @@ class WLang {
 	 * @var array Languages to use in order of priority
 	 */
 	private static $lang = '';
-	
+
 	/**
 	 * @var array List of language directories registered
 	 */
 	private static $lang_dirs = array();
-	
+
 	/**
 	 * @var array Language values associated to their constant
 	 */
 	private static $values = array();
-	
+
+	/**
+	 * @var WDatabase
+	 */
+	private static $db;
+
 	/**
 	 * Initializes the Lang template compiler and the language of the user.
 	 */
@@ -41,36 +46,40 @@ class WLang {
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('lang', array('WLang', 'compile_lang'));
 
+		// Init database
+		self::$db = WSystem::getDB();
+		self::$db->declareTable('languages');
+
 		// Add config lang
 		self::setLang(WConfig::get('config.lang'));
-		
+
 		// Configure locale
 		setlocale(LC_ALL, WConfig::get('config.lang'));
 	}
-	
+
 	/**
 	 * Parses the languages received from the browser through header Accept-Language.
 	 * See your browser language configuration to manage your priority list.
-	 * 
+	 *
 	 * @return array List of languages prioritized
 	 */
 	public static function getBrowserLang() {
 		if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 			return array();
 		}
-		
+
 		// Exemple of $http_lang: 'fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4'
 		// q-value is a ponderation: nothing or 1 means favorite lang, 0 means to avoid
 		$http_lang = trim($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		$priority_lang = array();
-		
+
 		if (!empty($http_lang)) {
 			$accept_lang = explode(',', $http_lang);
-			
+
 			foreach ($accept_lang as $lang_and_q) {
 				$detail = explode(';', $lang_and_q);
 				$lang = strtolower(substr($detail[0], 0, 2));
-				
+
 				if (strlen($lang) == 2) { // Lang must contain 2 chars (ex: 'en')
 					// Find q-value
 					if (sizeof($detail) == 1) {
@@ -78,7 +87,7 @@ class WLang {
 					} else {
 						$q_value = floatval(substr($detail[1], 2, 4));
 					}
-					
+
 					// Updates the $priority_lang array
 					if ($q_value > 0) {
 						if (array_key_exists($lang, $priority_lang)) {
@@ -93,24 +102,24 @@ class WLang {
 				}
 			}
 		}
-		
+
 		// q-values sorting and final extraction of the ordered keys
 		arsort($priority_lang);
 		return array_keys($priority_lang);
 	}
-	
+
 	/**
 	 * Sets the language to load for the current session.
-	 * 
+	 *
 	 * @param string $lang Language name (2 letters identifier)
 	 */
 	public static function setLang($lang) {
 		self::$lang = strtolower(substr($lang, 0, 2));
 	}
-	
+
 	/**
 	 * Returns curent language of the user.
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getLang() {
@@ -119,47 +128,41 @@ class WLang {
 
 	/**
 	 * Returns langs data.
-	 * 
+	 *
 	 * @param  bool take only enabled ?
 	 * @return array
 	 */
 	public static function getLangs($enabled = false) {
-		$db = WSystem::getDB();
-
 		$cond = '';
 		if ($enabled) {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = $db->query('SELECT * FROM languages'.$cond);
+		$que = self::$db->query('SELECT * FROM languages'.$cond);
 
 		return $que->fetchAll();
 	}
-	
+
 	/**
 	 * Returns the ID of current lang.
-	 * 
+	 *
 	 * @return int
 	 */
 	public static function getLangID() {
 		$lang = self::getLang();
-		
-		$db = WSystem::getDB();
 
-		$pre = $db->prepare('SELECT id FROM languages WHERE iso = ?');
+		$pre = self::$db->prepare('SELECT id FROM languages WHERE iso = ?');
 		$pre->execute(array(strtoupper($lang)));
 		return $pre->fetch(PDO::FETCH_COLUMN);
 	}
 
 	/**
 	 * Returns the ID of default lang.
-	 * 
+	 *
 	 * @return int
 	 */
 	public static function getDefaultLangID() {
-		$db = WSystem::getDB();
-
-		$que = $db->query('SELECT id FROM languages WHERE is_default = 1');
+		$que = self::$db->query('SELECT id FROM languages WHERE is_default = 1');
 		return $que->fetch(PDO::FETCH_COLUMN);
 	}
 
@@ -170,17 +173,15 @@ class WLang {
 	 * @return array
 	 */
 	public static function getLangIDS($enabled = false) {
-		$db = WSystem::getDB();
-
 		$cond = '';
 		if ($enabled) {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = $db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC'); //Force default to be first
+		$que = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC'); //Force default to be first
 		return $que->fetchAll(PDO::FETCH_COLUMN);
 	}
-	
+
 	/**
 	 * Assigns a new language constant.
 	 * If the constant was already defined, it will keep the previous value by default.
@@ -194,10 +195,10 @@ class WLang {
 			self::$values[$name] = $value;
 		}
 	}
-	
+
 	/**
 	 * Declares a directory containing language files.
-	 * 
+	 *
 	 * @param string $dir language directory
 	 * @return boolean true if $dir is a directory, false otherwise
 	 */
@@ -205,28 +206,28 @@ class WLang {
 		if (is_dir($dir)) {
 			$dir = rtrim($dir, DS).DS;
 			$files = glob($dir.'*');
-			
+
 			if (!empty($files)) {
 				$lang_files = array();
-				
+
 				// Find all files of this dir
 				foreach ($files as $file) {
 					$lang = substr(basename($file), 0, 2);
 					$lang_files[$lang] = $file;
 				}
-				
+
 				self::$lang_dirs[str_replace(WITY_PATH, '', $dir)] = $lang_files;
-				
+
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Loads a language file.
-	 * 
+	 *
 	 * @param string $dir language file path without its extension and without the locale identifier
 	 */
 	private static function loadLangFile($file) {
@@ -241,7 +242,7 @@ class WLang {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the value in the current language associated to the $name key.
 	 *
@@ -250,11 +251,11 @@ class WLang {
 	 */
 	public static function get($name, $params = null) {
 		$name = trim($name);
-		
+
 		if (empty($name)) {
 			return '';
 		}
-		
+
 		// Load the lang value if not already set
 		foreach (self::$lang_dirs as $dir_name => $dir) {
 			if (isset($dir[self::$lang])) {
@@ -264,43 +265,43 @@ class WLang {
 			// Remove the directory treated
 			unset(self::$lang_dirs[$dir_name]);
 		}
-		
+
 		if (isset(self::$values[$name])) {
 			// Replace given parameters in the lang string
 			if (!is_null($params)) {
 				if (strpos(self::$values[$name], '%s') !== false) {
 					$args = func_get_args();
 					$args[0] = self::$values[$name];
-					
+
 					return call_user_func_array('sprintf', $args);
 				} else if (is_array($params)) {
 					$string = self::$values[$name];
 					foreach ($params as $key => $value) {
 						$string = str_replace('{{'.$key.'}}', $value, $string);
 					}
-					
+
 					return $string;
 				}
 			}
-			
+
 			return self::$values[$name];
 		} else {
 			return ucfirst(str_replace('_', ' ', $name));
 		}
 	}
-	
+
 	/**
 	 * get($name) alias
-	 * 
+	 *
 	 * Example : <code>WLang::_('LANG_ID');</code>
-	 * 
+	 *
 	 * @param string $name name as it is in the lang file
 	 * @return string value as it is after compiling the lang file
 	 */
 	public static function _($name, $params = null) {
 		return self::get($name, $params);
 	}
-	
+
 	/*****************************************
 	 * WTemplateCompiler's new handlers part *
 	 *****************************************/
@@ -309,7 +310,7 @@ class WLang {
 	 * {lang} gives access to translation variables
 	 * sprintf format (such as %s) may be use in language files like this :
 	 * {lang index|{$arg1}} = sprintf(WLang::_('index'), {$arg1})
-	 * 
+	 *
 	 * @param string $args language identifier
 	 * @return string php string that calls the WLang::get()
 	 */
@@ -317,10 +318,10 @@ class WLang {
 		if (!empty($args)) {
 			// Replace the template variables in the string
 			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
-			
+
 			$data = explode('|', $args);
 			$id = array_shift($data);
-			
+
 			if (strlen($id) > 0) {
 				// Find parameters to replace the %s in the lang string
 				$params = '';
@@ -329,15 +330,15 @@ class WLang {
 					foreach ($data as $var) {
 						$args .= '"'.$var.'", ';
 					}
-					
+
 					$params = ', '.substr($args, 0, -2);
 				}
-				
+
 				// Build final php lang string
 				return '<?php echo WLang::get("'.$id.'"'.$params.'); ?>';
 			}
 		}
-		
+
 		return '';
 	}
 }

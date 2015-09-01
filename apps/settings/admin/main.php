@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * SettingsAdminController is the Admin Controller of the Settings Application
- * 
+ *
  * @package Apps\Settings\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -22,10 +22,10 @@ class SettingsAdminController extends WController {
 
 	/**
 	 * Configuration handler
-	 * 
+	 *
 	 * @return array Settings model
 	 */
-	protected function configure() {
+	protected function configure(array $params) {
 		// Settings editable by user
 		$settings_keys = array('site_title', 'description', 'email');
 
@@ -36,7 +36,7 @@ class SettingsAdminController extends WController {
 
 		$settings['favicon'] = WConfig::get('config.favicon', '');
 		$settings['icon'] = WConfig::get('config.icon', '');
-		
+
 		// Update settings
 		$data = WRequest::getAssoc(array('update', 'settings'));
 		if ($data['update'] == 'true') {
@@ -57,9 +57,9 @@ class SettingsAdminController extends WController {
 					$upload->allowed = array('image/*');
 					$upload->file_new_name_body = $file;
 					$upload->file_overwrite = true;
-					
+
 					$upload->Process($this->upload_dir);
-					
+
 					if (!$upload->processed) {
 						WNote::error($file.'_upload_error', $upload->error);
 					} else {
@@ -69,23 +69,23 @@ class SettingsAdminController extends WController {
 					}
 				}
 			}
-			
+
 			WConfig::save('config');
 
 			WNote::success('settings_updated', WLang::get('settings_updated'));
 			$this->setHeader('Location', WRoute::getDir().'admin/settings/');
 		}
-		
+
 		// Return settings values
 		return $settings;
 	}
 
 	/**
 	 * Languages handler
-	 * 
+	 *
 	 * @return array languages
 	 */
-	public function languages($params) {
+	protected function languages(array $params) {
 
 		$action = array_shift($params);
 
@@ -112,16 +112,13 @@ class SettingsAdminController extends WController {
 			}
 			/* END VARIABLES CHECKING */
 
-			if ($post_data['enabled'] == 'on') {
-				$post_data['enabled'] = true;
-			} else {
-				$post_data['enabled'] = false;
-			}
+			$post_data['enabled'] = $post_data['enabled'] == 'on';
 
-			if ($post_data['is_default'] == 'on') {
+			$languages = WLang::getLangIDS();
+			if (empty($languages)) {
 				$post_data['is_default'] = true;
 			} else {
-				$post_data['is_default'] = false;
+				$post_data['is_default'] = $post_data['is_default'] == 'on';
 			}
 
 			if (empty($errors)) {
@@ -152,7 +149,7 @@ class SettingsAdminController extends WController {
 				}
 			} else {
 				WNote::error('language_data_error', implode('<br />', $errors));
-				
+
 				// Restore fields
 				$db_data = $post_data;
 			}
@@ -180,14 +177,14 @@ class SettingsAdminController extends WController {
 		}
 	}
 
-	public function language_delete(array $params) {
+	protected function language_delete(array $params) {
 		$id_language = intval(array_shift($params));
 
 		$language = $this->model->getLanguage($id_language);
 
 		if (!empty($language)) {
 			if (in_array('confirm', $params)) {
-				
+
 				$this->model->deleteLanguage($id_language);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');

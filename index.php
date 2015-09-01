@@ -1,9 +1,9 @@
 <?php
 /**
  * wityCMS index.php start-up file
- * 
+ *
  * Content Management System for everyone.
- * 
+ *
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
  * @version 0.5.0-dev
@@ -46,7 +46,7 @@ require_once SYS_DIR.'WCore'.DS.'WMain.php';
  */
 if (file_exists(WITY_PATH.'installer/installer.php') && !file_exists(CONFIG_DIR.'config.php')) {
 	WRoute::init();
-	
+
 	// Redirect user to root directory if not already on it
 	if (WRoute::getQuery() != '') {
 		header('Location: '.WRoute::getDir());

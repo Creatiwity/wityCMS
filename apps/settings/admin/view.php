@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * SettingsAdminView is the Admin View of the Settings Application
- * 
+ *
  * @package Apps\Settings\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -55,7 +55,7 @@ class SettingsAdminView extends WView {
 
 	public function language_delete($model) {
 		$this->assign('name', $model['name']);
-		$this->assign('confirm_delete_url', '/admin/settings/languages/language_delete/'.$model['id'].'/confirm');
+		$this->assign('confirm_delete_url', '/admin/settings/language_delete/'.$model['id'].'/confirm');
 	}
 }
 

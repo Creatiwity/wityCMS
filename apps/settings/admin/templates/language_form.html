@@ -1,5 +1,5 @@
 <div class="wity-app wity-app-slideshow wity-action-form">
-	<form method="post" enctype="multipart/form-data">	
+	<form method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-8">
 				<h2 class="sr-only">{lang slide_add}</h2>
@@ -35,7 +35,6 @@
 				<div>
 				{/if}
 					<label class="control-label">{lang enabled}</label><br />
-					<p><i>{lang Default language can not be disabled}</i></p>
 					<div class="onoffswitch">
 						<input type="checkbox" name="enabled" class="onoffswitch-checkbox" id="enabled" {if {$enabled}}checked{/if}>
 						<label class="onoffswitch-label" for="enabled">
@@ -45,7 +44,6 @@
 					</div>
 
 					<label class="control-label">{lang Use as default}</label><br />
-					<p><i>{lang To change default language, please select another one}</i></p>
 					<div class="onoffswitch">
 						<input type="checkbox" name="is_default" class="onoffswitch-checkbox" id="is_default" {if {$is_default}}checked{/if}>
 						<label class="onoffswitch-label" for="is_default">
@@ -56,7 +54,7 @@
 				</div>
 
 			</div>
-			<div class="col-md-4">		
+			<div class="col-md-4">
 				<div class="well well-sm">
 					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang save}</button>
 					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>

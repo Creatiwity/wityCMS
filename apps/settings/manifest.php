@@ -3,12 +3,12 @@
 <app>
 	<!-- Application name -->
 	<name>Settings</name>
-	
+
 	<version>0.5</version>
-	
+
 	<!-- Last update date -->
 	<date>22-10-2014</date>
-	
+
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">configure</action>
@@ -16,6 +16,5 @@
 		<action menu="false">language_add</action>
 		<action menu="false">language_edit</action>
 		<action menu="false">language_delete</action>
-		<action menu="false">languages_reorder</action>
 	</admin>
 </app>
