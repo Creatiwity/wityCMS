@@ -99,6 +99,13 @@ abstract class WController {
 		if (!empty($action)) {
 			$tpl = WSystem::getTemplate();
 
+			// Assigns action in template
+			$this->action = $action;
+
+			if (!$this->context['parent']) {
+				$tpl->assign('wity_action', $this->action, true);
+			}
+
 			$access_result = $this->hasAccess($this->getAppName(), $action);
 
 			if ($access_result !== true) {
@@ -120,12 +127,6 @@ abstract class WController {
 				}
 
 				return WNote::error('app_no_access', WLang::get('error_app_no_access', $action, $this->getAppName()));
-			}
-
-			$this->action = $action;
-
-			if (!$this->context['parent']) {
-				$tpl->assign('wity_action', $this->action, true);
 			}
 
 			// Theme configuration for admin
