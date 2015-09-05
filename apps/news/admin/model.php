@@ -67,28 +67,18 @@ class NewsAdminModel extends NewsModel {
 	}
 
 	/**
-	 * Creates a News in the database from a set of data
+	 * Create lang line.
 	 *
-	 * @param array $data
+	 * @param int $id_news
 	 * @param array $data_translatable
-	 * @return mixed ID of the new item or false on error
 	 */
-	public function createNews($data, $data_translatable) {
-		$prep = $this->db->prepare('
-			INSERT INTO news(image)
-			VALUES (:image)
-		');
-		$prep->bindParam(':image', $data['image']);
-
-		if (!$prep->execute()) {
-			return false;
-		}
-
-		$id_news = $this->db->lastInsertId();
-
-		// Create language lines
+	private function insertNewsLang($id_news, $data_translatable) {
 		$exec = true;
 		foreach ($data_translatable as $id_lang => $values) {
+			// Clean previous line
+			$prep = $this->db->prepare('DELETE FROM news_lang WHERE id_news = ? AND id_lang = ?');
+			$prep->execute(array($id_news, $id_lang));
+
 			$prep = $this->db->prepare('
 				INSERT INTO news_lang(id_news, id_lang, title, author, content, url, meta_title, meta_description, published, publish_date)
 				VALUES (:id_news, :id_lang, :title, :author, :content, :url, :meta_title, :meta_description, :published, :publish_date)
@@ -109,7 +99,30 @@ class NewsAdminModel extends NewsModel {
 			}
 		}
 
-		if ($exec) {
+		return $exec;
+	}
+
+	/**
+	 * Creates a News in the database from a set of data
+	 *
+	 * @param array $data
+	 * @param array $data_translatable
+	 * @return mixed ID of the new item or false on error
+	 */
+	public function createNews($data, $data_translatable) {
+		$prep = $this->db->prepare('
+			INSERT INTO news(image)
+			VALUES (:image)
+		');
+		$prep->bindParam(':image', $data['image']);
+
+		if (!$prep->execute()) {
+			return false;
+		}
+
+		$id_news = $this->db->lastInsertId();
+
+		if ($this->insertNewsLang($id_news, $data_translatable)) {
 			return $id_news;
 		} else {
 			return false;
@@ -137,24 +150,7 @@ class NewsAdminModel extends NewsModel {
 			return false;
 		}
 
-		// Create language lines
-		$exec = true;
-		foreach ($data_translatable as $id_lang => $values) {
-
-			$prep = $this->db->prepare('
-				DELETE FROM news_lang
-				WHERE id_news = ? AND id_lang = ?
-			');
-
-			$prep->execute(array($id_news, $id_lang));
-
-			$values['id_news'] = $id_news;
-			$values['id_lang'] = $id_lang;
-
-			$this->db->insertInto('news_lang', array('id_news', 'id_lang', 'title', 'author', 'content', 'url', 'meta_title', 'meta_description', 'published', 'publish_date'), $values);
-		}
-
-		return $exec;
+		return $this->insertNewsLang($id_news, $data_translatable);
 	}
 
 	/**
