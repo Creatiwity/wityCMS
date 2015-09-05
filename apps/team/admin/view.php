@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * TeamAdminView is the Admin View of the Team Application.
- * 
+ *
  * @package Apps\Team\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -18,12 +18,11 @@ class TeamAdminView extends WView {
 		$this->assign('require', 'witycms/admin');
 		$this->assign('members', $model['members']);
 	}
-	
+
 	private function memberForm(array $model) {
 		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
 		$this->assign('require', 'witycms/admin');
-		$this->assign('langs', WLang::getLangs());
-		
+
 		$default = array(
 			'id'          => '',
 			'name'        => '',
@@ -36,38 +35,34 @@ class TeamAdminView extends WView {
 			'title'       => '',
 			'description' => '',
 		);
-		$lang_list = WLang::getLangIDS(true);
-		
-		$js_translatable = array();
 
+		$lang_list = WLang::getLangIds();
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
 				$default[$key.'_'.$id_lang] = $value;
-				$js_translatable[$key.'_'.$id_lang] = $value;
 			}
 		}
 
-		$js_values = array();
+		$this->assignDefault($default, $model['data']);
 
-		foreach ($js_translatable as $item => $def) {
+		// Auto-translate
+		$js_values = array();
+		foreach ($default as $item => $def) {
 			$js_values[$item] = isset($model['data'][$item]) ? $model['data'][$item] : $def;
 		}
-
 		$this->assign('js_values', json_encode($js_values));
-		
-		$this->assignDefault($default, $model['data']);
-		
+
 		$this->setTemplate('member-form');
 	}
-	
+
 	public function memberAdd(array $model) {
 		$this->memberForm($model);
 	}
-	
+
 	public function memberEdit(array $model) {
 		$this->memberForm($model);
 	}
-	
+
 	public function memberDelete(array $model) {
 		$this->assign('name', $model['name']);
 		$this->assign('confirm_delete_url', '/admin/team/member-delete/'.$model['id'].'/confirm');

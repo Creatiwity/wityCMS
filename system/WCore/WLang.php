@@ -127,58 +127,61 @@ class WLang {
 	}
 
 	/**
+	 * Returns the Id of current lang.
+	 *
+	 * @return int
+	 */
+	public static function getLangId() {
+		$lang = self::getLang();
+
+		$pre = self::$db->prepare('SELECT id FROM languages WHERE iso = ?');
+		$pre->execute(array(strtoupper($lang)));
+
+		return $pre->fetch(PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * Returns the Id of default lang.
+	 *
+	 * @return int
+	 */
+	public static function getDefaultLangId() {
+		$que = self::$db->query('SELECT id FROM languages WHERE is_default = 1');
+
+		return $que->fetch(PDO::FETCH_COLUMN);
+	}
+
+	/**
 	 * Returns langs data.
 	 *
-	 * @param  bool take only enabled ?
+	 * @param  bool Take only enabled languages?
 	 * @return array
 	 */
-	public static function getLangs($enabled = false) {
+	public static function getLangs($enabled = true) {
 		$cond = '';
 		if ($enabled) {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = self::$db->query('SELECT * FROM languages'.$cond);
+		$que = self::$db->query('SELECT * FROM languages'.$cond.' ORDER BY is_default DESC');
 
 		return $que->fetchAll();
 	}
 
 	/**
-	 * Returns the ID of current lang.
-	 *
-	 * @return int
-	 */
-	public static function getLangID() {
-		$lang = self::getLang();
-
-		$pre = self::$db->prepare('SELECT id FROM languages WHERE iso = ?');
-		$pre->execute(array(strtoupper($lang)));
-		return $pre->fetch(PDO::FETCH_COLUMN);
-	}
-
-	/**
-	 * Returns the ID of default lang.
-	 *
-	 * @return int
-	 */
-	public static function getDefaultLangID() {
-		$que = self::$db->query('SELECT id FROM languages WHERE is_default = 1');
-		return $que->fetch(PDO::FETCH_COLUMN);
-	}
-
-	/**
 	 * Returns list of lang IDs
 	 *
-	 * @param  bool take only enabled ?
+	 * @param  bool Take only enabled languages?
 	 * @return array
 	 */
-	public static function getLangIDS($enabled = false) {
+	public static function getLangIds($enabled = true) {
 		$cond = '';
 		if ($enabled) {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC'); //Force default to be first
+		$que = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC');
+
 		return $que->fetchAll(PDO::FETCH_COLUMN);
 	}
 

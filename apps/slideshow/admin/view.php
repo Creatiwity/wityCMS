@@ -21,14 +21,13 @@ class SlideshowAdminView extends WView {
 	}
 
 	public function slides($model) {
+		$this->assign('require', 'witycms/admin');
 		$this->assign('slides', $model);
-		$this->assign('require', "witycms/admin");
 	}
 
 	private function slide_form($model) {
-		$this->assign('langs', WLang::getLangs());
-		$this->assign('js', "/libraries/ckeditor-4.4.7/ckeditor.js");
-		$this->assign('require', "witycms/admin");
+		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
+		$this->assign('require', 'witycms/admin');
 
 		$default = array(
 			'image' => '',
@@ -38,26 +37,22 @@ class SlideshowAdminView extends WView {
 			'title'  => '',
 			'legend' => '',
 		);
-		$lang_list = WLang::getLangIDS(true);
 
-		$js_translatable = array();
-
+		$lang_list = WLang::getLangIds();
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
 				$default[$key.'_'.$id_lang] = $value;
-				$js_translatable[$key.'_'.$id_lang] = $value;
 			}
 		}
 
-		$js_values = array();
+		$this->assignDefault($default, $model);
 
-		foreach ($js_translatable as $item => $def) {
+		// Auto-translate
+		$js_values = array();
+		foreach ($default as $item => $def) {
 			$js_values[$item] = isset($model[$item]) ? $model[$item] : $def;
 		}
-
 		$this->assign('js_values', json_encode($js_values));
-
-		$this->assignDefault($default, $model);
 
 		$this->setTemplate('slide_form');
 	}

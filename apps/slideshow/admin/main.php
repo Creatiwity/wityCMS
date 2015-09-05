@@ -29,16 +29,16 @@ class SlideshowAdminController extends WController {
 			$errors = array();
 			$post_data = WRequest::getAssoc(array('url'), null, 'POST');
 			$data_translatable = array();
-			
+
 			// Format translatable fields
 			$translatable_fields = array('title', 'legend');
-			$lang_list = WLang::getLangIDS(true);
-			$default_id = WLang::getDefaultLangID();
+			$lang_list = WLang::getLangIds();
+			$default_id = WLang::getDefaultLangId();
 
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);
-					
+
 					if (empty($value) && $id_lang != $default_id) {
 						// Use the value of the default lang
 						$data_translatable[$id_lang][$field] = $data_translatable[$default_id][$field];
@@ -47,12 +47,12 @@ class SlideshowAdminController extends WController {
 					}
 				}
 			}
-			
+
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data_translatable[$default_id]['title'])) {
 				$errors[] = WLang::get('no_title');
 			}
-			
+
 			if (!empty($post_data['url']) && strpos($post_data['url'], '://') === false) {
 				$post_data['url'] = 'http://'.$post_data['url'];
 			}
@@ -112,7 +112,7 @@ class SlideshowAdminController extends WController {
 					@unlink($this->upload_dir.basename($post_data['image']));
 					$post_data['image'] = '';
 				}
-				
+
 				// Restore fields
 				$db_data = $post_data;
 
@@ -195,30 +195,30 @@ class SlideshowAdminController extends WController {
 			return WNote::error('data_missing');
 		}
 	}
-	
+
 	protected function configuration(array $params) {
 		$config = $this->model->getConfig();
-		
+
 		$data = WRequest::getAssoc(array('update', 'config'));
-		
+
 		if ($data['update'] == 'true') {
 			foreach ($config as $key => $value) {
 				if ($key == 'autoplay') {
 					$value = intval(isset($data['config']['autoplay']));
-					
+
 					$this->model->setConfig($key, $value);
 				} else if (isset($data['config'][$key])) {
 					$this->model->setConfig($key, $data['config'][$key]);
 				}
 			}
-			
+
 			// Refresh config
 			$config = $this->model->getConfig();
-			
+
 			WNote::success('config_edited', WLang::get('config_edited'));
 			$this->setHeader('Location', WRoute::getDir().'admin/slideshow/configuration');
 		}
-		
+
 		return $config;
 	}
 

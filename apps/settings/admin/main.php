@@ -114,7 +114,7 @@ class SettingsAdminController extends WController {
 
 			$post_data['enabled'] = $post_data['enabled'] == 'on';
 
-			$languages = WLang::getLangIDS();
+			$languages = WLang::getLangIds();
 			if (empty($languages)) {
 				$post_data['is_default'] = true;
 			} else {

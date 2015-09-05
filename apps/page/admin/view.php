@@ -28,14 +28,13 @@ class PageAdminView extends WView {
 
 	public function form($model) {
 		// JS & CSS
-		$this->assign('require', 'apps!page/form');
-		$this->assign('js', "/libraries/ckeditor-4.4.7/ckeditor.js");
 		$this->assign('require', 'witycms/admin');
+		$this->assign('require', 'apps!page/form');
+		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
 
 		$this->assign('id', $model['id']);
 		$this->assign('pages', $model['pages']);
 
-		$lang_list = array(1, 2);
 		$default = array(
 			'id'            => 0,
 			'parent'        => '',
@@ -46,14 +45,14 @@ class PageAdminView extends WView {
 		$default_translatable = array(
 			'title'            => '',
 			'subtitle'         => '',
-			'content'          => '',
 			'author'           => !empty($_SESSION['firstname']) || !empty($_SESSION['lastname']) ? trim($_SESSION['firstname'].' '.$_SESSION['lastname']) : $_SESSION['nickname'],
+			'content'          => '',
 			'url'              => '',
 			'meta_title'       => '',
 			'meta_description' => '',
-			'published'        => true,
 		);
-		
+
+		$lang_list = WLang::getLangIds();
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
 				$default[$key.'_'.$id_lang] = $value;
@@ -61,6 +60,13 @@ class PageAdminView extends WView {
 		}
 
 		$this->assignDefault($default, $model['data']);
+
+		// Auto-translate
+		$js_values = array();
+		foreach ($default as $item => $def) {
+			$js_values[$item] = isset($model['data'][$item]) ? $model['data'][$item] : $def;
+		}
+		$this->assign('js_values', json_encode($js_values));
 
 		$this->setTemplate('form');
 	}
@@ -74,7 +80,7 @@ class PageAdminView extends WView {
 	}
 
 	public function delete($model) {
-		$this->assign('title', $model['title_1']);
+		$this->assign('title', $model['title_'.WLang::getLangId()]);
 		$this->assign('confirm_delete_url', '/admin/page/delete/'.$model['id'].'/confirm');
 	}
 }
