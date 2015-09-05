@@ -6,9 +6,9 @@
 	<item id="bad_data">Merci de compléter tous les champs requis.</item>
 	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
 	<item id="error_no_password">Pas de mot de passe fourni.</item>
-	<item id="nickname_bad_length">Le pseudo doit contenir entre 3 et 30 caractères.</item>
-	<item id="nickname_invalid_char">Le pseudo contient des caractères non valides (.)</item>
-	<item id="nickname_already_used">Ce pseudo est déjà en utilisation.</item>
+	<item id="nickname_bad_length">L'identifiant doit contenir entre 3 et 30 caractères.</item>
+	<item id="nickname_invalid_char">L'identifiant contient des caractères non valides (.)</item>
+	<item id="nickname_already_used">Cet identifiant est déjà en utilisation.</item>
 	<item id="email_not_valid">Cet email n'est pas valide.</item>
 	<item id="email_already_used">Cet email est déjà utilisé.</item>
 	
@@ -33,7 +33,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	
 	<!-- Register form -->
 	<item id="register_form_title">Création d'un nouveau compte</item>
-	<item id="password_conf">Confirmation </item>
+	<item id="password_conf">Mot de passe (confirmation)</item>
 	<item id="email">Email </item>
 	<item id="firstname">Prénom </item>
 	<item id="lastname">Nom </item>
@@ -50,9 +50,9 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 Identifiant : {nickname}<br />
 Mot de passe : {password}</p>
 <p>Pour finaliser votre demande, veuillez cliquer sur le lien ci-dessous :<br />
-<a href="{base}/user/confirm/{confirm}">Valider la demande</a></p>
+<a href="{base}user/confirm/{confirm}">Valider la demande</a></p>
 <p>Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navigateur :<br />
-{base}/user/confirm/{confirm}</p>
+{base}user/confirm/{confirm}</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_confirm">Pour terminer la création de votre compte, vous devez cliquer sur le lien de confirmation dans l'email que vous allez recevoir.</item>
 	<item id="user_validated">Votre compte a été validé avec succès.</item>
@@ -70,7 +70,7 @@ Vous serez notifié par email lorsque cela sera fait.</p>
 	<item id="user_register_admin_warning"><![CDATA[
 <p>Bonjour,</p>
 <p>L'utilisateur <strong>{nickname}</strong> vient de demander la création d'un compte sur le site {site_title}.<br />
-Pour l'étudier, <a href="{base}/admin/user/edit/{userid}">cliquez ici</a>.</p>
+Pour l'étudier, <a href="{base}admin/user/edit/{userid}">cliquez ici</a>.</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin"><![CDATA[Votre compte a bien été enregistrée.<br />
 Son activation nécessite l'intervention d'un administrateur.<br />
@@ -88,9 +88,9 @@ Vous serez notifié par email lorsqu'il sera validé.]]></item>
 Identifiant : {nickname}<br />
 Password : {password}</p>
 <p>Vous pouvez vous connecter à l'adresse suivante :<br />
-<a href="{base}/user/connexion/">Se connecter</a></p>
+<a href="{base}user/connexion/">Se connecter</a></p>
 <p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
-{base}/user/connexion/</p>
+{base}user/connexion/</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_success"><![CDATA[<p>Votre compte utilisateur a été créé avec succès.</p>
 <p>Vous pouvez vous connecter en <a href="/user/login/">cliquant ici</a>.</p>]]></item>
@@ -98,6 +98,7 @@ Password : {password}</p>
 	<!-- Password lost -->
 	<item id="reset_password">Réinitialisation de mot de passe</item>
 	<item id="enter_your_email">Afin de récupérer votre mot de passe, veuillez spécifier l'adresse email de votre compte.</item>
+	<item id="chose_new_password">Choisissez un nouveau mot de passe :</item>
 	<item id="submit">Envoyer</item>
 	<item id="user_password_lost_not_found">Cet email n'existe pas dans la base de données.</item>
 	<item id="user_password_lost_failure">Une erreur inconnue s'est produite lors de l'enregistrement de votre demande de changement de mot de passe dans la base de données.</item>
@@ -107,9 +108,9 @@ Password : {password}</p>
 <p>Bonjour,</p>
 <p>Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_title}.</p>
 <p>Pour passer à l'étape suivante, suivez ce lien :<br />
-<a href="{base}/user/password_lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a></p>
+<a href="{base}user/password_lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a></p>
 <p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
-{base}/user/password_lost/?email={email}&amp;confirm={confirm}</p>
+{base}user/password_lost/?email={email}&amp;confirm={confirm}</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_password_lost_success"><![CDATA[<p>Votre mot de passe a été réinitialisé avec succès.</p>
 <p>Vous pouvez vous connecter en l'utlisant à <a href="/user/login/">cette adresse</a>.</p>]]></item>

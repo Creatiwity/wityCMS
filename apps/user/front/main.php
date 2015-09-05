@@ -100,7 +100,7 @@ class UserController extends WController {
 
 			// Reload the page with GET method
 			if ($error) {
-				$this->setHeader('Location', WRoute::getDir().'/user/login');
+				$this->setHeader('Location', WRoute::getDir().'user/login');
 			}
 		}
 		

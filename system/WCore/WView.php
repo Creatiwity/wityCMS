@@ -119,7 +119,7 @@ class WView {
 	 */
 	public function setTemplate($template) {
 		$file = $template;
-		
+
 		// Use system directory separator
 		if (DS != '/') {
 			$file = str_replace('/', DS, $file);
@@ -129,10 +129,10 @@ class WView {
 		if (strpos($file, DS) === false) {
 			$file = $this->getContext('directory').'templates'.DS.$file.'.html';
 		}
-		
+
 		if (!$this->getContext('admin')) {
 			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->getContext('app-name').DS.basename($template);
-			
+
 			// Allow template overriding from theme
 			if (file_exists($theme_tpl)) {
 				$file = $theme_tpl;
@@ -172,10 +172,10 @@ class WView {
 			}
 		}
 	}
-	
+
 	/**
 	 * Assign values relatively to a default model.
-	 * 
+	 *
 	 * <code>
 	 *   $this->assignRelative(array(
 	 *     'var1' => 'default_value1',
@@ -184,7 +184,7 @@ class WView {
 	 *     'var1' => 'final_value1'
 	 *   )); // Will assign var1 = final_value1 and var2 = default_value2
 	 * </code>
-	 * 
+	 *
 	 * @param array $model Model + default values
 	 * @param array $values Values to use
 	 */
@@ -250,7 +250,7 @@ class WView {
 				foreach (self::$global_vars['css'] as $file) {
 					$css .= '<link href="'.$file.'" rel="stylesheet" type="text/css" />'."\n";
 				}
-				
+
 				return $css;
 
 			case 'js':
@@ -258,7 +258,7 @@ class WView {
 				foreach (self::$global_vars['js'] as $file) {
 					$script .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 				}
-				
+
 				return $script;
 
 			case 'require':
@@ -266,7 +266,7 @@ class WView {
 					return '';
 				}
 
-				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.js"></script>'."\n"
+				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.min.js"></script>'."\n"
 					.'<script>'."\n"
 					.'var wity_enabled_langs ='.json_encode(WLang::getLangs(true)).";\n"
 					.'var wity_base_url = "'.WRoute::getBase().'"'.";\n"
@@ -377,6 +377,7 @@ class WView {
 		// Clean the view for the next render
 		$this->templateFile = '';
 		$this->context['signature'] = '';
+		$this->render_counts[$signature] = 1;
 
 		return $this->rendered_string;
 	}

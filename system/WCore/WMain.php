@@ -22,7 +22,7 @@ class WMain {
 	public function __construct() {
 		// Loading config
 		$this->loadConfigs();
-		
+
 		// Initializing lang
 		WLang::init();
 		WLang::declareLangDir(SYS_DIR.'lang');
@@ -80,6 +80,12 @@ class WMain {
 			default: // Render in a theme
 				$view = WRetriever::getView($route['app'], $route['params'], false);
 				$theme = ($route['admin']) ? 'admin-bootstrap': WConfig::get('config.theme');
+
+				// Load language file from template
+				if ($route['admin']) {
+					WLang::declareLangDir(THEMES_DIR.'admin-bootstrap'.DS.'lang');
+				}
+
 				$response->render($view, $theme, $model);
 				break;
 		}
@@ -90,7 +96,7 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
-		
+
 		// Init template handler
 		WSystem::getTemplate();
 		WTemplateCompiler::registerCompiler('config', array('WConfig', 'compile_config'));
@@ -123,7 +129,7 @@ class WMain {
 				$error = true;
 			}
 		}
-		
+
 		if ($error) {
 			$route = WRoute::route();
 

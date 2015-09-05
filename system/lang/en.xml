@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="en">
+	<!-- General -->
+	<item id="french">French</item>
+	<item id="english">English</item>
+
 	<!-- WDate -->
 	<item id="now">now</item>
 	<item id="wdate_format">Y-m-d H:i:s</item>
@@ -17,12 +21,12 @@
 	<item id="wdate_minute_ago">1 minute ago</item>
 	<item id="wdate_seconds_ago">%s seconds ago</item>
 	<item id="wdate_second_ago">1 second ago</item>
-	
+
 	<!-- Notes -->
 	<item id="info_user_login_required">This area requires to be logged in.</item>
 	<item id="info_flood_duplicate">You already sent out this form data.</item>
 	<item id="info_flood_wait">Please, wait %s seconds between two posts.</item>
-	
+
 	<item id="error_404"><![CDATA[Sorry but wityCMS was not able to find the requested resource.
 <br /><br />
 <a href="/">Back to home</a>]]></item>

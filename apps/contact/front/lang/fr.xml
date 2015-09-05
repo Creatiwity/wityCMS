@@ -4,8 +4,8 @@
 	<item id="from_name_label">Votre nom</item>
 	<item id="from_name_placeholder">Nom</item>
 
-	<item id="from_company_label">Organisme</item>
-	<item id="from_company_placeholder">Organisme</item>
+	<item id="from_company_label">Organisation</item>
+	<item id="from_company_placeholder">Organisation</item>
 
 	<item id="from_email_label">Votre e-mail</item>
 	<item id="from_email_placeholder">E-mail</item>
@@ -30,7 +30,7 @@ Vous venez d'envoyer un email de contact sur le site {{site}}.<br /><br />
 En voici un récapitulatif :
 <ul>
 	<li><strong>Nom :</strong> {{name}}</li>
-	<li><strong>Organisme :</strong> {{company}}</li>
+	<li><strong>Organisation :</strong> {{company}}</li>
 	<li><strong>Objet :</strong> {{subject}}</li>
 	<li><strong>Message :</strong><br />
 {{message}}</li>

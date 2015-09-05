@@ -73,7 +73,7 @@ class SlideshowAdminController extends WController {
 					$post_data['image'] = '/upload/slideshow/'.$upload->file_dst_name;
 
 					// Erase the previous image
-					if (!empty($db_data['image'])) {
+					if (!empty($db_data['image']) && $post_data['image'] != $db_data['image']) {
 						@unlink($this->upload_dir.basename($db_data['image']));
 					}
 				}

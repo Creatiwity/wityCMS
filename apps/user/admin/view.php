@@ -143,6 +143,7 @@ class UserAdminView extends WView {
 
 		$this->assign('groups', $model['groups']);
 		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('default_admin', $model['default_admin']);
 
 		$this->setTemplate('groups_listing');
 	}
@@ -176,7 +177,7 @@ class UserAdminView extends WView {
 			}
 			$count_custom += $alphabet[$c];
 		}
-		
+
 		$this->assign('alphabet', $alphabet);
 		$count_total = $model->countUsers(array('groupe' => $group_id));
 		$this->assign('count_total', $count_total);

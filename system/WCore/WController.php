@@ -99,6 +99,13 @@ abstract class WController {
 		if (!empty($action)) {
 			$tpl = WSystem::getTemplate();
 
+			// Assigns action in template
+			$this->action = $action;
+
+			if (!$this->context['parent']) {
+				$tpl->assign('wity_action', $this->action, true);
+			}
+
 			$access_result = $this->hasAccess($this->getAppName(), $action);
 
 			if ($access_result !== true) {
@@ -118,13 +125,9 @@ abstract class WController {
 				if ($this->getAdminContext() && empty($_SESSION['access'])) {
 					return WNote::error('not_an_admin', WLang::get('error_not_an_admin'));
 				}
-				
+
 				return WNote::error('app_no_access', WLang::get('error_app_no_access', $action, $this->getAppName()));
 			}
-
-			$this->action = $action;
-
-			$tpl->assign('wity_action', $this->action);
 
 			// Theme configuration for admin
 			if ($this->getAdminContext()) {
@@ -186,6 +189,19 @@ abstract class WController {
 		}
 
 		return $this->context;
+	}
+
+	/**
+	 * Defines a new application's context
+	 *
+	 * @param array $context
+	 */
+	public function setContext($context) {
+		$this->context = $context;
+
+		if (!empty($this->view)) {
+			$this->view->setContext($context);
+		}
 	}
 
 	/**

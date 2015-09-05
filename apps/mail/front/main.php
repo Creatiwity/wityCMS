@@ -285,7 +285,7 @@ class MailController extends WController {
 				call_user_func_array($func, $params['attachments']);
 			} else {
 				// array(array('email'[,'name']))
-				foreach ($attachments as $attachment) {
+				foreach ($params['attachments'] as $attachment) {
 					call_user_func_array($func, $attachment);
 				}
 			}

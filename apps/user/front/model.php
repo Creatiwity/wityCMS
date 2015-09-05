@@ -31,9 +31,9 @@ class UserModel {
 	 * @return mixed true if valid or error string
 	 */
 	public function checkNickname($nickname) {
-		if (empty($nickname) || strlen($nickname) < 3 || strlen($nickname) > 30) {
+		if (empty($nickname) || strlen($nickname) < 3 || strlen($nickname) > 200) {
 			return 'nickname_bad_length';
-		} else if (preg_match('#[\.]+#', $nickname)) {
+		} else if (!WTools::isEmail($nickname) && preg_match('#[\.]+#', $nickname)) {
 			return 'nickname_invalid_char';
 		}
 		

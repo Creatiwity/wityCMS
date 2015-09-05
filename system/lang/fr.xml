@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
+	<!-- General -->
+	<item id="french">Français</item>
+	<item id="english">Anglais</item>
+
 	<!-- WDate -->
 	<item id="now">maintenant</item>
 	<item id="wdate_format">d/m/Y H:i:s</item>
@@ -17,12 +21,12 @@
 	<item id="wdate_minute_ago">il y a une minute</item>
 	<item id="wdate_seconds_ago">il y a %s secondes</item>
 	<item id="wdate_second_ago">il y a une seconde</item>
-	
+
 	<!-- Notes -->
 	<item id="info_user_login_required">Cette zone nécessite une authentification.</item>
 	<item id="info_flood_duplicate">Vous avez déjà envoyé ces informations de formulaire.</item>
 	<item id="info_flood_wait">Merci d'attendre un délai de %s seconds entre deux envois de formulaire.</item>
-	
+
 	<item id="error_404"><![CDATA[Désolé mais wityCMS n'a pas été en mesure de trouver la page demandée.
 <br /><br />
 <a href="/">Retour à l'accueil</a>]]></item>

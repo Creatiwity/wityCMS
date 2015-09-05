@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WDatabase.php
  */
@@ -7,25 +7,26 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WDatabase manages all database interactions.
- * 
+ *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @author Matthieu Raymond <matthieu.raymond@creatiwity.net>
  * @version 0.5.0-dev-29-11-2013
  */
 class WDatabase extends PDO {
 	/**
-	 * @var string Stores the table prefix which is used in the database 
+	 * @var string Stores the table prefix which is used in the database
 	 */
 	private $tablePrefix = "";
-	
+
 	/**
-	 * @var array List of all tables that will be automatically prefixed 
+	 * @var array List of all tables that will be automatically prefixed
 	 */
 	private $tables = array();
-	
+
 	/**
 	 * Opens the PDO connection with the database.
-	 * 
+	 *
 	 * @param string $dsn database server
 	 * @param string $user username
 	 * @param string $password password
@@ -35,7 +36,7 @@ class WDatabase extends PDO {
 		if (!class_exists('PDO')) {
 			throw new Exception("WDatabase::__construct(): Class PDO not found.");
 		}
-		
+
 		try {
 			# Bug in PHP5.3 : PDO::MYSQL_ATTR_INIT_COMMAND constant does not exist
 			@parent::__construct($dsn, $user, $password);
@@ -44,25 +45,25 @@ class WDatabase extends PDO {
 			if ($message == "could not find driver") {
 				$message = WLang::get('error_could_not_find_pdo');
 			}
-			
+
 			WNote::error('error_sql_conn_failed', WLang::get('error_sql_conn_failed', $message), 'debug, die');
 		}
-		
+
 		$this->tablePrefix = WConfig::get('database.prefix');
 	}
-	
+
 	/**
 	 * Declare a new table in order to be automatically prefixed.
-	 * 
+	 *
 	 * @param string $table table's name
 	 */
 	public function declareTable($table) {
 		$this->tables[] = $table;
 	}
-	
+
 	/**
 	 * Transforms a query into another query with prefixed tables.
-	 * 
+	 *
 	 * @param type $querystring query without prefix
 	 * @return string query with all tables contained in the $table private property prefixed
 	 */
@@ -72,66 +73,66 @@ class WDatabase extends PDO {
 				$querystring = preg_replace('#([^a-z0-9_])'.$table.'([^a-z0-9_]|$)#', '$1'.$this->tablePrefix.$table.'$2', $querystring);
 			}
 		}
-		
+
 		return $querystring;
 	}
-	
+
 	/**
 	 * Automatically maps created_date, created_by and modified_date, modified_by fields in a request.
-	 * 
-	 * Whenever an INSERT or UPDATE request is sent, this function will slightly modify the request to 
+	 *
+	 * Whenever an INSERT or UPDATE request is sent, this function will slightly modify the request to
 	 * update two default columns: created_date and created_by for an INSERT request or
 	 * modified_date and modified_by for an UPDATE request.
-	 * 
+	 *
 	 * @param string $querystring
 	 * @return string
 	 */
 	private function setupDefaultFields($querystring) {
 		$querystring = trim($querystring);
-		
+
 		if (preg_match('#^UPDATE#', $querystring)) {
 			$querystring = str_replace('SET', 'SET modified_by = '.(isset($_SESSION['userid']) ? $_SESSION['userid'] : 0).', ', $querystring);
 		} else if (preg_match('#^INSERT#', $querystring)) {
 			$fields = '';
 			$values = '';
-			
+
 			if (strpos($querystring, 'created_date') === false) {
 				$fields = '`created_date`, ';
 				$values = 'NOW(), ';
 			}
-			
+
 			if (strpos($querystring, 'created_by') === false) {
 				$fields .= '`created_by`, ';
 				$values .= (isset($_SESSION['userid']) ? $_SESSION['userid'] : 0).', ';
 			}
-			
+
 			if (!empty($fields)) {
 				$querystring = preg_replace('#^INSERT INTO `?([a-zA-Z0-9_]+)`?\s*\((.+)\)#', 'INSERT INTO `$1` ('.$fields.'$2)', $querystring);
 				$querystring = preg_replace('#VALUES\s*\(#', 'VALUES('.$values, $querystring);
 			}
 		}
-		
+
 		return $querystring;
 	}
-	
+
 	/**
 	 * Executes the query and returns the response.
-	 * 
+	 *
 	 * @param string $querystring
 	 * @return PDOStatement|false a PDOStatement object or false if an error occurred
 	 */
 	public function query($querystring) {
 		$querystring = $this->setupDefaultFields($querystring);
 		$querystring = $this->prefixTables($querystring);
-		
+
 		return parent::query($querystring);
 	}
-	
+
 	/**
 	 * Prepares a statement for execution and returns a statement object.
-	 * 
+	 *
 	 * @todo Catch the eventual exception thrown by PDO::prepare
-	 * 
+	 *
 	 * @param string $querystring the query that will be prepared
 	 * @param string $driver_options optional list of key=>value pairs
 	 * @return PDOStatement|false a PDOStatement object or false if an error occurred
@@ -139,11 +140,11 @@ class WDatabase extends PDO {
 	public function prepare($querystring, $driver_options = array()) {
 		$querystring = $this->setupDefaultFields($querystring);
 		$querystring = $this->prefixTables($querystring);
-		
+
 		return parent::prepare($querystring, $driver_options);
 	}
 
-	/** 
+	/**
 	 * Insert a new row in table and return its id
 	 *
 	 * @param string        $table table name
@@ -154,33 +155,42 @@ class WDatabase extends PDO {
 	 */
 	public function insertInto($table, $fields, $data) {
 		$req = 'INSERT INTO `'.$table.'`(';
+
 		foreach ($fields as $key) {
-			$req .= '`'.$key.'`, ';
+			$req .= $key.', ';
 		}
+
 		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
+
 		$req .= ') VALUES (';
+
 		foreach ($fields as $key) {
 			$req .= ':'.$key.', ';
 		}
+
 		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
+
 		$req .= ')';
+
 		$prep = $this->prepare($req);
+
 		foreach ($fields as $key) {
 			$data[$key] = isset($data[$key]) ? $data[$key] : '';
 			$prep->bindParam(':'.$key, $data[$key]);
 		}
-		
+
 		if ($prep->execute()) {
 			return $this->lastInsertId();
 		} else {
 			return false;
 		}
 	}
-	/** 
+
+	/**
 	 * Update a table and return the numbers of row affected
 	 *
 	 * @param string        $table table name
@@ -192,19 +202,24 @@ class WDatabase extends PDO {
 	 */
 	public function update($table, $fields, $data, $cond = '1') {
 		$req = 'UPDATE `'.$table.'` SET ';
+
 		foreach ($fields as $key) {
-			$req .= '`'.$key.'` = :'.$key.', ';
+			$req .= $key.' = :'.$key.', ';
 		}
+
 		if (count($fields) >= 1) {
 			$req = substr($req, 0, -2);
 		}
+
 		$req .= ' WHERE '.$cond;
+
 		$prep = $this->prepare($req);
+
 		foreach ($fields as $key) {
 			$data[$key] = isset($data[$key]) ? $data[$key] : '';
 			$prep->bindParam(':'.$key, $data[$key]);
 		}
-		
+
 		return $prep->execute();
 	}
 }

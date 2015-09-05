@@ -50,10 +50,10 @@ Nickname: {nickname}<br />
 Password: {password}</p>
 
 <p>To validate your account, please follow this link:<br />
-<a href="{base}/user/confirm/{confirm}">Validate your account</a></p>
+<a href="{base}user/confirm/{confirm}">Validate your account</a></p>
 
 <p>If the link does not work, paste this link in your browser:<br />
-{base}/user/confirm/{confirm}</p>
+{base}user/confirm/{confirm}</p>
 
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_confirm">To finish your account creation, you have to click on the link in the email you are going to receive.</item>
@@ -71,7 +71,7 @@ You will be noticed as soon as it will be done.</p>
 	<item id="user_register_admin_warning"><![CDATA[
 <p>Hello,</p>
 <p>The account <strong>{nickname}</strong> needs to be validated on {site_title}.<br />
-To check it, <a href="{base}/admin/user/edit/{userid}">follow this link</a>.</p>
+To check it, <a href="{base}admin/user/edit/{userid}">follow this link</a>.</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin"><![CDATA[Your account got registered.<br />
 It needs to be validated by an administrator.<br />
@@ -88,9 +88,9 @@ You will be notified once it will be done.]]></item>
 Nickname: {nickname}<br />
 Password: {password}</p>
 <p>You can login with your account on the website:
-<a href="{base}/user/login/">Login</a></p>
+<a href="{base}user/login/">Login</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
-{base}/user/login/</p>
+{base}user/login/</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_success"><![CDATA[<p>Your account was created successfully.</p>
 <p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
@@ -98,6 +98,7 @@ Password: {password}</p>
 	<!-- Password lost -->
 	<item id="reset_password">Reset your password</item>
 	<item id="enter_your_email">To change your password, please enter your email adress.</item>
+	<item id="chose_new_password">Chose a new password:</item>
 	<item id="submit">Submit</item>
 	<item id="user_password_lost_not_found">This email does not exist in the database.</item>
 	<item id="user_password_lost_failure">An unknown error occured while saving your password reset demand in the database.</item>
@@ -107,9 +108,9 @@ Password: {password}</p>
 <p>Hello,</p>
 <p>You just ask for a password change on {site_title}.</p>
 <p>To get to the next step, please, follow this link:<br />
-<a href="{base}/user/password-lost/?email={email}&amp;confirm={confirm}">Change your password</a></p>
+<a href="{base}user/password-lost/?email={email}&amp;confirm={confirm}">Change your password</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
-{base}/user/password-lost/?email={email}&amp;confirm={confirm}</p>
+{base}user/password-lost/?email={email}&amp;confirm={confirm}</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_password_lost_success"><![CDATA[<p>Your password was changed successfully.</p>
 <p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
