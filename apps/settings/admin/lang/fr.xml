@@ -16,11 +16,12 @@
 	<item id="delete_confirm">Êtes vous sur de vouloir supprimer la langue :</item>
 	<item id="language">Langue</item>
 	<item id="languages">Langues</item>
+	<item id="language_add">Ajouter une langue</item>
+	<item id="language_edit">Modifier une langue</item>
 	<item id="enabled">Activé</item>
 	<item id="date_format_short">Date (format court)</item>
 	<item id="date_format_long">Date (format long)</item>
 	<item id="how it works">Comment ça marche ?</item>
-	<item id="language_add">Ajouter une langue</item>
 	<item id="Use as default">Utiliser comme langue par défaut</item>
 	<item id="default">Par défaut</item>
 	<item id="This is your default language, you can't disable it">Ceci est votre langue par défaut, vous ne pouvez pas la désactiver</item>

@@ -29,15 +29,15 @@ class SettingsAdminView extends WView {
 	}
 
 	private function language_form($model) {
-
 		$this->assign('css', '/apps/settings/admin/css/settings.css');
-		$this->assign('require', "witycms/admin");
+		$this->assign('require', 'witycms/admin');
 		$default = array(
+			'id'                => 0,
 			'name'              => '',
 			'iso'               => '',
 			'code'              => '',
-			'date_format_short' => '',
-			'date_format_long'  => '',
+			'date_format_short' => '%d/%m/%Y',
+			'date_format_long'  => '%d/%m/%Y %H:%M',
 			'enabled'           => 1,
 			'is_default'        => 0
 		);

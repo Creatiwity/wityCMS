@@ -1,9 +1,10 @@
 <div class="wity-app wity-app-settings wity-action-configure">
 	<form action="/admin/settings/" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<h1 class="sr-only">{lang settings}</h1>
+
 		<fieldset>
 			<legend>{lang SEO}</legend>
 
-			<h2 class="sr-only">{lang action_settings}</h2>
 			<div class="form-group">
 				<label for="site_title" class="col-sm-2 control-label">{lang site_title}</label>
 				<div class="col-sm-10 col-lg-5">
@@ -52,10 +53,9 @@
 				</div>
 			</div>
 		</fieldset>
-		
+
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-				<input type="hidden" name="update" value="true" />
 				<input class="btn btn-large btn-primary" type="submit" value="{lang submit}" />
 			</div>
 		</div>

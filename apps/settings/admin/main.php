@@ -38,8 +38,9 @@ class SettingsAdminController extends WController {
 		$settings['icon'] = WConfig::get('config.icon', '');
 
 		// Update settings
-		$data = WRequest::getAssoc(array('update', 'settings'));
-		if ($data['update'] == 'true') {
+		if (WRequest::getMethod() == 'POST') {
+			$data = WRequest::getAssoc(array('update', 'settings'));
+
 			foreach ($settings_keys as $key) {
 				if (isset($data['settings'][$key])) {
 					// Direct user input: all characters are accepted here
@@ -86,7 +87,6 @@ class SettingsAdminController extends WController {
 	 * @return array languages
 	 */
 	protected function languages(array $params) {
-
 		$action = array_shift($params);
 
 		if ($action == 'language_add') {
@@ -99,9 +99,9 @@ class SettingsAdminController extends WController {
 	}
 
 	private function language_form($id_language = 0, $db_data = array()) {
-		if (!empty($_POST)) {
-			$errors = array();
+		if (WRequest::getMethod() == 'POST') {
 			$post_data = WRequest::getAssoc(array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled', 'is_default'), null, 'POST');
+			$errors = array();
 			$required = array('name', 'iso');
 
 			/* BEGING VARIABLES CHECKING */
@@ -123,20 +123,16 @@ class SettingsAdminController extends WController {
 
 			if (empty($errors)) {
 				if (empty($id_language)) { // Add case
-					$id_language = $this->model->insertLanguage($post_data);
-
-					if ($id_language) {
-						$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
-						WNote::success('language_added');
-
+					if ($id_language = $this->model->insertLanguage($post_data)) {
 						$db_data = $this->model->getLanguage($id_language);
+						WNote::success('language_added');
 					} else {
 						$db_data = $post_data;
 						WNote::error('language_not_added');
 					}
 				} else { // Edit case
 					if ($this->model->updateLanguage($id_language, $post_data)) {
-						$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
+						$db_data = $this->model->getLanguage($id_language);
 						WNote::success('language_edited');
 					} else {
 						$db_data = $post_data;
@@ -147,14 +143,25 @@ class SettingsAdminController extends WController {
 				if ($post_data['is_default']) {
 					$this->model->setDefaultLanguage($db_data['id']);
 				}
+
+				$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
 			} else {
 				WNote::error('language_data_error', implode('<br />', $errors));
 
+				if (empty($id_language)) {
+					$this->setHeader('Location', WRoute::getDir().'admin/settings/language_add');
+				} else {
+					$post_data['id'] = $id_language;
+					$this->setHeader('Location', WRoute::getDir().'admin/settings/language_edit/'.$id_language);
+				}
+
 				// Restore fields
-				$db_data = $post_data;
+				$_SESSION['settings_languages_post_data'] = $post_data;
 			}
+		} else if (!empty($_SESSION['settings_languages_post_data'])) {
+			$db_data = $_SESSION['settings_languages_post_data'];
+			unset($_SESSION['settings_languages_post_data']);
 		}
-		$db_data['form'] = true;
 
 		return $db_data;
 	}
