@@ -21,13 +21,13 @@ class SlideshowAdminView extends WView {
 	}
 
 	public function slides($model) {
+		$this->assign('require', 'witycms/admin');
 		$this->assign('slides', $model);
-		$this->assign('require', "witycms/admin");
 	}
 
 	private function slide_form($model) {
-		$this->assign('js', "/libraries/ckeditor-4.4.7/ckeditor.js");
-		$this->assign('require', "witycms/admin");
+		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
+		$this->assign('require', 'witycms/admin');
 
 		$default = array(
 			'image' => '',
@@ -37,8 +37,8 @@ class SlideshowAdminView extends WView {
 			'title'  => '',
 			'legend' => '',
 		);
-		$lang_list = array(1, 2);
 
+		$lang_list = WLang::getLangIds();
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
 				$default[$key.'_'.$id_lang] = $value;
@@ -46,6 +46,13 @@ class SlideshowAdminView extends WView {
 		}
 
 		$this->assignDefault($default, $model);
+
+		// Auto-translate
+		$js_values = array();
+		foreach ($default as $item => $def) {
+			$js_values[$item] = isset($model[$item]) ? $model[$item] : $def;
+		}
+		$this->assign('js_values', json_encode($js_values));
 
 		$this->setTemplate('slide_form');
 	}
@@ -59,7 +66,7 @@ class SlideshowAdminView extends WView {
 	}
 
 	public function slide_delete($model) {
-		$this->assign('title', $model['title_1']);
+		$this->assign('name', $model['name']);
 		$this->assign('confirm_delete_url', '/admin/slideshow/slide_delete/'.$model['id'].'/confirm');
 	}
 

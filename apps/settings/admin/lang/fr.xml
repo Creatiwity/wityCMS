@@ -2,7 +2,7 @@
 <lang value="fr">
 	<!-- Actions -->
 	<item id="configure">Configuration</item>
-	
+
 	<!-- Configure -->
 	<item id="site_title">Titre du site</item>
 	<item id="description">Description pour le référencement (environ 125 caractères)</item>
@@ -11,7 +11,30 @@
 	<item id="favicon">Favicon (.ico)</item>
 	<item id="icon">Icône du site (32x32 px)</item>
 	<item id="submit">Envoyer</item>
-	
+
+	<!-- Language -->
+	<item id="delete_confirm">Êtes vous sur de vouloir supprimer la langue :</item>
+	<item id="language">Langue</item>
+	<item id="languages">Langues</item>
+	<item id="language_add">Ajouter une langue</item>
+	<item id="language_edit">Modifier une langue</item>
+	<item id="enabled">Activé</item>
+	<item id="date_format_short">Date (format court)</item>
+	<item id="date_format_long">Date (format long)</item>
+	<item id="how it works">Comment ça marche ?</item>
+	<item id="Use as default">Utiliser comme langue par défaut</item>
+	<item id="default">Par défaut</item>
+	<item id="This is your default language, you can't disable it">Ceci est votre langue par défaut, vous ne pouvez pas la désactiver</item>
+	<item id="no_language_in_database">Aucune langue dans la base de données.</item>
+	<item id="language_added">La langue a été ajoutée avec succès.</item>
+	<item id="language_not_added">Une erreur s'est produite lors de l'ajout de la langue.</item>
+	<item id="language_edited">La langue a été éditée avec succès.</item>
+	<item id="language_not_edited">Une erreur s'est produite lors de l'ajout de la langue.</item>
+	<item id="language_data_error">Des données sont manquantes.</item>
+	<item id="language_delete">Supprimer une langue</item>
+	<item id="language_delete_confirm">Voulez-vous vraiment supprimer la langue %s ?</item>
+	<item id="language_deleted">La langue a été supprimée avec succès.</item>
+
 	<!-- Messages -->
 	<item id="settings_updated">La configuration a été mise à jour avec succès.</item>
 </lang>

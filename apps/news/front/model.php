@@ -114,18 +114,19 @@ class NewsModel {
 		}
 
 		$id_lang = WLang::getLangID();
+		$default_lang = WLang::getDefaultLangID();
 		
 		$prep = $this->db->prepare('
 			SELECT DISTINCT(id), news.*, news_lang.*
 			FROM news
 			LEFT JOIN news_lang
-			ON id = news_lang.id_news AND id_lang = :id_lang
+			ON id = news_lang.id_news AND (id_lang = :id_lang)
 			LEFT JOIN news_cats_relations
 			ON id = news_cats_relations.id_news
 			LEFT JOIN news_cats
 			ON id_cat = cid
 			WHERE 1 = 1 '.$cond.'
-			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
+			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').', ABS('.$default_lang.' - id_lang) ASC 
 			LIMIT :start, :number
 		');
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);

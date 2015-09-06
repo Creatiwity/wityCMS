@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * TeamAdminController is the Admin Controller of the Team Application.
- * 
+ *
  * @package Apps\Team\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -19,7 +19,7 @@ class TeamAdminController extends WController {
 	public function __construct() {
 		$this->upload_dir = WITY_PATH.'upload'.DS.'team'.DS;
 	}
-	
+
 	protected function members(array $params) {
 		return array(
 			'members' => $this->model->getMembers()
@@ -34,14 +34,16 @@ class TeamAdminController extends WController {
 
 			// Format translatable fields
 			$translatable_fields = array('title', 'description');
-			$lang_list = array(1, 2);
+			$lang_list = WLang::getLangIds();
+			$default_id = WLang::getDefaultLangId();
+
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);
-					
-					if (empty($value) && $i > 0) {
+
+					if (empty($value) && $id_lang != $default_id) {
 						// Use the value of the default lang
-						$data_translatable[$id_lang][$field] = $data_translatable[$lang_list[0]][$field];
+						$data_translatable[$id_lang][$field] = $data_translatable[$default_id][$field];
 					} else {
 						$data_translatable[$id_lang][$field] = $value;
 					}
@@ -52,8 +54,8 @@ class TeamAdminController extends WController {
 			if (empty($data['name'])) {
 				$errors[] = WLang::get('no_name');
 			}
-			
-			if (empty($data_translatable[$lang_list[0]]['title'])) {
+
+			if (empty($data_translatable[$default_id]['title'])) {
 				$errors[] = WLang::get('no_title');
 			}
 			/* END VARIABLES CHECKING */
@@ -72,7 +74,7 @@ class TeamAdminController extends WController {
 					$data['image'] = $db_data['image'];
 				} else {
 					$data['image'] = '/upload/team/'.$upload->file_dst_name;
-					
+
 					// Erase the previous image
 					if (!empty($db_data['image'])) {
 						@unlink($this->upload_dir.basename($db_data['image']));
@@ -98,7 +100,7 @@ class TeamAdminController extends WController {
 					$data['image_hover'] = $db_data['image_hover'];
 				} else {
 					$data['image_hover'] = '/upload/team/'.$upload->file_dst_name;
-					
+
 					// Erase the previous image_hover
 					if (!empty($db_data['image_hover'])) {
 						@unlink($this->upload_dir.basename($db_data['image_hover']));
@@ -112,7 +114,7 @@ class TeamAdminController extends WController {
 
 			if (empty($errors)) {
 				if (empty($id_member)) { // Add case
-					if ($id_member = $this->model->createMember($data, $data_translatable)) { 
+					if ($id_member = $this->model->createMember($data, $data_translatable)) {
 						WNote::success('member_added', WLang::get('member_added', $data['name']));
 					} else {
 						WNote::error('member_not_added', WLang::get('db_unknown_error'));
@@ -133,9 +135,9 @@ class TeamAdminController extends WController {
 				$db_data = $data;
 			}
 		}
-		
+
 		return array(
-			'id'    => $id_member, 
+			'id'    => $id_member,
 			'data'  => $db_data
 		);
 	}
@@ -143,12 +145,12 @@ class TeamAdminController extends WController {
 	protected function memberAdd(array $params) {
 		return $this->memberForm();
 	}
-	
+
 	protected function memberEdit(array $params) {
 		$id_member = intval(array_shift($params));
 
 		$data = $this->model->getMember($id_member);
-		
+
 		// Check whether this item exists
 		if (!empty($data)) {
 			return $this->memberForm($id_member, $data);
@@ -157,24 +159,24 @@ class TeamAdminController extends WController {
 			return WNote::error('member_not_found', WLang::get('member_not_found'));
 		}
 	}
-	
+
 	protected function memberDelete(array $params) {
 		$id_member = intval(array_shift($params));
 		$data = $this->model->getMember($id_member);
-		
+
 		// Check existence
 		if ($data === false) {
 			$this->setHeader('Location', WRoute::getDir().'admin/team');
 			return WNote::error('member_not_found', WLang::get('member_not_found'));
 		}
-		
+
 		if (in_array('confirm', $params)) {
 			$this->model->deleteMember($id_member);
-			
+
 			$this->setHeader('Location', WRoute::getDir() . 'admin/team');
 			WNote::success('member_deleted', WLang::get('member_deleted'));
 		}
-		
+
 		return $data;
 	}
 

@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * PageAdminController is the Admin Controller of the Page Application
- * 
+ *
  * @package Apps\Page\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -19,14 +19,14 @@ class PageAdminController extends WController {
 	public function __construct() {
 		$this->upload_dir = WITY_PATH.'upload'.DS.'page'.DS;
 	}
-	
+
 	/**
 	 * Handle page Listing action
 	 */
 	protected function pages(array $params) {
 		$n = 30; // Items per page
 		$page = 1;
-		
+
 		if (!empty($params[0])) {
 			$page_params = intval($params[0]);
 
@@ -34,7 +34,7 @@ class PageAdminController extends WController {
 				$page = $page_params;
 			}
 		}
-		
+
 		return array(
 			'data'          => $this->model->getPages(($page-1)*$n, $n),
 			'total'         => $this->model->countPages(),
@@ -42,22 +42,22 @@ class PageAdminController extends WController {
 			'page_per_page' => $n,
 		);
 	}
-	
+
 	/**
 	 * - Handles Add action
 	 * - Prepares page form
 	 */
 	private function form($id_page = 0, $db_data = array()) {
-		$data = array();
-
-		if (!empty($_POST)) {
+		if (WRequest::getMethod() == 'POST') {
 			$errors = array();
-			$data = WRequest::getAssoc(array('parent'));
+			$post_data = WRequest::getAssoc(array('parent'));
 			$data_translatable = array();
-			
+
 			// Format translatable fields
 			$translatable_fields = array('title', 'subtitle', 'content', 'author', 'url', 'meta_title', 'meta_description');
-			$lang_list = array(1, 2);
+			$lang_list = WLang::getLangIds();
+			$default_id = WLang::getDefaultLangId();
+
 			foreach ($translatable_fields as $field) {
 				foreach ($lang_list as $i => $id_lang) {
 					$value = WRequest::get($field.'_'.$id_lang);
@@ -67,27 +67,27 @@ class PageAdminController extends WController {
 						$value = preg_replace('#[^a-zA-Z0-9\/\._-]+#', '-', $value);
 						$value = trim($value, '-');
 					}
-					
-					if (empty($value) && $i > 0) {
+
+					if (($value === null || $value === '') && $id_lang != $default_id) {
 						// Use the value of the default lang
-						$data_translatable[$id_lang][$field] = $data_translatable[$lang_list[0]][$field];
+						$data_translatable[$id_lang][$field] = $data_translatable[$default_id][$field];
 					} else {
 						$data_translatable[$id_lang][$field] = $value;
 					}
 				}
 			}
-			
+
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data_translatable[$lang_list[0]]['title'])) {
 				$errors[] = WLang::get('page_no_title');
 			}
-			
+
 			// Treat custom page URL
 			if (empty($data_translatable[$lang_list[0]]['url'])) {
 				$errors[] = WLang::get('page_no_permalink');
 			}
 
-			$data['menu'] = '';
+			$post_data['menu'] = false;
 			/* END VARIABLES CHECKING */
 
 			// Image
@@ -101,38 +101,38 @@ class PageAdminController extends WController {
 
 				if (!$upload->processed) {
 					$errors[] = $upload->error;
-					$data['image'] = $db_data['image'];
+					$post_data['image'] = $db_data['image'];
 				} else {
-					$data['image'] = '/upload/page/'.$upload->file_dst_name;
-					
+					$post_data['image'] = '/upload/page/'.$upload->file_dst_name;
+
 					// Erase the previous image
 					if (!empty($db_data['image'])) {
 						@unlink($this->upload_dir.basename($db_data['image']));
 					}
 				}
 			} else if (!empty($id_page)) {
-				$data['image'] = $db_data['image'];
+				$post_data['image'] = $db_data['image'];
 			} else {
-				$data['image'] = '';
+				$post_data['image'] = '';
 			}
-			
+
 			if (empty($errors)) {
 				if (empty($id_page)) { // Add case
-					if ($id_page = $this->model->createPage($data, $data_translatable)) { 
+					if ($id_page = $this->model->createPage($post_data, $data_translatable)) {
 						// Create custom route
 						foreach ($lang_list as $i => $id_lang) {
 							if (!empty($data_translatable[$id_lang]['url'])) {
 								WRoute::defineCustom($data_translatable[$id_lang]['url'], '/page/'.$id_page);
 							}
 						}
-						
+
 						$this->setHeader('Location', WRoute::getDir().'admin/page/edit/'.$id_page.'-'.$data_translatable[$lang_list[0]]['url']);
 						return WNote::success('page_added', WLang::get('page_added', $data_translatable[$lang_list[0]]['title']));
 					} else {
 						WNote::error('page_not_added', WLang::get('page_not_added'));
 					}
 				} else { // Edit case
-					if ($this->model->updatePage($id_page, $data, $data_translatable)) {
+					if ($this->model->updatePage($id_page, $post_data, $data_translatable)) {
 						// Create custom route
 						foreach ($lang_list as $i => $id_lang) {
 							if ($db_data['url_'.$id_lang] != $data_translatable[$id_lang]['url']) {
@@ -140,7 +140,7 @@ class PageAdminController extends WController {
 								WRoute::defineCustom($data_translatable[$id_lang]['url'], '/page/'.$id_page);
 							}
 						}
-						
+
 						$this->setHeader('Location', WRoute::getDir().'admin/page/edit/'.$id_page.'-'.$data_translatable[$lang_list[0]]['url']);
 						return WNote::success('page_edited', WLang::get('page_edited', $data_translatable[$lang_list[0]]['title']));
 					} else {
@@ -149,12 +149,12 @@ class PageAdminController extends WController {
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
-				$db_data = $data;
+				$db_data = $post_data;
 			}
 		}
-		
+
 		return array(
-			'id'    => $id_page, 
+			'id'    => $id_page,
 			'data'  => $db_data,
 			'pages' => $this->model->getPages()
 		);
@@ -166,7 +166,7 @@ class PageAdminController extends WController {
 	protected function add($params) {
 		return $this->form();
 	}
-	
+
 	/**
 	 * Handles Edit action
 	 */
@@ -174,7 +174,7 @@ class PageAdminController extends WController {
 		$id_page = intval(array_shift($params));
 
 		$db_data = $this->model->getPage($id_page);
-		
+
 		// Check whether this page exists
 		if (!empty($db_data)) {
 			return $this->form($id_page, $db_data);
@@ -183,7 +183,7 @@ class PageAdminController extends WController {
 			return WNote::error('page_not_found', WLang::get('page_not_found'));
 		}
 	}
-	
+
 	/**
 	 * Handles page Delete action
 	 */
@@ -191,28 +191,28 @@ class PageAdminController extends WController {
 		$id_page = intval(array_shift($params));
 
 		$db_data = $this->model->getPage($id_page);
-		
+
 		if (!empty($db_data)) {
 			if (in_array('confirm', $params)) {
 				$this->model->deletePage($id_page);
-				
+
 				if (!empty($db_data['image'])) {
 					@unlink($this->upload_dir.$db_data['image']);
 				}
-				
+
 				// Delete custom route
 				$lang_list = array(1, 2);
 				foreach ($lang_list as $i => $id_lang) {
 					WRoute::deleteCustom($db_data['url_'.$id_lang]);
 				}
-				
+
 				// Treat child pages
 				$this->model->removeParentPage($id_page);
-				
+
 				WNote::success('page_deleted', WLang::get('page_deleted', $db_data['title_1']));
 				$this->setHeader('Location', WRoute::getDir().'admin/page');
 			}
-			
+
 			return $db_data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/page');

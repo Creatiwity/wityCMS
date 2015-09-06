@@ -25,7 +25,7 @@ class NewsAdminModel extends NewsModel {
 
 	/**
 	 * Retrieves all data linked to a News
-	 * 
+	 *
 	 * @param int $id_news
 	 * @return array
 	 */
@@ -33,7 +33,7 @@ class NewsAdminModel extends NewsModel {
 		if (empty($id_news)) {
 			return false;
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT *
 			FROM news
@@ -41,13 +41,13 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		$news = $prep->fetch(PDO::FETCH_ASSOC);
-		
+
 		if (!empty($news)) {
 			$news['cats'] = $this->getCatsOfNews($id_news);
 		}
-		
+
 		// Get lang fields
 		$prep = $this->db->prepare('
 			SELECT *
@@ -56,39 +56,29 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			foreach ($data as $key => $value) {
 				$news[$key.'_'.$data['id_lang']] = $value;
 			}
 		}
-		
+
 		return $news;
 	}
-	
+
 	/**
-	 * Creates a News in the database from a set of data
-	 * 
-	 * @param array $data
+	 * Create lang line.
+	 *
+	 * @param int $id_news
 	 * @param array $data_translatable
-	 * @return mixed ID of the new item or false on error
 	 */
-	public function createNews($data, $data_translatable) {
-		$prep = $this->db->prepare('
-			INSERT INTO news(image)
-			VALUES (:image)
-		');
-		$prep->bindParam(':image', $data['image']);
-		
-		if (!$prep->execute()) {
-			return false;
-		}
-		
-		$id_news = $this->db->lastInsertId();
-		
-		// Create language lines
+	private function insertNewsLang($id_news, $data_translatable) {
 		$exec = true;
 		foreach ($data_translatable as $id_lang => $values) {
+			// Clean previous line
+			$prep = $this->db->prepare('DELETE FROM news_lang WHERE id_news = ? AND id_lang = ?');
+			$prep->execute(array($id_news, $id_lang));
+
 			$prep = $this->db->prepare('
 				INSERT INTO news_lang(id_news, id_lang, title, author, content, url, meta_title, meta_description, published, publish_date)
 				VALUES (:id_news, :id_lang, :title, :author, :content, :url, :meta_title, :meta_description, :published, :publish_date)
@@ -103,22 +93,45 @@ class NewsAdminModel extends NewsModel {
 			$prep->bindParam(':meta_description', $values['meta_description']);
 			$prep->bindParam(':published', $values['published']);
 			$prep->bindParam(':publish_date', $values['publish_date']);
-			
+
 			if (!$prep->execute()) {
 				$exec = false;
 			}
 		}
-		
-		if ($exec) {
+
+		return $exec;
+	}
+
+	/**
+	 * Creates a News in the database from a set of data
+	 *
+	 * @param array $data
+	 * @param array $data_translatable
+	 * @return mixed ID of the new item or false on error
+	 */
+	public function createNews($data, $data_translatable) {
+		$prep = $this->db->prepare('
+			INSERT INTO news(image)
+			VALUES (:image)
+		');
+		$prep->bindParam(':image', $data['image']);
+
+		if (!$prep->execute()) {
+			return false;
+		}
+
+		$id_news = $this->db->lastInsertId();
+
+		if ($this->insertNewsLang($id_news, $data_translatable)) {
 			return $id_news;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Updates a News in the database from a set of data
-	 * 
+	 *
 	 * @param int $id_news
 	 * @param array $data
 	 * @param array $data_translatable
@@ -132,41 +145,17 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':id_news', $id_news);
 		$prep->bindParam(':image', $data['image']);
-		
+
 		if (!$prep->execute()) {
 			return false;
 		}
-		
-		// Create language lines
-		$exec = true;
-		foreach ($data_translatable as $id_lang => $values) {
-			$prep = $this->db->prepare('
-				UPDATE news_lang
-				SET title = :title, author = :author, content = :content, url = :url, meta_title = :meta_title, meta_description = :meta_description, published = :published, publish_date = :publish_date
-				WHERE id_news = :id_news AND id_lang = :id_lang
-			');
-			$prep->bindParam(':title', $values['title']);
-			$prep->bindParam(':author', $values['author']);
-			$prep->bindParam(':content', $values['content']);
-			$prep->bindParam(':url', $values['url']);
-			$prep->bindParam(':meta_title', $values['meta_title']);
-			$prep->bindParam(':meta_description', $values['meta_description']);
-			$prep->bindParam(':published', $values['published']);
-			$prep->bindParam(':publish_date', $values['publish_date']);
-			$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
-			$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
-			
-			if (!$prep->execute()) {
-				$exec = false;
-			}
-		}
-		
-		return $exec;
+
+		return $this->insertNewsLang($id_news, $data_translatable);
 	}
-	
+
 	/**
 	 * Deletes a News in the database
-	 * 
+	 *
 	 * @param int $id_news
 	 * @return bool Success?
 	 */
@@ -176,19 +165,19 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$exec1 = $prep->execute();
-		
+
 		$prep = $this->db->prepare('
 			DELETE FROM news_lang WHERE id_news = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$exec2 = $prep->execute();
-		
+
 		return $exec1 && $exec2;
 	}
-	
+
 	/**
 	 * Create a relation between a News and a Category
-	 * 
+	 *
 	 * @param int $id_news
 	 * @param int $id_cat
 	 * @return bool Success?
@@ -200,13 +189,13 @@ class NewsAdminModel extends NewsModel {
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->bindParam(':id_cat', $id_cat, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Destroy all relations link categories to a given News_ID
-	 * 
+	 *
 	 * @param int $id_news
 	 * @return bool Success?
 	 */
@@ -215,13 +204,13 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats_relations WHERE id_news = :id_news
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Destroy all relations involving a given News_Cat_ID
-	 * 
+	 *
 	 * @param int $id_cat
 	 * @return bool Success?
 	 */
@@ -230,13 +219,13 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats_relations WHERE id_cat = :id_cat
 		');
 		$prep->bindParam(':id_cat', $id_cat, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Removes all relations to a parent category
-	 * 
+	 *
 	 * @param int $parent_id_cat
 	 * @return bool Success?
 	 */
@@ -247,13 +236,13 @@ class NewsAdminModel extends NewsModel {
 			WHERE parent = :id_cat
 		');
 		$prep->bindParam(':id_cat', $parent_id_cat);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Creates a news category in the database
-	 * 
+	 *
 	 * @param array $data
 	 * @return mixed ID of the new item or false on error
 	 */
@@ -265,17 +254,17 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':shortname', $data['shortname']);
 		$prep->bindParam(':parent', $data['parent']);
-		
+
 		if ($prep->execute()) {
 			return $this->db->lastInsertId();
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Updates a category in the database
-	 * 
+	 *
 	 * @param int $id_cat
 	 * @param array $data
 	 * @return bool Success?
@@ -290,13 +279,13 @@ class NewsAdminModel extends NewsModel {
 		$prep->bindParam(':shortname', $data['shortname']);
 		$prep->bindParam(':parent', $data['parent']);
 		$prep->bindParam(':id_cat', $id_cat);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Deletes a news category in the database
-	 * 
+	 *
 	 * @param int $id_cat
 	 * @return bool Success?
 	 */
@@ -305,7 +294,7 @@ class NewsAdminModel extends NewsModel {
 			DELETE FROM news_cats WHERE cid = :id_cat
 		');
 		$prep->bindParam(':id_cat', $id_cat, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
 }

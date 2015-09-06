@@ -43,7 +43,7 @@ class NewsAdminView extends WView {
 		// Assign site URL for permalink management
 		$this->assign('site_url', WRoute::getBase().'news/');
 
-		// Treat categories filled by user
+		// Treat categories input by user
 		$cats = array();
 		if (!empty($model['data']['cats']) && is_array($model['data']['cats'])) {
 			foreach ($model['data']['cats'] as $key => $cat) {
@@ -58,7 +58,7 @@ class NewsAdminView extends WView {
 		$this->assign('categories', $model['cats']);
 		$this->assign('cats', $cats);
 
-		$lang_list = array(1, 2);
+		$lang_list = WLang::getLangIds();
 
 		foreach ($lang_list as $id_lang) {
 			if (!empty($model['data']['publish_date_'.$id_lang])) {
@@ -91,7 +91,7 @@ class NewsAdminView extends WView {
 			'publish_date'     => date('Y-m-d', time()),
 			'publish_time'     => date('H:i', time()),
 		);
-		
+
 		foreach ($default_translatable as $key => $value) {
 			foreach ($lang_list as $id_lang) {
 				$default[$key.'_'.$id_lang] = $value;
@@ -99,6 +99,14 @@ class NewsAdminView extends WView {
 		}
 
 		$this->assignDefault($default, $model['data']);
+
+		// Auto-translate
+		$js_values = array();
+		foreach ($default as $item => $def) {
+			$js_values[$item] = isset($model['data'][$item]) ? $model['data'][$item] : $def;
+		}
+		$this->assign('js_values', json_encode($js_values));
+
 		$this->setTemplate('news-form');
 	}
 
@@ -111,7 +119,7 @@ class NewsAdminView extends WView {
 	}
 
 	public function newsDelete($model) {
-		$this->assign('title', $model['title_1']);
+		$this->assign('title', $model['title_'.WLang::getLangId()]);
 		$this->assign('confirm_delete_url', '/admin/news/news-delete/'.$model['id'].'/confirm');
 	}
 

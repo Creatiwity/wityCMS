@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_configuration` (
 --
 
 INSERT INTO `prefix_mail_configuration` (`id`, `key`, `value`, `user_id`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
-(1, 'canReceive', '0', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
+(1, 'canReceive', '0', 0, NOW(), 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -526,6 +526,33 @@ CREATE TABLE IF NOT EXISTS `prefix_team_member_lang` (
   `modified_by` int(11) NOT NULL,
   PRIMARY KEY (`id_member`,`id_lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Structure de la table `prefix_languages`
+--
+
+CREATE TABLE IF NOT EXISTS `prefix_languages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `iso` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `code` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `date_format_short` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `date_format_long` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `is_default` tinyint(1) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Contenu de la table `prefix_languages`
+--
+
+INSERT INTO `prefix_languages` (`id`, `name`, `iso`, `code`, `date_format_short`, `date_format_long`, `enabled`, `is_default`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
+(1, 'Français', 'FR', 'fr_FR', '%d/%m/%Y', '%d/%m/%Y %H:%M', 1, 1, NOW(), 0, '0000-00-00 00:00:00', 0);
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

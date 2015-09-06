@@ -3,27 +3,91 @@
  */
 
 require(['jquery'], function($) {
-	// Handle translatable fields
+	// Add translatable tabs
+	var translatable_html = '<div role="tabpanel" style="margin-bottom: 1em;"><ul class="nav nav-tabs translatable-tabs" role="tablist">';
+
+	for (var i = 0; i < wity_enabled_langs.length; ++i) {
+		var act = '';
+
+		if (wity_enabled_langs[i].id == wity_default_lang_id) {
+			act = ' class="active"';
+		}
+
+		translatable_html += '<li role="presentation"'+act+'><a href="#lang_'+wity_enabled_langs[i].id+'" class="lang">'+wity_enabled_langs[i].name+'</a></li>';
+	}
+
+	translatable_html += '</ul></div>';
+
+	$('#translatable-tabs').append(translatable_html);
+
 	$('.translatable-tabs a.lang').click(function(e) {
-		var $this = $(this),
-			previousLang = $('.translatable-tabs .active a').attr('href').replace('#', '');
-		
+		var $this = $(this);
+
 		e.preventDefault();
 		$this.tab('show');
-		
+
 		var lang = $this.attr('href').replace('#', '');
-		
+
 		$('.translatable .lang').addClass('hidden');
 		$('.translatable .lang.' + lang).removeClass('hidden');
-		
-		lang = lang.replace('lang_', '');
-		previousLang = previousLang.replace('lang_', '');
-		
-		// Update label's for attribute
-		$('.translatable label').each(function(index, element) {
-			var $this = $(this);
-			$this.attr('for', $this.attr('for').replace(previousLang, lang));
-		});
+	});
+
+	// Add translatable fields
+	$('.translatable').each(function () {
+		var $this = $(this),
+			$base = $this.children().detach();
+
+		for (var i = 0; i < wity_enabled_langs.length; ++i) {
+			var classes = 'lang_' + wity_enabled_langs[i].id;
+			if (wity_enabled_langs[i].id != wity_default_lang_id) {
+				classes += ' hidden';
+			}
+
+			var $current = $('<div class="lang ' + classes + '"></div>').append($base.clone());
+
+			$current.find('label').each(function() {
+				var $that = $(this);
+				$that.attr('for', $that.attr('for') + '_' + wity_enabled_langs[i].id);
+			})
+
+			$current.find('input, select, textarea').each(function(){
+				var $that = $(this);
+				$that.data('lang', wity_enabled_langs[i].id);
+
+				$that.attr('name', $that.attr('name') + '_' + wity_enabled_langs[i].id);
+				$that.attr('id', $that.attr('id') + '_' + wity_enabled_langs[i].id);
+
+				if (js_values) {
+					if ($that.is('input[type="checkbox"]')) {
+						$that.attr('checked', js_values[$that.attr('name')]);
+					} else if ($that.is('input') || $that.is('select')) {
+						$that.attr('value', js_values[$that.attr('name')]);
+					} else {
+						$that.html(js_values[$that.attr('name')]);
+					}
+				}
+			});
+
+			$this.append($current);
+		}
+	});
+
+	var roxyFileman = wity_base_url + 'libraries/fileman/index.html',
+	options = {
+		filebrowserBrowseUrl: roxyFileman,
+		filebrowserImageBrowseUrl: roxyFileman + '?type=image',
+		removeDialogTabs: 'link:upload;image:upload'
+	};
+
+	$('.ckedit').each(function() {
+		var $this = $(this),
+			height = $this.data('height') || '500px';
+
+		options.height = height;
+
+		if (CKEDITOR) {
+			CKEDITOR.replace($(this).attr('id'), options);
+		}
 	});
 
 	$('[data-reordable-url]').each(function(index, reordableTable) {

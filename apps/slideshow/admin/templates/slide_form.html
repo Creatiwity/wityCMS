@@ -1,46 +1,21 @@
 <div class="wity-app wity-app-slideshow wity-action-form">
 	<form method="post" enctype="multipart/form-data">
-		<div role="tabpanel">
-			<!-- Nav tabs -->
-			<ul class="nav nav-tabs translatable-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#lang_1" class="lang">{lang french}</a></li>
-				<li role="presentation"><a href="#lang_2" class="lang">{lang english}</a></li>
-			</ul>
-		</div>
+		<div id="translatable-tabs"></div>
 		
 		<div class="row">
 			<div class="col-md-8">
 				<h2 class="sr-only">{lang slide_add}</h2>
 
 				<div class="form-group translatable">
-					<label for="title_1" class="control-label">{lang title}*</label><br />
-					<input id="title_1" class="form-control lang lang_1" type="text" name="title_1" value="{$title_1}" autocomplete="off" placeholder="{lang title}" />
-					<input id="title_2" class="form-control lang lang_2 hidden" type="text" name="title_2" value="{$title_2}" autocomplete="off" placeholder="{lang title}" />
+					<label for="title" class="control-label">{lang title}*</label><br />
+					<input id="title" class="form-control" type="text" name="title" autocomplete="off" placeholder="{lang title}" />
 				</div>
 
 				<div class="translatable">
-					<label for="legend_1">{lang legend}</label><br />
-					<div class="lang lang_1">
-						<textarea id="legend_1" class="form-control" name="legend_1" rows="20" cols="80">{$legend_1}</textarea>
-					</div>
-					<div class="lang lang_2 hidden">
-						<textarea id="legend_2" class="form-control" name="legend_2" rows="20" cols="80">{$legend_2}</textarea>
-					</div>
+					<label for="legend">{lang legend}</label><br />
+					<textarea id="legend" class="form-control" name="legend" rows="20" cols="80"></textarea>
 				</div>
 				<br />
-
-				<script type="text/javascript">
-					var roxyFileman = '{$wity_base_url}libraries/fileman/index.html',
-						options = {
-							filebrowserBrowseUrl: roxyFileman,
-							filebrowserImageBrowseUrl: roxyFileman + '?type=image',
-							removeDialogTabs: 'link:upload;image:upload',
-							height: '200px'
-						};
-					
-					CKEDITOR.replace('legend_1', options);
-					CKEDITOR.replace('legend_2', options);
-				</script>
 				
 				<div class="form-group">
 					<label for="url" class="control-label">{lang URL}</label>
@@ -72,3 +47,7 @@
 		</div>
 	</form>
 </div>
+
+<script>
+	var js_values = {$js_values};
+</script>
