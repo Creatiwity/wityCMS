@@ -209,13 +209,14 @@ class WNote {
 		
 		$file = fopen(LOGS_DIR.'wity.log', 'a+');
 		$date = new WDate();
-		$text = sprintf("[%s] [%s] [user %s|%s] [route %s] %s - %s\r\n", 
-			$date->__toString(), 
-			$note['level'], 
-			@$_SESSION['userid'], 
-			$_SERVER['REMOTE_ADDR'], 
-			$_SERVER['REQUEST_URI'], 
-			$note['code'], 
+		$text = sprintf("[%s] [%s] [user %s|%s] [route %s] %s - %s\r\n",
+			$date->__toString(),
+			$note['level'],
+			@$_SESSION['userid'],
+			@WSession::getIP(),
+			$_SERVER['HTTP_USER_AGENT'],
+			$_SERVER['REQUEST_URI'],
+			$note['code'],
 			$note['message']
 		);
 		fwrite($file, $text);
@@ -237,12 +238,13 @@ class WNote {
 			$mail->FromName = WConfig::get('config.site_title');
 			$mail->AddAddress($email);
 			$mail->Subject = "[".WConfig::get('config.site_title')."] ".$note['level']." note - ".$note['code'];
-			$mail->Body = 
+			$mail->Body =
 "<p>Dear developper,</p>
 <p>A new <strong>".$note['level']."</strong> note was triggered:</p>
 <ul>
 	<li>Userid: ".@$_SESSION['userid']."</li>
-	<li>Client ip: ".$_SERVER['REMOTE_ADDR']."</li>
+	<li>Client ip: ".@WSession::getIP()."</li>
+	<li>User agent: ".$_SERVER['HTTP_USER_AGENT']."</li>
 	<li>Base: ".WConfig::get('config.base')."</li>
 	<li>Route: ".$_SERVER['REQUEST_URI']."</li>
 	<li><strong>Code:</strong> ".$note['code']."</li>
