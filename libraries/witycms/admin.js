@@ -59,7 +59,7 @@ require(['jquery'], function($) {
 
 				if (js_values) {
 					if ($that.is('input[type="checkbox"]')) {
-						$that.attr('checked', js_values[$that.attr('name')]);
+						$that.attr('checked', js_values[$that.attr('name')] == "1");
 					} else if ($that.is('input') || $that.is('select')) {
 						$that.attr('value', js_values[$that.attr('name')]);
 					} else {
