@@ -215,7 +215,12 @@ class WLang {
 
 		$que = self::$db->query('SELECT * FROM languages'.$cond.' ORDER BY is_default DESC');
 
-		return $que->fetchAll();
+		$langs = array();
+		while ($data = $que->fetch(PDO::FETCH_ASSOC)) {
+			$langs[intval($data['id'])] = $data;
+		}
+
+		return $langs;
 	}
 
 	/**
@@ -314,9 +319,6 @@ class WLang {
 			foreach (self::$lang_dirs as $dir_name => $dir) {
 				if (isset($dir[self::$lang_iso])) {
 					self::loadLangFile($dir[self::$lang_iso]);
-
-					// Remove the treated file
-					unset(self::$lang_dirs[$dir_name][self::$lang_iso]);
 				}
 			}
 		}
