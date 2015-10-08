@@ -117,6 +117,10 @@ class WLang {
 	 * @return bool
 	 */
 	public static function setLang($lang) {
+		if ($lang == self::$lang) {
+			return true;
+		}
+
 		self::$lang = $lang;
 		self::$lang_iso = strtolower(substr($lang, 0, 2));
 
@@ -139,9 +143,7 @@ class WLang {
 		$lang = self::getLangWithId($id_lang);
 
 		if (!empty($lang['code'])) {
-			self::setLang($lang['code']);
-
-			return true;
+			return self::setLang($lang['code']);
 		}
 
 		return false;
