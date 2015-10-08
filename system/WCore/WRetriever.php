@@ -150,18 +150,19 @@ class WRetriever {
 			} else {
 				$view = $controller->getView();
 
-				// Attempt to declare the template file according to the action
-				// The final template file can be changed directly in the View.php
-				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['action'].'.html';
-				if (file_exists($actionTemplateFile)) {
-					$view->setTemplate($actionTemplateFile);
-				}
-
 				$executable_action = preg_replace('#[^a-z_]#', '', $model['action']);
 
 				// Prepare the view
 				if (method_exists($view, $executable_action)) {
 					$view->$executable_action($model['result']);
+				}
+
+				// Infers template file
+				if ($view->getTemplate() == '') {
+					$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['action'].'.html';
+					if (file_exists($actionTemplateFile)) {
+						$view->setTemplate($actionTemplateFile);
+					}
 				}
 
 				// Update the context
