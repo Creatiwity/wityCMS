@@ -169,4 +169,34 @@ require(['jquery'], function($) {
 
 		$('body').on('mouseup mouseleave touchend', unbindMove);
 	});
+
+	// Input counter
+	$('input[maxlength].counter').each(function(index, element) {
+		var $element = $(element),
+			$parent = $element.parent(),
+			$inputGroup,
+			maxLength = $element.attr('maxlength'),
+			$counterWrapper = $('<span class="input-group-addon">/' + maxLength + '</span>'),
+			$counter = $('<span class="title-count">0</span>');
+
+		$counter.prependTo($counterWrapper);
+
+		if (!$parent.is('.input-group')) {
+			$inputGroup = $('<div>').addClass('input-group');
+			$inputGroup.appendTo($parent);
+		} else {
+			$inputGroup = $parent;
+		}
+
+		$element.detach().appendTo($inputGroup);
+		$element.addClass('form-control');
+
+		$inputGroup.append($counterWrapper);
+
+		$element.on('input', function() {
+			$counter.text($element.val().length);
+		});
+
+		$counter.text($element.val().length);
+	});
 });
