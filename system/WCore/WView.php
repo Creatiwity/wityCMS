@@ -270,7 +270,7 @@ class WView {
 					.'<script>'."\n"
 					.'var wity_enabled_langs ='.json_encode(WLang::getLangs(true)).";\n"
 					.'var wity_base_url = "'.WRoute::getBase().'"'.";\n"
-					.'var wity_default_lang_id = "'.WLang::getDefaultLangID().'"'.";\n"
+					.'var wity_default_lang_id = "'.WLang::getDefaultLangId().'"'.";\n"
 					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
 
 				// If array not empty

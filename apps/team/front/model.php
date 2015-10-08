@@ -34,7 +34,7 @@ class TeamModel {
 	 * @return array|false
 	 */
 	public function getMember($id_member) {
-		$id_lang = WLang::getLangID();
+		$id_lang = WLang::getLangId();
 
 		$prep = $this->db->prepare('
 			SELECT *
@@ -56,7 +56,7 @@ class TeamModel {
 	 * @return array
 	 */
 	public function getMembers() {
-		$id_lang = WLang::getLangID();
+		$id_lang = WLang::getLangId();
 
 		$prep = $this->db->prepare('
 			SELECT *

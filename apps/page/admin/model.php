@@ -30,7 +30,7 @@ class PageAdminModel extends PageModel {
 	 * @return array
 	 */
 	public function getPage($id_page) {
-		$id_lang = WLang::getLangID();
+		$id_lang = WLang::getLangId();
 
 		$prep = $this->db->prepare('
 			SELECT *

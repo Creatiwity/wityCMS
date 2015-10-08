@@ -74,7 +74,7 @@ class SettingsAdminModel {
 	 * @return Bool success
 	 */
 	public function updateLanguage($id, $data) {
-		if ($id == WLang::getDefaultLangID() || $data['is_default']) {
+		if ($id == WLang::getDefaultLangId() || $data['is_default']) {
 			$data['enabled'] = true;
 		}
 

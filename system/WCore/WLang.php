@@ -15,16 +15,21 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-06-03-2013
+ * @version 0.5.0-dev-08-10-2015
  */
 class WLang {
 	/**
-	 * @var array Languages to use in order of priority
+	 * @var array Current language - ex: 'en_EN'
 	 */
 	private static $lang = '';
 
 	/**
-	 * @var array List of language directories registered
+	 * @var array Current language ISO format - ex: 'en'
+	 */
+	private static $lang_iso;
+
+	/**
+	 * @var array List of registered directories containing language files
 	 */
 	private static $lang_dirs = array();
 
@@ -52,9 +57,6 @@ class WLang {
 
 		// Add config lang
 		self::setLang(WConfig::get('config.lang'));
-
-		// Configure locale
-		setlocale(LC_ALL, WConfig::get('config.lang'));
 	}
 
 	/**
@@ -78,9 +80,9 @@ class WLang {
 
 			foreach ($accept_lang as $lang_and_q) {
 				$detail = explode(';', $lang_and_q);
-				$lang = strtolower(substr($detail[0], 0, 2));
+				$lang = str_replace('-', '_', $detail[0]);
 
-				if (strlen($lang) == 2) { // Lang must contain 2 chars (ex: 'en')
+				if (strlen($lang) == 5) { // Lang must contain 5 chars (ex: 'en_EN')
 					// Find q-value
 					if (sizeof($detail) == 1) {
 						$q_value = 1;
@@ -109,21 +111,57 @@ class WLang {
 	}
 
 	/**
-	 * Sets the language to load for the current session.
+	 * Sets the current lang.
 	 *
-	 * @param string $lang Language name (2 letters identifier)
+	 * @param string $lang Language code (ex: 'en_EN')
+	 * @return bool
 	 */
 	public static function setLang($lang) {
-		self::$lang = strtolower(substr($lang, 0, 2));
+		self::$lang = $lang;
+		self::$lang_iso = strtolower(substr($lang, 0, 2));
+
+		// Configure locale
+		setlocale(LC_ALL, self::$lang);
+
+		// Clean previous values to reload them
+		self::$values = array();
+
+		return true;
 	}
 
 	/**
-	 * Returns curent language of the user.
+	 * Sets the current lang by Id.
 	 *
+	 * @param int $id_lang
+	 * @return bool
+	 */
+	public static function setLangWithId($id_lang) {
+		$lang = self::getLangWithId($id_lang);
+
+		if (!empty($lang['code'])) {
+			self::setLang($lang['code']);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the current lang.
 	 * @return string
 	 */
 	public static function getLang() {
 		return self::$lang;
+	}
+
+	/**
+	 * Returns the ISO code of the current lang.
+	 *
+	 * @return string
+	 */
+	public static function getLangISO() {
+		return self::$lang_iso;
 	}
 
 	/**
@@ -132,23 +170,35 @@ class WLang {
 	 * @return int
 	 */
 	public static function getLangId() {
-		$lang = self::getLang();
+		$lang_iso = self::getLangISO();
 
 		$pre = self::$db->prepare('SELECT id FROM languages WHERE iso = ?');
-		$pre->execute(array(strtoupper($lang)));
+		$pre->execute(array($lang_iso));
 
-		return $pre->fetch(PDO::FETCH_COLUMN);
+		return intval($pre->fetch(PDO::FETCH_COLUMN));
 	}
 
 	/**
-	 * Returns the Id of default lang.
+	 * Returns the Id of current lang.
+	 *
+	 * @return int
+	 */
+	public static function getLangWithId($id_lang) {
+		$pre = self::$db->prepare('SELECT * FROM languages WHERE id = ?');
+		$pre->execute(array($id_lang));
+
+		return $pre->fetch(PDO::FETCH_ASSOC);
+	}
+
+	/**
+	 * Returns the Id of the default lang.
 	 *
 	 * @return int
 	 */
 	public static function getDefaultLangId() {
 		$que = self::$db->query('SELECT id FROM languages WHERE is_default = 1');
 
-		return $que->fetch(PDO::FETCH_COLUMN);
+		return intval($que->fetch(PDO::FETCH_COLUMN));
 	}
 
 	/**
@@ -169,7 +219,7 @@ class WLang {
 	}
 
 	/**
-	 * Returns list of lang IDs
+	 * Returns list of lang Ids
 	 *
 	 * @param  bool Take only enabled languages?
 	 * @return array
@@ -260,13 +310,15 @@ class WLang {
 		}
 
 		// Load the lang value if not already set
-		foreach (self::$lang_dirs as $dir_name => $dir) {
-			if (isset($dir[self::$lang])) {
-				self::loadLangFile($dir[self::$lang]);
-			}
+		if (!isset(self::$values[$name])) {
+			foreach (self::$lang_dirs as $dir_name => $dir) {
+				if (isset($dir[self::$lang_iso])) {
+					self::loadLangFile($dir[self::$lang_iso]);
 
-			// Remove the directory treated
-			unset(self::$lang_dirs[$dir_name]);
+					// Remove the treated file
+					unset(self::$lang_dirs[$dir_name][self::$lang_iso]);
+				}
+			}
 		}
 
 		if (isset(self::$values[$name])) {

@@ -18,20 +18,20 @@ class NewsModel {
 	 * @var WDatabase instance
 	 */
 	protected $db;
-	
+
 	public function __construct() {
 		$this->db = WSystem::getDB();
-		
+
 		// Declare table
 		$this->db->declareTable('news');
 		$this->db->declareTable('news_lang');
 		$this->db->declareTable('news_cats');
 		$this->db->declareTable('news_cats_relations');
 	}
-	
+
 	/**
 	 * Counts news in the database
-	 * 
+	 *
 	 * @return int
 	 */
 	public function countNews(array $filters = array()) {
@@ -43,7 +43,7 @@ class NewsModel {
 			}
 			$cond .= ') ';
 		}
-		
+
 		if (!empty($filters['published'])) {
 			$published = intval($filters['published']);
 			if ($published == 0 || $published == 1) {
@@ -59,8 +59,8 @@ class NewsModel {
 			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
 		}
 
-		$id_lang = WLang::getLangID();
-		
+		$id_lang = WLang::getLangId();
+
 		$prep = $this->db->prepare('
 			SELECT COUNT(*)
 			FROM news
@@ -74,13 +74,13 @@ class NewsModel {
 		');
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return intval($prep->fetchColumn());
 	}
-	
+
 	/**
 	 * Retrieves a set of news
-	 * 
+	 *
 	 * @param int $from
 	 * @param int $number
 	 * @param string $order Ordering field name
@@ -97,7 +97,7 @@ class NewsModel {
 			}
 			$cond .= ') ';
 		}
-		
+
 		if (empty($filters['published'])) {
 			$cond .= 'AND published = 1 ';
 		} else if ($filters['published'] != -1) {
@@ -113,40 +113,39 @@ class NewsModel {
 			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
 		}
 
-		$id_lang = WLang::getLangID();
-		$default_lang = WLang::getDefaultLangID();
-		
+		$id_lang = WLang::getLangId();
+
 		$prep = $this->db->prepare('
 			SELECT DISTINCT(id), news.*, news_lang.*
 			FROM news
 			LEFT JOIN news_lang
-			ON id = news_lang.id_news AND (id_lang = :id_lang)
+			ON id = news_lang.id_news AND id_lang = :id_lang
 			LEFT JOIN news_cats_relations
 			ON id = news_cats_relations.id_news
 			LEFT JOIN news_cats
 			ON id_cat = cid
 			WHERE 1 = 1 '.$cond.'
-			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').', ABS('.$default_lang.' - id_lang) ASC 
+			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
 			LIMIT :start, :number
 		');
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$data['cats'] = $this->getCatsOfNews($data['id']);
-			
+
 			$result[] = $data;
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Retrieves all data linked to a News
-	 * 
+	 *
 	 * @param int $id_news
 	 * @return array
 	 */
@@ -155,8 +154,8 @@ class NewsModel {
 			return false;
 		}
 
-		$id_lang = WLang::getLangID();
-		
+		$id_lang = WLang::getLangId();
+
 		$prep = $this->db->prepare('
 			SELECT *
 			FROM news
@@ -167,19 +166,19 @@ class NewsModel {
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		$data = $prep->fetch(PDO::FETCH_ASSOC);
-		
+
 		if (!empty($data)) {
 			$data['cats'] = $this->getCatsOfNews($id_news);
 		}
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Retrieves a category from the database
-	 * 
+	 *
 	 * @param int $id_cat
 	 * @return array
 	 */
@@ -187,21 +186,21 @@ class NewsModel {
 		if (empty($id_cat)) {
 			return false;
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT *
-			FROM news_cats 
+			FROM news_cats
 			WHERE cid = :id_cat
 		');
 		$prep->bindParam(':id_cat', $id_cat, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Retrieves a category by its shortname from the database.
-	 * 
+	 *
 	 * @param string $shortname
 	 * @return array
 	 */
@@ -209,7 +208,7 @@ class NewsModel {
 		if (empty($shortname)) {
 			return false;
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT *
 			FROM news_cats
@@ -217,15 +216,15 @@ class NewsModel {
 		');
 		$prep->bindParam(':shortname', $shortname);
 		$prep->execute();
-		
+
 		$data = $prep->fetch(PDO::FETCH_ASSOC);
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Retrieves a complete set of Categories linked to News
-	 * 
+	 *
 	 * @param int $id_news
 	 * @return array
 	 */
@@ -239,13 +238,13 @@ class NewsModel {
 		');
 		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Retrieves full set of Categories in the database
-	 * 
+	 *
 	 * @param string $order
 	 * @param bool $asc
 	 * @return array
@@ -257,9 +256,9 @@ class NewsModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
-		
+
 		$result = $prep->fetchAll(PDO::FETCH_ASSOC);
-		
+
 		// Find parent categories' name
 		foreach ($result as $key => $cat) {
 			$result[$key]['parent_name'] = "";
@@ -272,10 +271,10 @@ class NewsModel {
 				}
 			}
 		}
-		
+
 		return $result;
 	}
-	
+
 	public function increaseViews($id_news) {
 		$prep = $this->db->prepare('
 			UPDATE news
@@ -283,7 +282,7 @@ class NewsModel {
 			WHERE id = :id
 		');
 		$prep->bindParam(':id', $id_news);
-		
+
 		return $prep->execute();
 	}
 }

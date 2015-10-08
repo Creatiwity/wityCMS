@@ -70,7 +70,7 @@ class PageModel {
 	 * @return array
 	 */
 	public function getPages($from = 0, $number = 0, $order = 'virtual_parent', $asc = true) {
-		$id_lang = WLang::getLangID();
+		$id_lang = WLang::getLangId();
 
 		$prep = $this->db->prepare('
 			SELECT *, 
@@ -114,7 +114,7 @@ class PageModel {
 	 * @return array
 	 */
 	public function getPage($id_page) {
-		$id_lang = WLang::getLangID();
+		$id_lang = WLang::getLangId();
 
 		$prep = $this->db->prepare('
 			SELECT *
@@ -183,7 +183,7 @@ class PageModel {
 	 * @return array
 	 */
 	public function getChildPages($id_parent) {
-		$id_lang = WLang::getLangID();
+		$id_lang = WLang::getLangId();
 		
 		$prep = $this->db->prepare('
 			SELECT *
