@@ -40,13 +40,6 @@
 }
 
 /**
- * Groups listing
- */
-#groups-list .group-form {
-	display: none;
-}
-
-/**
  * Group diff
  */
 #group-diff .listing-wrapper {

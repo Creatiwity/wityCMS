@@ -47,9 +47,9 @@ require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 			// Assign group permissions to inputs
 			accessForm.assignPermissions('group-edit-'+groupid, access);
 		}
-		
+
 		resetGroupForms();
-		
+
 		if ($('#group-edit-'+groupid+' form').css('display') == 'none') {
 			$('#group-edit-'+groupid+' form').slideDown();
 		}
@@ -58,27 +58,27 @@ require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 	$(document).ready(function() {
 		accessForm.bindEvents('group-add');
 	});
-	
+
 	$('#add_group_button').click(function() {
 		showAddForm();
-		
+
 		return false;
 	});
-	
+
 	$('body').on('click', '.group-edit-button', function() {
 		var $this = $(this),
 			groupId = $this.attr('data-group-id'),
 			groupName = $this.attr('data-group-name'),
 			groupAccess = $this.attr('data-group-access');
-		
+
 		showEditForm(groupId, groupName, groupAccess);
-		
+
 		return false;
 	});
-	
+
 	$('body').on('click', '[data-reset-group-form]', function() {
 		resetGroupForms();
-		
+
 		return false;
 	});
 });
