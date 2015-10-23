@@ -266,9 +266,15 @@ class WView {
 					return '';
 				}
 
+				$lang_array = WLang::getLangs(true);
+				
+				foreach ($lang_array as $key => $value) {
+					$lang_array[$key] = json_encode($value);
+				}
+
 				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.min.js"></script>'."\n"
 					.'<script>'."\n"
-					.'var wity_enabled_langs ='.json_encode(WLang::getLangs(true)).";\n"
+					.'var wity_enabled_langs = ['. implode(',', $lang_array) ."];\n"
 					.'var wity_base_url = "'.WRoute::getBase().'"'.";\n"
 					.'var wity_default_lang_id = "'.WLang::getDefaultLangId().'"'.";\n"
 					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
