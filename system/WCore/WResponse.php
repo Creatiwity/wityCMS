@@ -128,7 +128,7 @@ class WResponse {
 
 			// Absolute links fix
 			$html = $this->absoluteLinkFix($html);
-			
+
 			echo $html;
 		} catch (Exception $e) {
 			WNote::error('final_render_failed', WLang::get('error_final_render_failed', $e->getMessage()), 'die');
@@ -149,8 +149,8 @@ class WResponse {
 		$dir = WRoute::getDir();
 		if (!empty($dir)) {
 			$string = str_replace(
-				array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
-				array('src="'.$dir, 'href="'.$dir, 'action="'.$dir, 'data-link-modal="'.$dir),
+				array('src="/', 'href="/', 'action="/', 'data-link-modal="/', 'poster="/'),
+				array('src="'.$dir, 'href="'.$dir, 'action="'.$dir, 'data-link-modal="'.$dir, 'poster="'.$dir),
 				$string
 			);
 		}
