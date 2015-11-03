@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
 	<item id="mandatory_fields">Les champs marqués d'une étoile sont obligatoires.</item>
-	
+
 	<!-- Errors -->
 	<item id="bad_data">Merci de compléter tous les champs requis.</item>
 	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
@@ -11,7 +11,7 @@
 	<item id="nickname_already_used">Cet identifiant est déjà en utilisation.</item>
 	<item id="email_not_valid">Cet email n'est pas valide.</item>
 	<item id="email_already_used">Cet email est déjà utilisé.</item>
-	
+
 	<!-- Connection -->
 	<item id="login_success">Bienvenue %s !</item>
 	<item id="login_max_attempt">Vous avez atteint le nombre maximum d'essais d'autentification possible.
@@ -19,7 +19,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="login_error"><![CDATA[Le couple <em>identifiant / mot de passe</em> fourni ne correspond à aucun compte valide.]]></item>
 	<item id="user_disconnected">Vous avez été déconnecté avec succès.</item>
 	<item id="cookie_not_accepted">Pour vous connecter, votre navigateur doit accepter les cookies.</item>
-	
+
 	<!-- Login form -->
 	<item id="login_form_title">Connexion</item>
 	<item id="nickname">Identifiant </item>
@@ -30,7 +30,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="password_lost">Mot de passe perdu ?</item>
 	<item id="login_button">Connexion</item>
 	<item id="more_options">Plus d'options</item>
-	
+
 	<!-- Register form -->
 	<item id="register_form_title">Création d'un nouveau compte</item>
 	<item id="password_conf">Mot de passe (confirmation)</item>
@@ -40,7 +40,7 @@ Merci de bien vouloir patienter un moment avant de réessayer.</item>
 	<item id="country">Pays </item>
 	<item id="register">Inscription</item>
 	<item id="user_register_failure">Une erreur inconnue s'est produite lors de la création de votre compte dans la base de données.</item>
-	
+
 	<!-- Register - EMAIL CONFIRMATION -->
 	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
 	<item id="user_register_email_confirm"><![CDATA[
@@ -56,7 +56,7 @@ Mot de passe : {password}</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_confirm">Pour terminer la création de votre compte, vous devez cliquer sur le lien de confirmation dans l'email que vous allez recevoir.</item>
 	<item id="user_validated">Votre compte a été validé avec succès.</item>
-	
+
 	<!-- Register: ADMIN CHECK -->
 	<item id="user_register_email_admin"><![CDATA[
 <p>Bonjour,</p>
@@ -72,14 +72,14 @@ Vous serez notifié par email lorsque cela sera fait.</p>
 <p>L'utilisateur <strong>{nickname}</strong> vient de demander la création d'un compte sur le site {site_title}.<br />
 Pour l'étudier, <a href="{base}admin/user/edit/{userid}">cliquez ici</a>.</p>
 <p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_admin"><![CDATA[Votre compte a bien été enregistrée.<br />
+	<item id="user_register_admin"><![CDATA[Votre compte a bien été enregistré.<br />
 Son activation nécessite l'intervention d'un administrateur.<br />
 Vous serez notifié par email lorsqu'il sera validé.]]></item>
 	<item id="user_validated_admin"><![CDATA[Votre email a bien été validé.<br />
 L'activation de votre compte nécessite l'intervention d'un administrateur.<br />
 Vous serez notifié par email lorsqu'il sera validé.]]></item>
 	<item id="user_invalid_confirm_code">Ce code de confirmation ne correspond à aucun compte dans la base de données.</item>
-	
+
 	<!-- Register - AUTO -->
 	<item id="user_register_email"><![CDATA[
 <p>Bonjour,</p>
@@ -94,7 +94,7 @@ Password : {password}</p>
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_success"><![CDATA[<p>Votre compte utilisateur a été créé avec succès.</p>
 <p>Vous pouvez vous connecter en <a href="/user/login/">cliquant ici</a>.</p>]]></item>
-	
+
 	<!-- Password lost -->
 	<item id="reset_password">Réinitialisation de mot de passe</item>
 	<item id="enter_your_email">Afin de récupérer votre mot de passe, veuillez spécifier l'adresse email de votre compte.</item>
