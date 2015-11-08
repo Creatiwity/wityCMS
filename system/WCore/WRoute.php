@@ -41,11 +41,11 @@ class WRoute {
 	 * @var string Request string of the page
 	 */
 	private static $query;
-	
+
 	/**
 	 * Stores the query string given in the URL.
 	 * Example: "published=1"
-	 * 
+	 *
 	 * @var string URL Query String
 	 */
 	private static $queryString;
@@ -62,7 +62,7 @@ class WRoute {
 	 */
 	public static function init() {
 		self::$query = $_SERVER['REQUEST_URI'];
-		
+
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
 		$dir = self::getDir();
 		if ($dir != '/') {
@@ -72,7 +72,7 @@ class WRoute {
 		// Cleansing
 		self::$query = ltrim(self::$query, '/');
 		self::$query = str_replace(array('index.php', 'index.html'), '', self::$query);
-		
+
 		// Extract query string
 		$split_query = explode('?', self::$query);
 		if (count($split_query) > 1) {
@@ -178,16 +178,16 @@ class WRoute {
 
 	/**
 	 * Returns the domain from which the user tried to acess wityCMS.
-	 * 
+	 *
 	 * If the site is running on http://mysite.com/wity/,
 	 * it should return "mysite.com".
-	 * 
+	 *
 	 * @return string Domain name
 	 */
 	public static function getDomain() {
 		return $_SERVER['HTTP_HOST'];
 	}
-	
+
 	/**
 	 * Returns the full root location in which wityCMS is installed, as defined in /system/config/config.php.
 	 *
@@ -212,7 +212,7 @@ class WRoute {
 		// Remove the working directory of the script
 		// example: $_SERVER['SCRIPT_NAME'] = /wity/index.php
 		$dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
-		
+
 		return $dir;
 	}
 
@@ -227,7 +227,7 @@ class WRoute {
 	public static function getQuery() {
 		return self::$query;
 	}
-	
+
 	/**
 	 * Returns the query string given in URL (without '?' char).
 	 *

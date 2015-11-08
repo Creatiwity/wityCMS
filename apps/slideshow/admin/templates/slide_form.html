@@ -1,7 +1,7 @@
 <div class="wity-app wity-app-slideshow wity-action-form">
 	<form method="post" enctype="multipart/form-data">
 		<div id="translatable-tabs"></div>
-		
+
 		<div class="row">
 			<div class="col-md-8">
 				<h2 class="sr-only">{lang slide_add}</h2>
@@ -16,7 +16,7 @@
 					<textarea id="legend" class="form-control" name="legend" rows="20" cols="80"></textarea>
 				</div>
 				<br />
-				
+
 				<div class="form-group">
 					<label for="url" class="control-label">{lang URL}</label>
 					<input id="url" class="form-control" type="text" name="url" value="{$url}" autocomplete="off" placeholder="{lang URL}" />
@@ -30,15 +30,15 @@
 							<br />
 							<small>(PNG ou JPEG | 1600x450 px | ~170 ko)</small>
 						</label>
-						
+
 						{if !empty({$image})}
 						<p><img class="img-responsive" src="{$image}" alt="{$title_1}" /></p>
 						{/if}
-						
+
 						<input id="image" type="file" name="image" class="form-control" />
 					</div>
 				</div>
-				
+
 				<div class="well well-sm">
 					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang save}</button>
 					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>

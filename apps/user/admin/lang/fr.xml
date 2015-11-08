@@ -8,7 +8,7 @@
 	<item id="action_groups">Gestion des groupes</item>
 	<item id="action_group_del">Suprimer un groupe</item>
 	<item id="action_config">Configuration</item>
-	
+
 	<!-- Errors -->
 	<item id="bad_data">Veuillez remplir tous les champs requis.</item>
 	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
@@ -19,7 +19,7 @@
 	<item id="nickname_already_used">Ce pseudo est déjà en utilisation.</item>
 	<item id="email_not_valid">Cet email n'est pas valide.</item>
 	<item id="email_already_used">Cet email est déjà utilisé.</item>
-	
+
 	<!-- General -->
 	<item id="search">Rechercher</item>
 	<item id="nickname">Pseudo</item>
@@ -34,7 +34,7 @@
 	<item id="edit">Modifier</item>
 	<item id="delete">Supprimer</item>
 	<item id="cancel">Annuler</item>
-	
+
 	<!-- Account Admin checking -->
 	<item id="waiting">En attente de validation</item>
 	<item id="validate">Valider</item>
@@ -58,7 +58,7 @@
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_account_refused">L'utilisateur %s a été refusé.</item>
 	<item id="user_account_invalid">L'utilisateur %s ne correspond pas au processus de validation.</item>
-	
+
 	<!-- User add/edit form -->
 	<item id="users_total">%s utilisateurs inscrits</item>
 	<item id="users_found">%s utilisateurs trouvés</item>
@@ -98,12 +98,12 @@ Ceci est un message automatique.]]></item>
 	<item id="send_email_confirmation">Envoyer les nouvelles informations par email ?</item>
 	<item id="user_edit_own">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
 	<item id="user_validating_account">En envoyant le formulaire d'édition de cet utilisateur, son compte sera validé et il en sera notifié par email.</item>
-	
+
 	<!-- User deletion -->
 	<item id="user_delete_confirmation">Êtes-vous sûr de vouloir supprimer l'utilisateur %s ?</item>
 	<item id="user_deleted">L'utilisateur a été supprimé avec succès.</item>
 	<item id="user_self_delete">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
-	
+
 	<!-- Group form -->
 	<item id="add_a_group">Ajouter un groupe</item>
 	<item id="group_name">Nom du groupe</item>
@@ -114,7 +114,7 @@ Ceci est un message automatique.]]></item>
 	<item id="apply">Appliquer</item>
 	<item id="group_del_confirm">Voulez-vous vraiment supprimer la catégorie %s ?</item>
 	<item id="group_not_modified">Une erreur inconnue s'est produite lors du traitement du groupe dans la base de données.</item>
-	
+
 	<!-- Group treatment -->
 	<item id="group_name_empty">Le nom du groupe est vide.</item>
 	<item id="group_added"><![CDATA[Le groupe <strong>%s</strong> a été ajouté avec succès.]]></item>
@@ -122,7 +122,7 @@ Ceci est un message automatique.]]></item>
 	<item id="group_not_added">Une erreur inconnue s'est produite lors du traitement du groupe par la base de données.</item>
 	<item id="group_deleted">Le groupe a été supprimé avec succès.</item>
 	<item id="group_delete_confirmation">Êtes-vous sûr de vouloir supprimer le groupe %s ?</item>
-	
+
 	<!-- Group diff -->
 	<item id="apply_access">Application des nouveaux droits d'accès au groupe %s</item>
 	<item id="apply_access_inheriting">Appliquer les nouveaux droits d'accès à tous les utilisateurs qui héritaient des précédents accès du groupe</item>
@@ -133,7 +133,7 @@ Ceci est un message automatique.]]></item>
 	<item id="gd_perm_minus">Permission en moins par rapport au nouveaux accès du groupe</item>
 	<item id="reset">Réinitialiser</item>
 	<item id="users">utilisateurs</item>
-	
+
 	<!-- Config -->
 	<item id="config_register">Ouvrir les inscriptions</item>
 	<item id="config_email_conf">Lors de l'inscription, demander une confirmation par email</item>

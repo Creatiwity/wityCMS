@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsletterController is the Front Controller of the Newsletter Application
- * 
+ *
  * @package Apps\Newsletter\Front
  * @author Thibault Vlacich <thibault@vlacich.fr>
  * @version 1.0.0-01-03-2015

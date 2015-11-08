@@ -18,13 +18,13 @@
 	<item id="twitter">Twitter</item>
 	<item id="image">Image</item>
 	<item id="image_hover">Image au survol</item>
-	
+
 	<item id="no_member_in_database">Aucun membre dans la base de données.</item>
 	<item id="member_not_found">Le membre demandé n'existe pas.</item>
 	<item id="db_unknown_error">Une erreur inconnue s'est produite en enregistrant les données dans la base de données.</item>
 	<item id="member_edited">Le membre a été édité avec succès.</item>
 	<item id="member_added">Le membre a été créé avec succès.</item>
-	
+
 	<item id="member_delete_confirm">Confirmez-vous la suppression du membre %s ?</item>
 	<item id="member_deleted">Le membre a été supprimé avec succès.</item>
 	<item id="config_edited">Les informations ont été mises à jour.</item>

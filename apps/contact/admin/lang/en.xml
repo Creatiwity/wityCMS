@@ -20,7 +20,7 @@
 	<item id="from">From:</item>
 	<item id="attachment">Download attachment</item>
 	<item id="close">Close</item>
-	
+
 	<!-- Configuration -->
 	<item id="config_site_from_name">Sender's name</item>
 	<item id="config_site_from_email">Sender's email</item>

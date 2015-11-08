@@ -16,22 +16,22 @@ defined('WITYCMS_VERSION') or die('Access denied');
 class LangController extends WController {
 	protected function select($params) {
 		$lang = array_shift($params);
-		
+
 		switch ($lang) {
 			default:
 			case 'fr':
 				$_SESSION['lang'] = 'fr';
 				break;
-			
+
 			case 'en':
 				$_SESSION['lang'] = 'en';
 				break;
-			
+
 			case 'es':
 				$_SESSION['lang'] = 'es';
 				break;
 		}
-		
+
 		// Redirection
 		$this->setHeader('Location', WRoute::getReferer());
 	}

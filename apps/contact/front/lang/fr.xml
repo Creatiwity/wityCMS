@@ -43,7 +43,7 @@ L'équipe du site {{site}}<br /><br />
 
 --<br />
 <em>Ceci est un message automatique.</em>]]></item>
-	
+
 	<item id="mail_for_admin_subject">[%s] Contact - %s</item>
 	<item id="mail_for_admin_body"><![CDATA[Bonjour,<br /><br />
 

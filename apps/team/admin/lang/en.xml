@@ -14,7 +14,7 @@
 	<item id="db_unknown_error">An unknown error occured while saving the data in the database.</item>
 	<item id="member_edited">The member was edited successfully.</item>
 	<item id="member_added">The member was created successfully.</item>
-	
+
 	<item id="member_delete_confirm">Do you confirm the deletion of the member %s?</item>
 	<item id="member_deleted">The member was deleted successfully.</item>
 	<item id="config_edited">Informations were updated successfully.</item>

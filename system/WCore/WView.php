@@ -267,7 +267,7 @@ class WView {
 				}
 
 				$lang_array = WLang::getLangs(true);
-				
+
 				foreach ($lang_array as $key => $value) {
 					$lang_array[$key] = json_encode($value);
 				}

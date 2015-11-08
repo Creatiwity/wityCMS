@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * TeamController is the Front Controller of the Team Application.
- * 
+ *
  * @package Apps\Team\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>

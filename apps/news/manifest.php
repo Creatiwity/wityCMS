@@ -3,22 +3,22 @@
 <app>
 	<!-- Application name -->
 	<name>News</name>
-	
+
 	<version>1.0.0</version>
-	
+
 	<!-- Last update date -->
 	<date>02-05-2015</date>
-	
+
 	<!-- Permissions -->
 	<permission name="writer" />
 	<permission name="category_manager" />
 	<permission name="moderator" />
-	
+
 	<!-- Front pages -->
 	<action default="default">listing</action>
 	<action>detail</action>
 	<action>preview</action>
-	
+
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">news</action>

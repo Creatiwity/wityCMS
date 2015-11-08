@@ -20,7 +20,7 @@
 	<item id="from">De :</item>
 	<item id="attachment">Télécharger la pièce jointe</item>
 	<item id="close">Fermer</item>
-	
+
 	<!-- Configuration -->
 	<item id="config_site_from_name">Nom de l'expéditeur</item>
 	<item id="config_site_from_email">Email de l'expéditeur</item>

@@ -3,12 +3,12 @@
 <app>
 	<!-- Application name -->
 	<name>Lang</name>
-	
+
 	<version>0.5</version>
-	
+
 	<!-- Last update date -->
 	<date>14-06-2015</date>
-	
+
 	<!-- Front pages -->
 	<action default="default">select</action>
 </app>

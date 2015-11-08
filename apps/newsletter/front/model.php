@@ -33,9 +33,9 @@ class NewsletterModel {
 		');
 		$prep->bindParam(':email', $email);
 		$prep->execute();
-		
+
 		$rows = $prep->fetch(PDO::FETCH_NUM);
-		
+
 		return $rows[0] > 0;
 	}
 

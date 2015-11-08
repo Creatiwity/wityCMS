@@ -3,26 +3,26 @@
 <app>
 	<!-- Application name -->
 	<name>User</name>
-	
+
 	<version>0.5.0</version>
-	
+
 	<!-- Last update date -->
 	<date>09-05-2015</date>
-	
+
 	<!-- Permissions -->
 	<permission name="add" />
 	<permission name="edit" />
 	<permission name="delete" />
 	<permission name="group_manager" />
 	<permission name="config" />
-	
+
 	<!-- Front actions -->
 	<action default="default" alias="connexion">login</action>
 	<action requires="connected" alias="deconnexion">logout</action>
 	<action requires="not-connected">register</action>
 	<action requires="not-connected">confirm</action>
 	<action requires="not-connected" alias="password-lost">password_lost</action>
-	
+
 	<!-- Admin actions -->
 	<admin>
 		<action default="default" description="action_listing">listing</action>

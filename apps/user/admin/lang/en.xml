@@ -7,7 +7,7 @@
 	<item id="action_delete">Delete a user</item>
 	<item id="action_groups">Manage groups</item>
 	<item id="action_group_del">Delete a group</item>
-	
+
 	<!-- Errors -->
 	<item id="bad_data">Please, fill in all the required fields.</item>
 	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
@@ -18,7 +18,7 @@
 	<item id="nickname_already_used">Nickname already in use.</item>
 	<item id="email_not_valid">The email given is not valid.</item>
 	<item id="email_already_used">The email given is already in use.</item>
-	
+
 	<!-- General -->
 	<item id="search">Search</item>
 	<item id="nickname">Nickname</item>
@@ -33,7 +33,7 @@
 	<item id="edit">Edit</item>
 	<item id="delete">Delete</item>
 	<item id="cancel">Cancel</item>
-	
+
 	<!-- Account Admin checking -->
 	<item id="waiting">Waiting for validation</item>
 	<item id="validate">Validate</item>
@@ -57,7 +57,7 @@
 <p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_account_refused">The user %s was refused.</item>
 	<item id="user_account_invalid">The user %s is not to be checked.</item>
-	
+
 	<!-- User add/edit form -->
 	<item id="users_total">%s registered users</item>
 	<item id="users_found">%s users found</item>
@@ -97,12 +97,12 @@ This is an automatic message.]]></item>
 	<item id="send_email_confirmation">Send the new account's data by email?</item>
 	<item id="user_edit_own">Notice: you are editing your own account. Changes will take effect immediately.</item>
 	<item id="user_validating_account">By sending the edition form of this user, its account will be validated and he will be notified by email.</item>
-	
+
 	<!-- User deletion -->
 	<item id="user_delete_confirmation">Are you sure you want to delete the user %s?</item>
 	<item id="user_deleted">The user was deleted successfully.</item>
 	<item id="user_self_delete">You cannot delete your own account.</item>
-	
+
 	<!-- Group form -->
 	<item id="add_a_group">Add a group</item>
 	<item id="group_name">Group name</item>
@@ -113,7 +113,7 @@ This is an automatic message.]]></item>
 	<item id="apply">Apply</item>
 	<item id="group_del_confirm">Do you really want to delete the group %s?</item>
 	<item id="group_not_modified">An unknow error occured while trying to apply changes to the group.</item>
-	
+
 	<!-- Group treatment -->
 	<item id="group_name_empty">No group name given</item>
 	<item id="group_added"><![CDATA[The group <strong>%s</strong> was added successfully.]]></item>
@@ -121,7 +121,7 @@ This is an automatic message.]]></item>
 	<item id="group_not_added">An unknown error occured while trying to apply changes to the group in the database.</item>
 	<item id="group_deleted">The group selected was deleted successfully.</item>
 	<item id="group_delete_confirmation">Are you sure you want to delete the group %s?</item>
-	
+
 	<!-- Group diff -->
 	<item id="apply_access">Applying new access rights to the group %s</item>
 	<item id="apply_access_inheriting">Apply new access rights to all users having the previous group access</item>
@@ -131,7 +131,7 @@ This is an automatic message.]]></item>
 	<item id="gd_perm_plus">Permissions in addition to the new group access</item>
 	<item id="gd_perm_minus">Permissions missing compared to the new group access</item>
 	<item id="reset">Reset</item>
-	
+
 	<!-- Config -->
 	<item id="config_register">Allow registering</item>
 	<item id="config_email_conf">At registering, check user email by sending a mail</item>

@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsView is the Front View of the News Application
- * 
+ *
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
@@ -27,7 +27,7 @@ class NewsView extends WView {
 
 	public function preview($data) {
 		$this->assign($data);
-		
+
 		$this->setTemplate('listing');
 	}
 }

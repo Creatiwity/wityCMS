@@ -3,15 +3,15 @@
 <app>
 	<!-- Application name -->
 	<name>Team</name>
-	
+
 	<version>0.5.0</version>
-	
+
 	<!-- Last update date -->
 	<date>07-06-2015</date>
-	
+
 	<!-- Front pages -->
 	<action default="default">members</action>
-	
+
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">members</action>

@@ -1,9 +1,9 @@
 <?php
 /**
  * wityCMS paths.php
- * 
+ *
  * Content Management System for everyone.
- * 
+ *
  * @version 0.5.0-dev
  */
 

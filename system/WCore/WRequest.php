@@ -219,13 +219,13 @@ class WRequest {
 			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#', function($matches) {
 				// Allowed tags
 				if (in_array($matches[1], array(
-					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'button', 'img', 'br', 
-					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 'hr', 
-					'audio', 'video', 'source', 'iframe', 
-					'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
-					'ul', 'ol', 'li', 'dl', 'dt', 'dd', 
-					'div', 'p', 'var', 
-					'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col', 
+					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'button', 'img', 'br',
+					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 'hr',
+					'audio', 'video', 'source', 'iframe',
+					'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+					'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+					'div', 'p', 'var',
+					'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
 					'section', 'article', 'aside'))) {
 					return $matches[0];
 				} else if (in_array($matches[1], array('script', 'link'))) {
@@ -252,10 +252,10 @@ class WRequest {
 	public static function unlock() {
 		self::$lock = false;
 	}
-	
+
 	/**
 	 * Retrieves the HTTP Method used by the client.
-	 * 
+	 *
 	 * @return string Either GET|POST|PUT|DEL...
 	 */
 	public static function getMethod() {

@@ -11,15 +11,15 @@
  * @version 0.3-01-04-2010
  */
 class Pagination {
-	
+
 	/**
 	 *
-	 * @var int Total pages number 
+	 * @var int Total pages number
 	 */
 	private $n;
 	/**
 	 *
-	 * @var int Total elements number 
+	 * @var int Total elements number
 	 */
 	private $total;
 	/**
@@ -29,7 +29,7 @@ class Pagination {
 	private $limit;
 	/**
 	 *
-	 * @var int Current page 
+	 * @var int Current page
 	 */
 	private $currentPage;
 	/**
@@ -37,10 +37,10 @@ class Pagination {
 	 * @var string URL pattern for the current page
 	 */
 	private $urlPattern;
-	
+
 	/**
 	 * Setup Pagination
-	 * 
+	 *
 	 * @param type  $total          Total elements number
 	 * @param type  $limit          Maximum number of elements on a page
 	 * @param int   $currentPage    Page Current page
@@ -50,29 +50,29 @@ class Pagination {
 		$this->total = $total <= 0 ? 1 : $total;
 		$this->limit = $limit;
 		$this->urlPattern = $urlPattern;
-		
+
 		// Computes the number of pages (rule for inexact value : trunc(n)+1)
 		$this->n = ceil($this->total / $this->limit);
-		
+
 		if ($currentPage <= 0 || $currentPage > $this->n) {
 			$currentPage = 1;
 		}
 		$this->currentPage = $currentPage;
 	}
-	
+
 	/**
 	 * Returns the HTML code corresponding to the current page page-selector
-	 * 
+	 *
 	 * @return string HTML code of the page selector
 	 */
 	public function getHTML() {
 		// CSS adding
 		$tpl = WSystem::getTemplate();
-		
+
 		// Beginning of the display-chain
 		$output = "<div class='row text-center'>
 						<ul class='pagination'>";
-						
+
 		$firstDone = false;
 		$lastDone = false;
 		for ($i = 1; $i <= $this->n; $i++) {
@@ -90,7 +90,7 @@ class Pagination {
 					$firstDone = true;
 					$output .= sprintf(
 						'<li><a href="%s">First</a></li>
-						<li><a href="%s" title="Page précédente">&laquo;</a></li> ', 
+						<li><a href="%s" title="Page précédente">&laquo;</a></li> ',
 						sprintf(urldecode($this->urlPattern), 1), sprintf(urldecode($this->urlPattern), $this->currentPage-1)
 					);
 				}
@@ -99,7 +99,7 @@ class Pagination {
 					$lastDone = true;
 					$output .= sprintf(
 						'<li><a href="%s" title="Page suivante">&raquo;</a></li>
-						<li><a href="%s">Last</a></li>', 
+						<li><a href="%s">Last</a></li>',
 						sprintf(urldecode($this->urlPattern), $this->currentPage+1), sprintf(urldecode($this->urlPattern), $this->n)
 					);
 				}
@@ -109,14 +109,14 @@ class Pagination {
 				}
 			}
 		}
-		
+
 		$output .= '</ul></div>';
 		return $output;
 	}
-	
+
 	/**
 	 * Returns the HTML code corresponding to the current page page-selector
-	 * 
+	 *
 	 * @see Pagination::getHTML()
 	 * @return string HTML code of the page selector
 	 */

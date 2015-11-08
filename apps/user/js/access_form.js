@@ -118,17 +118,17 @@ define(['jquery'], function($) {
 		$('#'+id+' .access-type').change(function() {
 			changeType(id, $(this).val());
 		});
-		
+
 		// Whenever the check or uncheck buttons are used
 		$('#'+id+' .check-all').click(function() {
 			changeType(id, 'custom');
 			accessSelectAll(id);
 		});
-		
+
 		$('#'+id+' .uncheck-all').click(function() {
 			changeType(id, 'none');
 		});
-		
+
 		// Whenever a checkbox is changed
 		$('#'+id+' input[type="checkbox"]').change(function() {
 			if ($('#'+id+' .user-rights input:checked').size() == 0) {
@@ -149,7 +149,7 @@ define(['jquery'], function($) {
 		if (group_id == 0) {
 			return;
 		}
-		
+
 		// global var group_access is defined in the template file
 		assignPermissions('user-access', group_access[group_id]);
 	}
@@ -164,7 +164,7 @@ define(['jquery'], function($) {
 			}
 		}
 	});
-	
+
 	$('#groupe').change(function() {
 		accessGroup(this.options[this.selectedIndex].value);
 	});

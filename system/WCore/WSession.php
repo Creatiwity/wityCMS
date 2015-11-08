@@ -7,7 +7,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WSession manages all session variables and anti flood system.
- * 
+ *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.5.0-dev-07-01-2014
@@ -18,28 +18,28 @@ class WSession {
 	 * @type int
 	 */
 	const REMEMBER_TIME = 604800; // 1 week
-	
+
 	/**
 	 * Minimum time between two POST requests
 	 */
 	const FLOOD_TIME = 2;
-	
+
 	/**
 	 * Time before the session expires (seconds)
 	 */
 	const TOKEN_EXPIRATION = 120;
-	
+
 	/*
 	 * Maximum login attempts
 	 */
 	const MAX_LOGIN_ATTEMPT = 3;
-	
+
 	/**
 	 * States
 	 */
 	const LOGIN_SUCCESS = 1;
 	const LOGIN_MAX_ATTEMPT_REACHED = 2;
-	
+
 	/**
 	 * Session setup
 	 */
@@ -48,10 +48,10 @@ class WSession {
 		ini_set('session.use_trans_sid', '0');
 		session_name('wsid');
 		session_set_cookie_params(self::REMEMBER_TIME, WRoute::getDir());
-		
+
 		// Start sessions
 		session_start();
-		
+
 		if ($this->isConnected()) {
 			// Token expiration checking
 			if (empty($_SESSION['token_expiration']) || time() >= $_SESSION['token_expiration']) {
@@ -64,19 +64,19 @@ class WSession {
 			$this->reloadSession(intval($_COOKIE['userid']));
 		}
 	}
-	
+
 	/**
 	 * Is the user logged in?
-	 * 
+	 *
 	 * @return boolean true if the user is logged in, false otherwise
 	 */
 	public static function isConnected() {
 		return isset($_SESSION['userid']);
 	}
-	
+
 	/**
 	 * Creates a session for the user
-	 * 
+	 *
 	 * @param string $nickname nickname
 	 * @param string $password password
 	 * @param string $remember true if auto-log in of the user enabled for the next time
@@ -90,7 +90,7 @@ class WSession {
 		} else if ($_SESSION['login_try'] >= self::MAX_LOGIN_ATTEMPT) {
 			return self::LOGIN_MAX_ATTEMPT_REACHED;
 		}
-		
+
 		// Treatment
 		$nickname = trim($nickname);
 		// Email to lower case
@@ -98,17 +98,17 @@ class WSession {
 			$nickname = strtolower($nickname);
 		}
 		$password_hash = sha1($password);
-		
+
 		// Search a matching couple (nickname, password_hash) in DB
 		include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 		$userModel = new UserModel();
 		$data = $userModel->matchUser($nickname, $password_hash);
-		
+
 		// User found
 		if (!empty($data)) {
 			unset($_SESSION['login_try']); // cleanup
 			$this->setupSession($data['id'], $data);
-			
+
 			// Cookie setup
 			if ($remember > 0) {
 				$lifetime = time() + $remember;
@@ -116,17 +116,17 @@ class WSession {
 				setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
 				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, WRoute::getDir());
 			}
-			return self::LOGIN_SUCCESS; 
+			return self::LOGIN_SUCCESS;
 		} else {
 			// Attempt + 1
 			$_SESSION['login_try']++;
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Setup session variables for the user
-	 * 
+	 *
 	 * @param string $userid current user id
 	 * @param array $data data to store into $_SESSION
 	 */
@@ -138,7 +138,7 @@ class WSession {
 		$_SESSION['lang']      = $data['lang'];
 		$_SESSION['firstname'] = $data['firstname'];
 		$_SESSION['lastname']  = $data['lastname'];
-		
+
 		$_SESSION['access_string'] = $data['access'];
 		if (empty($data['access'])) {
 			$_SESSION['access'] = '';
@@ -157,50 +157,50 @@ class WSession {
 				}
 			}
 		}
-		
+
 		// Next checking time
 		$_SESSION['token_expiration'] = time() + self::TOKEN_EXPIRATION;
 	}
-	
+
 	/**
 	 * Disconnects the user
 	 */
 	public function closeSession() {
 		// Delete vars
 		unset(
-			$_SESSION['userid'], 
-			$_SESSION['nickname'], 
-			$_SESSION['email'], 
-			$_SESSION['groupe'], 
-			$_SESSION['lang'], 
-			$_SESSION['firstname'], 
-			$_SESSION['lastname'], 
-			$_SESSION['access_string'], 
+			$_SESSION['userid'],
+			$_SESSION['nickname'],
+			$_SESSION['email'],
+			$_SESSION['groupe'],
+			$_SESSION['lang'],
+			$_SESSION['firstname'],
+			$_SESSION['lastname'],
+			$_SESSION['access_string'],
 			$_SESSION['access'],
 			$_SESSION['token_expiration']
 		);
-		
+
 		// Reset cookies
 		setcookie('userid', '', time()-3600, WRoute::getDir());
 		setcookie('hash', '', time()-3600, WRoute::getDir());
 	}
-	
+
 	/**
 	 * Clean variables used to define a user loaded
 	 */
 	public function destroy() {
 		$this->closeSession();
-		
+
 		$_SESSION = array();
 		session_destroy();
-		
+
 		// Reset cookies
 		setcookie(session_name(), '', time()-3600, WRoute::getDir());
 	}
-	
+
 	/**
 	 * Reloads a user based on cookies
-	 * 
+	 *
 	 * @param string $userid        current user id
 	 * @param string $cookie_hash   cookie hash for security checking
 	 * @return boolean true if successfully reloaded, false otherwise
@@ -210,22 +210,22 @@ class WSession {
 			include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 			$userModel = new UserModel();
 			$data = $userModel->getUser($userid);
-			
+
 			if (!empty($data)) {
 				// Check hash
 				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
 					$this->setupSession($userid, $data);
-					
+
 					return true;
 				}
 			}
 		}
-		
+
 		$this->closeSession();
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Generates a user-and-computer specific hash that will be stored in a cookie
 	 *
@@ -236,26 +236,26 @@ class WSession {
 	 */
 	public function generate_hash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
-		
+
 		// Link the hash to the user's environment
 		if ($environment) {
 			$string .= $_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']."*";
 		}
-		
+
 		return sha1($string);
 	}
-	
+
 	/**
 	 * Anti-flood method
-	 * 
+	 *
 	 * Checking the $_POST content to avoid multiple and repeating similar form submissions.
-	 * 
+	 *
 	 * @return boolean true if flood detected, false otherwise
 	 */
 	public function check_flood() {
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$flood = true;
-			
+
 			// Referer checking
 			if (empty($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
 				header('location: '.WRoute::getBase());
@@ -270,46 +270,46 @@ class WSession {
 			else if (empty($_SESSION['access'][0]) && !empty($_SESSION['flood_time']) && $_SESSION['flood_time'] > time()) {
 				$exceptions = array('user');
 				$route = WRoute::route();
-				
+
 				// Applications in $exceptions will bypass the flood checking
 				if (!in_array($route['app'], $exceptions)) {
 					WNote::info('flood_wait', WLang::get('info_flood_wait', self::FLOOD_TIME));
 					$flood = false;
 				}
 			}
-			
+
 			// Updating flood variables
 			$_SESSION['last_query'] = md5(serialize($_POST));
-			
+
 			// Updating flood time at shutdown to let less priorized script using this variable
 			register_shutdown_function(array($this, 'upgrade_flood'), time() + self::FLOOD_TIME + 1);
-			
+
 			return $flood;
 		} else {
 			// Creating SESSION variable $flood_time
 			if (!isset($_SESSION['flood_time'])) {
 				$_SESSION['flood_time'] = 0;
 			}
-			
+
 			// Void last request
 			$_SESSION['last_query'] = '';
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Updates flood time.
-	 * 
+	 *
 	 * @param int $limit timestamp limit
 	 */
 	public function upgrade_flood($limit) {
 		$_SESSION['flood_time'] = $limit;
 	}
-	
+
 	/**
 	 * Get the IP of the client.
-	 * 
+	 *
 	 * @return string Either an ipv4 or an ipv6 address
 	 */
 	public static function getIP() {
@@ -322,7 +322,7 @@ class WSession {
 		else {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		}
-		
+
 		return $ip;
 	}
 }

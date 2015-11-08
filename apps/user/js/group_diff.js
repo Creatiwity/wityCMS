@@ -131,15 +131,15 @@ require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 
 					// Bind change events to every inputs
 					accessForm.bindEvents('user-'+data[i].id);
-					
+
 					$('#user-'+data[i].id+' a.reset').click(function() {
 						var $parent = $(this).parent(),
 							el_id = $parent.attr('id'),
 							access = $parent.attr('data-user-access');
-						
+
 						assignDiffPermissions(el_id, group_access, access);
 					});
-					
+
 					// Assign group permissions to inputs
 					assignDiffPermissions('user-'+data[i].id, group_access, data[i].access);
 				}

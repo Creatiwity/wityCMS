@@ -1,7 +1,7 @@
 <?php
 /**
  * Sample configuration file for system/config/config.php
- * 
+ *
  * This file defines the main configuration values for wityCMS.
  */
 

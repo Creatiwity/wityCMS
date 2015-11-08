@@ -18,18 +18,18 @@ class TeamModel {
 	 * @var WDatabase instance
 	 */
 	protected $db;
-	
+
 	public function __construct() {
 		$this->db = WSystem::getDB();
-		
+
 		// Declare table
 		$this->db->declareTable('team_member');
 		$this->db->declareTable('team_member_lang');
 	}
-	
+
 	/**
 	 * Get member for a given ID.
-	 * 
+	 *
 	 * @param int $id_member
 	 * @return array|false
 	 */
@@ -46,13 +46,13 @@ class TeamModel {
 		$prep->bindParam(':id', $id_member, PDO::PARAM_INT);
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Get the Members.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getMembers() {
@@ -67,7 +67,7 @@ class TeamModel {
 		');
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
 }

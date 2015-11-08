@@ -9,7 +9,7 @@
 			<input type="hidden" name="old_access" value="{$group.access}" />
 			<input type="hidden" name="new_name" value="{$new_name}" />
 			<input type="hidden" name="new_access" value="{$new_access}" />
-			
+
 			<h1>{lang apply_access|{$group.name}} (<a href="/admin/user/listing/?groupe={$group.id}" onclick="window.open(this.href); return false;">{$count_total} {lang users}</a>)</h1>
 			<p>
 				{if {$count_regular} > 0}
@@ -20,7 +20,7 @@
 				<label><input id="display-custom" type="checkbox" name="apply_to_custom" checked="checked" /> {lang apply_access_custom} ({$count_custom} {lang users})</label>
 				{/if}
 			</p>
-			
+
 			{if {$count_custom} > 0}
 			<div class="listing-wrapper">
 				<div class="alphabet">
@@ -28,7 +28,7 @@
 				</div>
 				<div class="users-list-container">
 					<p class="caption">{lang select_users}</p>
-					
+
 					<dl class="users-list">
 						<dt class="pattern"><label><input type="checkbox" name="user[]" checked="checked" /> <span class="nickname"></span></label></dt>
 						<dd class="pattern">
@@ -36,7 +36,7 @@
 							<label><input class="access-type all" type="radio" name="type[]" value="all" /> {lang access_all}</label>
 							<label><input class="access-type custom" type="radio" name="type[]" value="custom" /> {lang access_custom}</label>
 							- [<a href="javascript:void(0)" class="reset">{lang reset}</a>]
-							
+
 							<div class="text-right">
 								<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
 							</div>
@@ -74,7 +74,7 @@
 				<div class="clear"></div>
 			</div>
 			{/if}
-			
+
 			<p class="text-center">
 				<input type="submit" value="{lang apply}" class="btn btn-primary" />
 				<input type="button" value="{lang cancel}" class="btn btn-default" onclick="history.back();" />

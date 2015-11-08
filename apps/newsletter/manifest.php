@@ -3,15 +3,15 @@
 <app>
 	<!-- Application name -->
 	<name>Newsletter</name>
-	
+
 	<version>1.0.0</version>
-	
+
 	<!-- Last update date -->
 	<date>01-03-2015</date>
-	
+
 	<!-- Front pages -->
 	<action default="default">add</action>
-	
+
 	<!-- Admin pages -->
 	<admin>
 		<action default="default" description="action_listing">listing</action>

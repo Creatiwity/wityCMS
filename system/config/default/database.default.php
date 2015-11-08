@@ -1,7 +1,7 @@
 <?php
 /**
  * Sample configuration file for system/config/database.php
- * 
+ *
  * This file defines the credentials to login to the MySQL database.
  */
 

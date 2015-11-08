@@ -7,26 +7,26 @@ defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserModel is the Front Model of the User Application.
- * 
+ *
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @version 0.5.0-dev-15-02-2013
  */
 class UserModel {
 	protected $db;
-	
+
 	public function __construct() {
 		$this->db = WSystem::getDB();
-		
+
 		// Declare table
 		$this->db->declareTable('users');
 		$this->db->declareTable('users_config');
 		$this->db->declareTable('users_groups');
 	}
-	
+
 	/**
 	 * Checks whether a nickname is valid and available
-	 * 
+	 *
 	 * @param string $nickname
 	 * @return mixed true if valid or error string
 	 */
@@ -36,23 +36,23 @@ class UserModel {
 		} else if (!WTools::isEmail($nickname) && preg_match('#[\.]+#', $nickname)) {
 			return 'nickname_invalid_char';
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE nickname LIKE :nickname
 		');
 		$prep->bindParam(':nickname', $nickname);
 		$prep->execute();
-		
+
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
 			return 'nickname_already_used';
 		}
 	}
-	
+
 	/**
 	 * Checks whether an email is valid and available
-	 * 
+	 *
 	 * @param string $email
 	 * @return mixed true if valid or error string
 	 */
@@ -60,23 +60,23 @@ class UserModel {
 		if (!WTools::isEmail($email)) {
 			return 'email_not_valid';
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT * FROM users WHERE email LIKE :email
 		');
 		$prep->bindParam(':email', $email);
 		$prep->execute();
-		
+
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
 			return 'email_already_used';
 		}
 	}
-	
+
 	/**
 	 * Counts the users in the database.
-	 * 
+	 *
 	 * @param array $filters List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return int Number of users
 	 */
@@ -96,13 +96,13 @@ class UserModel {
 					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
-			
+
 			if (isset($filters['valid'])) {
 				$cond .= 'valid = '.intval($filters['valid']).' AND ';
 			} else {
 				$cond .= 'valid = 1 AND ';
 			}
-			
+
 			if (!empty($filters['groupe'])) {
 				$cond = 'LEFT JOIN users_groups
 				ON groupe = users_groups.id
@@ -110,22 +110,22 @@ class UserModel {
 			} else if (!empty($cond)) {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
-			
+
 			$prep = $this->db->prepare('
 				SELECT COUNT(*)
 				FROM users
 				'.$cond
 			);
 		}
-		
+
 		$prep->execute();
-		
+
 		return intval($prep->fetchColumn());
 	}
-	
+
 	/**
 	 * Retrieves a list of users.
-	 * 
+	 *
 	 * @param int    $from     Position of the first user to return
 	 * @param int    $number   Number of users
 	 * @param string $order    Name of the ordering column
@@ -137,7 +137,7 @@ class UserModel {
 		if (strtoupper($sens) != 'ASC') {
 			$sens = 'DESC';
 		}
-		
+
 		// Add filters
 		$cond = '';
 		if (!empty($filters)) {
@@ -150,24 +150,24 @@ class UserModel {
 					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
 				}
 			}
-			
+
 			if (isset($filters['valid'])) {
 				$cond .= 'valid = '.intval($filters['valid']).' AND ';
 			} else {
 				$cond .= 'valid = 1 AND ';
 			}
-			
+
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
-			
+
 			if (!empty($cond)) {
 				$cond = 'WHERE '.substr($cond, 0, -5);
 			}
 		}
-		
+
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe, 
+			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe,
 				users.access, valid, ip, name AS groupe_name, last_activity, users.created_date
 			FROM users
 			LEFT JOIN users_groups
@@ -179,19 +179,19 @@ class UserModel {
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Retrieves informations about for specific user.
-	 * 
+	 *
 	 * @param int $user_id ID of the user
 	 * @return array Information about the user
 	 */
 	public function getUser($user_id) {
 		$prep = $this->db->prepare('
-			SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe, 
+			SELECT users.id, nickname, password, email, firstname, lastname, country, lang, groupe,
 				users.access, valid, ip, name AS groupe_name, last_activity, users.created_date
 			FROM users
 			LEFT JOIN users_groups
@@ -200,13 +200,13 @@ class UserModel {
 		');
 		$prep->bindParam(':userid', $user_id, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Finds a user in the database matching with $nickname and $password.
-	 * 
+	 *
 	 * @param string $nickname
 	 * @param string $password
 	 * @return array Information of the users found
@@ -222,10 +222,10 @@ class UserModel {
 		$prep->execute();
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Creates a user in the database.
-	 * 
+	 *
 	 * @param array $data
 	 * @return mixed ID of the user just created or false on failure
 	 */
@@ -252,17 +252,17 @@ class UserModel {
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		
+
 		if ($prep->execute()) {
 			return $this->db->lastInsertId();
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Updates a user in the database.
-	 * 
+	 *
 	 * @param int   $user_id ID of the user
 	 * @param array $data    New data to assign
 	 * @return bool Request status
@@ -276,17 +276,17 @@ class UserModel {
 			$string .= $key.' = '.$this->db->quote($value).', ';
 		}
 		$string = substr($string, 0, -2);
-		
+
 		return $this->db->query('
 			UPDATE users
 			SET '.$string.'
 			WHERE id = '.$user_id
 		);
 	}
-	
+
 	/**
 	 * Updates the last_activity timestamp and the ip of a user in the database.
-	 * 
+	 *
 	 * @param int $user_id ID of the user
 	 * @return bool Request status
 	 */
@@ -300,10 +300,10 @@ class UserModel {
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Find a user with its confirm code.
-	 * 
+	 *
 	 * @param string $confirm The confirm code of the user
 	 * @return array User data (array() if not found)
 	 */
@@ -315,13 +315,13 @@ class UserModel {
 		');
 		$prep->bindParam(':confirm', $confirm);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Find a user with its email.
-	 * 
+	 *
 	 * @param string $email Email of the user
 	 * @return array User data (array() if not found)
 	 */
@@ -333,13 +333,13 @@ class UserModel {
 		');
 		$prep->bindParam(':email', $email);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Find a user with its email and confirm code.
-	 * 
+	 *
 	 * @param string $email    Email of the user desired
 	 * @param string $confirm  Confirm code
 	 * @return array User data (array() if not found)
@@ -353,13 +353,13 @@ class UserModel {
 		$prep->bindParam(':email', $email);
 		$prep->bindParam(':confirm', $confirm);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Send an email in html for user app purpose.
-	 * 
+	 *
 	 * @param string $to
 	 * @param string $subject
 	 * @param string $body
@@ -376,10 +376,10 @@ class UserModel {
 		$mail->Send();
 		unset($mail);
 	}
-	
+
 	/**
 	 * Retrieves the User app's configuration stored in the users_config table.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getConfig() {
@@ -388,12 +388,12 @@ class UserModel {
 			FROM users_config
 		');
 		$prep->execute();
-		
+
 		$config = array();
 		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$config[$row['name']] = $row['value'];
 		}
-		
+
 		return $config;
 	}
 }

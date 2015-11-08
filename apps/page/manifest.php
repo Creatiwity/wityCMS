@@ -3,19 +3,19 @@
 <app>
 	<!-- Application name -->
 	<name>Page</name>
-	
+
 	<version>0.5.0</version>
-	
+
 	<!-- Last update date -->
 	<date>23-03-2015</date>
-	
+
 	<!-- Permissions -->
 	<permission name="writer" />
 	<permission name="moderator" />
-	
+
 	<!-- Front pages -->
 	<action default="default">display</action>
-	
+
 	<!-- Admin pages -->
 	<admin>
 		<action default="default">pages</action>

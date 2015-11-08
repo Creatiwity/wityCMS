@@ -4,17 +4,17 @@
 	<item id="action_listing">Subscribers list</item>
 	<item id="action_delete">Delete a subscriber</item>
 	<item id="action_export">Export subscriber list</item>
-	
+
 	<!-- page listing -->
 	<item id="actions">Actions</item>
 	<item id="email">E-mail adress</item>
 	<item id="date">Date</item>
 	<item id="no_subs_in_database">No subscriber found in the database.</item>
 	<item id="sub_delete_confirmation">Are you sure you want to delete the subscriber &lt;strong&gt;%s&lt;/strong&gt;?</item>
-	
+
 	<!-- page management -->
 	<item id="sub_deleted">Subscriber &lt;strong&gt;%s&lt;/strong&gt; has been successfully deleted.</item>
-	
+
 	<item id="cancel">Cancel</item>
 	<item id="delete">Delete</item>
 	<item id="submit">Save</item>
