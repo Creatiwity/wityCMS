@@ -101,11 +101,11 @@ class NewsAdminView extends WView {
 		$this->assignDefault($default, $model['data']);
 
 		// Auto-translate
-		$js_values = array();
+		$form_values = array();
 		foreach ($default as $item => $def) {
-			$js_values[$item] = isset($model['data'][$item]) ? $model['data'][$item] : $def;
+			$form_values[$item] = isset($model['data'][$item]) ? $model['data'][$item] : $def;
 		}
-		$this->assign('js_values', json_encode($js_values));
+		$this->assign('form_values', json_encode($form_values));
 
 		$this->setTemplate('news-form');
 	}

@@ -60,8 +60,8 @@ require(['jquery', 'witycms/admin'], function($) {
 	});
 
 	$(namespace + '#parent').on('change', function() {
-		for (var i = 0; i < wity_enabled_langs.length; ++i) {
-			formatURL(wity_enabled_langs[i].id);
+		for (var i = 0; i < wity_lang_enabled_langs.length; ++i) {
+			formatURL(wity_lang_enabled_langs[i].id);
 		}
 	});
 

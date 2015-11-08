@@ -61,7 +61,7 @@ require(['jquery'], function($) {
 	});
 
 	$(namespace + '.btn.preview').click(function() {
-		$.post(wityBaseURL + 'm/admin/news/news-save-preview',
+		$.post(wity_base_url + 'm/admin/news/news-save-preview',
 			{
 				title: $('#title').val(),
 				content: CKEDITOR.instances.content.getData()
@@ -72,7 +72,7 @@ require(['jquery'], function($) {
 						var dataJSON = JSON.parse(data);
 
 						if (dataJSON.result && dataJSON.result === 'ok') {
-							window.open(wityBaseURL + 'news/preview');
+							window.open(wity_base_url + 'news/preview');
 						}
 					} catch (e) {}
 				}

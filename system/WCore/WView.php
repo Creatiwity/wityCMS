@@ -274,9 +274,9 @@ class WView {
 
 				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.min.js"></script>'."\n"
 					.'<script>'."\n"
-					.'var wity_enabled_langs = ['. implode(',', $lang_array) ."];\n"
 					.'var wity_base_url = "'.WRoute::getBase().'"'.";\n"
-					.'var wity_default_lang_id = "'.WLang::getDefaultLangId().'"'.";\n"
+					.'var wity_lang_enabled_langs = ['. implode(',', $lang_array) ."];\n"
+					.'var wity_lang_default_id = "'.WLang::getDefaultLangId().'"'.";\n"
 					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
 
 				// If array not empty

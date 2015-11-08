@@ -48,11 +48,11 @@ class SlideshowAdminView extends WView {
 		$this->assignDefault($default, $model);
 
 		// Auto-translate
-		$js_values = array();
+		$form_values = array();
 		foreach ($default as $item => $def) {
-			$js_values[$item] = isset($model[$item]) ? $model[$item] : $def;
+			$form_values[$item] = isset($model[$item]) ? $model[$item] : $def;
 		}
-		$this->assign('js_values', json_encode($js_values));
+		$this->assign('form_values', json_encode($form_values));
 
 		$this->setTemplate('slide_form');
 	}

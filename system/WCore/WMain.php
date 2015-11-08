@@ -207,6 +207,7 @@ class WMain {
 			'wity_app'              => $route['app'],
 			'wity_query'            => WRoute::getQuery(),
 			'wity_lang'             => WLang::getLangISO(),
+			'wity_lang_code'        => WLang::getLang(),
 			'wity_site_favicon'     => WConfig::get('config.favicon'),
 			'wity_site_icon'        => WConfig::get('config.icon')
 		);

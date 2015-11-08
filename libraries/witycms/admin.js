@@ -6,14 +6,14 @@ require(['jquery'], function($) {
 	// Add translatable tabs
 	var translatable_html = '<div role="tabpanel" style="margin-bottom: 1em;"><ul class="nav nav-tabs translatable-tabs" role="tablist">';
 
-	for (var i = 0; i < wity_enabled_langs.length; ++i) {
+	for (var i = 0; i < wity_lang_enabled_langs.length; ++i) {
 		var act = '';
 
-		if (wity_enabled_langs[i].id == wity_default_lang_id) {
+		if (wity_lang_enabled_langs[i].id == wity_lang_default_id) {
 			act = ' class="active"';
 		}
 
-		translatable_html += '<li role="presentation"'+act+'><a href="#lang_'+wity_enabled_langs[i].id+'" class="lang">'+wity_enabled_langs[i].name+'</a></li>';
+		translatable_html += '<li role="presentation"'+act+'><a href="#lang_'+wity_lang_enabled_langs[i].id+'" class="lang">'+wity_lang_enabled_langs[i].name+'</a></li>';
 	}
 
 	translatable_html += '</ul></div>';
@@ -37,9 +37,9 @@ require(['jquery'], function($) {
 		var $this = $(this),
 			$base = $this.children().detach();
 
-		for (var i = 0; i < wity_enabled_langs.length; ++i) {
-			var classes = 'lang_' + wity_enabled_langs[i].id;
-			if (wity_enabled_langs[i].id != wity_default_lang_id) {
+		for (var i = 0; i < wity_lang_enabled_langs.length; ++i) {
+			var classes = 'lang_' + wity_lang_enabled_langs[i].id;
+			if (wity_lang_enabled_langs[i].id != wity_lang_default_id) {
 				classes += ' hidden';
 			}
 
@@ -47,23 +47,23 @@ require(['jquery'], function($) {
 
 			$current.find('label').each(function() {
 				var $that = $(this);
-				$that.attr('for', $that.attr('for') + '_' + wity_enabled_langs[i].id);
-			})
+				$that.attr('for', $that.attr('for') + '_' + wity_lang_enabled_langs[i].id);
+			});
 
-			$current.find('input, select, textarea').each(function(){
+			$current.find('input, select, textarea').each(function() {
 				var $that = $(this);
-				$that.data('lang', wity_enabled_langs[i].id);
+				$that.data('lang', wity_lang_enabled_langs[i].id);
 
-				$that.attr('name', $that.attr('name') + '_' + wity_enabled_langs[i].id);
-				$that.attr('id', $that.attr('id') + '_' + wity_enabled_langs[i].id);
+				$that.attr('name', $that.attr('name') + '_' + wity_lang_enabled_langs[i].id);
+				$that.attr('id', $that.attr('id') + '_' + wity_lang_enabled_langs[i].id);
 
-				if (js_values) {
+				if (wity_lang_form_values) {
 					if ($that.is('input[type="checkbox"]')) {
-						$that.attr('checked', js_values[$that.attr('name')] == "1");
+						$that.attr('checked', wity_lang_form_values[$that.attr('name')] == "1");
 					} else if ($that.is('input') || $that.is('select')) {
-						$that.attr('value', js_values[$that.attr('name')]);
+						$that.attr('value', wity_lang_form_values[$that.attr('name')]);
 					} else {
-						$that.html(js_values[$that.attr('name')]);
+						$that.html(wity_lang_form_values[$that.attr('name')]);
 					}
 				}
 			});
@@ -96,7 +96,10 @@ require(['jquery'], function($) {
 			$parametersElement = $reordableTable.closest('[data-reordable-parameters]'),
 			parameters = $parametersElement.length > 0 ? $parametersElement.data('reordableParameters') : {},
 			$sortableElements,
-			bindMove, unbindMove, $rootElement, moving = false;
+			bindMove,
+			unbindMove,
+			$rootElement,
+			moving = false;
 
 		bindMove = function($element) {
 			$sortableElements = $reordableTable.find('tr').not('thead>tr, tfoot>tr, tr.not-reordable');
@@ -128,12 +131,14 @@ require(['jquery'], function($) {
 
 		unbindMove = function() {
 			if (moving) {
+				var data;
+
 				$rootElement.removeClass('reordering');
 				$sortableElements.off('mouseenter');
 				moving = false;
 
 				if (url) {
-					var data = $.extend({}, parameters);
+					data = $.extend({}, parameters);
 				}
 
 				$sortableElements.each(function(index, element) {
