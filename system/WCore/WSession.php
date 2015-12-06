@@ -140,6 +140,8 @@ class WSession {
 
 		if (empty($_SESSION['lang']) && !empty($data['lang'])) {
 			$_SESSION['lang'] = $data['lang'];
+		} else {
+			$_SESSION['lang'] = WLang::getLangISO();
 		}
 
 		$_SESSION['access_string'] = $data['access'];
