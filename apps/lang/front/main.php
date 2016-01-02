@@ -25,13 +25,13 @@ class LangController extends WController {
 				break;
 
 			case 'en':
-				$_SESSION['lang'] = 'en';
-				$_SESSION['lang_iso'] = 'en_EN';
+				$_SESSION['lang'] = 'en_EN';
+				$_SESSION['lang_iso'] = 'en';
 				break;
 
 			case 'es':
-				$_SESSION['lang'] = 'es';
-				$_SESSION['lang_iso'] = 'es_ES';
+				$_SESSION['lang'] = 'es_ES';
+				$_SESSION['lang_iso'] = 'es';
 				break;
 		}
 

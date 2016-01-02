@@ -112,6 +112,7 @@ class SettingsAdminController extends WController {
 			}
 			/* END VARIABLES CHECKING */
 
+			$post_data['iso'] = strtolower($post_data['iso']);
 			$post_data['enabled'] = $post_data['enabled'] == 'on';
 
 			$languages = WLang::getLangIds();
