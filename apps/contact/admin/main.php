@@ -66,12 +66,12 @@ class ContactAdminController extends WController {
 	protected function mail_detail(array $params) {
 		$id = intval(array_shift($params));
 		if (empty($id)) {
-			return WNote::error('missing_email_id', WLang::_('missing_email_id'));
+			return WNote::error('missing_email_id', WLang::get('Email id is missing.'));
 		}
 
 		$model = $this->model->getEmail($id);
 		if (!$model) {
-			return WNote::error('not_found_email_id', WLang::_('not_found_email_id'));
+			return WNote::error('not_found_email_id', WLang::get('Unable to find this email.'));
 		}
 
 		return $model;
@@ -80,7 +80,7 @@ class ContactAdminController extends WController {
 	protected function download(array $params) {
 		$id = intval(array_shift($params));
 		if (empty($id)) {
-			return WNote::error('missing_email_id', WLang::_('missing_email_id'));
+			return WNote::error('missing_email_id', WLang::get('Email id is missing.'));
 		}
 
 		$model = $this->model->getEmail($id);
@@ -126,7 +126,7 @@ class ContactAdminController extends WController {
 				}
 			}
 
-			WNote::success('contact_config_updated', WLang::get('contact_config_updated'));
+			WNote::success('contact_config_updated', WLang::get('The configuration was updated.'));
 		}
 
 		return $config;

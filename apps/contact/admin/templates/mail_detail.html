@@ -5,12 +5,14 @@
 			<h4 class="modal-title" id="modal_email_label">{$object}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{lang from} <b>{$from}</b></p>
-			{if !empty({$attachment})}<p><b><a href="/admin/contact/download/{$id}"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> {lang attachment}</a></b></p>{/if}
+			<p>{lang From:} <b>{$from}</b></p>
+			{if !empty({$attachment})}
+			<p><b><a href="/admin/contact/download/{$id}"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> {lang Download attachment}</a></b></p>
+			{/if}
 			<span>{$message}</span>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{lang close}</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">{lang Close}</button>
 		</div>
 	</div>
 </div>

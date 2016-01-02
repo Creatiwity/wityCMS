@@ -12,7 +12,6 @@ require(['jquery'], function($) {
 			var cleaned, app, $container, _i, _len;
 
 			if (jsonResponse['app-name']) {
-
 				app = jsonResponse['app-name'];
 
 				$('[data-wity-note-app="' + app + '"]').remove();
@@ -22,10 +21,12 @@ require(['jquery'], function($) {
 					$domObject.before($container);
 
 					for (_i = 0, _len = jsonResponse.notes.length; _i < _len; ++_i) {
-						$container.append('<div class="alert alert-' + jsonResponse.notes[_i].level + '" data-note-code="' + jsonResponse.notes[_i].code + '">'
-							+ '<button type="button" class="close" data-dismiss="alert">&times;</button>'
-							+ jsonResponse.notes[_i].message
-							+ '</div>');
+						$container.append('<div class="alert alert-' + jsonResponse.notes[_i].level +
+							'" data-note-code="' + jsonResponse.notes[_i].code + '">' +
+								'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+								jsonResponse.notes[_i].message +
+							'</div>'
+						);
 					}
 				}
 			}
@@ -37,7 +38,7 @@ require(['jquery'], function($) {
 			$button = $(this);
 			$button.button('loading');
 			$form = $button.closest('form');
-			url = $form.attr('action');
+			url = $form.attr('action').replace('/contact', '/m/contact');
 			method = $form.attr('method');
 			data = $form.serialize();
 

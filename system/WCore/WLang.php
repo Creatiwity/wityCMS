@@ -333,28 +333,28 @@ class WLang {
 			}
 		}
 
-		if (isset(self::$values[$name])) {
-			// Replace given parameters in the lang string
-			if (!is_null($params)) {
-				if (strpos(self::$values[$name], '%s') !== false) {
-					$args = func_get_args();
-					$args[0] = self::$values[$name];
-
-					return call_user_func_array('sprintf', $args);
-				} else if (is_array($params)) {
-					$string = self::$values[$name];
-					foreach ($params as $key => $value) {
-						$string = str_replace('{{'.$key.'}}', $value, $string);
-					}
-
-					return $string;
-				}
-			}
-
-			return self::$values[$name];
-		} else {
-			return ucfirst(str_replace('_', ' ', $name));
+		if (!isset(self::$values[$name])) {
+			self::$values[$name] = $name;
 		}
+
+		// Replace given parameters in the lang string
+		if (!is_null($params)) {
+			if (strpos(self::$values[$name], '%s') !== false) {
+				$args = func_get_args();
+				$args[0] = self::$values[$name];
+
+				return call_user_func_array('sprintf', $args);
+			} else if (is_array($params)) {
+				$string = self::$values[$name];
+				foreach ($params as $key => $value) {
+					$string = str_replace('{{'.$key.'}}', $value, $string);
+				}
+
+				return $string;
+			}
+		}
+
+		return self::$values[$name];
 	}
 
 	/**

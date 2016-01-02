@@ -14,9 +14,9 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action description="mail_history" default="default">mail_history</action>
+		<action default="default" description="Inbox">mail_history</action>
 		<action menu="false">mail_detail</action>
-		<action requires="config" description="action_config">config</action>
+		<action description="Configuration">config</action>
 		<action menu="false">download</action>
 	</admin>
 </app>
