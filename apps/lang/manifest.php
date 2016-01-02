@@ -9,6 +9,6 @@
 	<!-- Last update date -->
 	<date>14-06-2015</date>
 
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">select</action>
 </app>

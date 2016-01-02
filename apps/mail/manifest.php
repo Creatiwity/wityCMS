@@ -12,7 +12,7 @@
 	<!-- Permissions -->
 	<permission name="whitelist_manager" />
 
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">send</action>
 	<action>redirect</action>
 </app>

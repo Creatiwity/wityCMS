@@ -12,7 +12,7 @@
 	<!-- Front actions -->
 	<action default="default">block</action>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action default="default" description="Slides">slides</action>
 		<action menu="false">slide_add</action>

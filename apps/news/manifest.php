@@ -14,12 +14,12 @@
 	<permission name="category_manager" />
 	<permission name="moderator" />
 
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">listing</action>
 	<action>detail</action>
 	<action>preview</action>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action default="default">news</action>
 		<action requires="writer" menu="false">news-add</action>

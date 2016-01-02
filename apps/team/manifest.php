@@ -9,10 +9,10 @@
 	<!-- Last update date -->
 	<date>07-06-2015</date>
 
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">members</action>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action default="default">members</action>
 		<action menu="false">member-add</action>

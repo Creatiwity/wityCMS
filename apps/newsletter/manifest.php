@@ -9,10 +9,10 @@
 	<!-- Last update date -->
 	<date>01-03-2015</date>
 
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">add</action>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action default="default" description="action_listing">listing</action>
 		<action requires="moderator" description="action_delete" menu="false">delete</action>

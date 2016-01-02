@@ -13,10 +13,10 @@
 	<permission name="writer" />
 	<permission name="moderator" />
 
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">display</action>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action default="default">pages</action>
 		<action requires="writer" description="page_add" menu="false">add</action>

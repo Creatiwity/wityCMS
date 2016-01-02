@@ -9,7 +9,7 @@
 	<!-- Last update date -->
 	<date>22-10-2014</date>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action default="default">configure</action>
 		<action>languages</action>

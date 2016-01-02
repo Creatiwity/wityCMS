@@ -9,19 +9,13 @@
 	<!-- Last update date -->
 	<date>02-10-2013</date>
 
-	<!-- Dependencies -->
-	<dependencies>
-		<app>user</app>
-	</dependencies>
-
-	<!-- Front pages -->
+	<!-- Front actions -->
 	<action default="default">form</action>
 
-	<!-- Admin pages -->
+	<!-- Admin actions -->
 	<admin>
 		<action description="mail_history" default="default">mail_history</action>
 		<action menu="false">mail_detail</action>
-		<!-- <action description="new_mail" alias="reply">new_mail</action> -->
 		<action requires="config" description="action_config">config</action>
 		<action menu="false">download</action>
 	</admin>
