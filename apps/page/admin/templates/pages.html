@@ -1,19 +1,19 @@
 <div class="wity-app wity-app-partner wity-action-listing">
-	<h2 class="sr-only">{lang pages}</h2>
+	<h1>{lang Pages}</h1>
 
 	<div class="text-right">
-		<a class="btn btn-success" href="/admin/page/add"><i class="glyphicon glyphicon-plus"></i> {lang page_add}</a>
+		<a class="btn btn-success" href="/admin/page/add"><i class="glyphicon glyphicon-plus"></i> {lang Add a page}</a>
 	</div>
 
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<th style="width: 5%;">ID</th>
-				<th style="width: 50%;">{lang title}</th>
-				<th style="width: 10%;">{lang author}</th>
-				<th style="width: 10%;" class="text-center">{lang views}</th>
-				<th style="width: 15%;">{lang last_modification}</th>
-				<th style="width: 10%;">{lang actions}</th>
+				<th style="width: 50%;">{lang Title}</th>
+				<th style="width: 10%;">{lang Author}</th>
+				<th style="width: 10%;" class="text-center">{lang Views}</th>
+				<th style="width: 15%;">{lang Last modification}</th>
+				<th style="width: 10%;">{lang Actions}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,13 +32,13 @@
 				</td>
 				<td>
 					<div class="btn-group">
-						<a href="/admin/page/edit/{$page.id}-{$page.url}" title="{lang page_edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang edit}</a>
+						<a href="/admin/page/edit/{$page.id}-{$page.url}" title="{lang Edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
 						<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 							<span class="caret"></span>
 							<span class="sr-only">Toggle Dropdown</span>
 						</button>
 						<ul class="dropdown-menu pull-right" role="menu">
-							<li><a href="javascript:void(0)" title="{lang page_delete}" class="link" data-link-modal="/v/admin/page/delete/{$page.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang delete}</a></li>
+							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/page/delete/{$page.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
 						</ul>
 					</div>
 				</td>
@@ -46,7 +46,7 @@
 		{/for}
 		{empty}
 			<tr>
-				<td colspan="6" class="text-center">{lang no_page_in_database}</td>
+				<td colspan="6" class="text-center">{lang No page in database.}</td>
 			</tr>
 		{/empty}
 		</tbody>

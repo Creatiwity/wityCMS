@@ -79,12 +79,12 @@ class PageAdminController extends WController {
 
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data_translatable[$lang_list[0]]['title'])) {
-				$errors[] = WLang::get('page_no_title');
+				$errors[] = WLang::get('Please, provide a title.');
 			}
 
 			// Treat custom page URL
 			if (empty($data_translatable[$lang_list[0]]['url'])) {
-				$errors[] = WLang::get('page_no_permalink');
+				$errors[] = WLang::get('Please, provide a URL.');
 			}
 
 			$post_data['menu'] = false;
@@ -127,9 +127,9 @@ class PageAdminController extends WController {
 						}
 
 						$this->setHeader('Location', WRoute::getDir().'admin/page/edit/'.$id_page.'-'.$data_translatable[$lang_list[0]]['url']);
-						return WNote::success('page_added', WLang::get('page_added', $data_translatable[$lang_list[0]]['title']));
+						return WNote::success('page_added', WLang::get('The page <strong>%s</strong> was successfully created.', $data_translatable[$lang_list[0]]['title']));
 					} else {
-						WNote::error('page_not_added', WLang::get('page_not_added'));
+						WNote::error('page_not_added', WLang::get('An unknown error occurred while creating the page in the database.'));
 					}
 				} else { // Edit case
 					if ($this->model->updatePage($id_page, $post_data, $data_translatable)) {
@@ -142,9 +142,9 @@ class PageAdminController extends WController {
 						}
 
 						$this->setHeader('Location', WRoute::getDir().'admin/page/edit/'.$id_page.'-'.$data_translatable[$lang_list[0]]['url']);
-						return WNote::success('page_edited', WLang::get('page_edited', $data_translatable[$lang_list[0]]['title']));
+						return WNote::success('page_edited', WLang::get('The page <strong>%s</strong> was successfully edited.', $data_translatable[$lang_list[0]]['title']));
 					} else {
-						WNote::error('page_not_edited', WLang::get('page_not_edited'));
+						WNote::error('page_not_edited', WLang::get('An unknown error occurred while editing the page in the database.'));
 					}
 				}
 			} else {
@@ -180,7 +180,7 @@ class PageAdminController extends WController {
 			return $this->form($id_page, $db_data);
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/page');
-			return WNote::error('page_not_found', WLang::get('page_not_found'));
+			return WNote::error('page_not_found', WLang::get('Page not found.'));
 		}
 	}
 
@@ -209,14 +209,14 @@ class PageAdminController extends WController {
 				// Treat child pages
 				$this->model->removeParentPage($id_page);
 
-				WNote::success('page_deleted', WLang::get('page_deleted', $db_data['title_1']));
+				WNote::success('page_deleted', WLang::get('The page <strong>%s</strong> was successfully deleted.', $db_data['title_1']));
 				$this->setHeader('Location', WRoute::getDir().'admin/page');
 			}
 
 			return $db_data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/page');
-			return WNote::error('page_not_found', WLang::get('page_not_found', $id_page));
+			return WNote::error('page_not_found', WLang::get('Page not found.', $id_page));
 		}
 	}
 

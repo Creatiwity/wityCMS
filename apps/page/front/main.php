@@ -20,7 +20,7 @@ class PageController extends WController {
 		$page = $this->model->getPage($id_page);
 
 		if (empty($page)) {
-			return WNote::error('page_not_found', WLang::get('page_not_found', $id_page));
+			return WNote::error('page_not_found', WLang::get('Page not found.', $id_page));
 		}
 
 		// View + 1

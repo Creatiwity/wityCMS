@@ -12,7 +12,7 @@ require(['jquery', 'witycms/admin'], function($) {
 
 	String.prototype.latinise = function() {
 		return this.replace(/[^A-Za-z0-9\[\] ]/g, function(a) {
-			return Latinise.latin_map[a] || a
+			return Latinise.latin_map[a] || a;
 		});
 	};
 	String.prototype.latinize = String.prototype.latinise;
@@ -54,7 +54,7 @@ require(['jquery', 'witycms/admin'], function($) {
 		var $this = $(this),
 			idLang = $this.data('lang');
 
-		if ($(namespace + '.lang_' + idLang + ' .url').val() == '') {
+		if ($(namespace + '.lang_' + idLang + ' .url').val() === '') {
 			formatURL(idLang);
 		}
 	});
