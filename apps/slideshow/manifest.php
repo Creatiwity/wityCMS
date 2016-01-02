@@ -19,6 +19,6 @@
 		<action menu="false">slide_edit</action>
 		<action menu="false">slide_delete</action>
 		<action menu="false">slides_reorder</action>
-		<action>configuration</action>
+		<action description="Configuration">configuration</action>
 	</admin>
 </app>

@@ -4,16 +4,16 @@
 
 		<div class="row">
 			<div class="col-md-8">
-				<h2 class="sr-only">{lang slide_add}</h2>
+				<h1>{if empty({$id})}{lang Add a slide}{else}{lang Edit a slide}{/if}</h1>
 
 				<div class="form-group translatable">
-					<label for="title" class="control-label">{lang title}*</label><br />
-					<input id="title" class="form-control" type="text" name="title" autocomplete="off" placeholder="{lang title}" />
+					<label for="title" class="control-label">{lang Title}*</label><br />
+					<input id="title" class="form-control" type="text" name="title" autocomplete="off" placeholder="{lang Title}" />
 				</div>
 
 				<div class="translatable">
-					<label for="legend">{lang legend}</label><br />
-					<textarea id="legend" class="form-control" name="legend" rows="20" cols="80"></textarea>
+					<label for="legend">{lang Legend}</label><br />
+					<textarea id="legend" class="form-control" name="legend" rows="20" cols="80" placeholder="{lang Legend}"></textarea>
 				</div>
 				<br />
 
@@ -26,9 +26,7 @@
 				<div class="well well-sm">
 					<div class="form-group">
 						<label for="image" class="control-label">
-							{lang image}
-							<br />
-							<small>(PNG ou JPEG | 1600x450 px | ~170 ko)</small>
+							{lang Image (PNG or JPEG / 1600x450 px / ~170 ko)}
 						</label>
 
 						{if !empty({$image})}
@@ -40,8 +38,8 @@
 				</div>
 
 				<div class="well well-sm">
-					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang save}</button>
-					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang cancel}</button>
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang Submit}</button>
+					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang Cancel}</button>
 				</div>
 			</div>
 		</div>

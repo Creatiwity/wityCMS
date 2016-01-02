@@ -50,7 +50,7 @@ class SlideshowAdminController extends WController {
 
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data_translatable[$default_id]['title'])) {
-				$errors[] = WLang::get('no_title');
+				$errors[] = WLang::get('Please, provide a title.');
 			}
 
 			if (!empty($post_data['url']) && strpos($post_data['url'], '://') === false) {
@@ -80,7 +80,7 @@ class SlideshowAdminController extends WController {
 			} else if (!empty($id_slide)) {
 				$post_data['image'] = $db_data['image'];
 			} else {
-				$errors[] = WLang::get('no_image');
+				$errors[] = WLang::get('Please, provide an image.');
 			}
 
 			if (empty($errors)) {
@@ -89,20 +89,20 @@ class SlideshowAdminController extends WController {
 
 					if ($id_slide) {
 						$this->setHeader('Location', WRoute::getDir().'admin/slideshow/edit/'.$id_slide);
-						WNote::success('slide_added');
+						WNote::success('slide_added', WLang::get('The slide was successfully created.'));
 
 						$db_data = $this->model->getSlide($id_slide);
 					} else {
 						$db_data = $post_data;
-						WNote::error('slide_not_added');
+						WNote::error('slide_not_added', WLang::get('An unknown error occured.'));
 					}
 				} else { // Edit case
 					if ($this->model->updateSlide($id_slide, $post_data, $data_translatable)) {
 						$this->setHeader('Location', WRoute::getDir().'admin/slideshow/edit/'.$id_slide);
-						WNote::success('slide_edited');
+						WNote::success('slide_edited', WLang::get('The slide was successfully edited.'));
 					} else {
 						$db_data = $post_data;
-						WNote::error('slide_not_edited');
+						WNote::error('slide_not_edited', WLang::get('An unknown error occured.'));
 					}
 				}
 			} else {
@@ -140,7 +140,7 @@ class SlideshowAdminController extends WController {
 			return $this->slide_form($id_slide, $db_data);
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/slideshow');
-			WNote::error('slide_not_found');
+			WNote::error('slide_not_found', WLang::get('The slide was not found.'));
 			return array();
 		}
 	}
@@ -159,13 +159,13 @@ class SlideshowAdminController extends WController {
 				$this->model->deleteSlide($id_slide);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/slideshow');
-				WNote::success('slide_deleted');
+				WNote::success('slide_deleted', WLang::get('The slide was successfully deleted.'));
 			}
 
 			return $slide;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/slideshow');
-			WNote::error('slide_not_found');
+			WNote::error('slide_not_found', WLang::get('The slide was not found.'));
 		}
 
 		return array();
@@ -215,7 +215,7 @@ class SlideshowAdminController extends WController {
 			// Refresh config
 			$config = $this->model->getConfig();
 
-			WNote::success('config_edited', WLang::get('config_edited'));
+			WNote::success('config_edited', WLang::get('The configuration was successfully saved.'));
 			$this->setHeader('Location', WRoute::getDir().'admin/slideshow/configuration');
 		}
 
