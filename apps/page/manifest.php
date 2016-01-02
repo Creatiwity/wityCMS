@@ -18,7 +18,7 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action default="default">pages</action>
+		<action default="default" description="Pages">pages</action>
 		<action requires="writer" menu="false">add</action>
 		<action requires="writer" menu="false">edit</action>
 		<action requires="moderator" menu="false">delete</action>

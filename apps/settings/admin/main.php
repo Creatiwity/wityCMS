@@ -73,7 +73,7 @@ class SettingsAdminController extends WController {
 
 			WConfig::save('config');
 
-			WNote::success('settings_updated', WLang::get('settings_updated'));
+			WNote::success('settings_updated', WLang::get('The settings were updated successfully.'));
 			$this->setHeader('Location', WRoute::getDir().'admin/settings/');
 		}
 
@@ -102,12 +102,12 @@ class SettingsAdminController extends WController {
 		if (WRequest::getMethod() == 'POST') {
 			$post_data = WRequest::getAssoc(array('name', 'iso', 'code', 'date_format_short', 'date_format_long', 'enabled', 'is_default'), null, 'POST');
 			$errors = array();
-			$required = array('name', 'iso');
 
 			/* BEGING VARIABLES CHECKING */
+			$required = array('name', 'iso', 'code');
 			foreach ($required as $req) {
 				if (empty($post_data[$req])) {
-					$errors[] = WLang::get('no_'.$req);
+					$errors[] = WLang::get('Please, provide a '.$req.'.');
 				}
 			}
 			/* END VARIABLES CHECKING */
@@ -125,18 +125,18 @@ class SettingsAdminController extends WController {
 				if (empty($id_language)) { // Add case
 					if ($id_language = $this->model->insertLanguage($post_data)) {
 						$db_data = $this->model->getLanguage($id_language);
-						WNote::success('language_added');
+						WNote::success('language_added', WLang::get('The language was successfully created.'));
 					} else {
 						$db_data = $post_data;
-						WNote::error('language_not_added');
+						WNote::error('language_not_added', WLang::get('An error occured during the creation of the language.'));
 					}
 				} else { // Edit case
 					if ($this->model->updateLanguage($id_language, $post_data)) {
 						$db_data = $this->model->getLanguage($id_language);
-						WNote::success('language_edited');
+						WNote::success('language_edited', WLang::get('The language was successfully edited.'));
 					} else {
 						$db_data = $post_data;
-						WNote::error('language_not_edited');
+						WNote::error('language_not_edited', WLang::get('An error occured during the edition of the language.'));
 					}
 				}
 
@@ -195,7 +195,7 @@ class SettingsAdminController extends WController {
 				$this->model->deleteLanguage($id_language);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/settings/languages');
-				WNote::success('language_deleted');
+				WNote::success('The language was successfully deleted.');
 			}
 
 			return $language;

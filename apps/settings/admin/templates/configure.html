@@ -1,18 +1,18 @@
 <div class="wity-app wity-app-settings wity-action-configure">
 	<form action="/admin/settings/" method="post" class="form-horizontal" enctype="multipart/form-data">
-		<h1 class="sr-only">{lang settings}</h1>
+		<h1>{lang Settings of the site}</h1>
 
 		<fieldset>
 			<legend>{lang SEO}</legend>
 
 			<div class="form-group">
-				<label for="site_title" class="col-sm-2 control-label">{lang site_title}</label>
+				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
 				<div class="col-sm-10 col-lg-5">
 					<input id="site_title" class="form-control" type="text" name="settings[site_title]" value="{$settings.site_title}" />
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="description" class="col-sm-2 control-label">{lang description}</label>
+				<label for="description" class="col-sm-2 control-label">{lang SEO description (about 125 symbols)}</label>
 				<div class="col-sm-10 col-lg-5">
 					<textarea id="description" class="form-control" name="settings[description]" rows="5" cols="40">{$settings.description}</textarea>
 				</div>
@@ -20,10 +20,10 @@
 		</fieldset>
 
 		<fieldset>
-			<legend>{lang email}</legend>
+			<legend>{lang Email}</legend>
 
 			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">{lang email}</label>
+				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
 				<div class="col-sm-10 col-lg-5">
 					<input id="email" class="form-control" type="email" name="settings[email]" value="{$settings.email}" />
 				</div>
@@ -31,10 +31,10 @@
 		</fieldset>
 
 		<fieldset>
-			<legend>{lang icons}</legend>
+			<legend>{lang Icons}</legend>
 
 			<div class="form-group">
-				<label for="favicon" class="col-sm-2 control-label">{lang favicon}</label>
+				<label for="favicon" class="col-sm-2 control-label">{lang Favicon (.ico)}</label>
 				<div class="col-sm-10 col-lg-5">
 					{if !empty({$settings.favicon})}
 					<p><img src="{$settings.favicon}" alt="Favicon" width="32" height="32" /></p>
@@ -44,7 +44,7 @@
 			</div>
 
 			<div class="form-group">
-				<label for="icon" class="col-sm-2 control-label">{lang icon}</label>
+				<label for="icon" class="col-sm-2 control-label">{lang Site's icon (32x32 px)}</label>
 				<div class="col-sm-10 col-lg-5">
 					{if !empty({$settings.icon})}
 					<p><img src="{$settings.icon}" alt="Icon" width="32" height="32" /></p>
@@ -56,7 +56,7 @@
 
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-				<input class="btn btn-large btn-primary" type="submit" value="{lang submit}" />
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Submit}" />
 			</div>
 		</div>
 	</form>

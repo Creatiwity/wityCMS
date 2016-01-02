@@ -11,8 +11,8 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action default="default">configure</action>
-		<action>languages</action>
+		<action default="default" description="Configure">configure</action>
+		<action description="Languages">languages</action>
 		<action menu="false">language_add</action>
 		<action menu="false">language_edit</action>
 		<action menu="false">language_delete</action>
