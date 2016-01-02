@@ -151,6 +151,7 @@ class WLang {
 
 	/**
 	 * Returns the current lang.
+	 *
 	 * @return string
 	 */
 	public static function getLang() {
@@ -198,9 +199,13 @@ class WLang {
 	 * @return int
 	 */
 	public static function getDefaultLangId() {
-		$que = self::$db->query('SELECT id FROM languages WHERE is_default = 1');
+		if (!empty(self::$db)) {
+			$query = self::$db->query('SELECT id FROM languages WHERE is_default = 1');
 
-		return intval($que->fetch(PDO::FETCH_COLUMN));
+			return intval($query->fetch(PDO::FETCH_COLUMN));
+		}
+
+		return 0;
 	}
 
 	/**
@@ -215,11 +220,14 @@ class WLang {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = self::$db->query('SELECT * FROM languages'.$cond.' ORDER BY is_default DESC');
-
 		$langs = array();
-		while ($data = $que->fetch(PDO::FETCH_ASSOC)) {
-			$langs[intval($data['id'])] = $data;
+
+		if (!empty(self::$db)) {
+			$query = self::$db->query('SELECT * FROM languages'.$cond.' ORDER BY is_default DESC');
+
+			while ($data = $query->fetch(PDO::FETCH_ASSOC)) {
+				$langs[intval($data['id'])] = $data;
+			}
 		}
 
 		return $langs;
@@ -259,7 +267,7 @@ class WLang {
 	/**
 	 * Declares a directory containing language files.
 	 *
-	 * @param string $dir language directory
+	 * @param  string $dir language directory
 	 * @return boolean true if $dir is a directory, false otherwise
 	 */
 	public static function declareLangDir($dir) {

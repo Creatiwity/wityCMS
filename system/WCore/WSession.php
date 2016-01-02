@@ -138,10 +138,14 @@ class WSession {
 		$_SESSION['firstname'] = $data['firstname'];
 		$_SESSION['lastname']  = $data['lastname'];
 
-		if (empty($_SESSION['lang']) && !empty($data['lang'])) {
-			$_SESSION['lang'] = $data['lang'];
-		} else {
-			$_SESSION['lang'] = WLang::getLangISO();
+		if (empty($_SESSION['lang'])) {
+			if (!empty($data['lang'])) {
+				$_SESSION['lang'] = $data['lang'];
+				$_SESSION['lang_iso'] = substr($data['lang'], 0, 2);
+			} else {
+				$_SESSION['lang'] = WLang::getLang();
+				$_SESSION['lang_iso'] = WLang::getLangISO();
+			}
 		}
 
 		$_SESSION['access_string'] = $data['access'];

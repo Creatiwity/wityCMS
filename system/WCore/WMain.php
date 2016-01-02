@@ -157,7 +157,7 @@ class WMain {
 
 		// Set session lang as top priority
 		if (!empty($_SESSION['lang'])) {
-			WLang::setLang($_SESSION['lang'], true);
+			WLang::setLang($_SESSION['lang']);
 		}
 	}
 
@@ -206,8 +206,8 @@ class WMain {
 			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
 			'wity_app'              => $route['app'],
 			'wity_query'            => WRoute::getQuery(),
-			'wity_lang'             => WLang::getLangISO(),
-			'wity_lang_code'        => WLang::getLang(),
+			'wity_lang'             => WLang::getLang(),
+			'wity_lang_iso'         => WLang::getLangISO(),
 			'wity_site_favicon'     => WConfig::get('config.favicon'),
 			'wity_site_icon'        => WConfig::get('config.icon')
 		);
@@ -218,7 +218,6 @@ class WMain {
 				'wity_user_nickname'  => $_SESSION['nickname'],
 				'wity_user_email'     => $_SESSION['email'],
 				'wity_user_groupe'    => $_SESSION['groupe'],
-				'wity_user_lang'      => $_SESSION['lang'],
 				'wity_user_firstname' => $_SESSION['firstname'],
 				'wity_user_lastname'  => $_SESSION['lastname'],
 				'wity_user_access'    => $_SESSION['access']
