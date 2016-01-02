@@ -55,14 +55,14 @@ class NewsletterAdminController extends WController {
 			if (in_array('confirm', $params)) {
 				$this->model->deleteSubscriber($sub_id);
 
-				WNote::success('sub_deleted', WLang::get('sub_deleted', $data['email']));
+				WNote::success('sub_deleted', WLang::get('The subscriber &lt;strong&gt;%s&lt;/strong&gt; was successfully deleted.', $data['email']));
 				$this->setHeader('Location', WRoute::getDir().'admin/newsletter');
 			}
 
 			return $data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/newsletter');
-			return WNote::error('sub_not_found', WLang::get('sub_not_found', $sub_id));
+			return WNote::error('sub_not_found', WLang::get('Subscriber not found.', $sub_id));
 		}
 	}
 

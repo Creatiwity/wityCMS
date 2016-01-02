@@ -18,17 +18,17 @@ class NewsletterController extends WController {
 
 		if (!empty($data['email'])) {
 			if (!WTools::isEmail($data['email'])) {
-				return WNote::error('bad_email');
+				return WNote::error('Email invalid.');
 			}
 
 			if ($this->model->isEmailInDb($data['email'])) {
-				return WNote::error('already_in_db');
+				return WNote::error('This e-mail address is already subscribed.');
 			}
 
 			if ($this->model->addEmail($data['email'])) {
-				return WNote::success('email_added');
+				return WNote::success('E-mail address successfully added.');
 			} else {
-				return WNote::error('unknown_error');
+				return WNote::error('An unknown error happened.');
 			}
 		}
 	}

@@ -14,8 +14,8 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action default="default" description="action_listing">listing</action>
-		<action requires="moderator" description="action_delete" menu="false">delete</action>
-		<action requires="moderator" description="action_export">export</action>
+		<action default="default" description="Subscribers">listing</action>
+		<action requires="moderator" menu="false">delete</action>
+		<action requires="moderator" description="Export">export</action>
 	</admin>
 </app>
