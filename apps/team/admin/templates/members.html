@@ -8,6 +8,7 @@
 	<table class="table table-striped table-hover witycms-reordable" data-reordable-url="{$wity_base_url}m/admin/team/members-reorder">
 		<thead>
 			<tr>
+				<th>{lang ID}</th>
 				<th>{lang Name}</th>
 				<th>{lang Position}</th>
 				<th>{lang Order}</th>
@@ -18,6 +19,7 @@
 		<tbody>
 		{for $member in $members}
 			<tr data-reordable-id="{$member.id}">
+				<td>{$member.id}</td>
 				<td><strong>{$member.name}</strong></td>
 				<td>{$member.title}</td>
 				<td class="drag-handler">
@@ -51,7 +53,7 @@
 		{/for}
 		{empty}
 			<tr>
-				<td colspan="5" class="text-center">{lang No member in database.}</td>
+				<td colspan="6" class="text-center">{lang No member in database.}</td>
 			</tr>
 		{/empty}
 		</tbody>
