@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\Newsletter\Front
  * @author Thibault Vlacich <thibault@vlacich.fr>
- * @version 1.0.0-01-03-2015
+ * @version 0.5.0-dev-02-01-2015
  */
 class NewsletterView extends WView {
 	public function add($model) {

@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-22-11-2012
+ * @version 0.5.0-dev-02-01-2015
  */
 class WConfig {
 	/**

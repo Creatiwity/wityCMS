@@ -31,7 +31,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-18-10-2013
+ * @version 0.5.0-dev-02-01-2015
  */
 class WRoute {
 	/**

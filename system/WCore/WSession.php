@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-07-01-2014
+ * @version 0.5.0-dev-02-01-2015
  */
 class WSession {
 	/*

@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-09-05-2015
+ * @version 0.5.0-dev-02-01-2015
  */
 class UserController extends WController {
 	/*

@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-26-04-2013
+ * @version 0.5.0-dev-02-01-2015
  */
 class UserAdminView extends WView {
 	public function __construct() {

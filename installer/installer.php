@@ -12,7 +12,7 @@ require 'view.php';
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-17-01-2013
+ * @version 0.5.0-dev-02-01-2015
  */
 class Installer {
 	private $THEMES_DIR;

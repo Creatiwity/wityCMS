@@ -4,12 +4,10 @@
 	<!-- Application name -->
 	<name>Mail</name>
 
-	<version>0.4.0</version>
+	<version>0.5.0-dev-02-01-2015</version>
 
 	<!-- Last update date -->
 	<date>25-11-2013</date>
-
-	<default_lang>fr</default_lang>
 
 	<!-- Permissions -->
 	<permission name="whitelist_manager" />

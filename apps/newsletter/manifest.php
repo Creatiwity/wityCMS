@@ -4,7 +4,7 @@
 	<!-- Application name -->
 	<name>Newsletter</name>
 
-	<version>1.0.0</version>
+	<version>0.5.0-dev-02-01-2015</version>
 
 	<!-- Last update date -->
 	<date>01-03-2015</date>

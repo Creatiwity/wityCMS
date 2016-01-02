@@ -15,7 +15,7 @@ include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
  *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-dev-15-02-2013
+ * @version 0.5.0-dev-02-01-2015
  */
 class UserAdminModel extends UserModel {
 	public function __construct() {

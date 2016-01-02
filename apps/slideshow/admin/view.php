@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Slideshow\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 1.0.0-07-02-2015
+ * @version 0.5.0-dev-02-01-2015
  */
 class SlideshowAdminView extends WView {
 	public function __construct() {
