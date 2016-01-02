@@ -100,18 +100,18 @@ class NewsAdminController extends WController {
 
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data_translatable[$default_id]['title'])) {
-				$errors[] = WLang::get('news_no_title');
+				$errors[] = WLang::get('Please, provide a title.');
 			}
 
 			if (empty($data_translatable[$default_id]['author'])) {
-				$errors[] = WLang::get('news_no_author');
+				$errors[] = WLang::get('Please, provide an author.');
 			}
 
 			foreach ($lang_list as $i => $id_lang) {
 				if (!$data_translatable[$id_lang]['published']) {
 					$data_translatable[$id_lang]['publish_date'] = '';
 				} else if (empty($data_translatable[$id_lang]['publish_date']) || empty($data_translatable[$id_lang]['publish_time'])) {
-					$errors[] = WLang::get('news_no_publish_date');
+					$errors[] = WLang::get('Please, provide a date of publication.');
 				} else {
 					$data_translatable[$id_lang]['publish_date'] .= ' '.$data_translatable[$id_lang]['publish_time'];
 				}
@@ -157,9 +157,9 @@ class NewsAdminController extends WController {
 						}
 
 						$this->setHeader('Location', Wroute::getDir().'admin/news');
-						WNote::success('news_added', WLang::get('news_added', $data_translatable[$default_id]['title']));
+						WNote::success('news_added', WLang::get('The news <strong>%s</strong> was successfully created.', $data_translatable[$default_id]['title']));
 					} else {
-						WNote::error('news_not_added', WLang::get('news_not_added'));
+						WNote::error('news_not_added', WLang::get('An unknown error occurred while creating the news in the database.'));
 					}
 				} else { // Edit case
 					if ($this->model->updateNews($id_news, $post_data, $data_translatable)) {
@@ -173,9 +173,9 @@ class NewsAdminController extends WController {
 						}
 
 						$this->setHeader('Location', Wroute::getDir().'admin/news');
-						WNote::success('news_edited', WLang::get('news_edited', $data_translatable[$default_id]['title']));
+						WNote::success('news_edited', WLang::get('The news <strong>%s</strong> was successfully edited.', $data_translatable[$default_id]['title']));
 					} else {
-						WNote::error('news_not_edited', WLang::get('news_not_edited'));
+						WNote::error('news_not_edited', WLang::get('An unknown error occurred while editing the news in the database.'));
 					}
 				}
 			} else {
@@ -206,7 +206,7 @@ class NewsAdminController extends WController {
 			return $this->newsForm($id_news, $db_data);
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/news');
-			return WNote::error('news_not_found', WLang::get('news_not_found', $id_news));
+			return WNote::error('news_not_found', WLang::get('News not found.'));
 		}
 	}
 
@@ -241,13 +241,13 @@ class NewsAdminController extends WController {
 				$this->model->deleteNews($id_news);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/news');
-				WNote::success('news_deleted', WLang::get('news_deleted', $db_data['title_1']));
+				WNote::success('news_deleted', WLang::get('The news <strong>%s</strong> was successfully deleted.', $db_data['title_1']));
 			}
 
 			return $db_data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/news');
-			return WNote::error('news_not_found', WLang::get('news_not_found', $id_news));
+			return WNote::error('news_not_found', WLang::get('News not found.', $id_news));
 		}
 	}
 
@@ -265,7 +265,7 @@ class NewsAdminController extends WController {
 			$id_cat = intval($post_data['id']);
 
 			if (empty($post_data['name'])) {
-				$errors[] = WLang::get('category_no_name');
+				$errors[] = WLang::get('Please, provide a name.');
 			}
 
 			// Format short name
@@ -281,9 +281,9 @@ class NewsAdminController extends WController {
 				if (empty($id_cat)) { // Add case
 					if ($this->model->createCat($post_data)) {
 						$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
-						WNote::success('category_added', WLang::get('category_added', $post_data['name']));
+						WNote::success('category_added', WLang::get('The category <strong>%s</strong> was successfully created.', $post_data['name']));
 					} else {
-						WNote::error('category_not_added', WLang::get('category_not_added'));
+						WNote::error('category_not_added', WLang::get('An unknown error occurred while adding the category in the database.'));
 					}
 				} else { // Edit case
 					$db_data = $this->model->getCat($id_cat);
@@ -292,12 +292,12 @@ class NewsAdminController extends WController {
 					if ($db_data !== false) {
 						if ($this->model->updateCat($id_cat, $post_data)) {
 							$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
-							WNote::success('category_edited', WLang::get('category_edited', $post_data['name']));
+							WNote::success('category_edited', WLang::get('The category <strong>%s</strong> was successfully edited.', $post_data['name']));
 						} else {
-							WNote::error('category_not_edited', WLang::get('category_not_edited'));
+							WNote::error('category_not_edited', WLang::get('An unknown error occurred while editing the category in the database.'));
 						}
 					} else {
-						WNote::error('category_not_found', WLang::get('category_not_found'));
+						WNote::error('category_not_found', WLang::get("The category was not found."));
 					}
 				}
 			} else {
@@ -345,13 +345,13 @@ class NewsAdminController extends WController {
 				$this->model->deleteCat($id_cat);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
-				WNote::success('category_deleted', WLang::get('category_deleted'));
+				WNote::success('category_deleted', WLang::get('Category successfully deleted.'));
 			}
 
 			return $db_data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
-			return WNote::error('category_not_found', WLang::get('category_not_found'));
+			return WNote::error('category_not_found', WLang::get("The category you are trying to delete doesn't exist."));
 		}
 	}
 

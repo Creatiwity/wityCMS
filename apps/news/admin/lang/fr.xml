@@ -1,72 +1,69 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
 	<!-- Actions -->
-	<item id="news">Articles</item>
-	<item id="news_add">Ajouter un article</item>
-	<item id="news_edit">Modifier un article</item>
-	<item id="news_delete">Supprimer un article</item>
-	<item id="categories">Catégories</item>
-	<item id="category_add">Ajouter une catégorie</item>
-	<item id="category_edit">Modifier une catégorie</item>
-	<item id="category_delete">Supprimer une catégorie</item>
+	<item id="News">Articles</item>
+	<item id="Add a news">Ajouter un article</item>
+	<item id="Edit a news">Modifier un article</item>
+	<item id="Delete a news">Supprimer un article</item>
+	<item id="Categories">Catégories</item>
+	<item id="Add a category">Ajouter une catégorie</item>
+	<item id="Edit a category">Modifier une catégorie</item>
+	<item id="Delete a category">Supprimer une catégorie</item>
 
-	<item id="cancel">Annuler</item>
-	<item id="delete">Supprimer</item>
-	<item id="submit">Sauvegarder</item>
-	<item id="edit">Modifier</item>
+	<item id="Cancel">Annuler</item>
+	<item id="Delete">Supprimer</item>
+	<item id="Submit">Soumettre</item>
+	<item id="Edit">Modifier</item>
 
 	<!-- News -->
-	<item id="title">Titre</item>
-	<item id="author">Auteur</item>
-	<item id="category">Catégorie</item>
-	<item id="last_modification">Dernière modification</item>
-	<item id="views">Vues</item>
-	<item id="actions">Actions</item>
-	<item id="no_news_in_database">Aucun article trouvé dans la base de données.</item>
-	<item id="news_delete_confirmation">Êtes-vous sûr de vouloir supprimer l'article &lt;strong&gt;%s&lt;/strong&gt; ?</item>
+	<item id="Title">Titre</item>
+	<item id="Author">Auteur</item>
+	<item id="Category">Catégorie</item>
+	<item id="Last modification">Dernière modification</item>
+	<item id="Views">Vues</item>
+	<item id="Actions">Actions</item>
+	<item id="No news in database">Aucun article trouvé dans la base de données.</item>
+	<item id="Do you really want to delete the news &lt;strong&gt;%s&lt;/strong&gt;?">Êtes-vous sûr de vouloir supprimer l'article &lt;strong&gt;%s&lt;/strong&gt; ?</item>
 
 	<!-- News form -->
-	<item id="url">URL</item>
-	<item id="preview">Prévisualiser</item>
-	<item id="content">Contenu</item>
+	<item id="Preview">Prévisualiser</item>
+	<item id="Content">Contenu</item>
 
-	<item id="details">Détails</item>
-	<item id="published">Publier l'article</item>
-	<item id="publish_date">Date de publication</item>
-	<item id="publish_time">Heure de publication</item>
-	<item id="image">Image</item>
+	<item id="Details">Détails</item>
+	<item id="Published">Publiée</item>
+	<item id="Date of publication">Date de publication</item>
+	<item id="Hour of publication">Heure de publication</item>
+	<item id="Image">Image</item>
 
 	<item id="SEO">Référencement</item>
-	<item id="meta_title">Balise titre</item>
-	<item id="meta_description">Balise description</item>
+	<item id="Meta Title">Balise titre</item>
+	<item id="Meta Description">Balise description</item>
 
-	<item id="news_created_on">&lt;strong&gt;Créé&lt;/strong&gt; le %s</item>
-	<item id="news_modified_on">&lt;strong&gt;Modifié&lt;/strong&gt; le %s</item>
+	<item id="Created on %s">&lt;strong&gt;Créé&lt;/strong&gt; le %s</item>
+	<item id="Modified on %s">&lt;strong&gt;Modifié&lt;/strong&gt; le %s</item>
 
-	<item id="news_not_found">L'article n°%s que vous tentez de modifier n'existe pas.</item>
-	<item id="news_no_title">Il manque un titre.</item>
-	<item id="news_no_author">Il manque un auteur.</item>
-	<item id="news_no_permalink">Il manque un URL.</item>
-	<item id="news_no_publish_date">Il manque une date de publication.</item>
-	<item id="news_image_error">Erreur lors de l'upload de l'image : %s</item>
-	<item id="news_added">L'article &lt;strong&gt;%s&lt;/strong&gt; a été créé avec succès.</item>
-	<item id="news_not_added">Une erreur inconnue s'est produite lors de l'ajout de l'article dans la base de données.</item>
-	<item id="news_edited">L'article &lt;strong&gt;%s&lt;/strong&gt; a été modifié avec succès.</item>
-	<item id="news_not_edited">Une erreur inconnue s'est produite lors de la modification de l'article dans la base de données.</item>
-	<item id="news_deleted">L'article "&lt;strong&gt;%s&lt;/strong&gt;" a été supprimé avec succès.</item>
+	<item id="News not found.">L'article demandé n'existe pas.</item>
+	<item id="Please, provide a title.">Il manque un titre.</item>
+	<item id="Please, provide an author.">Il manque un auteur.</item>
+	<item id="Please, provide a date of publication.">Il manque une date de publication.</item>
+	<item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">L'article &lt;strong&gt;%s&lt;/strong&gt; a été créé avec succès.</item>
+	<item id="An unknown error occurred while creating the news in the database.">Une erreur inconnue s'est produite lors de l'ajout de l'article dans la base de données.</item>
+	<item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">L'article &lt;strong&gt;%s&lt;/strong&gt; a été modifié avec succès.</item>
+	<item id="An unknown error occurred while editing the news in the database.">Une erreur inconnue s'est produite lors de la modification de l'article dans la base de données.</item>
+	<item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully deleted.">L'article "&lt;strong&gt;%s&lt;/strong&gt;" a été supprimé avec succès.</item>
 
 	<!-- Categories -->
-	<item id="name">Nom</item>
-	<item id="shortname">Nom court</item>
-	<item id="none">Aucune</item>
+	<item id="Name">Nom</item>
+	<item id="Shortname">Nom court</item>
+	<item id="None">Aucune</item>
 
-	<item id="no_category_in_database">Aucune catégorie trouvée dans la base de données.</item>
-	<item id="category_no_name">Veuillez spécifier un nom pour la nouvelle catégorie.</item>
-	<item id="category_added">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été ajoutée avec succès.</item>
-	<item id="category_not_added">Une erreur inconnue s'est produite lors de l'ajout de la catégorie dans la base de données.</item>
-	<item id="category_edited">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été modifiée avec succès.</item>
-	<item id="category_not_edited">Une erreur inconnue s'est produite lors de la modification de la catégorie dans la base de données.</item>
-	<item id="category_not_found">La catégorie que vous tentez de supprimer n'existe pas.</item>
-	<item id="category_deleted">La catégorie a été supprimée avec succès.</item>
-	<item id="category_delete_confirmation">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
+	<item id="No category in database">Aucune catégorie dans la base de données.</item>
+	<item id="Please, provide a name.">Veuillez spécifier un nom pour la nouvelle catégorie.</item>
+	<item id="The category &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été ajoutée avec succès.</item>
+	<item id="An unknown error occurred while adding the category in the database.">Une erreur inconnue s'est produite lors de l'ajout de la catégorie dans la base de données.</item>
+	<item id="The category &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été modifiée avec succès.</item>
+	<item id="An unknown error occurred while editing the category in the database.">Une erreur inconnue s'est produite lors de la modification de la catégorie dans la base de données.</item>
+	<item id="The category was not found.">Cette catégorie n'existe pas.</item>
+	<item id="Category successfully deleted.">La catégorie a été supprimée avec succès.</item>
+	<item id="Do you really want to delete this category?">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
 </lang>

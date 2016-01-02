@@ -21,12 +21,12 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action default="default">news</action>
+		<action default="default" description="News">news</action>
 		<action requires="writer" menu="false">news-add</action>
 		<action requires="writer" menu="false">news-edit</action>
 		<action requires="writer" menu="false">news-save-preview</action>
 		<action requires="moderator" menu="false">news-delete</action>
-		<action requires="category_manager">categories</action>
+		<action requires="category_manager" description="Categories">categories</action>
 		<action requires="category_manager, moderator" menu="false">category-delete</action>
 	</admin>
 </app>
