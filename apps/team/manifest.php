@@ -14,7 +14,7 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action default="default">members</action>
+		<action default="default" description="Members">members</action>
 		<action menu="false">member-add</action>
 		<action menu="false">member-edit</action>
 		<action menu="false">member-delete</action>

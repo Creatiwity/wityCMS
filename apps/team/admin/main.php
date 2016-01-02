@@ -52,11 +52,11 @@ class TeamAdminController extends WController {
 
 			/* BEGING VARIABLES CHECKING */
 			if (empty($data['name'])) {
-				$errors[] = WLang::get('no_name');
+				$errors[] = WLang::get('Please, provide a name.');
 			}
 
 			if (empty($data_translatable[$default_id]['title'])) {
-				$errors[] = WLang::get('no_title');
+				$errors[] = WLang::get('Please, provide a position.');
 			}
 			/* END VARIABLES CHECKING */
 
@@ -115,17 +115,17 @@ class TeamAdminController extends WController {
 			if (empty($errors)) {
 				if (empty($id_member)) { // Add case
 					if ($id_member = $this->model->createMember($data, $data_translatable)) {
-						WNote::success('member_added', WLang::get('member_added', $data['name']));
+						WNote::success('member_added', WLang::get('The member was successfully created.', $data['name']));
 					} else {
-						WNote::error('member_not_added', WLang::get('db_unknown_error'));
+						WNote::error('member_not_added', WLang::get('An unknown error occured.'));
 					}
 
 					$this->setHeader('Location', WRoute::getDir().'admin/team/member-edit/'.$id_member);
 				} else { // Edit case
 					if ($this->model->updateMember($id_member, $data, $data_translatable)) {
-						WNote::success('member_edited', WLang::get('member_edited', $data['name']));
+						WNote::success('member_edited', WLang::get('The member was successfully edited.', $data['name']));
 					} else {
-						WNote::error('member_not_edited', WLang::get('db_unknown_error'));
+						WNote::error('member_not_edited', WLang::get('An unknown error occured.'));
 					}
 
 					$this->setHeader('Location', WRoute::getDir().'admin/team/member-edit/'.$id_member);
@@ -156,7 +156,7 @@ class TeamAdminController extends WController {
 			return $this->memberForm($id_member, $data);
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/team');
-			return WNote::error('member_not_found', WLang::get('member_not_found'));
+			return WNote::error('member_not_found', WLang::get('The member was not found.'));
 		}
 	}
 
@@ -167,14 +167,14 @@ class TeamAdminController extends WController {
 		// Check existence
 		if ($data === false) {
 			$this->setHeader('Location', WRoute::getDir().'admin/team');
-			return WNote::error('member_not_found', WLang::get('member_not_found'));
+			return WNote::error('member_not_found', WLang::get('The member was not found.'));
 		}
 
 		if (in_array('confirm', $params)) {
 			$this->model->deleteMember($id_member);
 
 			$this->setHeader('Location', WRoute::getDir() . 'admin/team');
-			WNote::success('member_deleted', WLang::get('member_deleted'));
+			WNote::success('member_deleted', WLang::get('The member was successfully deleted.'));
 		}
 
 		return $data;
@@ -199,9 +199,9 @@ class TeamAdminController extends WController {
 				}
 			}
 
-			return WNote::success('reordering_success', 'reordering_success');
+			return WNote::success('reordering_success');
 		} else {
-			return WNote::error('data_missing', 'data_missing');
+			return WNote::error('data_missing');
 		}
 	}
 
