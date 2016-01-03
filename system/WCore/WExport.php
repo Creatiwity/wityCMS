@@ -10,6 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
+ * @author Thibault Vlacich <thibault@vlacich.fr>
  * @version 0.5.0-dev-02-01-2015
  */
 class WExport {

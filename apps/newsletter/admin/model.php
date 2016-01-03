@@ -9,7 +9,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * NewsletterAdminModel is the Admin Model of the Newsletter Application
  *
  * @package Apps\Newsletter\Admin
- * @author Thibault Vlacich <thibault.vlacich@gmail.com>
+ * @author Thibault Vlacich <thibault@vlacich.fr>
  * @version 0.5.0-dev-02-01-2015
  */
 class NewsletterAdminModel {
