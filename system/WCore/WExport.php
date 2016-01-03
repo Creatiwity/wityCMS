@@ -14,10 +14,10 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @version 0.5.0-dev-02-01-2015
  */
 class WExport {
-    public static function toCSVNamed($filename_prefix, array &$data) {
-        $filename = $filename_prefix.'_' . date('Ymd-His') . '.csv';
+	public static function toCSVNamed($filename_prefix, array &$data) {
+		$filename = $filename_prefix.'_' . date('Ymd-His') . '.csv';
 
-        // Disable caching
+		// Disable caching
 		$now = gmdate('D, d M Y H:i:s');
 		header('Expires: Tue, 03 Jul 2001 06:00:00 GMT');
 		header('Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate');
@@ -36,22 +36,22 @@ class WExport {
 
 		$output = fopen('php://output', 'w');
 
-        if (!empty($data)) {
-            fwrite($output, "\xEF\xBB\xBF"); // UTF-8 BOM
+		if (!empty($data)) {
+			fwrite($output, "\xEF\xBB\xBF"); // UTF-8 BOM
 
-            // Columns name
-    		fputcsv($output, array_keys(reset($data)), ';');
+			// Columns name
+			fputcsv($output, array_keys(reset($data)), ';');
 
-            // Values
-    		foreach ($data as $line) {
-    			fputcsv($output, $line, ';');
-    		}
-        }
+			// Values
+			foreach ($data as $line) {
+				fputcsv($output, $line, ';');
+			}
+		}
 
 		fclose($output);
 
-        exit();
-    }
+		exit();
+	}
 }
 
 ?>
