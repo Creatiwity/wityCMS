@@ -3,29 +3,36 @@
 		<h1>{lang Settings of the site}</h1>
 
 		<fieldset>
-			<legend>{lang SEO}</legend>
+			<legend>{lang General}</legend>
 
 			<div class="form-group">
-				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
+				<label for="email" class="col-sm-2 control-label">{lang Website's name}</label>
 				<div class="col-sm-10 col-lg-5">
-					<input id="site_title" class="form-control" type="text" name="settings[site_title]" value="{$settings.site_title}" />
+					<input id="name" class="form-control" type="text" name="settings[name]" value="{$settings.name}" />
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="description" class="col-sm-2 control-label">{lang SEO description (about 125 symbols)}</label>
-				<div class="col-sm-10 col-lg-5">
-					<textarea id="description" class="form-control" name="settings[description]" rows="5" cols="40">{$settings.description}</textarea>
-				</div>
-			</div>
-		</fieldset>
-
-		<fieldset>
-			<legend>{lang Email}</legend>
 
 			<div class="form-group">
 				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
 				<div class="col-sm-10 col-lg-5">
 					<input id="email" class="form-control" type="email" name="settings[email]" value="{$settings.email}" />
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang SEO}</legend>
+
+			<div class="form-group">
+				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="page_title" class="form-control" type="text" name="settings[page_title]" value="{$settings.page_title}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
+				<div class="col-sm-10 col-lg-5">
+					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
 				</div>
 			</div>
 		</fieldset>

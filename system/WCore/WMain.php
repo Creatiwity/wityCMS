@@ -189,19 +189,17 @@ class WMain {
 	private function setupTemplate() {
 		$tpl = WSystem::getTemplate();
 
-		$site_title = WConfig::get('config.site_title');
 		$route = WRoute::route();
 
 		// Load language file from template
 		WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
 
 		// Setup system template variables with $wity_ prefix
-		// @TODO: distinguish site_title and page_title values
 		$tpl_vars = array(
 			'wity_base_url'         => WRoute::getBase(),
-			'wity_site_title'       => $site_title,
-			'wity_page_title'       => $site_title,
-			'wity_page_description' => WConfig::get('config.description'),
+			'wity_site_title'       => WConfig::get('config.name'),
+			'wity_page_title'       => WConfig::get('config.page_title'),
+			'wity_page_description' => WConfig::get('config.page_description'),
 			'wity_user'             => false,
 			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
 			'wity_app'              => $route['app'],

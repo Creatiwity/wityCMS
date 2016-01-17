@@ -109,7 +109,8 @@ class Installer {
 
 					// Save General configuration
 					WConfig::set('config.base', trim($config['base'], '/'));
-					WConfig::set('config.site_title', $config['site_title']);
+					WConfig::set('config.name', $config['site_title']);
+					WConfig::set('config.page_title', $config['site_title']);
 					WConfig::set('config.theme', $config['theme']);
 					WConfig::set('config.lang', $config['language']);
 					WConfig::set('config.timezone', $config['timezone']);

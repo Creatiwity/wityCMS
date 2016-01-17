@@ -27,7 +27,7 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('site_title', 'description', 'email');
+		$settings_keys = array('name', 'page_title', 'page_description', 'email');
 
 		$settings = array();
 		foreach ($settings_keys as $key) {
