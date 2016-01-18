@@ -23,11 +23,6 @@ class WExport {
 		header('Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate');
 		header('Last-Modified: '.$now.' GMT');
 
-		// Force download
-		header('Content-Type: application/force-download');
-		header('Content-Type: application/octet-stream');
-		header('Content-Type: application/download');
-
 		// Disposition / encoding on response body
 		header('Content-Disposition: attachment;filename='.$filename);
 		header('Content-Transfer-Encoding: binary');
