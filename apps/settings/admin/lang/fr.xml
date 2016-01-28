@@ -6,7 +6,7 @@
 	<!-- Configure -->
 	<item id="Configure">Configurer</item>
 	<item id="Settings of the site">Réglages du site</item>
-	<item id="Website's name">Email de l'administrateur</item>
+	<item id="Website's name">Nom du site</item>
 	<item id="Administrator's email">Email de l'administrateur</item>
 	<item id="Title">Titre</item>
 	<item id="Description (about 125 symbols)">Description pour le référencement (environ 125 caractères)</item>
