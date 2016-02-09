@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang value="fr">
-	<!-- Genera -->
+	<!-- General -->
 	<item id="Settings">Réglages</item>
 
 	<!-- Configure -->
 	<item id="Configure">Configurer</item>
 	<item id="Settings of the site">Réglages du site</item>
+	<item id="General">Général</item>
 	<item id="Website's name">Nom du site</item>
 	<item id="Administrator's email">Email de l'administrateur</item>
 	<item id="Title">Titre</item>

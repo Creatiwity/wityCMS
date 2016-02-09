@@ -33,10 +33,13 @@ require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 	 */
 	function showEditForm(groupid, name, access) {
 		// Form creation by clonage
-		if ($('#group-edit-'+groupid).size() == 0) {
-			var clone = $('#group-add').clone().attr('id', 'group-edit-'+groupid);
-			clone.find('form').hide();
-			clone.insertAfter('#group-'+groupid);
+		if ($('#group-edit-'+groupid).size() === 0) {
+			var $clone = $('#group-add').clone().attr('id', 'group-edit-'+groupid);
+			$clone.find('form').hide();
+			$clone.find('h2').remove();
+
+			$('<tr></tr>').append($('<td colspan="3"></td>').append($clone)).insertAfter('#group-'+groupid);
+
 			$('#group-edit-'+groupid+' input[name="id"]').val(groupid);
 			$('#group-edit-'+groupid+' input[name="name"]').val(name);
 			$('#group-edit-'+groupid).removeClass('impair').addClass($('#group-'+groupid).attr('class'));

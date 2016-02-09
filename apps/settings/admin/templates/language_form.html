@@ -1,6 +1,6 @@
 <div class="wity-app wity-app-slideshow wity-action-form">
 	<form action="/admin/settings/{if empty({$id})}language_add{else}language_edit/{$id}{/if}" method="post" enctype="multipart/form-data" class="form-horizontal">
-		<h1>{if empty({$id})}{lang Add a language}{else}{lang Edit a lanauge}{/if}</h1>
+		<h1>{if empty({$id})}{lang Add a language}{else}{lang Edit a language}{/if}</h1>
 
 		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">{lang Name}*</label>

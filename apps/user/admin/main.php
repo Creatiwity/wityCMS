@@ -14,12 +14,12 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class UserAdminController extends WController {
 	/**
-	 * The listing action displays the list of users in the database.
+	 * The groups action displays the list of users in the database.
 	 *
 	 * @param array $params
 	 * @return array Model
 	 */
-	protected function listing(array $params) {
+	protected function users(array $params) {
 		$n = 30; // Number of users per page
 
 		// Admin check
@@ -38,7 +38,7 @@ class UserAdminController extends WController {
 						if ($notify) {
 							$this->model->sendEmail(
 								$db_data['email'],
-								WLang::get('user_account_validated_subject', WConfig::get('config.site_title')),
+								WLang::get('%s - Your account was validated', WConfig::get('config.site_title')),
 								str_replace(
 									array('{site_title}', '{base}'),
 									array(WConfig::get('config.site_title'), WRoute::getBase()),
@@ -47,7 +47,7 @@ class UserAdminController extends WController {
 							);
 						}
 
-						WNote::success('user_account_validated', WLang::get('user_account_validated', $db_data['nickname']));
+						WNote::success('user_account_validated', WLang::get('The user %s was successfully validated.', $db_data['nickname']));
 					} else if ($action == 'refuse') {
 						$config = $this->model->getConfig();
 						if ($config['keep_users']) {
@@ -60,7 +60,7 @@ class UserAdminController extends WController {
 						if ($notify) {
 							$this->model->sendEmail(
 								$db_data['email'],
-								WLang::get('user_account_refused_subject', WConfig::get('config.site_title')),
+								WLang::get('%s - Your account was refused', WConfig::get('config.site_title')),
 								str_replace(
 									array('{site_title}', '{base}'),
 									array(WConfig::get('config.site_title'), WRoute::getBase()),
@@ -69,10 +69,10 @@ class UserAdminController extends WController {
 							);
 						}
 
-						WNote::success('user_account_refused', WLang::get('user_account_refused', $db_data['nickname']));
+						WNote::success('user_account_refused', WLang::get('The user %s was refused.', $db_data['nickname']));
 					}
 				} else {
-					WNote::success('user_account_invalid', WLang::get('user_account_invalid', $db_data['nickname']));
+					WNote::success('user_account_invalid', WLang::get('The user %s is not valid.', $db_data['nickname']));
 				}
 			}
 		}
@@ -91,7 +91,7 @@ class UserAdminController extends WController {
 		// SortingHelper
 		$sortingHelper = WHelper::load('SortingHelper', array(
 			array('id', 'nickname', 'email', 'groupe', 'last_activity', 'created_date'),
-			'created_date', 'DESC'
+			'id', 'DESC'
 		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
 
@@ -163,10 +163,10 @@ class UserAdminController extends WController {
 						unset($post_data['password']); // don't change password if it's the same
 					}
 				} else {
-					$errors[] = WLang::get('error_password_not_matching');
+					$errors[] = WLang::get('Error: the passwords do not match.');
 				}
 			} else if ($add_case) {
-				$errors[] = WLang::get('error_no_password');
+				$errors[] = WLang::get('Please, provide a password.');
 			} else {
 				unset($post_data['password']);
 			}
@@ -211,7 +211,7 @@ class UserAdminController extends WController {
 							$mail->CharSet = 'utf-8';
 							$mail->From = WConfig::get('config.email');
 							$mail->FromName = WConfig::get('config.site_title');
-							$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_title'));
+							$mail->Subject = WLang::get('%s - Creation of your user account', WConfig::get('config.site_title'));
 							$mail->Body = WLang::get('user_register_email_body', array(
 								'site_title' => WConfig::get('config.site_title'),
 								'base'      => WRoute::getBase(),
@@ -225,9 +225,9 @@ class UserAdminController extends WController {
 						}
 
 						$this->setHeader('Location', WRoute::getDir().'admin/user');
-						WNote::success('user_created', WLang::get('user_created', $post_data['nickname']));
+						WNote::success('user_created', WLang::get('The user %s was successfully created.', $post_data['nickname']));
 					} else {
-						WNote::error('user_not_created', WLang::get('user_not_created', $post_data['nickname']));
+						WNote::error('user_not_created', WLang::get('An unknown error occured.', $post_data['nickname']));
 					}
 				} else { // EDIT case
 					if ($this->model->updateUser($user_id, $post_data)) {
@@ -237,9 +237,9 @@ class UserAdminController extends WController {
 						}
 
 						$this->setHeader('Location', WRoute::getDir().'admin/user/edit/'.$user_id);
-						WNote::success('user_edited', WLang::get('user_edited', $db_data['nickname']));
+						WNote::success('user_edited', WLang::get('The user %s was successfully edited.', $db_data['nickname']));
 					} else {
-						WNote::error('user_not_edited', WLang::get('user_not_edited', $db_data['nickname']));
+						WNote::error('user_not_edited', WLang::get('An unknown error occured.', $db_data['nickname']));
 					}
 				}
 			} else {
@@ -283,7 +283,7 @@ class UserAdminController extends WController {
 			return $this->user_form($user_id, $db_data);
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/user');
-			return WNote::error('user_not_found', WLang::get('user_not_found'));
+			return WNote::error('user_not_found', WLang::get('The user was not found.'));
 		}
 	}
 
@@ -297,7 +297,7 @@ class UserAdminController extends WController {
 		$user_id = intval(array_shift($params));
 
 		if ($user_id == $_SESSION['userid']) {
-			return WNote::error('user_self_delete', WLang::get('user_self_delete'));
+			return WNote::error('user_self_delete', WLang::get('You cannot delete your own user account.'));
 		}
 
 		$db_data = $this->model->getUser($user_id);
@@ -307,13 +307,13 @@ class UserAdminController extends WController {
 				$this->model->deleteUser($user_id);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/user');
-				WNote::success('user_deleted', WLang::get('user_deleted'));
+				WNote::success('user_deleted', WLang::get('The user was successfully deleted.'));
 			}
 
 			return $db_data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/user');
-			return WNote::error('user_not_found', WLang::get('user_not_found'));
+			return WNote::error('user_not_found', WLang::get('The user was not found.'));
 		}
 	}
 
@@ -331,50 +331,38 @@ class UserAdminController extends WController {
 			$data['access'] = WRequest::get('access', null, 'POST');
 
 			if (empty($data['name'])) {
-				$errors[] = WLang::get('group_name_empty');
+				$errors[] = WLang::get('Please, provide a name.');
 			}
 
 			// User access rights
 			$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
 
 			if (empty($errors)) {
-				$db_success = false;
-
 				if (empty($data['id'])) { // Adding a group
 					if ($this->model->createGroup($data)) {
-						WNote::success('user_group_added', WLang::get('group_added', $data['name']));
-						$db_success = true;
+						WNote::success('user_group_added', WLang::get('The group %s was successfully created.', $data['name']));
+					} else {
+						WNote::error('user_group_not_added', WLang::get('An unknown error occured.'));
 					}
 				} else { // Editing a group
 					$db_data = $this->model->getGroup($data['id']);
 
 					if (!empty($db_data)) {
-						$count_users = $this->model->countUsers(array('groupe' => $data['id']));
+						if ($this->model->updateGroup($data['id'], $data)) {
+							$count_users = $this->model->countUsers(array('groupe' => $data['id']));
 
-						// There will be a change in default group's access affecting users
-						if ($data['access'] != $db_data['access'] && $count_users > 0) {
-							$group_diff_data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
-
-							if (!in_array(null, $group_diff_data, true)) {
-								return $this->group_diff($group_diff_data);
+							if ($data['access'] != $db_data['access'] && $count_users > 0) {
+								// Does the user want to override users with custom access?
+								$this->setHeader('Location', WRoute::getDir().'admin/user/group_diff?id='.$data['id']);
 							} else {
-								return array(
-									'group_diff'   => true,
-									'group_id'     => $data['id'],
-									'group_name'   => $data['name'],
-									'group_access' => $data['access'],
-									'group'        => $db_data,
-									'admin_apps'   => $this->getAdminApps()
-								);
+								$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
 							}
-						} else if ($this->model->updateGroup($data['id'], $data)) {
-							WNote::success('user_group_edited', WLang::get('group_edited', $data['name']));
-							$db_success = true;
+
+							return WNote::success('user_group_edited', WLang::get('The group %s was successfully edited.', $data['name']));
+						} else {
+							WNote::error('user_group_not_edited', WLang::get('An unknown error occured.'));
 						}
 					}
-				}
-				if (!$db_success) {
-					WNote::error('user_group_not_modified', WLang::get('group_not_modified'));
 				}
 			} else {
 				WNote::error('user_data_errors', implode("<br />\n", $errors));
@@ -394,7 +382,6 @@ class UserAdminController extends WController {
 		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens); // sorting vars
 
-
 		$default_admin_route = WRoute::parseURL(WConfig::get('route.default_admin'));
 
 		return array(
@@ -402,6 +389,33 @@ class UserAdminController extends WController {
 			'admin_apps'    => $this->getAdminApps(),
 			'sorting_tpl'   => $sortingHelper->getTplVars(),
 			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
+		);
+	}
+
+	/**
+	 * Makes the dif between old and new access to a group.
+	 */
+	protected function group_diff() {
+		$id_group = intval(WRequest::get('id'));
+		$group = $this->model->getGroup($id_group);
+
+		if (empty($group)) {
+			return WNote::error('group_not_found', WLang::get('The group was not found.'));
+		}
+
+		if (WRequest::get('confirm') === 'true') {
+			$this->model->updateUsers(
+				array('access' => $group['access']),
+				array('groupe' => $id_group)
+			);
+
+			$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
+			return WNote::success('user_group_edited', WLang::get('The new access rights were applied to users in the group %s.', $group['name']));
+		}
+
+		return array(
+			'group' => $group,
+			'count' => $this->model->countUsers(array('groupe' => $id_group))
 		);
 	}
 
@@ -422,91 +436,14 @@ class UserAdminController extends WController {
 				$this->model->resetUsersInGroup($group_id);
 
 				$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
-				WNote::success('user_group_deleted', WLang::get('group_deleted'));
+				WNote::success('user_group_deleted', WLang::get('The group %s was successfully deleted.', $db_data['name']));
 			}
 
 			return $db_data;
 		} else {
 			$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
-			return WNote::error('group_not_found', WLang::get('group_not_found'));
+			return WNote::error('group_not_found', WLang::get('The group was not found.'));
 		}
-	}
-
-	/**
-	 * Makes the dif between old and new access to a group.
-	 */
-	protected function group_diff() {
-		// Retrieve post data
-		$data = WRequest::getAssoc(array('groupid', 'new_name', 'old_access', 'new_access'));
-
-		if (!in_array(null, $data, true)) {
-			$data = array_merge($data, WRequest::getAssoc(array('apply_to_regular', 'apply_to_custom', 'user', 'type', 'access')));
-
-			if ($data['apply_to_regular'] == 'on' && $data['apply_to_custom'] == 'on') {
-				$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid']));
-			} else {
-				// Update all users having the old group access
-				if ($data['apply_to_regular'] == 'on') {
-					$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => $data['old_access']));
-				}
-
-				// Update all users having custom group access
-				if ($data['apply_to_custom'] == 'on' || sizeof($data['user']) == sizeof($data['type'])) {
-					$this->model->updateUsers(array('access' => $data['new_access']), array('groupe' => $data['groupid'], 'access' => 'NOT:'.$data['old_access']));
-				} else { // Custom update
-					// Retrieve all custom users belonging to this group
-					$users = $this->model->getUsersWithCustomAccess(array('groupe' => $data['groupid']));
-
-					foreach ($users as $user) {
-						$user_id = $user['id'];
-
-						if (array_key_exists($user_id, $data['user'])) {
-							$this->model->updateUser($user_id, array('access' => $data['new_access']));
-						} else if (!empty($data['type'][$user_id])) {
-							// Update with given access
-							$access = $this->model->treatAccessData($data['type'][$user_id], isset($data['access'][$user_id]) ? $data['access'][$user_id] : array());
-
-							if ($user['access'] != $access) {
-								$this->model->updateUser($user_id, array('access' => $access));
-							}
-						}
-					}
-				}
-			}
-
-			// Update group with new access
-			if ($this->model->updateGroup($data['groupid'], array('name' => $data['new_name'], 'access' => $data['new_access']))) {
-				WNote::success('user_group_edited', WLang::get('group_edited', $data['new_name']));
-			} else {
-				WNote::error('user_group_not_modified', WLang::get('group_not_modified'));
-			}
-		}
-
-		$this->setHeader('Location', WRoute::getDir().'admin/user/groups');
-
-		return array();
-	}
-
-	/**
-	 * Display in a JSON format all the users whose nickname starts with a given letter.
-	 *
-	 * Used for ajax method in group_diff action.
-	 *
-	 * @return array Matching users
-	 */
-	protected function load_users_with_letter() {
-		$letter = WRequest::get('letter');
-		$group_id = intval(WRequest::get('groupe'));
-
-		if (!empty($letter) && !empty($group_id)) {
-			if ($letter == '#') {
-				$users = $this->model->getUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $group_id));
-			} else {
-				$users = $this->model->getUsersWithCustomAccess(array('nickname' => $letter.'%', 'groupe' => $group_id));
-			}
-		}
-
-		return $users;
 	}
 
 	/**
@@ -517,12 +454,14 @@ class UserAdminController extends WController {
 	protected function config(array $params) {
 		$data = WRequest::getAssoc(array('update', 'config'));
 		$config = $this->model->getConfig();
+
 		if ($data['update'] == 'true') {
 			foreach ($config as $name => $value) {
 				$config[$name] = intval(!empty($data['config'][$name]));
 				$this->model->setConfig($name, $config[$name]);
 			}
-			WNote::success('user_config_updated', WLang::get('user_config_updated'));
+
+			WNote::success('user_config_updated', WLang::get('The configuration was successfully updated.'));
 		}
 
 		return $config;
