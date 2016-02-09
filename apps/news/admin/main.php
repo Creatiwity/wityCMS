@@ -309,11 +309,7 @@ class NewsAdminController extends WController {
 		$sort_by = '';
 		$sens = '';
 		if (!empty($params[0])) {
-			sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by_crit, $sens);
-
-			if (isset($this->model->cats_data_model['toDB'][$sort_by_crit])) {
-				$sort_by = $sort_by_crit;
-			}
+			sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by, $sens);
 		}
 
 		// SortingHelper Helper

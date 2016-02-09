@@ -115,6 +115,10 @@ class NewsModel {
 
 		$id_lang = WLang::getLangId();
 
+		if ($order == 'created_date') {
+			$order = 'news.created_date';
+		}
+
 		$prep = $this->db->prepare('
 			SELECT DISTINCT(id), news.*, news_lang.*
 			FROM news
@@ -125,7 +129,7 @@ class NewsModel {
 			LEFT JOIN news_cats
 			ON id_cat = cid
 			WHERE 1 = 1 '.$cond.'
-			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC').'
 			LIMIT :start, :number
 		');
 		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
