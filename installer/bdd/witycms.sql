@@ -348,32 +348,6 @@ CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
 DROP TABLE IF EXISTS `prefix_page`;
 CREATE TABLE IF NOT EXISTS `prefix_page` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` tinytext CHARACTER SET utf8 NOT NULL,
-  `title` tinytext CHARACTER SET utf8 NOT NULL,
-  `subtitle` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `author` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `content` text CHARACTER SET utf8 NOT NULL,
-  `meta_title` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `meta_description` text COLLATE utf8_unicode_ci NOT NULL,
-  `views` int(11) NOT NULL DEFAULT '0',
-  `parent` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `menu` tinyint(4) NOT NULL DEFAULT '0',
-  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `created_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `created_by` int(11) unsigned NOT NULL DEFAULT '0',
-  `modified_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `modified_by` int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `prefix_page`
---
-
-CREATE TABLE IF NOT EXISTS `prefix_page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
   `views` int(11) NOT NULL DEFAULT '0',
   `parent` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `menu` tinyint(4) NOT NULL DEFAULT '0',
@@ -391,6 +365,7 @@ CREATE TABLE IF NOT EXISTS `prefix_page` (
 -- Table structure for table `prefix_page_lang`
 --
 
+DROP TABLE IF EXISTS `prefix_page_lang`;
 CREATE TABLE IF NOT EXISTS `prefix_page_lang` (
   `id_page` int(11) unsigned NOT NULL,
   `id_lang` int(11) unsigned NOT NULL,
@@ -493,6 +468,7 @@ CREATE TABLE IF NOT EXISTS `prefix_newsletter` (
 -- Table structure for table `prefix_team_member`
 --
 
+DROP TABLE IF EXISTS `prefix_team_member`;
 CREATE TABLE IF NOT EXISTS `prefix_team_member` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
@@ -515,6 +491,7 @@ CREATE TABLE IF NOT EXISTS `prefix_team_member` (
 -- Table structure for table `prefix_team_member_lang`
 --
 
+DROP TABLE IF EXISTS `prefix_team_member_lang`;
 CREATE TABLE IF NOT EXISTS `prefix_team_member_lang` (
   `id_member` int(10) unsigned NOT NULL,
   `id_lang` int(11) unsigned NOT NULL,
@@ -531,6 +508,7 @@ CREATE TABLE IF NOT EXISTS `prefix_team_member_lang` (
 -- Structure de la table `prefix_languages`
 --
 
+DROP TABLE IF EXISTS `prefix_languages`;
 CREATE TABLE IF NOT EXISTS `prefix_languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8 NOT NULL,
@@ -553,6 +531,7 @@ CREATE TABLE IF NOT EXISTS `prefix_languages` (
 
 INSERT INTO `prefix_languages` (`id`, `name`, `iso`, `code`, `date_format_short`, `date_format_long`, `enabled`, `is_default`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
 (1, 'Français', 'FR', 'fr_FR', '%d/%m/%Y', '%d/%m/%Y %H:%M', 1, 1, NOW(), 0, '0000-00-00 00:00:00', 0);
+(2, 'English', 'en', 'en_EN', '%m/%d/%Y', '%m/%d/%Y %H:%M', 1, 0, NOW(), 0, '0000-00-00 00:00:00', 0);
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

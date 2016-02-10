@@ -74,13 +74,13 @@ class Installer {
 					$database['dbprefix'] = (!empty($database['dbprefix'])) ? $database['dbprefix']."_":"";
 
 					// Create SQL Tables
-					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'wity.sql');
+					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'witycms.sql');
 					$sql_commands = str_replace('prefix_', $database['dbprefix'], $sql_commands); // configure prefix
 					$db = $this->getSQLServerConnection($database);
 					$db->exec($sql_commands);
 					$error = $db->errorInfo();
 					if (!is_null($error[0]) && !$error[0]!=0) {
-						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the wityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
+						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the wityCMS tables in the database. Please, import installer/bdd/witycms.sql file manually in your database.');
 						break;
 					}
 
