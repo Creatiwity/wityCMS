@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
 	<!-- General -->
+	<item id="User">Utilisateur</item>
 	<item id="Edit">Modifier</item>
 	<item id="Delete">Supprimer</item>
 	<item id="Cancel">Annuler</item>

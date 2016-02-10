@@ -14,7 +14,7 @@
 	<item id="Icons">Icônes</item>
 	<item id="Favicon (.ico)">Favicon (.ico)</item>
 	<item id="Site's icon (32x32 px)">Icône du site (32x32 px)</item>
-	<item id="Submit">Soumettre</item>
+	<item id="Submit">Envoyer</item>
 	<item id="The settings were updated successfully.">La configuration a été mise à jour avec succès.</item>
 
 	<!-- Languages -->
@@ -46,5 +46,4 @@
 	<item id="The language was successfully deleted.">La langue a été supprimée avec succès.</item>
 	<item id="Cancel">Annuler</item>
 	<item id="Delete">Supprimer</item>
-	<item id="Submit">Soumettre</item>
 </lang>

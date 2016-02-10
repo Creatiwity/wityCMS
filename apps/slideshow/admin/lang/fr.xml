@@ -15,8 +15,8 @@
 
 	<item id="Add a slide">Ajouter une slide</item>
 	<item id="Edit a slide">Modifier une slide</item>
-	<item id="Image (PNG or JPEG / 1600x450 px / ~170 ko)">Image (PNG ou JPEG / 1600x450 px / ~170 ko)</item>
-	<item id="Submit">Soumettre</item>
+	<item id="Image (PNG or JPEG)">Image (PNG ou JPEG)</item>
+	<item id="Submit">Envoyer</item>
 	<item id="Cancel">Annuler</item>
 
 	<item id="Please, provide a title.">Veuillez fournir un titre.</item>
