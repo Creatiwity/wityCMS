@@ -11,7 +11,6 @@ $config = array(
   'page_title'       => 'wityCMS',
   'page_description' => '',
   'theme'            => 'grafx',
-  'lang'             => 'en_EN',
   'timezone'         => 'Europe/Paris',
   'email'            => 'contact@mysite.com',
   'debug'            => true
