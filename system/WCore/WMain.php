@@ -155,7 +155,7 @@ class WMain {
 		// Variable for Roxy file manager
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
 
-		// Set session lang as top priority
+		// Set session lang
 		if (!empty($_SESSION['lang'])) {
 			WLang::setLang($_SESSION['lang']);
 		}

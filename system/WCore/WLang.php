@@ -56,7 +56,13 @@ class WLang {
 		self::$db->declareTable('languages');
 
 		// Add config lang
-		self::setLang(WConfig::get('config.lang'));
+		$lang = self::getDefaultLang();
+
+		if (!empty($lang)) {
+			self::setLang($lang['code']);
+		} else {
+			self::setLang('en_EN');
+		}
 	}
 
 	/**
@@ -184,7 +190,7 @@ class WLang {
 	/**
 	 * Returns the Id of current lang.
 	 *
-	 * @return int
+	 * @return array
 	 */
 	public static function getLangWithId($id_lang) {
 		$pre = self::$db->prepare('SELECT * FROM languages WHERE id = ?');
@@ -206,6 +212,21 @@ class WLang {
 		}
 
 		return 0;
+	}
+
+	/**
+	 * Returns the default lang data.
+	 *
+	 * @return array
+	 */
+	public static function getDefaultLang() {
+		$id_lang = self::getDefaultLangId();
+
+		if (!empty($id_lang)) {
+			return self::getLangWithId($id_lang);
+		}
+
+		return null;
 	}
 
 	/**
