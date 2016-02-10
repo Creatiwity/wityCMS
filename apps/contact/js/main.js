@@ -33,26 +33,42 @@ require(['jquery'], function($) {
 		};
 
 		$('body').on('click', '[data-witycms-submit="ajax"]', function() {
-			var $form, $button, url, method, data;
+			var $button = $(this),
+				$form = $button.closest('form'),
+				method = $form.attr('method'),
+				url = $form.attr('action').replace('/contact', '/m/contact'),
+				data,
+				$inputFile = $form.find('.upload-document-input'),
+				processData = true,
+				contentType = true;
 
-			$button = $(this);
+			if (!window.FormData && $inputFile.val()) {
+				// FormData not supported
+				return;
+			}
+
+			if ($inputFile.val()) {
+				data = new FormData($form[0]);
+				processData = false;
+				contentType = false;
+			} else {
+				data = $form.serialize();
+			}
+
 			$button.button('loading');
-			$form = $button.closest('form');
-			url = $form.attr('action').replace('/contact', '/m/contact');
-			method = $form.attr('method');
-			data = $form.serialize();
-
-			$('.wity-app.app-contact :input').attr('disabled', true);
+			$form.find(':input').attr('disabled', true);
 
 			$.ajax({
 				type: method,
 				url: url,
 				data: data,
+				processData: processData,
+				contentType: contentType,
 				success: function(response) {
 					var jResponse;
 
 					$button.button('reset');
-					$('.wity-app.app-contact :input').attr('disabled', false);
+					$form.find(':input').attr('disabled', false);
 
 					try {
 						jResponse = $.parseJSON(response);
@@ -109,7 +125,5 @@ require(['jquery'], function($) {
 			$uploadDocumentDelete.addClass('hidden');
 			$uploadDocumentButton.prop('disabled', false);
 		});
-
 	});
-
 });

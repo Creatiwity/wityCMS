@@ -106,14 +106,25 @@ class ContactController extends WController {
 						$data['extras'] = array();
 					}
 
-					$mail_params = array_merge($data['extras'], array(
+					$extras = '';
+
+					if (!empty($data['extras'])) {
+						$extras = "<ul>\n";
+						foreach ($data['extras'] as $key => $value) {
+							$extras .= "<li><strong>".WLang::get($key)." :</strong> ".$value."</li>\n";
+						}
+						$extras .= "</ul>\n";
+					}
+
+					$mail_params = array(
 						'site'    => WConfig::get('config.site_title'),
 						'base'    => WRoute::getBase(),
 						'name'    => $data['from_name'].' &lt;'.$data['from_email'].'&gt;',
 						'company' => $data['from_company'],
 						'subject' => $data['email_subject'],
-						'message' => $data['email_message']
-					));
+						'message' => $data['email_message'],
+						'extras'  => $extras
+					);
 
 					$email_message = WLang::get('mail_for_admin_body', $mail_params);
 

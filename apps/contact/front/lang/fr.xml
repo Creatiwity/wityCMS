@@ -21,9 +21,10 @@ En voici un récapitulatif :
 	<li><strong>Nom :</strong> {{name}}</li>
 	<li><strong>Organisation :</strong> {{company}}</li>
 	<li><strong>Objet :</strong> {{subject}}</li>
-	<li><strong>Message :</strong><br />
-{{message}}</li>
+	<li><strong>Message :</strong><br />{{message}}</li>
 </ul>
+
+{{extras}}
 
 Nous nous efforçons d'y répondre dans les plus brefs délais.<br /><br />
 
@@ -42,11 +43,12 @@ Une nouvelle demande de contact vient d'être postée sur le site {{site}} :
 	<li><strong>Nom :</strong> {{name}}</li>
 	<li><strong>Organisation :</strong> {{company}}</li>
 	<li><strong>Objet :</strong> {{subject}}</li>
-	<li><strong>Message :</strong><br />
-{{message}}</li>
+	<li><strong>Message :</strong><br />{{message}}</li>
 </ul>
 
-Vous pouvez visualiser l'ensemble des demandes de contact à <a href="{{base}}admin/contact/">cette adresse</a>.<br /><br />
+{{extras}}
+
+Vous pouvez visualiser l'ensemble des demandes de contact à <a href="{{base}}admin/contact">cette adresse</a>.<br /><br />
 
 --<br />
 <em>Ceci est un message automatique.</em>]]></item>
