@@ -62,12 +62,12 @@ $(window).ready(function() {
 							type: "select",
 							options: [
 								{
-									value: "en-EN",
-									text: "English (en-EN)"
+									value: "en_EN",
+									text: "English (en_EN)"
 								},
 								{
-									value: "fr-FR",
-									text: "Français (fr-FR)"
+									value: "fr_FR",
+									text: "Français (fr_FR)"
 								}
 							]
 						},
