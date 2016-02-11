@@ -15,7 +15,7 @@ This CMS uses its own templating system, named [WTemplate](https://github.com/Cr
 
 ### Let's go
 
-![Installer](https://raw.githubusercontent.com/Creatiwity/wityCMS/0.5/installer/installer.jpg)
+![Installer](installer/installer.jpg)
 
 1. **Unzip** and **copy** wityCMS files on your web server using FileZilla.
 2. Open a navigator and **go to the URL** of your web server.
