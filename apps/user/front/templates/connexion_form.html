@@ -14,9 +14,11 @@
 			<input type="password" class="form-control" name="password" placeholder="{lang password}" />
 		</div>
 
-		<label class="checkbox">
-			<input type="checkbox" value="remember" name="remember" checked="checked" onclick="if (this.checked) document.getElementById('more-options').className = ''; else document.getElementById('more-options').className = 'show';" /> {lang always_remain_connected}
-		</label>
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" value="remember" name="remember" checked="checked" onclick="if (this.checked) document.getElementById('more-options').className = ''; else document.getElementById('more-options').className = 'show';" /> {lang always_remain_connected}
+			</label>
+		</div>
 
 		<div id="more-options">
 			<div class="form-group">
@@ -31,5 +33,11 @@
 		<p><a href="/user/password-lost/">{lang password_lost}</a></p>
 
 		<input class="btn btn-lg btn-primary btn-block" type="submit" value="{lang login_button}" />
+
+		{if {$config.register}}
+		<br />
+
+		<p class="text-center"><a href="/user/register/">{lang register_form_title}</a></p>
+		{/if}
 	</form>
 </div>

@@ -1,6 +1,7 @@
 <div class="wity-app wity-app-contact wity-action-config">
 	<form action="/admin/contact/config/" method="post" class="form-horizontal">
-		<h2 class="sr-only">{lang action_config}</h2>
+		<h1>{lang Configuration}</h1>
+
 		{for $name, $value in $config}
 		<div class="form-group">
 			<label for="{$name}" class="col-sm-2 control-label">{lang config_{$name}}</label>
@@ -9,10 +10,11 @@
 			</div>
 		</div>
 		{/for}
+		
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
 				<input type="hidden" name="update" value="true" />
-				<input class="btn btn-large btn-primary" type="submit" value="{lang submit}" />
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Save}" />
 			</div>
 		</div>
 	</form>

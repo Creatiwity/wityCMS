@@ -2,6 +2,7 @@
 <lang value="fr">
 	<item id="news_meta">Rédigé par %s, le %s</item>
 	<item id="read_more">Lire la suite</item>
-	
+
 	<item id="news_not_found">La news demandée est introuvable.</item>
+	<item id="no_news_in_category">Aucune news dans cette catégorie.</item>
 </lang>

@@ -3,16 +3,16 @@
  */
 #admin-check a {
 	filter:alpha(opacity=30);
-    -moz-opacity: 0.3;
-    -khtml-opacity: 0.3;
-    opacity: 0.3;
+	-moz-opacity: 0.3;
+	-khtml-opacity: 0.3;
+	opacity: 0.3;
 }
 
 #admin-check a:hover, #admin-check a.checked {
 	filter:alpha(opacity=100);
-    -moz-opacity: 1;
-    -khtml-opacity: 1;
-    opacity: 1;
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
 }
 
 #admin-check-buttons {
@@ -28,117 +28,13 @@
 	border: 1px solid black;
 }
 
-.user-rights > tbody > tr > td {
-	border-top: 1px solid black;
-	padding: 0;
+.user-rights tbody tr td {
+	border: 1px solid black;
+	padding: 10px;
 }
 
 .user-rights .permissions {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-.user-rights .permissions td {
-	border-top: none;
-	border-left: 1px solid black;
-	padding: 8px;
-}
-
-.user-rights .permissions label {
-	display: block;
-}
-
-/**
- * Groups listing
- */
-#groups-list .group-form td {
-	padding: 0;
-}
-
-#groups-list .group-form form {
-	padding: 8px;
-	display: none;
-}
-
-/**
- * Group diff
- */
-#group-diff .listing-wrapper {
-	margin: 1em;
-	display: none;
-}
-
-#group-diff .alphabet {
-	width: 15%;
-	margin: 0 2% 0 0;
-	padding: 0;
-	float: left;
-	line-height: 35px;
-}
-
-#group-diff .alphabet a, #group-diff .alphabet span {
-	background: #28b8f7;
-	font-size: 15px;
-	padding: 5px;
-	margin-right: 5px;
-	color: white;
-	white-space: nowrap;
-}
-
-#group-diff .alphabet span {
-	background: gray;
-}
-
-#group-diff .alphabet a:hover, #group-diff .alphabet a.current {
-	background: #1aa4e0;
-}
-
-#group-diff .legende {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-}
-
-#group-diff .users-list-container {
-	width: 80%;
-	float: left;
-}
-
-#group-diff .users-list-container dl {
-	margin: 0;
-}
-
-#group-diff .users-list-container p.loading {
-	padding-left: 25px;
-	background: url('../../../../themes/system/images/icones/loader.gif') no-repeat;
-}
-
-#group-diff dl dt {
-	background: #28b8f7;
-	padding: 5px;
-	margin-bottom: 1em;
-	font-weight: bold;
-	font-size: 1.2em;
-}
-
-#group-diff dl dd {
-	margin-bottom: 1em;
-	display: none;
-}
-
-#group-diff .pattern {
-	display: none;
-}
-
-#group-diff .shared {
-	font-weight: bold;
-	color: blue;
-}
-#group-diff .minus {
-	font-weight: bold;
-	color: red;
-}
-#group-diff .plus {
-	font-weight: bold;
-	color: green;
 }

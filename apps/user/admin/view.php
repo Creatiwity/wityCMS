@@ -3,14 +3,14 @@
  * User Application - Admin View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserAdminView is the Admin View of the User Application.
  *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-26-04-2013
+ * @version 0.5.0-11-02-2016
  */
 class UserAdminView extends WView {
 	public function __construct() {
@@ -25,7 +25,7 @@ class UserAdminView extends WView {
 	 *
 	 * @param array $model
 	 */
-	public function listing(array $model) {
+	public function users(array $model) {
 		// SortingHelper Helper
 		$this->assign($model['sorting_tpl']);
 
@@ -57,7 +57,7 @@ class UserAdminView extends WView {
 			$model['stats']['request'],
 			$model['per_page'],
 			$model['current_page'],
-			'/admin/user/listing/'.$model['sorting_vars'][0].'-'.strtolower($model['sorting_vars'][1]).'-%d/'.$subURL)
+			'/admin/user/users/'.$model['sorting_vars'][0].'-'.strtolower($model['sorting_vars'][1]).'-%d/'.$subURL)
 		);
 		$this->assign('pagination', $pagination->getHTML());
 	}
@@ -69,19 +69,20 @@ class UserAdminView extends WView {
 	 */
 	public function user_form(array $model) {
 		// Display a warning message when user edits its own account
-		if (!empty($model['user_data']) && $model['user_data']['id'] == $_SESSION['userid']) {
-			WNote::info('user_edit_own', WLang::get('user_edit_own'));
+		if (!empty($model['user_data']) && isset($_SESSION['userid']) && $model['user_data']['id'] == $_SESSION['userid']) {
+			WNote::info('user_edit_own', WLang::get('Warning: you are about to edit your own account. The changes will be applied immediatly.'));
 		}
 
 		// Displays a message for user under validation
 		if (!empty($model['user_data']) && $model['user_data']['valid'] == 2) {
-			WNote::info('user_validating_account', WLang::get('user_validating_account'));
+			WNote::info('user_validating_account', WLang::get('Submitting this form, this user account will be validated and the user will be notified by email.'));
 		}
 
 		// Setup the form
 		$this->assign('require', 'apps!user/access_form');
 		$this->assign('groups', $model['groupes']);
 		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('default_admin', $model['default_admin']);
 
 		$this->assignDefault(array(
 			'id'            => 0,
@@ -132,58 +133,21 @@ class UserAdminView extends WView {
 	 * @param array $model
 	 */
 	public function groups(array $model) {
-		if (!empty($model['group_diff'])) {
-			$this->group_diff($model);
-			return;
-		}
-
-		$this->assign('require', 'apps!user/access_form');
 		$this->assign('require', 'apps!user/groups');
 		$this->assign($model['sorting_tpl']);
 
 		$this->assign('groups', $model['groups']);
 		$this->assign('admin_apps', $model['admin_apps']);
-
-		$this->setTemplate('groups_listing');
+		$this->assign('default_admin', $model['default_admin']);
 	}
 
 	/**
-	 * Prepares the group difference form.
-	 *
-	 * Allows to customize user access when modifying group access.
+	 * Group difference form.
 	 *
 	 * @param array $model
 	 */
 	public function group_diff(array $model) {
-		$group_id = $model['group_id'];
-
-		$this->assign('require', 'apps!user/access_form');
-		$this->assign('require', 'apps!user/group_diff');
-
-		$this->assign('admin_apps', $model['admin_apps']);
-		$this->assign('group', $model['group']);
-		$this->assign('new_name', $model['group_name']);
-		$this->assign('new_access', $model['group_access']);
-
-		$chars = array('#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
-		$alphabet = array();
-		$count_custom = 0;
-		$model = new UserAdminModel();
-		foreach ($chars as $c) {
-			if ($c == '#') {
-				$alphabet['#'] = $model->countUsersWithCustomAccess(array('nickname' => 'REGEXP:^[^a-zA-Z]', 'groupe' => $group_id));
-			} else {
-				$alphabet[$c] = $model->countUsersWithCustomAccess(array('nickname' => $c.'%', 'groupe' => $group_id));
-			}
-			$count_custom += $alphabet[$c];
-		}
-		$this->assign('alphabet', $alphabet);
-		$count_total = $model->countUsers(array('groupe' => $group_id));
-		$this->assign('count_total', $count_total);
-		$this->assign('count_custom', $count_custom);
-		$this->assign('count_regular', $count_total-$count_custom);
-
-		$this->setTemplate('group_diff');
+		$this->assign($model);
 	}
 
 	/**
@@ -193,7 +157,7 @@ class UserAdminView extends WView {
 	 */
 	public function group_del(array $model) {
 		$this->assign('group_name', $model['name']);
-		$this->assign('confirm_delete_url', "/admin/user/group_del/".$model['id']);
+		$this->assign('confirm_delete_url', '/admin/user/group_del/'.$model['id']);
 	}
 
 	/**

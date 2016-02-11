@@ -3,19 +3,32 @@
  * News Application - Front View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsView is the Front View of the News Application
- * 
+ *
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-19-04-2013
+ * @version 0.5.0-11-02-2016
  */
 class NewsView extends WView {
 	public function listing($data) {
-		$this->assign('news', $data);
+		$this->assign('css', '/apps/news/front/css/news.css');
+
+		foreach ($data['news'] as $key => $news) {
+			$data['news'][$key]['permalink'] = $news['url'];
+			$data['news'][$key]['url'] = '/news/'.$news['id'].'-'.$news['url'];
+		}
+
+		$this->assign($data);
+	}
+
+	public function preview($data) {
+		$this->assign($data);
+
+		$this->setTemplate('listing');
 	}
 }
 

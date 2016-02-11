@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="en">
+	<item id="Toggle navigation">Toggle navigation</item>
+	<item id="Home">Home</item>
+	<item id="starting page">starting page</item>
+	<item id="About">About</item>
+	<item id="the company">the company</item>
+	<item id="Services">Services</item>
+	<item id="our skills">our skills</item>
+	<item id="Portfolio">Portfolio</item>
+	<item id="our works">our works</item>
+	<item id="Blog">Blog</item>
+	<item id="latest posts">latest posts</item>
+	<item id="Contact">Contact</item>
+	<item id="send us an email">send us an email</item>
+	<item id="Search the website">Search the website</item>
+	<item id="Sign up">Sign up</item>
+	<item id="Login">Login</item>
+	<item id="welcome_user">Welcome %s!</item>
+	<item id="Logout">Logout</item>
+	<item id="Administration">Administration</item>
+	<item id="All rights reserved.">All rights reserved.</item>
+</lang>

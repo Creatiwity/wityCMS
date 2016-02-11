@@ -3,49 +3,55 @@
  * News Application - Admin Controller
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsAdminController is the Admin Controller of the News Application
- * 
+ *
  * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-19-04-2013
+ * @version 0.5.0-11-02-2016
  */
 class NewsAdminController extends WController {
+	private $upload_dir;
+
+	public function __construct() {
+		$this->upload_dir = WITY_PATH.'upload'.DS.'news'.DS;
+	}
+
 	/**
-	 * Handle News Listing action
+	 * Handles news action
 	 */
-	protected function listing(array $params) {
+	protected function news(array $params) {
 		$n = 30; // Rows per page
 		$sort_by = '';
 		$sens = '';
 		$page = 1;
-		
+
 		// Sorting criterias given by URL
 		if (isset($params[0])) {
 			$criterias = $params[0];
 			sscanf(str_replace('-', ' ', $criterias), '%s %s %d', $sort_by_crit, $sens, $page_crit);
-			
-			if (isset($this->model->news_data_model['toDB'][$sort_by_crit])) {
+
+			if (in_array($sort_by_crit, array('id', 'title', 'author', 'created_date', 'views'))) {
 				$sort_by = $sort_by_crit;
 			}
-			
+
 			if ($page_crit > 1) {
 				$page = $page_crit;
 			}
 		}
-		
+
 		// SortingHelper
 		$sortingHelper = WHelper::load('SortingHelper', array(
-			array('news_id', 'news_title', 'news_author', 'news_date', 'news_views'), 
-			'news_date', 'DESC'
+			array('id', 'title', 'author', 'created_date', 'views'),
+			'created_date', 'DESC'
 		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
-		
+
 		return array(
-			'data'         => $this->model->getNewsList(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC'),
+			'data'         => $this->model->getAllNews(($page-1)*$n, $n, $sort[0], $sort[1] == 'ASC', array('published' => -1, 'publish_date' => -1)),
 			'total'        => $this->model->countNews(),
 			'current_page' => $page,
 			'per_page'     => $n,
@@ -53,234 +59,301 @@ class NewsAdminController extends WController {
 			'sorting_tpl'  => $sortingHelper->getTplVars()
 		);
 	}
-	
+
 	/**
 	 * Form to add/edit a news.
-	 * 
-	 * @param int $news_id
+	 *
+	 * @param int $id_news
 	 * @param array $db_data
 	 */
-	private function news_form($news_id = 0, $db_data = array()) {
-		$data = array();
-		
-		if (WRequest::hasData()) {
-			$data = WRequest::getAssoc(array('news_author', 'news_meta_title', 'news_keywords', 'news_description', 'news_title', 'news_url', 'news_content', 'news_cats'));
+	private function newsForm($id_news = 0, $db_data = array()) {
+		if (WRequest::getMethod() == 'POST') {
 			$errors = array();
-			
+			$post_data = WRequest::getAssoc(array('cats'));
+			$data_translatable = array();
+
+			// Format translatable fields
+			$translatable_fields = array('title', 'content', 'author', 'url', 'meta_title', 'meta_description', 'published', 'publish_date', 'publish_time');
+			$lang_list = WLang::getLangIds();
+			$default_id = WLang::getDefaultLangId();
+
+			foreach ($translatable_fields as $field) {
+				foreach ($lang_list as $i => $id_lang) {
+					$value = WRequest::get($field.'_'.$id_lang);
+
+					if ($field == 'published') {
+						$value = $value == 'on';
+					} else if ($field == 'url') {
+						$value = strtolower(WTools::stripAccents($value));
+						$value = preg_replace('#[^a-zA-Z0-9\/\._-]+#', '-', $value);
+						$value = trim($value, '-');
+					}
+
+					if (($value === null || $value === '') && $id_lang != $default_id) {
+						// Use the value of the default lang
+						$data_translatable[$id_lang][$field] = $data_translatable[$default_id][$field];
+					} else {
+						$data_translatable[$id_lang][$field] = $value;
+					}
+				}
+			}
+
 			/* BEGING VARIABLES CHECKING */
-			if (empty($data['news_title'])) {
-				$errors[] = WLang::get("article_no_title");
+			if (empty($data_translatable[$default_id]['title'])) {
+				$errors[] = WLang::get('Please, provide a title.');
 			}
-			
-			if (empty($data['news_author'])) {
-				$errors[] = WLang::get("article_no_author");
+
+			if (empty($data_translatable[$default_id]['author'])) {
+				$errors[] = WLang::get('Please, provide an author.');
 			}
-			
-			// Treat custom news URL
-			if (empty($data['news_url'])) {
-				$errors[] = WLang::get("article_no_permalink");
-			} else {
-				$data['news_url'] = strtolower($data['news_url']);
-				// remove accents
-				$data['news_url'] = preg_replace('#[^a-z0-9.]+#', '-', $data['news_url']);
-				$data['news_url'] = trim($data['news_url'], '-');
+
+			foreach ($lang_list as $i => $id_lang) {
+				if (!$data_translatable[$id_lang]['published']) {
+					$data_translatable[$id_lang]['publish_date'] = '';
+				} else if (empty($data_translatable[$id_lang]['publish_date']) || empty($data_translatable[$id_lang]['publish_time'])) {
+					$errors[] = WLang::get('Please, provide a date of publication.');
+				} else {
+					$data_translatable[$id_lang]['publish_date'] .= ' '.$data_translatable[$id_lang]['publish_time'];
+				}
+
+				unset($data_translatable[$id_lang]['publish_time']);
 			}
 			/* END VARIABLES CHECKING */
-			
+
+			// Image
+			if (!empty($_FILES['image']['name'])) {
+				$this->makeUploadDir();
+
+				$upload = WHelper::load('upload', array($_FILES['image']));
+				$upload->allowed = array('image/*');
+
+				$upload->Process($this->upload_dir);
+
+				if (!$upload->processed) {
+					$errors[] = $upload->error;
+					$post_data['image'] = $db_data['image'];
+				} else {
+					$post_data['image'] = '/upload/news/'.$upload->file_dst_name;
+
+					// Erase the previous image
+					if (!empty($db_data['image'])) {
+						@unlink($this->upload_dir.basename($db_data['image']));
+					}
+				}
+			} else if (!empty($id_news)) {
+				$post_data['image'] = $db_data['image'];
+			} else {
+				$post_data['image'] = '';
+			}
+
 			if (empty($errors)) {
-				if (empty($news_id)) { // Add case
-					$news_id = $this->model->createNews($data);
-					
-					if ($news_id !== false) {
+				if (empty($id_news)) { // Add case
+					if ($id_news = $this->model->createNews($post_data, $data_translatable)) {
 						// Treat categories
-						if (!empty($data['news_cats'])) {
-							foreach ($data['news_cats'] as $cat_id => $v) {
-								$this->model->addCatToNews($news_id, intval($cat_id));
+						if (!empty($post_data['cats'])) {
+							foreach ($post_data['cats'] as $id_cat => $v) {
+								$this->model->addCatToNews($id_news, intval($id_cat));
 							}
 						}
-						
-						$this->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
-						WNote::success('article_added', WLang::get('article_added', $data['news_title']));
+
+						$this->setHeader('Location', Wroute::getDir().'admin/news');
+						WNote::success('news_added', WLang::get('The news <strong>%s</strong> was successfully created.', $data_translatable[$default_id]['title']));
 					} else {
-						WNote::error('article_not_added', WLang::get('article_not_added'));
+						WNote::error('news_not_added', WLang::get('An unknown error occurred while creating the news in the database.'));
 					}
 				} else { // Edit case
-					if ($this->model->updateNews($news_id, $data)) {
+					if ($this->model->updateNews($id_news, $post_data, $data_translatable)) {
 						// Treat categories
-						$this->model->removeCatsFromNews($news_id);
-						if (!empty($data['news_cats'])) {
-							foreach ($data['news_cats'] as $cat_id => $v) {
-								$this->model->addCatToNews($news_id, intval($cat_id));
+						$this->model->removeCatsFromNews($id_news);
+
+						if (!empty($post_data['cats'])) {
+							foreach ($post_data['cats'] as $id_cat => $v) {
+								$this->model->addCatToNews($id_news, intval($id_cat));
 							}
 						}
-						
-						$this->setHeader('Location', Wroute::getDir().'/admin/news/edit/'.$news_id.'-'.$data['news_url']);
-						WNote::success('article_edited', WLang::get('article_edited', $data['news_title']));
+
+						$this->setHeader('Location', Wroute::getDir().'admin/news');
+						WNote::success('news_edited', WLang::get('The news <strong>%s</strong> was successfully edited.', $data_translatable[$default_id]['title']));
 					} else {
-						WNote::error('article_not_edited', WLang::get('article_not_edited'));
+						WNote::error('news_not_edited', WLang::get('An unknown error occurred while editing the news in the database.'));
 					}
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
+				$db_data = $post_data;
 			}
 		}
-		
+
 		return array(
-			'data'      => $db_data,
-			'post_data' => $data,
-			'cats'      => $this->model->getCatsList('news_cat_name', 'ASC')
+			'data' => $db_data,
+			'cats' => $this->model->getCatsStructure('name', 'ASC')
 		);
 	}
-	
-	protected function add($params) {
-		return $this->news_form();
+
+	protected function newsAdd($params) {
+		return $this->newsForm();
 	}
-	
+
 	/**
-	 * Handles Edit action
+	 * Handles news-edit action
 	 */
-	protected function edit($params) {
-		$news_id = intval(array_shift($params));
-		
-		$db_data = $this->model->getNews($news_id);
-		
+	protected function newsEdit($params) {
+		$id_news = intval(array_shift($params));
+
+		$db_data = $this->model->getNews($id_news);
+
 		if ($db_data !== false) {
-			return $this->news_form($news_id, $db_data);
+			return $this->newsForm($id_news, $db_data);
 		} else {
-			$this->setHeader('Location', WRoute::getDir().'/admin/news');
-			return WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
+			$this->setHeader('Location', WRoute::getDir().'admin/news');
+			return WNote::error('news_not_found', WLang::get('News not found.'));
 		}
 	}
-	
+
+	protected function newsSavePreview($params) {
+		$data = WRequest::getAssoc(array('title', 'content'), '', 'POST');
+
+		$data['author'] = trim($_SESSION['firstname'].' '.$_SESSION['lastname']);
+		$data['created_date'] = date(WLang::get('wdate_format'), time());
+
+		$_SESSION['news_preview'] = $data;
+
+		return 'ok';
+	}
+
 	/**
-	 * Handles News Delete action
-	 * 
-	 * @todo Handle properly the article_not_found case with Bootstrap
+	 * Handles news-delete action
+	 *
+	 * @todo Handle properly the news_not_found case with Bootstrap
 	 */
-	protected function news_delete($params) {
-		$news_id = intval(array_shift($params));
-		
-		$db_data = $this->model->getNews($news_id);
-		
+	protected function newsDelete($params) {
+		$id_news = intval(array_shift($params));
+
+		$db_data = $this->model->getNews($id_news);
+
 		if ($db_data !== false) {
 			if (in_array('confirm', $params)) {
-				$this->model->removeCatsFromNews($news_id);
-				$this->model->deleteNews($news_id);
-				
-				$this->setHeader('Location', WRoute::getDir() . '/admin/news');
-				WNote::success('article_deleted', WLang::get('article_deleted', $db_data['news_title']));
+				if (!empty($db_data['image'])) {
+					@unlink($this->upload_dir.$data['image']);
+				}
+
+				$this->model->removeCatsFromNews($id_news);
+				$this->model->deleteNews($id_news);
+
+				$this->setHeader('Location', WRoute::getDir().'admin/news');
+				WNote::success('news_deleted', WLang::get('The news <strong>%s</strong> was successfully deleted.', $db_data['title_1']));
 			}
-			
+
 			return $db_data;
 		} else {
-			$this->setHeader('Location', WRoute::getDir() . '/admin/news');
-			return WNote::error('article_not_found', WLang::get('article_not_found', $news_id));
+			$this->setHeader('Location', WRoute::getDir().'admin/news');
+			return WNote::error('news_not_found', WLang::get('News not found.', $id_news));
 		}
 	}
-	
+
 	/**
-	 * Handles News categories_manager action
+	 * Handles categories action
 	 */
-	protected function categories_manager($params) {
-		$data = array();
-		
+	protected function categories($params) {
+		$post_data = WRequest::getAssoc(array('name'), null, 'POST');
+
 		// Data was sent by form
-		if (WRequest::hasData()) {
-			$data = WRequest::getAssoc(array('news_cat_id', 'news_cat_name', 'news_cat_shortname', 'news_cat_parent'));
+		if (!in_array(null, $post_data, true)) {
+			$post_data += WRequest::getAssoc(array('id', 'shortname', 'parent'));
 			$errors = array();
-			
-			$cat_id = intval($data['news_cat_id']);
-			
-			if (empty($data['news_cat_name'])) {
-				$errors[] = WLang::get('category_no_name');
+
+			$id_cat = intval($post_data['id']);
+
+			if (empty($post_data['name'])) {
+				$errors[] = WLang::get('Please, provide a name.');
 			}
-			
+
 			// Format short name
-			if (empty($data['news_cat_shortname'])) {
-				$data['news_cat_shortname'] = strtolower($data['news_cat_name']);
-			} else {
-				$data['news_cat_shortname'] = strtolower($data['news_cat_shortname']);
+			if (empty($post_data['shortname'])) {
+				$post_data['shortname'] = $post_data['name'];
 			}
-			$data['news_cat_shortname'] = preg_replace('#[^a-z0-9.]+#', '-', $data['news_cat_shortname']);
-			$data['news_cat_shortname'] = trim($data['news_cat_shortname'], '-');
-			
+
+			$post_data['shortname'] = strtolower(WTools::stripAccents($post_data['shortname']));
+			$post_data['shortname'] = preg_replace('#[^a-zA-Z0-9\/\._-]+#', '-', $post_data['shortname']);
+			$post_data['shortname'] = trim($post_data['shortname'], '-');
+
 			if (empty($errors)) {
-				if (empty($cat_id)) { // Add case
-					if ($this->model->createCat($data)) {
-						$this->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager');
-						WNote::success('cat_added', WLang::get('cat_added', $data['news_cat_name']));
+				if (empty($id_cat)) { // Add case
+					if ($this->model->createCat($post_data)) {
+						$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
+						WNote::success('category_added', WLang::get('The category <strong>%s</strong> was successfully created.', $post_data['name']));
 					} else {
-						WNote::error('cat_not_added', WLang::get('cat_not_added'));
+						WNote::error('category_not_added', WLang::get('An unknown error occurred while adding the category in the database.'));
 					}
 				} else { // Edit case
-					$db_data = $this->model->getCat($cat_id);
-					
+					$db_data = $this->model->getCat($id_cat);
+
 					// Check existing category
 					if ($db_data !== false) {
-						if ($this->model->updateCat($cat_id, $data)) {
-							$this->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager');
-							WNote::success('cat_edited', WLang::get('cat_edited', $data['news_cat_name']));
+						if ($this->model->updateCat($id_cat, $post_data)) {
+							$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
+							WNote::success('category_edited', WLang::get('The category <strong>%s</strong> was successfully edited.', $post_data['name']));
 						} else {
-							WNote::error('cat_not_edited', WLang::get('cat_not_edited'));
+							WNote::error('category_not_edited', WLang::get('An unknown error occurred while editing the category in the database.'));
 						}
 					} else {
-						WNote::error('cat_not_found', "The category you are trying to edit (#".$cat_id.") does not exist in the database.");
+						WNote::error('category_not_found', WLang::get("The category was not found."));
 					}
 				}
 			} else {
 				WNote::error('data_errors', implode("<br />\n", $errors));
 			}
 		}
-		
+
 		// Sorting criteria given in URL
 		$sort_by = '';
 		$sens = '';
 		if (!empty($params[0])) {
-			sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by_crit, $sens);
-			
-			if (isset($this->model->cats_data_model['toDB'][$sort_by_crit])) {
-				$sort_by = $sort_by_crit;
-			}
+			sscanf(str_replace('-', ' ', $params[0]), '%s %s', $sort_by, $sens);
 		}
-		
+
 		// SortingHelper Helper
 		$sortingHelper = WHelper::load('SortingHelper', array(
-			array('news_cat_name', 'news_cat_shortname'), 
-			'news_cat_name', 'ASC'
+			array('name', 'shortname'),
+			'name', 'ASC'
 		));
 		$sort = $sortingHelper->findSorting($sort_by, $sens);
-		
+
 		return array(
-			'data'        => $this->model->getCatsList($sort[0], $sort[1]),
-			'post_data'   => $data,
+			'data'        => $this->model->getCatsStructure($sort[0], $sort[1]),
+			'post_data'   => $post_data,
 			'sorting_tpl' => $sortingHelper->getTplVars()
 		);
 	}
-	
+
 	/**
-	 * Handles Category_delete action
-	 * 
-	 * @todo Handle properly the cat_not_found case with Bootstrap
+	 * Handles category-delete
 	 */
-	protected function category_delete($params) {
-		$cat_id = intval(array_shift($params));
-		
-		$db_data = $this->model->getCat($cat_id);
-		
+	protected function categoryDelete($params) {
+		$id_cat = intval(array_shift($params));
+
+		$db_data = $this->model->getCat($id_cat);
+
 		if ($db_data !== false) {
 			if (in_array('confirm', $params)) {
-				$this->model->removeCatsFromNews($cat_id);
-				$this->model->unlinkChildrenOfParentCat($cat_id);
-				$this->model->deleteCat($cat_id);
-				
-				$this->setHeader('Location', WRoute::getDir() . '/admin/news/categories_manager');
-				WNote::success('category_deleted', WLang::get('category_deleted'));
+				$this->model->removeCatsFromNews($id_cat);
+				$this->model->unlinkChildrenOfParentCat($id_cat);
+				$this->model->deleteCat($id_cat);
+
+				$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
+				WNote::success('category_deleted', WLang::get('Category successfully deleted.'));
 			}
-			
+
 			return $db_data;
 		} else {
-			$this->setHeader('Location', WRoute::getDir().'/admin/news/categories_manager');
-			return WNote::error('category_not_found', WLang::get('category_not_found'));
+			$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
+			return WNote::error('category_not_found', WLang::get("The category you are trying to delete doesn't exist."));
+		}
+	}
+
+	private function makeUploadDir() {
+		if (!is_dir($this->upload_dir)) {
+			mkdir($this->upload_dir, 0777, true);
 		}
 	}
 }

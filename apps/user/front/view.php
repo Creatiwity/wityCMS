@@ -3,36 +3,37 @@
  * User Application - Front View
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * UserView is the Front View of the User Application.
- * 
+ *
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-26-02-2013
+ * @version 0.5.0-11-02-2016
  */
 class UserView extends WView {
 	public function __construct() {
 		parent::__construct();
-		
+
 		// CSS for all views
 		$this->assign('css', '/apps/user/front/css/user.css');
 	}
-	
+
 	/**
 	 * Prepares the connexion form.
-	 * 
+	 *
 	 * @param array $model Model containing the redirect link
 	 */
 	public function login($model) {
 		$this->assign('redirect', $model['redirect']);
+		$this->assign('config', $model['config']);
 		$this->setTemplate('connexion_form');
 	}
-	
+
 	/**
 	 * Prepares the register form.
-	 * 
+	 *
 	 * @param array $model
 	 */
 	public function register($model) {
@@ -42,10 +43,10 @@ class UserView extends WView {
 			$this->assign($name, isset($model[$name]) ? $model[$name] : '');
 		}
 	}
-	
+
 	/**
 	 * Prepares the password-lost form.
-	 * 
+	 *
 	 * @param array $model
 	 */
 	public function password_lost($model) {

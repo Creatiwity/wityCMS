@@ -1,0 +1,54 @@
+<div class="wity-app wity-app-slideshow wity-action-form">
+	<form method="post" enctype="multipart/form-data">
+		<div id="translatable-tabs"></div>
+
+		<div class="row">
+			<div class="col-md-9 form-horizontal">
+				<h1>{if empty({$id})}{lang Add a slide}{else}{lang Edit a slide}{/if}</h1>
+
+				<div class="form-group">
+					<label for="title" class="col-sm-3 control-label">{lang Title}*</label>
+					<div class="col-sm-9 translatable">
+						<input id="title" class="form-control" type="text" name="title" autocomplete="off" placeholder="{lang Title}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="legend" class="col-sm-3 control-label">{lang Legend}*</label>
+					<div class="col-sm-9 translatable">
+						<textarea id="legend" class="form-control" name="legend" rows="20" cols="80" placeholder="{lang Legend}"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="url" class="col-sm-3 control-label">{lang URL}</label>
+					<div class="col-sm-9 translatable">
+						<input id="url" class="form-control" type="text" name="url" value="{$url}" autocomplete="off" placeholder="{lang URL}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="url" class="col-sm-3 control-label">{lang Image (PNG or JPEG)}*</label>
+					<div class="col-sm-9">
+						{if !empty({$image})}
+						<p><img class="img-responsive" src="{$image}" alt="{$title_1}" style="max-width: 200px; max-height: 200px;" /></p>
+						{/if}
+
+						<input id="image" type="file" name="image" class="form-control" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="well well-sm">
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang Submit}</button>
+					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang Cancel}</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script>
+	var wity_lang_form_values = {$form_values};
+</script>

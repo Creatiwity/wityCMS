@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="fr">
+	<!-- Actions -->
+	<item id="Add a page">Ajouter une page</item>
+	<item id="Edit a page">Modifier une page</item>
+	<item id="Delete a page">Supprimer une page</item>
+
+	<!-- Pages -->
+	<item id="Pages">Pages</item>
+	<item id="Actions">Actions</item>
+	<item id="Title">Titre</item>
+	<item id="Author">Auteur</item>
+	<item id="Category">Catégorie</item>
+	<item id="Last modification">Dernière modification</item>
+	<item id="Views">Vues</item>
+	<item id="No page in database.">Aucune page dans la base de données.</item>
+
+	<!-- Page form -->
+	<item id="URL">URL</item>
+	<item id="Preview">Prévisualiser</item>
+	<item id="Content">Contenu</item>
+
+	<item id="SEO">Référencement</item>
+	<item id="Meta Title">Balise titre</item>
+	<item id="Meta Description">Balise description</item>
+
+	<item id="Details">Détails</item>
+	<item id="Subtitle">Sous-titre</item>
+	<item id="Mother page">Page mère</item>
+	<item id="Image">Image</item>
+
+	<item id="Created on %s">&lt;strong&gt;Créée&lt;/strong&gt; le %s</item>
+	<item id="Modified on %s">&lt;strong&gt;Modifiée&lt;/strong&gt; le %s</item>
+
+	<item id="Please, provide a title.">Veuillez fournir un titre.</item>
+	<item id="Please, provide a URL.">Veuillez fournir une URL.</item>
+
+	<item id="Page not found.">La page n'a pas été trouvée.</item>
+	<item id="The page &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">La page &lt;strong&gt;%s&lt;/strong&gt; a été créée avec succès.</item>
+	<item id="An unknown error occurred while creating the page in the database.">Une erreur inconnue s'est produite lors de l'ajout de la page dans la base de données.</item>
+	<item id="The page &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">La page &lt;strong&gt;%s&lt;/strong&gt; a été modifiée avec succès.</item>
+	<item id="An unknown error occurred while editing the page in the database.">Une erreur inconnue s'est produite lors de l'édition de la page dans la base de données.</item>
+
+	<item id="Do you really want to delete the page %s?">Confirmez-vous la suppression de la page &lt;strong&gt;%s&lt;/strong&gt; ?</item>
+	<item id="The page &lt;strong&gt;%s&lt;/strong&gt; was successfully deleted.">La page &lt;strong&gt;%s&lt;/strong&gt; a été supprimée avec succès.</item>
+
+	<item id="Edit">Modifier</item>
+	<item id="Cancel">Annuler</item>
+	<item id="Delete">Supprimer</item>
+	<item id="Submit">Envoyer</item>
+	<item id="N/A">N/A</item>
+</lang>

@@ -1,0 +1,67 @@
+<div class="wity-app wity-app-news wity-action-news-listing">
+	<h1>{lang News}</h1>
+
+	<div class="text-right">
+		<a class="btn btn-success" href="/admin/news/news-add"><i class="glyphicon glyphicon-plus"></i> {lang Add a news}</a>
+	</div>
+
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th style="width: 5%;"><a href="/admin/news/news/id-{$id_sort}/"><i class="{$id_class}"></i> ID</a></th>
+				<th style="width: 40%;"><a href="/admin/news/news/title-{$title_sort}/"><i class="{$title_class}"></i> {lang Title}</a></th>
+				<th style="width: 10%;"><a href="/admin/news/news/author-{$author_sort}/"><i class="{$author_class}"></i> {lang Author}</a></th>
+				<th style="width: 10%;">{lang Category}</th>
+				<th style="width: 5%;" class="text-center">{lang Published}</th>
+				<th style="width: 5%;" class="text-center"><a href="/admin/news/news/views-{$views_sort}/"><i class="{$views_class}"></i> {lang Views}</a></th>
+				<th style="width: 15%;"><a href="/admin/news/news/created_date-{$created_date_sort}/"><i class="{$created_date_class}"></i> {lang Last modification}</a></th>
+				<th style="width: 10%;">{lang Actions}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{for $n in $news}
+			<tr>
+				<td>{$n.id}</td>
+				<td><strong>{$n.title}</strong></td>
+				<td>{$n.author}</td>
+				<td>
+					<ul class="list-unstyled">
+					{for $c in {$n.cats}}
+						<li>{$c.name}</li>
+					{/for}
+					</ul>
+				</td>
+				<td class="text-center">{if {$n.published}}Y{else}N{/if}</td>
+				<td class="text-center">{$n.views}</td>
+				<td>
+					{if {$n.modified_date} != '0000-00-00 00:00:00'}
+						{$n.modified_date}
+					{else}
+						{$n.created_date}
+					{/if}
+				</td>
+				<td>
+					<div class="btn-group">
+						<a href="/admin/news/news-edit/{$n.id}-{$n.url}/" title="{lang Edit}" class="btn btn-default btn-sm wity_edit_category"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+						<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu pull-right" role="menu">
+							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/news/news-delete/{$n.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		{/for}
+		{empty}
+			<tr>
+				<td colspan="8" class="text-center">{lang No news in database.}</td>
+			</tr>
+		{/empty}
+		</tbody>
+	</table>
+	{$pagination}
+
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete_label" aria-hidden="true"></div>
+</div>

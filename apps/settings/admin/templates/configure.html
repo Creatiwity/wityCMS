@@ -1,0 +1,70 @@
+<div class="wity-app wity-app-settings wity-action-configure">
+	<form action="/admin/settings/" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<h1>{lang Settings of the site}</h1>
+
+		<fieldset>
+			<legend>{lang General}</legend>
+
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">{lang Website's name}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="name" class="form-control" type="text" name="settings[name]" value="{$settings.name}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="email" class="form-control" type="email" name="settings[email]" value="{$settings.email}" />
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang SEO}</legend>
+
+			<div class="form-group">
+				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="page_title" class="form-control" type="text" name="settings[page_title]" value="{$settings.page_title}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
+				<div class="col-sm-10 col-lg-5">
+					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang Icons}</legend>
+
+			<div class="form-group">
+				<label for="favicon" class="col-sm-2 control-label">{lang Favicon (.ico)}</label>
+				<div class="col-sm-10 col-lg-5">
+					{if !empty({$settings.favicon})}
+					<p><img src="{$settings.favicon}" alt="Favicon" width="32" height="32" /></p>
+					{/if}
+					<input id="favicon" class="form-control" type="file" name="favicon" value="" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="icon" class="col-sm-2 control-label">{lang Site's icon (32x32 px)}</label>
+				<div class="col-sm-10 col-lg-5">
+					{if !empty({$settings.icon})}
+					<p><img src="{$settings.icon}" alt="Icon" width="32" height="32" /></p>
+					{/if}
+					<input id="icon" class="form-control" type="file" name="icon" value="" />
+				</div>
+			</div>
+		</fieldset>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Submit}" />
+			</div>
+		</div>
+	</form>
+</div>

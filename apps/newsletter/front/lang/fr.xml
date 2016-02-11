@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lang value="fr">
+	<!-- Form -->
+	<item id="Register to our newsletter">Inscrivez-vous à la newsletter :</item>
+	<item id="Register">S'inscrire</item>
+
+	<item id="Email invalid.">Email invalide.</item>
+	<item id="This e-mail address is already subscribed.">Cette adresse est déjà inscrite.</item>
+	<item id="E-mail address successfully added.">Adresse ajoutée avec succès.</item>
+	<item id="An unknown error happened.">Une erreur inconnue est survenue.</item>
+</lang>

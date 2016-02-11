@@ -1,0 +1,13 @@
+
+.wity-app-search .search-form {
+	max-width: 800px;
+	margin: auto;
+}
+
+.wity-app-search dl dt {
+	font-weight: normal;
+}
+
+.wity-app-search dl dd {
+	margin-bottom: 20px;
+}

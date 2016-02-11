@@ -1,0 +1,21 @@
+/**
+ * News
+ */
+
+.wity-app-news.wity-action-listing .news {
+	border-bottom: 1px solid #91cadf;
+	margin-bottom: 1em;
+}
+
+.wity-app-news.wity-action-listing .news .news-header {
+	margin-bottom: 1em;
+}
+
+.wity-app-news.wity-action-listing .news .news-header .news-title {
+	margin-bottom: 0;
+}
+
+.wity-app-news.wity-action-listing .news .news-header .news-meta {
+	font-style: italic;
+	margin-bottom: 0;
+}

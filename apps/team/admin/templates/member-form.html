@@ -1,0 +1,86 @@
+<div class="wity-app wity-app-team wity-action-member-form">
+	<form action="/admin/team/{if empty({$id})}member-add{else}member-edit/{$id}{/if}" method="post" enctype="multipart/form-data">
+		<div id="translatable-tabs"></div>
+
+		<div class="row">
+			<div class="col-md-9 form-horizontal">
+				<h1>{if empty({$id})}{lang Add a member}{else}{lang Edit a member}{/if}</h1>
+
+				<input type="hidden" name="id" value="{$id}" />
+
+				<div class="form-group">
+					<label for="name" class="control-label col-md-2">{lang Name}*</label>
+					<div class="col-md-10">
+						<input id="name" class="form-control" type="text" name="name" value="{$name}" placeholder="{lang Name}" />
+					</div>
+				</div>
+
+				<div class="form-group translatable">
+					<label for="title" class="control-label col-md-2">{lang Position}*</label>
+					<div class="col-md-10">
+						<input id="title" class="form-control" type="text" name="title" placeholder="{lang Position}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="description" class="control-label col-md-2">{lang Description}</label>
+					<div class="col-sm-10 translatable">
+						<textarea id="description" class="form-control" name="description" rows="20" cols="80" placeholder="{lang Description}"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="email" class="control-label col-md-2">{lang Email}</label>
+					<div class="col-md-10">
+						<input id="email" class="form-control" type="email" name="email" value="{$email}" placeholder="{lang Email}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="linkedin" class="control-label col-md-2">{lang Linkedin}</label>
+					<div class="col-md-10">
+						<input id="linkedin" class="form-control" type="text" name="linkedin" value="{$linkedin}" placeholder="{lang Linkedin}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="twitter" class="control-label col-md-2">{lang Twitter}</label>
+					<div class="col-md-10">
+						<input id="twitter" class="form-control" type="text" name="twitter" value="{$twitter}" placeholder="{lang Twitter}"/>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="image" class="control-label col-md-2">
+						{lang Image (PNG or JPEG / 180x180 px / ~20 ko)}
+					</label>
+					<div class="col-md-10">
+						{if !empty({$image})}<p><img src="{$image}" alt="{$name}" /></p>{/if}
+						<input id="image" type="file" name="image" class="form-control" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="image_hover" class="control-label col-md-2">
+						{lang Hovering image (PNG ou JPEG / 180x180 px / ~20 ko)}
+					</label>
+					<div class="col-md-10">
+						{if !empty({$image_hover})}<p><img src="{$image_hover}" alt="{$name}" /></p>{/if}
+						<input id="image_hover" type="file" name="image_hover" class="form-control" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="well well-sm">
+					<button type="submit" class="btn btn-primary btn-lg btn-block" type="button">{lang Submit}</button>
+					<button class="btn btn-default btn-lg btn-block" type="button" onclick="history.back();">{lang Cancel}</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script>
+	var wity_lang_form_values = {$form_values};
+</script>

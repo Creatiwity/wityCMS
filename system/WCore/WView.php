@@ -3,14 +3,14 @@
  * WView.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WView handles application's Views.
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-12-10-2013
+ * @version 0.5.0-11-02-2016
  */
 class WView {
 	/**
@@ -119,7 +119,7 @@ class WView {
 	 */
 	public function setTemplate($template) {
 		$file = $template;
-		
+
 		// Use system directory separator
 		if (DS != '/') {
 			$file = str_replace('/', DS, $file);
@@ -127,15 +127,15 @@ class WView {
 
 		// Format the file asked
 		if (strpos($file, DS) === false) {
-			$file = $this->context['directory'].'templates'.DS.$file.'.html';
-			
-			if (!$this->context['admin']) {
-				$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->context['app-name'].DS.$template.'.html';
-				
-				// Allow template overriding from theme
-				if (file_exists($theme_tpl)) {
-					$file = $theme_tpl;
-				}
+			$file = $this->getContext('directory').'templates'.DS.$file.'.html';
+		}
+
+		if (!$this->getContext('admin')) {
+			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->getContext('app-name').DS.basename($template);
+
+			// Allow template overriding from theme
+			if (file_exists($theme_tpl)) {
+				$file = $theme_tpl;
 			}
 		}
 
@@ -172,10 +172,10 @@ class WView {
 			}
 		}
 	}
-	
+
 	/**
 	 * Assign values relatively to a default model.
-	 * 
+	 *
 	 * <code>
 	 *   $this->assignRelative(array(
 	 *     'var1' => 'default_value1',
@@ -184,7 +184,7 @@ class WView {
 	 *     'var1' => 'final_value1'
 	 *   )); // Will assign var1 = final_value1 and var2 = default_value2
 	 * </code>
-	 * 
+	 *
 	 * @param array $model Model + default values
 	 * @param array $values Values to use
 	 */
@@ -250,7 +250,7 @@ class WView {
 				foreach (self::$global_vars['css'] as $file) {
 					$css .= '<link href="'.$file.'" rel="stylesheet" type="text/css" />'."\n";
 				}
-				
+
 				return $css;
 
 			case 'js':
@@ -258,7 +258,7 @@ class WView {
 				foreach (self::$global_vars['js'] as $file) {
 					$script .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 				}
-				
+
 				return $script;
 
 			case 'require':
@@ -266,8 +266,17 @@ class WView {
 					return '';
 				}
 
-				$require = '<script type="text/javascript" src="{$wity_base_url}/libraries/requirejs/require.js"></script>'."\n"
+				$lang_array = WLang::getLangs(true);
+
+				foreach ($lang_array as $key => $value) {
+					$lang_array[$key] = json_encode($value);
+				}
+
+				$require = '<script type="text/javascript" src="{$wity_base_url}libraries/requirejs/require.min.js"></script>'."\n"
 					.'<script>'."\n"
+					.'var wity_base_url = "'.WRoute::getBase().'"'.";\n"
+					.'var wity_lang_enabled_langs = ['. implode(',', $lang_array) ."];\n"
+					.'var wity_lang_default_id = "'.WLang::getDefaultLangId().'"'.";\n"
 					.'require.config('.file_get_contents('libraries/libraries.json').');'."\n";
 
 				// If array not empty
@@ -374,6 +383,7 @@ class WView {
 		// Clean the view for the next render
 		$this->templateFile = '';
 		$this->context['signature'] = '';
+		$this->render_counts[$signature] = 1;
 
 		return $this->rendered_string;
 	}

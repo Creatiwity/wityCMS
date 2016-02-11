@@ -3,26 +3,27 @@
  * WRoute.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WRoute calculates the route given in the URL to find out the right application to execute.
  *
- * <p>Traditionally, Apache URL Rewriting is used in WityCMS.
- * Example: the URL "http://mysite.com/wity/news/see/4" would be translated like this :</p>
+ * <p>Traditionally, Apache URL Rewriting is used in wityCMS.
+ * Example: the URL "http://mysite.com/wity/news/see/4?published=1" would be translated this way:</p>
  * <ul>
  *    <li>app = "news" (this param will be used as Application name in WMain)</li>
  *    <li>param1 = "see" - in this case, this parameter is called the action of the application</li>
  *    <li>param2 = "4" - in this case, it may be the id of the news to display</li>
  * </ul>
  *
- * <p>WRoute can provide several informations about the URL of the page.
- * If we keep the example URL = http://mysite.com/wity/news/see/4</p>
+ * <p>WRoute provides several informations about the URL of the page.
+ * If we keep the example URL = http://mysite.com/wity/news/see/4?published=1</p>
  * <ul>
- *     <li>Base = "http://mysite.com/wity" - Base contains the directory in which WityCMS is installed</li>
- *     <li>Dir = "/wity" - it is the directory in which WityCMS is installed (may be empty)</li>
- *     <li>Query = "/news/see/4" [Params = array("news", "see", "4")]</li>
- *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4") - full URL of the page</li>
+ *     <li>Base = "http://mysite.com/wity/" - Base contains the host + directory in which wityCMS is installed</li>
+ *     <li>Dir = "/wity/" - it is the directory in which wityCMS is installed (contains at least '/')</li>
+ *     <li>Query = "news/see/4" [Params = array("news", "see", "4")]</li>
+ *     <li>QueryString = "published=1"</li>
+ *     <li>URL = Base + Query (= "http://mysite.com/wity/news/see/4?published=1") - full URL of the page</li>
  * </ul>
  *
  * <p>Notice that every route information given by WRoute is formatted with the slash located at the beginning,
@@ -30,16 +31,24 @@ defined('IN_WITY') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-18-10-2013
+ * @version 0.5.0-11-02-2016
  */
 class WRoute {
 	/**
-	 * If the URL is http://mysite.com/wity/user/login and if WityCMS is executed in /wity,
+	 * If the URL is http://mysite.com/wity/user/login and if wityCMS is executed in /wity,
 	 * then the $query will be set to "user/login".
 	 *
 	 * @var string Request string of the page
 	 */
 	private static $query;
+
+	/**
+	 * Stores the query string given in the URL.
+	 * Example: "published=1"
+	 *
+	 * @var string URL Query String
+	 */
+	private static $queryString;
 
 	/**
 	 * Stores the calculated route.
@@ -52,12 +61,24 @@ class WRoute {
 	 * Initializes WRoute.
 	 */
 	public static function init() {
+		self::$query = $_SERVER['REQUEST_URI'];
+
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
-		self::$query = str_replace(self::getDir(), '', $_SERVER['REQUEST_URI']);
+		$dir = self::getDir();
+		if ($dir != '/') {
+			self::$query = str_replace($dir, '', $_SERVER['REQUEST_URI']);
+		}
 
 		// Cleansing
-		self::$query = str_replace(array('index.php', '.html', '.htm'), '', self::$query);
-		self::$query = preg_replace('#\?.*$#', '', self::$query); // Remove query string
+		self::$query = ltrim(self::$query, '/');
+		self::$query = str_replace(array('index.php', 'index.html'), '', self::$query);
+
+		// Extract query string
+		$split_query = explode('?', self::$query);
+		if (count($split_query) > 1) {
+			self::$query = $split_query[0];
+			self::$queryString = $split_query[1];
+		}
 
 		// Loading route config values
 		WConfig::load('route', SYS_DIR.'config'.DS.'route.php', 'php');
@@ -140,7 +161,7 @@ class WRoute {
 
 						$app = array_shift($params);
 						if (!empty($app)) {
-							// In WityCMS, to trigger an admin app, the app must be equal to "admin/news"
+							// In wityCMS, to trigger an admin app, the app must be equal to "admin/news"
 							$route['app'] = 'admin/'.$app;
 						}
 					} else {
@@ -156,66 +177,78 @@ class WRoute {
 	}
 
 	/**
-	 * Returns the domain from which the user tried to acess WityCMS.
-	 * 
+	 * Returns the domain from which the user tried to acess wityCMS.
+	 *
 	 * If the site is running on http://mysite.com/wity/,
 	 * it should return "mysite.com".
-	 * 
+	 *
 	 * @return string Domain name
 	 */
 	public static function getDomain() {
 		return $_SERVER['HTTP_HOST'];
 	}
-	
+
 	/**
-	 * Returns the full root location in which WityCMS is installed, as defined in /system/config/config.php.
+	 * Returns the full root location in which wityCMS is installed, as defined in /system/config/config.php.
 	 *
 	 * If the website address is http://mysite.com/wity/user/login,
-	 * it should return http://mysite.com/wity.
+	 * it should return http://mysite.com/wity/.
 	 *
-	 * @return string the full root location of WityCMS
+	 * @return string the full root location of wityCMS
 	 */
 	public static function getBase() {
-		return rtrim(WConfig::get('config.base'), '/');
+		return rtrim(WConfig::get('config.base'), '/').'/';
 	}
 
 	/**
-	 * Returns the partial WityCMS root directory.
+	 * Returns the partial wityCMS root directory.
 	 *
-	 * If the website address is http://mysite.com/wity/user/login,
-	 * it will return /wity.
+	 * If the website address is "http://mysite.com/wity/news/see/4?published=1",
+	 * it will return "/wity/".
 	 *
-	 * @return string The partial root location of WityCMS
+	 * @return string The partial root location of wityCMS
 	 */
 	public static function getDir() {
 		// Remove the working directory of the script
-		// example: $_SERVER['SCRIPT_NAME'] = http://mysite.com/wity/index.php
+		// example: $_SERVER['SCRIPT_NAME'] = /wity/index.php
 		$dir = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
-		$dir = rtrim($dir, '/');
+
 		return $dir;
 	}
 
 	/**
-	 * Returns the query asked to WityCMS in the URL.
+	 * Returns the query asked to wityCMS in the URL.
 	 *
-	 * If the request URL is http://mysite.com/wity/user/login,
-	 * it will return /user/login.
+	 * If the request URL is "http://mysite.com/wity/news/see/4?published=1",
+	 * it will return "/news/see/4".
 	 *
-	 * @return string The partial root location of WityCMS
+	 * @return string The partial root location of wityCMS
 	 */
 	public static function getQuery() {
 		return self::$query;
 	}
 
 	/**
+	 * Returns the query string given in URL (without '?' char).
+	 *
+	 * If the request URL is "http://mysite.com/wity/news/see/4?published=1",
+	 * it will return "published=1".
+	 *
+	 * @return string The partial root location of wityCMS
+	 */
+	public static function getQueryString() {
+		return self::$queryString;
+	}
+
+	/**
 	 * Returns the full URL of the page.
 	 *
-	 * For example: http://mysite.com/wity/user/login
+	 * For example: "http://mysite.com/wity/news/see/4?published=1"
 	 *
 	 * @return string The full URL
 	 */
 	public static function getURL() {
-		return self::getBase().self::$query;
+		return self::getBase().self::$query.'?'.self::$queryString;
 	}
 
 	/**
@@ -239,14 +272,14 @@ class WRoute {
 	/**
 	 * Defines a custom route to redirect to a specific application.
 	 *
-	 * <code>WRoute::defineCustomRoute('/test/', 'news/see/13');</code>
+	 * <code>WRoute::defineCustomRoute('test', 'news/see/13');</code>
 	 *
 	 * @param  string  $uri         The custom route to catch
 	 * @param  array   $redirection Redirection URI
 	 * @return boolean true if the redirection was applied
 	 */
 	public static function defineCustom($uri, $redirection) {
-		$uri = '/'.trim($uri, '/');
+		$uri = trim($uri, '/');
 		if (!empty($uri)) {
 			WConfig::set('route.custom.'.$uri, $redirection);
 			WConfig::save('route');
@@ -263,7 +296,7 @@ class WRoute {
 	 * @param string $uri The custom route to remove
 	 */
 	public static function deleteCustom($uri) {
-		$uri = '/'.trim($uri, '/');
+		$uri = trim($uri, '/');
 		if (!empty($uri) && !is_null(WConfig::get('route.custom.'.$uri))) {
 			$custom_routes = WConfig::get('route.custom');
 			unset($custom_routes[$uri]);

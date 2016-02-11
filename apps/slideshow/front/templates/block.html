@@ -1,0 +1,24 @@
+<div class="wity-app wity-app-slideshow wity-action-block">
+	<div class="slideshow" data-wity-slider='{ "bullet_point_position": "none", "controls": "true", "width": 1600, "height": 450, "fluid": true, "pause": {$config.time_pause}, "speed": {$config.time_transition}, "auto": {$config.autoplay}}'>
+		{for $slide in $slides}
+		<div class="slide">
+			<div class="slide-inner" style="background-image: url({$wity_base_url}{$slide.image})">
+				{if (!empty({$slide.title}) || !empty({$slide.legend}))}
+				<div class="description">
+					{if !empty({$slide.title})}
+					<h2 {if empty({$slide.legend})}class="only-title"{/if}>{$slide.title}</h2>
+					{if !empty({$slide.legend})}<br/>{/if}
+					{/if}
+					{if !empty({$slide.legend})}
+					<div {if empty({$slide.title})}class="only-legend"{/if}>{$slide.legend}</div>
+					{/if}
+					{if !empty({$slide.url})}
+					<a href="{$slide.url}" class="link"></a>
+					{/if}
+				</div>
+				{/if}
+			</div>
+		</div>
+		{/for}
+	</div>
+</div>

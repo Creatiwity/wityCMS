@@ -1,0 +1,86 @@
+<div class="wity-app wity-app-slideshow wity-action-form">
+	<form action="/admin/settings/{if empty({$id})}language_add{else}language_edit/{$id}{/if}" method="post" enctype="multipart/form-data" class="form-horizontal">
+		<h1>{if empty({$id})}{lang Add a language}{else}{lang Edit a language}{/if}</h1>
+
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">{lang Name}*</label>
+			<div class="col-sm-10 col-lg-5">
+				<input id="name" class="form-control lang" type="text" name="name" value="{$name}" autocomplete="off" placeholder="{lang Name}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="iso" class="col-sm-2 control-label">{lang ISO}*</label>
+			<div class="col-sm-10 col-lg-5">
+				<input id="iso" class="form-control lang" type="text" name="iso" value="{$iso}" autocomplete="off" placeholder="{lang ISO}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="code" class="col-sm-2 control-label">{lang Code}*</label>
+			<div class="col-sm-10 col-lg-5">
+				<input id="code" class="form-control lang" type="text" name="code" value="{$code}" autocomplete="off" placeholder="{lang Code}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="date_format_short" class="col-sm-2 control-label">
+				{lang Date (short format)}<br />
+				<a href="http://php.net/manual/fr/function.strftime.php" target="_blank">{lang How it works?}</a>
+			</label>
+			<div class="col-sm-10 col-lg-5">
+				<input id="date_format_short" class="form-control lang" type="text" name="date_format_short" value="{$date_format_short}" autocomplete="off" placeholder="%d/%m/%Y" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="date_format_long" class="col-sm-2 control-label">{lang Date (long format)}</label>
+			<div class="col-sm-10 col-lg-5">
+				<input id="date_format_long" class="form-control lang" type="text" name="date_format_long" value="{$date_format_long}" autocomplete="off" placeholder="%d/%m/%Y %H:%M" />
+			</div>
+		</div>
+
+		{if {$is_default}}
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<p><em>{lang This is your default language, you can't disable it.}</em></p>
+			</div>
+		</div>
+		<input type="hidden" name="enabled" value="on" />
+		<input type="hidden" name="is_default" value="on" />
+
+		{else}
+		<div class="form-group">
+			<label class="col-sm-2 control-label">{lang Enabled}</label>
+			<div class="col-sm-10 col-lg-5">
+				<div class="onoffswitch">
+					<input type="checkbox" name="enabled" class="onoffswitch-checkbox" id="enabled" {if {$enabled}}checked="checked"{/if}>
+					<label class="onoffswitch-label" for="enabled">
+						<span class="onoffswitch-inner"></span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">{lang Use as default}</label>
+			<div class="col-sm-10 col-lg-5">
+				<div class="onoffswitch">
+					<input type="checkbox" name="is_default" class="onoffswitch-checkbox" id="is_default" {if {$is_default}}checked="checked"{/if}>
+					<label class="onoffswitch-label" for="is_default">
+						<span class="onoffswitch-inner"></span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+		{/if}
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input class="btn btn-primary" type="submit" value="{lang Submit}" />
+			</div>
+		</div>
+	</form>
+</div>

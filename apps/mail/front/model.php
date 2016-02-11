@@ -3,7 +3,7 @@
  * Mail Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * MailModel is the Front Model of the Mail Application
@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\Mail\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-26-11-2013
+ * @version 0.5.0-11-02-2016
  */
 class MailModel {
 	/**

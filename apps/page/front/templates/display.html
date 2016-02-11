@@ -1,0 +1,24 @@
+<div class="wity-app wity-app-page wity-action-display">
+	<ol class="breadcrumb">
+		<li><a href="/">{lang Home}</a></li>
+		<li class="active">{$title}</li>
+	</ol>
+
+	<article class="page">
+		{if !empty({$image})}
+		<div class="page-image">
+			<img class="image-border img-responsive" src="{$image}" alt="{$title}" />
+		</div>
+		{/if}
+
+		{if !empty($_SESSION['access'])}
+		<em class="page-edit"><a href="/admin/page/edit/{$id}"><i class="glyphicon glyphicon-pencil"></i></a></em>
+		{/if}
+
+		<h1>{$title}</h1>
+
+		<div class="page-content">
+			{$content}
+		</div>
+	</article>
+</div>

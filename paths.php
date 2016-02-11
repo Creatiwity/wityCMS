@@ -1,13 +1,13 @@
 <?php
 /**
- * WityCMS paths.php
- * 
+ * wityCMS paths.php
+ *
  * Content Management System for everyone.
- * 
- * @version 0.4.0
+ *
+ * @version 0.5.0-11-02-2016
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * Directory Separator
@@ -15,7 +15,7 @@ defined('IN_WITY') or die('Access denied');
 define('DS', DIRECTORY_SEPARATOR);
 
 /**
- * WityCMS Root directory
+ * wityCMS Root directory
  */
 define('WITY_PATH', dirname(__FILE__).DS);
 

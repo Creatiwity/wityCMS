@@ -3,14 +3,14 @@
  * WResponse.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
- * WResponse compiles the final render of WityCMS that will be sent to the browser.
+ * WResponse compiles the final render of wityCMS that will be sent to the browser.
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-28-10-2013
+ * @version 0.5.0-11-02-2016
  */
 class WResponse {
 	/**
@@ -53,7 +53,7 @@ class WResponse {
 	}
 
 	/**
-	 * WityCMS's classic render with HTML theme.
+	 * wityCMS's classic render with HTML theme.
 	 *
 	 * @param WView  $view  View to be rendered
 	 * @param string $theme Theme name to use to wrap the view
@@ -128,7 +128,7 @@ class WResponse {
 
 			// Absolute links fix
 			$html = $this->absoluteLinkFix($html);
-			
+
 			echo $html;
 		} catch (Exception $e) {
 			WNote::error('final_render_failed', WLang::get('error_final_render_failed', $e->getMessage()), 'die');
@@ -149,8 +149,8 @@ class WResponse {
 		$dir = WRoute::getDir();
 		if (!empty($dir)) {
 			$string = str_replace(
-				array('src="/', 'href="/', 'action="/', 'data-link-modal="/'),
-				array('src="'.$dir.'/', 'href="'.$dir.'/', 'action="'.$dir.'/', 'data-link-modal="'.$dir.'/'),
+				array('src="/', 'href="/', 'action="/', 'data-link-modal="/', 'poster="/'),
+				array('src="'.$dir, 'href="'.$dir, 'action="'.$dir, 'data-link-modal="'.$dir, 'poster="'.$dir),
 				$string
 			);
 		}

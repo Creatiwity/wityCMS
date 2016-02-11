@@ -2,7 +2,7 @@
  * Contacts management script allowing ajax usage.
  *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0
+ * @version 0.5.0-11-02-2016
  */
 require(['jquery'], function($) {
 	$(document).ready(function() {
@@ -12,7 +12,6 @@ require(['jquery'], function($) {
 			var cleaned, app, $container, _i, _len;
 
 			if (jsonResponse['app-name']) {
-
 				app = jsonResponse['app-name'];
 
 				$('[data-wity-note-app="' + app + '"]').remove();
@@ -22,36 +21,54 @@ require(['jquery'], function($) {
 					$domObject.before($container);
 
 					for (_i = 0, _len = jsonResponse.notes.length; _i < _len; ++_i) {
-						$container.append('<div class="alert alert-' + jsonResponse.notes[_i].level + '" data-note-code="' + jsonResponse.notes[_i].code + '">'
-							+ '<button type="button" class="close" data-dismiss="alert">&times;</button>'
-							+ jsonResponse.notes[_i].message
-							+ '</div>');
+						$container.append('<div class="alert alert-' + jsonResponse.notes[_i].level +
+							'" data-note-code="' + jsonResponse.notes[_i].code + '">' +
+								'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+								jsonResponse.notes[_i].message +
+							'</div>'
+						);
 					}
 				}
 			}
 		};
 
 		$('body').on('click', '[data-witycms-submit="ajax"]', function() {
-			var $form, $button, url, method, data;
+			var $button = $(this),
+				$form = $button.closest('form'),
+				method = $form.attr('method'),
+				url = $form.attr('action').replace('/contact', '/m/contact'),
+				data,
+				$inputFile = $form.find('.upload-document-input'),
+				processData = true,
+				contentType = true;
 
-			$button = $(this);
+			if (!window.FormData && $inputFile.val()) {
+				// FormData not supported
+				return;
+			}
+
+			if ($inputFile.val()) {
+				data = new FormData($form[0]);
+				processData = false;
+				contentType = false;
+			} else {
+				data = $form.serialize();
+			}
+
 			$button.button('loading');
-			$form = $button.closest('form');
-			url = $form.attr('action');
-			method = $form.attr('method');
-			data = $form.serialize();
-
-			$('.wity-app.app-contact :input').attr('disabled', true);
+			$form.find(':input').attr('disabled', true);
 
 			$.ajax({
 				type: method,
 				url: url,
 				data: data,
+				processData: processData,
+				contentType: contentType,
 				success: function(response) {
 					var jResponse;
 
 					$button.button('reset');
-					$('.wity-app.app-contact :input').attr('disabled', false);
+					$form.find(':input').attr('disabled', false);
 
 					try {
 						jResponse = $.parseJSON(response);
@@ -80,6 +97,33 @@ require(['jquery'], function($) {
 			return false;
 		});
 
-	});
+		var namespace = '.wity-app-contact.wity-action-form ',
+			$uploadDocumentButton = $(namespace + '.upload-document'),
+			$uploadDocumentInput = $(namespace + '.upload-document-input'),
+			$uploadDocumentDelete = $(namespace + '.upload-document-delete');
 
+		/* Document */
+		$uploadDocumentButton.click(function() {
+			$uploadDocumentInput.click();
+		});
+
+		$uploadDocumentInput.change(function() {
+			var value = $uploadDocumentInput.val();
+
+			if (!value || value === '') {
+				$uploadDocumentDelete.addClass('hidden');
+				$uploadDocumentButton.prop('disabled', false);
+			} else {
+				$uploadDocumentDelete.find('span.text').text(' ' + $uploadDocumentInput[0].files[0].name);
+				$uploadDocumentDelete.removeClass('hidden');
+				$uploadDocumentButton.prop('disabled', true);
+			}
+		});
+
+		$uploadDocumentDelete.click(function() {
+			$uploadDocumentInput.replaceWith($uploadDocumentInput = $uploadDocumentInput.clone(true));
+			$uploadDocumentDelete.addClass('hidden');
+			$uploadDocumentButton.prop('disabled', false);
+		});
+	});
 });

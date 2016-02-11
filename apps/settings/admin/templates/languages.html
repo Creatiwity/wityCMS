@@ -1,0 +1,57 @@
+<div class="wity-app wity-app-settings wity-action-settings">
+	<h1>{lang Languages}</h1>
+
+	<div class="text-right">
+		<a class="btn btn-success" href="/admin/settings/language_add"><i class="glyphicon glyphicon-plus"></i> {lang Add a language}</a>
+	</div>
+
+	<table class="table table-striped table-hover" data-reordable-url="{$wity_base_url}m/admin/settings/language_reorder">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>{lang Language}</th>
+				<th>{lang ISO}</th>
+				<th>{lang Code}</th>
+				<th>{lang Enabled}</th>
+				<th>{lang By default}</th>
+				<th>{lang Actions}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{for $language in $languages}
+			<tr data-reordable-id="{$language.id}">
+				<td>{$language.id}</td>
+				<td><strong>{$language.name}</strong></td>
+				<td>{$language.iso}</td>
+				<td>{$language.code}</td>
+				<td>{if {$language.enabled} == 0}
+						<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" style="color:red"></span>
+					{else}
+						<span class="glyphicon glyphicon-ok-circle" aria-hidden="true" style="color:green"></span>
+					{/if}
+				</td>
+				<td>{if {$language.is_default} == 1}<span class="glyphicon glyphicon-record" aria-hidden="true" style="color:#337ab7"></span>{/if}</td>
+				<td>
+					<div class="btn-group">
+						<a href="/admin/settings/language_edit/{$language.id}" title="{lang Edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+						<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu pull-right" role="menu">
+							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/settings/language_delete/{$language.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		{/for}
+		{empty}
+			<tr>
+				<td colspan="7" class="text-center">{lang No language in database.}</td>
+			</tr>
+		{/empty}
+		</tbody>
+	</table>
+
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete" aria-hidden="true"></div>
+</div>

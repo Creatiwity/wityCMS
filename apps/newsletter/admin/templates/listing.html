@@ -1,0 +1,31 @@
+<div class="wity-app wity-app-partner wity-action-listing">
+	<h2 class="sr-only">{lang articles_listing}</h2>
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th><i class="{$title_class}"></i> {lang Email}</th>
+				<th><i class="{$modified_date_class}"></i> {lang Date}</th>
+				<th>{lang Actions}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{for $sub in $subs}
+			<tr>
+				<td>{$sub.email}</td>
+				<td>{$sub.created_date}</td>
+				<td>
+					<a href="javascript:void(0)" title="{lang Delete}" class="btn btn-default btn-sm" data-link-modal="/v/admin/newsletter/delete/{$sub.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a>
+				</td>
+			</tr>
+		{/for}
+		{empty}
+			<tr>
+				<td colspan="6" class="text-center">{lang No subscriber in database}</td>
+			</tr>
+		{/empty}
+		</tbody>
+	</table>
+	{$pagination}
+
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete_label" aria-hidden="true"></div>
+</div>

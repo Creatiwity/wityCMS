@@ -3,14 +3,14 @@
  * WRequest.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * WRequest manages all input variables.
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-29-12-2011
+ * @version 0.5.0-11-02-2016
  */
 class WRequest {
 	 /**
@@ -219,13 +219,13 @@ class WRequest {
 			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#', function($matches) {
 				// Allowed tags
 				if (in_array($matches[1], array(
-					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'img', 'br', 
-					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 
-					'audio', 'video', 'source', 'iframe', 
-					'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
-					'ul', 'ol', 'li', 'dl', 'dt', 'dd', 
-					'div', 'p', 'var', 
-					'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col', 
+					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'button', 'img', 'br',
+					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 'hr',
+					'audio', 'video', 'source', 'iframe',
+					'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+					'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+					'div', 'p', 'var',
+					'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
 					'section', 'article', 'aside'))) {
 					return $matches[0];
 				} else if (in_array($matches[1], array('script', 'link'))) {
@@ -254,17 +254,8 @@ class WRequest {
 	}
 
 	/**
-	 * Tells the user if data is available.
-	 *
-	 * @return bool true if data available
-	 */
-	public static function hasData() {
-		return !empty($_REQUEST) && !in_array(null, $_REQUEST, true) && !self::$lock;
-	}
-	
-	/**
 	 * Retrieves the HTTP Method used by the client.
-	 * 
+	 *
 	 * @return string Either GET|POST|PUT|DEL...
 	 */
 	public static function getMethod() {

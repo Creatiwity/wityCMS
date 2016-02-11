@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang value="fr">
+	<!-- General -->
+	<item id="Settings">Réglages</item>
+
+	<!-- Configure -->
+	<item id="Configure">Configurer</item>
+	<item id="Settings of the site">Réglages du site</item>
+	<item id="General">Général</item>
+	<item id="Website's name">Nom du site</item>
+	<item id="Administrator's email">Email de l'administrateur</item>
+	<item id="Title">Titre</item>
+	<item id="Description (about 125 symbols)">Description pour le référencement (environ 125 caractères)</item>
+	<item id="Icons">Icônes</item>
+	<item id="Favicon (.ico)">Favicon (.ico)</item>
+	<item id="Site's icon (32x32 px)">Icône du site (32x32 px)</item>
+	<item id="Submit">Envoyer</item>
+	<item id="The settings were updated successfully.">La configuration a été mise à jour avec succès.</item>
+
+	<!-- Languages -->
+	<item id="Languages">Langues</item>
+	<item id="Language">Langue</item>
+	<item id="Add a language">Ajouter une langue</item>
+	<item id="Edit a language">Modifier une langue</item>
+	<item id="No language in database.">Auncue langue dans la base de données.</item>
+	<item id="Enabled">Activé</item>
+	<item id="By default">Par défaut</item>
+
+	<!-- Language form -->
+	<item id="Date (short format)">Date (format court)</item>
+	<item id="Date (long format)">Date (format long)</item>
+	<item id="How it works?">Comment ça marche ?</item>
+	<item id="Use as default">Utiliser comme langue par défaut</item>
+	<item id="This is your default language, you can't disable it.">Ceci est votre langue par défaut, vous ne pouvez pas la désactiver.</item>
+
+	<item id="Please, provide a name.">Veuillez fournir un nom.</item>
+	<item id="Please, provide a iso.">Veuillez fournir un code ISO.</item>
+	<item id="Please, provide a code.">Veuillez fournir un code.</item>
+	<item id="The language was successfully created.">La langue a été ajoutée avec succès.</item>
+	<item id="An error occured during the creation of the language.">Une erreur s'est produite lors de l'ajout de la langue.</item>
+	<item id="The language was successfully edited.">La langue a été éditée avec succès.</item>
+	<item id="An error occured during the edition of the language.">Une erreur s'est produite lors de la modification de la langue.</item>
+
+	<item id="Delete a language">Supprimer une langue</item>
+	<item id="Do you really want to delete the language %s?">Voulez-vous vraiment supprimer la langue %s ?</item>
+	<item id="The language was successfully deleted.">La langue a été supprimée avec succès.</item>
+	<item id="Cancel">Annuler</item>
+	<item id="Delete">Supprimer</item>
+</lang>

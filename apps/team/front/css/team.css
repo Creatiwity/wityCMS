@@ -1,0 +1,85 @@
+/**
+ * Team
+ */
+
+.wity-app-team .team .avatar {
+	width: 190px;
+	height: 190px;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	padding: 5px;
+}
+
+.wity-app-team .team .avatar .mask {
+	position: absolute;
+	top: -45px;
+	bottom: -45px;
+	left: -45px;
+	right: -45px;
+	background: url('../img/mask.png') no-repeat center center;
+	z-index: 10;
+	display: block;
+	-ms-transform: rotate(0deg); /* IE 9 */
+    -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+    transform: rotate(0deg);
+	-webkit-transition: -webkit-transform 0.3s ease-in-out;
+	   -moz-transition: -moz-transform    0.3s ease-in-out;
+	    -ms-transition: -ms-transform     0.3s ease-in-out;
+	     -o-transition: -o-transform      0.3s ease-in-out;
+	        transition: transform         0.3s ease-in-out;
+}
+
+.wity-app-team .team .avatar:hover .mask {
+	-ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg);
+}
+
+.wity-app-team .team .avatar .image-hover {
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	-webkit-transition: all 0.5s ease-in-out;
+	   -moz-transition: all 0.5s ease-in-out;
+	    -ms-transition: all 0.5s ease-in-out;
+	     -o-transition: all 0.5s ease-in-out;
+	        transition: all 0.5s ease-in-out;
+}
+
+.wity-app-team .team .avatar:hover .image-hover {
+	opacity: 1;
+	visibility: visible;
+}
+
+.wity-app-team .team .member {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.wity-app-team .team h2 {
+	margin-bottom: 10px;
+	font-size: 1.4em;
+	text-transform: uppercase;
+}
+
+.wity-app-team .team .title {
+
+}
+
+.wity-app-team .team .socials {
+	margin-top: 10px;
+}
+
+.wity-app-team .team .socials a {
+	display: inline-block;
+	width: 30px;
+	height: 34px;
+	background: url('../img/social-bg.png') no-repeat center top;
+}
+
+.wity-app-team .team .socials a:hover {
+	background-position: center bottom;
+}

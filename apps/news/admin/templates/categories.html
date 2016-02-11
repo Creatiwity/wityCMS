@@ -1,0 +1,55 @@
+<div class="wity-app wity-app-news wity-action-categories-manager">
+	<div class="text-right">
+		<button id="add_cat_button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> {lang Add a category}</button>
+	</div>
+
+	<form method="post">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th><a href="/admin/news/categories/name-{$name_sort}/"><i class="{$name_class}"></i> {lang Name}</a></th>
+					<th><a href="/admin/news/categories/shortname-{$shortname_sort}/"><i class="{$shortname_class}"></i> {lang Shortname}</a></th>
+					<th>{lang Parent}</th>
+					<th>{lang Actions}</th>
+				</tr>
+			</thead>
+			<tbody id="categories_body">
+				{for $c in $cats}
+				<tr data-wity-category='{"cid":"{$c.cid}", "name":"{$c.name}", "shortname":"{$c.shortname}", "parent":"{$c.parent}"}'>
+					<td>{$c.name}</td>
+					<td>{$c.shortname}</td>
+					<td>{$c.parent_name}</td>
+					<td>
+						<div class="btn-group">
+							<a href="javascript:void(0)" title="{lang Edit}" class="btn btn-default btn-sm wity_edit_category"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+							<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<span class="caret"></span>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<ul class="dropdown-menu pull-right" role="menu">
+								<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/news/category-delete/{$c.cid}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+				{/for}
+				{empty}
+				<tr>
+					<td colspan="6" class="text-center">{lang No category in database}</td>
+				</tr>
+				{/empty}
+			</tbody>
+		</table>
+		<input type="text" id="news_cat_id" name="news_cat_id" class="hidden" />
+	</form>
+
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete_label" aria-hidden="true"></div>
+	<div id="selectParent" class="hide">
+		<select id="parent" name="parent" class="form-control">
+			<option value="0">{lang None}</option>
+			{for $c in $cats}
+			<option value="{$c.cid}">{$c.name}</option>
+			{/for}
+		</select>
+	</div>
+</div>

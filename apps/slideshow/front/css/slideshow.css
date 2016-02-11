@@ -1,0 +1,111 @@
+/**
+ * Slideshow
+ */
+
+.wity-app-slideshow.wity-action-block .slideshow {
+	height: 300px;
+	overflow: hidden;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide {
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .slide-inner {
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+	background-size: cover;
+	background-position: center center;
+	text-align: center;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description {
+	max-width: 90%;
+	color: white;
+	margin: 8% auto 0 auto;
+	display: inline-block;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description h2 {
+	padding: 10px 10px 10px 10px;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-weight: normal;
+	font-size: 1.5em;
+	margin: 0;
+	display: inline-block;
+	color: white;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description div {
+	padding: 5px 10px 5px 10px;
+	margin-top: 10px;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-weight: normal;
+	font-size: 1em;
+	margin: 0;
+	display: none;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description h2.only-title {
+	padding-bottom: 10px;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description div.only-legend {
+	margin-top: 0;
+	padding-top: 6px;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description .link {
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .slide .description div p {
+	margin: 0 0 5px 0;
+}
+
+@media (min-width: 768px) {
+	.wity-app-slideshow.wity-action-block .slideshow .slide .description h2 {
+		font-size: 2em;
+	}
+	.wity-app-slideshow.wity-action-block .slideshow .slide .description div {
+		display: inline-block;
+		font-size: 1.3em;
+	}
+}
+
+@media (min-width: 992px) {
+	.wity-app-slideshow.wity-action-block .slideshow .slide .description h2 {
+		font-size: 2.5em;
+	}
+	.wity-app-slideshow.wity-action-block .slideshow .slide .description div {
+		font-size: 1.6em;
+	}
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-left,
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-right,
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-left:focus {
+	background-image: url(../img/slideshow-directions.png);
+	background-position: top left;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-right,
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-right:focus {
+	background-position: top right;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-left:hover {
+	background-position: bottom left;
+}
+
+.wity-app-slideshow.wity-action-block .slideshow .wslider-controls-right:hover {
+	background-position: bottom right;
+}

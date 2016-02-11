@@ -2,52 +2,54 @@
 	<form method="post">
 		<div class="row">
 			<div class="col-md-9 form-horizontal">
-				<h2 class="sr-only">{if empty({$id})}{lang action_add}{else}{lang action_edit}{/if}</h2>
+				<h1>{if empty({$id})}{lang Add a user}{else}{lang Edit a user}{/if}</h1>
 				<input type="hidden" name="id" value="{$id}" />
-				
-				<div class="form-group">
-					<div class="sr-only">
-						<label for="nickname">{lang nickname}*</label>
-					</div>
-					<div class="col-md-12">
-						<input id="nickname" class="form-control input-lg" type="text" name="nickname" value="{$nickname}"  autocomplete="off" placeholder="{lang nickname}" />
+
+				<div class="form-group form-group-lg">
+					<label for="nickname" class="control-label col-md-3">{lang Nickname}*</label>
+					<div class="col-md-9">
+						<input id="nickname" class="form-control input-lg" type="text" name="nickname" value="{$nickname}"  autocomplete="off" placeholder="{lang Nickname}" />
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="password" class="control-label col-md-3">{lang password}{if empty({$id})}*{/if}</label>
+					<label for="password" class="control-label col-md-3">{lang Password}{if empty({$id})}*{/if}</label>
 					<div class="col-md-9">
 						<input id="password" class="form-control" type="password" name="password" autocomplete="off" />
-						{if !empty({$id})}<span class="help-block">{lang leave_empty_to_leave_unchanged}</span>{/if}
+						{if !empty({$id})}<em class="help-block">{lang Leave empty to let the password unchanged}</em>{/if}
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="password_conf" class="control-label col-md-3"><em>{lang confirmation}{if empty({$id})}*{/if}</em></label>
+					<label for="password_conf" class="control-label col-md-3">{lang Password} <em>{lang (confirmation)}{if empty({$id})}*{/if}</em></label>
 					<div class="col-md-9">
 						<input id="password_conf" class="form-control" type="password" name="password_conf" autocomplete="off"/>
 					</div>
 				</div>
+
 				<div class="form-group">
-					<label for="email" class="control-label col-md-3">{lang email}*</label>
+					<label for="email" class="control-label col-md-3">{lang Email}*</label>
 					<div class="col-md-9">
 						<input id="email" class="form-control" type="email" name="email" value="{$email}" />
 					</div>
 				</div>
+
 				<div class="form-group">
-					<label for="firstname" class="control-label col-md-3">{lang firstname}</label>
+					<label for="firstname" class="control-label col-md-3">{lang Firstname}</label>
 					<div class="col-md-9">
 						<input id="firstname" class="form-control" type="text" name="firstname" value="{$firstname}" />
 					</div>
 				</div>
+
 				<div class="form-group">
-					<label for="lastname" class="control-label col-md-3">{lang lastname}</label>
+					<label for="lastname" class="control-label col-md-3">{lang Lastname}</label>
 					<div class="col-md-9">
 						<input id="lastname" class="form-control" type="text" name="lastname" value="{$lastname}" />
 					</div>
 				</div>
+
 				<div class="form-group">
-					<label for="groupe" class="control-label col-md-3">{lang group}*</label>
+					<label for="groupe" class="control-label col-md-3">{lang Group}*</label>
 					<div class="col-md-9">
 						<script type="text/javascript">
 							var user_access = '{$access}';
@@ -57,54 +59,65 @@
 							{/for}
 							};
 						</script>
-						<select id="groupe" class="form-control" name="groupe" onchange="accessGroup(this.options[this.selectedIndex].value);">
-							<option value="0">{lang group_default}</option>
-						{for $group in $groups}
-							<option value="{$group.id}"{if {$group.id} == {$groupe}} selected="selected"{/if}>{$group.name}</option>
-						{/for}
+						<select id="groupe" class="form-control" name="groupe">
+							<option value="0">{lang No group}</option>
+							{for $group in $groups}
+								<option value="{$group.id}"{if {$group.id} == {$groupe}} selected="selected"{/if}>{$group.name}</option>
+							{/for}
 						</select>
 					</div>
 				</div>
-				<div class="form-group">
-					<strong>{lang user_rights}*</strong>
-					<div id="user-access">
-						<div class="radio">
-							<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang access_none}</label>
+
+				<div id="user-access">
+					<div class="form-group">
+						<label class="control-label col-md-3">{lang User Rights}*</label>
+						<div class="col-md-9">
+							<div class="radio">
+								<label><input class="access-type none" type="radio" name="type" value="none"{if empty({$access})} checked="checked"{/if} /> {lang Regular user}</label>
+							</div>
+							<div class="radio">
+								<label><input class="access-type all" type="radio" name="type" value="all"{if {$access} == 'all'} checked="checked"{/if} /> {lang Supreme admin}</label>
+							</div>
+							<div class="radio">
+								<label><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang Custom rights}</label>
+							</div>
 						</div>
-						<div class="radio">
-							<label><input class="access-type all" type="radio" name="type" value="all"{if {$access} == 'all'} checked="checked"{/if} /> {lang access_all}</label>
-						</div>
-						<div class="radio">
-							<label><input class="access-type custom" type="radio" name="type" value="custom"{if !empty({$access}) && {$access} != 'all'} checked="checked"{/if} /> {lang access_custom}</label>
-						</div>
-						<br />
-						
-						<div class="text-right">
-							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
-						</div>
-						<table class="user-rights" cellpadding="0" cellspacing="0">
-							<colgroup><col width="25%" /></colgroup>
-							{for $app, $details in $admin_apps}
-							<tr>
-								<td><p class="text-center"><strong>{$details.name}</strong></p></td>
-								<td>
-									<table class="permissions" cellpadding="0" cellspacing="0">
-										<tr>
-										{for $perm in {$details.permissions}}
-											<td><p class="text-center"><label>{$perm|ucfirst}<br /><input type="checkbox" name="access[{$app}][{$perm}]" /></label></p></td>
-										{/for}
-										{empty}
-											<td><p class="text-center"><em>{lang no_permissions}</em></p></td>
-										{/empty}
-										</tr>
-									</table>
-								</td>
-							</tr>
-							{/for}
-						</table>
-						<div class="text-right">
-							<a href="javascript:void(0)" class="check-all">{lang check_all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang uncheck_all}</a>
-						</div>
+					</div>
+
+					<div class="text-right">
+						<a href="javascript:void(0)" class="check-all">{lang Select all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang Unselect all}</a>
+					</div>
+					<table class="user-rights" cellpadding="0" cellspacing="0">
+						<colgroup><col width="25%" /></colgroup>
+						{for $app, $details in $admin_apps}
+						<tr>
+							<td><strong>{$details.name}</strong></td>
+							<td>
+								{if !empty({$details.permissions})}
+								<ul class="permissions">
+									{for $perm in {$details.permissions}}
+									<li>
+										{if {$app} == {$default_admin} && {$perm} == 'admin'}
+										<input type="hidden" name="access[{$app}][{$perm}]" value="on" />
+										<em>Admin ({lang This is the application loaded by default in the admin.})</em>
+										{else}
+										<label>
+											<input type="checkbox" name="access[{$app}][{$perm}]" />
+											{$perm|ucfirst}
+										</label>
+										{/if}
+									</li>
+									{/for}
+								</ul>
+								{else}
+									<p class="text-center"><em>{lang This application does not have custom permission, nor admin zone.}</em></p>
+								{/if}
+							</td>
+						</tr>
+						{/for}
+					</table>
+					<div class="text-right">
+						<a href="javascript:void(0)" class="check-all">{lang Select all}</a> - <a href="javascript:void(0)" class="uncheck-all">{lang Unselect all}</a>
 					</div>
 				</div>
 			</div>
@@ -112,17 +125,17 @@
 				{if !empty({$created_date})}
 				<div class="well">
 					<ul class="list-unstyled">
-						<li><strong>{lang register_time}:</strong> {$created_date}</li>
-						<li><strong>{lang last_connection}:</strong> {$last_activity}</li>
+						<li><strong>{lang Registration date}</strong> {$created_date}</li>
+						<li><strong>{lang Last connection}</strong> {$last_activity}</li>
 					</ul>
 				</div>
 				{/if}
 				<div class="well well-sm">
 					<div class="checkbox">
-						<label><input type="checkbox" name="email_confirmation"{if empty({$id})} checked="checked"{/if} /> {lang send_email_confirmation}</label>
+						<label><input type="checkbox" name="email_confirmation"{if empty({$id})} checked="checked"{/if} /> {lang Send a confirmation by email to the user}</label>
 					</div>
-					<button type="submit" class="btn btn-primary btn-lg btn-block">{if empty({$id})}{lang add_user}{else}{lang edit_user}{/if}</button>
-					<a class="btn btn-default btn-lg btn-block" value="{lang cancel}" href="/admin/user/">{lang cancel}</a>
+					<button type="submit" class="btn btn-primary btn-lg btn-block">{lang Submit}</button>
+					<a class="btn btn-default btn-lg btn-block" href="/admin/user/">{lang Cancel}</a>
 				</div>
 			</div>
 		</div>

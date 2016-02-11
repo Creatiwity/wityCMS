@@ -3,7 +3,7 @@
  * Mail Application - Front Controller
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * MailController is the Front Controller of the Mail Application
@@ -11,7 +11,7 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\Mail\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-25-11-2013
+ * @version 0.5.0-11-02-2016
  */
 class MailController extends WController {
 
@@ -245,12 +245,14 @@ class MailController extends WController {
 
 		// Clean the PHPMailer instance
 		$this->phpmailer->clearAddresses();
+		$this->phpmailer->ClearCCs();
+		$this->phpmailer->ClearBCCs();
 		$this->phpmailer->clearAttachments();
 
 		// Add addresses
 
 		// If POP3/IMAP enabled, mail app will manage responses, 'to' goes to CC, a placeholder goes to 'to'
-		if (self::$configuration['canReceive'] == '0') {
+		if (self::$configuration['canReceive'] == '1') {
 			$from = array(self::$configuration['from']);
 
 			if (is_array($params['from'] && !empty($params['from'][1]))) {
@@ -277,6 +279,19 @@ class MailController extends WController {
 			$this->addAddressesInField($params['bcc'], 'bcc');
 		}
 
+		if (!empty($params['attachments']) && is_array($params['attachments'])) {
+			$func = array($this->phpmailer, 'addAttachment');
+
+			if (!is_array($params['attachments'][0])) {
+				// array('email'[, 'name'])
+				call_user_func_array($func, $params['attachments']);
+			} else {
+				// array(array('email'[,'name']))
+				foreach ($params['attachments'] as $attachment) {
+					call_user_func_array($func, $attachment);
+				}
+			}
+		}
 
 		$params['params']['mail_app'] = array();
 
@@ -309,11 +324,11 @@ class MailController extends WController {
 
 		if (!$this->phpmailer->send()) {
 			// TODO Change WNote::error handler and translate it
-			WNote::error('mail_send_fail', 'mail_send_fail: '.$this->phpmailer->ErrorInfo);
+			WNote::error('mail_send_fail', 'mail_send_fail: '.$this->phpmailer->ErrorInfo, 'email, log');
 			$success = false;
 		}
 
-		if (!$success || !$this->model->addMail(
+		if (!$this->model->addMail(
 			self::$hash_mail,
 			self::$hash_mailing_list,
 			$params['from'],
@@ -327,7 +342,7 @@ class MailController extends WController {
 			$this->phpmailer->Body,
 			$params['params']
 		)) {
-			WNote::error('email_not_saved', 'email_not_saved');
+			WNote::error('email_not_saved', 'email_not_saved', 'email, log');
 			$success = false;
 		}
 
@@ -423,7 +438,7 @@ class MailController extends WController {
 		}
 
 		if (self::$smodel->addAction($hash_action, self::$hash_mail, self::$expiration['one-time'], self::$expiration['expires'], $url)) {
-			return WRoute::getBase().'/mail/redirect/'.$hash_action;
+			return WRoute::getBase().'mail/redirect/'.$hash_action;
 		} else {
 			return '';
 		}

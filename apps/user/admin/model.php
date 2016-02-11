@@ -3,7 +3,7 @@
  * User Application - Admin Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * Include Front Model for inheritance
@@ -12,21 +12,21 @@ include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 
 /**
  * UserAdminModel is the Admin Model of the User Application.
- * 
+ *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-15-02-2013
+ * @version 0.5.0-11-02-2016
  */
 class UserAdminModel extends UserModel {
 	public function __construct() {
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Creates a user in the database.
-	 * 
+	 *
 	 * This is an admin version able to change the field `users.access`.
-	 * 
+	 *
 	 * @param array $data
 	 * @return bool Request status
 	 */
@@ -52,17 +52,17 @@ class UserAdminModel extends UserModel {
 		$valid = isset($data['valid']) ? $data['valid'] : 1;
 		$prep->bindParam(':valid', $valid);
 		$prep->bindParam(':ip', $_SERVER['REMOTE_ADDR']);
-		
-		if ($prep->execute()) { 
+
+		if ($prep->execute()) {
 			return $this->db->lastInsertId();
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Deletes a user.
-	 * 
+	 *
 	 * @param int $user_id
 	 * @return bool Request status
 	 */
@@ -71,13 +71,13 @@ class UserAdminModel extends UserModel {
 			DELETE FROM users WHERE id = :id
 		');
 		$prep->bindParam(':id', $user_id, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Retrieves details of a group.
-	 * 
+	 *
 	 * @param int $group_id
 	 * @return array Data of the group
 	 */
@@ -89,13 +89,13 @@ class UserAdminModel extends UserModel {
 		');
 		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Retrieves the list of user groups.
-	 * 
+	 *
 	 * @param string $order Name of the ordering column
 	 * @param string $sens  Order: "ASC" or "DESC"
 	 * @return array Set of groups
@@ -104,20 +104,20 @@ class UserAdminModel extends UserModel {
 		if (strtoupper($sens) != 'ASC') {
 			$sens = 'DESC';
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT id, name, access
 			FROM users_groups
 			ORDER BY '.$order.' '.$sens
 		);
 		$prep->execute();
-		
+
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Retrieves the list of user groups with users_count row.
-	 * 
+	 *
 	 * @param string $order Name of the ordering column
 	 * @param string $asc   Ascendent or descendent?
 	 * @return array Set of groups
@@ -132,7 +132,7 @@ class UserAdminModel extends UserModel {
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
-		
+
 		$data = array();
 		while ($row = $prep->fetch(PDO::FETCH_ASSOC)) {
 			if ($row['groupe'] == 0) {
@@ -141,13 +141,13 @@ class UserAdminModel extends UserModel {
 			unset($row['groupe']);
 			$data[] = $row;
 		}
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Creates a new group in the database.
-	 * 
+	 *
 	 * @param array $data array(nickname, access)
 	 * @return bool Request status
 	 */
@@ -158,17 +158,17 @@ class UserAdminModel extends UserModel {
 		');
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
-		
+
 		if ($prep->execute()) {
 			return $this->db->lastInsertId();
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Updates a group in the database.
-	 * 
+	 *
 	 * @param int   $group_id Group ID
 	 * @param array $data     Columns to update
 	 * @return bool Request status
@@ -182,13 +182,13 @@ class UserAdminModel extends UserModel {
 		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
 		$prep->bindParam(':name', $data['name']);
 		$prep->bindParam(':access', $data['access']);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Deletes a group in the database.
-	 * 
+	 *
 	 * @param int $group_id Group ID
 	 * @return bool Request status
 	 */
@@ -197,13 +197,13 @@ class UserAdminModel extends UserModel {
 			DELETE FROM users_groups WHERE id = :id
 		');
 		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Removes all users who belonged to an obsolete group.
-	 * 
+	 *
 	 * @param int $group_id Group ID
 	 * @return bool Request status
 	 */
@@ -214,13 +214,13 @@ class UserAdminModel extends UserModel {
 			WHERE groupe = :id
 		');
 		$prep->bindParam(':id', $group_id, PDO::PARAM_INT);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Updates several users matching filters.
-	 * 
+	 *
 	 * @param array $data     Columns to update in users table
 	 * @param array $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return bool Request status
@@ -229,7 +229,7 @@ class UserAdminModel extends UserModel {
 		if (empty($data)) {
 			return true;
 		}
-		
+
 		// Add filters
 		$cond = '';
 		if (!empty($filters)) {
@@ -244,31 +244,31 @@ class UserAdminModel extends UserModel {
 				}
 			}
 		}
-		
+
 		if (empty($cond)) {
 			return true;
 		} else {
 			$cond = substr($cond, 0, -5);
 		}
-		
+
 		$string = '';
 		foreach ($data as $key => $value) {
 			$string .= $key.' = '.$this->db->quote($value).', ';
 		}
 		$string = substr($string, 0, -2);
-		
+
 		$prep = $this->db->prepare('
 			UPDATE users
 			SET '.$string.'
 			WHERE '.$cond
 		);
-		
+
 		return $prep->execute();
 	}
-	
+
 	/**
 	 * Transforms access data obtained from the admin form into an access string.
-	 * 
+	 *
 	 * @param string $type    Type of the user (none|all|custom)
 	 * @param array  $access  List of app and perms whose user have access
 	 * @return string Access string formated
@@ -286,14 +286,14 @@ class UserAdminModel extends UserModel {
 					$access_string .= $app.'['.implode('|', $perms).'],';
 				}
 			}
-			
+
 			return substr($access_string, 0, -1);
 		}
 	}
-	
+
 	/**
 	 * Counts the users in the database having different access from their group's access.
-	 * 
+	 *
 	 * @param array $filters List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
@@ -309,17 +309,17 @@ class UserAdminModel extends UserModel {
 						if (strpos($value, '%') === false) {
 							$value = '%'.$value.'%';
 						}
-						
-						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+
+						$cond .= $name." COLLATE UTF8_GENERAL_CI LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
-			
+
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT COUNT(*)
 			FROM users
@@ -330,10 +330,10 @@ class UserAdminModel extends UserModel {
 		$prep->execute();
 		return intval($prep->fetchColumn());
 	}
-	
+
 	/**
 	 * Retrieves a list of users having different access from their group's access.
-	 * 
+	 *
 	 * @param array  $filters  List of criteria to filter the request (nickname, email, firstname, lastname and groupe)
 	 * @return array A list of information about the users found
 	 */
@@ -349,17 +349,17 @@ class UserAdminModel extends UserModel {
 						if (strpos($value, '%') === false) {
 							$value = '%'.$value.'%';
 						}
-						
-						$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
+
+						$cond .= $name." COLLATE UTF8_GENERAL_CI LIKE ".$this->db->quote($value)." AND ";
 					}
 				}
 			}
-			
+
 			if (!empty($filters['groupe'])) {
 				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
 			}
 		}
-		
+
 		$prep = $this->db->prepare('
 			SELECT users.id, nickname, email, firstname, lastname, users.access, groupe, name AS groupe_name, ip
 			FROM users
@@ -368,13 +368,13 @@ class UserAdminModel extends UserModel {
 			WHERE '.$cond.'users.access != users_groups.access
 		');
 		$prep->execute();
-		
+
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Defines a config in users_config table.
-	 * 
+	 *
 	 * @param string $name
 	 * @param string $value
 	 * @return Request status
@@ -387,7 +387,7 @@ class UserAdminModel extends UserModel {
 		');
 		$prep->bindParam(':name', $name);
 		$prep->bindParam(':value', $value);
-		
+
 		return $prep->execute();
 	}
 }

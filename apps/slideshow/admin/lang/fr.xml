@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="fr">
+	<item id="Slideshow">Carousel</item>
+
+	<item id="Slides">Slides</item>
+	<item id="Title">Titre</item>
+	<item id="Legend">Légende</item>
+	<item id="Image">Image</item>
+	<item id="Position">Position</item>
+	<item id="Last modification">Dernière modification</item>
+	<item id="Actions">Actions</item>
+	<item id="URL">URL</item>
+	<item id="Edit">Modifier</item>
+	<item id="No slide in database.">Aucune slide dans la base de données</item>
+
+	<item id="Add a slide">Ajouter une slide</item>
+	<item id="Edit a slide">Modifier une slide</item>
+	<item id="Image (PNG or JPEG)">Image (PNG ou JPEG)</item>
+	<item id="Submit">Envoyer</item>
+	<item id="Cancel">Annuler</item>
+
+	<item id="Please, provide a title.">Veuillez fournir un titre.</item>
+	<item id="Please, provide an image.">Veuillez fournir une image.</item>
+	<item id="The slide was successfully created.">La slide a été ajoutée avec succès.</item>
+	<item id="An unknown error occured.">Une erreur inconnue s'est produite.</item>
+	<item id="The slide was successfully edited.">La slide a été éditée avec succès.</item>
+	<item id="The slide was not found.">La slide n'a pas été trouvée.</item>
+
+	<item id="Delete a slide">Supprimer une slide</item>
+	<item id="Do you really want to delete the slide %s?">Êtes-vous sûr de vouloir supprimer la slide %s ?</item>
+	<item id="Delete">Supprimer</item>
+	<item id="The slide was successfully deleted.">La slide a été supprimée avec succès.</item>
+
+	<item id="config_time_pause">Temps de pause entre deux slides (ms)</item>
+	<item id="config_time_transition">Temps de transition entre deux slides (ms)</item>
+	<item id="config_autoplay">Activer la lecture automatique des slides</item>
+	<item id="The configuration was successfully saved.">La configuration a été sauvegardée avec succès.</item>
+</lang>

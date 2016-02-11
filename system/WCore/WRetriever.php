@@ -3,14 +3,14 @@
  * WRetriever.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
- * WRetriever is the component to get the model or the view of an action from any WityCMS's application.
+ * WRetriever is the component to get the model or the view of an action from any wityCMS's application.
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-16-10-2013
+ * @version 0.5.0-11-02-2016
  */
 class WRetriever {
 	/**
@@ -150,16 +150,19 @@ class WRetriever {
 			} else {
 				$view = $controller->getView();
 
-				// Attempt to declare the template file according to the action
-				// The final template file can be changed directly in the View.php
-				$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['action'].'.html';
-				if (file_exists($actionTemplateFile)) {
-					$view->setTemplate($actionTemplateFile);
-				}
+				$executable_action = preg_replace('#[^a-z_]#', '', $model['action']);
 
 				// Prepare the view
-				if (method_exists($view, $model['action'])) {
-					$view->$model['action']($model['result']);
+				if (method_exists($view, $executable_action)) {
+					$view->$executable_action($model['result']);
+				}
+
+				// Infers template file
+				if ($view->getTemplate() == '') {
+					$actionTemplateFile = $view->getContext('directory').'templates'.DS.$model['action'].'.html';
+					if (file_exists($actionTemplateFile)) {
+						$view->setTemplate($actionTemplateFile);
+					}
 				}
 
 				// Update the context
@@ -187,6 +190,10 @@ class WRetriever {
 	public static function getController($app_code, $has_parent) {
 		// Check if app not already instantiated
 		if (isset(self::$controllers[$app_code])) {
+			$context = self::$controllers[$app_code]->getContext();
+			$context['parent'] = $has_parent;
+			self::$controllers[$app_code]->setContext($context);
+
 			return self::$controllers[$app_code];
 		}
 
@@ -314,9 +321,15 @@ class WRetriever {
 	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
 			$args = explode('?', $args);
+			$url = trim($args[0], '/');
 
 			// Explode the route in several parts
-			$route = WRoute::parseURL($args[0]);
+			$custom_routes = WConfig::get('route.custom');
+			if (isset($custom_routes[$url])) {
+				$route = WRoute::parseURL($custom_routes[$url]);
+			} else {
+				$route = WRoute::parseURL($url);
+			}
 
 			if (!empty($route['app'])) {
 				// Format the querystring PHP code if a querystring is given

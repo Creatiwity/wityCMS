@@ -1,0 +1,44 @@
+<div class="wity-app wity-app-team wity-action-listing">
+	<div class="team">
+		{for $count, $member in $members}
+		<div class="col-md-4 col-sm-6 col-xs-12 member">
+			{if !empty({$member.email})}
+			<a href="{if strpos({$member.email}, '@') !== false}mailto:{elseif strpos({$member.email}, 'www') === 0}http://{/if}{$member.email}" class="avatar" target="_blank">
+				<img src="{$member.image}" alt="{$member.name}" width="180" height="180" />
+				{if !empty({$member.image_hover})}
+					<img class="image-hover" src="{$member.image_hover}" alt="{$member.name}" width="180" height="180" />
+				{/if}
+				<span class="mask"></span>
+			</a>
+			{else}
+			<div class="avatar">
+				<img src="{$member.image}" alt="{$member.name}" width="180" height="180" />
+				{if !empty({$member.image_hover})}
+					<img class="image-hover" src="{$member.image_hover}" alt="{$member.name}" width="180" height="180" />
+				{/if}
+				<span class="mask"></span>
+			</div>
+			{/if}
+
+			<h2>{$member.name}</h2>
+			<span class="title">{$member.title}</span>
+			<div class="socials">
+				{if !empty({$member.linkedin})}
+					<a href="{$member.linkedin}" target="_blank" class="twitter"><img src="/apps/team/front/img/twitter.png" alt="Twitter" /></a>
+				{/if}
+				{if !empty({$member.twitter})}
+					<a href="{$member.twitter}" target="_blank" class="linkedin"><img src="/apps/team/front/img/linkedin.png" alt="Linkedin" /></a>
+				{/if}
+			</div>
+		</div>
+			{if {$count} % 2 == 1}<div class="clearfix visible-sm-block"></div>{/if}
+			{if {$count} % 3 == 2}<div class="clearfix visible-md-block visible-lg-block"></div>{/if}
+		{/for}
+
+		<div class="clearfix"></div>
+	</div>
+
+	{empty}
+		<p>{lang No member in database.}</p>
+	{/empty}
+</div>

@@ -1,11 +1,24 @@
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<h4 class="modal-title">{$object}</h4>
-</div>
-<div class="modal-body">
-	<p>{lang from} <b>{$from}</b></p>
-	<span>{$message}</span>
-</div>
-<div class="modal-footer">
-	<button type="button" data-dismiss="modal" class="btn btn-default">{lang close}</button>
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="modal_email_label">{$object}</h4>
+		</div>
+		<div class="modal-body">
+			<p><strong>{lang From:}</strong> {$from}</p>
+
+			{if !empty({$attachment})}
+			<p>
+				<a class="btn btn-default" href="/admin/contact/download/{$id}">
+					<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> {lang Download attachment}
+				</a>
+			</p>
+			{/if}
+
+			<div class="message">{$message}</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{lang Close}</button>
+		</div>
+	</div>
 </div>

@@ -3,7 +3,7 @@
  * installer.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 require 'view.php';
 
@@ -12,7 +12,7 @@ require 'view.php';
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-17-01-2013
+ * @version 0.5.0-11-02-2016
  */
 class Installer {
 	private $THEMES_DIR;
@@ -62,7 +62,7 @@ class Installer {
 					set_time_limit(0);
 
 					// Get config data
-					$config = WRequest::getAssoc(array('site_name', 'base', 'theme', 'language', 'timezone'), '', 'POST');
+					$config = WRequest::getAssoc(array('site_title', 'base', 'theme', 'language', 'timezone'), '', 'POST');
 					$route = WRequest::getAssoc(array('front_app', 'admin_app'), '', 'POST');
 					$database = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword', 'dbname', 'dbprefix'), '', 'POST');
 					$user = WRequest::getAssoc(array('nickname', 'password', 'email', 'firstname', 'lastname'), '', 'POST');
@@ -74,13 +74,13 @@ class Installer {
 					$database['dbprefix'] = (!empty($database['dbprefix'])) ? $database['dbprefix']."_":"";
 
 					// Create SQL Tables
-					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'wity.sql');
+					$sql_commands = file_get_contents('installer'.DS.'bdd'.DS.'witycms.sql');
 					$sql_commands = str_replace('prefix_', $database['dbprefix'], $sql_commands); // configure prefix
 					$db = $this->getSQLServerConnection($database);
 					$db->exec($sql_commands);
 					$error = $db->errorInfo();
 					if (!is_null($error[0]) && !$error[0]!=0) {
-						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the WityCMS tables in the database. Please, import installer/bdd/wity.sql file manually in your database.');
+						$this->view->error('installer', $data['installer'], 'Fatal Error', 'Impossible to create the wityCMS tables in the database. Please, import installer/bdd/witycms.sql file manually in your database.');
 						break;
 					}
 
@@ -103,13 +103,14 @@ class Installer {
 							break;
 						}
 					} else {
-						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of WityCMS.');
+						$this->view->error('installer', $data['installer'], 'Fatal Error', 'The User application required by the system cannot be found. Please, download a complete package of wityCMS.');
 						break;
 					}
 
 					// Save General configuration
 					WConfig::set('config.base', trim($config['base'], '/'));
-					WConfig::set('config.site_name', $config['site_name']);
+					WConfig::set('config.name', $config['site_title']);
+					WConfig::set('config.page_title', $config['site_title']);
 					WConfig::set('config.theme', $config['theme']);
 					WConfig::set('config.lang', $config['language']);
 					WConfig::set('config.timezone', $config['timezone']);
@@ -191,7 +192,7 @@ class Installer {
 	 * @return bool
 	 */
 	private function installerValidation($data) {
-		$inputs = array('site_name', 'base_url', 'theme', 'language', 'front_app', 'admin_app', 'db_credentials', 'db_name', 'tables_prefix', 'user_password', 'user_nickname', 'user_email');
+		$inputs = array('site_title', 'base_url', 'theme', 'language', 'front_app', 'admin_app', 'db_credentials', 'db_name', 'tables_prefix', 'user_password', 'user_nickname', 'user_email');
 		foreach ($inputs as $input_name) {
 			$data['group'] = $input_name;
 			if (!$this->remoteValidation($data)) {
@@ -211,9 +212,9 @@ class Installer {
 		$respond = true;
 
 		switch ($data['group']) {
-			case 'site_name':
-				$site_name = WRequest::get('site_name', '', 'POST');
-				if ($this->isVerifiedString($site_name, $data, $respond)) {
+			case 'site_title':
+				$site_title = WRequest::get('site_title', '', 'POST');
+				if ($this->isVerifiedString($site_title, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Site name validated.");
 					return true;
 				} else if ($respond) {
@@ -256,20 +257,22 @@ class Installer {
 				if ($this->isFrontApp($front_app, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Front application validated.");
 					return true;
-				} else if ($respond) {
+				} else if ($respond && $front_app != 'Select') {
 					$this->view->error('group', $data['group'], "Invalid front application", "Starting front application parameter must an existing front application, in 'apps' directory.");
 					return false;
 				}
+				break;
 
 			case 'admin_app':
 				$admin_app = WRequest::get('admin_app', '', 'POST');
 				if ($this->isAdminApp($admin_app, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Admin application validated.");
 					return true;
-				} else if ($respond) {
+				} else if ($respond && $admin_app != 'Select') {
 					$this->view->error('group', $data['group'], "Invalid admin application", "Starting admin application parameter must an existing admin application, in 'apps' directory.");
 					return false;
 				}
+				break;
 
 			case 'db_credentials':
 				$r = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword'), '', 'POST');
@@ -354,7 +357,7 @@ class Installer {
 
 	/**
 	 * URL Validator
-	 * Checks that a string is a URL where WityCMS can be installed
+	 * Checks that a string is a URL where wityCMS can be installed
 	 *
 	 * @param string $url
 	 * @param array $data
@@ -552,10 +555,12 @@ class Installer {
 	 * @return array List of Front Apps
 	 */
 	private function getFrontApps() {
-		if ($apps = scandir($this->APPS_DIR)) {
-			foreach ($apps as $key => $value) {
-				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."front") || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($apps[$key]);
+		$apps = array('select' => 'Select');
+
+		if ($scanned_apps = scandir($this->APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir($this->APPS_DIR.DS.$value.DS."front") && !in_array($value, $this->EXCLUDED_DIRS)) {
+					$apps[$key] = $value;
 				}
 			}
 		}
@@ -569,11 +574,11 @@ class Installer {
 	 * @return array List of Admin Apps
 	 */
 	private function getAdminApps() {
-		if ($apps = scandir($this->APPS_DIR)) {
-			foreach ($apps as $key => $value) {
-				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."admin") || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($apps[$key]);
-				} else {
+		$apps = array('select' => 'Select');
+
+		if ($scanned_apps = scandir($this->APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir($this->APPS_DIR.DS.$value.DS."admin") && !in_array($value, $this->EXCLUDED_DIRS)) {
 					$apps[$key] = 'admin/'.$value;
 				}
 			}

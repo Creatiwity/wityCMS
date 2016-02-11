@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{$wity_lang}">
 	<head>
 		<title>{$wity_page_title}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content="WityCMS" />
+		<meta name="generator" content="wityCMS 0.5.0" />
 		<meta name="robots" content="noindex,nofollow" />
+		{if !empty({$wity_site_favicon})}<link rel="icon" type="image/x-icon" href="{$wity_site_favicon}" />{/if}
+		{if !empty({$wity_site_icon})}<link rel="apple-touch-icon" href="{$wity_site_icon}" />{/if}
 
 		<!-- Bootstrap -->
-		<link href="/libraries/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal-bs3patch.css" rel="stylesheet" />
-		<link href="/libraries/bootstrap-modal-2.2.0/css/bootstrap-modal.css" rel="stylesheet" />
-		<link href="/themes/admin-bootstrap/css/style.css" rel="stylesheet" />
+		<link href="/libraries/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="/themes/admin-bootstrap/css/style.css?v=0.5.0" rel="stylesheet" />
 
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-			<script src="/libraries/IE-compatibility/html5shiv.js"></script>
+			<script src="/libraries/IE-compatibility/html5shiv.min.js"></script>
 			<script src="/libraries/IE-compatibility/respond.min.js"></script>
 		<![endif]-->
 
@@ -33,53 +33,59 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/">{$wity_site_name}</a>
+				<a class="navbar-brand" href="/">{$wity_site_title}</a>
 			</div>
 
 			<div class="navbar-collapse collapse navbar-menu-admin-collapse">
-				{if !empty({$appsList})}
+				{if !empty({$wity_admin_apps})}
 				<ul class="nav navbar-nav">
-					{for $app, $details in $appsList}
-					<li {if {$app} == {$appSelected}} class="active"{/if}>
-						<a href="/admin/{$app}/">{lang {$details.name}}</a>
-					</li>
+					{for $app, $details in $wity_admin_apps}
+						<li {if 'admin/'.{$app} == {$wity_app}} class="active"{/if}>
+							<a href="/admin/{$app}">{lang {$details.name}}</a>
+						</li>
 					{/for}
 				</ul>
 				{/if}
+
 				{if !empty({$wity_user_nickname})}
 				<p class="navbar-text pull-right">
-					Bienvenue {$wity_user_nickname}
+					{lang welcome} {if !empty({$wity_user_firstname}) || !empty({$wity_user_lastname})} {$wity_user_firstname} {$wity_user_lastname}{else}{$wity_user_nickname}{/if}
 					&nbsp;|&nbsp;
-					<a href="/user/logout/" class="navbar-link">Déconnexion</a>
+					<a href="/user/logout" class="navbar-link">{lang Logout}</a>
 				</p>
 				{/if}
 			</div><!--/.nav-collapse -->
 		</div>
-		{if !empty({$adminMenu})}
-		<div class="col-md-2">
-			<ul class="nav nav-pills nav-stacked">
-				{for $action, $desc in $actionsList}
-				{if {$desc.menu}}
-				<li class="{if {$action} == {$actionAsked}}active{/if}">
-					<a href="/admin/{$appSelected}/{$action}/">{lang {$desc.description}}</a>
-				</li>
+
+		<div class="container">
+			<div class="row">
+				{if !empty({$wity_admin_has_submenu})}
+				<div class="col-md-2">
+					<ul class="nav nav-pills nav-stacked">
+					{for $action, $desc in $wity_admin_actions}
+						{if {$desc.menu}}
+						<li class="{if {$action} == {$wity_action}}active{/if}">
+							<a href="/{$wity_app}/{$action}">{lang {$desc.description}}</a>
+						</li>
+						{/if}
+					{/for}
+					</ul>
+				</div>
+
+				<div class="col-md-10">
+				{else}
+				<div class="col-md-12">
 				{/if}
-				{/for}
-			</ul>
-		</div><!--/span-->
-		<div class="col-md-10">
-		{else}
-		<div class="col-md-12">
-		{/if}
-			{$notes}
-			<div class="clearfix"></div>
-			{$include}
-		</div><!--/span-->
-		<div class="clearfix"></div>
-		<div class="col-md-12">
-			<hr />
+					{$notes}
+					<div class="clearfix"></div>
+					{$include}
+				</div>
+			</div>
+
 			<footer>
-				<p>&copy; WityCMS Administration 2014</p>
+				<hr />
+				<p class="pull-right">&copy; wityCMS v0.5.0 Administration 2016</p>
+				<p><img src="/themes/system/images/witycms-logo.png" alt="wityCMS" width="140" /></p>
 			</footer>
 		</div>
 	</body>

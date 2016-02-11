@@ -1,0 +1,33 @@
+<div class="wity-app wity-app-slideshow wity-action-configuration">
+	<form action="/admin/slideshow/configuration/update" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<h2 class="sr-only">{lang config}</h2>
+
+		{for $key, $value in $config}
+			{if {$key} == 'autoplay'}
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="config[autoplay]"{if {$value}} checked="checked"{/if} /> {lang config_{$key}}
+					</label>
+				</div>
+			</div>
+		</div>
+			{else}
+		<div class="form-group">
+			<label for="{$key}" class="control-label col-md-3">{lang config_{$key}}<span class="required">*</span></label>
+			<div class="col-md-9 col-lg-3">
+				<input id="{$key}" class="form-control" type="text" name="config[{$key}]" value="{$value}" />
+			</div>
+		</div>
+			{/if}
+		{/for}
+
+		<div class="form-group">
+			<div class="col-md-offset-3 col-md-9">
+				<input type="hidden" name="update" value="true" />
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Submit}" />
+			</div>
+		</div>
+	</form>
+</div>

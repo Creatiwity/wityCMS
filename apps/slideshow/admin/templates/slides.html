@@ -1,0 +1,65 @@
+<div class="wity-app wity-app-slideshow wity-action-slides">
+	<h1>{lang Slides}</h1>
+
+	<div class="text-right">
+		<a class="btn btn-success" href="/admin/slideshow/slide_add"><i class="glyphicon glyphicon-plus"></i> {lang Add a slide}</a>
+	</div>
+
+	<table class="table table-striped table-hover" data-reordable-url="{$wity_base_url}m/admin/slideshow/slides_reorder">
+		<thead>
+			<tr>
+				<th>{lang ID}</th>
+				<th>{lang Title}</th>
+				<th>{lang Legend}</th>
+				<th>{lang Image}</th>
+				<th>{lang Position}</th>
+				<th>{lang Last modification}</th>
+				<th>{lang Actions}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{for $slide in $slides}
+			<tr data-reordable-id="{$slide.id}">
+				<td>{$slide.id}</td>
+				<td><strong>{$slide.title}</strong></td>
+				<td>{$slide.legend}</td>
+				<td><img class="img-responsive" src="{$slide.image}" alt="{$slide.title}" style="max-width: 200px; max-height: 200px;" /></td>
+				<td class="drag-handler">
+					<div class="drag-group">
+						<i class="glyphicon glyphicon-move"></i>
+						<div class="position">
+							{$slide.position}
+						</div>
+					</div>
+				</td>
+				<td>
+					{if {$slide.modified_date} != '0000-00-00 00:00:00'}
+						{$slide.modified_date}
+					{else}
+						{$slide.created_date}
+					{/if}
+				</td>
+				<td>
+					<div class="btn-group">
+						<a href="/admin/slideshow/slide_edit/{$slide.id}" title="{lang Edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+						<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu pull-right" role="menu">
+							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/slideshow/slide_delete/{$slide.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		{/for}
+		{empty}
+			<tr>
+				<td colspan="7" class="text-center">{lang No slide in database.}</td>
+			</tr>
+		{/empty}
+		</tbody>
+	</table>
+
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete" aria-hidden="true"></div>
+</div>

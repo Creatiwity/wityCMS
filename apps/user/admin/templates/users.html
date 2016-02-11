@@ -1,0 +1,137 @@
+<div class="wity-app wity-app-user wity-action-users">
+	<h1>{lang Users}</h1>
+
+	<p class="text-right">
+		<a class="btn btn-success" href="/admin/user/add"><i class="glyphicon glyphicon-plus"></i> {lang Add a user}</a>
+	</p>
+
+	<div class="row">
+		<div class="col-md-9">
+			<span class="label label-info">{lang %s users registered|{$stats.total}}</span>
+			{if {$stats.request} < {$stats.total}}
+			<span class="label label-warning">{lang %s users found|{$stats.request}}</span>
+			{/if}
+
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th><a href="/admin/user/users/id-{$id_sort}/{$subURL}"><i class="{$id_class}"></i> {lang ID}</a></th>
+						<th><a href="/admin/user/users/nickname-{$nickname_sort}/{$subURL}"><i class="{$nickname_class}"></i> {lang Nickname}</a></th>
+						<th><a href="/admin/user/users/groupe-{$groupe_sort}/{$subURL}"><i class="{$groupe_class}"></i> {lang Group}</a></th>
+						<th><a href="/admin/user/users/created_date-{$created_date_sort}/{$subURL}"><i class="{$created_date_class}"></i> {lang Registration date}</a></th>
+						<th><a href="/admin/user/users/last_activity-{$last_activity_sort}/{$subURL}"><i class="{$last_activity_class}"></i> {lang Last connection}</a></th>
+						<th>{lang Actions}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{for $count, $user in $users}
+					<tr>
+						<td>{$user.id}</td>
+						<td><strong>{$user.nickname}</strong></td>
+						<td>{$user.groupe_name}</td>
+						<td>{$user.created_date}</td>
+						<td>{$user.last_activity}</td>
+						<td>
+							<div class="btn-group">
+								<a href="/admin/user/edit/{$user.id}" title="{lang Edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+								{if {$user.id} != $_SESSION['userid']}
+								<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+									<span class="caret"></span>
+									<span class="sr-only">{lang Toggle Dropdown}</span>
+								</button>
+								<ul class="dropdown-menu pull-right" role="menu">
+									<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/user/delete/{$user.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+								</ul>
+								{/if}
+							</div>
+						</td>
+					</tr>
+					{/for}
+					{empty}
+					<tr>
+						<td colspan="6" class="text-center">{lang No user found in database.}</td>
+					</tr>
+					{/empty}
+				</tbody>
+			</table>
+
+			{$pagination}
+
+			{if !empty({$users_waiting})}
+				<hr />
+				<h2>{lang Users waiting for validation}</h2>
+				<form id="admin-check-form" action="/admin/user/users" method="post">
+					<table id="admin-check" class="table table-hover table-striped">
+						{for $count, $user in $users_waiting}
+						<tr class="waiting" data-title="{$user.nickname}" data-content="&lt;ul class='unstyled'&gt;&lt;li&gt;{$user.firstname} {$user.lastname}&lt;/li&gt;&lt;li&gt;{$user.email}&lt;/li&gt;&lt;/ul&gt;">
+							<td>{$user.id}</td>
+							<td><strong>{$user.nickname}</strong></td>
+							<td>{$user.created_date}</td>
+							<td>
+								<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="validate" />
+								<input class="hidden" type="radio" name="admin_check[{$user.id}]" value="refuse" />
+								<a class="validate" href="javascript:void(0)" title="{lang Validate}"><i class="text-success glyphicon glyphicon-ok"></i></a>
+								<a class="refuse" href="javascript:void(0)" title="{lang Refuse}"><i class="text-danger glyphicon glyphicon-remove"></i></a>
+							</td>
+						</tr>
+						{/for}
+					</table>
+					<div id="admin-check-buttons" class="pull-right form-inline">
+						<div class="checkbox">
+							<label><input type="checkbox" name="notify" checked="checked" /> {lang Notify these users}</label>
+						</div>
+						<input id="admin-check-button" class="btn btn-primary" type="submit" value="{lang Submit}" />
+						<input id="cancel-button" class="btn btn-default" type="button" value="{lang Cancel}" />
+					</div>
+					<div class="clearfix"></div>
+				</form>
+			{/if}
+		</div>
+
+		<div class="col-md-3">
+			<div id="search" class=" well well-sm">
+				<h4 class="text-center">{lang Search}</h4>
+				<form action="/admin/user/users" method="get" class="form-horizontal">
+					<div class="form-group">
+						<label for="nickname" class="control-label col-lg-5"><strong>{lang Nickname}</strong></label>
+						<div class="col-lg-7">
+							<input id="nickname" class="form-control" type="text" name="nickname" value="{$nickname}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="email" class="control-label col-lg-5">{lang Email}</label>
+						<div class="col-lg-7">
+							<input id="email" class="form-control" type="text" name="email" value="{$email}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="firstname" class="control-label col-lg-5">{lang Firstname}</label>
+						<div class="col-lg-7">
+							<input id="firstname" class="form-control" type="text" name="firstname" value="{$firstname}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="lastname" class="control-label col-lg-5">{lang Lastname}</label>
+						<div class="col-lg-7">
+							<input id="lastname" class="form-control" type="text" name="lastname" value="{$lastname}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="groupe" class="control-label col-lg-5">{lang Group}</label>
+						<div class="col-lg-7">
+							<select id="groupe" class="form-control" name="groupe">
+								<option value=""></option>
+								{for $group in $groups}
+								<option value="{$group.id}"{if {$groupe} == {$group.id}} selected="selected"{/if}>{$group.name}</option>
+								{/for}
+							</select>
+						</div>
+					</div>
+					<input type="submit" class="btn btn-default btn-block" value="{lang Filter}" />
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal_delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_delete_label" aria-hidden="true"></div>
+</div>

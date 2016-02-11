@@ -3,14 +3,14 @@
  * view.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * View sends all Installer's stuff to the client.
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-25-01-2013
+ * @version 0.5.0-11-02-2016
  */
 class View {
 	/**

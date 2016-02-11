@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="en">
 	<item id="mandatory_fields">These fields are mandatory.</item>
-	
+
 	<!-- Errors -->
 	<item id="bad_data">Please, fill in all the required fields.</item>
 	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
@@ -11,7 +11,7 @@
 	<item id="nickname_already_used">Nickname already in use.</item>
 	<item id="email_not_valid">The email given is not valid.</item>
 	<item id="email_already_used">The email given is already in use.</item>
-	
+
 	<!-- Connection -->
 	<item id="login_success">Welcome %s!</item>
 	<item id="login_max_attempt">You reached the maximum of login attempt authorized.
@@ -19,7 +19,7 @@ Please, wait a moment before trying again.</item>
 	<item id="login_error"><![CDATA[The couple <em>nickname / password</em> given does not match with any valid account.]]></item>
 	<item id="user_disconnected">You were loged out successfully.</item>
 	<item id="cookie_not_accepted">To login, your browser needs to accept the cookies.</item>
-	
+
 	<!-- Login form -->
 	<item id="login_form_title">Connection</item>
 	<item id="nickname">Identifier</item>
@@ -30,7 +30,7 @@ Please, wait a moment before trying again.</item>
 	<item id="password_lost">Password lost?</item>
 	<item id="login_button">Connection</item>
 	<item id="more_options">More options</item>
-	
+
 	<!-- Register form -->
 	<item id="register_form_title">Create a new account</item>
 	<item id="password_conf">Confirmation </item>
@@ -40,39 +40,39 @@ Please, wait a moment before trying again.</item>
 	<item id="country">Country </item>
 	<item id="register">Register</item>
 	<item id="user_register_failure">An unknown error occured when trying to create your account in the database.</item>
-	
+
 	<!-- Register - EMAIL CONFIRMATION -->
 	<item id="user_register_email_subject">%s - Your user account creation</item>
 	<item id="user_register_email_confirm"><![CDATA[
-<p>Welcome on {site_name}!</p>
+<p>Welcome on {site_title}!</p>
 <p>There are your user account credentials:<br />
 Nickname: {nickname}<br />
 Password: {password}</p>
 
 <p>To validate your account, please follow this link:<br />
-<a href="{base}/user/confirm/{confirm}">Validate your account</a></p>
+<a href="{base}user/confirm/{confirm}">Validate your account</a></p>
 
 <p>If the link does not work, paste this link in your browser:<br />
-{base}/user/confirm/{confirm}</p>
+{base}user/confirm/{confirm}</p>
 
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_confirm">To finish your account creation, you have to click on the link in the email you are going to receive.</item>
 	<item id="user_validated">Your account got validated successfully.</item>
-	
+
 	<!-- Register: ADMIN CHECK -->
 	<item id="user_register_email_admin"><![CDATA[
-<p>Welcome on {site_name}!</P>
+<p>Welcome on {site_title}!</P>
 <p>There are your user account credentials:<br />
 Nickname: {nickname}<br />
 Password: {password}</p>
 <p>First, your account <strong>needs to be validated by an administrator</strong> to be activated.<br />
 You will be noticed as soon as it will be done.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin_warning"><![CDATA[
 <p>Hello,</p>
-<p>The account <strong>{nickname}</strong> needs to be validated on {site_name}.<br />
-To check it, <a href="{base}/admin/user/edit/{userid}">follow this link</a>.</p>
-<p><strong>{site_name}</strong></p>]]></item>
+<p>The account <strong>{nickname}</strong> needs to be validated on {site_title}.<br />
+To check it, <a href="{base}admin/user/edit/{userid}">follow this link</a>.</p>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_admin"><![CDATA[Your account got registered.<br />
 It needs to be validated by an administrator.<br />
 You will be notified once it will be done.]]></item>
@@ -80,24 +80,25 @@ You will be notified once it will be done.]]></item>
 To be able to use your account, it needs to be validated by an administrator.<br />
 You will be notified once it will be done.]]></item>
 	<item id="user_invalid_confirm_code">This confirm code does not match with any account in the database.</item>
-	
+
 	<!-- Register - AUTO -->
 	<item id="user_register_email"><![CDATA[
-<p>Welcome on {site_name}!</p>
+<p>Welcome on {site_title}!</p>
 <p>There are your user account credentials:<br />
 Nickname: {nickname}<br />
 Password: {password}</p>
 <p>You can login with your account on the website:
-<a href="{base}/user/login/">Login</a></p>
+<a href="{base}user/login/">Login</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
-{base}/user/login/</p>
-<p><strong>{site_name}</strong></p>]]></item>
+{base}user/login/</p>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_register_success"><![CDATA[<p>Your account was created successfully.</p>
 <p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
-	
+
 	<!-- Password lost -->
 	<item id="reset_password">Reset your password</item>
 	<item id="enter_your_email">To change your password, please enter your email adress.</item>
+	<item id="chose_new_password">Chose a new password:</item>
 	<item id="submit">Submit</item>
 	<item id="user_password_lost_not_found">This email does not exist in the database.</item>
 	<item id="user_password_lost_failure">An unknown error occured while saving your password reset demand in the database.</item>
@@ -105,12 +106,12 @@ Password: {password}</p>
 	<item id="user_password_lost_subject">%s - Password reset request</item>
 	<item id="user_password_lost_email"><![CDATA[
 <p>Hello,</p>
-<p>You just ask for a password change on {site_name}.</p>
+<p>You just ask for a password change on {site_title}.</p>
 <p>To get to the next step, please, follow this link:<br />
-<a href="{base}/user/password-lost/?email={email}&amp;confirm={confirm}">Change your password</a></p>
+<a href="{base}user/password-lost/?email={email}&amp;confirm={confirm}">Change your password</a></p>
 <p>If the link does not work, paste this link in your browser:<br />
-{base}/user/password-lost/?email={email}&amp;confirm={confirm}</p>
-<p><strong>{site_name}</strong></p>]]></item>
+{base}user/password-lost/?email={email}&amp;confirm={confirm}</p>
+<p><strong>{site_title}</strong></p>]]></item>
 	<item id="user_password_lost_success"><![CDATA[<p>Your password was changed successfully.</p>
 <p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
 </lang>

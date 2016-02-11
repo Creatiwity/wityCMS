@@ -3,7 +3,7 @@
  * News Application - Front Model
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 /**
  * NewsModel is the Front Model of the News Application
@@ -11,123 +11,76 @@ defined('IN_WITY') or die('Access denied');
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.4.0-19-04-2013
+ * @version 0.5.0-11-02-2016
  */
 class NewsModel {
 	/**
 	 * @var WDatabase instance
 	 */
 	protected $db;
-	
-	/**
-	 * @var News Data Model
-	 */
-	public $news_data_model = array(
-		'toDB' => array(
-			'news_id' => 'id',
-			'news_url' => 'url',
-			'news_title' => 'title',
-			'news_author' => 'author',
-			'news_content' => 'content',
-			'news_meta_title' => 'meta_title',
-			'news_keywords' => 'keywords',
-			'news_description' => 'description',
-			'news_date' => 'created_date',
-			'news_modified' => 'modified_date',
-			'news_editor_id' => 'modified_by',
-			'news_views' => 'views',
-			'news_publish' => 'published',
-			'news_cats' => 'cats'
-		),
-		'fromDB' => array(
-			'id' => 'news_id',
-			'url' => 'news_url',
-			'title' => 'news_title',
-			'author' => 'news_author',
-			'content' => 'news_content',
-			'meta_title' => 'news_meta_title',
-			'keywords' => 'news_keywords',
-			'description' => 'news_description',
-			'created_date' => 'news_date',
-			'modified_date' => 'news_modified',
-			'modified_by' => 'news_editor_id',
-			'views' => 'news_views',
-			'published' => 'news_publish',
-			'cats' => 'news_cats'
-		)
-	);
-	
-	/**
-	 * @var News_cats Data Model
-	 */
-	public $cats_data_model = array(
-		'toDB' => array(
-			'news_cat_id' => 'cid',
-			'news_cat_name' => 'name',
-			'news_cat_shortname' => 'shortname',
-			'news_cat_parent' => 'parent',
-			'news_cat_parent_name' => 'parent_name'
-		),
-		'fromDB' => array(
-			'cid' => 'news_cat_id',
-			'name' => 'news_cat_name',
-			'shortname' => 'news_cat_shortname',
-			'parent' => 'news_cat_parent',
-			'parent_name' => 'news_cat_parent_name'
-		)
-	);
-	
+
 	public function __construct() {
 		$this->db = WSystem::getDB();
-		
+
 		// Declare table
 		$this->db->declareTable('news');
+		$this->db->declareTable('news_lang');
 		$this->db->declareTable('news_cats');
 		$this->db->declareTable('news_cats_relations');
 	}
-	
-	/**
-	 * Rename News fields retrieved from DB to model structure (by ref)
-	 */
-	public function renameNewsFieldsFromDb(&$data) {
-		foreach ($data as $prop => $value) {
-			if (!empty($this->news_data_model['fromDB'][$prop])) {
-				unset($data[$prop]);
-				$data[$this->news_data_model['fromDB'][$prop]] = $value;
-			}
-		}
-	}
-	
-	/**
-	 * Rename News_cats fields retrieved from DB to model structure (by ref)
-	 */
-	public function renameCatsFieldsFromDb(&$data) {
-		foreach ($data as $prop => $value) {
-			if (!empty($this->cats_data_model['fromDB'][$prop])) {
-				unset($data[$prop]);
-				$data[$this->cats_data_model['fromDB'][$prop]] = $value;
-			}
-		}
-	}
-	
+
 	/**
 	 * Counts news in the database
-	 * 
+	 *
 	 * @return int
 	 */
-	public function countNews() {
+	public function countNews(array $filters = array()) {
+		$cond = '';
+		if (!empty($filters['cats'])) {
+			$cond .= 'AND (1 = 0 ';
+			foreach ($filters['cats'] as $cat) {
+				$cond .= 'OR shortname = "'.$cat.'" ';
+			}
+			$cond .= ') ';
+		}
+
+		if (!empty($filters['published'])) {
+			$published = intval($filters['published']);
+			if ($published == 0 || $published == 1) {
+				$cond .= 'AND published = '.$published.' ';
+			}
+		} else {
+			$cond .= 'AND published = 1 ';
+		}
+
+		if (empty($filters['publish_date'])) {
+			$cond .= 'AND publish_date <= NOW()';
+		} else if ($filters['publish_date'] != -1) {
+			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
+		}
+
+		$id_lang = WLang::getLangId();
+
 		$prep = $this->db->prepare('
 			SELECT COUNT(*)
 			FROM news
+			LEFT JOIN news_cats_relations
+			ON id = news_cats_relations.id_news
+			LEFT JOIN news_cats
+			ON id_cat = cid
+			LEFT JOIN news_lang
+			ON id = news_lang.id_news AND id_lang = :id_lang
+			WHERE 1 = 1 '.$cond.'
 		');
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return intval($prep->fetchColumn());
 	}
-	
+
 	/**
 	 * Retrieves a set of news
-	 * 
+	 *
 	 * @param int $from
 	 * @param int $number
 	 * @param string $order Ordering field name
@@ -135,170 +88,206 @@ class NewsModel {
 	 * @param array $filters Set of filters: cats(array), published(int(1|0))
 	 * @return array
 	 */
-	public function getNewsList($from, $number, $order = 'news_date', $asc = false, array $filters = array()) {
-		$order = $this->news_data_model['toDB'][$order];
+	public function getAllNews($from, $number, $order = 'created_date', $asc = false, array $filters = array()) {
 		$cond = '';
-		if (!empty($filters)) {
-			if (!empty($filters['cats'])) {
-				$cond .= '(';
-				foreach ($filters['cats'] as $cat) {
-					$cond .= 'shortname = "'.$cat.'" OR ';
-				}
-				$cond = sustr($cond, 0, -4).')';
+		if (!empty($filters['cats'])) {
+			$cond .= 'AND (1 = 0 ';
+			foreach ($filters['cats'] as $cat) {
+				$cond .= 'OR shortname = "'.$cat.'" ';
 			}
-			
-			if (!empty($filters['published'])) {
-				if (!empty($cond)) {
-					$cond .= ' AND ';
-				}
-				$cond .= 'published = '.intval($filters['published']);
-			}
-			
-			if (!empty($cond)) {
-				$cond = 'WHERE '.$cond;
+			$cond .= ') ';
+		}
+
+		if (empty($filters['published'])) {
+			$cond .= 'AND published = 1 ';
+		} else if ($filters['published'] != -1) {
+			$published = intval($filters['published']);
+			if ($published == 0 || $published == 1) {
+				$cond .= 'AND published = '.$published.' ';
 			}
 		}
-		
+
+		if (empty($filters['publish_date'])) {
+			$cond .= 'AND publish_date <= NOW()';
+		} else if ($filters['publish_date'] != -1) {
+			$cond .= 'AND publish_date <= "'.$filters['publish_date'].'"';
+		}
+
+		$id_lang = WLang::getLangId();
+
+		if ($order == 'created_date') {
+			$order = 'news.created_date';
+		}
+
 		$prep = $this->db->prepare('
-			SELECT DISTINCT(id), url, title, author, content, meta_title, keywords, description, views, published,
-				news.created_date, news.modified_date, news.modified_by
+			SELECT DISTINCT(id), news.*, news_lang.*
 			FROM news
+			LEFT JOIN news_lang
+			ON id = news_lang.id_news AND id_lang = :id_lang
 			LEFT JOIN news_cats_relations
-			ON id = news_id
+			ON id = news_cats_relations.id_news
 			LEFT JOIN news_cats
-			ON cat_id = cid
-			'.$cond.'
-			ORDER BY news.'.$order.' '.($asc ? 'ASC' : 'DESC').'
+			ON id_cat = cid
+			WHERE 1 = 1 '.$cond.'
+			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC').'
 			LIMIT :start, :number
 		');
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->bindParam(':start', $from, PDO::PARAM_INT);
 		$prep->bindParam(':number', $number, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		$result = array();
 		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
 			$data['cats'] = $this->getCatsOfNews($data['id']);
-			$this->renameNewsFieldsFromDb($data);
+
 			$result[] = $data;
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Retrieves all data linked to a News
-	 * 
-	 * @param int $news_id
+	 *
+	 * @param int $id_news
 	 * @return array
 	 */
-	public function getNews($news_id) {
-		if (empty($news_id)) {
+	public function getNews($id_news) {
+		if (empty($id_news)) {
 			return false;
 		}
-		
+
+		$id_lang = WLang::getLangId();
+
 		$prep = $this->db->prepare('
-			SELECT id, url, title, author, content, meta_title, keywords, description, views, published,
-				created_date, modified_date, modified_by
+			SELECT *
 			FROM news
-			WHERE id = :news_id
+			LEFT JOIN news_lang
+			ON id = id_news AND id_lang = :id_lang
+			WHERE id = :id_news
 		');
-		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
+		$prep->bindParam(':id_lang', $id_lang, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		$data = $prep->fetch(PDO::FETCH_ASSOC);
-		
+
 		if (!empty($data)) {
-			$data['cats'] = $this->getCatsOfNews($news_id);
-			$this->renameNewsFieldsFromDb($data);
+			$data['cats'] = $this->getCatsOfNews($id_news);
 		}
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Retrieves a category from the database
-	 * 
-	 * @param int $cat_id
+	 *
+	 * @param int $id_cat
 	 * @return array
 	 */
-	public function getCat($cat_id) {
-		if (empty($cat_id)) {
+	public function getCat($id_cat) {
+		if (empty($id_cat)) {
 			return false;
 		}
-		
+
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname
-			FROM news_cats 
-			WHERE cid = :cat_id
+			SELECT *
+			FROM news_cats
+			WHERE cid = :id_cat
 		');
-		$prep->bindParam(':cat_id', $cat_id, PDO::PARAM_INT);
+		$prep->bindParam(':id_cat', $id_cat, PDO::PARAM_INT);
 		$prep->execute();
-		
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
-	 * Retrieves a complete set of Categories linked to News
-	 * 
-	 * @param int $news_id
+	 * Retrieves a category by its shortname from the database.
+	 *
+	 * @param string $shortname
 	 * @return array
 	 */
-	public function getCatsOfNews($news_id) {
+	public function getCatByShortname($shortname) {
+		if (empty($shortname)) {
+			return false;
+		}
+
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname
+			SELECT *
+			FROM news_cats
+			WHERE shortname = :shortname
+		');
+		$prep->bindParam(':shortname', $shortname);
+		$prep->execute();
+
+		$data = $prep->fetch(PDO::FETCH_ASSOC);
+
+		return $data;
+	}
+
+	/**
+	 * Retrieves a complete set of Categories linked to News
+	 *
+	 * @param int $id_news
+	 * @return array
+	 */
+	public function getCatsOfNews($id_news) {
+		$prep = $this->db->prepare('
+			SELECT *
 			FROM news_cats_relations
 			LEFT JOIN news_cats
-			ON cat_id = cid
-			WHERE news_id = :news_id
+			ON id_cat = cid
+			WHERE id_news = :id_news
 		');
-		$prep->bindParam(':news_id', $news_id, PDO::PARAM_INT);
+		$prep->bindParam(':id_news', $id_news, PDO::PARAM_INT);
 		$prep->execute();
-		
-		$result = array();
-		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
-			$this->renameCatsFieldsFromDb($data);
-			$result[] = $data;
-		}
-		
-		return $result;
+
+		return $prep->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	/**
 	 * Retrieves full set of Categories in the database
-	 * 
+	 *
 	 * @param string $order
 	 * @param bool $asc
 	 * @return array
 	 */
-	public function getCatsList($order = 'news_cat_name', $asc = true) {
-		$order = $this->cats_data_model['toDB'][$order];
+	public function getCatsStructure($order = 'name', $asc = true) {
 		$prep = $this->db->prepare('
-			SELECT cid, name, shortname, parent
+			SELECT *
 			FROM news_cats
 			ORDER BY '.$order.' '.($asc ? 'ASC' : 'DESC')
 		);
 		$prep->execute();
-		
-		$result = array();
-		while ($data = $prep->fetch(PDO::FETCH_ASSOC)) {
-			$this->renameCatsFieldsFromDb($data);
-			$result[] = $data;
-		}
-		
+
+		$result = $prep->fetchAll(PDO::FETCH_ASSOC);
+
 		// Find parent categories' name
 		foreach ($result as $key => $cat) {
-			$result[$key]['news_cat_parent_name'] = "";
-			if ($cat['news_cat_parent'] != 0) {
+			$result[$key]['parent_name'] = "";
+			if ($cat['parent'] != 0) {
 				foreach ($result as $key2 => $cat2) {
-					if ($cat2['news_cat_id'] == $cat['news_cat_parent']) {
-						$result[$key]['news_cat_parent_name'] = $cat2['news_cat_name'];
+					if ($cat2['cid'] == $cat['parent']) {
+						$result[$key]['parent_name'] = $cat2['name'];
 						break;
 					}
 				}
 			}
 		}
-		
+
 		return $result;
+	}
+
+	public function increaseViews($id_news) {
+		$prep = $this->db->prepare('
+			UPDATE news
+			SET views = views + 1
+			WHERE id = :id
+		');
+		$prep->bindParam(':id', $id_news);
+
+		return $prep->execute();
 	}
 }
 

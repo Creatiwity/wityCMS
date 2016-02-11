@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="en">
+	<item id="config_time_pause">Pause time between two slides (ms)</item>
+	<item id="config_time_transition">Transition time between two slides (ms)</item>
+	<item id="config_autoplay">Enable slides autoplaying</item>
+</lang>

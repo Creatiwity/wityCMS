@@ -3,7 +3,7 @@
  * WMain.php
  */
 
-defined('IN_WITY') or die('Access denied');
+defined('WITYCMS_VERSION') or die('Access denied');
 
 require_once SYS_DIR.'WCore'.DS.'WController.php';
 require_once SYS_DIR.'WCore'.DS.'WView.php';
@@ -13,7 +13,7 @@ require_once SYS_DIR.'WCore'.DS.'WView.php';
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.4.0-27-09-2013
+ * @version 0.5.0-11-02-2016
  */
 class WMain {
 	/**
@@ -23,6 +23,10 @@ class WMain {
 		// Loading config
 		$this->loadConfigs();
 
+		// Initializing lang
+		WLang::init();
+		WLang::declareLangDir(SYS_DIR.'lang');
+
 		// Initializing the route
 		$this->route();
 
@@ -31,10 +35,6 @@ class WMain {
 
 		// Setup Timezone
 		$this->setupTimezone();
-
-		// Initializing lang
-		WLang::init();
-		WLang::declareLangDir(SYS_DIR.'lang');
 
 		// Setup Template
 		$this->setupTemplate();
@@ -80,6 +80,12 @@ class WMain {
 			default: // Render in a theme
 				$view = WRetriever::getView($route['app'], $route['params'], false);
 				$theme = ($route['admin']) ? 'admin-bootstrap': WConfig::get('config.theme');
+
+				// Load language file from template
+				if ($route['admin']) {
+					WLang::declareLangDir(THEMES_DIR.'admin-bootstrap'.DS.'lang');
+				}
+
 				$response->render($view, $theme, $model);
 				break;
 		}
@@ -90,6 +96,10 @@ class WMain {
 	 */
 	private function loadConfigs() {
 		WConfig::load('config', CONFIG_DIR.'config.php', 'php');
+
+		// Init template handler
+		WSystem::getTemplate();
+		WTemplateCompiler::registerCompiler('config', array('WConfig', 'compile_config'));
 	}
 
 	/**
@@ -119,7 +129,7 @@ class WMain {
 				$error = true;
 			}
 		}
-		
+
 		if ($error) {
 			$route = WRoute::route();
 
@@ -141,10 +151,18 @@ class WMain {
 		if (!$session->check_flood()) {
 			$_POST = array();
 		}
+
+		// Variable for Roxy file manager
+		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
+
+		// Set session lang
+		if (!empty($_SESSION['lang'])) {
+			WLang::setLang($_SESSION['lang']);
+		}
 	}
 
 	/**
-	 * Setup WityCMS timezone for dates
+	 * Setup wityCMS timezone for dates
 	 * Will change PHP and MySQL configuration
 	 */
 	private function setupTimezone() {
@@ -171,20 +189,25 @@ class WMain {
 	private function setupTemplate() {
 		$tpl = WSystem::getTemplate();
 
-		$site_name = WConfig::get('config.site_name');
 		$route = WRoute::route();
+
+		// Load language file from template
+		WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
 
 		// Setup system template variables with $wity_ prefix
 		$tpl_vars = array(
 			'wity_base_url'         => WRoute::getBase(),
-			'wity_site_name'        => $site_name,
-			'wity_site_subtitle'    => $site_name,
-			'wity_page_title'       => $site_name,
-			'wity_page_keywords'    => WConfig::get('config.keywords'),
-			'wity_page_description' => WConfig::get('config.description'),
+			'wity_site_title'       => WConfig::get('config.name'),
+			'wity_page_title'       => WConfig::get('config.page_title'),
+			'wity_page_description' => WConfig::get('config.page_description'),
 			'wity_user'             => false,
-			'wity_home'             => WRoute::getQuery() == '/',
-			'wity_app'              => $route['app']
+			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
+			'wity_app'              => $route['app'],
+			'wity_query'            => WRoute::getQuery(),
+			'wity_lang'             => WLang::getLang(),
+			'wity_lang_iso'         => WLang::getLangISO(),
+			'wity_site_favicon'     => WConfig::get('config.favicon'),
+			'wity_site_icon'        => WConfig::get('config.icon')
 		);
 
 		if (WSession::isConnected()) {
@@ -193,7 +216,6 @@ class WMain {
 				'wity_user_nickname'  => $_SESSION['nickname'],
 				'wity_user_email'     => $_SESSION['email'],
 				'wity_user_groupe'    => $_SESSION['groupe'],
-				'wity_user_lang'      => $_SESSION['lang'],
 				'wity_user_firstname' => $_SESSION['firstname'],
 				'wity_user_lastname'  => $_SESSION['lastname'],
 				'wity_user_access'    => $_SESSION['access']

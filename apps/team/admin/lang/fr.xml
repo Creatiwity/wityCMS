@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<lang value="fr">
+	<item id="Team">Equipe</item>
+
+	<item id="Members">Membres</item>
+	<item id="Name">Nom</item>
+	<item id="Position">Poste</item>
+	<item id="Order">Position</item>
+	<item id="Actions">Actions</item>
+	<item id="No member in database.">Aucun membre dans la base de données.</item>
+
+	<item id="Add a member">Ajouter un membre</item>
+	<item id="Edit a member">Modifier un membre</item>
+	<item id="Description">Description</item>
+	<item id="Email">Email</item>
+	<item id="Linkedin">LinkedIn</item>
+	<item id="Twitter">Twitter</item>
+	<item id="Image (PNG or JPEG / 180x180 px / ~20 ko)">Image (PNG ou JPEG / 180x180 px / ~20 ko)</item>
+	<item id="Hovering image (PNG ou JPEG / 180x180 px / ~20 ko)">Image au survol (PNG ou JPEG / 180x180 px / ~20 ko)</item>
+	<item id="Cancel">Annuler</item>
+	<item id="Submit">Envoyer</item>
+	<item id="Edit">Modifier</item>
+
+	<item id="Please, provide a name.">Veuillez fournir un nom.</item>
+	<item id="Please, provide a position.">Veuillez fournir une position.</item>
+	<item id="The member was not found.">Le membre n'a pas été trouvé.</item>
+	<item id="The member was successfully created.">Le membre a été créé avec succès.</item>
+	<item id="The member was successfully edited.">Le membre a été édité avec succès.</item>
+	<item id="An unknown error occured.">Une erreur inconnue s'est produite en enregistrant les données dans la base de données.</item>
+
+	<item id="Delete a member">Supprimer un membre</item>
+	<item id="Do you really want to delete the member %s?">Confirmez-vous la suppression du membre %s ?</item>
+	<item id="Delete">Supprimer</item>
+	<item id="The member was successfully deleted.">Le membre a été supprimé avec succès.</item>
+</lang>

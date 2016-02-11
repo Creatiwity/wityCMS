@@ -1,14 +1,18 @@
 /**
- * Grafx v1 theme for WityCMS
- * 29/09/2013
+ * Theme Name: Grafx
+ * Theme URI: https://creatiwity.net
+ * Description: Theme for wityCMS
+ * Author: Creatiwity
+ * Author URI: https://creatiwity.net
+ * Version: 1.1.0
  */
 
 html {
-	font-size: 1em;
+	font-size: 100%;
 }
 
 body {
-	font-family: Arial, Helvetica, FreeSans, sans-serif;
+	font-family: Arial, sans-serif;
 	font-size: 0.8em;
 	color: #a0a0a0;
 	background: url('../img/bg.png') repeat-x;
@@ -19,79 +23,74 @@ body {
 }
 
 a {
-	color: #a0a0a0;
+	color: #91cadf;
 	text-decoration: none;
 }
 
-a:hover {
-	color: #91cadf;
+a:hover, a:focus {
+	color: #76afc4;
+	text-decoration: underline;
 }
 
-h1 {
-	font-size: 1.1em;
-	background: url('../img/button-plus-green.png') no-repeat left center;
-	margin: 0;
-	padding: 10px 0 8px 28px;
-}
-
-h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
 	color: #91cadf;
-	font-size: 1.2em;
+	font-weight: bold;
 	margin: 0 0 1em 0;
 	padding: 0;
 }
 
-ul.listing {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+h1 {
+	font-size: 2em;
 }
 
-ul.listing li {
-	background: #f5f5f5;
-	margin-bottom: 5px;
-	padding: 6px 10px;
-	border-radius: 4px;
+h2 {
+	font-size: 1.8em;
 }
 
-ul.listing li:hover {
-	background: #f0f0f0;
+h3 {
+	font-size: 1.6em;
 }
 
-/**
- * Structure
- */
-#column-content, #column-blocks {
-	padding: 0 15px;
+h4 {
+	font-size: 1.4em;
+}
+
+h5 {
+	font-size: 1.2em;
+}
+
+h6 {
+	font-size: 1.1em;
 }
 
 .block {
 	background: white;
 	padding: 15px 30px;
 	margin-bottom: 15px;
+	border-radius: 5px;
 }
 
 /**
  * Header
  */
 
-header {
+header.theme-header {
 	color: white;
 	font-weight: bold;
 	margin-top: 30px;
 }
 
-header img {
+header.theme-header img {
 	float: left;
 }
 
-header .inner {
+header.theme-header .inner {
 	display: inline-block;
 	text-align: right;
 	padding-top: 40px;
 }
 
-header p.site-name {
+header.theme-header p.site-name {
 	font-size: 3em;
 	letter-spacing: 4px;
 	text-transform: uppercase;
@@ -100,54 +99,46 @@ header p.site-name {
 	display: inline;
 }
 
-header p.slogan {
-	margin: 0;
-	padding: 0;
-	position: relative;
-	top: -10px;
-	z-index: -5;
-}
-
 /**
  * Navigation
  */
 
-nav {
-	background: white; 
+.navbar {
+	background: white;
 }
 
-nav ul li a {
+.navbar ul li a {
 	color: #a0a0a0;
 }
 
-.nav li a:hover {
+.navbar ul li a:hover {
 	color: #91cadf;
 	background: #f9fdff;
 }
 
-nav ul li a span {
+.navbar ul li a span {
 	font-size: 1.4em;
 }
 
-nav ul li em {
+.navbar ul li em {
 	font-style: normal;
 }
 
-nav .navbar-toggle {
+.navbar .navbar-toggle {
 	border-color: #dddddd;
 }
 
-nav .icon-bar {
+.navbar .icon-bar {
 	background-color: #dddddd;
 }
 
-nav .navbar-form {
+.navbar .navbar-form {
 	border: 1px solid #cfcfcf;
 	margin-top: 15px;
 	padding: 0;
 }
 
-nav .navbar-form input {
+.navbar .navbar-form input {
 	border: 0;
 	margin: 0;
 	padding: 0 0 0 10px;
@@ -156,7 +147,7 @@ nav .navbar-form input {
 	box-shadow: none;
 }
 
-nav .navbar-form button {
+.navbar .navbar-form button {
 	width: 30px;
 	height: 32px;
 	overflow: hidden;
@@ -169,36 +160,9 @@ nav .navbar-form button {
 	color: white;
 }
 
-nav .navbar-form button:hover {
+.navbar .navbar-form button:hover {
 	color: white;
 	background: #f0f0f0;
-}
-
-/**
- * News
- */
-
-.wity-app-news .item {
-	border-bottom: 1px solid #91cadf;
-	margin-bottom: 1em;
-}
-
-.wity-app-news .item-meta {
-	font-size: 0.9em;
-	font-style: italic;
-	margin-bottom: 1em;
-	padding-left: 28px;
-	position: relative;
-	top: -10px;
-}
-
-.wity-app-news .news-read-more {
-	text-align: right;
-}
-
-.wity-app-news .news-read-more a {
-	background: url('../img/button-read-more.png') no-repeat left center;
-	padding-left: 20px;
 }
 
 /**
