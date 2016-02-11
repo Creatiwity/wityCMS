@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\Newsletter\Admin
  * @author Thibault Vlacich <thibault@vlacich.fr>
- * @version 0.5.0-dev-02-01-2015
+ * @version 0.5.0-11-02-2016
  */
 class NewsletterAdminModel {
 	/**

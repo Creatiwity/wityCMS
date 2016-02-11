@@ -4,7 +4,7 @@
 	<!-- Application name -->
 	<name>Contact</name>
 
-	<version>0.5.0-dev-02-01-2015</version>
+	<version>0.5.0-11-02-2016</version>
 
 	<!-- Last update date -->
 	<date>02-10-2013</date>

@@ -16,7 +16,7 @@ include_once APPS_DIR.'news'.DS.'front'.DS.'model.php';
  * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-02-01-2015
+ * @version 0.5.0-11-02-2016
  */
 class NewsAdminModel extends NewsModel {
 	public function __construct() {

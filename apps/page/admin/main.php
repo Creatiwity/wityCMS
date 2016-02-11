@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Page\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-02-01-2015
+ * @version 0.5.0-11-02-2016
  */
 class PageAdminController extends WController {
 	private $upload_dir;

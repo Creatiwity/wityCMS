@@ -16,7 +16,7 @@ include_once APPS_DIR.'team'.DS.'front'.DS.'model.php';
  * @package Apps\Team\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-dev-02-01-2015
+ * @version 0.5.0-11-02-2016
  */
 class TeamAdminModel extends TeamModel {
 	public function __construct() {
