@@ -15,6 +15,32 @@ var Form, FormNode;
 		VALIDATED = 4,                    // Validated
 		EMPTY_NOT_REQUIRED = 5;           // Empty but not required
 
+	var updateNavBar = function() {
+		var $formNavLi = $('.form-nav li'),
+			$grayBar = $('.form-nav-bar .gray-bar'),
+			$activeBar = $('.form-nav-bar .active-bar'),
+			$formNavLiFirst = $formNavLi.first(),
+			tabStatusFirstOffset = $formNavLiFirst.position(),
+			tabStatusLastOffset = $formNavLi.last().position();
+
+		$grayBar.css({
+			top: tabStatusFirstOffset.top + 35,
+			left: tabStatusFirstOffset.left + $formNavLiFirst.outerWidth() / 2,
+			width: tabStatusLastOffset.left - tabStatusFirstOffset.left
+		});
+
+		var $formNavActiveLi = $('.form-nav li.valid, .form-nav li.active'),
+			tabStatusActiveLastOffset = $formNavActiveLi.last().position();
+
+		if ($formNavActiveLi.length > 0) {
+			$activeBar.css({
+				top: tabStatusFirstOffset.top + 35,
+				left: tabStatusFirstOffset.left + $formNavLiFirst.outerWidth() / 2,
+				width: tabStatusActiveLastOffset.left - tabStatusFirstOffset.left
+			});
+		}
+	};
+
 	/**
 	 * Form class manages the whole form logic and view and initializes the FormNode elements
 	 *
@@ -52,11 +78,6 @@ var Form, FormNode;
 			// Register all form containers (alerts, submit button, ...)
 			this.$alert = $('[data-wity-form-alert="' + id + '"]');
 			this.$submit = $('[data-wity-form-submit="' + id + '"]');
-
-			this.$summary = $('[data-wity-form-summary="' + id + '"]');
-			if (this.$summary.length > 0) {
-				this.context.$summary = this.$summary;
-			}
 
 			this.$tabs = $('[data-wity-form-tabs="' + id + '"]');
 			if (this.$tabs.length > 0) {
@@ -99,6 +120,25 @@ var Form, FormNode;
 				}
 			});
 
+			// Replace submit button
+			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				var $tab = $(e.target);
+
+				updateNavBar();
+
+				if ($tab.parent().index() == $('[data-wity-form-tabs] li').length - 1) {
+					var $nextButton = $($tab.attr('href')).find('.next-button');
+
+					if ($nextButton.length > 0) {
+						$nextButton.replaceWith(that.$submit.detach());
+					}
+				}
+			});
+
+			// Bar
+			updateNavBar();
+			$(window).resize(updateNavBar);
+
 			// Initialize all submit buttons statuses to disabled
 			this.setButtonStatus(false);
 
@@ -137,7 +177,7 @@ var Form, FormNode;
 
 			if (!state) {
 				this.debug('Form:%s submit button DISABLED', this.id);
-				this.$submit.button('remaining')
+				this.$submit.button('remaining');
 				setTimeout(function() {that.$submit.attr("disabled", "disabled");}, 0);
 			} else {
 				this.debug('Form:%s submit button ENABLED', this.id);
@@ -158,7 +198,7 @@ var Form, FormNode;
 				success: callback,
 				type: 'GET'
 			});
-		}
+		};
 
 		// Ajax internal function to test FormNode validity remotely when needed
 		Form.prototype.ajax = function(sData, callback, context) {
@@ -352,6 +392,14 @@ var Form, FormNode;
 			// This node is required if specified or if it's the root node
 			this.required = (options.required === true) || (options.root === true);
 
+			if (options.image) {
+				this.image = options.image;
+			}
+
+			if (options.introduction) {
+				this.introduction = options.introduction;
+			}
+
 			// getValues will returns the values of the "requires" node
 			this.requires = options.requires;
 
@@ -392,12 +440,41 @@ var Form, FormNode;
 				if (context.$tabs.length > 0) {
 					// Add the tab only if a place has been reserved to place it
 					$tabStatus = $('<i class="glyphicon"></i>');
-					$tabTitle = $('<a href="#form_' + context.id + '_' + this.id + '" data-toggle="tab"></a>').append($tabStatus).append(' ' + this.name);
+					$tabTitle = $('<a href="#form_' + context.id + '_' + this.id + '" data-toggle="tab"></a>').append($('<span class="icon"></span>').append($tabStatus)).append(' ' + this.name);
 					$tabTitle = $('<li></li>').append($tabTitle);
 
 					// Set tab content container
 					$tabContainer = $('<div class="tab-pane" id="form_' + context.id + '_' + this.id + '"></div>');
+
+					if (this.image || this.introduction) {
+						var $introduction = $('<div class="introduction"></div>');
+
+						if (this.image) {
+							$introduction.append('<img src="'+this.image+'" alt="" class="img-responsive" />');
+						}
+
+						if (this.introduction) {
+							$introduction.append(this.introduction);
+						}
+
+						$introduction.append('<div class="clearfix"></div>');
+
+						$tabContainer.append($introduction);
+					}
+
 					$tabContent = $('<fieldset class="form-horizontal"></fieldset>').appendTo($tabContainer);
+
+					if (tabCounter > 0) {
+						$prevButton = $('<button type="button" class="btn btn-default btn-lg prev-button">Back</button>').appendTo($tabContainer);
+						$prevButton.on('click', function() {
+							$tabTitle.prev().find('a').trigger('click');
+						});
+					}
+
+					$nextButton = $('<button type="button" class="btn btn-primary btn-lg pull-right next-button">Next</button>').appendTo($tabContainer);
+					$nextButton.on('click', function() {
+						$tabTitle.next().find('a').trigger('click');
+					});
 
 					// Set the first tab added as active
 					if (tabCounter === 0) {
@@ -408,39 +485,32 @@ var Form, FormNode;
 					context.$tabs.append($tabTitle);
 					context.$content.append($tabContainer);
 
-					if (context.$summary.length > 0) {
-						context.$summary.append($('<h4>' + this.name + '</h4>'));
-					}
-
 					context.$content = $tabContent;
 
 					// Pushing view updater to update tab status
 					this.views.push({
 						updater: function(state) {
-							var vstate = state || that.validated;
+							var vstate = state || that.validated,
+								$li = $tabStatus.closest('li');
 							$tabStatus.removeClass('glyphicon-remove glyphicon-ok');
+							$li.removeClass('valid invalid');
 
 							switch (vstate) {
 								case NOT_YET_VALIDATED:
-								$tabStatus.addClass('glyphicon-remove');
-								break;
-
 								case NOT_VALIDATED:
-								$tabStatus.addClass('glyphicon-remove');
-								break;
-
 								case NOT_VALIDATED_EMPTY_REQUIRED:
-								$tabStatus.addClass('glyphicon-remove');
-								break;
+									$tabStatus.addClass('glyphicon-remove');
+									$li.addClass('invalid');
+									break;
 
 								case EMPTY_NOT_REQUIRED:
-								$tabStatus.addClass('glyphicon-ok');
-								break;
-
 								case VALIDATED:
-								$tabStatus.addClass('glyphicon-ok');
-								break;
+									$tabStatus.addClass('glyphicon-ok');
+									$li.addClass('valid');
+									break;
 							}
+
+							updateNavBar();
 						}
 					});
 
@@ -466,7 +536,7 @@ var Form, FormNode;
 					if ($.isArray(options.options)) {
 						// Preconfigured values
 						for (_i = 0, _len = options.options.length; _i < _len; ++_i) {
-							$field.append('<option value="' + options.options[_i].value + '">' + options.options[_i].text + '</option>')
+							$field.append('<option value="' + options.options[_i].value + '">' + options.options[_i].text + '</option>');
 						}
 
 						// Set the default specified value if it exists
@@ -533,9 +603,8 @@ var Form, FormNode;
 				// Add it in the view
 				context.$content.append($alertContainer);
 				context.$content.append($fieldContainer);
-				$fieldContainer.append('<label class="col-md-4 control-label" for="' + this.id + '">' + this.name + (this.required ? '*' : '') + '</label>')
+				$fieldContainer.append('<label class="col-md-4 control-label" for="' + this.id + '">' + this.name + (this.required ? '*' : '') + '</label>');
 				$fieldContainer.append($('<div class="col-md-8"></div>').append($field).append(this.$helpBlock));
-
 
 				// Push the field updater in the views stack
 				this.views.push({
@@ -586,51 +655,33 @@ var Form, FormNode;
 					validationTimer = setTimeout(function() {that.validate();}, 1000);
 				});
 
-			} else {
-				// A virtual field can have a summary if specified (two password fields that have to appear only once in the summary)
-				this.summary = (options.summary === true);
 			}
 
-			if (this.summary && context.$summary.length > 0) {
+			if (this.summary) {
 				// Add the summary to the view
 				$summaryStatus = $('<i class="glyphicon"></i>');
-				$summaryLi = $('<li></li>');
 
-				$summaryLi.append($summaryStatus);
-				$summaryLi.append(' ' + this.name + (this.required ? '*' : ''));
-
-				context.$summary.append($summaryLi);
+				$fieldContainer.find('label').prepend(' ').prepend($summaryStatus);
 
 				// Push the summary view to the view stack of this node
 				this.views.push({
 					updater: function(state) {
 						var vstate = state || that.validated;
-						$summaryLi.removeClass('text-success text-danger text-warning text-primary text-muted');
 						$summaryStatus.removeClass('glyphicon-remove glyphicon-ok');
 
 						switch (vstate) {
 							case NOT_YET_VALIDATED:
-								if (that.required) {
-									$summaryLi.addClass('text-primary');
-								}
 								break;
 
 							case NOT_VALIDATED:
-								$summaryLi.addClass('text-danger');
-								$summaryStatus.addClass('glyphicon-remove');
-								break;
-
 							case NOT_VALIDATED_EMPTY_REQUIRED:
-								$summaryLi.addClass('text-danger');
 								$summaryStatus.addClass('glyphicon-remove');
 								break;
 
 							case VALIDATING:
-								$summaryLi.addClass('text-info');
 								break;
 
 							case VALIDATED:
-								$summaryLi.addClass('text-success');
 								$summaryStatus.addClass('glyphicon-ok');
 								break;
 
@@ -802,9 +853,9 @@ var Form, FormNode;
 				// Not validated
 				// Or Validate()
 
-				if (child.validated === NOT_VALIDATED
-					|| child.validated === NOT_VALIDATED_EMPTY_REQUIRED
-					|| (child.validated === NOT_YET_VALIDATED && child.required === true)) {
+				if (child.validated === NOT_VALIDATED ||
+					child.validated === NOT_VALIDATED_EMPTY_REQUIRED ||
+					(child.validated === NOT_YET_VALIDATED && child.required === true)) {
 					causeId = child.id;
 					cause = 1;
 					validating = false;
@@ -1003,12 +1054,12 @@ var Form, FormNode;
 		FormNode.prototype.displayNotes = function(notes, classes) {
 			var that = this;
 			$.each(notes, function(index, r) {
-				var alert = '<span class="' + classes + '">'
-								+ '<strong>'
-									+ r.head_message
-								+ '</strong> '
-								+ r.message
-							+ '</span>'
+				var alert = '<span class="' + classes + '">' +
+					'<strong>' +
+						r.head_message +
+					'</strong> ' +
+					r.message +
+				'</span>';
 
 				if (that.helpMessage !== '') {
 					that.helpMessage += '<br/>';

@@ -14,10 +14,14 @@ $(window).ready(function() {
 
 			childs: [
 				{
-					id: "site",
-					name: "Site",
+					id: "general",
+					name: "General",
 					tab: true,
 					required: true,
+					image: 'installer/img/img-01.png',
+					introduction: '<h2>wityCMS is incredibly customizable</h2>' +
+						'<p>After the installation, you will be able to connect to an administration panel to edit the configuration of your website. wityCMS enables the creation of new applications quickly from another one based on the retriever concept (more details by clicking on the question mark).</p>' +
+						'<p><em>NB:</em> The site name will be displayed on the top-left corner of the administration. The base URL is the URL of your website which can be read from the top bar of your browser.</p>',
 
 					childs: [
 						{
@@ -76,14 +80,26 @@ $(window).ready(function() {
 							name: "Timezone",
 							required: true,
 							type: "select",
-							hr: true,
 							options: {
 								url: "installer/view/timezones.html"
 							}
-						},
+						}
+					]
+				},
+				{
+					id: "applications",
+					name: "Applications",
+					tab: true,
+					required: true,
+					image: 'installer/img/img-02.png',
+					introduction: '<h2>Define your home page</h2>' +
+						'<p>The Home application is the first application executed by wityCMS and that will be displayed when users connect to the root page of your website. For instance, if you want to create a blog, we advise you to select the News application.</p>' +
+						'<p>The main admin application is the first application loaded when you connect to the administration. We advise you to select the application you will use most of the time (user or news for instance).</p>',
+
+					childs: [
 						{
 							id: "front_app",
-							name: "Default front app.",
+							name: "Home application",
 							required: true,
 							type: 'select',
 							options: {
@@ -96,7 +112,7 @@ $(window).ready(function() {
 						},
 						{
 							id: "admin_app",
-							name: "Default admin app.",
+							name: "Main admin application",
 							required: true,
 							type: 'select',
 							options: {
@@ -114,6 +130,10 @@ $(window).ready(function() {
 					name: "Database",
 					tab: true,
 					required: true,
+					image: 'installer/img/img-03.png',
+					introduction: '<h2>Configure the database</h2>' +
+						'<p>wityCMS needs a MySQL database to run which is available on most of the web servers. Fill in the credentials provided by your hosting company in the form.</p>' +
+						'<p>The prefix tables field allows you to defined the prefix added at the begining of the name of the tables. We advise you to let the value "wity" (nb: an underscore character will be automatically added after the prefix).</p>',
 
 					childs: [
 						{
@@ -123,7 +143,6 @@ $(window).ready(function() {
 							required: true,
 							summary: true,
 							errorsOnChilds: true,
-							hr: true,
 
 							validate: {
 								remote: 'db_credentials'
@@ -167,22 +186,22 @@ $(window).ready(function() {
 
 									type: "password",
 									summary: false
-								}
+								},
+								{
+									id: "dbname",
+									name: "Database name",
+									required: true,
+									requires: "credentials",
+
+									validate: {
+										remote: 'db_name'
+									}
+								},
 							]
 						},
 						{
-							id: "dbname",
-							name: "Database name",
-							required: true,
-							requires: "credentials",
-
-							validate: {
-								remote: 'db_name'
-							}
-						},
-						{
 							id: "dbprefix",
-							name: "Tables prefix",
+							name: "Prefix for tables",
 							requires: "dbname",
 							validEmpty: true,
 							value: 'wity',
@@ -198,6 +217,10 @@ $(window).ready(function() {
 					name: "Admin account",
 					tab: true,
 					required: true,
+					image: 'installer/img/img-04.png',
+					introduction: '<h2>One step left before launching the installation!</h2>' +
+						'<p>The following fields will allow you create your user account. This account will have full power to do modifications in the administration. Please, chose carefully your password.</p>' +
+						'<p>Once you click on the "Launch install" button, wityCMS will install and you will be able connect to the administration panel.</p>',
 
 					childs: [
 						{
@@ -208,7 +231,7 @@ $(window).ready(function() {
 							validate: {
 								local: {
 									type: "regexp",
-									options: "^[a-zA-Z0-9]([a-zA-Z0-9])*$",
+									options: "^[a-zA-Z0-9\.@_]+$",
 									message: "The nickname must be an alphanumeric value."
 								},
 								remote: 'user_nickname'
@@ -250,23 +273,6 @@ $(window).ready(function() {
 							]
 						},
 						{
-							id: "email",
-							name: "Email",
-							required: true,
-							hr: true,
-
-							validate: {
-								local: {
-									type: "regexp",
-									options: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
-									message: "This email is not valid."
-								},
-								remote: 'user_email'
-							},
-
-							type: "email"
-						},
-						{
 							id: "firstname",
 							name: "Firstname",
 
@@ -291,11 +297,27 @@ $(window).ready(function() {
 								},
 								remote: 'user_lastname'
 							}
+						},
+						{
+							id: "email",
+							name: "Email",
+							required: true,
+
+							validate: {
+								local: {
+									type: "regexp",
+									options: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
+									message: "This email is not valid."
+								},
+								remote: 'user_email'
+							},
+
+							type: "email"
 						}
 					]
 				}
 			]
-		}
+		};
 
 		new Form(installer);
 

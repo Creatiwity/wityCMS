@@ -257,20 +257,22 @@ class Installer {
 				if ($this->isFrontApp($front_app, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Front application validated.");
 					return true;
-				} else if ($respond) {
+				} else if ($respond && $front_app != 'Select') {
 					$this->view->error('group', $data['group'], "Invalid front application", "Starting front application parameter must an existing front application, in 'apps' directory.");
 					return false;
 				}
+				break;
 
 			case 'admin_app':
 				$admin_app = WRequest::get('admin_app', '', 'POST');
 				if ($this->isAdminApp($admin_app, $data, $respond)) {
 					$this->view->success('group', $data['group'], "Validated !", "Admin application validated.");
 					return true;
-				} else if ($respond) {
+				} else if ($respond && $admin_app != 'Select') {
 					$this->view->error('group', $data['group'], "Invalid admin application", "Starting admin application parameter must an existing admin application, in 'apps' directory.");
 					return false;
 				}
+				break;
 
 			case 'db_credentials':
 				$r = WRequest::getAssoc(array('dbserver', 'dbport', 'dbuser', 'dbpassword'), '', 'POST');
@@ -553,10 +555,12 @@ class Installer {
 	 * @return array List of Front Apps
 	 */
 	private function getFrontApps() {
-		if ($apps = scandir($this->APPS_DIR)) {
-			foreach ($apps as $key => $value) {
-				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."front") || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($apps[$key]);
+		$apps = array('select' => 'Select');
+
+		if ($scanned_apps = scandir($this->APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir($this->APPS_DIR.DS.$value.DS."front") && !in_array($value, $this->EXCLUDED_DIRS)) {
+					$apps[$key] = $value;
 				}
 			}
 		}
@@ -570,11 +574,11 @@ class Installer {
 	 * @return array List of Admin Apps
 	 */
 	private function getAdminApps() {
-		if ($apps = scandir($this->APPS_DIR)) {
-			foreach ($apps as $key => $value) {
-				if (in_array($value, $this->EXCLUDED_APPS) || !is_dir($this->APPS_DIR.DS.$value.DS."admin") || in_array($value, $this->EXCLUDED_DIRS)) {
-					unset($apps[$key]);
-				} else {
+		$apps = array('select' => 'Select');
+
+		if ($scanned_apps = scandir($this->APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir($this->APPS_DIR.DS.$value.DS."admin") && !in_array($value, $this->EXCLUDED_DIRS)) {
 					$apps[$key] = 'admin/'.$value;
 				}
 			}
