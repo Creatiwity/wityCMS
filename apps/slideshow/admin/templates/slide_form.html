@@ -21,7 +21,7 @@
 				</div>
 
 				<div class="form-group">
-					<label for="url" class="col-sm-3 control-label">{lang URL}*</label>
+					<label for="url" class="col-sm-3 control-label">{lang URL}</label>
 					<div class="col-sm-9 translatable">
 						<input id="url" class="form-control" type="text" name="url" value="{$url}" autocomplete="off" placeholder="{lang URL}" />
 					</div>
@@ -29,7 +29,7 @@
 
 				<div class="form-group">
 					<label for="url" class="col-sm-3 control-label">{lang Image (PNG or JPEG)}*</label>
-					<div class="col-sm-9 translatable">
+					<div class="col-sm-9">
 						{if !empty({$image})}
 						<p><img class="img-responsive" src="{$image}" alt="{$title_1}" style="max-width: 200px; max-height: 200px;" /></p>
 						{/if}

@@ -55,7 +55,10 @@ class SlideshowAdminController extends WController {
 
 			if (!empty($post_data['url']) && strpos($post_data['url'], '://') === false) {
 				$post_data['url'] = 'http://'.$post_data['url'];
+			} else {
+				$post_data['url'] = '';
 			}
+
 			/* END VARIABLES CHECKING */
 
 			// Image
