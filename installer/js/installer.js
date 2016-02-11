@@ -186,18 +186,18 @@ $(window).ready(function() {
 
 									type: "password",
 									summary: false
-								},
-								{
-									id: "dbname",
-									name: "Database name",
-									required: true,
-									requires: "credentials",
-
-									validate: {
-										remote: 'db_name'
-									}
-								},
+								}
 							]
+						},
+						{
+							id: "dbname",
+							name: "Database name",
+							required: true,
+							requires: "credentials",
+
+							validate: {
+								remote: 'db_name'
+							}
 						},
 						{
 							id: "dbprefix",
