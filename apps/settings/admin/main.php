@@ -15,6 +15,9 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class SettingsAdminController extends WController {
 	private $upload_dir;
+	private $EXCLUDED_THEMES = array('system', 'admin-bootstrap');
+	private $EXCLUDED_APPS = array('admin');
+	private $EXCLUDED_DIRS = array('.', '..');
 
 	public function __construct() {
 		$this->upload_dir = WITY_PATH.'upload'.DS.'settings'.DS;
@@ -28,6 +31,7 @@ class SettingsAdminController extends WController {
 	protected function configure(array $params) {
 		// Settings editable by user
 		$settings_keys = array('name', 'page_title', 'page_description', 'email');
+		$route_keys    = array('default_front', 'default_admin');
 
 		$settings = array();
 		foreach ($settings_keys as $key) {
@@ -37,15 +41,28 @@ class SettingsAdminController extends WController {
 		$settings['favicon'] = WConfig::get('config.favicon', '');
 		$settings['icon'] = WConfig::get('config.icon', '');
 
+		$route = array();
+		foreach ($route_keys as $key) {
+			$route[$key] = WConfig::get('route.'.$key);
+			$route[$key] = WConfig::get('route.'.$key);
+		}
+
 		// Update settings
 		if (WRequest::getMethod() == 'POST') {
-			$data = WRequest::getAssoc(array('update', 'settings'));
+			$data = WRequest::getAssoc(array('update', 'settings', 'route'));
 
 			foreach ($settings_keys as $key) {
 				if (isset($data['settings'][$key])) {
 					// Direct user input: all characters are accepted here
 					$settings[$key] = $data['settings'][$key];
 					WConfig::set('config.'.$key, $settings[$key]);
+				}
+			}
+
+			foreach ($route_keys as $key) {
+				if (isset($data['route'][$key])) {
+					$route[$key] = $data['route'][$key];
+					WConfig::set('route.'.$key, $route[$key]);
 				}
 			}
 
@@ -72,13 +89,19 @@ class SettingsAdminController extends WController {
 			}
 
 			WConfig::save('config');
+			WConfig::save('route');
 
 			WNote::success('settings_updated', WLang::get('The settings were updated successfully.'));
 			$this->setHeader('Location', WRoute::getDir().'admin/settings/');
 		}
 
 		// Return settings values
-		return $settings;
+		return array(
+			'settings'   => $settings,
+			'route'      => $route,
+			'front_apps' => $this->getAllFrontApps(),
+			'admin_apps' => $this->getAllAdminApps(),
+		);
 	}
 
 	/**
@@ -213,6 +236,41 @@ class SettingsAdminController extends WController {
 			mkdir($this->upload_dir, 0777, true);
 		}
 	}
+
+	/**
+	 * Get existing Front Apps
+	 *
+	 * @return array List of Front Apps
+	 */
+	private function getAllFrontApps() {
+		if ($scanned_apps = scandir(APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir(APPS_DIR.DS.$value.DS."front") && !in_array($value, $this->EXCLUDED_DIRS)) {
+					$apps[$key] = $value;
+				}
+			}
+		}
+
+		return $apps;
+	}
+
+	/**
+	 * Get existing Admin Apps
+	 *
+	 * @return array List of Admin Apps
+	 */
+	private function getAllAdminApps() {
+		if ($scanned_apps = scandir(APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir(APPS_DIR.DS.$value.DS."admin") && !in_array($value, $this->EXCLUDED_DIRS)) {
+					$apps[$key] = 'admin/'.$value;
+				}
+			}
+		}
+
+		return $apps;
+	}
+
 }
 
 ?>
