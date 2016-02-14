@@ -43,8 +43,7 @@ class SettingsAdminController extends WController {
 
 		$route = array();
 		foreach ($route_keys as $key) {
-			$route[$key] = WConfig::get('route.'.$key);
-			$route[$key] = WConfig::get('route.'.$key);
+			$route[$key] = WConfig::get('route.'.$key, '');
 		}
 
 		// Update settings
