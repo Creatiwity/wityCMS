@@ -32,6 +32,7 @@ class SettingsAdminController extends WController {
 		// Settings editable by user
 		$settings_keys = array('name', 'page_title', 'page_description', 'email', 'theme');
 		$route_keys    = array('default_front', 'default_admin');
+		$og_keys       = array('title', 'description', 'image');
 
 		$settings = array();
 		foreach ($settings_keys as $key) {
@@ -46,9 +47,14 @@ class SettingsAdminController extends WController {
 			$route[$key] = WConfig::get('route.'.$key, '');
 		}
 
+		$og = array();
+		foreach ($og_keys as $key) {
+			$og[$key] = WConfig::get('config.og.'.$key, '');
+		}
+
 		// Update settings
 		if (WRequest::getMethod() == 'POST') {
-			$data = WRequest::getAssoc(array('update', 'settings', 'route'));
+			$data = WRequest::getAssoc(array('update', 'settings', 'route', 'og'));
 
 			foreach ($settings_keys as $key) {
 				if (isset($data['settings'][$key])) {
@@ -65,8 +71,15 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			// Uploads favicon & icon
-			foreach (array('favicon', 'icon') as $file) {
+			foreach ($og_keys as $key) {
+				if (isset($data['og'][$key])) {
+					$og[$key] = $data['og'][$key];
+					WConfig::set('config.og.'.$key, $og[$key]);
+				}
+			}
+
+			// Uploads favicon & image
+			foreach (array('favicon', 'image') as $file) {
 				if (!empty($_FILES[$file]['name'])) {
 					$this->makeUploadDir();
 
@@ -80,9 +93,15 @@ class SettingsAdminController extends WController {
 					if (!$upload->processed) {
 						WNote::error($file.'_upload_error', $upload->error);
 					} else {
-						$old_file = WConfig::get('config.'.$file);
+						if ($file == 'favicon') {
+							$old_file = WConfig::get('config.favicon');
 
-						WConfig::set('config.'.$file, '/upload/settings/'.$upload->file_dst_name.'?'.time());
+							WConfig::set('config.favicon', '/upload/settings/'.$upload->file_dst_name.'?'.time());
+						} else if ($file == 'image') {
+							$old_file = WConfig::get('config.og.image');
+
+							WConfig::set('config.og.image', '/upload/settings/'.$upload->file_dst_name.'?'.time());
+						}
 					}
 				}
 			}
@@ -97,6 +116,7 @@ class SettingsAdminController extends WController {
 		// Return settings values
 		return array(
 			'settings'   => $settings,
+			'og'         => $og,
 			'route'      => $route,
 			'front_apps' => $this->getAllFrontApps(),
 			'admin_apps' => $this->getAllAdminApps(),

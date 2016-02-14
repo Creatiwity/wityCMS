@@ -19,6 +19,7 @@ class SettingsAdminView extends WView {
 	 */
 	public function configure($model) {
 		$this->assign('settings', $model['settings']);
+		$this->assign('og', $model['og']);
 		$this->assign('route', $model['route']);
 		$this->assign('front_apps', $model['front_apps']);
 		$this->assign('admin_apps', $model['admin_apps']);

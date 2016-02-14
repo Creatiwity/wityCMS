@@ -10,6 +10,7 @@
 	<item id="Website's name">Nom du site</item>
 	<item id="Administrator's email">Email de l'administrateur</item>
 	<item id="Default theme">Thème par défault</item>
+	<item id="Default applications">Applications par défault</item>
 	<item id="Default front app">Application par défault</item>
 	<item id="Default admin app">Application par défault dans l'administration</item>
 	<item id="Title">Titre</item>
