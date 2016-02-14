@@ -22,6 +22,7 @@ class SettingsAdminView extends WView {
 		$this->assign('route', $model['route']);
 		$this->assign('front_apps', $model['front_apps']);
 		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('themes', $model['themes']);
 	}
 
 	public function languages($data) {

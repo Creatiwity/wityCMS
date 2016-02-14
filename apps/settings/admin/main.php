@@ -30,7 +30,7 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('name', 'page_title', 'page_description', 'email');
+		$settings_keys = array('name', 'page_title', 'page_description', 'email', 'theme');
 		$route_keys    = array('default_front', 'default_admin');
 
 		$settings = array();
@@ -101,6 +101,7 @@ class SettingsAdminController extends WController {
 			'route'      => $route,
 			'front_apps' => $this->getAllFrontApps(),
 			'admin_apps' => $this->getAllAdminApps(),
+			'themes'     => $this->getAllThemes()
 		);
 	}
 
@@ -235,6 +236,25 @@ class SettingsAdminController extends WController {
 		if (!is_dir($this->upload_dir)) {
 			mkdir($this->upload_dir, 0777, true);
 		}
+	}
+
+	/**
+	 * Get existing themes
+	 *
+	 * @return array List of themes
+	 */
+	private function getAllThemes() {
+		if ($themes = scandir(THEMES_DIR)) {
+			foreach ($themes as $key => $value) {
+				if (in_array($value, $this->EXCLUDED_THEMES) || !is_dir(THEMES_DIR.DS.$value) || in_array($value, $this->EXCLUDED_DIRS)) {
+					unset($themes[$key]);
+				}
+			}
+
+			$themes[] = "_blank";
+		}
+
+		return $themes;
 	}
 
 	/**
