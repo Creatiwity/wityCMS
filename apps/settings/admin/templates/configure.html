@@ -18,27 +18,6 @@
 					<input id="email" class="form-control" type="email" name="settings[email]" value="{$settings.email}" />
 				</div>
 			</div>
-		</fieldset>
-
-		<fieldset>
-			<legend>{lang SEO}</legend>
-
-			<div class="form-group">
-				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="page_title" class="form-control" type="text" name="settings[page_title]" value="{$settings.page_title}" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
-				<div class="col-sm-10 col-lg-5">
-					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
-				</div>
-			</div>
-		</fieldset>
-
-		<fieldset>
-			<legend>{lang Icons}</legend>
 
 			<div class="form-group">
 				<label for="favicon" class="col-sm-2 control-label">{lang Favicon (.ico)}</label>
@@ -51,12 +30,85 @@
 			</div>
 
 			<div class="form-group">
-				<label for="icon" class="col-sm-2 control-label">{lang Site's icon (32x32 px)}</label>
+				<label for="theme" class="col-sm-2 control-label">{lang Default theme}</label>
 				<div class="col-sm-10 col-lg-5">
-					{if !empty({$settings.icon})}
-					<p><img src="{$settings.icon}" alt="Icon" width="32" height="32" /></p>
+					<select id="theme" class="form-control" name="settings[theme]">
+						{for $theme in $themes}
+						<option value="{$theme}"{if {$theme} == {$settings.theme}} selected="selected"{/if}>{$theme}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang Default applications}</legend>
+
+			<div class="form-group">
+				<label for="default_front" class="col-sm-2 control-label">{lang Default front app}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="default_front" class="form-control" name="route[default_front]">
+						{for $app in $front_apps}
+						<option value="{$app}"{if {$app} == {$route.default_front}} selected="selected"{/if}>{$app}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="default_admin" class="col-sm-2 control-label">{lang Default admin app}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="default_admin" class="form-control" name="route[default_admin]">
+						{for $app in $admin_apps}
+						<option value="{$app}"{if {$app} == {$route.default_admin}} selected="selected"{/if}>{$app}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang SEO}</legend>
+
+			<div class="form-group">
+				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="page_title" class="form-control" type="text" name="settings[page_title]" value="{$settings.page_title}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
+				<div class="col-sm-10 col-lg-5">
+					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang Opengraph}</legend>
+
+			<div class="form-group">
+				<label for="og_title" class="col-sm-2 control-label">{lang Title}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="og_title" class="form-control" type="text" name="og[title]" value="{$og.title}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="og_description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
+				<div class="col-sm-10 col-lg-5">
+					<textarea id="og_description" class="form-control" name="og[description]" rows="5" cols="40">{$og.description}</textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="image" class="col-sm-2 control-label">{lang Image}</label>
+				<div class="col-sm-10 col-lg-5">
+					{if !empty({$og.image})}
+					<p><img src="{$og.image}" alt="Icon" class="img-responsive" /></p>
 					{/if}
-					<input id="icon" class="form-control" type="file" name="icon" value="" />
+					<input id="image" class="form-control" type="file" name="image" value="" />
 				</div>
 			</div>
 		</fieldset>

@@ -15,6 +15,9 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class SettingsAdminController extends WController {
 	private $upload_dir;
+	private $EXCLUDED_THEMES = array('system', 'admin-bootstrap');
+	private $EXCLUDED_APPS = array('admin');
+	private $EXCLUDED_DIRS = array('.', '..');
 
 	public function __construct() {
 		$this->upload_dir = WITY_PATH.'upload'.DS.'settings'.DS;
@@ -27,7 +30,9 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('name', 'page_title', 'page_description', 'email');
+		$settings_keys = array('name', 'page_title', 'page_description', 'email', 'theme');
+		$route_keys    = array('default_front', 'default_admin');
+		$og_keys       = array('title', 'description', 'image');
 
 		$settings = array();
 		foreach ($settings_keys as $key) {
@@ -37,9 +42,19 @@ class SettingsAdminController extends WController {
 		$settings['favicon'] = WConfig::get('config.favicon', '');
 		$settings['icon'] = WConfig::get('config.icon', '');
 
+		$route = array();
+		foreach ($route_keys as $key) {
+			$route[$key] = WConfig::get('route.'.$key, '');
+		}
+
+		$og = array();
+		foreach ($og_keys as $key) {
+			$og[$key] = WConfig::get('config.og.'.$key, '');
+		}
+
 		// Update settings
 		if (WRequest::getMethod() == 'POST') {
-			$data = WRequest::getAssoc(array('update', 'settings'));
+			$data = WRequest::getAssoc(array('update', 'settings', 'route', 'og'));
 
 			foreach ($settings_keys as $key) {
 				if (isset($data['settings'][$key])) {
@@ -49,8 +64,22 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			// Uploads favicon & icon
-			foreach (array('favicon', 'icon') as $file) {
+			foreach ($route_keys as $key) {
+				if (isset($data['route'][$key])) {
+					$route[$key] = $data['route'][$key];
+					WConfig::set('route.'.$key, $route[$key]);
+				}
+			}
+
+			foreach ($og_keys as $key) {
+				if (isset($data['og'][$key])) {
+					$og[$key] = $data['og'][$key];
+					WConfig::set('config.og.'.$key, $og[$key]);
+				}
+			}
+
+			// Uploads favicon & image
+			foreach (array('favicon', 'image') as $file) {
 				if (!empty($_FILES[$file]['name'])) {
 					$this->makeUploadDir();
 
@@ -64,21 +93,35 @@ class SettingsAdminController extends WController {
 					if (!$upload->processed) {
 						WNote::error($file.'_upload_error', $upload->error);
 					} else {
-						$old_file = WConfig::get('config.'.$file);
+						if ($file == 'favicon') {
+							$old_file = WConfig::get('config.favicon');
 
-						WConfig::set('config.'.$file, '/upload/settings/'.$upload->file_dst_name.'?'.time());
+							WConfig::set('config.favicon', '/upload/settings/'.$upload->file_dst_name.'?'.time());
+						} else if ($file == 'image') {
+							$old_file = WConfig::get('config.og.image');
+
+							WConfig::set('config.og.image', '/upload/settings/'.$upload->file_dst_name.'?'.time());
+						}
 					}
 				}
 			}
 
 			WConfig::save('config');
+			WConfig::save('route');
 
 			WNote::success('settings_updated', WLang::get('The settings were updated successfully.'));
 			$this->setHeader('Location', WRoute::getDir().'admin/settings/');
 		}
 
 		// Return settings values
-		return $settings;
+		return array(
+			'settings'   => $settings,
+			'og'         => $og,
+			'route'      => $route,
+			'front_apps' => $this->getAllFrontApps(),
+			'admin_apps' => $this->getAllAdminApps(),
+			'themes'     => $this->getAllThemes()
+		);
 	}
 
 	/**
@@ -213,6 +256,60 @@ class SettingsAdminController extends WController {
 			mkdir($this->upload_dir, 0777, true);
 		}
 	}
+
+	/**
+	 * Get existing themes
+	 *
+	 * @return array List of themes
+	 */
+	private function getAllThemes() {
+		if ($themes = scandir(THEMES_DIR)) {
+			foreach ($themes as $key => $value) {
+				if (in_array($value, $this->EXCLUDED_THEMES) || !is_dir(THEMES_DIR.DS.$value) || in_array($value, $this->EXCLUDED_DIRS)) {
+					unset($themes[$key]);
+				}
+			}
+
+			$themes[] = "_blank";
+		}
+
+		return $themes;
+	}
+
+	/**
+	 * Get existing Front Apps
+	 *
+	 * @return array List of Front Apps
+	 */
+	private function getAllFrontApps() {
+		if ($scanned_apps = scandir(APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir(APPS_DIR.DS.$value.DS."front") && !in_array($value, $this->EXCLUDED_DIRS)) {
+					$apps[$key] = $value;
+				}
+			}
+		}
+
+		return $apps;
+	}
+
+	/**
+	 * Get existing Admin Apps
+	 *
+	 * @return array List of Admin Apps
+	 */
+	private function getAllAdminApps() {
+		if ($scanned_apps = scandir(APPS_DIR)) {
+			foreach ($scanned_apps as $key => $value) {
+				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir(APPS_DIR.DS.$value.DS."admin") && !in_array($value, $this->EXCLUDED_DIRS)) {
+					$apps[$key] = 'admin/'.$value;
+				}
+			}
+		}
+
+		return $apps;
+	}
+
 }
 
 ?>

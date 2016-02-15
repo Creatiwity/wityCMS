@@ -207,7 +207,10 @@ class WMain {
 			'wity_lang'             => WLang::getLang(),
 			'wity_lang_iso'         => WLang::getLangISO(),
 			'wity_site_favicon'     => WConfig::get('config.favicon'),
-			'wity_site_icon'        => WConfig::get('config.icon')
+			'wity_og_type'          => 'website',
+			'wity_og_title'         => WConfig::get('config.og.title'),
+			'wity_og_description'   => WConfig::get('config.og.description'),
+			'wity_og_image'         => WConfig::get('config.og.image')
 		);
 
 		if (WSession::isConnected()) {
