@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{$wity_lang}">
 	<head>
-		<title>{$wity_page_title}</title>
+		<title>{!$wity_page_title!}</title>
 		<meta charset="utf-8" />
 		<meta name="description" content="{!$wity_page_description!}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,12 +10,12 @@
 		{if !empty({$wity_site_favicon})}<link rel="icon" type="image/x-icon" href="{$wity_site_favicon}" />{/if}
 		{if !empty({$wity_og_image})}<link rel="apple-touch-icon" href="{$wity_og_image}" />{/if}
 
-		<meta property="og:title" content="{!$wity_og_title!}">
-		<meta property="og:type" content="{!$wity_og_type!}">
-		<meta property="og:url" content="{$wity_base_url}">
-		<meta property="og:image" content="{$wity_og_image}">
-		<meta property="og:site_name" content="{!$wity_site_title!}">
-		<meta property="og:description" content="{!$wity_og_description!}">
+		<meta property="og:site_name" content="{!$wity_site_title!}" />
+		<meta property="og:type" content="{!$wity_og_type!}" />
+		<meta property="og:url" content="{$wity_url}" />
+		<meta property="og:image" content="{$wity_og_image}" />
+		<meta property="og:title" content="{!$wity_og_title!}" />
+		<meta property="og:description" content="{!$wity_og_description!}" />
 
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />

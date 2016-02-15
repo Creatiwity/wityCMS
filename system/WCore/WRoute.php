@@ -248,7 +248,13 @@ class WRoute {
 	 * @return string The full URL
 	 */
 	public static function getURL() {
-		return self::getBase().self::$query.'?'.self::$queryString;
+		$url = self::getBase().self::$query;
+
+		if (!empty(self::$queryString)) {
+			$url .= '?'.self::$queryString;
+		}
+
+		return $url;
 	}
 
 	/**

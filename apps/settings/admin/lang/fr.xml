@@ -9,15 +9,17 @@
 	<item id="General">Général</item>
 	<item id="Website's name">Nom du site</item>
 	<item id="Administrator's email">Email de l'administrateur</item>
-	<item id="Default theme">Thème par défault</item>
-	<item id="Default applications">Applications par défault</item>
-	<item id="Default front app">Application par défault</item>
-	<item id="Default admin app">Application par défault dans l'administration</item>
+	<item id="Default theme">Thème par défaut</item>
+	<item id="Default applications">Applications par défaut</item>
+	<item id="Default application">Application par défaut</item>
+	<item id="Default application in admin">Application par défaut dans l'administration</item>
 	<item id="Title">Titre</item>
 	<item id="Description (about 125 symbols)">Description pour le référencement (environ 125 caractères)</item>
 	<item id="Icons">Icônes</item>
 	<item id="Favicon (.ico)">Favicon (.ico)</item>
-	<item id="Site's icon (32x32 px)">Icône du site (32x32 px)</item>
+	<item id="Facebook's OpenGraph">OpenGraph (Facebook)</item>
+	<item id="Description">Description</item>
+	<item id="Image">Image</item>
 	<item id="Submit">Envoyer</item>
 	<item id="The settings were updated successfully.">La configuration a été mise à jour avec succès.</item>
 
