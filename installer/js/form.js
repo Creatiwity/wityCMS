@@ -646,7 +646,7 @@ var Form, FormNode;
 				});
 
 				// Bind validator to the blur and change events
-				$field.on('input propertychange', function() {
+				$field.on('input change propertychange', function() {
 					if (validationTimer) {
 						clearTimeout(validationTimer);
 					}
