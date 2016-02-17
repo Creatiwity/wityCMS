@@ -138,8 +138,8 @@ abstract class WController {
 					$tpl->assign('wity_admin_apps', $admin_apps);
 
 					// Load lang
-					foreach ($admin_apps as $admin_app) {
-						WLang::declareLangDir(APPS_DIR.strtolower($admin_app['name']).DS.'admin'.DS.'lang');
+					foreach ($admin_apps as $admin_app_key => $admin_app) {
+						WLang::declareLangDir(APPS_DIR.$admin_app_key.DS.'admin'.DS.'lang');
 					}
 
 					$manifest = $this->getManifest();
