@@ -77,25 +77,25 @@ class UserController extends WController {
 						$error = false;
 
 						if (empty($_COOKIE['wsid'])) {
-							WNote::info('user_cookie_not_accepted', WLang::get('cookie_not_accepted'));
+							WNote::info('user_cookie_not_accepted', WLang::get('To log in, your browser must accept cookies.'));
 							$cookie = false;
 						} else {
 							// Redirect
-							WNote::success('user_login_success', WLang::get('login_success', $_SESSION['nickname']));
+							WNote::success('user_login_success', WLang::get('Welcome %s!', $_SESSION['nickname']));
 							$this->setHeader('Location', $redirect);
 						}
 						break;
 
 					case WSession::LOGIN_MAX_ATTEMPT_REACHED:
-						WNote::error('user_login_max_attempt', WLang::get('login_max_attempt'));
+						WNote::error('user_login_max_attempt', WLang::get('You reached the maximum number of login attempts. Please, wait a few moment before trying to login again.'));
 						break;
 
 					case 0:
-						WNote::error('user_login_error', WLang::get('login_error'));
+						WNote::error('user_login_error', WLang::get('The couple nickname / password given does not match with any valid account.'));
 						break;
 				}
 			} else {
-				WNote::error('user_bad_data', WLang::get('bad_data'));
+				WNote::error('user_bad_data', WLang::get('Please, fill in all the required fields.'));
 			}
 
 			// Reload the page with GET method
@@ -126,7 +126,7 @@ class UserController extends WController {
 		}
 
 		$this->setHeader('Location', WRoute::getDir());
-		return WNote::success('user_disconnected', WLang::get('user_disconnected'));
+		return WNote::success('user_disconnected', WLang::get('You were successfully logout.'));
 	}
 
 	/**
@@ -138,7 +138,7 @@ class UserController extends WController {
 		// Check if inscriptions are open
 		$config = $this->model->getConfig();
 		if (!$config['register']) {
-			return WNote::info('user_inscription_closed', WLang::get('user_inscription_closed'));
+			return WNote::info('user_inscription_closed', WLang::get('Sorry, but the registration is closed on this website.'));
 		}
 
 		$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'country'));
@@ -147,7 +147,7 @@ class UserController extends WController {
 
 			// Check nickname availability
 			if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
-				$errors[] = WLang::get($e);
+				$errors[] = $e;
 			}
 
 			// Matching passwords
@@ -155,15 +155,15 @@ class UserController extends WController {
 				if ($data['password'] === $data['password_conf']) {
 					$data['password'] = sha1($data['password']);
 				} else {
-					$errors[] = WLang::get('error_password_not_matching');
+					$errors[] = WLang::get('The passwords do not match.');
 				}
 			} else {
-				$errors[] = WLang::get('error_no_password');
+				$errors[] = WLang::get('Please, provide a password.');
 			}
 
 			// Email availability
 			if (($e = $this->model->checkEmail($data['email'])) !== true) {
-				$errors[] = WLang::get($e);
+				$errors[] = $e;
 			}
 
 			// Default group (0: simple user)
@@ -184,7 +184,7 @@ class UserController extends WController {
 						// Send a validation email
 						$this->model->sendEmail(
 							$data['email'],
-							WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
+							WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
 							str_replace(
 								array('{site_title}', '{nickname}', '{password}', '{base}', '{confirm}'),
 								array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $data['confirm']),
@@ -192,13 +192,13 @@ class UserController extends WController {
 							)
 						);
 
-						return WNote::success('user_register_confirm', WLang::get('user_register_confirm'));
+						return WNote::success('user_register_confirm', WLang::get('To complete the creation of your account, please, click on the link in the email you are going to receive.'));
 					} else if ($config['admin_check']) {
 						if ($config['summary']) {
 							// Send an email to the user to remind him its login data
 							$this->model->sendEmail(
 								$data['email'],
-								WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
+								WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 								str_replace(
 									array('{site_title}', '{nickname}', '{password}'),
 									array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf']),
@@ -212,7 +212,7 @@ class UserController extends WController {
 						if (!empty($admin_emails)) {
 							$this->model->sendEmail(
 								$admin_emails,
-								WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
+								WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 								str_replace(
 									array('{site_title}', '{nickname}', '{base}', '{userid}'),
 									array(WConfig::get('config.site_title'), $data['nickname'], WRoute::getBase(), $user_id),
@@ -227,7 +227,7 @@ class UserController extends WController {
 							// Send a validation email
 							$this->model->sendEmail(
 								$data['email'],
-								WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
+								WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
 								str_replace(
 									array('{site_title}', '{nickname}', '{password}', '{base}'),
 									array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase()),
@@ -239,7 +239,7 @@ class UserController extends WController {
 						return WNote::success('user_register_success', WLang::get('user_register_success'));
 					}
 				} else {
-					WNote::error('user_register_failure', WLang::get('user_register_failure'));
+					WNote::error('user_register_failure', WLang::get('An unknown error occured.'));
 				}
 			} else {
 				WNote::error('user_data_errors', implode("<br />\n", $errors));
@@ -259,7 +259,7 @@ class UserController extends WController {
 		// Check if inscriptions are open
 		$config = $this->model->getConfig();
 		if (!$config['register']) {
-			return WNote::info('user_register_closed', WLang::get('user_register_closed'));
+			return WNote::info('user_register_closed', WLang::get('Sorry, but the registration is closed on this website.'));
 		}
 
 		// Retrieve the confirm code
@@ -271,7 +271,7 @@ class UserController extends WController {
 
 		$data = $this->model->findUserWithConfirmCode($confirm_code);
 		if (empty($data)) { // No confirm code found
-			return WNote::error('user_invalid_confirm_code', WLang::get('user_invalid_confirm_code'));
+			return WNote::error('user_invalid_confirm_code', WLang::get('This confirmation code is invalid.'));
 		}
 
 		if ($config['admin_check']) {
@@ -281,7 +281,7 @@ class UserController extends WController {
 				if (!empty($admin_emails)) {
 					$this->model->sendEmail(
 						$admin_emails,
-						WLang::get('user_register_email_subject', WConfig::get('config.site_title')),
+						WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
 						str_replace(
 							array('{site_title}', '{nickname}', '{base}', '{userid}'),
 							array(WConfig::get('config.site_title'), $data['nickname'], WRoute::getBase(), $data['id']),
@@ -292,13 +292,13 @@ class UserController extends WController {
 
 				WNote::success('user_validated_admin', WLang::get('user_validated_admin'));
 			} else {
-				WNote::error('user_register_failure', WLang::get('user_register_failure'));
+				WNote::error('user_register_failure', WLang::get('An unknown error occcured.'));
 			}
 		} else {
 			if ($this->model->updateUser($data['id'], array('confirm' => '', 'valid' => 1))) {
-				WNote::success('user_validated', WLang::get('user_validated'));
+				WNote::success('user_validated', WLang::get('Your account was successfully created.'));
 			} else {
-				WNote::error('user_register_failure', WLang::get('user_register_failure'));
+				WNote::error('user_register_failure', WLang::get('An unknown error occcured.'));
 			}
 		}
 
@@ -327,7 +327,7 @@ class UserController extends WController {
 						// Send it by email
 						$this->model->sendEmail(
 							$data['email'],
-							WLang::get('user_password_lost_subject', WConfig::get('config.site_title')),
+							WLang::get('%s - Reset your password', WConfig::get('config.site_title')),
 							str_replace(
 								array('{base}', '{site_title}', '{email}', '{confirm}'),
 								array(WRoute::getBase(), WConfig::get('config.site_title'), $user_data['email'], $confirm),
@@ -335,12 +335,12 @@ class UserController extends WController {
 							)
 						);
 
-						return WNote::success('user_password_lost_email_sent', WLang::get('user_password_lost_email_sent'));
+						return WNote::success('user_password_lost_email_sent', WLang::get('An email was sent to your address. It contains a link to proceed to the next step of the password reset.'));
 					} else {
-						WNote::error('user_password_lost_failure', WLang::get('user_password_lost_failure'));
+						WNote::error('user_password_lost_failure', WLang::get('An unknown error occured.'));
 					}
 				} else {
-					WNote::error('user_password_lost_not_found', WLang::get('user_password_lost_not_found'));
+					WNote::error('user_password_lost_not_found', WLang::get('This email was not found in the database.'));
 				}
 			}
 
@@ -361,10 +361,10 @@ class UserController extends WController {
 						if ($this->model->updateUser($user_data['id'], array('password' => $password, 'confirm' => ''))) {
 							return WNote::success('user_password_lost_success', WLang::get('user_password_lost_success'));
 						} else {
-							WNote::error('user_password_lost_failure', WLang::get('user_password_lost_failure'));
+							WNote::error('user_password_lost_failure', WLang::get('An unknown error occured.'));
 						}
 					} else {
-						WNote::error('error_password_not_matching', WLang::get('error_password_not_matching'));
+						WNote::error('error_password_not_matching', WLang::get('The passwords do not match.'));
 					}
 				}
 

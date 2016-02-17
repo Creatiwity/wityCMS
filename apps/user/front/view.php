@@ -28,7 +28,6 @@ class UserView extends WView {
 	public function login($model) {
 		$this->assign('redirect', $model['redirect']);
 		$this->assign('config', $model['config']);
-		$this->setTemplate('connexion_form');
 	}
 
 	/**
@@ -37,7 +36,6 @@ class UserView extends WView {
 	 * @param array $model
 	 */
 	public function register($model) {
-		$this->assign('base', WRoute::getBase());
 		$inputs = array('nickname', 'email', 'firstname', 'lastname', 'country');
 		foreach ($inputs as $name) {
 			$this->assign($name, isset($model[$name]) ? $model[$name] : '');

@@ -32,9 +32,9 @@ class UserModel {
 	 */
 	public function checkNickname($nickname) {
 		if (empty($nickname) || strlen($nickname) < 3 || strlen($nickname) > 200) {
-			return 'nickname_bad_length';
+			return WLang::get('The nicknmae must contain between 3 and 30 characters.');
 		} else if (!WTools::isEmail($nickname) && preg_match('#[\.]+#', $nickname)) {
-			return 'nickname_invalid_char';
+			return WLang::get('The nickname contains invalid characters [.].');
 		}
 
 		$prep = $this->db->prepare('
@@ -46,7 +46,7 @@ class UserModel {
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
-			return 'nickname_already_used';
+			return WLang::get('The nickname is already in use.');
 		}
 	}
 
@@ -58,7 +58,7 @@ class UserModel {
 	 */
 	public function checkEmail($email) {
 		if (!WTools::isEmail($email)) {
-			return 'email_not_valid';
+			return WLang::get('Please, provide a valid email.');
 		}
 
 		$prep = $this->db->prepare('
@@ -70,7 +70,7 @@ class UserModel {
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
-			return 'email_already_used';
+			return WLang::get('The email is already in use.');
 		}
 	}
 
