@@ -3,20 +3,20 @@
 
 	<form action="/user/register" method="post">
 		<div class="form-group">
-			<label class="sr-only" for="nickname">{lang Nickname}</label>
+			<label class="sr-only" for="nickname">{lang Nickname}*</label>
 			<input id="nickname" type="text" class="form-control" name="nickname" placeholder="{lang Nickname}" value="{$nickname}" />
 		</div>
 
 		<div class="form-group">
-			<label class="sr-only" for="email">{lang Email}</label>
+			<label class="sr-only" for="email">{lang Email}*</label>
 			<input id="email" type="email" class="form-control" name="email" placeholder="{lang Email}" value="{$email}" />
 		</div>
 
 		<div class="form-group">
-			<label class="sr-only" for="password">{lang Password}</label>
+			<label class="sr-only" for="password">{lang Password}*</label>
 			<input id="password" type="password" name="password" class="form-control signup-main signup-password" placeholder="{lang Password}" />
 
-			<label class="sr-only" for="password_conf">{lang Password (confirmation)}</label>
+			<label class="sr-only" for="password_conf">{lang Password (confirmation)}*</label>
 			<input id="password_conf" type="password" name="password_conf" class="form-control signup-main signup-confirm" placeholder="{lang Password (confirmation)}" />
 		</div>
 		<hr/>
