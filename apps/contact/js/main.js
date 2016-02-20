@@ -40,7 +40,7 @@ require(['jquery'], function($) {
 				data,
 				$inputFile = $form.find('.upload-document-input'),
 				processData = true,
-				contentType = true;
+				contentType = 'application/x-www-form-urlencoded';
 
 			if (!window.FormData && $inputFile.val()) {
 				// FormData not supported
