@@ -15,8 +15,8 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th><a href="/admin/user/groups/name-{$name_sort}/"><i class="{$name_class}"></i> {lang Name}</a></th>
-				<th><a href="/admin/user/groups/users_count-{$users_count_sort}/"><i class="{$users_count_class}"></i> {lang Number of users}</a></th>
+				<th><a href="/admin/user/groups/name-{$name_sort}"><i class="{$name_class}"></i> {lang Name}</a></th>
+				<th><a href="/admin/user/groups/users_count-{$users_count_sort}"><i class="{$users_count_class}"></i> {lang Number of users}</a></th>
 				<th>{lang Actions}</th>
 			</tr>
 		</thead>
@@ -33,7 +33,7 @@
 							<span class="sr-only">{lang Toggle Dropdown}</span>
 						</button>
 						<ul class="dropdown-menu pull-right" role="menu">
-							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/user/group_del/{$group.id}/" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/user/group_del/{$group.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
 						</ul>
 					</div>
 				</td>

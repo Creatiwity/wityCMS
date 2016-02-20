@@ -124,7 +124,7 @@ class UserAdminView extends WView {
 	 */
 	public function delete(array $model) {
 		$this->assign('nickname', $model['nickname']);
-		$this->assign('confirm_delete_url', "/admin/user/delete/".$model['id']);
+		$this->assign('confirm_delete_url', "/admin/user/delete".$model['id']);
 	}
 
 	/**

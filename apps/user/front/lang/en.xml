@@ -2,7 +2,7 @@
 <lang value="en">
 	<!-- Register -->
 	<item id="user_register_success"><![CDATA[<p>Your account was created successfully.</p>
-<p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
+<p>You can now login with it on <a href="/user/login">this page</a>.</p>]]></item>
 
 	<!-- Register - EMAIL CONFIRMATION -->
 	<item id="user_register_email_confirm"><![CDATA[
@@ -80,5 +80,5 @@ Password: {password}</p>
 
 	<!-- Reset password -->
 	<item id="user_password_lost_success"><![CDATA[<p>Your password was changed successfully.</p>
-<p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
+<p>You can now login with it on <a href="/user/login">this page</a>.</p>]]></item>
 </lang>
