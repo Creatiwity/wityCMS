@@ -130,7 +130,8 @@ class WView {
 			$file = $this->getContext('directory').'templates'.DS.$file.'.html';
 		}
 
-		if (!$this->getContext('admin')) {
+		$route = WRoute::route();
+		if (!$route['admin']) {
 			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->getContext('app-name').DS.basename($template);
 
 			// Allow template overriding from theme

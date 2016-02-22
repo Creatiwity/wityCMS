@@ -32,7 +32,7 @@ class UserModel {
 	 */
 	public function checkNickname($nickname) {
 		if (empty($nickname) || strlen($nickname) < 3 || strlen($nickname) > 200) {
-			return WLang::get('The nicknmae must contain between 3 and 30 characters.');
+			return WLang::get('The nickname must contain between 3 and 30 characters.');
 		} else if (!WTools::isEmail($nickname) && preg_match('#[\.]+#', $nickname)) {
 			return WLang::get('The nickname contains invalid characters [.].');
 		}
