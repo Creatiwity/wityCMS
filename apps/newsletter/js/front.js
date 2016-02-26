@@ -16,7 +16,7 @@ require(['jquery'], function($) {
 			term = $input.val(),
 			url = $form.attr('action');
 
-		if (term == '') {
+		if (term === '') {
 			$form.fadeOut('fast', function() {
 				$form.fadeIn('fast', function() {
 					$form.fadeOut('fast', function() {
@@ -47,8 +47,8 @@ require(['jquery'], function($) {
 					return; // internal error
 				}
 
-				returnedErrorLevel = returnedJSON.result.level ? returnedJSON.result.level : '',
-				returnedCode = returnedJSON.result.code ? returnedJSON.result.code : '',
+				returnedErrorLevel = returnedJSON.result.level ? returnedJSON.result.level : '';
+				returnedCode = returnedJSON.result.code ? returnedJSON.result.code : '';
 				returnedMessage = returnedJSON.result.message ? returnedJSON.result.message : '';
 			} catch (e) {
 				returnedErrorLevel = 'error';
