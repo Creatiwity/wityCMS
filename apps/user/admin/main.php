@@ -150,8 +150,6 @@ class UserAdminController extends WController {
 				if (($e = $this->model->checkNickname($post_data['nickname'])) !== true) {
 					$errors[] = WLang::get($e);
 				}
-			} else {
-				unset($post_data['nickname']);
 			}
 
 			// Matching passwords
@@ -207,21 +205,7 @@ class UserAdminController extends WController {
 					if ($user_id !== false) {
 						// Send email if requested
 						if (WRequest::get('email_confirmation') == 'on') {
-							$mail = WHelper::load('phpmailer');
-							$mail->CharSet = 'utf-8';
-							$mail->From = WConfig::get('config.email');
-							$mail->FromName = WConfig::get('config.site_title');
-							$mail->Subject = WLang::get('%s - Creation of your user account', WConfig::get('config.site_title'));
-							$mail->Body = WLang::get('user_register_email_body', array(
-								'site_title' => WConfig::get('config.site_title'),
-								'base'      => WRoute::getBase(),
-								'nickname'  => $post_data['nickname'],
-								'password'  => $password_original
-							));
-							$mail->IsHTML(true);
-							$mail->AddAddress($post_data['email']);
-							$mail->Send();
-							unset($mail);
+							$this->sendUserDataByMail($post_data['nickname'], $password_original, $post_data['email'], 'register');
 						}
 
 						$this->setHeader('Location', WRoute::getDir().'admin/user');
@@ -230,7 +214,16 @@ class UserAdminController extends WController {
 						WNote::error('user_not_created', WLang::get('An unknown error occured.', $post_data['nickname']));
 					}
 				} else { // EDIT case
+					if ($db_data['valid'] == 2) {
+						$post_data['valid'] = 1;
+					}
+
 					if ($this->model->updateUser($user_id, $post_data)) {
+						// Send email if requested
+						if (WRequest::get('email_confirmation') == 'on') {
+							$this->sendUserDataByMail($post_data['nickname'], $password_original, $post_data['email'], 'edition');
+						}
+
 						// Reload session if account was auto-edited
 						if ($user_id == $_SESSION['userid']) {
 							WSystem::getSession()->reloadSession($user_id);
@@ -257,6 +250,24 @@ class UserAdminController extends WController {
 			'admin_apps'    => $this->getAdminApps(),
 			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
 		);
+	}
+
+	private function sendUserDataByMail($nickname, $password, $email, $template_prefix) {
+		$mail = WHelper::load('phpmailer');
+		$mail->CharSet = 'utf-8';
+		$mail->From = WConfig::get('config.email');
+		$mail->FromName = WConfig::get('config.site_title');
+		$mail->Subject = WLang::get('user_'.$template_prefix.'_email_subject', WConfig::get('config.site_title'));
+		$mail->Body = WLang::get('user_'.$template_prefix.'_email_body', array(
+			'site_title' => WConfig::get('config.site_title'),
+			'base'      => WRoute::getBase(),
+			'nickname'  => $nickname,
+			'password'  => $password
+		));
+		$mail->IsHTML(true);
+		$mail->AddAddress($email);
+		$mail->Send();
+		unset($mail);
 	}
 
 	/**

@@ -19,9 +19,28 @@ This is an automatic message.]]></item>
 This is an automatic message.]]></item>
 
 	<!-- User add/edit form -->
+	<item id="user_register_email_subject">%s - Creation of your user account</item>
+	<item id="user_edition_email_subject">%s - Edition of your user account</item>
+
 	<item id="user_register_email_body"><![CDATA[
 <p>Dear user,</p>
-<p>An account was just created for you on the website {{site_title}}</p>
+<p>An account was just created for you on the website {{site_title}}.</p>
+<p>To login, proceed to <a href="{{base}}/user/login">{{base}}/user/login</a>.</p>
+<p>Here are you login data :</p>
+<ul>
+	<li><strong>ID :</strong> {{nickname}}</li>
+	<li><strong>Password :</strong> {{password}}</li>
+</ul>
+<p>This information is personnal.<br />
+To change them, go to your profile.</p>
+
+<p>{{site_title}}</p>
+--------------<br />
+This is an automatic message.]]></item>
+
+	<item id="user_edition_email_body"><![CDATA[
+<p>Dear user,</p>
+<p>Your account was just edited and validated on the website {{site_title}}.</p>
 <p>To login, proceed to <a href="{{base}}/user/login">{{base}}/user/login</a>.</p>
 <p>Here are you login data :</p>
 <ul>
