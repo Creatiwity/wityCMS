@@ -4,14 +4,14 @@
 	<item id="user_account_validated_email"><![CDATA[
 <p>Welcome on {site_title}!</p>
 <p>Your account on {site_title} was validated by an administrator.</p>
-<p>You can login with your account at the address <a href="{base}/user/login">{base}/user/login</a>.</p>
+<p>You can login with your account at the address <a href="{{base}}user/login">{{base}}user/login</a>.</p>
 
 <p>{{site_title}}</p>
 --------------<br />
 This is an automatic message.]]></item>
 	<item id="user_account_refused_email"><![CDATA[
 <p>Dear user,</p>
-<p>Your inscription on {site_title} was not accepted.</p>
+<p>Your inscription on {{site_title}} was not accepted.</p>
 <p>For further information, please, contact an administrator.</p>
 
 <p>{{site_title}}</p>
@@ -25,7 +25,7 @@ This is an automatic message.]]></item>
 	<item id="user_register_email_body"><![CDATA[
 <p>Dear user,</p>
 <p>An account was just created for you on the website {{site_title}}.</p>
-<p>To login, proceed to <a href="{{base}}/user/login">{{base}}/user/login</a>.</p>
+<p>To login, proceed to <a href="{{base}}user/login">{{base}}user/login</a>.</p>
 <p>Here are you login data :</p>
 <ul>
 	<li><strong>ID :</strong> {{nickname}}</li>
@@ -41,7 +41,7 @@ This is an automatic message.]]></item>
 	<item id="user_edition_email_body"><![CDATA[
 <p>Dear user,</p>
 <p>Your account was just edited and validated on the website {{site_title}}.</p>
-<p>To login, proceed to <a href="{{base}}/user/login">{{base}}/user/login</a>.</p>
+<p>To login, proceed to <a href="{{base}}user/login">{{base}}user/login</a>.</p>
 <p>Here are you login data :</p>
 <ul>
 	<li><strong>ID :</strong> {{nickname}}</li>

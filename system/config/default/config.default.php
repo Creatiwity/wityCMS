@@ -7,7 +7,7 @@
 
 $config = array(
   'base'             => 'https://www.mysite.com',
-  'name'             => 'wityCMS',
+  'site_title'       => 'wityCMS',
   'page_title'       => 'wityCMS',
   'page_description' => '',
   'theme'            => 'grafx',

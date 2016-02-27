@@ -44,7 +44,7 @@
 	<item id="user_account_validated_email"><![CDATA[
 <p>Bonjour,</p>
 <p>Votre compte sur le site {site_title} vient d'être validé par un administrateur.</p>
-<p>Vous pouvez vous connecter à l'adresse <a href="{base}/user/login">{base}/user/login</a>.</p>
+<p>Vous pouvez vous connecter à l'adresse <a href="{{base}}user/login">{{base}}user/login</a>.</p>
 
 <p>{{site_title}}</p>
 --------------<br />
@@ -54,7 +54,7 @@ Ceci est un message automatique.]]></item>
 	<item id="%s - Your account was refused">%s - Votre compte utilisateur a été refusée</item>
 	<item id="user_account_refused_email"><![CDATA[
 <p>Bonjour,</p>
-<p>Votre inscription sur le site {site_title} n'a pas été acceptée.</p>
+<p>Votre inscription sur le site {{site_title}} n'a pas été acceptée.</p>
 <p>Pour plus d'informations, merci de contacter un administrateur.</p>
 
 <p>{{site_title}}</p>
@@ -90,7 +90,7 @@ Ceci est un message automatique.]]></item>
 	<item id="user_register_email_body"><![CDATA[
 <p>Bonjour,</p>
 <p>Un compte utilisateur vient de vous être créé sur le site {{site_title}}</p>
-<p></p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}/user/login">{{base}}/user/login</a>.</p>
+<p></p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}user/login">{{base}}user/login</a>.</p>
 <p>Voici vos données de connexion :</p>
 <ul>
 	<li><strong>Identifiant :</strong> {{nickname}}</li>
@@ -106,7 +106,7 @@ Ceci est un message automatique.]]></item>
 	<item id="user_edition_email_body"><![CDATA[
 <p>Bonjour,</p>
 <p>Votre compte utilisateur sur le site {{site_title}} vient d'être modifié et validé.</p>
-<p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}/user/login">{{base}}/user/login</a>.</p>
+<p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}user/login">{{base}}user/login</a>.</p>
 <p>Voici vos données de connexion :</p>
 <ul>
 	<li><strong>Identifiant :</strong> {{nickname}}</li>

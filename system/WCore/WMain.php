@@ -198,7 +198,7 @@ class WMain {
 		$tpl_vars = array(
 			'wity_base_url'         => WRoute::getBase(),
 			'wity_url'              => WRoute::getURL(),
-			'wity_site_title'       => WConfig::get('config.name'),
+			'wity_site_title'       => WConfig::get('config.site_title'),
 			'wity_page_title'       => WConfig::get('config.page_title'),
 			'wity_page_description' => WConfig::get('config.page_description'),
 			'wity_user'             => false,

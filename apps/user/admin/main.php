@@ -39,11 +39,10 @@ class UserAdminController extends WController {
 							$this->model->sendEmail(
 								$db_data['email'],
 								WLang::get('%s - Your account was validated', WConfig::get('config.site_title')),
-								str_replace(
-									array('{site_title}', '{base}'),
-									array(WConfig::get('config.site_title'), WRoute::getBase()),
-									WLang::get('user_account_validated_email')
-								)
+								WLang::get('user_account_validated_email', array(
+									'site_title' => WConfig::get('config.site_title'),
+									'base'       => WRoute::getBase()
+								))
 							);
 						}
 
@@ -260,9 +259,9 @@ class UserAdminController extends WController {
 		$mail->Subject = WLang::get('user_'.$template_prefix.'_email_subject', WConfig::get('config.site_title'));
 		$mail->Body = WLang::get('user_'.$template_prefix.'_email_body', array(
 			'site_title' => WConfig::get('config.site_title'),
-			'base'      => WRoute::getBase(),
-			'nickname'  => $nickname,
-			'password'  => $password
+			'base'       => WRoute::getBase(),
+			'nickname'   => $nickname,
+			'password'   => $password
 		));
 		$mail->IsHTML(true);
 		$mail->AddAddress($email);
