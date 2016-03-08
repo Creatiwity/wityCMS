@@ -220,13 +220,10 @@ class WLang {
 	 * @return array
 	 */
 	public static function getDefaultLang() {
-		$id_lang = self::getDefaultLangId();
+		$pre = self::$db->prepare('SELECT * FROM languages WHERE is_default = 1');
+		$pre->execute();
 
-		if (!empty($id_lang)) {
-			return self::getLangWithId($id_lang);
-		}
-
-		return null;
+		return $pre->fetch(PDO::FETCH_ASSOC);
 	}
 
 	/**
@@ -266,9 +263,19 @@ class WLang {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC');
+		$query = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC');
 
-		return $que->fetchAll(PDO::FETCH_COLUMN);
+		return $query->fetchAll(PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * Get display region into the current language.
+	 *
+	 * @param string $iso_code
+	 * @return string Country name
+	 */
+	public static function getDisplayRegion($iso_code) {
+		return locale_get_display_region('-'.$iso_code, self::getLang());
 	}
 
 	/**

@@ -189,7 +189,7 @@ $countries = array(
 
 // Translate countries
 foreach ($countries as $iso_code => $name) {
-	$countries[$iso_code] = WLang::get('country_'.$iso_code);
+	$countries[$iso_code] = WLang::getDisplayRegion($iso_code);
 }
 
 asort($countries);
