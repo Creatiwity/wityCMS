@@ -113,9 +113,10 @@ class WView {
 	}
 
 	/**
-	 * Sets the file that will be used for template compiling
+	 * Sets the file that will be used for template compiling.
+	 * $template needs to include an extension ".html".
 	 *
-	 * @param string $file file that will be used for template compiling
+	 * @param string $template File that will be used for template compiling
 	 */
 	public function setTemplate($template) {
 		$file = $template;
@@ -127,7 +128,7 @@ class WView {
 
 		// Format the file asked
 		if (strpos($file, DS) === false) {
-			$file = $this->getContext('directory').'templates'.DS.$file.'.html';
+			$file = $this->getContext('directory').'templates'.DS.$file;
 		}
 
 		$route = WRoute::route();

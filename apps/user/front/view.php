@@ -52,7 +52,7 @@ class UserView extends WView {
 		if ($model['step'] == 2) {
 			$this->assign('email', $model['email']);
 			$this->assign('confirm', $model['confirm']);
-			$this->setTemplate('reset_password');
+			$this->setTemplate('reset_password.html');
 		}
 	}
 }

@@ -107,7 +107,7 @@ class NewsAdminView extends WView {
 		}
 		$this->assign('form_values', json_encode($form_values));
 
-		$this->setTemplate('news-form');
+		$this->setTemplate('news-form.html');
 	}
 
 	public function newsAdd($model) {

@@ -96,7 +96,7 @@ class UserAdminView extends WView {
 			'created_date'  => ''
 		), !empty($model['user_data']) ? $model['user_data'] : $model['post_data']);
 
-		$this->setTemplate('user_form');
+		$this->setTemplate('user_form.html');
 	}
 
 	/**

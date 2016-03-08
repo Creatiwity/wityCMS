@@ -28,7 +28,7 @@ class SettingsAdminView extends WView {
 
 	public function languages($data) {
 		if ($data['form']) {
-			$this->setTemplate('language_form');
+			$this->setTemplate('language_form.html');
 		}
 		$this->assign($data);
 	}
@@ -47,7 +47,7 @@ class SettingsAdminView extends WView {
 			'is_default'        => 0
 		);
 		$this->assignDefault($default, $model);
-		$this->setTemplate('language_form');
+		$this->setTemplate('language_form.html');
 	}
 
 	public function language_add($model) {

@@ -54,7 +54,7 @@ class SlideshowAdminView extends WView {
 		}
 		$this->assign('form_values', json_encode($form_values));
 
-		$this->setTemplate('slide_form');
+		$this->setTemplate('slide_form.html');
 	}
 
 	public function slide_add($model) {

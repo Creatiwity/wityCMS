@@ -28,7 +28,7 @@ class NewsView extends WView {
 	public function preview($data) {
 		$this->assign($data);
 
-		$this->setTemplate('listing');
+		$this->setTemplate('listing.html');
 	}
 }
 

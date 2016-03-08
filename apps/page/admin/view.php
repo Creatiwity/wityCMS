@@ -68,7 +68,7 @@ class PageAdminView extends WView {
 		}
 		$this->assign('form_values', json_encode($form_values));
 
-		$this->setTemplate('form');
+		$this->setTemplate('form.html');
 	}
 
 	public function add($model) {
