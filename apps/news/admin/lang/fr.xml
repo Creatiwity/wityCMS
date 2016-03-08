@@ -22,7 +22,7 @@
 	<item id="Last modification">Dernière modification</item>
 	<item id="Views">Vues</item>
 	<item id="Actions">Actions</item>
-	<item id="No news in database">Aucun article trouvé dans la base de données.</item>
+	<item id="No news in database.">Aucun article dans la base de données.</item>
 	<item id="Do you really want to delete the news &lt;strong&gt;%s&lt;/strong&gt;?">Êtes-vous sûr de vouloir supprimer l'article &lt;strong&gt;%s&lt;/strong&gt; ?</item>
 
 	<!-- News form -->

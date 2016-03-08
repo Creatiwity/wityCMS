@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lang value="fr">
-	<item id="news_meta">Rédigé par %s, le %s</item>
-	<item id="read_more">Lire la suite</item>
+	<item id="Posted by %s, on the %s">Rédigé par %s, le %s</item>
+	<item id="No news in this category.">Aucun article dans cette catégorie.</item>
 
-	<item id="news_not_found">La news demandée est introuvable.</item>
-	<item id="no_news_in_category">Aucune news dans cette catégorie.</item>
+	<item id="The news was not found.">La news demandée est introuvable.</item>
 </lang>

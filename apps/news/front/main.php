@@ -39,13 +39,13 @@ class NewsController extends WController {
 
 			if (empty($news)) {
 				$this->setHeader('Location', WRoute::getDir().'news');
-				return WNote::error('news_not_found', WLang::get('news_not_found'));
+				return WNote::error('news_not_found', WLang::get('The news was not found.'));
 			}
 
 			// Forbid access to non published news to non admin users
 			if ($news['published'] != 1 && !$this->hasAccess('news', '', true)) {
 				$this->setHeader('Location', WRoute::getDir().'news');
-				return WNote::error('news_not_found', WLang::get('news_not_found'));
+				return WNote::error('news_not_found', WLang::get('The news was not found.'));
 			}
 
 			if (!empty($news['cats'])) {

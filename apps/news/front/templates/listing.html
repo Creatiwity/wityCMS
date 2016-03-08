@@ -8,13 +8,13 @@
 
 				<h2 class="news-title"><a href="{$n.url}">{$n.title}</a></h2>
 
-				<p class="news-meta">{lang news_meta|{$n.author}|{$n.created_date|strftime_db:'%d %B %Y, %Hh%M'}}</p>
+				<p class="news-meta">{lang Posted by %s, on the %s|{$n.author}|{$n.created_date|strftime_db:'%d %B %Y, %Hh%M'}}</p>
 			</header>
 
 			<div class="news-content">{$n.content}</div>
 		</article>
 	{/for}
 	{empty}
-		<p>{lang no_news_in_category}</p>
+		<p>{lang No news in this category.}</p>
 	{/empty}
 </section>
