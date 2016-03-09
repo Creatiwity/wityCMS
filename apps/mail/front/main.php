@@ -244,9 +244,7 @@ class MailController extends WController {
 		self::$tpl->pushContext();
 
 		// Clean the PHPMailer instance
-		$this->phpmailer->clearAddresses();
-		$this->phpmailer->ClearCCs();
-		$this->phpmailer->ClearBCCs();
+		$this->phpmailer->clearAllRecipients();
 		$this->phpmailer->clearAttachments();
 
 		// Add addresses
