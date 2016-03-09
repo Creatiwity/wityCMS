@@ -217,6 +217,7 @@ class WMain {
 		if (WSession::isConnected()) {
 			$tpl_vars['wity_user'] = true;
 			$tpl_vars += array(
+				'wity_userid'         => $_SESSION['userid'],
 				'wity_user_nickname'  => $_SESSION['nickname'],
 				'wity_user_email'     => $_SESSION['email'],
 				'wity_user_groupe'    => $_SESSION['groupe'],
