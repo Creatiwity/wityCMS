@@ -164,6 +164,8 @@ class UserController extends WController {
 			// Email availability
 			if (($e = $this->model->checkEmail($data['email'])) !== true) {
 				$errors[] = $e;
+			} else {
+				$data['email'] = strtolower($data['email']);
 			}
 
 			// Default group (0: simple user)

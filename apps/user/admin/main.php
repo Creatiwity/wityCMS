@@ -173,6 +173,8 @@ class UserAdminController extends WController {
 			if ($add_case || $post_data['email'] != $db_data['email']) {
 				if (($e = $this->model->checkEmail($post_data['email'])) !== true) {
 					$errors[] = WLang::get($e);
+				} else {
+					$post_data['email'] = strtolower($post_data['email']);
 				}
 			}
 
