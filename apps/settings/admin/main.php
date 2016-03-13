@@ -109,8 +109,8 @@ class SettingsAdminController extends WController {
 			WConfig::save('config');
 			WConfig::save('route');
 
-			WNote::success('settings_updated', WLang::get('The settings were updated successfully.'));
 			$this->setHeader('Location', WRoute::getDir().'admin/settings/');
+			return WNote::success('settings_updated', WLang::get('The settings were updated successfully.'));
 		}
 
 		// Return settings values
