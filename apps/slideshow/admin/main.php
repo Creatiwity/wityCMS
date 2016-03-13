@@ -53,12 +53,7 @@ class SlideshowAdminController extends WController {
 				$errors[] = WLang::get('Please, provide a title.');
 			}
 
-			if (!empty($post_data['url']) && strpos($post_data['url'], '://') === false) {
-				$post_data['url'] = 'http://'.$post_data['url'];
-			} else {
-				$post_data['url'] = '';
-			}
-
+			$post_data['url'] = WTools::secureURL($post_data['url']);
 			/* END VARIABLES CHECKING */
 
 			// Image
