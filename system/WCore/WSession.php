@@ -17,7 +17,7 @@ class WSession {
 	 * Default session life when the user asks to remember his account
 	 * @type int
 	 */
-	const REMEMBER_TIME = 604800; // 1 week
+	const REMEMBER_TIME = 2419200; // 1 month
 
 	/**
 	 * Minimum time between two POST requests
