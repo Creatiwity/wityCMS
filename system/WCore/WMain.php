@@ -211,7 +211,8 @@ class WMain {
 			'wity_og_type'          => 'website',
 			'wity_og_title'         => WConfig::get('config.og.title'),
 			'wity_og_description'   => WConfig::get('config.og.description'),
-			'wity_og_image'         => WConfig::get('config.og.image')
+			'wity_og_image'         => WConfig::get('config.og.image'),
+			'wity_now'              => time()
 		);
 
 		if (WSession::isConnected()) {
