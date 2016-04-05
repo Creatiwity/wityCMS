@@ -229,7 +229,7 @@ class UserController extends WController {
 							// Send a validation email
 							$this->model->sendEmail(
 								$data['email'],
-								WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
+								WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 								str_replace(
 									array('{site_title}', '{nickname}', '{password}', '{base}'),
 									array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase()),
