@@ -30,7 +30,7 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme');
+		$settings_keys = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'debug');
 		$route_keys    = array('default_front', 'default_admin');
 		$og_keys       = array('title', 'description', 'image');
 
@@ -57,7 +57,9 @@ class SettingsAdminController extends WController {
 			$data = WRequest::getAssoc(array('update', 'settings', 'route', 'og'));
 
 			foreach ($settings_keys as $key) {
-				if (isset($data['settings'][$key])) {
+				if ($key == 'debug') {
+					WConfig::set('config.debug', ($data['settings']['debug'] == 'on'));
+				} else if (isset($data['settings'][$key])) {
 					// Direct user input: all characters are accepted here
 					$settings[$key] = $data['settings'][$key];
 					WConfig::set('config.'.$key, $settings[$key]);
