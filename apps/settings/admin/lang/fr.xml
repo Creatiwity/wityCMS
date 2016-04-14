@@ -18,6 +18,7 @@
 	<item id="Description (about 125 symbols)">Description pour le référencement (environ 125 caractères)</item>
 	<item id="Icons">Icônes</item>
 	<item id="Favicon (.ico)">Favicon (.ico)</item>
+	<item id="Debug mode">Mode debug</item>
 	<item id="Facebook's OpenGraph">OpenGraph (Facebook)</item>
 	<item id="Description">Description</item>
 	<item id="Image">Image</item>
