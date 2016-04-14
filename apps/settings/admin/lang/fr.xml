@@ -8,6 +8,7 @@
 	<item id="Settings of the site">Réglages du site</item>
 	<item id="General">Général</item>
 	<item id="Website's name">Nom du site</item>
+	<item id="Website's base URL">URL de base du site</item>
 	<item id="Administrator's email">Email de l'administrateur</item>
 	<item id="Default theme">Thème par défaut</item>
 	<item id="Default applications">Applications par défaut</item>
