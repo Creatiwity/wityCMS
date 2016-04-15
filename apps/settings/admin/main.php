@@ -30,7 +30,7 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'timezone', 'ga', 'debug');
+		$settings_keys = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'timezone', 'ga', 'version', 'debug');
 		$route_keys    = array('default_front', 'default_admin');
 		$og_keys       = array('title', 'description', 'image');
 
