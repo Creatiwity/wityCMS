@@ -20,10 +20,12 @@ class SettingsAdminView extends WView {
 	public function configure($model) {
 		$this->assign('settings', $model['settings']);
 		$this->assign('og', $model['og']);
+		$this->assign('coordinates', $model['coordinates']);
 		$this->assign('route', $model['route']);
 		$this->assign('front_apps', $model['front_apps']);
 		$this->assign('admin_apps', $model['admin_apps']);
 		$this->assign('themes', $model['themes']);
+		$this->assign('countries', $model['countries']);
 	}
 
 	public function languages($data) {

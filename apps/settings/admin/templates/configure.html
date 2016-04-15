@@ -29,13 +29,6 @@
 			</div>
 
 			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="email" class="form-control" type="email" name="settings[email]" value="{!$settings.email!}" />
-				</div>
-			</div>
-
-			<div class="form-group">
 				<label for="favicon" class="col-sm-2 control-label">{lang Favicon (.ico)}</label>
 				<div class="col-sm-10 col-lg-5">
 					{if !empty({$settings.favicon})}
@@ -150,6 +143,57 @@
 					<p><img src="{$og.image}" alt="Icon" class="img-responsive" /></p>
 					{/if}
 					<input id="image" class="form-control" type="file" name="image" value="" />
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang Coordinates}</legend>
+
+			<div class="form-group">
+				<label for="address" class="col-sm-2 control-label">{lang Address}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="address" class="form-control" type="text" name="coordinates[address]" value="{!$coordinates.address!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="zip" class="col-sm-2 control-label">{lang Zip code}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="zip" class="form-control" type="text" name="coordinates[zip]" value="{!$coordinates.zip!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="city" class="col-sm-2 control-label">{lang City}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="city" class="form-control" type="text" name="coordinates[city]" value="{!$coordinates.city!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="state" class="col-sm-2 control-label">{lang State}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="state" class="form-control" type="text" name="coordinates[state]" value="{!$coordinates.state!}" />
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="country" class="col-sm-2 control-label">{lang Country}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="country" class="form-control" name="coordinates[country]">
+						{for $country in $countries}
+						<option value="{$country}"{if {$country} == {$coordinates.country}} selected="selected"{/if}>{$app}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="email" class="form-control" type="email" name="settings[email]" value="{!$settings.email!}" />
 				</div>
 			</div>
 		</fieldset>
