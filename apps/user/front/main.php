@@ -304,7 +304,7 @@ class UserController extends WController {
 			}
 		}
 
-		$this->view->login();
+		$this->setHeader('Location', WRoute::getDir().'user/login');
 	}
 
 	/**
