@@ -30,7 +30,7 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'timezone', 'debug');
+		$settings_keys = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'timezone', 'ga', 'debug');
 		$route_keys    = array('default_front', 'default_admin');
 		$og_keys       = array('title', 'description', 'image');
 
@@ -58,7 +58,15 @@ class SettingsAdminController extends WController {
 
 			foreach ($settings_keys as $key) {
 				if ($key == 'debug') {
-					WConfig::set('config.debug', ($data['settings']['debug'] == 'on'));
+					$settings['debug'] = ($data['settings']['debug'] == 'on');
+					WConfig::set('config.debug', $settings['debug']);
+				} else if ($key == 'ga') {
+					if (!empty($data['settings']['ga']) && !preg_match('/^ua-\d{4,9}-\d{1,4}$/i', $data['settings']['ga'])) {
+						WNote::error('bad_ga_tracking_code', WLang::get('The Google Analytics tracking code is not correct.'));
+					} else {
+						$settings['ga'] = $data['settings']['ga'];
+						WConfig::set('config.ga', $settings['ga']);
+					}
 				} else if (isset($data['settings'][$key])) {
 					// Direct user input: all characters are accepted here
 					$settings[$key] = $data['settings'][$key];

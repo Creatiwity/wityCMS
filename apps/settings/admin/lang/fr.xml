@@ -24,6 +24,7 @@
 	<item id="Description">Description</item>
 	<item id="Image">Image</item>
 	<item id="Submit">Envoyer</item>
+	<item id="The Google Analytics tracking code is not correct.">Le code de tracking Google Analytics n'est pas correct.</item>
 	<item id="The settings were updated successfully.">La configuration a été mise à jour avec succès.</item>
 
 	<!-- Languages -->
