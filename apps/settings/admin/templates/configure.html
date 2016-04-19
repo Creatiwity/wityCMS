@@ -13,9 +13,18 @@
 			</div>
 
 			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
+				<label for="base" class="col-sm-2 control-label">{lang Website's base URL}</label>
 				<div class="col-sm-10 col-lg-5">
-					<input id="email" class="form-control" type="email" name="settings[email]" value="{!$settings.email!}" />
+					<input id="base" class="form-control" type="text" name="settings[base]" value="{!$settings.base!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="timezone" class="col-sm-2 control-label">{lang Timezone}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="timezone" class="form-control" name="settings[timezone]">
+						{include apps/settings/admin/templates/timezones.html}
+					</select>
 				</div>
 			</div>
 
@@ -37,6 +46,31 @@
 						<option value="{$theme}"{if {$theme} == {$settings.theme}} selected="selected"{/if}>{$theme}</option>
 						{/for}
 					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="ga" class="col-sm-2 control-label">{lang Google Analytics}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="ga" class="form-control" type="ga" name="settings[ga]" value="{!$settings.ga!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="version" class="col-sm-2 control-label">{lang Version}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="version" class="form-control" type="version" name="settings[version]" value="{!$settings.version!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="debug" class="col-sm-2 control-label">{lang Debug mode}</label>
+				<div class="col-sm-10 col-lg-5">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="debug" name="settings[debug]" value="on" {if {$settings.debug}} checked="checked"{/if}>
+						</label>
+					</div>
 				</div>
 			</div>
 
@@ -71,6 +105,8 @@
 		<fieldset>
 			<legend>{lang SEO}</legend>
 
+			<h4>{lang General}</h4>
+
 			<div class="form-group">
 				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
 				<div class="col-sm-10 col-lg-5">
@@ -84,10 +120,8 @@
 					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
 				</div>
 			</div>
-		</fieldset>
 
-		<fieldset>
-			<legend>{lang Facebook's OpenGraph}</legend>
+			<h4>{lang Facebook's OpenGraph}</h4>
 
 			<div class="form-group">
 				<label for="og_title" class="col-sm-2 control-label">{lang Title}</label>
@@ -109,6 +143,57 @@
 					<p><img src="{$og.image}" alt="Icon" class="img-responsive" /></p>
 					{/if}
 					<input id="image" class="form-control" type="file" name="image" value="" />
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang Coordinates}</legend>
+
+			<div class="form-group">
+				<label for="address" class="col-sm-2 control-label">{lang Address}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="address" class="form-control" type="text" name="coordinates[address]" value="{!$coordinates.address!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="zip" class="col-sm-2 control-label">{lang Zip code}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="zip" class="form-control" type="text" name="coordinates[zip]" value="{!$coordinates.zip!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="city" class="col-sm-2 control-label">{lang City}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="city" class="form-control" type="text" name="coordinates[city]" value="{!$coordinates.city!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="state" class="col-sm-2 control-label">{lang State}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="state" class="form-control" type="text" name="coordinates[state]" value="{!$coordinates.state!}" />
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="country" class="col-sm-2 control-label">{lang Country}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="country" class="form-control" name="coordinates[country]">
+						{for $country in $countries}
+						<option value="{$country}"{if {$country} == {$coordinates.country}} selected="selected"{/if}>{$app}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="email" class="form-control" type="email" name="settings[email]" value="{!$settings.email!}" />
 				</div>
 			</div>
 		</fieldset>

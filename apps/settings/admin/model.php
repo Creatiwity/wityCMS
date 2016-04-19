@@ -27,6 +27,18 @@ class SettingsAdminModel {
 	}
 
 	/**
+	 * Retrieve countries from database
+	 *
+	 * @return Array
+	 */
+	public function getCountries() {
+		// TODO
+		/*$prep = $this->db->query('SELECT * FROM countries');
+
+		return $prep->fetchAll(PDO::FETCH_ASSOC);*/
+	}
+
+	/**
 	 * Retrieve languages from database
 	 *
 	 * @return Array

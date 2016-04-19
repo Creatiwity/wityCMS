@@ -30,9 +30,10 @@ class SettingsAdminController extends WController {
 	 */
 	protected function configure(array $params) {
 		// Settings editable by user
-		$settings_keys = array('site_title', 'page_title', 'page_description', 'email', 'theme');
-		$route_keys    = array('default_front', 'default_admin');
-		$og_keys       = array('title', 'description', 'image');
+		$settings_keys    = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'timezone', 'ga', 'version', 'debug');
+		$route_keys       = array('default_front', 'default_admin');
+		$og_keys          = array('title', 'description', 'image');
+		$coordinates_keys = array('address', 'zip', 'city', 'state', 'country');
 
 		$settings = array();
 		foreach ($settings_keys as $key) {
@@ -52,12 +53,27 @@ class SettingsAdminController extends WController {
 			$og[$key] = WConfig::get('config.og.'.$key, '');
 		}
 
+		$coordinates = array();
+		foreach ($coordinates_keys as $key) {
+			$coordinates[$key] = WConfig::get('config.coordinates.'.$key, '');
+		}
+
 		// Update settings
 		if (WRequest::getMethod() == 'POST') {
-			$data = WRequest::getAssoc(array('update', 'settings', 'route', 'og'));
+			$data = WRequest::getAssoc(array('update', 'settings', 'route', 'og', 'coordinates'));
 
 			foreach ($settings_keys as $key) {
-				if (isset($data['settings'][$key])) {
+				if ($key == 'debug') {
+					$settings['debug'] = ($data['settings']['debug'] == 'on');
+					WConfig::set('config.debug', $settings['debug']);
+				} else if ($key == 'ga') {
+					if (!empty($data['settings']['ga']) && !preg_match('/^ua-\d{4,9}-\d{1,4}$/i', $data['settings']['ga'])) {
+						WNote::error('bad_ga_tracking_code', WLang::get('The Google Analytics tracking code is not correct.'));
+					} else {
+						$settings['ga'] = $data['settings']['ga'];
+						WConfig::set('config.ga', $settings['ga']);
+					}
+				} else if (isset($data['settings'][$key])) {
 					// Direct user input: all characters are accepted here
 					$settings[$key] = $data['settings'][$key];
 					WConfig::set('config.'.$key, $settings[$key]);
@@ -75,6 +91,13 @@ class SettingsAdminController extends WController {
 				if (isset($data['og'][$key])) {
 					$og[$key] = $data['og'][$key];
 					WConfig::set('config.og.'.$key, $og[$key]);
+				}
+			}
+
+			foreach ($coordinates_keys as $key) {
+				if (isset($data['coordinates'][$key])) {
+					$coordinates[$key] = $data['coordinates'][$key];
+					WConfig::set('config.coordinates.'.$key, $coordinates[$key]);
 				}
 			}
 
@@ -115,12 +138,14 @@ class SettingsAdminController extends WController {
 
 		// Return settings values
 		return array(
-			'settings'   => $settings,
-			'og'         => $og,
-			'route'      => $route,
-			'front_apps' => $this->getAllFrontApps(),
-			'admin_apps' => $this->getAllAdminApps(),
-			'themes'     => $this->getAllThemes()
+			'settings'    => $settings,
+			'og'          => $og,
+			'coordinates' => $coordinates,
+			'route'       => $route,
+			'front_apps'  => $this->getAllFrontApps(),
+			'admin_apps'  => $this->getAllAdminApps(),
+			'themes'      => $this->getAllThemes(),
+			'countries'   => $this->model->getCountries(),
 		);
 	}
 
