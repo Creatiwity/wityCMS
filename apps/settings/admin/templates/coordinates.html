@@ -1,0 +1,67 @@
+<div class="wity-app wity-app-settings wity-action-coordinates">
+	<form action="/admin/settings/coordinates" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<fieldset>
+			<legend>{lang Coordinates}</legend>
+
+			<div class="form-group">
+				<label for="address" class="col-sm-2 control-label">{lang Address}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="address" class="form-control" type="text" name="settings[coord_address]" value="{!$settings.coord_address!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="zip" class="col-sm-2 control-label">{lang Zip code}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="zip" class="form-control" type="text" name="settings[coord_zip]" value="{!$settings.coord_zip!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="city" class="col-sm-2 control-label">{lang City}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="city" class="form-control" type="text" name="settings[coord_city]" value="{!$settings.coord_city!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="state" class="col-sm-2 control-label">{lang State}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="state" class="form-control" type="text" name="settings[coord_state]" value="{!$settings.coord_state!}" />
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label for="country" class="col-sm-2 control-label">{lang Country}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="country" class="form-control" name="settings[coord_country]">
+						{for $country_iso, $country in $countries}
+						<option value="{$country}"{if {$country} == {$settings.coord_country} || (empty({$settings.coord_country}) && {$country_iso} == 'FR')} selected="selected"{/if}>{$country}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="email" class="form-control" type="email" name="settings[email]" value="{!$settings.email!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="phone" class="col-sm-2 control-label">{lang Phone}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="phone" class="form-control" type="text" name="settings[coord_phone]" value="{!$settings.coord_phone!}" />
+				</div>
+			</div>
+		</fieldset>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Submit}" />
+			</div>
+		</div>
+	</form>
+</div>

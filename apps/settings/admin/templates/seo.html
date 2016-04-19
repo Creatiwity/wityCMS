@@ -1,0 +1,54 @@
+<div class="wity-app wity-app-settings wity-action-seo">
+	<form action="/admin/settings/seo" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<fieldset>
+			<legend>{lang General}</legend>
+
+			<div class="form-group">
+				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="page_title" class="form-control" type="text" name="settings[page_title]" value="{!$settings.page_title!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
+				<div class="col-sm-10 col-lg-5">
+					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
+				</div>
+			</div>
+
+		</fieldset>
+		<fieldset>
+			<legend>{lang Facebook's OpenGraph}</legend>
+
+			<div class="form-group">
+				<label for="og_title" class="col-sm-2 control-label">{lang Title}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="og_title" class="form-control" type="text" name="settings[og_title]" value="{!$settings.og_title!}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="og_description" class="col-sm-2 control-label">{lang Description}</label>
+				<div class="col-sm-10 col-lg-5">
+					<textarea id="og_description" class="form-control" name="settings[og_description]" rows="5" cols="40">{$settings.og_description}</textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="image" class="col-sm-2 control-label">{lang Image}</label>
+				<div class="col-sm-10 col-lg-5">
+					{if !empty({$settings.og_image})}
+					<p><img src="{!$settings.og_image!}" alt="Icon" class="img-responsive" /></p>
+					{/if}
+					<input id="image" class="form-control" type="file" name="og_image" value="" />
+				</div>
+			</div>
+		</fieldset>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Submit}" />
+			</div>
+		</div>
+	</form>
+</div>

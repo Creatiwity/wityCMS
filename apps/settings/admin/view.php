@@ -15,23 +15,32 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class SettingsAdminView extends WView {
 	/**
-	 * Prepares the configure view
+	 * Prepares the general view
 	 */
-	public function configure($model) {
+	public function general($model) {
 		$this->assign('settings', $model['settings']);
-		$this->assign('og', $model['og']);
-		$this->assign('coordinates', $model['coordinates']);
 		$this->assign('route', $model['route']);
 		$this->assign('front_apps', $model['front_apps']);
 		$this->assign('admin_apps', $model['admin_apps']);
 		$this->assign('themes', $model['themes']);
+	}
+
+	/**
+	 * Prepares the SEO view
+	 */
+	public function seo($model) {
+		$this->assign('settings', $model['settings']);
+	}
+
+	/**
+	 * Prepares the Coordinates view
+	 */
+	public function coordinates($model) {
+		$this->assign('settings', $model['settings']);
 		$this->assign('countries', $model['countries']);
 	}
 
 	public function languages($data) {
-		if ($data['form']) {
-			$this->setTemplate('language_form.html');
-		}
 		$this->assign($data);
 	}
 

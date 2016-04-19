@@ -208,10 +208,11 @@ class WMain {
 			'wity_lang'             => WLang::getLang(),
 			'wity_lang_iso'         => WLang::getLangISO(),
 			'wity_site_favicon'     => WConfig::get('config.favicon'),
+			'wity_ga'               => WConfig::get('config.ga'),
 			'wity_og_type'          => 'website',
-			'wity_og_title'         => WConfig::get('config.og.title'),
-			'wity_og_description'   => WConfig::get('config.og.description'),
-			'wity_og_image'         => WConfig::get('config.og.image'),
+			'wity_og_title'         => WConfig::get('config.og_title'),
+			'wity_og_description'   => WConfig::get('config.og_description'),
+			'wity_og_image'         => WConfig::get('config.og_image'),
 			'wity_now'              => time()
 		);
 

@@ -15,68 +15,69 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class SettingsAdminController extends WController {
 	private $upload_dir;
+
 	private $EXCLUDED_THEMES = array('system', 'admin-bootstrap');
-	private $EXCLUDED_APPS = array('admin');
-	private $EXCLUDED_DIRS = array('.', '..');
+	private $EXCLUDED_APPS   = array('admin');
+	private $EXCLUDED_DIRS   = array('.', '..');
 
 	public function __construct() {
 		$this->upload_dir = WITY_PATH.'upload'.DS.'settings'.DS;
 	}
 
 	/**
-	 * Configuration handler
-	 *
-	 * @return array Settings model
+	 * General handler
 	 */
-	protected function configure(array $params) {
-		// Settings editable by user
-		$settings_keys    = array('site_title', 'base', 'page_title', 'page_description', 'email', 'theme', 'timezone', 'ga', 'version', 'debug');
-		$route_keys       = array('default_front', 'default_admin');
-		$og_keys          = array('title', 'description', 'image');
-		$coordinates_keys = array('address', 'zip', 'city', 'state', 'country');
+	protected function general(array $params) {
+		$settings_keys = array(
+			// General
+			'site_title', 'base', 'theme', 'timezone', 'favicon', 'ga', 'version', 'debug',
+			// SEO
+			'page_title', 'page_description',
+			// OpenGraph
+			'og_title', 'og_description', 'og_image',
+			// Coordinates
+			'coord_address', 'coord_zip', 'coord_city', 'coord_state', 'coord_country', 'email', 'coord_phone'
+		);
+		$route_keys = array('default_front', 'default_admin');
 
 		$settings = array();
 		foreach ($settings_keys as $key) {
 			$settings[$key] = WConfig::get('config.'.$key, '');
 		}
 
-		$settings['favicon'] = WConfig::get('config.favicon', '');
-		$settings['icon'] = WConfig::get('config.icon', '');
-
 		$route = array();
 		foreach ($route_keys as $key) {
 			$route[$key] = WConfig::get('route.'.$key, '');
 		}
 
-		$og = array();
-		foreach ($og_keys as $key) {
-			$og[$key] = WConfig::get('config.og.'.$key, '');
-		}
-
-		$coordinates = array();
-		foreach ($coordinates_keys as $key) {
-			$coordinates[$key] = WConfig::get('config.coordinates.'.$key, '');
-		}
-
 		// Update settings
 		if (WRequest::getMethod() == 'POST') {
-			$data = WRequest::getAssoc(array('update', 'settings', 'route', 'og', 'coordinates'));
+			$data = WRequest::getAssoc(array('update', 'settings', 'route'));
 
 			foreach ($settings_keys as $key) {
-				if ($key == 'debug') {
-					$settings['debug'] = ($data['settings']['debug'] == 'on');
-					WConfig::set('config.debug', $settings['debug']);
-				} else if ($key == 'ga') {
-					if (!empty($data['settings']['ga']) && !preg_match('/^ua-\d{4,9}-\d{1,4}$/i', $data['settings']['ga'])) {
-						WNote::error('bad_ga_tracking_code', WLang::get('The Google Analytics tracking code is not correct.'));
+				if (isset($data['settings'][$key])) {
+					if ($key == 'debug') {
+						$settings['debug'] = ($data['settings']['debug'] == 'on');
+						WConfig::set('config.debug', $settings['debug']);
+					} else if ($key == 'ga') {
+						if (!empty($data['settings']['ga']) && !preg_match('/^ua-\d{4,9}-\d{1,4}$/i', $data['settings']['ga'])) {
+							WNote::error('settings_error', WLang::get('The Google Analytics tracking code is not correct.'));
+						} else {
+							$settings['ga'] = $data['settings']['ga'];
+							WConfig::set('config.ga', $settings['ga']);
+						}
+					} else if ($key == 'email') {
+						if (!empty($data['settings']['email']) && !WTools::isEmail($data['settings']['email'])) {
+							WNote::error('settings_error', WLang::get('The email provided is not valid.'));
+						} else {
+							$settings['email'] = $data['settings']['email'];
+							WConfig::set('config.email', $settings['email']);
+						}
 					} else {
-						$settings['ga'] = $data['settings']['ga'];
-						WConfig::set('config.ga', $settings['ga']);
+						// Direct user input: all characters are accepted here
+						$settings[$key] = $data['settings'][$key];
+						WConfig::set('config.'.$key, $settings[$key]);
 					}
-				} else if (isset($data['settings'][$key])) {
-					// Direct user input: all characters are accepted here
-					$settings[$key] = $data['settings'][$key];
-					WConfig::set('config.'.$key, $settings[$key]);
 				}
 			}
 
@@ -87,22 +88,8 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			foreach ($og_keys as $key) {
-				if (isset($data['og'][$key])) {
-					$og[$key] = $data['og'][$key];
-					WConfig::set('config.og.'.$key, $og[$key]);
-				}
-			}
-
-			foreach ($coordinates_keys as $key) {
-				if (isset($data['coordinates'][$key])) {
-					$coordinates[$key] = $data['coordinates'][$key];
-					WConfig::set('config.coordinates.'.$key, $coordinates[$key]);
-				}
-			}
-
 			// Uploads favicon & image
-			foreach (array('favicon', 'image') as $file) {
+			foreach (array('favicon', 'og_image') as $file) {
 				if (!empty($_FILES[$file]['name'])) {
 					$this->makeUploadDir();
 
@@ -116,15 +103,13 @@ class SettingsAdminController extends WController {
 					if (!$upload->processed) {
 						WNote::error($file.'_upload_error', $upload->error);
 					} else {
-						if ($file == 'favicon') {
-							$old_file = WConfig::get('config.favicon');
+						$old_file = WConfig::get('config.'.$file);
 
-							WConfig::set('config.favicon', '/upload/settings/'.$upload->file_dst_name.'?'.time());
-						} else if ($file == 'image') {
-							$old_file = WConfig::get('config.og.image');
-
-							WConfig::set('config.og.image', '/upload/settings/'.$upload->file_dst_name.'?'.time());
+						if (!empty($old_file) && basename($old_file) != $upload->file_dst_name) {
+							@unlink(WITY_PATH.$old_file);
 						}
+
+						WConfig::set('config.'.$file, '/upload/settings/'.$upload->file_dst_name.'?'.time());
 					}
 				}
 			}
@@ -132,38 +117,48 @@ class SettingsAdminController extends WController {
 			WConfig::save('config');
 			WConfig::save('route');
 
-			$this->setHeader('Location', WRoute::getDir().'admin/settings/');
+			if (!empty($params['suffix'])) {
+				$suffix = $params['suffix'];
+			} else {
+				$suffix = 'general';
+			}
+
+			$this->setHeader('Location', WRoute::getDir().'admin/settings/'.$suffix);
 			return WNote::success('settings_updated', WLang::get('The settings were updated successfully.'));
 		}
 
 		// Return settings values
 		return array(
 			'settings'    => $settings,
-			'og'          => $og,
-			'coordinates' => $coordinates,
 			'route'       => $route,
 			'front_apps'  => $this->getAllFrontApps(),
 			'admin_apps'  => $this->getAllAdminApps(),
 			'themes'      => $this->getAllThemes(),
-			'countries'   => $this->model->getCountries(),
+			'countries'   => WTools::getCountries(),
 		);
 	}
 
 	/**
+	 * SEO handler
+	 */
+	protected function seo($params) {
+		return $this->general(array('suffix' => 'seo'));
+	}
+
+	/**
+	 * Coordinates handler
+	 */
+	protected function coordinates($params) {
+		return $this->general(array('suffix' => 'coordinates'));
+	}
+
+	/**
 	 * Languages handler
-	 *
-	 * @return array languages
 	 */
 	protected function languages(array $params) {
-		$action = array_shift($params);
-
-		if ($action == 'language_add') {
-			return $this->language_form();
-		} else {
-			return Array(
-				'form'      => false,
-				'languages' => $this->model->getLanguages());
-		}
+		return array(
+			'languages' => $this->model->getLanguages()
+		);
 	}
 
 	private function language_form($id_language = 0, $db_data = array()) {
@@ -334,7 +329,6 @@ class SettingsAdminController extends WController {
 
 		return $apps;
 	}
-
 }
 
 ?>

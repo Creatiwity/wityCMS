@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WTools.php
  */
@@ -61,6 +61,39 @@ class WTools {
 	public static function moveElementInArray(&$array, $a, $b) {
 		$out = array_splice($array, $a, 1);
 		array_splice($array, $b, 0, $out);
+	}
+
+	/**
+	 * Get countries list
+	 *
+	 * @return array
+	 */
+	public static function getCountries() {
+		static $countries = array();
+
+		if (empty($countries)) {
+			include HELPERS_DIR.'countries'.DS.'countries.php';
+		}
+
+		return $countries;
+	}
+
+	/**
+	 * Generates a random string
+	 *
+	 * @param int $length
+	 * @return string
+	 */
+	public static function generateString($length = 10) {
+		$characters = '01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$characters_length = strlen($characters);
+		$random_string = '';
+
+		for ($i = 0; $i < $length; $i++) {
+		$random_string .= $characters[rand(0, $characters_length - 1)];
+		}
+
+		return $random_string;
 	}
 }
 

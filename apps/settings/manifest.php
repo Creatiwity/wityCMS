@@ -11,7 +11,9 @@
 
 	<!-- Admin actions -->
 	<admin>
-		<action default="default" description="Configure">configure</action>
+		<action default="default" description="General">general</action>
+		<action description="SEO">seo</action>
+		<action description="Coordinates">coordinates</action>
 		<action description="Languages">languages</action>
 		<action menu="false">language_add</action>
 		<action menu="false">language_edit</action>

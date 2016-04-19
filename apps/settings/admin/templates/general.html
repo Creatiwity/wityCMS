@@ -1,7 +1,5 @@
-<div class="wity-app wity-app-settings wity-action-configure">
-	<form action="/admin/settings" method="post" class="form-horizontal" enctype="multipart/form-data">
-		<h1>{lang Settings of the site}</h1>
-
+<div class="wity-app wity-app-settings wity-action-general">
+	<form action="/admin/settings/general" method="post" class="form-horizontal" enctype="multipart/form-data">
 		<fieldset>
 			<legend>{lang General}</legend>
 
@@ -98,102 +96,6 @@
 						<option value="{$app}"{if {$app} == {$route.default_admin}} selected="selected"{/if}>{$app}</option>
 						{/for}
 					</select>
-				</div>
-			</div>
-		</fieldset>
-
-		<fieldset>
-			<legend>{lang SEO}</legend>
-
-			<h4>{lang General}</h4>
-
-			<div class="form-group">
-				<label for="site_title" class="col-sm-2 control-label">{lang Title}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="page_title" class="form-control" type="text" name="settings[page_title]" value="{!$settings.page_title!}" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="description" class="col-sm-2 control-label">{lang Description (about 125 symbols)}</label>
-				<div class="col-sm-10 col-lg-5">
-					<textarea id="page_description" class="form-control" name="settings[page_description]" rows="5" cols="40">{$settings.page_description}</textarea>
-				</div>
-			</div>
-
-			<h4>{lang Facebook's OpenGraph}</h4>
-
-			<div class="form-group">
-				<label for="og_title" class="col-sm-2 control-label">{lang Title}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="og_title" class="form-control" type="text" name="og[title]" value="{!$og.title!}" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="og_description" class="col-sm-2 control-label">{lang Description}</label>
-				<div class="col-sm-10 col-lg-5">
-					<textarea id="og_description" class="form-control" name="og[description]" rows="5" cols="40">{$og.description}</textarea>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="image" class="col-sm-2 control-label">{lang Image}</label>
-				<div class="col-sm-10 col-lg-5">
-					{if !empty({$og.image})}
-					<p><img src="{$og.image}" alt="Icon" class="img-responsive" /></p>
-					{/if}
-					<input id="image" class="form-control" type="file" name="image" value="" />
-				</div>
-			</div>
-		</fieldset>
-
-		<fieldset>
-			<legend>{lang Coordinates}</legend>
-
-			<div class="form-group">
-				<label for="address" class="col-sm-2 control-label">{lang Address}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="address" class="form-control" type="text" name="coordinates[address]" value="{!$coordinates.address!}" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="zip" class="col-sm-2 control-label">{lang Zip code}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="zip" class="form-control" type="text" name="coordinates[zip]" value="{!$coordinates.zip!}" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="city" class="col-sm-2 control-label">{lang City}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="city" class="form-control" type="text" name="coordinates[city]" value="{!$coordinates.city!}" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="state" class="col-sm-2 control-label">{lang State}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="state" class="form-control" type="text" name="coordinates[state]" value="{!$coordinates.state!}" />
-				</div>
-			</div>
-
-
-			<div class="form-group">
-				<label for="country" class="col-sm-2 control-label">{lang Country}</label>
-				<div class="col-sm-10 col-lg-5">
-					<select id="country" class="form-control" name="coordinates[country]">
-						{for $country in $countries}
-						<option value="{$country}"{if {$country} == {$coordinates.country}} selected="selected"{/if}>{$app}</option>
-						{/for}
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">{lang Administrator's email}</label>
-				<div class="col-sm-10 col-lg-5">
-					<input id="email" class="form-control" type="email" name="settings[email]" value="{!$settings.email!}" />
 				</div>
 			</div>
 		</fieldset>
