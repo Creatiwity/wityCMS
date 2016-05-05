@@ -209,6 +209,7 @@ class WMain {
 			'wity_lang_iso'         => WLang::getLangISO(),
 			'wity_site_favicon'     => WConfig::get('config.favicon'),
 			'wity_ga'               => WConfig::get('config.ga'),
+			'wity_version'          => WConfig::get('config.version'),
 			'wity_og_type'          => 'website',
 			'wity_og_title'         => WConfig::get('config.og_title'),
 			'wity_og_description'   => WConfig::get('config.og_description'),

@@ -250,6 +250,12 @@ class WView {
 			case 'css':
 				$css = '';
 				foreach (self::$global_vars['css'] as $file) {
+					if (strpos($file, '?') !== false) {
+						$file .= '&amp;v='.WConfig::get('config.version');
+					} else {
+						$file .= '?v='.WConfig::get('config.version');
+					}
+
 					$css .= '<link href="'.$file.'" rel="stylesheet" type="text/css" />'."\n";
 				}
 
@@ -258,6 +264,12 @@ class WView {
 			case 'js':
 				$script = '';
 				foreach (self::$global_vars['js'] as $file) {
+					if (strpos($file, '?') !== false) {
+						$file .= '&amp;v='.WConfig::get('config.version');
+					} else {
+						$file .= '?v='.WConfig::get('config.version');
+					}
+
 					$script .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 				}
 
