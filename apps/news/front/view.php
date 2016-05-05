@@ -15,7 +15,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class NewsView extends WView {
 	public function listing($data) {
-		$this->assign('css', '/apps/news/front/css/news.css?test=lol');
+		$this->assign('css', '/apps/news/front/css/news.css');
 
 		foreach ($data['news'] as $key => $news) {
 			$data['news'][$key]['permalink'] = $news['url'];
