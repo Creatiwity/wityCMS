@@ -277,6 +277,134 @@ class SettingsAdminController extends WController {
 		}
 	}
 
+	protected function translate() {
+		return array(
+			'apps'   => $this->getAllApps(),
+			'themes' => $this->getAllThemes()
+		);
+	}
+
+	protected function translate_app(array $params) {
+		if (!isset($params[0])) {
+			return WNote::error('no_app_provided', WLang::_('No app name was provided'));
+		}
+
+		$app = $params[0];
+
+		if (!is_dir($folder = APPS_DIR.$app)) {
+			return WNote::error('app_does_not_exist', WLang::_('The asked app does not exists'));
+		}
+
+		return $this->translate_files('app', $folder);
+	}
+
+	protected function translate_theme(array $params) {
+		if (!isset($params[0])) {
+			return WNote::error('no_theme_provided', WLang::_('No theme name was provided'));
+		}
+
+		$theme = $params[0];
+
+		if (!is_dir($folder = THEMES_DIR.$theme)) {
+			return WNote::error('theme_does_not_exist', WLang::_('The asked theme does not exists'));
+		}
+
+		return $this->translate_files('theme', $folder);
+	}
+
+
+	private function translate_files($type = 'core', $folder = SYSTEM_DIR) {
+		switch ($type) {
+			case 'app':
+				$foldersToScan = array(
+					$folder.DS.'front',
+					$folder.DS.'admin',
+					$folder.DS.'front'.DS.'templates',
+					$folder.DS.'admin'.DS.'templates'
+				);
+
+				$extensionsToScan = array('html', 'php');
+				break;
+
+			case 'theme':
+				$foldersToScan = array(
+					$folder.DS.'templates'
+				);
+
+				$extensionsToScan = array('html');
+				break;
+
+			default:
+
+				break;
+		}
+
+		$translatables = array();
+
+		foreach ($foldersToScan as $folderToScan) {
+			if (is_dir($folderToScan) && $scan = scandir($folderToScan)) {
+				foreach ($scan as $file) {
+					if (is_file($folderToScan.DS.$file)) {
+						$fileextension = pathinfo($file, PATHINFO_EXTENSION);
+
+						if (in_array($fileextension, $extensionsToScan)) {
+							$fileTranslatables = array(
+								'file'          => str_replace($folder.DS, '', $folderToScan.DS.$file),
+								'translatables' => array()
+							);
+
+							$file_content = file_get_contents($folderToScan.DS.$file);
+
+							if (preg_match_all('#\{lang ([^\|$]+)(\|.+)?\}#U', $file_content, $matches)) {
+								foreach ($matches[1] as $value) {
+									if (!in_array($value, $fileTranslatables['translatables'])) {
+										array_push($fileTranslatables['translatables'], $value);
+									}
+								}
+							}
+
+							if (preg_match_all("#WLang::(get|_)\('([^\|$]+)'\)#U", $file_content, $matches)) {
+								foreach ($matches[2] as $value) {
+									if (!in_array($value, $fileTranslatables['translatables'])) {
+										array_push($fileTranslatables['translatables'], $value);
+									}
+								}
+							}
+
+							if (!empty($fileTranslatables['translatables'])) {
+								array_push($translatables, $fileTranslatables);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return array(
+			'languages'     => $this->model->getLanguages(),
+			'translatables' => $translatables
+		);
+	}
+
+	/**
+	  * Get existing Apps
+	  *
+	  * @return array List of Apps
+	  */
+	 private function getAllApps() {
+	  $apps = array();
+
+	  if ($scanned_apps = scandir(APPS_DIR)) {
+	   foreach ($scanned_apps as $key => $value) {
+	    if (is_dir(APPS_DIR.DS.$value) && $value != "." && $value != "..") {
+	     $apps[$key] = $value;
+	    }
+	   }
+	  }
+
+	  return $apps;
+	 }
+
 	/**
 	 * Get existing themes
 	 *

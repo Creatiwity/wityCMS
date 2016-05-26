@@ -64,4 +64,7 @@
 	<item id="The language was successfully deleted.">La langue a été supprimée avec succès.</item>
 	<item id="Cancel">Annuler</item>
 	<item id="Delete">Supprimer</item>
+
+	<!-- Translates -->
+	<item id="Translate">Traduire</item>
 </lang>

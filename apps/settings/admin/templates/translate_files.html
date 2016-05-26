@@ -1,0 +1,36 @@
+<div class="wity-app wity-app-settings wity-action-translate">
+  <h1>{lang Translate}</h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    {for $count, $language in $languages}
+    <li role="presentation"{if {$count} == 0} class="active"{/if}><a href="#{$language.iso}" aria-controls="{$language.iso}" role="tab" data-toggle="tab">{$language.name}</a></li>
+    {/for}
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    {for $count, $language in $languages}
+    <div role="tabpanel" class="tab-pane{if {$count} == 0} active{/if}" id="{$language.iso}">
+      <form class="form-horizontal" method="post">
+        {for $translatable in $translatables}
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <fieldset>
+              <legend>{$translatable.file}</legend>
+              {for $value in $translatable.translatables}
+                <div class="form-group">
+                  <label for="" class="col-sm-6 control-label text-left">{$value}</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control">
+                  </div>
+                </div>
+              {/for}
+            </fieldset>
+          </div>
+        </div>
+        {/for}
+      </form>
+    </div>
+    {/for}
+  </div>
+</div>

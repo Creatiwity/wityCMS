@@ -18,5 +18,10 @@
 		<action menu="false">language_add</action>
 		<action menu="false">language_edit</action>
 		<action menu="false">language_delete</action>
+
+		<action description="Translate">translate</action>
+		<action menu="false">translate_app</action>
+		<action menu="false">translate_theme</action>
+		<action menu="false">translate_core</action>
 	</admin>
 </app>

@@ -73,6 +73,28 @@ class SettingsAdminView extends WView {
 		$this->assign('name', $model['name']);
 		$this->assign('confirm_delete_url', '/admin/settings/language_delete/'.$model['id'].'/confirm');
 	}
+
+	public function translate($model) {
+		$this->assign('themes', $model['themes']);
+		$this->assign('apps', $model['apps']);
+	}
+
+	public function translate_app($model) {
+		$this->translate_files($model);
+	}
+
+	public function translate_theme($model) {
+		$this->translate_files($model);
+	}
+
+	private function translate_files($model) {
+		$this->assign('css', '/apps/settings/admin/css/translate.css');
+
+		$this->assign('languages', $model['languages']);
+		$this->assign('translatables', $model['translatables']);
+
+		$this->setTemplate('translate_files.html');
+	}
 }
 
 ?>
