@@ -27,7 +27,9 @@ require_once 'paths.php';
 /**
  * Core classes inclusion
  */
+require_once SYS_DIR.'WTemplate'.DS.'WTemplate.php';
 require_once SYS_DIR.'WCore'.DS.'WSystem.php';
+require_once SYS_DIR.'WCore'.DS.'WSession.php';
 require_once SYS_DIR.'WCore'.DS.'WDatabase.php';
 require_once SYS_DIR.'WCore'.DS.'WRoute.php';
 require_once SYS_DIR.'WCore'.DS.'WConfig.php';
