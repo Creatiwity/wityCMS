@@ -257,9 +257,11 @@ class WRetriever {
 
 				return $controller;
 			} else {
+				WResponse::httpHeaderStatus(500);
 				return WNote::error('app_structure', WLang::get('error_bad_app_structure', $app_code));
 			}
 		} else {
+			WResponse::httpHeaderStatus(404);
 			return WNote::error(404, WLang::get('error_404'));
 		}
 	}
