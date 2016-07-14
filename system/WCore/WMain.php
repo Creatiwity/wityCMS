@@ -144,15 +144,15 @@ class WMain {
 	 * Initializes session and check the flood condition
 	 */
 	private function setupSession() {
-		// Instanciates it
+		// Instantiate the Session
 		$session = WSystem::getSession();
 
 		// Anti-flood checking
-		if (!$session->check_flood()) {
+		if (WConfig::get('config.anti_flood', false) && !$session->checkFlood()) {
 			$_POST = array();
 		}
 
-		// Variable for Roxy file manager
+		// Set Roxy file manager's upload dir variable
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
 
 		// Set session lang

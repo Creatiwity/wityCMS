@@ -257,7 +257,7 @@ class WSession {
 	 *
 	 * @return boolean true if flood detected, false otherwise
 	 */
-	public function check_flood() {
+	public function checkFlood() {
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$flood = true;
 
@@ -267,7 +267,7 @@ class WSession {
 				$flood = false;
 			}
 			// Last request checking
-			else if (!empty($_SESSION['last_query']) && md5(serialize($_POST)) == $_SESSION['last_query']) {
+			else if (!empty($_SESSION['last_query']) && md5(serialize($_POST).serialize($_FILES)) == $_SESSION['last_query']) {
 				WNote::info('flood_duplicate', WLang::get('info_flood_duplicate'));
 				$flood = false;
 			}
@@ -284,10 +284,10 @@ class WSession {
 			}
 
 			// Updating flood variables
-			$_SESSION['last_query'] = md5(serialize($_POST));
+			$_SESSION['last_query'] = md5(serialize($_POST).serialize($_FILES));
 
 			// Updating flood time at shutdown to let less priorized script using this variable
-			register_shutdown_function(array($this, 'upgrade_flood'), time() + self::FLOOD_TIME + 1);
+			register_shutdown_function(array($this, 'upgradeFlood'), time() + self::FLOOD_TIME + 1);
 
 			return $flood;
 		} else {
@@ -308,7 +308,7 @@ class WSession {
 	 *
 	 * @param int $limit timestamp limit
 	 */
-	public function upgrade_flood($limit) {
+	public function upgradeFlood($limit) {
 		$_SESSION['flood_time'] = $limit;
 	}
 
