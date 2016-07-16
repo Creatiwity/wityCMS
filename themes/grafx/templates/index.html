@@ -20,6 +20,9 @@
 
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-4.0.0-alpha.2/css/bootstrap.min.css" rel="stylesheet" />
+		<!-- Font-Awesome -->
+		<link href="/libraries/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+
 		<link href="/themes/grafx/css/style.css?v={$wity_version}" rel="stylesheet" title="Grafx" />
 
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -57,41 +60,31 @@
 			</header>
 
 			<nav class="navbar" role="navigation">
-				<div class="container-fluid">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-							<span class="sr-only">{lang Toggle navigation}</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-
-						<a class="navbar-brand" href="/"><img src="/themes/grafx/img/button-plus.png" alt="Plus" /></a>
-					</div>
-
-					<div class="collapse navbar-collapse">
-						<ul class="nav navbar-nav">
-							<li><a href="/"><span>{lang Home}</span><br />
-								<em>{lang starting page}</em></a></li>
-							<li><a href="/about"><span>{lang About}</span><br />
-								<em>{lang the company}</em></a></li>
-							<li><a href="/services"><span>{lang Services}</span><br />
-								<em>{lang our skills}</em></a></li>
-							<li><a href="/portfolio"><span>{lang Portfolio}</span><br />
-								<em>{lang our works}</em></a></li>
-							<li><a href="/news"><span>{lang Blog}</span><br />
-								<em>{lang latest posts}</em></a></li>
-							<li><a href="/contact"><span>{lang Contact}</span><br />
-								<em>{lang send us an email}</em></a></li>
-						</ul>
-
-						<form class="navbar-form navbar-right" role="search" action="/search" method="get">
-							<div class="form-group">
-								<input type="text" name="query" class="form-control" placeholder="{lang Search the website}" size="30" />
-							</div>
-							<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-						</form>
-					</div><!-- /.navbar-collapse -->
+			  <a class="navbar-brand" href="/"><img src="/themes/grafx/img/button-plus.png" alt="Plus" /></a>
+				<button class="navbar-toggler hidden-sm-up pull-xs-right" type="button" data-toggle="collapse" data-target=".navbar-toggleable">
+					<span class="fa fa-bars"></span>
+				</button>
+				<div class="collapse navbar-toggleable navbar-toggleable-xs">
+					<ul class="nav navbar-nav">
+						<li class="nav-item pull-xs-none pull-sm-left"><a href="/"><span>{lang Home}</span><br />
+							<em>{lang starting page}</em></a></li>
+						<li class="nav-item pull-xs-none pull-sm-left"><a href="/about"><span>{lang About}</span><br />
+							<em>{lang the company}</em></a></li>
+						<li class="nav-item pull-xs-none pull-sm-left"><a href="/services"><span>{lang Services}</span><br />
+							<em>{lang our skills}</em></a></li>
+						<li class="nav-item pull-xs-none pull-sm-left"><a href="/portfolio"><span>{lang Portfolio}</span><br />
+							<em>{lang our works}</em></a></li>
+						<li class="nav-item pull-xs-none pull-sm-left"><a href="/news"><span>{lang Blog}</span><br />
+							<em>{lang latest posts}</em></a></li>
+						<li class="nav-item pull-xs-none pull-sm-left"><a href="/contact"><span>{lang Contact}</span><br />
+							<em>{lang send us an email}</em></a></li>
+					</ul>
+					<form class="navbar-form form-inline pull-sm-right" role="search" action="/search" method="get">
+						<div class="form-group">
+							<input type="text" name="query" class="form-control" placeholder="{lang Search the website}" size="30" />
+						</div>
+						<button type="submit" class="btn btn-default"><span class="fa fa-search"></span></button>
+					</form>
 				</div>
 			</nav>
 
@@ -106,7 +99,7 @@
 				<div id="column-blocks" class="col-md-4">
 					{if !{$wity_user}}
 					<aside id="grafx-user" class="block block-user">
-						<p class="text-center buttons">
+						<p class="text-xs-center buttons">
 							<a class="button-register" href="#grafx-register" data-toggle="collapse" data-parent="#grafx-user">{lang Sign up} <img src="/themes/grafx/img/sign-in.png" alt="Sign in" /></a>
 							<a class="button-login" href="#grafx-login" data-toggle="collapse" data-parent="#grafx-user"><img src="/themes/grafx/img/login.png" alt="Login" /> {lang Login}</a>
 						</p>
@@ -128,7 +121,7 @@
 				</div>
 			</div>
 
-			<footer class="text-center">
+			<footer class="text-xs-center">
 				<p>{$wity_site_title}&copy; {$wity_now|date:'Y'}<br />
 					{lang All rights reserved.}</p>
 			</footer>
