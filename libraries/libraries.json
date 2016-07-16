@@ -6,7 +6,7 @@
 		"themes": "witycms/themes.plugin",
 		"jquery": "jquery-1.11.2/jquery-1.11.2.min",
 		"bootstrap": "bootstrap-3.3.6/js/bootstrap.min",
-		"bootstrap-datepicker": "bootstrap-datepicker-1.6.0/js/bootstrap-datepicker.min",
+		"bootstrap-datepicker": "bootstrap-datepicker-1.6.1/js/bootstrap-datepicker.min",
 		"wityslider": "wityslider-1.2.9/wityslider"
 	},
 	"shim": {
