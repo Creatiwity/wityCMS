@@ -5,12 +5,13 @@
 		"apps": "witycms/apps.plugin",
 		"themes": "witycms/themes.plugin",
 		"jquery": "jquery-1.11.2/jquery-1.11.2.min",
+		"tether": "tether-1.3.1/js/tether.min",
 		"bootstrap": "bootstrap-4.0.0-alpha.2/js/bootstrap.min",
 		"bootstrap-datepicker": "bootstrap-datepicker-1.6.1/js/bootstrap-datepicker.min",
 		"wityslider": "wityslider-1.2.9/wityslider"
 	},
 	"shim": {
-		"bootstrap": ["jquery"],
+		"bootstrap": ["jquery", "tether"],
 		"bootstrap-datepicker": ["bootstrap"]
 	},
 	"waitSeconds": 15
