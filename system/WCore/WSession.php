@@ -317,12 +317,12 @@ class WSession {
 	 * @return string Either an ipv4 or an ipv6 address
 	 */
 	public static function getIP() {
-		if ($ip = getenv('HTTP_CLIENT_IP')) {}
-		else if ($ip = getenv('HTTP_X_FORWARDED_FOR')) {}
-		else if ($ip = getenv('HTTP_X_FORWARDED')) {}
-		else if ($ip = getenv('HTTP_FORWARDED_FOR')) {}
-		else if ($ip = getenv('HTTP_FORWARDED')) {}
-		else if ($ip = getenv('HTTP_REMOTE_ADDR')) {}
+		if ($ip = $_SERVER['HTTP_CLIENT_IP']) {}
+		else if ($ip = $_SERVER['HTTP_X_FORWARDED_FOR']) {}
+		else if ($ip = $_SERVER['HTTP_X_FORWARDED']) {}
+		else if ($ip = $_SERVER['HTTP_FORWARDED_FOR']) {}
+		else if ($ip = $_SERVER['HTTP_FORWARDED']) {}
+		else if ($ip = $_SERVER['HTTP_REMOTE_ADDR']) {}
 		else {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		}
