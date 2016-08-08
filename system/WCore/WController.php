@@ -111,7 +111,9 @@ abstract class WController {
 			if ($access_result !== true) {
 				// Display login form if not connected
 				if (!WSession::isConnected()) {
-					$userView = WRetriever::getView('user', array('login'));
+					$userView = WRetriever::getView('user', array(0 => 'login',
+						'redirect' => WRoute::getDir().'admin'
+					));
 					$this->setView($userView);
 					return;
 				} else if (!empty($_SESSION['access'])) {
