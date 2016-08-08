@@ -138,10 +138,10 @@ class UserAdminController extends WController {
 	 */
 	protected function user_form($user_id = 0, $db_data = array()) {
 		$add_case = empty($user_id);
-		$post_data = WRequest::getAssoc(array('nickname', 'email'), null, 'POST');
+		$post_data = array();
 
-		if (!in_array(null, $post_data, true)) {
-			$post_data += WRequest::getAssoc(array('password', 'password_conf', 'firstname', 'lastname', 'groupe', 'type', 'access'), null, 'POST');
+		if (WRequest::getMethod() == 'POST') {
+			$post_data = WRequest::getAssoc(array('nickname', 'email', 'password', 'password_conf', 'firstname', 'lastname', 'groupe', 'type', 'access'), null, 'POST');
 			$errors = array();
 
 			// Check nickname availability
@@ -336,11 +336,9 @@ class UserAdminController extends WController {
 	 * @return array Model
 	 */
 	protected function groups(array $params) {
-		$data = WRequest::getAssoc(array('id', 'name', 'type'), null, 'POST');
-
-		if (!in_array(null, $data, true)) {
+		if (WRequest::getMethod() == 'POST') {
+			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
 			$errors = array();
-			$data['access'] = WRequest::get('access', null, 'POST');
 
 			if (empty($data['name'])) {
 				$errors[] = WLang::get('Please, provide a name.');
