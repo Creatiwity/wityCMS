@@ -199,15 +199,14 @@ class NewsAdminController extends WController {
 	 */
 	protected function newsEdit($params) {
 		$id_news = intval(array_shift($params));
+		$news = $this->model->getNews($id_news);
 
-		$db_data = $this->model->getNews($id_news);
-
-		if ($db_data !== false) {
-			return $this->newsForm($id_news, $db_data);
-		} else {
+		if (empty($news)) {
 			$this->setHeader('Location', WRoute::getDir().'admin/news');
 			return WNote::error('news_not_found', WLang::get('News not found.'));
 		}
+
+		return $this->newsForm($id_news, $news);
 	}
 
 	protected function newsSavePreview($params) {
@@ -228,38 +227,36 @@ class NewsAdminController extends WController {
 	 */
 	protected function newsDelete($params) {
 		$id_news = intval(array_shift($params));
+		$news = $this->model->getNews($id_news);
 
-		$db_data = $this->model->getNews($id_news);
-
-		if ($db_data !== false) {
-			if (in_array('confirm', $params)) {
-				if (!empty($db_data['image'])) {
-					@unlink($this->upload_dir.$data['image']);
-				}
-
-				$this->model->removeCatsFromNews($id_news);
-				$this->model->deleteNews($id_news);
-
-				$this->setHeader('Location', WRoute::getDir().'admin/news');
-				WNote::success('news_deleted', WLang::get('The news <strong>%s</strong> was successfully deleted.', $db_data['title_1']));
-			}
-
-			return $db_data;
-		} else {
+		if (empty($news)) {
 			$this->setHeader('Location', WRoute::getDir().'admin/news');
 			return WNote::error('news_not_found', WLang::get('News not found.', $id_news));
 		}
+
+		if (in_array('confirm', $params)) {
+			if (!empty($news['image'])) {
+				@unlink($this->upload_dir.$data['image']);
+			}
+
+			$this->model->removeCatsFromNews($id_news);
+			$this->model->deleteNews($id_news);
+
+			$this->setHeader('Location', WRoute::getDir().'admin/news');
+			WNote::success('news_deleted', WLang::get('The news <strong>%s</strong> was successfully deleted.', $news['title_1']));
+		}
+
+		return $news;
 	}
 
 	/**
 	 * Handles categories action
 	 */
 	protected function categories($params) {
-		$post_data = WRequest::getAssoc(array('name'), null, 'POST');
+		$post_data = array();
 
-		// Data was sent by form
-		if (!in_array(null, $post_data, true)) {
-			$post_data += WRequest::getAssoc(array('id', 'shortname', 'parent'));
+		if (WRequest::hasDataForURL('admin/news/categories')) {
+			$post_data = WRequest::getAssoc(array('id', 'name', 'shortname', 'parent'));
 			$errors = array();
 
 			$id_cat = intval($post_data['id']);
@@ -331,24 +328,23 @@ class NewsAdminController extends WController {
 	 */
 	protected function categoryDelete($params) {
 		$id_cat = intval(array_shift($params));
+		$category = $this->model->getCat($id_cat);
 
-		$db_data = $this->model->getCat($id_cat);
-
-		if ($db_data !== false) {
-			if (in_array('confirm', $params)) {
-				$this->model->removeCatsFromNews($id_cat);
-				$this->model->unlinkChildrenOfParentCat($id_cat);
-				$this->model->deleteCat($id_cat);
-
-				$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
-				WNote::success('category_deleted', WLang::get('Category successfully deleted.'));
-			}
-
-			return $db_data;
-		} else {
+		if (empty($category)) {
 			$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
 			return WNote::error('category_not_found', WLang::get("The category you are trying to delete doesn't exist."));
 		}
+
+		if (in_array('confirm', $params)) {
+			$this->model->removeCatsFromNews($id_cat);
+			$this->model->unlinkChildrenOfParentCat($id_cat);
+			$this->model->deleteCat($id_cat);
+
+			$this->setHeader('Location', WRoute::getDir().'admin/news/categories');
+			WNote::success('category_deleted', WLang::get('Category successfully deleted.'));
+		}
+
+		return $category;
 	}
 
 	private function makeUploadDir() {

@@ -32,12 +32,13 @@ class WSession {
 	/*
 	 * Maximum login attempts
 	 */
-	const MAX_LOGIN_ATTEMPT = 3;
+	const MAX_LOGIN_ATTEMPT = 5;
 
 	/**
-	 * States
+	 * Return codes
 	 */
-	const LOGIN_SUCCESS = 1;
+	const LOGIN_SUCCESS = 0;
+	const LOGIN_ERROR = 1;
 	const LOGIN_MAX_ATTEMPT_REACHED = 2;
 
 	/**
@@ -93,11 +94,7 @@ class WSession {
 
 		// Treatment
 		$nickname = trim($nickname);
-		// Email to lower case
-		if (strpos($nickname, '@') !== false) {
-			$nickname = strtolower($nickname);
-		}
-		$password_hash = sha1($password);
+		$password_hash = sha1(trim($password));
 
 		// Search a matching couple (nickname, password_hash) in DB
 		include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
@@ -122,11 +119,13 @@ class WSession {
 				setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
 				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, WRoute::getDir());
 			}
+
 			return self::LOGIN_SUCCESS;
 		} else {
 			// Attempt + 1
 			$_SESSION['login_try']++;
-			return 0;
+
+			return self::LOGIN_ERROR;
 		}
 	}
 
@@ -318,12 +317,12 @@ class WSession {
 	 * @return string Either an ipv4 or an ipv6 address
 	 */
 	public static function getIP() {
-		if ($ip = getenv('HTTP_CLIENT_IP')) {}
-		else if ($ip = getenv('HTTP_X_FORWARDED_FOR')) {}
-		else if ($ip = getenv('HTTP_X_FORWARDED')) {}
-		else if ($ip = getenv('HTTP_FORWARDED_FOR')) {}
-		else if ($ip = getenv('HTTP_FORWARDED')) {}
-		else if ($ip = getenv('HTTP_REMOTE_ADDR')) {}
+		if ($ip = $_SERVER['HTTP_CLIENT_IP']) {}
+		else if ($ip = $_SERVER['HTTP_X_FORWARDED_FOR']) {}
+		else if ($ip = $_SERVER['HTTP_X_FORWARDED']) {}
+		else if ($ip = $_SERVER['HTTP_FORWARDED_FOR']) {}
+		else if ($ip = $_SERVER['HTTP_FORWARDED']) {}
+		else if ($ip = $_SERVER['HTTP_REMOTE_ADDR']) {}
 		else {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		}

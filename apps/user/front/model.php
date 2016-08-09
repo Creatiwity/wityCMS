@@ -396,6 +396,26 @@ class UserModel {
 
 		return $config;
 	}
+
+	public function getRedirectURLWithParams($params) {
+		// Find redirect URL
+		$route = WRoute::route();
+		$referer = WRoute::getReferer();
+		$redirect_request = WRequest::get('redirect');
+
+		if (!empty($params['redirect'])) {
+			return $params['redirect'];
+		} else if (!empty($redirect_request)) {
+			return $redirect_request;
+		} else if ($route['app'] != 'user') {
+			// Login form loaded from an external application
+			return WRoute::getDir().WRoute::getQuery();
+		} else if (strpos($referer, 'user') === false) {
+			return $referer;
+		} else {
+			return WRoute::getDir();
+		}
+	}
 }
 
 ?>

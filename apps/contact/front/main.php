@@ -23,11 +23,9 @@ class ContactController extends WController {
 
 	protected function form(array $params) {
 		$user_id = isset($_SESSION['userid']) ? $_SESSION['userid'] : null;
-		$data = WRequest::getAssoc(array('from_name', 'from_email', 'email_subject', 'email_message'));
 
-		if (!in_array(null, $data, true)) {
-			$data['from_company'] = WRequest::get('from_company');
-			$data['extras'] = WRequest::get('extras');
+		if (WRequest::hasDataForURL('contact')) {
+			$data = WRequest::getAssoc(array('from_name', 'from_email', 'from_company', 'email_subject', 'email_message', 'extras'));
 			$errors = array();
 
 			/**
@@ -67,7 +65,8 @@ class ContactController extends WController {
 					'application/vnd.ms-word',
 					'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 					'application/pdf',
-					'image/*');
+					'image/*'
+				);
 
 				$upload->Process($this->upload_dir);
 

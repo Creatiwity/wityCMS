@@ -370,27 +370,6 @@ class WView {
 		$file = $this->getTemplate();
 		$this->rendered_string = $this->tpl->parse($file);
 
-		// Add the signature to the forms within the view
-		$this->rendered_string = preg_replace_callback(
-			'#<form([^>]*)>(<input type="hidden" name="form_signature")?#',
-			function($matches) use($signature) {
-				// Add action in the form values
-				preg_match('#action="([^"]*)"#', $matches[1], $matches_args);
-				$action = '';
-				if (!empty($matches_args[1])) {
-					$action = '<input type="hidden" name="form_action" value="'.trim($matches_args[1], ' /').'" />';
-				}
-
-				// Prevent from overriding sub-forms signatures
-				if (empty($matches[2])) {
-					return '<form'.$matches[1].'><input type="hidden" name="form_signature" value="'.$signature.'" />'.$action;
-				} else {
-					return $matches[0];
-				}
-			},
-			$this->rendered_string
-		);
-
 		// Come back to previous context
 		$this->tpl->popContext();
 

@@ -13,7 +13,7 @@
 	<item id="To log in, your browser must accept cookies.">Pour vous connecter, votre navigateur doit accepter les cookies.</item>
 	<item id="Welcome %s!">Bienvenue %s !</item>
 	<item id="You reached the maximum number of login attempts. Please, wait a few moment before trying to login again.">Vous avez atteint le nombre maximum d'essais d'autentification possible. Merci de bien vouloir patienter un moment avant de réessayer.</item>
-	<item id="The couple nickname / password given does not match with any valid account.">Le couple identifiant / mot de passe fourni ne correspond à aucun compte valide.</item>
+	<item id="The couple nickname / password does not match with any valid account.">Le couple identifiant / mot de passe fourni ne correspond à aucun compte valide.</item>
 	<item id="Please, fill in all the required fields.">Merci de compléter tous les champs requis.</item>
 
 	<!-- Logout -->
