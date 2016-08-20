@@ -253,11 +253,4 @@ $countries = array(
 	'ZW' => 'Zimbabwe',
 );
 
-// Translate countries
-foreach ($countries as $iso_code => $name) {
-	$countries[$iso_code] = WLang::getDisplayRegion($iso_code);
-}
-
-asort($countries);
-
 ?>

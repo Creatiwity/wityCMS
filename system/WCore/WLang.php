@@ -269,13 +269,56 @@ class WLang {
 	}
 
 	/**
+	 * Load countries list from helpers.
+	 *
+	 * @return array array(ISO => Country)
+	 */
+	private static function getRawCountries() {
+		static $countries = array();
+
+		if (empty($countries)) {
+			include HELPERS_DIR.'countries'.DS.'countries.php';
+		}
+
+		return $countries;
+	}
+
+	/**
 	 * Get display region into the current language.
 	 *
 	 * @param string $iso_code
 	 * @return string Country name
 	 */
-	public static function getDisplayRegion($iso_code) {
-		return locale_get_display_region('-'.$iso_code, self::getLang());
+	public static function getCountry($iso_code) {
+		if (function_exists('locale_get_display_region')) {
+			return locale_get_display_region('-'.$iso_code, self::getLang());
+		} else {
+			$countries = self::getRawCountries();
+
+			return !empty($countries[$iso_code]) ? $countries[$iso_code] : $iso_code;
+		}
+	}
+
+	/**
+	 * Get countries list
+	 *
+	 * @return array
+	 */
+	public static function getCountries() {
+		static $countries = array();
+
+		if (empty($countries)) {
+			$countries = self::getRawCountries();
+
+			// Translate countries
+			foreach ($countries as $iso_code => $name) {
+				$countries[$iso_code] = self::getCountry($iso_code);
+			}
+
+			asort($countries);
+		}
+
+		return $countries;
 	}
 
 	/**

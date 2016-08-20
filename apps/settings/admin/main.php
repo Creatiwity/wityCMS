@@ -134,7 +134,7 @@ class SettingsAdminController extends WController {
 			'front_apps'  => $this->getAllFrontApps(),
 			'admin_apps'  => $this->getAllAdminApps(),
 			'themes'      => $this->getAllThemes(),
-			'countries'   => WTools::getCountries(),
+			'countries'   => WLang::getCountries(),
 		);
 	}
 
