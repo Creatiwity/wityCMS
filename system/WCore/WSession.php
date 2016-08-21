@@ -72,7 +72,7 @@ class WSession {
 	 * @return boolean true if the user is logged in, false otherwise
 	 */
 	public static function isConnected() {
-		return isset($_SESSION['userid']);
+		return !empty($_SESSION['userid']);
 	}
 
 	/**
@@ -80,10 +80,10 @@ class WSession {
 	 *
 	 * @param string $nickname nickname
 	 * @param string $password password
-	 * @param string $remember true if auto-log in of the user enabled for the next time
+	 * @param int $remember Time in seconds to keep the session
 	 * @return int State of the request (LOGIN_SUCCESS | 0 = error)
 	 */
-	public function createSession($nickname, $password, $remember) {
+	public function createSession($nickname, $password, $remember = 0) {
 		// In case of multiple errors of login, return an error
 		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
@@ -99,26 +99,24 @@ class WSession {
 		// Search a matching couple (nickname, password_hash) in DB
 		include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 		$userModel = new UserModel();
-		$data = $userModel->matchUser($nickname, $password_hash);
+		$user = $userModel->matchUser($nickname, $password_hash);
 
 		// User found
-		if (!empty($data)) {
+		if (!empty($user)) {
 			unset($_SESSION['login_try']); // cleanup
-			$this->setupSession($data['id'], $data);
+			$this->setupSession($user);
 
 			// Setup lang at login
-			if (!empty($data['lang'])) {
-				$_SESSION['lang'] = $data['lang'];
-				$_SESSION['lang_iso'] = substr($data['lang'], 0, 2);
+			if (!empty($user['lang'])) {
+				$_SESSION['lang'] = $user['lang'];
+				$_SESSION['lang_iso'] = substr($user['lang'], 0, 2);
 			}
 
 			// Cookie setup
-			if ($remember > 0) {
-				$lifetime = time() + $remember;
-				// Cookie setup
-				setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
-				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, WRoute::getDir());
-			}
+			$lifetime = $remember > 0 ? time() + $remember : 0;
+
+			setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
+			setcookie('hash', $this->generate_hash($user['nickname'], $user['password']), $lifetime, WRoute::getDir());
 
 			return self::LOGIN_SUCCESS;
 		} else {
@@ -135,22 +133,22 @@ class WSession {
 	 * @param string $userid current user id
 	 * @param array $data data to store into $_SESSION
 	 */
-	public function setupSession($userid, $data) {
-		$_SESSION['userid']    = $userid;
-		$_SESSION['nickname']  = $data['nickname'];
-		$_SESSION['email']     = $data['email'];
-		$_SESSION['groupe']    = $data['groupe'];
-		$_SESSION['firstname'] = $data['firstname'];
-		$_SESSION['lastname']  = $data['lastname'];
+	private function setupSession($user) {
+		$_SESSION['userid']    = $user['id'];
+		$_SESSION['nickname']  = $user['nickname'];
+		$_SESSION['email']     = $user['email'];
+		$_SESSION['groupe']    = $user['groupe'];
+		$_SESSION['firstname'] = $user['firstname'];
+		$_SESSION['lastname']  = $user['lastname'];
 
-		$_SESSION['access_string'] = $data['access'];
-		if (empty($data['access'])) {
+		$_SESSION['access_string'] = $user['access'];
+		if (empty($user['access'])) {
 			$_SESSION['access'] = '';
-		} else if ($data['access'] == 'all') {
+		} else if ($user['access'] == 'all') {
 			$_SESSION['access'] = 'all';
 		} else {
 			$_SESSION['access'] = array();
-			foreach (explode(',', $data['access']) as $access) {
+			foreach (explode(',', $user['access']) as $access) {
 				$first_bracket = strpos($access, '[');
 				if ($first_bracket !== false) {
 					$app_name = substr($access, 0, $first_bracket);
@@ -168,8 +166,10 @@ class WSession {
 
 	/**
 	 * Disconnects the user
+	 *
+	 * @param bool $destroy Destroy the entire session (including other vars than user's)?
 	 */
-	public function closeSession() {
+	public function closeSession($destroy = false) {
 		// Delete vars
 		unset(
 			$_SESSION['userid'],
@@ -185,21 +185,16 @@ class WSession {
 		);
 
 		// Reset cookies
-		setcookie('userid', '', time()-3600, WRoute::getDir());
-		setcookie('hash', '', time()-3600, WRoute::getDir());
-	}
+		setcookie('userid', '', time() - 3600, WRoute::getDir());
+		setcookie('hash', '', time() - 3600, WRoute::getDir());
 
-	/**
-	 * Clean variables used to define a user loaded
-	 */
-	public function destroy() {
-		$this->closeSession();
+		if ($destroy) {
+			$_SESSION = array();
+			session_destroy();
 
-		$_SESSION = array();
-		session_destroy();
-
-		// Reset cookies
-		setcookie(session_name(), '', time()-3600, WRoute::getDir());
+			// Reset cookies
+			setcookie(session_name(), '', time() - 3600, WRoute::getDir());
+		}
 	}
 
 	/**
@@ -213,12 +208,12 @@ class WSession {
 		if (!empty($_COOKIE['hash'])) {
 			include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 			$userModel = new UserModel();
-			$data = $userModel->getUser($userid);
+			$user = $userModel->getUser($userid);
 
-			if (!empty($data)) {
+			if (!empty($user)) {
 				// Check hash
-				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
-					$this->setupSession($userid, $data);
+				if ($_COOKIE['hash'] == $this->generate_hash($user['nickname'], $user['password'])) {
+					$this->setupSession($user);
 
 					return true;
 				}
