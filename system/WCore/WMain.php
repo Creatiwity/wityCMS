@@ -83,7 +83,9 @@ class WMain {
 
 				// Load language file from template
 				if ($route['admin']) {
-					WLang::declareLangDir(THEMES_DIR.'admin-bootstrap'.DS.'lang');
+					WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme_admin').DS.'lang');
+				} else {
+					WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
 				}
 
 				$response->render($view, $theme, $model);
@@ -200,9 +202,6 @@ class WMain {
 		$tpl = WSystem::getTemplate();
 
 		$route = WRoute::route();
-
-		// Load language file from template
-		WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
 
 		// Setup system template variables with $wity_ prefix
 		$tpl_vars = array(
