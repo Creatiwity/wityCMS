@@ -101,7 +101,7 @@ abstract class WController {
 				$tpl->assign('wity_action', $this->action, true);
 			}
 
-			$access_result = $this->hasAccess($this->getAppName().'/'.$action);
+			$access_result = $this->hasAccess(($this->getAdminContext() ? 'admin/' : '').$this->getAppName().'/'.$action);
 
 			if ($access_result !== true) {
 				// Display login form if not connected
@@ -580,18 +580,6 @@ abstract class WController {
 		}
 
 		return false;
-	}
-
-	public static function hasPermission($app, $permission) {
-		if (empty($_SESSION['access'])) {
-			return false;
-		}
-
-		if ($_SESSION['access'] == 'all') {
-			return true;
-		}
-
-		return isset($_SESSION['access'][$app]) && !in_array($permission, $_SESSION['access'][$app]);
 	}
 
 	/**

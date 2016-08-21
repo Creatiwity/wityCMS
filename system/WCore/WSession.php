@@ -321,6 +321,25 @@ class WSession {
 
 		return $ip;
 	}
+
+	/**
+	 * Checks if current session has access to an app and permission.
+	 *
+	 * @param string $app
+	 * @param string $permission
+	 * @return bool
+	 */
+	public static function hasPermission($app, $permission) {
+		if (empty($_SESSION['access'])) {
+			return false;
+		}
+
+		if ($_SESSION['access'] == 'all') {
+			return true;
+		}
+
+		return isset($_SESSION['access'][$app]) && in_array($permission, $_SESSION['access'][$app]);
+	}
 }
 
 ?>
