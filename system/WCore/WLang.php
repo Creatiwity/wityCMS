@@ -21,12 +21,12 @@ class WLang {
 	/**
 	 * @var array Current language - ex: 'en_EN'
 	 */
-	private static $lang = '';
+	private static $lang_code = '';
 
 	/**
 	 * @var array Current language ISO format - ex: 'en'
 	 */
-	private static $lang_iso;
+	private static $lang_iso = '';
 
 	/**
 	 * @var array List of registered directories containing language files
@@ -55,14 +55,8 @@ class WLang {
 		self::$db = WSystem::getDB();
 		self::$db->declareTable('languages');
 
-		// Add config lang
-		$lang = self::getDefaultLang();
-
-		if (!empty($lang)) {
-			self::setLang($lang['code']);
-		} else {
-			self::setLang('en_EN');
-		}
+		// Init locale
+		self::setLang('en_EN');
 	}
 
 	/**
@@ -122,16 +116,16 @@ class WLang {
 	 * @param string $lang Language code (ex: 'en_EN')
 	 * @return bool
 	 */
-	public static function setLang($lang) {
-		if ($lang == self::$lang) {
+	public static function setLang($lang_code) {
+		if ($lang_code == self::$lang_code) {
 			return true;
 		}
 
-		self::$lang = $lang;
-		self::$lang_iso = strtolower(substr($lang, 0, 2));
+		self::$lang_code = $lang_code;
+		self::$lang_iso = strtolower(substr($lang_code, 0, 2));
 
 		// Configure locale
-		setlocale(LC_ALL, self::$lang);
+		setlocale(LC_ALL, self::$lang_code);
 
 		// Clean previous values to reload them
 		self::$values = array();
@@ -161,7 +155,7 @@ class WLang {
 	 * @return string
 	 */
 	public static function getLang() {
-		return self::$lang;
+		return self::$lang_code;
 	}
 
 	/**
@@ -229,7 +223,7 @@ class WLang {
 	/**
 	 * Returns langs data.
 	 *
-	 * @param  bool Take only enabled languages?
+	 * @param  bool Only return enabled languages?
 	 * @return array
 	 */
 	public static function getLangs($enabled = true) {
@@ -254,7 +248,7 @@ class WLang {
 	/**
 	 * Returns list of lang Ids
 	 *
-	 * @param  bool Take only enabled languages?
+	 * @param  bool Only return enabled languages?
 	 * @return array
 	 */
 	public static function getLangIds($enabled = true) {

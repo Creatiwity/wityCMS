@@ -106,12 +106,6 @@ class WSession {
 			unset($_SESSION['login_try']); // cleanup
 			$this->setupSession($user);
 
-			// Setup lang at login
-			if (!empty($user['lang'])) {
-				$_SESSION['lang'] = $user['lang'];
-				$_SESSION['lang_iso'] = substr($user['lang'], 0, 2);
-			}
-
 			// Cookie setup
 			$lifetime = $remember > 0 ? time() + $remember : 0;
 
@@ -140,6 +134,8 @@ class WSession {
 		$_SESSION['groupe']    = $user['groupe'];
 		$_SESSION['firstname'] = $user['firstname'];
 		$_SESSION['lastname']  = $user['lastname'];
+		$_SESSION['lang_code'] = $user['lang'];
+		$_SESSION['lang_iso']  = substr($user['lang'], 0, 2);
 
 		$_SESSION['access_string'] = $user['access'];
 		if (empty($user['access'])) {
@@ -178,7 +174,8 @@ class WSession {
 			$_SESSION['groupe'],
 			$_SESSION['firstname'],
 			$_SESSION['lastname'],
-			$_SESSION['lang'],
+			$_SESSION['lang_code'],
+			$_SESSION['lang_iso'],
 			$_SESSION['access_string'],
 			$_SESSION['access'],
 			$_SESSION['token_expiration']

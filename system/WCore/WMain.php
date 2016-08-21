@@ -28,7 +28,7 @@ class WMain {
 		WLang::declareLangDir(SYS_DIR.'lang');
 
 		// Initializing the route
-		$this->route();
+		$this->setupRoute();
 
 		// Initializing sessions
 		$this->setupSession();
@@ -106,7 +106,7 @@ class WMain {
 	 * Initializes the route.
 	 * Prevents browser from trying to load a physical file.
 	 */
-	private function route() {
+	private function setupRoute() {
 		WRoute::init();
 
 		// Checks if the browser tried to load a physical file
@@ -156,9 +156,19 @@ class WMain {
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
 
 		// Set session lang
-		if (!empty($_SESSION['lang'])) {
-			WLang::setLang($_SESSION['lang']);
+		if (empty($_SESSION['current_lang'])) {
+			$lang = WLang::getDefaultLang();
+
+			if (!empty($lang)) {
+				$_SESSION['current_lang_code'] = $lang['code'];
+				$_SESSION['current_lang_iso']  = $lang['iso'];
+			} else {
+				$_SESSION['current_lang_code'] = 'en_EN';
+				$_SESSION['current_lang_iso']  = 'en';
+			}
 		}
+
+		WLang::setLang($_SESSION['current_lang_code']);
 	}
 
 	/**
