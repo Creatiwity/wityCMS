@@ -262,7 +262,7 @@ class WRetriever {
 			}
 		}
 
-		if (empty($admin)) {
+		if (is_null($admin)) {
 			return $all_apps;
 		} else {
 			$apps_list = array();

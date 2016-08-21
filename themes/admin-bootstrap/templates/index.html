@@ -65,7 +65,7 @@
 					{for $action, $desc in $wity_admin_actions}
 						{if {$desc.menu}}
 						<li class="{if {$action} == {$wity_action}}active{/if}">
-							<a href="/{$wity_app}/{$action}">{lang {$desc.description}}</a>
+							<a href="/admin/{$wity_app}/{$action}">{lang {$desc.description}}</a>
 						</li>
 						{/if}
 					{/for}
