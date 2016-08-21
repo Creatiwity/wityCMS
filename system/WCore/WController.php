@@ -112,7 +112,7 @@ abstract class WController {
 					$this->setView($userView);
 					return;
 				} else if (!empty($_SESSION['access'])) {
-					$tpl->assign('wity_admin_apps', $this->getAdminApps());
+					$tpl->assign('wity_admin_apps', $this->getApps(false));
 				}
 
 				if (is_array($access_result)) {
@@ -131,7 +131,7 @@ abstract class WController {
 				$context = $this->getContext();
 
 				if (!$context['parent']) {
-					$admin_apps = $this->getAdminApps();
+					$admin_apps = $this->getApps(true);
 					$tpl->assign('wity_admin_apps', $admin_apps);
 
 					// Load lang
@@ -216,7 +216,7 @@ abstract class WController {
 	 * @return bool true if admin mode defined in context, false otherwise
 	 */
 	public function getAdminContext() {
-		return $this->context['admin'] === true;
+		return $this->context['admin'];
 	}
 
 	/**
@@ -582,22 +582,31 @@ abstract class WController {
 		return false;
 	}
 
+	public static function hasPermission($app, $permission) {
+		if (empty($_SESSION['access'])) {
+			return false;
+		}
+
+		if ($_SESSION['access'] == 'all') {
+			return true;
+		}
+
+		return isset($_SESSION['access'][$app]) && !in_array($permission, $_SESSION['access'][$app]);
+	}
+
 	/**
 	 * Returns the list of admin apps according to the user's access.
 	 */
-	public function getAdminApps() {
-		static $admin_apps = array();
-		if (empty($admin_apps)) {
-			$apps = WRetriever::getAppsList(true);
+	public function getApps($admin = null) {
+		$apps_manifests = array();
 
-			foreach ($apps as $app) {
-				if ($this->hasAccess('admin/'.$app)) {
-					$admin_apps[$app] = $this->loadManifest($app);
-				}
-			}
+		$apps_list = WRetriever::getAppsList($admin);
+
+		foreach ($apps_list as $app) {
+			$apps_manifests[$app] = $this->loadManifest($app);
 		}
 
-		return $admin_apps;
+		return $apps_manifests;
 	}
 
 	/**

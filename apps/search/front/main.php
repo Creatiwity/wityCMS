@@ -30,7 +30,7 @@ class SearchController extends WController {
 
 		// Do researches
 		if (!empty($query)) {
-			$apps = WRetriever::getAppsList();
+			$apps = WRetriever::getAppsList(false);
 
 			foreach ($apps as $app) {
 				// Only front app

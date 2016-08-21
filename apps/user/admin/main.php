@@ -248,8 +248,8 @@ class UserAdminController extends WController {
 			'user_data'     => $db_data,
 			'post_data'     => $post_data,
 			'groupes'       => $this->model->getGroupsList(),
-			'admin_apps'    => $this->getAdminApps(),
-			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
+			'admin_apps'    => $this->getApps(),
+			'default_admin' => $default_admin_route['app']
 		);
 	}
 
@@ -396,7 +396,7 @@ class UserAdminController extends WController {
 
 		return array(
 			'groups'        => $this->model->getGroupsListWithCount($sort[0], $sort[1]),
-			'admin_apps'    => $this->getAdminApps(),
+			'admin_apps'    => $this->getApps(),
 			'sorting_tpl'   => $sortingHelper->getTplVars(),
 			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
 		);

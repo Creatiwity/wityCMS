@@ -14,12 +14,6 @@ defined('WITYCMS_VERSION') or die('Access denied');
  */
 class WRetriever {
 	/**
-	 * @var Stores the application list
-	 * @static
-	 */
-	private static $apps_list = array();
-
-	/**
 	 * @var Stores all the app already instantiated
 	 * @static
 	 */
@@ -76,7 +70,7 @@ class WRetriever {
 			'url'        => $url,
 			'app'        => $route['app'],
 			'action'     => '',
-			'has-parent' => $has_parent,
+			'parent'     => $has_parent,
 			'signature'  => '',
 			'result'     => null,
 			'headers'    => array()
@@ -253,29 +247,40 @@ class WRetriever {
 	/**
 	 * Returns a list of applications that contains a main.php file in their front directory
 	 *
-	 * @param bool $admin Admin mode?
 	 * @return array Array of string containing app's name
 	 */
-	public static function getAppsList($admin = false) {
-		if (empty(self::$apps_list)) {
+	public static function getAppsList($admin = null) {
+		static $all_apps = array();
+
+		if (empty($all_apps)) {
 			$apps = glob(APPS_DIR.'*', GLOB_ONLYDIR);
+
 			foreach ($apps as $appDir) {
 				if ($appDir != '.' && $appDir != '..') {
-					if ($admin) {
-						// Check admin
-						if (file_exists($appDir.DS.'admin'.DS.'main.php')) {
-							self::$apps_list[] = basename($appDir);
-						}
-					} else {
-						// Check front
-						if (file_exists($appDir.DS.'front'.DS.'main.php')) {
-							self::$apps_list[] = basename($appDir);
-						}
-					}
+					$all_apps[] = basename($appDir);
 				}
 			}
 		}
-		return self::$apps_list;
+
+		if (empty($admin)) {
+			return $all_apps;
+		} else {
+			$apps_list = array();
+
+			foreach ($all_apps as $app) {
+				if ($admin === true) {
+					if (file_exists(APPS_DIR.$app.DS.'admin'.DS.'main.php')) {
+						$apps_list[] = $app;
+					}
+				} else if ($admin === false) {
+					if (file_exists(APPS_DIR.$app.DS.'front'.DS.'main.php')) {
+						$apps_list[] = $app;
+					}
+				}
+			}
+
+			return $apps_list;
+		}
 	}
 
 	/**
@@ -285,7 +290,7 @@ class WRetriever {
 	 * @param bool $admin Admin mode?
 	 * @return bool true if $app exists, false otherwise
 	 */
-	public static function isApp($app, $admin = false) {
+	public static function isApp($app, $admin = null) {
 		return !empty($app) && in_array($app, self::getAppsList($admin));
 	}
 
