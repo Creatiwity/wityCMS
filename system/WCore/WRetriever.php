@@ -161,10 +161,6 @@ class WRetriever {
 		}
 	}
 
-	public static function getViewFromModel(array $model) {
-		return self::getView($model['app'], $model['params'], $model['parent']);
-	}
-
 	/**
 	 * Get the controller of an application for a given URL.
 	 *
