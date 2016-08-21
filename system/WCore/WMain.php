@@ -79,7 +79,7 @@ class WMain {
 
 			default: // Render in a theme
 				$view = WRetriever::getView($route['app'], $route['params'], false);
-				$theme = ($route['admin']) ? 'admin-bootstrap': WConfig::get('config.theme');
+				$theme = ($route['admin']) ? WConfig::get('config.theme_admin') : WConfig::get('config.theme');
 
 				// Load language file from template
 				if ($route['admin']) {

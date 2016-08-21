@@ -335,8 +335,6 @@ class WView {
 
 		// Check template file
 		if (empty($this->templateFile)) {
-			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
-			// A View can now be empty
 			return '';
 		}
 
@@ -345,7 +343,7 @@ class WView {
 			$this->render_counts[$signature] = 1;
 		} else {
 			if ($this->render_counts[$signature] >= 5) {
-				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times. ')))->render();
+				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times.')))->render();
 			}
 
 			$this->render_counts[$signature]++;

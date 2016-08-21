@@ -113,6 +113,7 @@ class Installer {
 					WConfig::set('config.page_title', $config['site_title']);
 					WConfig::set('config.page_description', '');
 					WConfig::set('config.theme', $config['theme']);
+					WConfig::set('config.theme_admin', 'admin-bootstrap');
 					WConfig::set('config.lang', $config['language']);
 					WConfig::set('config.timezone', $config['timezone']);
 					WConfig::set('config.email', $user['email']);
