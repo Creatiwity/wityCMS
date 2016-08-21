@@ -58,19 +58,19 @@ class WMain {
 		$route = WRoute::route();
 
 		$response = new WResponse();
-		$model = WRetriever::getModel($route['app'], $route['params'], false);
+		$model = WRetriever::getModel($route['url'], array(), false);
 		switch ($route['mode']) {
 			case 'm': // Only model
 				$response->renderModel($model);
 				break;
 
 			case 'v': // Only view
-				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$view = WRetriever::getView($route['url'], array(), false);
 				$response->renderView($model, $view);
 				break;
 
 			case 'mv': // Model + View
-				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$view = WRetriever::getView($route['url'], array(), false);
 				$response->renderModelView($model, $view);
 				break;
 
@@ -78,7 +78,7 @@ class WMain {
 				break;
 
 			default: // Render in a theme
-				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$view = WRetriever::getView($route['url'], array(), false);
 				$theme = ($route['admin']) ? WConfig::get('config.theme_admin') : WConfig::get('config.theme');
 
 				// Load language file from template
@@ -202,6 +202,7 @@ class WMain {
 		$tpl = WSystem::getTemplate();
 
 		$route = WRoute::route();
+		$front_route = WRoute::parseURL(WConfig::get('route.default_front'));
 
 		// Setup system template variables with $wity_ prefix
 		$tpl_vars = array(
@@ -211,7 +212,7 @@ class WMain {
 			'wity_page_title'       => WConfig::get('config.page_title'),
 			'wity_page_description' => WConfig::get('config.page_description'),
 			'wity_user'             => false,
-			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
+			'wity_home'             => WRoute::getQuery() == '' || WRoute::equals($route, $front_route),
 			'wity_app'              => $route['app'],
 			'wity_query'            => WRoute::getQuery(),
 			'wity_lang'             => WLang::getLang(),

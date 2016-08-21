@@ -40,11 +40,6 @@ abstract class WController {
 	protected $action = '';
 
 	/**
-	 * @var array Parameters to forward to the application's action
-	 */
-	private $params;
-
-	/**
 	 * @var array List of headers for this view
 	 */
 	private $headers = array();
@@ -80,11 +75,11 @@ abstract class WController {
 	/**
 	 * Default Launch method
 	 *
-	 * Launch method determines the method that must be triggered in the application.
-	 * Most of the time, the action given in URL is used.
+	 * Launch method determines the method that must be executed in the application.
+	 * Most of the time, the given action in URL is used.
 	 */
 	public function launch($action, array $params = array()) {
-		// Trigger the corresponding method for the action given in URL
+		// Execute the corresponding method for the given action in the URL
 		return $this->forward($action, $params);
 	}
 
@@ -106,7 +101,7 @@ abstract class WController {
 				$tpl->assign('wity_action', $this->action, true);
 			}
 
-			$access_result = $this->hasAccess($this->getAppName(), $action);
+			$access_result = $this->hasAccess($this->getAppName().'/'.$action);
 
 			if ($access_result !== true) {
 				// Display login form if not connected
@@ -177,7 +172,7 @@ abstract class WController {
 	 * @return string application's name
 	 */
 	public function getAppName() {
-		return $this->context['app-name'];
+		return $this->context['app'];
 	}
 
 	/**
@@ -261,16 +256,12 @@ abstract class WController {
 	}
 
 	/**
-	 * Returns action's name which is the second parameter given in the URL, right after the app's name.
+	 * Returns the action to be executed for the given action in the URL.
 	 *
-	 * This method will remove the first item in $params if it is used to determine the action to trigger.
-	 *
-	 * @param array $params
-	 * @return string action's name asked in the URL
+	 * @param array Action asked in the URL
+	 * @return string Executable action
 	 */
-	public function getAskedAction(&$params) {
-		$action = isset($params[0]) ? strtolower($params[0]) : '';
-
+	public function getExecutableAction($action) {
 		if ($this->getAdminContext()) {
 			$actions_key = 'admin';
 			$alias_prefix = 'admin-';
@@ -291,10 +282,7 @@ abstract class WController {
 			}
 		}
 
-		if (!empty($action)) {
-			// Remove the first item in $params because it is the action name
-			array_shift($params);
-		} else if (isset($this->manifest[$default])) {
+		if (empty($action) && isset($this->manifest[$default])) {
 			$action = $this->manifest[$default];
 		}
 
@@ -306,7 +294,7 @@ abstract class WController {
 	 *
 	 * @return string real executed action name
 	 */
-	public function getTriggeredAction() {
+	public function getExecutedAction() {
 		return $this->action;
 	}
 
@@ -491,25 +479,25 @@ abstract class WController {
 	/**
 	 * Checks whether the user has access to an application, or a precise action of an application
 	 * hasAccess('news') = does the user have access to news app?
-	 * hasAccess('news', 'detail') = access to action detail in news app?
+	 * hasAccess('news/detail') = access to action detail in news app?
 	 *
-	 * @param string  $app    Name of the app
-	 * @param string  $action Action in the app to be checked (can be empty '' to check overall app access)
-	 * @param boolean $admin  Admin context (default to Wity admin context)
-	 * @return boolean|array
+	 * @param string $url
+	 * @return bool|array
 	 */
-	public function hasAccess($app, $action = '', $admin = null) {
-		if (is_null($admin)) {
-			$admin = $this->getAdminContext();
+	public function hasAccess($url) {
+		$route = WRoute::parseURL($url);
+
+		if (empty($route['app'])) {
+			return false;
 		}
 
 		// Check manifest
-		$manifest = $this->loadManifest($app);
+		$manifest = $this->loadManifest($route['app']);
 		if (is_null($manifest)) {
 			return false;
 		}
 
-		if ($admin) { // Admin mode ON
+		if ($route['admin']) { // Admin mode ON
 			if (empty($_SESSION['access'])) {
 				return false;
 			}
@@ -518,20 +506,20 @@ abstract class WController {
 				return true;
 			}
 
-			if (isset($_SESSION['access'][$app]) && is_array($_SESSION['access'][$app]) && in_array('admin', $_SESSION['access'][$app])) {
-				if (empty($action)) {
+			if (isset($_SESSION['access'][$route['app']]) && is_array($_SESSION['access'][$route['app']]) && in_array('admin', $_SESSION['access'][$route['app']])) {
+				if (empty($route['action'])) {
 					// Asking for application access
 					return true;
-				} else if (isset($manifest['admin'][$action])) {
+				} else if (isset($manifest['admin'][$route['action']])) {
 					// Check that the current user possesses all the required permissions
-					foreach ($manifest['admin'][$action]['requires'] as $req) {
+					foreach ($manifest['admin'][$route['action']]['requires'] as $req) {
 						switch ($req) {
 							case 'connected':
 							case 'admin':
 								break;
 
 							default:
-								if (!in_array($req, $_SESSION['access'][$app])) {
+								if (!in_array($req, $_SESSION['access'][$route['app']])) {
 									$this->setHeader('Location', WRoute::getReferer());
 									return false;
 								}
@@ -544,6 +532,8 @@ abstract class WController {
 			}
 		} else { // Admin mode OFF
 			// Assign default value for $action
+			$action = $route['action'];
+
 			if (empty($action)) {
 				if (!empty($manifest['default'])) {
 					$action = $manifest['default'];
@@ -555,7 +545,7 @@ abstract class WController {
 			// Supreme Admin -> access granted
 			if (isset($_SESSION['access']) && $_SESSION['access'] == 'all') {
 				if (isset($manifest['actions'][$action]) && in_array('not-connected', $manifest['actions'][$action]['requires'])) {
-					return WNote::error('app_logout_required', WLang::get('error_app_logout_required', $action, $app));
+					return WNote::error('app_logout_required', WLang::get('error_app_logout_required', $action, $route['app']));
 				}
 
 				return true;
@@ -567,7 +557,7 @@ abstract class WController {
 					switch ($req) {
 						case 'not-connected':
 							if (WSession::isConnected()) {
-								return WNote::error('app_logout_required', WLang::get('error_app_logout_required', $action, $app));
+								return WNote::error('app_logout_required', WLang::get('error_app_logout_required', $action, $route['app']));
 							}
 							break;
 
@@ -578,7 +568,7 @@ abstract class WController {
 							break;
 
 						default:
-							if (!WSession::isConnected() || !isset($_SESSION['access'][$app]) || !in_array($req, $_SESSION['access'][$app])) {
+							if (!WSession::isConnected() || !isset($_SESSION['access'][$route['app']]) || !in_array($req, $_SESSION['access'][$route['app']])) {
 								return false;
 							}
 							break;
@@ -598,15 +588,11 @@ abstract class WController {
 	public function getAdminApps() {
 		static $admin_apps = array();
 		if (empty($admin_apps)) {
-			$apps = WRetriever::getAppsList();
+			$apps = WRetriever::getAppsList(true);
 
 			foreach ($apps as $app) {
-				if (substr($app, 0, 5) == 'admin') {
-					$app_name = substr($app, 6);
-
-					if ($this->hasAccess($app_name, '', true)) {
-						$admin_apps[$app_name] = $this->loadManifest($app_name);
-					}
+				if ($this->hasAccess('admin/'.$app)) {
+					$admin_apps[$app] = $this->loadManifest($app);
 				}
 			}
 		}

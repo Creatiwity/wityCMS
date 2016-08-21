@@ -40,7 +40,7 @@
 				{if !empty({$wity_admin_apps})}
 				<ul class="nav navbar-nav">
 					{for $app, $details in $wity_admin_apps}
-						<li {if 'admin/'.{$app} == {$wity_app}} class="active"{/if}>
+						<li {if {$app} == {$wity_app}} class="active"{/if}>
 							<a href="/admin/{$app}">{lang {$details.name}}</a>
 						</li>
 					{/for}

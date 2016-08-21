@@ -90,9 +90,8 @@ class WRoute {
 	 * @return array The route
 	 */
 	public static function route() {
-		$route = self::$route;
-		if (!empty($route)) {
-			return $route;
+		if (!empty(self::$route)) {
+			return self::$route;
 		}
 
 		$route = self::parseURL(self::$query);
@@ -135,17 +134,26 @@ class WRoute {
 	 */
 	public static function parseURL($url) {
 		$route = array(
-			'app'    => '',
-			'params' => array(),
-			'mode'   => '',
-			'admin'  => false
+			'url'         => $url,
+			'app'         => '',
+			'action'      => '',
+			'params'      => array(),
+			'mode'        => '',
+			'admin'       => false,
+			'querystring' => ''
 		);
 
 		if (is_string($url)) {
 			$url = trim($url, '/');
 
 			if (!empty($url)) {
-				$params = explode('/', $url);
+				$args = explode('?', $url);
+
+				if (!empty($args[1])) {
+					$route['querystring'] = $args[1];
+				}
+
+				$params = explode('/', $args[0]);
 
 				// Extract the mode if exists
 				if (isset($params[0]) && in_array($params[0], array('m', 'v', 'mv', 'o'))) {
@@ -161,11 +169,15 @@ class WRoute {
 
 						$app = array_shift($params);
 						if (!empty($app)) {
-							// In wityCMS, to trigger an admin app, the app must be equal to "admin/news"
-							$route['app'] = 'admin/'.$app;
+							$route['app'] = $app;
 						}
 					} else {
 						$route['app'] = $app;
+					}
+
+					$action = array_shift($params);
+					if (!empty($action)) {
+						$route['action'] = $action;
 					}
 				}
 
@@ -309,6 +321,19 @@ class WRoute {
 			WConfig::set('route.custom', $custom_routes);
 			WConfig::save('route');
 		}
+	}
+
+	/**
+	 * Checks if two routes are equal.
+	 *
+	 * @param array Route 1
+	 * @param array Route 2
+	 * @return bool
+	 */
+	public static function equals($route1, $route2) {
+		return $route1['app'] == $route2['app']
+			&& $route1['action'] == $route2['action']
+			&& $route1['admin'] == $route2['admin'];
 	}
 }
 

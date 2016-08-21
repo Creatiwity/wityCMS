@@ -41,18 +41,21 @@ class WRetriever {
 	/**
 	 * Gets the model of an application/action
 	 *
-	 * @param string $app_name
-	 * @param array  $params
+	 * @param string $url
+	 * @param array  $extra_params
 	 * @param bool   $has_parent Defines if the app to retrieve is the main app (so does not have parent) or not
 	 * @return array
 	 */
-	public static function getModel($app_name, array $params = array(), $has_parent = true) {
+	public static function getModel($url, $extra_params = array(), $has_parent = true) {
+		$route = WRoute::parseURL($url);
+		$route['params'] = array_merge($route['params'], $extra_params);
+
 		// Get app controller
-		$controller = self::getController($app_name, $has_parent);
+		$controller = self::getController($url, $has_parent);
 
 		// Treat the GET querystring
-		if (isset($params['querystring'])) {
-			$querystring = explode('&', str_replace('&amp;', '&', $params['querystring']));
+		if (!empty($route['querystring'])) {
+			$querystring = explode('&', str_replace('&amp;', '&', $route['querystring']));
 			foreach ($querystring as $assignment) {
 				$data = addslashes($assignment);
 
@@ -63,16 +66,16 @@ class WRetriever {
 					$value = substr($data, $equal_pos+1);
 
 					// Update the Global variables
-					WRequest::set($key, $value, "GET");
+					WRequest::set($key, $value, 'GET');
 				}
 			}
 		}
 
 		// Init model structure
 		$model = array(
-			'app-name'   => $app_name,
+			'url'        => $url,
+			'app'        => $route['app'],
 			'action'     => '',
-			'params'     => $params,
 			'has-parent' => $has_parent,
 			'signature'  => '',
 			'result'     => null,
@@ -82,9 +85,9 @@ class WRetriever {
 		// Get model
 		if ($controller instanceof WController) {
 			// Match the asked action with the manifest
-			$action = $controller->getAskedAction($params);
+			$action = $controller->getExecutableAction($route['action']);
 
-			$model['signature'] = md5($app_name.$action.serialize($params));
+			$model['signature'] = md5($route['app'].$action.serialize($route['params']));
 
 			// Check if this model was not already calculated
 			if (isset(self::$models[$model['signature']])) {
@@ -92,9 +95,9 @@ class WRetriever {
 			}
 
 			// Trigger the action and get the result model
-			$model['result'] = $controller->launch($action, $params);
+			$model['result'] = $controller->launch($action, $route['params']);
 
-			$model['action'] = $controller->getTriggeredAction();
+			$model['action'] = $controller->getExecutedAction();
 
 			// Add headers to the model
 			$model['headers'] = $controller->getHeaders();
@@ -113,18 +116,18 @@ class WRetriever {
 	 * The model will automatically be generated and the View will be prepared
 	 * (the corresponding method to the action will be executed in WView)
 	 *
-	 * @param string $app_name   Application's name
-	 * @param array  $params     Some special parameters to send to the controller (optional)
+	 * @param string $url
+	 * @param array  $extra_params
 	 * @param bool   $has_parent Defines if the app to retrieve is the main app (so does not have parent) or not
 	 * @return WView
 	 */
-	public static function getView($app_name, array $params = array(), $has_parent = true) {
+	public static function getView($url, $extra_params = array(), $has_parent = true) {
 		// Get app controller
-		$controller = self::getController($app_name, $has_parent);
+		$controller = self::getController($url, $has_parent);
 
 		if ($controller instanceof WController) {
 			// Get the model
-			$model = self::getModel($app_name, $params, $has_parent);
+			$model = self::getModel($url, $extra_params, $has_parent);
 
 			if (is_array($model['result']) && array_keys($model['result']) == array('level', 'code', 'message', 'handlers')) {
 				// If model is a Note
@@ -159,41 +162,43 @@ class WRetriever {
 	}
 
 	public static function getViewFromModel(array $model) {
-		return self::getView($model['app-name'], $model['params'], $model['parent']);
+		return self::getView($model['app'], $model['params'], $model['parent']);
 	}
 
 	/**
-	 * If found, execute the application in the apps/$app_name directory
+	 * Get the controller of an application for a given URL.
 	 *
-	 * @param string $app_code   Code of the application that will be launched: "admin/news" or "news"
+	 * @param string $url Url of the app to be launched
 	 * @param bool   $has_parent Defines if the app to retrieve is the main app (so does not have parent) or not
 	 * @return WController App Controller
 	 */
-	public static function getController($app_code, $has_parent) {
-		// Check if app not already instantiated
-		if (isset(self::$controllers[$app_code])) {
-			$context = self::$controllers[$app_code]->getContext();
-			$context['parent'] = $has_parent;
-			self::$controllers[$app_code]->setContext($context);
+	public static function getController($url, $has_parent = true) {
+		$route = WRoute::parseURL($url);
 
-			return self::$controllers[$app_code];
+		if (empty($route['app'])) {
+			return null;
 		}
 
-		// App asked exists?
-		if (self::isApp($app_code)) {
-			// For example, an admin application is: "admin/news"
-			$admin = strpos($app_code, 'admin/') === 0;
+		// Check if app not already instantiated
+		if (isset(self::$controllers[$route['app']])) {
+			$context = self::$controllers[$route['app']]->getContext();
+			$context['parent'] = $has_parent;
 
+			self::$controllers[$route['app']]->setContext($context);
+
+			return self::$controllers[$route['app']];
+		}
+
+		// Asked App exists?
+		if (self::isApp($route['app'], $route['admin'])) {
 			// Calculates app's directory and class name
-			if ($admin) {
-				$app_name  = substr($app_code, 6);
-				$app_dir   = APPS_DIR.$app_name.DS.'admin'.DS;
-				$app_name_clear = str_replace(' ', '', ucwords(preg_replace('#[^a-zA-Z]+#', ' ', $app_name)));
+			$app_name_clear = str_replace(' ', '', ucwords(preg_replace('#[^a-zA-Z]+#', ' ', $route['app'])));
+
+			if ($route['admin']) {
+				$app_dir   = APPS_DIR.$route['app'].DS.'admin'.DS;
 				$app_class = $app_name_clear.'AdminController';
 			} else {
-				$app_name  = $app_code;
-				$app_dir   = APPS_DIR.$app_code.DS.'front'.DS;
-				$app_name_clear = str_replace(' ', '', ucwords(preg_replace('#[^a-zA-Z]+#', ' ', $app_code)));
+				$app_dir   = APPS_DIR.$route['app'].DS.'front'.DS;
 				$app_class = $app_name_clear.'Controller';
 			}
 
@@ -203,10 +208,11 @@ class WRetriever {
 			// App's controller must inherit WController
 			if (class_exists($app_class) && get_parent_class($app_class) == 'WController') {
 				$context = array(
-					'app-name'   => $app_name,
+					'url'        => $url,
+					'app'        => $route['app'],
 					'directory'  => $app_dir,
 					'controller' => $app_class,
-					'admin'      => $admin,
+					'admin'      => $route['admin'],
 					'parent'     => $has_parent
 				);
 
@@ -235,12 +241,12 @@ class WRetriever {
 				$controller->init($context);
 
 				// Store the controller
-				self::$controllers[$app_code] = $controller;
+				self::$controllers[$route['app']] = $controller;
 
 				return $controller;
 			} else {
 				WResponse::httpHeaderStatus(500);
-				return WNote::error('app_structure', WLang::get('error_bad_app_structure', $app_code));
+				return WNote::error('app_structure', WLang::get('error_bad_app_structure', $route['app']));
 			}
 		} else {
 			WResponse::httpHeaderStatus(404);
@@ -251,21 +257,24 @@ class WRetriever {
 	/**
 	 * Returns a list of applications that contains a main.php file in their front directory
 	 *
+	 * @param bool $admin Admin mode?
 	 * @return array Array of string containing app's name
 	 */
-	public static function getAppsList() {
+	public static function getAppsList($admin = false) {
 		if (empty(self::$apps_list)) {
 			$apps = glob(APPS_DIR.'*', GLOB_ONLYDIR);
 			foreach ($apps as $appDir) {
 				if ($appDir != '.' && $appDir != '..') {
-					// Check front
-					if (file_exists($appDir.DS.'front'.DS.'main.php')) {
-						self::$apps_list[] = basename($appDir);
-					}
-
-					// Check admin
-					if (file_exists($appDir.DS.'admin'.DS.'main.php')) {
-						self::$apps_list[] = 'admin/'.basename($appDir);
+					if ($admin) {
+						// Check admin
+						if (file_exists($appDir.DS.'admin'.DS.'main.php')) {
+							self::$apps_list[] = basename($appDir);
+						}
+					} else {
+						// Check front
+						if (file_exists($appDir.DS.'front'.DS.'main.php')) {
+							self::$apps_list[] = basename($appDir);
+						}
 					}
 				}
 			}
@@ -277,10 +286,11 @@ class WRetriever {
 	 * Returns application existence
 	 *
 	 * @param string $app
+	 * @param bool $admin Admin mode?
 	 * @return bool true if $app exists, false otherwise
 	 */
-	public static function isApp($app) {
-		return !empty($app) && in_array($app, self::getAppsList());
+	public static function isApp($app, $admin = false) {
+		return !empty($app) && in_array($app, self::getAppsList($admin));
 	}
 
 	/********************************************
@@ -326,7 +336,7 @@ class WRetriever {
 				// Replace all the template variables in the string
 				$params_string = WTemplateParser::replaceNodes($params_string, create_function('$s', "return '\'.'.WTemplateCompiler::parseVar(\$s).'.\'';"));
 
-				return 'WRetriever::getModel("'.$route['app'].'", '.$params_string.')';
+				return 'WRetriever::getModel("'.$url.'", '.$params_string.')';
 			}
 		}
 
