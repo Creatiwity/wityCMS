@@ -186,16 +186,14 @@ class TeamAdminController extends WController {
 	 * @return array WNote
 	 */
 	protected function membersReorder(array $params) {
-		$post_data = WRequest::getAssoc(array('positions'), null, 'POST');
+		if (WRequest::hasDataForURL('admin/team/members-reorder')) {
+			$positions = WRequest::get('positions', null, 'POST');
 
-		if (!in_array(null, $post_data, true)) {
-			foreach ($post_data['positions'] as $id => $position) {
+			foreach ($positions as $id => $position) {
 				$id = intval($id);
 
 				if (!empty($id)) {
-					$position = intval($position);
-
-					$this->model->reorderElement($id, $position);
+					$this->model->reorderElement($id, intval($position));
 				}
 			}
 

@@ -11,8 +11,8 @@ require(['jquery'], function($) {
 		setNote = function($domObject, jsonResponse) {
 			var cleaned, app, $container, _i, _len;
 
-			if (jsonResponse['app-name']) {
-				app = jsonResponse['app-name'];
+			if (jsonResponse['app']) {
+				app = jsonResponse['app'];
 
 				$('[data-wity-note-app="' + app + '"]').remove();
 
@@ -76,7 +76,7 @@ require(['jquery'], function($) {
 						// Debug code
 						// $('body').prepend('<pre>' + response + '</pre>');
 						setNote($form.parent(), {
-							'app-name': 'contact',
+							'app': 'contact',
 							'notes': [{
 								level: 'danger',
 								code: 'unknown_error',

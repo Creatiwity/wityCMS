@@ -19,7 +19,8 @@
 	<item id="Description (about 125 symbols)">Description (environ 125 caractères)</item>
 	<item id="Icons">Icônes</item>
 	<item id="Favicon (.ico)">Favicon (.ico)</item>
-	<item id="Debug mode">Mode debug</item>
+	<item id="Debug mode">Mode Debug (affiche certaines erreurs)</item>
+	<item id="Anti flood mode">Mode Anti-Flood (empêche le renvoi des données de formulaire une seconde fois)</item>
 	<item id="Facebook's OpenGraph">OpenGraph (Facebook)</item>
 	<item id="Description">Description</item>
 	<item id="Image">Image</item>

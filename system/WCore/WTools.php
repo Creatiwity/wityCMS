@@ -64,21 +64,6 @@ class WTools {
 	}
 
 	/**
-	 * Get countries list
-	 *
-	 * @return array
-	 */
-	public static function getCountries() {
-		static $countries = array();
-
-		if (empty($countries)) {
-			include HELPERS_DIR.'countries'.DS.'countries.php';
-		}
-
-		return $countries;
-	}
-
-	/**
 	 * Generates a random string
 	 *
 	 * @param int $length

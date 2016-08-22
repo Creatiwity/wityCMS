@@ -32,12 +32,13 @@ class WSession {
 	/*
 	 * Maximum login attempts
 	 */
-	const MAX_LOGIN_ATTEMPT = 3;
+	const MAX_LOGIN_ATTEMPT = 5;
 
 	/**
-	 * States
+	 * Return codes
 	 */
-	const LOGIN_SUCCESS = 1;
+	const LOGIN_SUCCESS = 0;
+	const LOGIN_ERROR = 1;
 	const LOGIN_MAX_ATTEMPT_REACHED = 2;
 
 	/**
@@ -71,7 +72,7 @@ class WSession {
 	 * @return boolean true if the user is logged in, false otherwise
 	 */
 	public static function isConnected() {
-		return isset($_SESSION['userid']);
+		return !empty($_SESSION['userid']);
 	}
 
 	/**
@@ -79,10 +80,10 @@ class WSession {
 	 *
 	 * @param string $nickname nickname
 	 * @param string $password password
-	 * @param string $remember true if auto-log in of the user enabled for the next time
+	 * @param int $remember Time in seconds to keep the session
 	 * @return int State of the request (LOGIN_SUCCESS | 0 = error)
 	 */
-	public function createSession($nickname, $password, $remember) {
+	public function createSession($nickname, $password, $remember = 0) {
 		// In case of multiple errors of login, return an error
 		// Stores in SESSION variable $login_try the login try number
 		if (!isset($_SESSION['login_try']) || (isset($_SESSION['flood_time']) && $_SESSION['flood_time'] < time())) {
@@ -93,40 +94,30 @@ class WSession {
 
 		// Treatment
 		$nickname = trim($nickname);
-		// Email to lower case
-		if (strpos($nickname, '@') !== false) {
-			$nickname = strtolower($nickname);
-		}
-		$password_hash = sha1($password);
+		$password_hash = sha1(trim($password));
 
 		// Search a matching couple (nickname, password_hash) in DB
 		include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 		$userModel = new UserModel();
-		$data = $userModel->matchUser($nickname, $password_hash);
+		$user = $userModel->matchUser($nickname, $password_hash);
 
 		// User found
-		if (!empty($data)) {
+		if (!empty($user)) {
 			unset($_SESSION['login_try']); // cleanup
-			$this->setupSession($data['id'], $data);
-
-			// Setup lang at login
-			if (!empty($data['lang'])) {
-				$_SESSION['lang'] = $data['lang'];
-				$_SESSION['lang_iso'] = substr($data['lang'], 0, 2);
-			}
+			$this->setupSession($user);
 
 			// Cookie setup
-			if ($remember > 0) {
-				$lifetime = time() + $remember;
-				// Cookie setup
-				setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
-				setcookie('hash', $this->generate_hash($data['nickname'], $data['password']), $lifetime, WRoute::getDir());
-			}
+			$lifetime = $remember > 0 ? time() + $remember : 0;
+
+			setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
+			setcookie('hash', $this->generate_hash($user['nickname'], $user['password']), $lifetime, WRoute::getDir());
+
 			return self::LOGIN_SUCCESS;
 		} else {
 			// Attempt + 1
 			$_SESSION['login_try']++;
-			return 0;
+
+			return self::LOGIN_ERROR;
 		}
 	}
 
@@ -136,22 +127,24 @@ class WSession {
 	 * @param string $userid current user id
 	 * @param array $data data to store into $_SESSION
 	 */
-	public function setupSession($userid, $data) {
-		$_SESSION['userid']    = $userid;
-		$_SESSION['nickname']  = $data['nickname'];
-		$_SESSION['email']     = $data['email'];
-		$_SESSION['groupe']    = $data['groupe'];
-		$_SESSION['firstname'] = $data['firstname'];
-		$_SESSION['lastname']  = $data['lastname'];
+	private function setupSession($user) {
+		$_SESSION['userid']    = $user['id'];
+		$_SESSION['nickname']  = $user['nickname'];
+		$_SESSION['email']     = $user['email'];
+		$_SESSION['groupe']    = $user['groupe'];
+		$_SESSION['firstname'] = $user['firstname'];
+		$_SESSION['lastname']  = $user['lastname'];
+		$_SESSION['lang_code'] = $user['lang'];
+		$_SESSION['lang_iso']  = substr($user['lang'], 0, 2);
 
-		$_SESSION['access_string'] = $data['access'];
-		if (empty($data['access'])) {
+		$_SESSION['access_string'] = $user['access'];
+		if (empty($user['access'])) {
 			$_SESSION['access'] = '';
-		} else if ($data['access'] == 'all') {
+		} else if ($user['access'] == 'all') {
 			$_SESSION['access'] = 'all';
 		} else {
 			$_SESSION['access'] = array();
-			foreach (explode(',', $data['access']) as $access) {
+			foreach (explode(',', $user['access']) as $access) {
 				$first_bracket = strpos($access, '[');
 				if ($first_bracket !== false) {
 					$app_name = substr($access, 0, $first_bracket);
@@ -169,8 +162,10 @@ class WSession {
 
 	/**
 	 * Disconnects the user
+	 *
+	 * @param bool $destroy Destroy the entire session (including other vars than user's)?
 	 */
-	public function closeSession() {
+	public function closeSession($destroy = false) {
 		// Delete vars
 		unset(
 			$_SESSION['userid'],
@@ -179,28 +174,24 @@ class WSession {
 			$_SESSION['groupe'],
 			$_SESSION['firstname'],
 			$_SESSION['lastname'],
-			$_SESSION['lang'],
+			$_SESSION['lang_code'],
+			$_SESSION['lang_iso'],
 			$_SESSION['access_string'],
 			$_SESSION['access'],
 			$_SESSION['token_expiration']
 		);
 
 		// Reset cookies
-		setcookie('userid', '', time()-3600, WRoute::getDir());
-		setcookie('hash', '', time()-3600, WRoute::getDir());
-	}
+		setcookie('userid', '', time() - 3600, WRoute::getDir());
+		setcookie('hash', '', time() - 3600, WRoute::getDir());
 
-	/**
-	 * Clean variables used to define a user loaded
-	 */
-	public function destroy() {
-		$this->closeSession();
+		if ($destroy) {
+			$_SESSION = array();
+			session_destroy();
 
-		$_SESSION = array();
-		session_destroy();
-
-		// Reset cookies
-		setcookie(session_name(), '', time()-3600, WRoute::getDir());
+			// Reset cookies
+			setcookie(session_name(), '', time() - 3600, WRoute::getDir());
+		}
 	}
 
 	/**
@@ -214,12 +205,12 @@ class WSession {
 		if (!empty($_COOKIE['hash'])) {
 			include_once APPS_DIR.'user'.DS.'front'.DS.'model.php';
 			$userModel = new UserModel();
-			$data = $userModel->getUser($userid);
+			$user = $userModel->getUser($userid);
 
-			if (!empty($data)) {
+			if (!empty($user)) {
 				// Check hash
-				if ($_COOKIE['hash'] == $this->generate_hash($data['nickname'], $data['password'])) {
-					$this->setupSession($userid, $data);
+				if ($_COOKIE['hash'] == $this->generate_hash($user['nickname'], $user['password'])) {
+					$this->setupSession($user);
 
 					return true;
 				}
@@ -257,7 +248,7 @@ class WSession {
 	 *
 	 * @return boolean true if flood detected, false otherwise
 	 */
-	public function check_flood() {
+	public function checkFlood() {
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$flood = true;
 
@@ -267,7 +258,7 @@ class WSession {
 				$flood = false;
 			}
 			// Last request checking
-			else if (!empty($_SESSION['last_query']) && md5(serialize($_POST)) == $_SESSION['last_query']) {
+			else if (!empty($_SESSION['last_query']) && md5(serialize($_POST).serialize($_FILES)) == $_SESSION['last_query']) {
 				WNote::info('flood_duplicate', WLang::get('info_flood_duplicate'));
 				$flood = false;
 			}
@@ -284,10 +275,10 @@ class WSession {
 			}
 
 			// Updating flood variables
-			$_SESSION['last_query'] = md5(serialize($_POST));
+			$_SESSION['last_query'] = md5(serialize($_POST).serialize($_FILES));
 
 			// Updating flood time at shutdown to let less priorized script using this variable
-			register_shutdown_function(array($this, 'upgrade_flood'), time() + self::FLOOD_TIME + 1);
+			register_shutdown_function(array($this, 'upgradeFlood'), time() + self::FLOOD_TIME + 1);
 
 			return $flood;
 		} else {
@@ -308,7 +299,7 @@ class WSession {
 	 *
 	 * @param int $limit timestamp limit
 	 */
-	public function upgrade_flood($limit) {
+	public function upgradeFlood($limit) {
 		$_SESSION['flood_time'] = $limit;
 	}
 
@@ -318,17 +309,36 @@ class WSession {
 	 * @return string Either an ipv4 or an ipv6 address
 	 */
 	public static function getIP() {
-		if ($ip = getenv('HTTP_CLIENT_IP')) {}
-		else if ($ip = getenv('HTTP_X_FORWARDED_FOR')) {}
-		else if ($ip = getenv('HTTP_X_FORWARDED')) {}
-		else if ($ip = getenv('HTTP_FORWARDED_FOR')) {}
-		else if ($ip = getenv('HTTP_FORWARDED')) {}
-		else if ($ip = getenv('HTTP_REMOTE_ADDR')) {}
+		if ($ip = $_SERVER['HTTP_CLIENT_IP']) {}
+		else if ($ip = $_SERVER['HTTP_X_FORWARDED_FOR']) {}
+		else if ($ip = $_SERVER['HTTP_X_FORWARDED']) {}
+		else if ($ip = $_SERVER['HTTP_FORWARDED_FOR']) {}
+		else if ($ip = $_SERVER['HTTP_FORWARDED']) {}
+		else if ($ip = $_SERVER['HTTP_REMOTE_ADDR']) {}
 		else {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		}
 
 		return $ip;
+	}
+
+	/**
+	 * Checks if current session has access to an app and permission.
+	 *
+	 * @param string $app
+	 * @param string $permission
+	 * @return bool
+	 */
+	public static function hasPermission($app, $permission) {
+		if (empty($_SESSION['access'])) {
+			return false;
+		}
+
+		if ($_SESSION['access'] == 'all') {
+			return true;
+		}
+
+		return isset($_SESSION['access'][$app]) && in_array($permission, $_SESSION['access'][$app]);
 	}
 }
 

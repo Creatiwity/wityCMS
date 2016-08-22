@@ -175,16 +175,14 @@ class SlideshowAdminController extends WController {
 	 * @return array WNote
 	 */
 	protected function slides_reorder(array $params) {
-		$post_data = WRequest::getAssoc(array('positions'), null, 'POST');
+		if (WRequest::hasDataForURL('admin/slideshow/slides_reorder')) {
+			$positions = WRequest::get('positions', null, 'POST');
 
-		if (!in_array(null, $post_data, true)) {
-			foreach ($post_data['positions'] as $id => $position) {
+			foreach ($positions as $id => $position) {
 				$id = intval($id);
 
 				if (!empty($id)) {
-					$position = intval($position);
-
-					$this->model->reorderSlide($id, $position);
+					$this->model->reorderSlide($id, intval($position));
 				}
 			}
 

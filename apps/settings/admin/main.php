@@ -30,7 +30,7 @@ class SettingsAdminController extends WController {
 	protected function general(array $params) {
 		$settings_keys = array(
 			// General
-			'site_title', 'base', 'theme', 'timezone', 'favicon', 'ga', 'version', 'debug',
+			'site_title', 'base', 'theme', 'timezone', 'favicon', 'ga', 'version', 'debug', 'anti_flood',
 			// SEO
 			'page_title', 'page_description',
 			// OpenGraph
@@ -55,11 +55,11 @@ class SettingsAdminController extends WController {
 			$data = WRequest::getAssoc(array('update', 'settings', 'route'));
 
 			foreach ($settings_keys as $key) {
-				if (isset($data['settings'][$key])) {
-					if ($key == 'debug') {
-						$settings['debug'] = ($data['settings']['debug'] == 'on');
-						WConfig::set('config.debug', $settings['debug']);
-					} else if ($key == 'ga') {
+				if ($key == 'debug' || $key == 'anti_flood') {
+					$settings[$key] = (isset($data['settings'][$key]) && $data['settings'][$key] == 'on');
+					WConfig::set('config.'.$key, $settings[$key]);
+				} else if (isset($data['settings'][$key])) {
+					if ($key == 'ga') {
 						if (!empty($data['settings']['ga']) && !preg_match('/^ua-\d{4,9}-\d{1,4}$/i', $data['settings']['ga'])) {
 							WNote::error('settings_error', WLang::get('The Google Analytics tracking code is not correct.'));
 						} else {
@@ -134,7 +134,7 @@ class SettingsAdminController extends WController {
 			'front_apps'  => $this->getAllFrontApps(),
 			'admin_apps'  => $this->getAllAdminApps(),
 			'themes'      => $this->getAllThemes(),
-			'countries'   => WTools::getCountries(),
+			'countries'   => WLang::getCountries(),
 		);
 	}
 

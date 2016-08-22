@@ -81,7 +81,7 @@ class UserAdminView extends WView {
 		// Setup the form
 		$this->assign('require', 'apps!user/access_form');
 		$this->assign('groups', $model['groupes']);
-		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('apps', $model['apps']);
 		$this->assign('default_admin', $model['default_admin']);
 
 		$this->assignDefault(array(
@@ -137,7 +137,7 @@ class UserAdminView extends WView {
 		$this->assign($model['sorting_tpl']);
 
 		$this->assign('groups', $model['groups']);
-		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('apps', $model['apps']);
 		$this->assign('default_admin', $model['default_admin']);
 	}
 

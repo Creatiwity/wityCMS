@@ -30,19 +30,17 @@ class SearchController extends WController {
 
 		// Do researches
 		if (!empty($query)) {
-			$apps = WRetriever::getAppsList();
+			$apps = WRetriever::getAppsList(false);
 
 			foreach ($apps as $app) {
 				// Only front app
-				if (strpos($app, 'admin/') === false) {
-					$manifest = $this->loadManifest($app);
+				$manifest = $this->loadManifest($app);
 
-					if (isset($manifest['actions']['search'])) {
-						$search_model = WRetriever::getModel($app, array('search', $query));
+				if (isset($manifest['actions']['search'])) {
+					$search_model = WRetriever::getModel($app.'/search', array($query));
 
-						if (!empty($search_model['result'])) {
-							$results[$app] = $search_model['result'];
-						}
+					if (!empty($search_model['result'])) {
+						$results[$app] = $search_model['result'];
 					}
 				}
 			}

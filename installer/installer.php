@@ -111,11 +111,15 @@ class Installer {
 					WConfig::set('config.base', trim($config['base'], '/'));
 					WConfig::set('config.site_title', $config['site_title']);
 					WConfig::set('config.page_title', $config['site_title']);
+					WConfig::set('config.page_description', '');
 					WConfig::set('config.theme', $config['theme']);
+					WConfig::set('config.theme_admin', 'admin-bootstrap');
 					WConfig::set('config.lang', $config['language']);
 					WConfig::set('config.timezone', $config['timezone']);
 					WConfig::set('config.email', $user['email']);
 					WConfig::set('config.debug', false);
+					WConfig::set('config.anti_flood', true);
+					WConfig::set('config.version', '1.0.0');
 					WConfig::save('config', CONFIG_DIR.'config.php');
 
 					// Save Route configuration
@@ -132,12 +136,14 @@ class Installer {
 							if ($file->getFilename() === '.' || $file->getFilename() === '..') {
 								continue;
 							}
+
 							if ($file->isDir()) {
 								@rmdir($file->getRealPath());
 							} else {
 								@unlink($file->getRealPath());
 							}
 						}
+
 						@rmdir($dir);
 
 						$this->view->success('installer', $data['installer'], 'Congratulations', 'Installation finished !');
@@ -606,7 +612,6 @@ class Installer {
 			return false;
 		}
 	}
-
 }
 
 ?>

@@ -20,18 +20,18 @@ class LangController extends WController {
 		switch ($lang) {
 			default:
 			case 'fr':
-				$_SESSION['lang'] = 'fr_FR';
-				$_SESSION['lang_iso'] = 'fr';
+				$_SESSION['current_lang_code'] = 'fr_FR';
+				$_SESSION['current_lang_iso'] = 'fr';
 				break;
 
 			case 'en':
-				$_SESSION['lang'] = 'en_EN';
-				$_SESSION['lang_iso'] = 'en';
+				$_SESSION['current_lang_code'] = 'en_EN';
+				$_SESSION['current_lang_iso'] = 'en';
 				break;
 
 			case 'es':
-				$_SESSION['lang'] = 'es_ES';
-				$_SESSION['lang_iso'] = 'es';
+				$_SESSION['current_lang_code'] = 'es_ES';
+				$_SESSION['current_lang_iso'] = 'es';
 				break;
 		}
 
