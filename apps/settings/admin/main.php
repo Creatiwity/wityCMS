@@ -363,7 +363,15 @@ class SettingsAdminController extends WController {
 								}
 							}
 
-							if (preg_match_all("#WLang::(get|_)\('([^\|$]+)'\)#U", $file_content, $matches)) {
+							if (preg_match_all("#WLang::(get|_)\('([^\']+)'#U", $file_content, $matches)) {
+								foreach ($matches[2] as $value) {
+									if (!in_array($value, $fileTranslatables['translatables'])) {
+										array_push($fileTranslatables['translatables'], $value);
+									}
+								}
+							}
+
+							if (preg_match_all("#WLang::(get|_)\(\"([^\"]+)\"#U", $file_content, $matches)) {
 								foreach ($matches[2] as $value) {
 									if (!in_array($value, $fileTranslatables['translatables'])) {
 										array_push($fileTranslatables['translatables'], $value);
