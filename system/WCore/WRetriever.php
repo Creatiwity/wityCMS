@@ -316,29 +316,19 @@ class WRetriever {
 	public static function compile_retrieve_model($args) {
 		if (!empty($args)) {
 			$args = explode('?', $args);
-			$url = trim($args[0], '/');
+			$url = $args[0];
 
-			// Explode the route in several parts
-			$custom_routes = WConfig::get('route.custom');
-			if (isset($custom_routes[$url])) {
-				$route = WRoute::parseURL($custom_routes[$url]);
-			} else {
-				$route = WRoute::parseURL($url);
-			}
-
-			if (!empty($route['app'])) {
+			if (isset($args[1])) {
 				// Format the querystring PHP code if a querystring is given
-				if (isset($args[1])) {
-					$route['params']['querystring'] = $args[1];
-				}
-
-				$params_string = var_export($route['params'], true);
+				$params_string = var_export($args[1], true);
 
 				// Replace all the template variables in the string
 				$params_string = WTemplateParser::replaceNodes($params_string, create_function('$s', "return '\'.'.WTemplateCompiler::parseVar(\$s).'.\'';"));
-
-				return 'WRetriever::getModel("'.$url.'", '.$params_string.')';
+			} else {
+				$params_string = 'array()';
 			}
+
+			return 'WRetriever::getModel("'.$url.'", '.$params_string.')';
 		}
 
 		return '';
