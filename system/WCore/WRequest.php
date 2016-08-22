@@ -18,6 +18,18 @@ class WRequest {
 	 */
 	private static $checked = array();
 
+	public static function init() {
+		$GLOBALS['_PUT'] = array();
+		$GLOBALS['_DELETE'] = array();
+
+		$method = WRequest::getMethod();
+		if ($method == 'PUT' || $method == 'DELETE') {
+			parse_str(file_get_contents('php://input'), $params);
+			$GLOBALS['_'.$method] = $params;
+			$_REQUEST += $params;
+		}
+	}
+
 	/**
 	 * Returns the values of all variables with name in $names sent by $hash method
 	 *
@@ -44,6 +56,12 @@ class WRequest {
 				break;
 			case 'POST':
 				$data = &$_POST;
+				break;
+			case 'PUT':
+				$data = &$GLOBALS['_PUT'];
+				break;
+			case 'DELETE':
+				$data = &$GLOBALS['_DELETE'];
 				break;
 			case 'FILES':
 				$data = &$_FILES;
@@ -89,6 +107,12 @@ class WRequest {
 				break;
 			case 'POST':
 				$data = &$_POST;
+				break;
+			case 'PUT':
+				$data = &$GLOBALS['_PUT'];
+				break;
+			case 'DELETE':
+				$data = &$GLOBALS['_DELETE'];
 				break;
 			case 'FILES':
 				$data = &$_FILES;
@@ -169,6 +193,14 @@ class WRequest {
 				break;
 			case 'POST':
 				$_POST[$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'PUT':
+				$GLOBALS['_PUT'][$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'DELETE':
+				$GLOBALS['_DELETE'][$name] = $value;
 				$_REQUEST[$name] = $value;
 				break;
 			case 'COOKIE':

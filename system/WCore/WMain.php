@@ -27,6 +27,9 @@ class WMain {
 		WLang::init();
 		WLang::declareLangDir(SYS_DIR.'lang');
 
+		// Initializing request
+		WRequest::init();
+
 		// Initializing the route
 		$this->setupRoute();
 
