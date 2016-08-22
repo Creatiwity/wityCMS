@@ -95,22 +95,10 @@ class WRoute {
 		}
 
 		$route = self::parseURL(self::$query);
-		$mode = $route['mode'];
 
-		// Remove the mode from the URL
-		if ($route['mode'] != '') {
-			$clean_query = str_replace($route['mode'].'/', '', self::$query);
-		} else {
-			$clean_query = self::$query;
-		}
-		$clean_query = rtrim($clean_query, '/');
+		if (empty($route['app'])) {
+			$mode = $route['mode'];
 
-		// Checking the existence of a custom route
-		$custom_routes = WConfig::get('route.custom');
-		if (isset($custom_routes[$clean_query])) {
-			$route = self::parseURL($custom_routes[$clean_query]);
-			$route['mode'] = $mode;
-		} else if (empty($route['app'])) {
 			// Use default route
 			if ($route['admin']) {
 				$route = self::parseURL(WConfig::get('route.default_admin'));
@@ -143,46 +131,53 @@ class WRoute {
 			'querystring' => ''
 		);
 
-		if (is_string($url)) {
+		if (!empty($url) && is_string($url)) {
 			$url = trim($url, '/');
 
-			if (!empty($url)) {
-				$args = explode('?', $url);
+			// Extract QueryString
+			$args = explode('?', $url);
 
-				if (!empty($args[1])) {
-					$route['querystring'] = $args[1];
-				}
+			if (!empty($args[1])) {
+				$route['querystring'] = $args[1];
+			}
 
-				$params = explode('/', $args[0]);
+			$params = explode('/', $args[0]);
 
-				// Extract the mode if exists
-				if (isset($params[0]) && in_array($params[0], array('m', 'v', 'mv', 'o'))) {
-					$route['mode'] = array_shift($params);
-				}
+			// Extract the mode if exists
+			if (isset($params[0]) && in_array($params[0], array('m', 'v', 'mv', 'o'))) {
+				$route['mode'] = array_shift($params);
+			}
 
-				// Extract the app
-				$app = array_shift($params);
-				if (!empty($app)) {
-					// Admin route
-					if ($app == 'admin') {
-						$route['admin'] = true;
+			// Search URL in custom routes
+			$custom_routes = WConfig::get('route.custom');
+			$cleaned_url = implode('/', $params);
+			if (isset($custom_routes[$cleaned_url])) {
+				$route['url'] = trim($custom_routes[$cleaned_url], '/');
+				$params = explode('/', $route['url']);
+			}
 
-						$app = array_shift($params);
-						if (!empty($app)) {
-							$route['app'] = $app;
-						}
-					} else {
+			// Extract the app
+			$app = array_shift($params);
+			if (!empty($app)) {
+				// Admin route
+				if ($app == 'admin') {
+					$route['admin'] = true;
+
+					$app = array_shift($params);
+					if (!empty($app)) {
 						$route['app'] = $app;
 					}
-
-					$action = array_shift($params);
-					if (!empty($action)) {
-						$route['action'] = $action;
-					}
+				} else {
+					$route['app'] = $app;
 				}
 
-				$route['params'] = $params;
+				$action = array_shift($params);
+				if (!empty($action)) {
+					$route['action'] = $action;
+				}
 			}
+
+			$route['params'] = $params;
 		}
 
 		return $route;
