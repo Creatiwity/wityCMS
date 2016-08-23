@@ -36,6 +36,8 @@ class WRequest {
 	 * You can use the following hashes:
 	 * - "GET"
 	 * - "POST"
+	 * - "PUT"
+	 * - "DELETE"
 	 * - "FILES"
 	 * - "COOKIE"
 	 * - "REQUEST" (default)
