@@ -110,7 +110,7 @@ class WSession {
 			$lifetime = $remember > 0 ? time() + $remember : 0;
 
 			setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
-			setcookie('hash', $this->generate_hash($user['nickname'], $user['password']), $lifetime, WRoute::getDir());
+			setcookie('hash', $this->generateHash($user['nickname'], $user['password']), $lifetime, WRoute::getDir());
 
 			return self::LOGIN_SUCCESS;
 		} else {
@@ -143,6 +143,12 @@ class WSession {
 		$_SESSION['token_expiration'] = time() + self::TOKEN_EXPIRATION;
 	}
 
+	/**
+	 * Parses an access string of a user into an array.
+	 *
+	 * @param string $access_string
+	 * @return array
+	 */
 	public static function parseAccessString($access_string) {
 		if (empty($access_string)) {
 			return '';
@@ -215,7 +221,7 @@ class WSession {
 
 			if (!empty($user)) {
 				// Check hash
-				if ($_COOKIE['hash'] == $this->generate_hash($user['nickname'], $user['password'])) {
+				if ($_COOKIE['hash'] == $this->generateHash($user['nickname'], $user['password'])) {
 					$this->setupSession($user);
 
 					return true;
@@ -236,7 +242,7 @@ class WSession {
 	 * @param boolean $environment optional value: true if we want to use environment specific values to generate the hash
 	 * @return string the generated hash
 	 */
-	public function generate_hash($nick, $pass, $environment = true) {
+	public function generateHash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
 
 		// Link the hash to the user's environment
