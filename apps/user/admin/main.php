@@ -140,6 +140,20 @@ class UserAdminController extends WController {
 		$add_case = empty($user_id);
 		$post_data = array();
 
+		// User access
+		$app_manifests = $this->getApps();
+		$access = array();
+
+		foreach ($app_manifests as $app => $app_manifest) {
+			if ($_SESSION['access'] == 'all') {
+				$access[$app] = $app_manifest['permissions'];
+			} else {
+				if (isset($_SESSION['access'][$app])) {
+					$access[$app] = array_intersect_assoc($_SESSION['access'][$app], $app_manifest['permissions']);
+				}
+			}
+		}
+
 		if (WRequest::getMethod() == 'POST') {
 			$post_data = WRequest::getAssoc(array('nickname', 'email', 'password', 'password_conf', 'firstname', 'lastname', 'groupe', 'type', 'access'), null, 'POST');
 			$errors = array();
@@ -193,10 +207,28 @@ class UserAdminController extends WController {
 			}
 
 			// User access rights
-			$post_data['access'] = $this->model->treatAccessData($post_data['type'], $post_data['access']);
-			if (!$add_case && $post_data['access'] == $db_data['access']) {
-				unset($post_data['access']);
+			if (!empty($post_data['access']) && is_array($post_data['access'])) {
+				foreach ($post_data['access'] as $app => $raw_permissions) {
+					$new_access[$app] = array_keys($raw_permissions);
+				}
 			}
+
+			if ($add_case) {
+				$new_access_string = $this->model->treatAccessData(array(), $access, $post_data['type'], $new_access);
+
+				$post_data['access'] = is_null($new_access_string) ? '' : $new_access_string;
+			} else {
+				$old_access = WSession::parseAccessString($db_data['access']);
+
+				$new_access_string = $this->model->treatAccessData($old_access, $access, $post_data['type'], $new_access);
+
+				if (is_null($new_access_string)) {
+					unset($post_data['access']);
+				} else {
+					$post_data['access'] = $new_access_string;
+				}
+			}
+
 			unset($post_data['type']);
 
 			if (empty($errors)) {
@@ -248,7 +280,7 @@ class UserAdminController extends WController {
 			'user_data'     => $db_data,
 			'post_data'     => $post_data,
 			'groupes'       => $this->model->getGroupsList(),
-			'apps'          => $this->getApps(),
+			'apps'          => $access,
 			'default_admin' => $default_admin_route['app']
 		);
 	}
