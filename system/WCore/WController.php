@@ -112,7 +112,7 @@ abstract class WController {
 					$this->setView($userView);
 					return;
 				} else if (!empty($_SESSION['access'])) {
-					$tpl->assign('wity_admin_apps', $this->getApps(false));
+					$tpl->assign('wity_admin_apps', $this->getApps(true));
 				}
 
 				if (is_array($access_result)) {
@@ -583,7 +583,7 @@ abstract class WController {
 	}
 
 	/**
-	 * Returns the list of admin apps according to the user's access.
+	 * Returns the list of apps according to the user's access.
 	 */
 	public function getApps($admin = null) {
 		$apps_manifests = array();
@@ -591,7 +591,9 @@ abstract class WController {
 		$apps_list = WRetriever::getAppsList($admin);
 
 		foreach ($apps_list as $app) {
-			$apps_manifests[$app] = $this->loadManifest($app);
+			if ($this->hasAccess(($admin ? 'admin/' : '').$app)) {
+				$apps_manifests[$app] = $this->loadManifest($app);
+			}
 		}
 
 		return $apps_manifests;
