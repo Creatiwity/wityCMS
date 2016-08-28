@@ -82,14 +82,22 @@ class WMain {
 
 			default: // Render in a theme
 				$view = WRetriever::getView($route['url'], array(), false);
-				$theme = ($route['admin']) ? WConfig::get('config.theme_admin') : WConfig::get('config.theme');
 
-				// Load language file from template
 				if ($route['admin']) {
-					WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme_admin').DS.'lang');
+					$theme = WConfig::get('config.theme_admin');
+
+					// Display login form if not connected
+					if (!WSession::isConnected()) {
+						$view = WRetriever::getView('user/login', array('redirect' => WRoute::getDir().'admin'));
+					} else if (!empty($_SESSION['access'])) {
+						$tpl = WSystem::getTemplate();
+						$tpl->assign('wity_admin_apps', WController::getApps(true));
+					}
 				} else {
-					WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
+					$theme = WConfig::get('config.theme');
 				}
+
+				WLang::declareLangDir(THEMES_DIR.$theme.DS.'lang');
 
 				$response->render($view, $theme, $model);
 				break;
