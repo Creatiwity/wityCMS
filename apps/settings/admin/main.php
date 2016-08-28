@@ -289,12 +289,14 @@ class SettingsAdminController extends WController {
 		}
 
 		$app = $params[0];
+		$manifest = $this->loadManifest($app);
+		$folder = APPS_DIR.$app;
 
-		if (!is_dir($folder = APPS_DIR.$app)) {
+		if (empty($manifest)) {
 			return WNote::error('app_does_not_exist', WLang::_('The app to translate does not exist.'));
 		}
 
-		$model = $this->translate_files('app', $folder);
+		$model = $this->translate_files('app', $manifest['name'], $folder);
 
 		if (WRequest::getMethod() == 'POST') {
 			$data = WRequest::getAssoc(array('type', 'folder'));
@@ -331,10 +333,10 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			$this->setHeader('Location', WRoute::getDir().'admin/settings');
+			$this->setHeader('Location', WRoute::getDir().'admin/settings/translate');
 			return WNote::success('translation_updated', WLang::_('The translations were successfully updated.'));
 		} else {
-			return $this->translate_files('app', $folder);
+			return $model;
 		}
 	}
 
@@ -370,7 +372,7 @@ class SettingsAdminController extends WController {
 			return WNote::error('theme_does_not_exist', WLang::_('The theme to translate does not exist.'));
 		}
 
-		$model = $this->translate_files('theme', $folder);
+		$model = $this->translate_files('theme', $theme, $folder);
 
 		if (WRequest::getMethod() == 'POST') {
 			$data = WRequest::getAssoc(array('type', 'folder'));
@@ -398,14 +400,14 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			$this->setHeader('Location', WRoute::getDir().'admin/settings');
+			$this->setHeader('Location', WRoute::getDir().'admin/settings/translate');
 			return WNote::success('translation_updated', WLang::_('The translations were successfully updated.'));
 		} else {
 			return $model;
 		}
 	}
 
-	private function translate_files($type = 'core', $folder = SYSTEM_DIR) {
+	private function translate_files($type = 'core', $name, $folder = SYSTEM_DIR) {
 		$languages = WLang::getLangs();
 		$fields = array();
 		$translatables_file = array();
@@ -498,6 +500,10 @@ class SettingsAdminController extends WController {
 
 				if (empty($fileTranslatables['keys'])) {
 					continue;
+				}
+
+				if ($type == 'app') {
+					$fileTranslatables['keys'][] = $name;
 				}
 
 				foreach ($fileTranslatables['keys'] as $key) {
