@@ -345,8 +345,12 @@ class WLang {
 
 				// Find all files of this dir
 				foreach ($files as $file) {
-					$lang = substr(basename($file), 0, 2);
-					$lang_files[$lang] = $file;
+					$extension = pathinfo($file, PATHINFO_EXTENSION);
+
+					if ($extension == 'xml') {
+						$lang = substr(basename($file), 0, 2);
+						$lang_files[$lang] = $file;
+					}
 				}
 
 				self::$lang_dirs[str_replace(WITY_PATH, '', $dir)] = $lang_files;

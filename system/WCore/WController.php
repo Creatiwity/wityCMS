@@ -98,6 +98,9 @@ abstract class WController {
 
 			$access_result = $this->hasAccess(($this->getAdminContext() ? 'admin/' : '').$this->getAppName().'/'.$action);
 
+			// Declare the language directory
+			WLang::declareLangDir($this->context['directory'].'lang');
+
 			if ($access_result !== true) {
 				if (is_array($access_result)) {
 					return $access_result; // $this->hasAccess() returned a note
@@ -124,9 +127,6 @@ abstract class WController {
 					isset($manifest['admin'][$this->action]) ? ' &raquo; '.WLang::get($manifest['admin'][$this->action]['description']) : ''
 				));
 			}
-
-			// Declare the language directory
-			WLang::declareLangDir($this->context['directory'].'lang');
 
 			// Execute action
 			$executable_action = preg_replace('#[^a-z_]#', '', $action);
