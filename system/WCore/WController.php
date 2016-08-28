@@ -299,7 +299,7 @@ abstract class WController {
 			}
 
 			if (!isset($manifest)) { // cache failed
-				$manifest = $this->parseManifest($manifest_file);
+				$manifest = self::parseManifest($manifest_file);
 
 				if (is_writable(CACHE_DIR.'manifests')) {
 					// Opening
