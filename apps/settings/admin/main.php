@@ -17,7 +17,6 @@ class SettingsAdminController extends WController {
 	private $upload_dir;
 
 	private $EXCLUDED_THEMES = array('system', 'admin-bootstrap');
-	private $EXCLUDED_APPS   = array('admin');
 	private $EXCLUDED_DIRS   = array('.', '..');
 
 	public function __construct() {
@@ -131,8 +130,8 @@ class SettingsAdminController extends WController {
 		return array(
 			'settings'    => $settings,
 			'route'       => $route,
-			'front_apps'  => $this->getAllFrontApps(),
-			'admin_apps'  => $this->getAllAdminApps(),
+			'front_apps'  => $this->getApps(false),
+			'admin_apps'  => $this->getApps(true),
 			'themes'      => $this->getAllThemes(),
 			'countries'   => WLang::getCountries(),
 		);
@@ -279,7 +278,7 @@ class SettingsAdminController extends WController {
 
 	protected function translate() {
 		return array(
-			'apps'   => $this->getAllApps(),
+			'apps'   => $this->getApps(),
 			'themes' => $this->getAllThemes()
 		);
 	}
@@ -295,7 +294,69 @@ class SettingsAdminController extends WController {
 			return WNote::error('app_does_not_exist', WLang::_('The asked app does not exists'));
 		}
 
-		return $this->translate_files('app', $folder);
+		$model = $this->translate_files('app', $folder);
+
+		if (WRequest::getMethod() == 'POST') {
+			$data = WRequest::getAssoc(array('type', 'folder'));
+			$data_translatable = array();
+
+			// Format translatable fields
+			$translatable_fields = array('front_fields', 'admin_fields');
+			$langs = WLang::getLangs();
+
+			foreach ($translatable_fields as $field) {
+				foreach ($langs as $lang) {
+					$data_translatable[$lang['id']][$field] = WRequest::get($field.'_'.$lang['id']);
+				}
+			}
+
+			// Write files
+			foreach ($langs as $lang) {
+				if (!empty($model['hashes']['front'])) {
+					$this->saveAsXMLForLang(
+						$lang,
+						$model['hashes']['front'],
+						$data_translatable[$lang['id']]['front_fields'],
+						$folder.DS.'front'.DS.'lang'.DS.strtolower($lang['iso']).'.xml'
+					);
+				}
+
+				if (!empty($model['hashes']['admin'])) {
+					$this->saveAsXMLForLang(
+						$lang,
+						$model['hashes']['admin'],
+						$data_translatable[$lang['id']]['admin_fields'],
+						$folder.DS.'admin'.DS.'lang'.DS.strtolower($lang['iso']).'.xml'
+					);
+				}
+			}
+
+			$this->setHeader('Location', WRoute::getReferer());
+			return WNote::success('translation_updated', WLang::_('The translations were successfully updated.'));
+		} else {
+			return $this->translate_files('app', $folder);
+		}
+	}
+
+	private function saveAsXMLForLang($lang, $hashes, $fields, $file) {
+		if (empty($fields)) {
+			return;
+		}
+
+		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><lang value="'.$lang['iso'].'"></lang>');
+
+		foreach ($fields as $hash => $value) {
+			if (!empty($hashes[$hash]) && !empty($value)) {
+				$item = $xml->addChild('item', $value);
+				$item->addAttribute('id', $hashes[$hash]);
+			}
+		}
+
+		$dom = new DOMDocument('1.0');
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
+		$dom->loadXML($xml->asXML());
+		file_put_contents($file, $dom->saveXML());
 	}
 
 	protected function translate_theme(array $params) {
@@ -309,11 +370,48 @@ class SettingsAdminController extends WController {
 			return WNote::error('theme_does_not_exist', WLang::_('The asked theme does not exists'));
 		}
 
-		return $this->translate_files('theme', $folder);
+		$model = $this->translate_files('theme', $folder);
+
+		if (WRequest::getMethod() == 'POST') {
+			$data = WRequest::getAssoc(array('type', 'folder'));
+			$data_translatable = array();
+
+			// Format translatable fields
+			$translatable_fields = array('theme_fields');
+			$langs = WLang::getLangs();
+
+			foreach ($translatable_fields as $field) {
+				foreach ($langs as $lang) {
+					$data_translatable[$lang['id']][$field] = WRequest::get($field.'_'.$lang['id']);
+				}
+			}
+
+			// Write files
+			foreach ($langs as $lang) {
+				if (!empty($model['hashes']['theme'])) {
+					$this->saveAsXMLForLang(
+						$lang,
+						$model['hashes']['theme'],
+						$data_translatable[$lang['id']]['theme_fields'],
+						$folder.DS.'lang'.DS.strtolower($lang['iso']).'.xml'
+					);
+				}
+			}
+
+			$this->setHeader('Location', WRoute::getReferer());
+			return WNote::success('translation_updated', WLang::_('The translations were successfully updated.'));
+		}
+
+		return $model;
 	}
 
-
 	private function translate_files($type = 'core', $folder = SYSTEM_DIR) {
+		$languages = WLang::getLangs();
+		$fields = array();
+		$translatables_file = array();
+		$translatables = array();
+		$hashes = array();
+
 		switch ($type) {
 			case 'app':
 				$foldersToScan = array(
@@ -324,6 +422,9 @@ class SettingsAdminController extends WController {
 				);
 
 				$extensionsToScan = array('html', 'php');
+
+				$translatables_file['front'] = $this->model->getTranslatablesInFolder($folder.DS.'front'.DS.'lang'.DS, $languages);
+				$translatables_file['admin'] = $this->model->getTranslatablesInFolder($folder.DS.'admin'.DS.'lang'.DS, $languages);
 				break;
 
 			case 'theme':
@@ -332,86 +433,100 @@ class SettingsAdminController extends WController {
 				);
 
 				$extensionsToScan = array('html');
+
+				$translatables_file['theme'] = $this->model->getTranslatablesInFolder($folder.DS.'lang'.DS, $languages);
 				break;
 
 			default:
-
 				break;
 		}
 
-		$translatables = array();
-
 		foreach ($foldersToScan as $folderToScan) {
-			if (is_dir($folderToScan) && $scan = scandir($folderToScan)) {
-				foreach ($scan as $file) {
-					if (is_file($folderToScan.DS.$file)) {
-						$fileextension = pathinfo($file, PATHINFO_EXTENSION);
+			if (!is_dir($folderToScan) || !($scan = scandir($folderToScan))) {
+				continue;
+			}
 
-						if (in_array($fileextension, $extensionsToScan)) {
-							$fileTranslatables = array(
-								'file'          => str_replace($folder.DS, '', $folderToScan.DS.$file),
-								'translatables' => array()
-							);
+			foreach ($scan as $file) {
+				if (!is_file($folderToScan.DS.$file)) {
+					continue;
+				}
 
-							$file_content = file_get_contents($folderToScan.DS.$file);
+				$fileExtension = pathinfo($file, PATHINFO_EXTENSION);
 
-							if (preg_match_all('#\{lang ([^\|$]+)(\|.+)?\}#U', $file_content, $matches)) {
-								foreach ($matches[1] as $value) {
-									if (!in_array($value, $fileTranslatables['translatables'])) {
-										array_push($fileTranslatables['translatables'], $value);
-									}
-								}
-							}
+				if (!in_array($fileExtension, $extensionsToScan)) {
+					continue;
+				}
 
-							if (preg_match_all("#WLang::(get|_)\('([^\']+)'#U", $file_content, $matches)) {
-								foreach ($matches[2] as $value) {
-									if (!in_array($value, $fileTranslatables['translatables'])) {
-										array_push($fileTranslatables['translatables'], $value);
-									}
-								}
-							}
+				$fileTranslatables = array(
+					'file'          => str_replace($folder.DS, '', $folderToScan.DS.$file),
+					'keys'          => array(),
+					'translatables' => array()
+				);
 
-							if (preg_match_all("#WLang::(get|_)\(\"([^\"]+)\"#U", $file_content, $matches)) {
-								foreach ($matches[2] as $value) {
-									if (!in_array($value, $fileTranslatables['translatables'])) {
-										array_push($fileTranslatables['translatables'], $value);
-									}
-								}
-							}
+				if ($type == 'theme') {
+					$fileTranslatables['prefix'] = 'theme';
+				} else {
+					$fileTranslatables['prefix'] = strpos($folderToScan, 'admin') !== false ? 'admin' : 'front';
+				}
 
-							if (!empty($fileTranslatables['translatables'])) {
-								array_push($translatables, $fileTranslatables);
-							}
+				// Scan file content
+				$file_content = file_get_contents($folderToScan.DS.$file);
+
+				if (preg_match_all('#\{lang ([^\|$]+)(\|.+)?\}#U', $file_content, $matches)) {
+					foreach ($matches[1] as $value) {
+						if (!in_array($value, $fileTranslatables['keys'])) {
+							array_push($fileTranslatables['keys'], $value);
 						}
 					}
 				}
+
+				if (preg_match_all("#WLang::(get|_)\('([^\']+)'#U", $file_content, $matches)) {
+					foreach ($matches[2] as $value) {
+						if (!in_array($value, $fileTranslatables['keys'])) {
+							array_push($fileTranslatables['keys'], $value);
+						}
+					}
+				}
+
+				if (preg_match_all("#WLang::(get|_)\(\"([^\"]+)\"#U", $file_content, $matches)) {
+					foreach ($matches[2] as $value) {
+						if (!in_array($value, $fileTranslatables['keys'])) {
+							array_push($fileTranslatables['keys'], $value);
+						}
+					}
+				}
+
+				if (empty($fileTranslatables['keys'])) {
+					continue;
+				}
+
+				foreach ($fileTranslatables['keys'] as $key) {
+					$key_hash = md5($key);
+
+					$fileTranslatables['hash'][$key_hash] = $key;
+					$hashes[$fileTranslatables['prefix']][$key_hash] = $key;
+
+					foreach ($languages as $language) {
+						if (!empty($translatables_file[$fileTranslatables['prefix']][$language['id']][$key_hash])) {
+							$translatables[$fileTranslatables['prefix'].'_fields_'.$language['id'].'['.$key_hash.']'] = $translatables_file[$fileTranslatables['prefix']][$language['id']][$key_hash];
+						}
+					}
+				}
+
+				array_push($fields, $fileTranslatables);
 			}
 		}
 
 		return array(
-			'languages'     => $this->model->getLanguages(),
-			'translatables' => $translatables
+			'type'               => $type,
+			'folder'             => $folder,
+			'languages'          => $languages,
+			'translatables'      => $translatables,
+			'fields'             => $fields,
+			'translatables_file' => $translatables_file,
+			'hashes'             => $hashes
 		);
 	}
-
-	/**
-	  * Get existing Apps
-	  *
-	  * @return array List of Apps
-	  */
-	 private function getAllApps() {
-	  $apps = array();
-
-	  if ($scanned_apps = scandir(APPS_DIR)) {
-	   foreach ($scanned_apps as $key => $value) {
-	    if (is_dir(APPS_DIR.DS.$value) && $value != "." && $value != "..") {
-	     $apps[$key] = $value;
-	    }
-	   }
-	  }
-
-	  return $apps;
-	 }
 
 	/**
 	 * Get existing themes
@@ -430,40 +545,6 @@ class SettingsAdminController extends WController {
 		}
 
 		return $themes;
-	}
-
-	/**
-	 * Get existing Front Apps
-	 *
-	 * @return array List of Front Apps
-	 */
-	private function getAllFrontApps() {
-		if ($scanned_apps = scandir(APPS_DIR)) {
-			foreach ($scanned_apps as $key => $value) {
-				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir(APPS_DIR.DS.$value.DS."front") && !in_array($value, $this->EXCLUDED_DIRS)) {
-					$apps[$key] = $value;
-				}
-			}
-		}
-
-		return $apps;
-	}
-
-	/**
-	 * Get existing Admin Apps
-	 *
-	 * @return array List of Admin Apps
-	 */
-	private function getAllAdminApps() {
-		if ($scanned_apps = scandir(APPS_DIR)) {
-			foreach ($scanned_apps as $key => $value) {
-				if (!in_array($value, $this->EXCLUDED_APPS) && is_dir(APPS_DIR.DS.$value.DS."admin") && !in_array($value, $this->EXCLUDED_DIRS)) {
-					$apps[$key] = 'admin/'.$value;
-				}
-			}
-		}
-
-		return $apps;
 	}
 }
 

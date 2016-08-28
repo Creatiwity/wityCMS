@@ -88,10 +88,16 @@ class SettingsAdminView extends WView {
 	}
 
 	private function translate_files($model) {
+		$this->assign('require', 'witycms/admin');
 		$this->assign('css', '/apps/settings/admin/css/translate.css');
 
+		$this->assign('type', $model['type']);
+		$this->assign('folder', $model['folder']);
 		$this->assign('languages', $model['languages']);
-		$this->assign('translatables', $model['translatables']);
+		$this->assign('fields', $model['fields']);
+
+		// Auto-translate
+		$this->assign('form_values', json_encode($model['translatables']));
 
 		$this->setTemplate('translate_files.html');
 	}

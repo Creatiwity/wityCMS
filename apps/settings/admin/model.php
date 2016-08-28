@@ -120,6 +120,39 @@ class SettingsAdminModel {
 
 		return true;
 	}
+
+	public function getTranslatablesInFolder($folder, array $languages) {
+		$translatables = array();
+
+		foreach ($languages as $language) {
+			$file = $folder.strtolower($language['iso']).'.xml';
+
+			if (file_exists($file)) {
+				$translatables[$language['id']] = $this->getTranslatablesOfFile($file);
+			}
+		}
+
+		return $translatables;
+	}
+
+	public function getTranslatablesOfFile($file) {
+		$translatables = array();
+
+		// Checks that file exists and not already loaded
+		if (file_exists($file)) {
+			// Parses XML file
+			$string = file_get_contents($file);
+			$xml = new SimpleXMLElement($string);
+			foreach ($xml->item as $lang_item) {
+				$lang_key = (string) $lang_item->attributes()->id;
+				$lang_string = dom_import_simplexml($lang_item)->nodeValue;
+
+				$translatables[md5($lang_key)] = $lang_string;
+			}
+		}
+
+		return $translatables;
+	}
 }
 
 ?>
