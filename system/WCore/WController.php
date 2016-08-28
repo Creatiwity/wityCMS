@@ -562,7 +562,11 @@ abstract class WController {
 		$apps_list = WRetriever::getAppsList($admin);
 
 		foreach ($apps_list as $app) {
-			if (self::hasAccess(($admin ? 'admin/' : '').$app)) {
+			if (is_null($admin)) {
+				if (self::hasAccess($app) || self::hasAccess('admin/'.$app)) {
+					$apps_manifests[$app] = self::loadManifest($app);
+				}
+			} else if (self::hasAccess(($admin ? 'admin/' : '').$app)) {
 				$apps_manifests[$app] = self::loadManifest($app);
 			}
 		}
