@@ -81,7 +81,7 @@ class WRetriever {
 			// Match the asked action with the manifest
 			$action = $controller->getExecutableAction($route['action']);
 
-			$model['signature'] = md5($route['app'].$action.serialize($route['params']));
+			$model['signature'] = md5($url);
 
 			// Check if this model was not already calculated
 			if (isset(self::$models[$model['signature']])) {
@@ -170,13 +170,8 @@ class WRetriever {
 		}
 
 		// Check if app not already instantiated
-		if (isset(self::$controllers[$route['app']])) {
-			$context = self::$controllers[$route['app']]->getContext();
-			$context['parent'] = $has_parent;
-
-			self::$controllers[$route['app']]->setContext($context);
-
-			return self::$controllers[$route['app']];
+		if (isset(self::$controllers[$url])) {
+			return self::$controllers[$url];
 		}
 
 		// Asked App exists?
@@ -231,7 +226,7 @@ class WRetriever {
 				$controller->init($context);
 
 				// Store the controller
-				self::$controllers[$route['app']] = $controller;
+				self::$controllers[$url] = $controller;
 
 				return $controller;
 			} else {

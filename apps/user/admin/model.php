@@ -269,19 +269,57 @@ class UserAdminModel extends UserModel {
 	/**
 	 * Transforms access data obtained from the admin form into an access string.
 	 *
+	 * @param array  $old_access      Previous access of the user
+	 * @param array  $allowed_apps    List of allowed apps of current user
+	 * @param string $new_type        New type for the user (none|all|custom)
+	 * @param array  $new_access      New access for the user
+	 * @return null|string Null if nothing to do. String to be updated
+	 */
+	public function treatAccessData($old_access, $allowed_apps, $new_type, $new_access) {
+		if ($_SESSION['access'] == 'all') {
+			return $this->stringifyAccess($new_type, $new_access);
+		} else {
+			if ($old_access == 'all') {
+				return null;
+			} else if ($old_access == '') {
+				return $this->stringifyAccess($new_type, $new_access);
+			} else {
+				$new_type = 'custom';
+
+				foreach ($allowed_apps as $app => $permissions) {
+					foreach ($permissions as $permission) {
+						// Remove this permission
+						if (isset($old_access[$app]) && ($key = array_search($permission, $old_access[$app])) !== false) {
+							unset($old_access[$app][$key]);
+						}
+
+						// Add this permission if asked
+						if (isset($new_access[$app]) && in_array($permission, $new_access[$app])) {
+							$old_access[$app][] = $permission;
+						}
+					}
+				}
+
+				return $this->stringifyAccess($new_type, $old_access);
+			}
+		}
+	}
+
+	/**
+	 * Stringify acess.
+	 *
 	 * @param string $type    Type of the user (none|all|custom)
 	 * @param array  $access  List of app and perms whose user have access
-	 * @return string Access string formated
+	 * @return string
 	 */
-	public function treatAccessData($type, $access) {
+	private function stringifyAccess($type, $access) {
 		if ($type == 'all') {
 			return 'all';
 		} else if ($type == 'none' || empty($access)) {
 			return '';
-		} else { // Custom access
+		} else {
 			$access_string = '';
 			foreach ($access as $app => $perms) {
-				$perms = array_keys($perms);
 				if (!empty($perms)) {
 					$access_string .= $app.'['.implode('|', $perms).'],';
 				}

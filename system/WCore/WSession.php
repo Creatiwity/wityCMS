@@ -110,7 +110,7 @@ class WSession {
 			$lifetime = $remember > 0 ? time() + $remember : 0;
 
 			setcookie('userid', $_SESSION['userid'], $lifetime, WRoute::getDir());
-			setcookie('hash', $this->generate_hash($user['nickname'], $user['password']), $lifetime, WRoute::getDir());
+			setcookie('hash', $this->generateHash($user['nickname'], $user['password']), $lifetime, WRoute::getDir());
 
 			return self::LOGIN_SUCCESS;
 		} else {
@@ -128,36 +128,48 @@ class WSession {
 	 * @param array $data data to store into $_SESSION
 	 */
 	private function setupSession($user) {
-		$_SESSION['userid']    = $user['id'];
-		$_SESSION['nickname']  = $user['nickname'];
-		$_SESSION['email']     = $user['email'];
-		$_SESSION['groupe']    = $user['groupe'];
-		$_SESSION['firstname'] = $user['firstname'];
-		$_SESSION['lastname']  = $user['lastname'];
-		$_SESSION['lang_code'] = $user['lang'];
-		$_SESSION['lang_iso']  = substr($user['lang'], 0, 2);
-
+		$_SESSION['userid']        = $user['id'];
+		$_SESSION['nickname']      = $user['nickname'];
+		$_SESSION['email']         = $user['email'];
+		$_SESSION['groupe']        = $user['groupe'];
+		$_SESSION['firstname']     = $user['firstname'];
+		$_SESSION['lastname']      = $user['lastname'];
+		$_SESSION['lang_code']     = $user['lang'];
+		$_SESSION['lang_iso']      = substr($user['lang'], 0, 2);
 		$_SESSION['access_string'] = $user['access'];
-		if (empty($user['access'])) {
-			$_SESSION['access'] = '';
-		} else if ($user['access'] == 'all') {
-			$_SESSION['access'] = 'all';
-		} else {
-			$_SESSION['access'] = array();
-			foreach (explode(',', $user['access']) as $access) {
-				$first_bracket = strpos($access, '[');
-				if ($first_bracket !== false) {
-					$app_name = substr($access, 0, $first_bracket);
-					$permissions = substr($access, $first_bracket+1, -1);
-					if (!empty($permissions)) {
-						$_SESSION['access'][$app_name] = explode('|', $permissions);
-					}
-				}
-			}
-		}
+		$_SESSION['access']        = $this->parseAccessString($user['access']);
 
 		// Next checking time
 		$_SESSION['token_expiration'] = time() + self::TOKEN_EXPIRATION;
+	}
+
+	/**
+	 * Parses an access string of a user into an array.
+	 *
+	 * @param string $access_string
+	 * @return array
+	 */
+	public static function parseAccessString($access_string) {
+		if (empty($access_string)) {
+			return '';
+		} else if ($access_string == 'all') {
+			return 'all';
+		} else {
+			$access = array();
+
+			foreach (explode(',', $access_string) as $access_apps) {
+				$first_bracket = strpos($access_apps, '[');
+				if ($first_bracket !== false) {
+					$app_name = substr($access_apps, 0, $first_bracket);
+					$permissions = substr($access_apps, $first_bracket+1, -1);
+					if (!empty($permissions)) {
+						$access[$app_name] = explode('|', $permissions);
+					}
+				}
+			}
+
+			return $access;
+		}
 	}
 
 	/**
@@ -209,7 +221,7 @@ class WSession {
 
 			if (!empty($user)) {
 				// Check hash
-				if ($_COOKIE['hash'] == $this->generate_hash($user['nickname'], $user['password'])) {
+				if ($_COOKIE['hash'] == $this->generateHash($user['nickname'], $user['password'])) {
 					$this->setupSession($user);
 
 					return true;
@@ -230,7 +242,7 @@ class WSession {
 	 * @param boolean $environment optional value: true if we want to use environment specific values to generate the hash
 	 * @return string the generated hash
 	 */
-	public function generate_hash($nick, $pass, $environment = true) {
+	public function generateHash($nick, $pass, $environment = true) {
 		$string = $nick.$pass;
 
 		// Link the hash to the user's environment
