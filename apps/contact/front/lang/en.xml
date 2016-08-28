@@ -1,44 +1,42 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <lang value="en">
-	<!-- Auto reply -->
-	<item id="copy_subject">[%s] Your contact request</item>
-	<item id="auto_reply"><![CDATA[Hello,<br /><br />
-
-You just sent a contact request on the website {{site}}.<br /><br />
-There, is a summary:
-<ul>
-	<li><strong>Name:</strong> {{name}}</li>
-	<li><strong>Organization:</strong> {{company}}</li>
-	<li><strong>Subject:</strong> {{subject}}</li>
-	<li><strong>Message:</strong><br />{{message}}</li>
-</ul>
-
-{{extras}}
-
-We will do our best to answer to your request as quickly as possible.<br /><br />
-
-Regards,<br />
-{{site}} team<br /><br />
-
---<br />
-<em>This is an auto-generated email.</em>]]></item>
-
-	<item id="mail_for_admin_subject">[%s] Contact - %s</item>
-	<item id="mail_for_admin_body"><![CDATA[Hello,<br /><br />
-
-A new contact request was just posted on the website {{site}} :
-
-<ul>
-	<li><strong>Name:</strong> {{name}}</li>
-	<li><strong>Organization:</strong> {{company}}</li>
-	<li><strong>Subject:</strong> {{subject}}</li>
-	<li><strong>Message:</strong><br />{{message}}</li>
-</ul>
-
-{{extras}}
-
-You can find the full list of contact request on <a href="{{base}}admin/contact">this page</a>.<br /><br />
-
---<br />
-<em>This is an auto-generated email.</em>]]></item>
+  <item id="mail_for_admin_body">Hello,&lt;br /&gt;&lt;br /&gt;&#13;
+&#13;
+A new contact request was just posted on the website {{site}} :&#13;
+&#13;
+&lt;ul&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Name:&lt;/strong&gt; {{name}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Organization:&lt;/strong&gt; {{company}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Subject:&lt;/strong&gt; {{subject}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Message:&lt;/strong&gt;&lt;br /&gt;{{message}}&lt;/li&gt;&#13;
+&lt;/ul&gt;&#13;
+&#13;
+{{extras}}&#13;
+&#13;
+You can find the full list of contact request on &lt;a href="{{base}}admin/contact"&gt;this page&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;&#13;
+&#13;
+--&lt;br /&gt;&#13;
+&lt;em&gt;This is an auto-generated email.&lt;/em&gt;</item>
+  <item id="mail_for_admin_subject">[%s] Contact - %s</item>
+  <item id="copy_subject">[%s] Your contact request</item>
+  <item id="auto_reply">Hello,&lt;br /&gt;&lt;br /&gt;&#13;
+&#13;
+You just sent a contact request on the website {{site}}.&lt;br /&gt;&lt;br /&gt;&#13;
+There, is a summary:&#13;
+&lt;ul&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Name:&lt;/strong&gt; {{name}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Organization:&lt;/strong&gt; {{company}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Subject:&lt;/strong&gt; {{subject}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Message:&lt;/strong&gt;&lt;br /&gt;{{message}}&lt;/li&gt;&#13;
+&lt;/ul&gt;&#13;
+&#13;
+{{extras}}&#13;
+&#13;
+We will do our best to answer to your request as quickly as possible.&lt;br /&gt;&lt;br /&gt;&#13;
+&#13;
+Regards,&lt;br /&gt;&#13;
+{{site}} team&lt;br /&gt;&lt;br /&gt;&#13;
+&#13;
+--&lt;br /&gt;&#13;
+&lt;em&gt;This is an auto-generated email.&lt;/em&gt;</item>
 </lang>

@@ -1,19 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
-	<!-- Actions -->
-	<item id="Subscribers">Liste des abonnés</item>
-	<item id="Delete a suscriber">Supprimer un abonné</item>
-	<item id="Export">Exporter</item>
-
-	<!-- Listing -->
-	<item id="Email">Email</item>
-	<item id="Date">Date</item>
-	<item id="Actions">Actions</item>
-	<item id="No subscriber in database">Aucun abonné trouvé dans la base de données.</item>
-	<item id="Do you really want to delete the subscriber &lt;strong&gt;%s&lt;/strong&gt;?">Voulez-vous vraiment supprimer l'abonné &lt;strong&gt;%s&lt;/strong&gt; ?</item>
-
-	<item id="The subscriber &lt;strong&gt;%s&lt;/strong&gt; was successfully deleted.">L'abonné &lt;strong&gt;%s&lt;/strong&gt; a été supprimé avec succès.</item>
-	<item id="Cancel">Annuler</item>
-	<item id="Delete">Supprimer</item>
-	<item id="Subscriber not found.">Cet abonné n'a pas été trouvé.</item>
+  <item id="The subscriber &amp;lt;strong&amp;gt;%s&amp;lt;/strong&amp;gt; was successfully deleted.">L'abonné &lt;strong&gt;%s&lt;/strong&gt; a été supprimé avec succès.</item>
+  <item id="Subscriber not found.">Cet abonné n'a pas été trouvé.</item>
+  <item id="Delete a suscriber">Supprimer un abonné</item>
+  <item id="Do you really want to delete the subscriber &amp;lt;strong&amp;gt;%s&amp;lt;/strong&amp;gt;?">Voulez-vous vraiment supprimer l'abonné &lt;strong&gt;%s&lt;/strong&gt; ?</item>
+  <item id="Cancel">Annuler</item>
+  <item id="Delete">Supprimer</item>
+  <item id="Email">Email</item>
+  <item id="Date">Date</item>
+  <item id="Actions">Actions</item>
+  <item id="No subscriber in database">Aucun abonné trouvé dans la base de données.</item>
+  <item id="Newsletter">Newsletter</item>
 </lang>

@@ -290,13 +290,22 @@ class UserAdminController extends WController {
 		$mail->CharSet = 'utf-8';
 		$mail->From = WConfig::get('config.email');
 		$mail->FromName = WConfig::get('config.site_title');
-		$mail->Subject = WLang::get('user_'.$template_prefix.'_email_subject', WConfig::get('config.site_title'));
-		$mail->Body = WLang::get('user_'.$template_prefix.'_email_body', array(
+
+		$body_vars = array(
 			'site_title' => WConfig::get('config.site_title'),
 			'base'       => WRoute::getBase(),
 			'nickname'   => $nickname,
 			'password'   => $password
-		));
+		);
+
+		if ($template_prefix == 'register') {
+			$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_title'));
+			$mail->Body = WLang::get('user_register_email_body', $body_vars);
+		} else {
+			$mail->Subject = WLang::get('user_edition_email_subject', WConfig::get('config.site_title'));
+			$mail->Body = WLang::get('user_edition_email_body', $body_vars);
+		}
+
 		$mail->IsHTML(true);
 		$mail->AddAddress($email);
 		$mail->Send();
