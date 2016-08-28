@@ -132,7 +132,7 @@ class SettingsAdminController extends WController {
 			'route'       => $route,
 			'front_apps'  => $this->getApps(false),
 			'admin_apps'  => $this->getApps(true),
-			'themes'      => $this->getAllThemes(),
+			'themes'      => $this->getAllThemes($this->EXCLUDED_THEMES),
 			'countries'   => WLang::getCountries(),
 		);
 	}
@@ -169,7 +169,7 @@ class SettingsAdminController extends WController {
 			$required = array('name', 'iso', 'code');
 			foreach ($required as $req) {
 				if (empty($post_data[$req])) {
-					$errors[] = WLang::get('Please, provide a '.$req.'.');
+					$errors[] = WLang::get('Please, fill in the field %s.', $req);
 				}
 			}
 			/* END VARIABLES CHECKING */
@@ -285,13 +285,13 @@ class SettingsAdminController extends WController {
 
 	protected function translate_app(array $params) {
 		if (!isset($params[0])) {
-			return WNote::error('no_app_provided', WLang::_('No app name was provided'));
+			return WNote::error('no_app_provided', WLang::_('The name of the app to translate is missing.'));
 		}
 
 		$app = $params[0];
 
 		if (!is_dir($folder = APPS_DIR.$app)) {
-			return WNote::error('app_does_not_exist', WLang::_('The asked app does not exists'));
+			return WNote::error('app_does_not_exist', WLang::_('The app to translate does not exist.'));
 		}
 
 		$model = $this->translate_files('app', $folder);
@@ -331,7 +331,7 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			$this->setHeader('Location', WRoute::getReferer());
+			$this->setHeader('Location', WRoute::getDir().'admin/settings');
 			return WNote::success('translation_updated', WLang::_('The translations were successfully updated.'));
 		} else {
 			return $this->translate_files('app', $folder);
@@ -361,13 +361,13 @@ class SettingsAdminController extends WController {
 
 	protected function translate_theme(array $params) {
 		if (!isset($params[0])) {
-			return WNote::error('no_theme_provided', WLang::_('No theme name was provided'));
+			return WNote::error('no_theme_provided', WLang::_('The name of the theme to translate is missing.'));
 		}
 
 		$theme = $params[0];
 
 		if (!is_dir($folder = THEMES_DIR.$theme)) {
-			return WNote::error('theme_does_not_exist', WLang::_('The asked theme does not exists'));
+			return WNote::error('theme_does_not_exist', WLang::_('The theme to translate does not exist.'));
 		}
 
 		$model = $this->translate_files('theme', $folder);
@@ -398,11 +398,11 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			$this->setHeader('Location', WRoute::getReferer());
+			$this->setHeader('Location', WRoute::getDir().'admin/settings');
 			return WNote::success('translation_updated', WLang::_('The translations were successfully updated.'));
+		} else {
+			return $model;
 		}
-
-		return $model;
 	}
 
 	private function translate_files($type = 'core', $folder = SYSTEM_DIR) {
@@ -416,8 +416,8 @@ class SettingsAdminController extends WController {
 			case 'app':
 				$foldersToScan = array(
 					$folder.DS.'front',
-					$folder.DS.'admin',
 					$folder.DS.'front'.DS.'templates',
+					$folder.DS.'admin',
 					$folder.DS.'admin'.DS.'templates'
 				);
 
@@ -503,6 +503,10 @@ class SettingsAdminController extends WController {
 				foreach ($fileTranslatables['keys'] as $key) {
 					$key_hash = md5($key);
 
+					if (isset($hashes[$fileTranslatables['prefix']][$key_hash])) {
+						continue;
+					}
+
 					$fileTranslatables['hash'][$key_hash] = $key;
 					$hashes[$fileTranslatables['prefix']][$key_hash] = $key;
 
@@ -533,10 +537,10 @@ class SettingsAdminController extends WController {
 	 *
 	 * @return array List of themes
 	 */
-	private function getAllThemes() {
+	private function getAllThemes($excluded_themes = array()) {
 		if ($themes = scandir(THEMES_DIR)) {
 			foreach ($themes as $key => $value) {
-				if (in_array($value, $this->EXCLUDED_THEMES) || !is_dir(THEMES_DIR.DS.$value) || in_array($value, $this->EXCLUDED_DIRS)) {
+				if (in_array($value, $excluded_themes) || !is_dir(THEMES_DIR.DS.$value) || in_array($value, $this->EXCLUDED_DIRS)) {
 					unset($themes[$key]);
 				}
 			}
