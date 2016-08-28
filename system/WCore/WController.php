@@ -123,7 +123,7 @@ abstract class WController {
 				));
 
 				$tpl->assign('wity_page_title', sprintf('Admin &raquo; %s%s',
-					ucwords($manifest['name']),
+					WLang::get($manifest['name']),
 					isset($manifest['admin'][$this->action]) ? ' &raquo; '.WLang::get($manifest['admin'][$this->action]['description']) : ''
 				));
 			}
