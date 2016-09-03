@@ -207,6 +207,7 @@ class UserAdminController extends WController {
 			}
 
 			// User access rights
+			$new_access = array();
 			if (!empty($post_data['access']) && is_array($post_data['access'])) {
 				foreach ($post_data['access'] as $app => $raw_permissions) {
 					$new_access[$app] = array_keys($raw_permissions);
