@@ -205,21 +205,23 @@ class UserModel {
 	}
 
 	/**
-	 * Finds a user in the database matching with $nickname and $password.
+	 * Finds a user in the database matching with $identifier and $password.
 	 *
-	 * @param string $nickname
+	 * @param string $identifier
 	 * @param string $password
 	 * @return array Information of the users found
 	 */
-	public function matchUser($nickname, $password) {
+	public function matchUser($identifier, $password) {
 		$prep = $this->db->prepare('
 			SELECT id, nickname, password, email, firstname, lastname, country, lang, groupe, access
 			FROM users
-			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
+			WHERE (nickname = :nickname OR email = :email) AND password = :password AND valid = 1
 		');
-		$prep->bindParam(':nickname', $nickname);
+		$prep->bindParam(':nickname', $identifier);
+		$prep->bindParam(':email', $identifier);
 		$prep->bindParam(':password', $password);
 		$prep->execute();
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 
