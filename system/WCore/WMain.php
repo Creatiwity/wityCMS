@@ -90,8 +90,15 @@ class WMain {
 					if (!WSession::isConnected()) {
 						$view = WRetriever::getView('user/login', array('redirect' => WRoute::getDir().'admin'));
 					} else if (!empty($_SESSION['access'])) {
+						$admin_apps = WController::getApps(true);
+
 						$tpl = WSystem::getTemplate();
-						$tpl->assign('wity_admin_apps', WController::getApps(true));
+						$tpl->assign('wity_admin_apps', $admin_apps);
+
+						// Load all langs for menu
+						foreach ($admin_apps as $admin_app_key => $admin_app) {
+							WLang::declareLangDir(APPS_DIR.$admin_app_key.DS.'admin'.DS.'lang');
+						}
 					}
 				} else {
 					$theme = WConfig::get('config.theme');

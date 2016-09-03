@@ -531,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `prefix_languages` (
 --
 
 INSERT INTO `prefix_languages` (`id`, `name`, `iso`, `code`, `date_format_short`, `date_format_long`, `enabled`, `is_default`, `created_date`, `created_by`, `modified_date`, `modified_by`) VALUES
-(1, 'Français', 'FR', 'fr_FR', '%d/%m/%Y', '%d/%m/%Y %H:%M', 1, 1, NOW(), 0, '0000-00-00 00:00:00', 0),
+(1, 'Français', 'fr', 'fr_FR', '%d/%m/%Y', '%d/%m/%Y %H:%M', 1, 1, NOW(), 0, '0000-00-00 00:00:00', 0),
 (2, 'English', 'en', 'en_EN', '%m/%d/%Y', '%m/%d/%Y %H:%M', 1, 0, NOW(), 0, '0000-00-00 00:00:00', 0);
 
 

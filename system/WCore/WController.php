@@ -98,6 +98,9 @@ abstract class WController {
 
 			$access_result = $this->hasAccess(($this->getAdminContext() ? 'admin/' : '').$this->getAppName().'/'.$action);
 
+			// Declare the language directory
+			WLang::declareLangDir($this->context['directory'].'lang');
+
 			if ($access_result !== true) {
 				if (is_array($access_result)) {
 					return $access_result; // $this->hasAccess() returned a note
@@ -120,13 +123,10 @@ abstract class WController {
 				));
 
 				$tpl->assign('wity_page_title', sprintf('Admin &raquo; %s%s',
-					ucwords($manifest['name']),
+					WLang::get($manifest['name']),
 					isset($manifest['admin'][$this->action]) ? ' &raquo; '.WLang::get($manifest['admin'][$this->action]['description']) : ''
 				));
 			}
-
-			// Declare the language directory
-			WLang::declareLangDir($this->context['directory'].'lang');
 
 			// Execute action
 			$executable_action = preg_replace('#[^a-z_]#', '', $action);
@@ -562,7 +562,11 @@ abstract class WController {
 		$apps_list = WRetriever::getAppsList($admin);
 
 		foreach ($apps_list as $app) {
-			if (self::hasAccess(($admin ? 'admin/' : '').$app)) {
+			if (is_null($admin)) {
+				if (self::hasAccess($app) || self::hasAccess('admin/'.$app)) {
+					$apps_manifests[$app] = self::loadManifest($app);
+				}
+			} else if (self::hasAccess(($admin ? 'admin/' : '').$app)) {
 				$apps_manifests[$app] = self::loadManifest($app);
 			}
 		}

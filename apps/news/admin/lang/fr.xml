@@ -1,69 +1,58 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
-	<!-- Actions -->
-	<item id="News">Articles</item>
-	<item id="Add a news">Ajouter un article</item>
-	<item id="Edit a news">Modifier un article</item>
-	<item id="Delete a news">Supprimer un article</item>
-	<item id="Categories">Catégories</item>
-	<item id="Add a category">Ajouter une catégorie</item>
-	<item id="Edit a category">Modifier une catégorie</item>
-	<item id="Delete a category">Supprimer une catégorie</item>
-
-	<item id="Cancel">Annuler</item>
-	<item id="Delete">Supprimer</item>
-	<item id="Submit">Envoyer</item>
-	<item id="Edit">Modifier</item>
-
-	<!-- News -->
-	<item id="Title">Titre</item>
-	<item id="Author">Auteur</item>
-	<item id="Category">Catégorie</item>
-	<item id="Last modification">Dernière modification</item>
-	<item id="Views">Vues</item>
-	<item id="Actions">Actions</item>
-	<item id="No news in database.">Aucun article dans la base de données.</item>
-	<item id="Do you really want to delete the news &lt;strong&gt;%s&lt;/strong&gt;?">Êtes-vous sûr de vouloir supprimer l'article &lt;strong&gt;%s&lt;/strong&gt; ?</item>
-
-	<!-- News form -->
-	<item id="Preview">Prévisualiser</item>
-	<item id="Content">Contenu</item>
-
-	<item id="Details">Détails</item>
-	<item id="Published">Publiée</item>
-	<item id="Date of publication">Date de publication</item>
-	<item id="Hour of publication">Heure de publication</item>
-	<item id="Image">Image</item>
-
-	<item id="SEO">Référencement</item>
-	<item id="Meta Title">Balise titre</item>
-	<item id="Meta Description">Balise description</item>
-
-	<item id="Created on %s">&lt;strong&gt;Créé&lt;/strong&gt; le %s</item>
-	<item id="Modified on %s">&lt;strong&gt;Modifié&lt;/strong&gt; le %s</item>
-
-	<item id="News not found.">L'article demandé n'existe pas.</item>
-	<item id="Please, provide a title.">Il manque un titre.</item>
-	<item id="Please, provide an author.">Il manque un auteur.</item>
-	<item id="Please, provide a date of publication.">Il manque une date de publication.</item>
-	<item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">L'article &lt;strong&gt;%s&lt;/strong&gt; a été créé avec succès.</item>
-	<item id="An unknown error occurred while creating the news in the database.">Une erreur inconnue s'est produite lors de l'ajout de l'article dans la base de données.</item>
-	<item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">L'article &lt;strong&gt;%s&lt;/strong&gt; a été modifié avec succès.</item>
-	<item id="An unknown error occurred while editing the news in the database.">Une erreur inconnue s'est produite lors de la modification de l'article dans la base de données.</item>
-	<item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully deleted.">L'article "&lt;strong&gt;%s&lt;/strong&gt;" a été supprimé avec succès.</item>
-
-	<!-- Categories -->
-	<item id="Name">Nom</item>
-	<item id="Shortname">Nom court</item>
-	<item id="None">Aucune</item>
-
-	<item id="No category in database">Aucune catégorie dans la base de données.</item>
-	<item id="Please, provide a name.">Veuillez spécifier un nom pour la nouvelle catégorie.</item>
-	<item id="The category &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été ajoutée avec succès.</item>
-	<item id="An unknown error occurred while adding the category in the database.">Une erreur inconnue s'est produite lors de l'ajout de la catégorie dans la base de données.</item>
-	<item id="The category &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été modifiée avec succès.</item>
-	<item id="An unknown error occurred while editing the category in the database.">Une erreur inconnue s'est produite lors de la modification de la catégorie dans la base de données.</item>
-	<item id="The category was not found.">Cette catégorie n'existe pas.</item>
-	<item id="Category successfully deleted.">La catégorie a été supprimée avec succès.</item>
-	<item id="Do you really want to delete this category?">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
+  <item id="Please, provide a title.">Il manque un titre.</item>
+  <item id="Please, provide an author.">Il manque un auteur.</item>
+  <item id="Please, provide a date of publication.">Il manque une date de publication.</item>
+  <item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">L'article &lt;strong&gt;%s&lt;/strong&gt; a été créé avec succès.</item>
+  <item id="An unknown error occurred while creating the news in the database.">Une erreur inconnue s'est produite lors de l'ajout de l'article dans la base de données.</item>
+  <item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">L'article &lt;strong&gt;%s&lt;/strong&gt; a été modifié avec succès.</item>
+  <item id="An unknown error occurred while editing the news in the database.">Une erreur inconnue s'est produite lors de la modification de l'article dans la base de données.</item>
+  <item id="News not found.">L'article demandé n'existe pas.</item>
+  <item id="The news &lt;strong&gt;%s&lt;/strong&gt; was successfully deleted.">L'article "&lt;strong&gt;%s&lt;/strong&gt;" a été supprimé avec succès.</item>
+  <item id="Please, provide a name.">Veuillez spécifier un nom pour la nouvelle catégorie.</item>
+  <item id="The category &lt;strong&gt;%s&lt;/strong&gt; was successfully created.">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été ajoutée avec succès.</item>
+  <item id="An unknown error occurred while adding the category in the database.">Une erreur inconnue s'est produite lors de l'ajout de la catégorie dans la base de données.</item>
+  <item id="The category &lt;strong&gt;%s&lt;/strong&gt; was successfully edited.">La catégorie &lt;strong&gt;%s&lt;/strong&gt; a été modifiée avec succès.</item>
+  <item id="An unknown error occurred while editing the category in the database.">Une erreur inconnue s'est produite lors de la modification de la catégorie dans la base de données.</item>
+  <item id="Category successfully deleted.">La catégorie a été supprimée avec succès.</item>
+  <item id="The category was not found.">Cette catégorie n'existe pas.</item>
+  <item id="The category you are trying to delete doesn't exist.">La catégorie que vous essayez de supprimer n'existe pas.</item>
+  <item id="Add a category">Ajouter une catégorie</item>
+  <item id="Name">Nom</item>
+  <item id="Shortname">Nom court</item>
+  <item id="Parent">Parent</item>
+  <item id="Actions">Actions</item>
+  <item id="Edit">Modifier</item>
+  <item id="Delete">Supprimer</item>
+  <item id="No category in database">Aucune catégorie dans la base de données.</item>
+  <item id="None">Aucune</item>
+  <item id="Delete a category">Supprimer une catégorie</item>
+  <item id="Do you really want to delete this category?">Êtes-vous sûr de vouloir supprimer cette catégorie ?</item>
+  <item id="Cancel">Annuler</item>
+  <item id="Delete a news">Supprimer un article</item>
+  <item id="Do you really want to delete the news &lt;strong&gt;%s&lt;/strong&gt;?">Êtes-vous sûr de vouloir supprimer l'article &lt;strong&gt;%s&lt;/strong&gt; ?</item>
+  <item id="Add a news">Ajouter un article</item>
+  <item id="Edit a news">Modifier un article</item>
+  <item id="Title">Titre</item>
+  <item id="URL">URL</item>
+  <item id="Content">Contenu</item>
+  <item id="Submit">Envoyer</item>
+  <item id="Preview">Prévisualiser</item>
+  <item id="Details">Détails</item>
+  <item id="Published">Publiée</item>
+  <item id="Date of publication">Date de publication</item>
+  <item id="Hour of publication">Heure de publication</item>
+  <item id="Author">Auteur</item>
+  <item id="Image">Image</item>
+  <item id="Created on %s">&lt;strong&gt;Créé&lt;/strong&gt; le %s</item>
+  <item id="Modified on %s">&lt;strong&gt;Modifié&lt;/strong&gt; le %s</item>
+  <item id="Categories">Catégories</item>
+  <item id="SEO">Référencement</item>
+  <item id="Meta Title">Balise titre</item>
+  <item id="Meta Description">Balise description</item>
+  <item id="News">Articles</item>
+  <item id="Category">Catégorie</item>
+  <item id="Views">Vues</item>
+  <item id="Last modification">Dernière modification</item>
+  <item id="No news in database.">Aucun article dans la base de données.</item>
 </lang>

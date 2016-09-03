@@ -1,161 +1,127 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
-	<!-- General -->
-	<item id="User">Utilisateur</item>
-	<item id="Edit">Modifier</item>
-	<item id="Delete">Supprimer</item>
-	<item id="Cancel">Annuler</item>
-	<item id="Submit">Envoyer</item>
-
-	<!-- Users -->
-	<item id="Add a user">Ajouter un utilisateur</item>
-	<item id="Edit a user">Editer un utilisateur</item>
-	<item id="Users">Utilisateurs</item>
-	<item id="%s users registered">%s utilisateurs inscrits</item>
-	<item id="%s users found">%s utilisateurs trouvés</item>
-	<item id="Nickname">Identifiant</item>
-	<item id="Group">Groupe</item>
-	<item id="Registration date">Date d'inscription</item>
-	<item id="Last connection">Dernière connexion</item>
-	<item id="Actions">Actions</item>
-	<item id="No user found in database.">Aucun utilisateur trouvé dans la base de données.</item>
-
-	<item id="Users waiting for validation">Utilisateurs en attente de validation</item>
-	<item id="Validate">Valider</item>
-	<item id="Refuse">Refuser</item>
-	<item id="Notify these users">Notifier ces utilisateurs</item>
-
-	<item id="Search">Recherche</item>
-	<item id="Email">Email</item>
-	<item id="Firstname">Prénom</item>
-	<item id="Lastname">Nom</item>
-
-	<item id="Error: the passwords do not match.">Erreur : les mots de passe fournis sont différents.</item>
-	<item id="Please, provide a password.">Veuillez fournir un mot de passe.</item>
-	<item id="The user was not found.">L'utilisateur n'existe pas.</item>
-	<item id="nickname_bad_length">Le pseudo doit contenir entre 3 et 30 caractères.</item>
-	<item id="nickname_invalid_char">Le pseudo contient des caractères non valides (.)</item>
-	<item id="nickname_already_used">Ce pseudo est déjà en utilisation.</item>
-	<item id="email_not_valid">Cet email n'est pas valide.</item>
-	<item id="email_already_used">Cet email est déjà utilisé.</item>
-
-	<!-- Account validation -->
-	<item id="%s - Your account was validated">%s - Votre compte utilisateur a été validé</item>
-	<item id="user_account_validated_email"><![CDATA[
-<p>Bonjour,</p>
-<p>Votre compte sur le site {site_title} vient d'être validé par un administrateur.</p>
-<p>Vous pouvez vous connecter à l'adresse <a href="{{base}}user/login">{{base}}user/login</a>.</p>
-
-<p>{{site_title}}</p>
---------------<br />
-Ceci est un message automatique.]]></item>
-	<item id="The user %s was successfully validated.">L'utilisateur %s a été validé avec succès.</item>
-
-	<item id="%s - Your account was refused">%s - Votre compte utilisateur a été refusée</item>
-	<item id="user_account_refused_email"><![CDATA[
-<p>Bonjour,</p>
-<p>Votre inscription sur le site {{site_title}} n'a pas été acceptée.</p>
-<p>Pour plus d'informations, merci de contacter un administrateur.</p>
-
-<p>{{site_title}}</p>
---------------<br />
-Ceci est un message automatique.]]></item>
-	<item id="The user %s was refused.">L'utilisateur %s a été refusé.</item>
-	<item id="The user %s is not valid.">L'utilisateur %s n'est pas valide.</item>
-
-	<!-- User add/edit form -->
-	<item id="Password">Mot de passe</item>
-	<item id="Leave empty to let the password unchanged">Laisser vide pour laisser le mot de passe inchangé.</item>
-	<item id="(confirmation)">(confirmation)</item>
-	<item id="No group">Aucun groupe</item>
-
-	<item id="User Rights">Droits d'accès</item>
-	<item id="Regular user">Simple utilisateur</item>
-	<item id="Supreme admin">Administrateur suprême</item>
-	<item id="Custom rights">Droits personnalisés</item>
-	<item id="Select all">Sélectionner tout</item>
-	<item id="Unselect all">Déselectionner tout</item>
-	<item id="This is the application loaded by default in the admin.">Ceci est l'application chargée par défaut dans l'administration.</item>
-	<item id="This application does not have custom permission, nor admin zone.">Cette application ne possède pas de permission personnalisée, ni zone d'administration.</item>
-	<item id="Send a confirmation by email to the user">Envoyer une confirmation par email à l'utilisateur</item>
-	<item id="Warning: you are about to edit your own account. The changes will be applied immediatly.">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
-	<item id="Submitting this form, this user account will be validated and the user will be notified by email.">En envoyant ce formulaire, ce compte utilisateur sera validé et il en sera notifié par email.</item>
-
-	<item id="The user %s was successfully created.">L'utilisateur %s a été créé avec succès.</item>
-	<item id="An unknown error occured.">Une erreur inconnue s'est produite.</item>
-	<item id="The user %s was successfully edited.">L'utilisateur %s a été édité avec succès.</item>
-
-	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
-	<item id="user_edition_email_subject">%s - Modification de votre compte utilisateur</item>
-	<item id="user_register_email_body"><![CDATA[
-<p>Bonjour,</p>
-<p>Un compte utilisateur vient de vous être créé sur le site {{site_title}}</p>
-<p></p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}user/login">{{base}}user/login</a>.</p>
-<p>Voici vos données de connexion :</p>
-<ul>
-	<li><strong>Identifiant :</strong> {{nickname}}</li>
-	<li><strong>Mot de passe :</strong> {{password}}</li>
-</ul>
-<p>Ces informations sont personnelles.<br />
-Pour tout changement, rendez-vous sur l'espace membre.</p>
-
-<p>{{site_title}}</p>
---------------<br />
-Ceci est un message automatique.]]></item>
-
-	<item id="user_edition_email_body"><![CDATA[
-<p>Bonjour,</p>
-<p>Votre compte utilisateur sur le site {{site_title}} vient d'être modifié et validé.</p>
-<p>Pour vous connecter, rendez-vous à l'adresse <a href="{{base}}user/login">{{base}}user/login</a>.</p>
-<p>Voici vos données de connexion :</p>
-<ul>
-	<li><strong>Identifiant :</strong> {{nickname}}</li>
-	<li><strong>Mot de passe :</strong> {{password}}</li>
-</ul>
-<p>Ces informations sont personnelles.<br />
-Pour tout changement, rendez-vous sur l'espace membre.</p>
-
-<p>{{site_title}}</p>
---------------<br />
-Ceci est un message automatique.]]></item>
-
-	<!-- User delete -->
-	<item id="Delete a user">Supprimer un utilisateur</item>
-	<item id="Do you really want to delete the user %s?">Êtes-vous sûr de vouloir supprimer l'utilisateur %s ?</item>
-	<item id="The user was successfully deleted.">L'utilisateur a été supprimé avec succès.</item>
-	<item id="You cannot delete your own user account.">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
-
-	<!-- Group form -->
-	<item id="Groups">Groupes</item>
-	<item id="Add a group">Ajouter un groupe</item>
-	<item id="Edit a group">Editer un groupe</item>
-	<item id="Name">Nom</item>
-	<item id="Default access rights for users in this group">Droits d'accès par défaut des utilisateurs du groupe</item>
-	<item id="Number of users">Nombre d'utilisateurs</item>
-	<item id="Apply">Appliquer</item>
-	<item id="No group in the database.">Aucun groupe trouvé dans la base de données.</item>
-
-	<item id="Please, provide a name.">Le nom du groupe est vide.</item>
-	<item id="The group %s was successfully created.">Le groupe %s a été ajouté avec succès.</item>
-	<item id="The group %s was successfully edited.">Le groupe %s a été édité avec succès.</item>
-
-	<!-- Groupe delete -->
-	<item id="Delete a group">Supprimer un groupe</item>
-	<item id="Do you really want to delete the group %s?">Voulez-vous vraiment supprimer le groupe %s ?</item>
-	<item id="The group %s was successfully deleted.">Le groupe %s a été supprimé avec succès.</item>
-	<item id="The group was not found.">Le groupe a été supprimé avec succès.</item>
-
-	<!-- Group diff -->
-	<item id="Apply new access rights">Application des nouveaux droits d'accès</item>
-	<item id="%s users">%s utilisateurs</item>
-	<item id="Do you want to apply new access rights to all users within the group?">Voulez-vous appliquer les nouveaux droits d'accès à tous les utilisateurs du groupe ?</item>
-	<item id="The new access rights were applied to users in the group %s.">Les nouveaux droits d'accès ont été appliqués aux utilisateurs du groupe %s.</item>
-
-	<!-- Config -->
-	<item id="config_register">Ouvrir les inscriptions</item>
-	<item id="config_email_conf">A l'inscription, envoi d'un courriel pour confirmer les adresses email</item>
-	<item id="config_summary">A la fin de l'inscription, envoyer un récapitulatif par email</item>
-	<item id="config_admin_check">Activer la validation des comptes utilisateurs par un admin</item>
-	<item id="config_keep_users">Conserver les comptes supprimés ou refusés dans la base de données en les désactivant</item>
-	<item id="The configuration was successfully updated.">La configuration a été mise à jour avec succès.</item>
+  <item id="%s - Your account was validated">%s - Votre compte utilisateur a été validé</item>
+  <item id="user_account_validated_email">&lt;p&gt;Bonjour,&lt;/p&gt;&#13;
+&lt;p&gt;Votre compte sur le site {site_title} vient d'être validé par un administrateur.&lt;/p&gt;&#13;
+&lt;p&gt;Vous pouvez vous connecter à l'adresse &lt;a href="{{base}}user/login"&gt;{{base}}user/login&lt;/a&gt;.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;{{site_title}}&lt;/p&gt;&#13;
+--------------&lt;br /&gt;&#13;
+Ceci est un message automatique.</item>
+  <item id="The user %s was successfully validated.">L'utilisateur %s a été validé avec succès.</item>
+  <item id="%s - Your account was refused">%s - Votre compte utilisateur a été refusée</item>
+  <item id="user_account_refused_email">&lt;p&gt;Bonjour,&lt;/p&gt;&#13;
+&lt;p&gt;Votre inscription sur le site {{site_title}} n'a pas été acceptée.&lt;/p&gt;&#13;
+&lt;p&gt;Pour plus d'informations, merci de contacter un administrateur.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;{{site_title}}&lt;/p&gt;&#13;
+--------------&lt;br /&gt;&#13;
+Ceci est un message automatique.</item>
+  <item id="The user %s was refused.">L'utilisateur %s a été refusé.</item>
+  <item id="The user %s is not valid.">L'utilisateur %s n'est pas valide.</item>
+  <item id="Error: the passwords do not match.">Erreur : les mots de passe fournis sont différents.</item>
+  <item id="Please, provide a password.">Veuillez fournir un mot de passe.</item>
+  <item id="The user %s was successfully created.">L'utilisateur %s a été créé avec succès.</item>
+  <item id="An unknown error occured.">Une erreur inconnue s'est produite.</item>
+  <item id="The user %s was successfully edited.">L'utilisateur %s a été édité avec succès.</item>
+  <item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
+  <item id="user_register_email_body">&lt;p&gt;Bonjour,&lt;/p&gt;&#13;
+&lt;p&gt;Un compte utilisateur vient de vous être créé sur le site {{site_title}}&lt;/p&gt;&#13;
+&lt;p&gt;&lt;/p&gt;Pour vous connecter, rendez-vous à l'adresse &lt;a href="{{base}}user/login"&gt;{{base}}user/login&lt;/a&gt;.&lt;/p&gt;&#13;
+&lt;p&gt;Voici vos données de connexion :&lt;/p&gt;&#13;
+&lt;ul&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Identifiant :&lt;/strong&gt; {{nickname}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Mot de passe :&lt;/strong&gt; {{password}}&lt;/li&gt;&#13;
+&lt;/ul&gt;&#13;
+&lt;p&gt;Ces informations sont personnelles.&lt;br /&gt;&#13;
+Pour tout changement, rendez-vous sur l'espace membre.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;{{site_title}}&lt;/p&gt;&#13;
+--------------&lt;br /&gt;&#13;
+Ceci est un message automatique.</item>
+  <item id="user_edition_email_subject">%s - Modification de votre compte utilisateur</item>
+  <item id="user_edition_email_body">&lt;p&gt;Bonjour,&lt;/p&gt;&#13;
+&lt;p&gt;Votre compte utilisateur sur le site {{site_title}} vient d'être modifié et validé.&lt;/p&gt;&#13;
+&lt;p&gt;Pour vous connecter, rendez-vous à l'adresse &lt;a href="{{base}}user/login"&gt;{{base}}user/login&lt;/a&gt;.&lt;/p&gt;&#13;
+&lt;p&gt;Voici vos données de connexion :&lt;/p&gt;&#13;
+&lt;ul&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Identifiant :&lt;/strong&gt; {{nickname}}&lt;/li&gt;&#13;
+	&lt;li&gt;&lt;strong&gt;Mot de passe :&lt;/strong&gt; {{password}}&lt;/li&gt;&#13;
+&lt;/ul&gt;&#13;
+&lt;p&gt;Ces informations sont personnelles.&lt;br /&gt;&#13;
+Pour tout changement, rendez-vous sur l'espace membre.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;{{site_title}}&lt;/p&gt;&#13;
+--------------&lt;br /&gt;&#13;
+Ceci est un message automatique.</item>
+  <item id="The user was not found.">L'utilisateur n'existe pas.</item>
+  <item id="You cannot delete your own user account.">Vous ne pouvez pas supprimer votre propre compte utilisateur.</item>
+  <item id="The user was successfully deleted.">L'utilisateur a été supprimé avec succès.</item>
+  <item id="Please, provide a name.">Le nom du groupe est vide.</item>
+  <item id="The group %s was successfully created.">Le groupe %s a été ajouté avec succès.</item>
+  <item id="The group %s was successfully edited.">Le groupe %s a été édité avec succès.</item>
+  <item id="The group was not found.">Le groupe a été supprimé avec succès.</item>
+  <item id="The new access rights were applied to users in the group %s.">Les nouveaux droits d'accès ont été appliqués aux utilisateurs du groupe %s.</item>
+  <item id="The group %s was successfully deleted.">Le groupe %s a été supprimé avec succès.</item>
+  <item id="The configuration was successfully updated.">La configuration a été mise à jour avec succès.</item>
+  <item id="Warning: you are about to edit your own account. The changes will be applied immediatly.">Attention : vous être en train d'éditer votre propre compte. Les changements prendront effet immédiatement.</item>
+  <item id="Submitting this form, this user account will be validated and the user will be notified by email.">En envoyant ce formulaire, ce compte utilisateur sera validé et il en sera notifié par email.</item>
+  <item id="Configuration">Configuration</item>
+  <item id="config_register">Ouvrir les inscriptions</item>
+  <item id="config_email_conf">A l'inscription, envoi d'un courriel pour confirmer les adresses email</item>
+  <item id="config_summary">A la fin de l'inscription, envoyer un récapitulatif par email</item>
+  <item id="config_admin_check">Activer la validation des comptes utilisateurs par un admin</item>
+  <item id="config_keep_users">Conserver les comptes supprimés ou refusés dans la base de données en les désactivant</item>
+  <item id="Submit">Envoyer</item>
+  <item id="Delete a user">Supprimer un utilisateur</item>
+  <item id="Do you really want to delete the user %s?">Êtes-vous sûr de vouloir supprimer l'utilisateur %s ?</item>
+  <item id="Cancel">Annuler</item>
+  <item id="Delete">Supprimer</item>
+  <item id="Delete a group">Supprimer un groupe</item>
+  <item id="Do you really want to delete the group %s?">Voulez-vous vraiment supprimer le groupe %s ?</item>
+  <item id="Apply new access rights">Application des nouveaux droits d'accès</item>
+  <item id="Do you want to apply new access rights to all users within the group?">Voulez-vous appliquer les nouveaux droits d'accès à tous les utilisateurs du groupe ?</item>
+  <item id="%s users">%s utilisateurs</item>
+  <item id="Apply">Appliquer</item>
+  <item id="Groups">Groupes</item>
+  <item id="Add a group">Ajouter un groupe</item>
+  <item id="Name">Nom</item>
+  <item id="Number of users">Nombre d'utilisateurs</item>
+  <item id="Actions">Actions</item>
+  <item id="Edit">Modifier</item>
+  <item id="No group in the database.">Aucun groupe trouvé dans la base de données.</item>
+  <item id="User Rights">Droits d'accès</item>
+  <item id="Regular user">Simple utilisateur</item>
+  <item id="Supreme admin">Administrateur suprême</item>
+  <item id="Custom rights">Droits personnalisés</item>
+  <item id="Select all">Sélectionner tout</item>
+  <item id="Unselect all">Déselectionner tout</item>
+  <item id="This is the application loaded by default in the admin.">Ceci est l'application chargée par défaut dans l'administration.</item>
+  <item id="This application does not have custom permission, nor admin zone.">Cette application ne possède pas de permission personnalisée, ni zone d'administration.</item>
+  <item id="Add a user">Ajouter un utilisateur</item>
+  <item id="Edit a user">Editer un utilisateur</item>
+  <item id="Nickname">Identifiant</item>
+  <item id="Password">Mot de passe</item>
+  <item id="Leave empty to let the password unchanged">Laisser vide pour laisser le mot de passe inchangé.</item>
+  <item id="(confirmation)">(confirmation)</item>
+  <item id="Email">Email</item>
+  <item id="Firstname">Prénom</item>
+  <item id="Lastname">Nom</item>
+  <item id="Group">Groupe</item>
+  <item id="No group">Aucun groupe</item>
+  <item id="Registration date">Date d'inscription</item>
+  <item id="Last connection">Dernière connexion</item>
+  <item id="Send a confirmation by email to the user">Envoyer une confirmation par email à l'utilisateur</item>
+  <item id="Users">Utilisateurs</item>
+  <item id="%s users registered">%s utilisateurs inscrits</item>
+  <item id="%s users found">%s utilisateurs trouvés</item>
+  <item id="ID">ID</item>
+  <item id="No user found in database.">Aucun utilisateur trouvé dans la base de données.</item>
+  <item id="Users waiting for validation">Utilisateurs en attente de validation</item>
+  <item id="Validate">Valider</item>
+  <item id="Refuse">Refuser</item>
+  <item id="Notify these users">Notifier ces utilisateurs</item>
+  <item id="Search">Recherche</item>
+  <item id="Filter">Filtrer</item>
+  <item id="User">Utilisateur</item>
 </lang>

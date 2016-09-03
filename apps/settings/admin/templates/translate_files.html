@@ -1,0 +1,34 @@
+<div class="wity-app wity-app-settings wity-action-translate">
+	<h1>{lang Translate}</h1>
+
+	<div id="translatable-tabs"></div>
+
+	<form class="form-horizontal" method="post">
+		<input type="hidden" name="type" value="{$type}" />
+		<input type="hidden" name="folder" value="{$folder}" />
+
+		{for $field in $fields}
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<fieldset>
+					<legend>{$field.file}</legend>
+					{for $hash, $key in $field.hash}
+						<div class="translatable form-group">
+							<label for="{$hash}" class="col-sm-6 control-label text-left">{$key}</label>
+							<div class="col-sm-6">
+								<textarea id="{$hash}" name="{$field.prefix}_fields[{$hash}]" type="text" class="form-control" rows="1" cols="40"></textarea>
+							</div>
+						</div>
+					{/for}
+				</fieldset>
+			</div>
+		</div>
+		{/for}
+
+		<button type="submit" class="btn btn-primary">{lang Save}</button>
+	</form>
+</div>
+
+<script type="text/javascript">
+	var wity_lang_form_values = {$form_values};
+</script>

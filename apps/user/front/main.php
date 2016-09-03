@@ -157,7 +157,7 @@ class UserController extends WController {
 						// Send a validation email
 						$this->model->sendEmail(
 							$data['email'],
-							WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
+							WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 							str_replace(
 								array('{site_title}', '{nickname}', '{password}', '{base}', '{confirm}'),
 								array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $data['confirm']),
@@ -254,7 +254,7 @@ class UserController extends WController {
 				if (!empty($admin_emails)) {
 					$this->model->sendEmail(
 						$admin_emails,
-						WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
+						WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 						str_replace(
 							array('{site_title}', '{nickname}', '{base}', '{userid}'),
 							array(WConfig::get('config.site_title'), $data['nickname'], WRoute::getBase(), $data['id']),
