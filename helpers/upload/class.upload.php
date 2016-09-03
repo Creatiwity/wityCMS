@@ -583,28 +583,6 @@ class upload {
     var $image_ratio_pixels;
 
     /**
-     * Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
-     * but only if original image is bigger
-     *
-     * Default value is false
-     *
-     * @access public
-     * @var bool
-     */
-    var $image_ratio_no_zoom_in;
-
-    /**
-     * Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
-     * but only if original image is smaller
-     *
-     * Default value is false
-     *
-     * @access public
-     * @var bool
-     */
-    var $image_ratio_no_zoom_out;
-
-    /**
      * Set this variable to calculate {@link image_x} automatically , using {@link image_y} and conserving ratio
      *
      * Default value is false
@@ -623,6 +601,52 @@ class upload {
      * @var bool
      */
     var $image_ratio_y;
+
+    /**
+     * (deprecated) Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+     * but only if original image is bigger
+     *
+     * This setting is soon to be deprecated. Instead, use {@link image_ratio} and {@link image_no_enlarging}
+     *
+     * Default value is false
+     *
+     * @access public
+     * @var bool
+     */
+    var $image_ratio_no_zoom_in;
+
+    /**
+     * (deprecated) Set this variable to keep the original size ratio to fit within {@link image_x} x {@link image_y},
+     * but only if original image is smaller
+     *
+     * Default value is false
+     *
+     * This setting is soon to be deprecated. Instead, use {@link image_ratio} and {@link image_no_shrinking}
+     *
+     * @access public
+     * @var bool
+     */
+    var $image_ratio_no_zoom_out;
+
+    /**
+     * Cancel resizing if the resized image is bigger than the original image, to prevent enlarging
+     *
+     * Default value is false
+     *
+     * @access public
+     * @var bool
+     */
+    var $image_no_enlarging;
+
+    /**
+     * Cancel resizing if the resized image is smaller than the original image, to prevent shrinking
+     *
+     * Default value is false
+     *
+     * @access public
+     * @var bool
+     */
+    var $image_no_shrinking;
 
     /**
      * Set this variable to set a maximum image width, above which the upload will be invalid
@@ -755,17 +779,6 @@ class upload {
      * @var boolean
      */
     var $image_interlace;
-
-    /**
-     * Preserve transparency when resizing or converting an image (deprecated)
-     *
-     * Default value is automatically set to true for transparent GIFs
-     * This setting is now deprecated
-     *
-     * @access public
-     * @var integer
-     */
-    var $preserve_transparency;
 
     /**
      * Flag set to true when the image is transparent
@@ -915,14 +928,6 @@ class upload {
     var $image_overlay_opacity;
 
     /**
-     * Soon to be deprecated old form of {@link image_overlay_opacity}
-     *
-     * @access public
-     * @var integer
-     */
-    var $image_overlay_percent;
-
-    /**
      * Inverts the color of an image
      *
      * Default value is FALSE
@@ -1042,6 +1047,8 @@ class upload {
      *
      * Value is either 'h' or 'v', as in horizontal and vertical
      *
+     * Note that if you use a TrueType font, you can use {@link image_text_angle} instead
+     *
      * Default value is h (horizontal)
      *
      * @access public
@@ -1074,14 +1081,6 @@ class upload {
     var $image_text_opacity;
 
     /**
-     * Soon to be deprecated old form of {@link image_text_opacity}
-     *
-     * @access public
-     * @var integer
-     */
-    var $image_text_percent;
-
-    /**
      * Sets the text background color for the text label
      *
      * Value is an hexadecimal color, such as #FFFFFF
@@ -1106,18 +1105,10 @@ class upload {
     var $image_text_background_opacity;
 
     /**
-     * Soon to be deprecated old form of {@link image_text_background_opacity}
-     *
-     * @access public
-     * @var integer
-     */
-    var $image_text_background_percent;
-
-    /**
      * Sets the text font in the text label
      *
      * Value is a an integer between 1 and 5 for GD built-in fonts. 1 is the smallest font, 5 the biggest
-     * Value can also be a string, which represents the path to a GDF font. The font will be loaded into GD, and used as a built-in font.
+     * Value can also be a string, which represents the path to a GDF or TTF font (TrueType).
      *
      * Default value is 5
      *
@@ -1125,6 +1116,35 @@ class upload {
      * @var mixed;
      */
     var $image_text_font;
+
+    /**
+     * Sets the text font size for TrueType fonts
+     *
+     * Value is a an integer, and represents the font size in pixels (GD1) or points (GD1)
+     *
+     * Note that this setting is only applicable to TrueType fonts, and has no effects with GD fonts
+     *
+     * Default value is 16
+     *
+     * @access public
+     * @var integer;
+     */
+    var $image_text_size;
+
+    /**
+     * Sets the text angle for TrueType fonts
+     *
+     * Value is a an integer between 0 and 360, in degrees, with 0 degrees being left-to-right reading text.
+     *
+     * Note that this setting is only applicable to TrueType fonts, and has no effects with GD fonts
+     * For GD fonts, you can use {@link image_text_direction} instead
+     *
+     * Default value is null (so it is determined by the value of {@link image_text_direction})
+     *
+     * @access public
+     * @var integer;
+     */
+    var $image_text_angle;
 
     /**
      * Sets the text label position within the image
@@ -1224,6 +1244,8 @@ class upload {
      *
      * This setting is relevant only if the text has several lines.
      *
+     * Note that this setting is only applicable to GD fonts, and has no effects with TrueType fonts
+     *
      * @access public
      * @var string;
      */
@@ -1237,6 +1259,8 @@ class upload {
      * Default value is 0
      *
      * This setting is relevant only if the text has several lines.
+     *
+     * Note that this setting is only applicable to GD fonts, and has no effects with TrueType fonts
      *
      * @access public
      * @var integer
@@ -1271,22 +1295,6 @@ class upload {
     var $image_reflection_space;
 
     /**
-     * Sets the color of the reflection background (deprecated)
-     *
-     * Value is an hexadecimal color, such as #FFFFFF
-     *
-     * Default value is #FFFFFF
-     *
-     * This setting is relevant only if {@link image_reflection_height} is set
-     *
-     * This setting is now deprecated in favor of {@link image_default_color}
-     *
-     * @access public
-     * @var string;
-     */
-    var $image_reflection_color;
-
-    /**
      * Sets the initial opacity of the reflection
      *
      * Value is an integer between 0 (no opacity) and 100 (full opacity).
@@ -1302,6 +1310,16 @@ class upload {
     var $image_reflection_opacity;
 
     /**
+     * Automatically rotates the image according to EXIF data (JPEG only)
+     *
+     * Default value is true
+     *
+     * @access public
+     * @var boolean;
+     */
+    var $image_auto_rotate;
+
+    /**
      * Flips the image vertically or horizontally
      *
      * Value is either 'h' or 'v', as in horizontal and vertical
@@ -1312,18 +1330,6 @@ class upload {
      * @var string;
      */
     var $image_flip;
-
-    /**
-     * Automatically rotates the image according to EXIF data (JPEG only)
-     *
-     * This setting will override any {@link image_rotate} and {@link image_flip} setting
-     *
-     * Default value is true
-     *
-     * @access public
-     * @var boolean;
-     */
-    var $image_rotate_auto;
 
     /**
      * Rotates the image by increments of 45 degrees
@@ -1735,15 +1741,17 @@ class upload {
         $this->image_ratio_crop         = false;    // keeps aspect ratio with x and y dimensions, filling the space
         $this->image_ratio_fill         = false;    // keeps aspect ratio with x and y dimensions, fitting the image in the space, and coloring the rest
         $this->image_ratio_pixels       = false;    // keeps aspect ratio, calculating x and y so that the image is approx the set number of pixels
-        $this->image_ratio_no_zoom_in   = false;
-        $this->image_ratio_no_zoom_out  = false;
         $this->image_ratio_x            = false;    // calculate the $image_x if true
         $this->image_ratio_y            = false;    // calculate the $image_y if true
+        $this->image_ratio_no_zoom_in   = false;
+        $this->image_ratio_no_zoom_out  = false;
+        $this->image_no_enlarging       = false;
+        $this->image_no_shrinking       = false;
+
         $this->png_compression          = null;
         $this->jpeg_quality             = 85;
         $this->jpeg_size                = null;
         $this->image_interlace          = false;
-        $this->preserve_transparency    = false;
         $this->image_is_transparent     = false;
         $this->image_transparent_color  = null;
         $this->image_background_color   = null;
@@ -1766,7 +1774,6 @@ class upload {
         $this->image_tint_color         = null;
         $this->image_overlay_color      = null;
         $this->image_overlay_opacity    = null;
-        $this->image_overlay_percent    = null;
         $this->image_negative           = false;
         $this->image_greyscale          = false;
         $this->image_pixelate           = null;
@@ -1779,11 +1786,11 @@ class upload {
         $this->image_text_direction     = null;
         $this->image_text_color         = '#FFFFFF';
         $this->image_text_opacity       = 100;
-        $this->image_text_percent       = 100;
         $this->image_text_background    = null;
         $this->image_text_background_opacity = 100;
-        $this->image_text_background_percent = 100;
         $this->image_text_font          = 5;
+        $this->image_text_size          = 16;
+        $this->image_text_angle         = null;
         $this->image_text_x             = null;
         $this->image_text_y             = null;
         $this->image_text_position      = null;
@@ -1795,7 +1802,6 @@ class upload {
 
         $this->image_reflection_height  = null;
         $this->image_reflection_space   = 2;
-        $this->image_reflection_color   = '#ffffff';
         $this->image_reflection_opacity = 60;
 
         $this->image_watermark          = null;
@@ -1806,7 +1812,7 @@ class upload {
         $this->image_watermark_no_zoom_out = false;
 
         $this->image_flip               = null;
-        $this->image_rotate_auto        = true;
+        $this->image_auto_rotate        = true;
         $this->image_rotate             = null;
         $this->image_crop               = null;
         $this->image_precrop            = null;
@@ -1925,7 +1931,6 @@ class upload {
             'css' => 'text/css',
             'xml' => 'application/xml',
             'doc' => 'application/msword',
-            'docx' => 'application/msword',
             'xls' => 'application/vnd.ms-excel',
             'xlt' => 'application/vnd.ms-excel',
             'xlm' => 'application/vnd.ms-excel',
@@ -2030,9 +2035,9 @@ class upload {
      *    or   string $file Local filename
      * @param  string $lang Optional language code
      */
-    function upload($file, $lang = 'en_GB') {
+    function __construct($file, $lang = 'en_GB') {
 
-        $this->version            = '0.33dev';
+        $this->version            = '0.34dev';
 
         $this->file_src_name      = '';
         $this->file_src_name_body = '';
@@ -2156,7 +2161,7 @@ class upload {
         // display some system information
         if (empty($this->log)) {
             $this->log .= '<b>system information</b><br />';
-            if (function_exists('ini_get_all')) {
+            if ($this->function_enabled('ini_get_all')) {
                 $inis = ini_get_all();
                 $open_basedir = (array_key_exists('open_basedir', $inis) && array_key_exists('local_value', $inis['open_basedir']) && !empty($inis['open_basedir']['local_value'])) ? $inis['open_basedir']['local_value'] : false;
             } else {
@@ -2328,7 +2333,7 @@ class upload {
             if (!$this->file_src_mime || !is_string($this->file_src_mime) || empty($this->file_src_mime) || strpos($this->file_src_mime, '/') === FALSE) {
                 if ($this->mime_fileinfo) {
                     $this->log .= '- Checking MIME type with Fileinfo PECL extension<br />';
-                    if (function_exists('finfo_open')) {
+                    if ($this->function_enabled('finfo_open')) {
                         $path = null;
                         if ($this->mime_fileinfo !== '') {
                             if ($this->mime_fileinfo === true) {
@@ -2393,7 +2398,7 @@ class upload {
                 if ($this->mime_file) {
                     $this->log .= '- Checking MIME type with UNIX file() command<br />';
                     if (substr(PHP_OS, 0, 3) != 'WIN') {
-                        if (function_exists('exec') && function_exists('escapeshellarg') && !extension_loaded('suhosin')) {
+                        if ($this->function_enabled('exec') && $this->function_enabled('escapeshellarg')) {
                             if (strlen($mime = @exec("file -bi ".escapeshellarg($this->file_src_pathname))) != 0) {
                                 $this->file_src_mime = trim($mime);
                                 $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;MIME type detected as ' . $this->file_src_mime . ' by UNIX file() command<br />';
@@ -2421,7 +2426,7 @@ class upload {
             if (!$this->file_src_mime || !is_string($this->file_src_mime) || empty($this->file_src_mime) || strpos($this->file_src_mime, '/') === FALSE) {
                 if ($this->mime_magic) {
                     $this->log .= '- Checking MIME type with mime.magic file (mime_content_type())<br />';
-                    if (function_exists('mime_content_type')) {
+                    if ($this->function_enabled('mime_content_type')) {
                         $this->file_src_mime = mime_content_type($this->file_src_pathname);
                         $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;MIME type detected as ' . $this->file_src_mime . ' by mime_content_type()<br />';
                         if (preg_match("/^([\.\w-]+)\/([\.\w-]+)(.*)$/i", $this->file_src_mime)) {
@@ -2555,7 +2560,7 @@ class upload {
         static $gd_version = null;
         static $gd_full_version = null;
         if ($gd_version === null) {
-            if (function_exists('gd_info')) {
+            if ($this->function_enabled('gd_info')) {
                 $gd = gd_info();
                 $gd = $gd["GD Version"];
                 $regex = "/([\d\.]+)/i";
@@ -2579,6 +2584,24 @@ class upload {
         } else {
             return $gd_version;
         }
+    }
+
+    /**
+     * Checks if a function is available
+     *
+     * @access private
+     * @param  string  $func Function name
+     * @return boolean Success
+     */
+    function function_enabled($func) {
+        // cache the list of disabled functions
+        static $disabled = null;
+        if ($disabled === null) $disabled = array_map('trim', array_map('strtolower', explode(',', ini_get('disable_functions'))));
+        // cache the list of functions blacklisted by suhosin
+        static $blacklist = null;
+        if ($blacklist === null) $blacklist = extension_loaded('suhosin') ? array_map('trim', array_map('strtolower', explode(',', ini_get('  suhosin.executor.func.blacklist')))) : array();
+        // checks if the function is really enabled
+        return (function_exists($func) && !in_array($func, $disabled) && !in_array($func, $blacklist));
     }
 
     /**
@@ -2630,7 +2653,7 @@ class upload {
      */
     function temp_dir() {
         $dir = '';
-        if (function_exists('sys_get_temp_dir')) $dir = sys_get_temp_dir();
+        if ($this->function_enabled('sys_get_temp_dir')) $dir = sys_get_temp_dir();
         if (!$dir && $tmp=getenv('TMP'))    $dir = $tmp;
         if (!$dir && $tmp=getenv('TEMP'))   $dir = $tmp;
         if (!$dir && $tmp=getenv('TMPDIR')) $dir = $tmp;
@@ -2890,10 +2913,6 @@ class upload {
         // clean up some parameters
         $this->file_max_size = $this->getsize($this->file_max_size);
         $this->jpeg_size = $this->getsize($this->jpeg_size);
-        // some parameters are being deprecated, and replaced with others
-        if (is_null($this->image_overlay_opacity)) $this->image_overlay_opacity = $this->image_overlay_percent;
-        if ($this->image_text_opacity == 100) $this->image_text_opacity = $this->image_text_percent;
-        if ($this->image_text_background_opacity == 100) $this->image_text_background_opacity = $this->image_text_background_percent;
 
         // copy some variables as we need to keep them clean
         $file_src_name = $this->file_src_name;
@@ -3092,7 +3111,7 @@ class upload {
                                  || $this->image_greyscale
                                  || $this->image_negative
                                  || !empty($this->image_watermark)
-                                 || $this->image_rotate_auto
+                                 || $this->image_auto_rotate
                                  || is_numeric($this->image_rotate)
                                  || is_numeric($this->jpeg_size)
                                  || !empty($this->image_flip)
@@ -3270,7 +3289,7 @@ class upload {
                 if ($this->gdversion()) {
                     switch($this->image_src_type) {
                         case 'jpg':
-                            if (!function_exists('imagecreatefromjpeg')) {
+                            if (!$this->function_enabled('imagecreatefromjpeg')) {
                                 $this->processed = false;
                                 $this->error = $this->translate('no_create_support', array('JPEG'));
                             } else {
@@ -3284,7 +3303,7 @@ class upload {
                             }
                             break;
                         case 'png':
-                            if (!function_exists('imagecreatefrompng')) {
+                            if (!$this->function_enabled('imagecreatefrompng')) {
                                 $this->processed = false;
                                 $this->error = $this->translate('no_create_support', array('PNG'));
                             } else {
@@ -3298,7 +3317,7 @@ class upload {
                             }
                             break;
                         case 'gif':
-                            if (!function_exists('imagecreatefromgif')) {
+                            if (!$this->function_enabled('imagecreatefromgif')) {
                                 $this->processed = false;
                                 $this->error = $this->translate('no_create_support', array('GIF'));
                             } else {
@@ -3388,6 +3407,115 @@ class upload {
 
                     $image_dst = & $image_src;
 
+                    // automatically pre-rotates the image according to EXIF data (JPEG only)
+                    if ($this->image_auto_rotate && $this->image_src_type == 'jpg' && $this->function_enabled('exif_read_data')) {
+                        $auto_flip = false;
+                        $auto_rotate = 0;
+                        $exif = @exif_read_data($this->file_src_pathname);
+                        if (is_array($exif) && isset($exif['Orientation'])) {
+                            $orientation = $exif['Orientation'];
+                            switch($orientation) {
+                              case 1:
+                                $this->log .= '- EXIF orientation = 1 : default<br />';
+                                break;
+                              case 2:
+                                $auto_flip = 'v';
+                                $this->log .= '- EXIF orientation = 2 : vertical flip<br />';
+                                break;
+                              case 3:
+                                $auto_rotate = 180;
+                                $this->log .= '- EXIF orientation = 3 : 180 rotate left<br />';
+                                break;
+                              case 4:
+                                $auto_flip = 'h';
+                                $this->log .= '- EXIF orientation = 4 : horizontal flip<br />';
+                                break;
+                              case 5:
+                                $auto_flip = 'h';
+                                $auto_rotate = 90;
+                                $this->log .= '- EXIF orientation = 5 : horizontal flip + 90 rotate right<br />';
+                                break;
+                              case 6:
+                                $auto_rotate = 90;
+                                $this->log .= '- EXIF orientation = 6 : 90 rotate right<br />';
+                                break;
+                              case 7:
+                                $auto_flip = 'v';
+                                $auto_rotate = 90;
+                                $this->log .= '- EXIF orientation = 7 : vertical flip + 90 rotate right<br />';
+                                break;
+                              case 8:
+                                $auto_rotate = 270;
+                                $this->log .= '- EXIF orientation = 8 : 90 rotate left<br />';
+                                break;
+                              default:
+                                $this->log .= '- EXIF orientation = '.$orientation.' : unknown<br />';
+                                break;
+                            }
+                        } else {
+                            $this->log .= '- EXIF data is invalid or missing<br />';
+                        }
+
+                        // auto-flip image
+                        if ($gd_version >= 2 && !empty($auto_flip)) {
+                            $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;auto-flip image : ' . $auto_flip . '<br />';
+                            $tmp = $this->imagecreatenew($this->image_src_x, $this->image_src_y);
+                            for ($x = 0; $x < $this->image_src_x; $x++) {
+                                for ($y = 0; $y < $this->image_src_y; $y++){
+                                    if (strpos($auto_flip, 'v') !== false) {
+                                        imagecopy($tmp, $image_dst, $this->image_src_x - $x - 1, $y, $x, $y, 1, 1);
+                                    } else {
+                                        imagecopy($tmp, $image_dst, $x, $this->image_src_y - $y - 1, $x, $y, 1, 1);
+                                    }
+                                }
+                            }
+                            // we transfert tmp into image_dst
+                            $image_dst = $this->imagetransfer($tmp, $image_dst);
+                        }
+
+                        // auto-rotate image
+                        if ($gd_version >= 2 && is_numeric($auto_rotate)) {
+                            if (!in_array($auto_rotate, array(0, 90, 180, 270))) $auto_rotate = 0;
+                            if ($auto_rotate != 0) {
+                                if ($auto_rotate == 90 || $auto_rotate == 270) {
+                                    $tmp = $this->imagecreatenew($this->image_src_y, $this->image_src_x);
+                                } else {
+                                    $tmp = $this->imagecreatenew($this->image_src_x, $this->image_src_y);
+                                }
+                                $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;auto-rotate image : ' . $auto_rotate . '<br />';
+                                for ($x = 0; $x < $this->image_src_x; $x++) {
+                                    for ($y = 0; $y < $this->image_src_y; $y++){
+                                        if ($auto_rotate == 90) {
+                                            imagecopy($tmp, $image_dst, $y, $x, $x, $this->image_src_y - $y - 1, 1, 1);
+                                        } else if ($auto_rotate == 180) {
+                                            imagecopy($tmp, $image_dst, $x, $y, $this->image_src_x - $x - 1, $this->image_src_y - $y - 1, 1, 1);
+                                        } else if ($auto_rotate == 270) {
+                                            imagecopy($tmp, $image_dst, $y, $x, $this->image_src_x - $x - 1, $y, 1, 1);
+                                        } else {
+                                            imagecopy($tmp, $image_dst, $x, $y, $x, $y, 1, 1);
+                                        }
+                                    }
+                                }
+                                if ($auto_rotate == 90 || $auto_rotate == 270) {
+                                    $t = $this->image_src_y;
+                                    $this->image_src_y = $this->image_src_x;
+                                    $this->image_src_x = $t;
+                                }
+                                // we transfert tmp into image_dst
+                                $image_dst = $this->imagetransfer($tmp, $image_dst);
+                            }
+                        }
+
+                    } else {
+                        if (!$this->image_auto_rotate) {
+                            $this->log .= '- auto-rotate deactivated<br />';
+                        } else if (!$this->image_src_type == 'jpg') {
+                            $this->log .= '- auto-rotate applies only to JPEG images<br />';
+                        } else if (!$this->function_enabled('exif_read_data')) {
+                            $this->log .= '- auto-rotate requires function exif_read_data to be enabled<br />';
+                        }
+                    }
+
                     // pre-crop image, before resizing
                     if ((!empty($this->image_precrop))) {
                         list($ct, $cr, $cb, $cl) = $this->getoffsets($this->image_precrop, $this->image_src_x, $this->image_src_y, true, true);
@@ -3424,118 +3552,129 @@ class upload {
                     // resize image (and move image_src_x, image_src_y dimensions into image_dst_x, image_dst_y)
                     if ($this->image_resize) {
                         $this->log .= '- resizing...<br />';
+                        $this->image_dst_x = $this->image_x;
+                        $this->image_dst_y = $this->image_y;
 
+                        // backward compatibility for soon to be deprecated settings
+                        if ($this->image_ratio_no_zoom_in) {
+                            $this->image_ratio = true;
+                            $this->image_no_enlarging = true;
+                        } else if ($this->image_ratio_no_zoom_out) {
+                            $this->image_ratio = true;
+                            $this->image_no_shrinking = true;
+                        }
+
+                        // keeps aspect ratio with x calculated from y
                         if ($this->image_ratio_x) {
                             $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;calculate x size<br />';
                             $this->image_dst_x = round(($this->image_src_x * $this->image_y) / $this->image_src_y);
                             $this->image_dst_y = $this->image_y;
+
+                        // keeps aspect ratio with y calculated from x
                         } else if ($this->image_ratio_y) {
                             $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;calculate y size<br />';
                             $this->image_dst_x = $this->image_x;
                             $this->image_dst_y = round(($this->image_src_y * $this->image_x) / $this->image_src_x);
+
+                        // keeps aspect ratio, calculating x and y so that the image is approx the set number of pixels
                         } else if (is_numeric($this->image_ratio_pixels)) {
                             $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;calculate x/y size to match a number of pixels<br />';
                             $pixels = $this->image_src_y * $this->image_src_x;
                             $diff = sqrt($this->image_ratio_pixels / $pixels);
                             $this->image_dst_x = round($this->image_src_x * $diff);
                             $this->image_dst_y = round($this->image_src_y * $diff);
-                        } else if ($this->image_ratio || $this->image_ratio_crop || $this->image_ratio_fill || $this->image_ratio_no_zoom_in || $this->image_ratio_no_zoom_out) {
-                            $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;check x/y sizes<br />';
-                            if ((!$this->image_ratio_no_zoom_in && !$this->image_ratio_no_zoom_out)
-                                 || ($this->image_ratio_no_zoom_in && ($this->image_src_x > $this->image_x || $this->image_src_y > $this->image_y))
-                                 || ($this->image_ratio_no_zoom_out && $this->image_src_x < $this->image_x && $this->image_src_y < $this->image_y)) {
-                                $this->image_dst_x = $this->image_x;
+
+                        // keeps aspect ratio with x and y dimensions, filling the space
+                        } else if ($this->image_ratio_crop) {
+                            if (!is_string($this->image_ratio_crop)) $this->image_ratio_crop = '';
+                            $this->image_ratio_crop = strtolower($this->image_ratio_crop);
+                            if (($this->image_src_x/$this->image_x) > ($this->image_src_y/$this->image_y)) {
                                 $this->image_dst_y = $this->image_y;
-                                if ($this->image_ratio_crop) {
-                                    if (!is_string($this->image_ratio_crop)) $this->image_ratio_crop = '';
-                                    $this->image_ratio_crop = strtolower($this->image_ratio_crop);
-                                    if (($this->image_src_x/$this->image_x) > ($this->image_src_y/$this->image_y)) {
-                                        $this->image_dst_y = $this->image_y;
-                                        $this->image_dst_x = intval($this->image_src_x*($this->image_y / $this->image_src_y));
-                                        $ratio_crop = array();
-                                        $ratio_crop['x'] = $this->image_dst_x - $this->image_x;
-                                        if (strpos($this->image_ratio_crop, 'l') !== false) {
-                                            $ratio_crop['l'] = 0;
-                                            $ratio_crop['r'] = $ratio_crop['x'];
-                                        } else if (strpos($this->image_ratio_crop, 'r') !== false) {
-                                            $ratio_crop['l'] = $ratio_crop['x'];
-                                            $ratio_crop['r'] = 0;
-                                        } else {
-                                            $ratio_crop['l'] = round($ratio_crop['x']/2);
-                                            $ratio_crop['r'] = $ratio_crop['x'] - $ratio_crop['l'];
-                                        }
-                                        $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_crop_x         : ' . $ratio_crop['x'] . ' (' . $ratio_crop['l'] . ';' . $ratio_crop['r'] . ')<br />';
-                                        if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
-                                    } else {
-                                        $this->image_dst_x = $this->image_x;
-                                        $this->image_dst_y = intval($this->image_src_y*($this->image_x / $this->image_src_x));
-                                        $ratio_crop = array();
-                                        $ratio_crop['y'] = $this->image_dst_y - $this->image_y;
-                                        if (strpos($this->image_ratio_crop, 't') !== false) {
-                                            $ratio_crop['t'] = 0;
-                                            $ratio_crop['b'] = $ratio_crop['y'];
-                                        } else if (strpos($this->image_ratio_crop, 'b') !== false) {
-                                            $ratio_crop['t'] = $ratio_crop['y'];
-                                            $ratio_crop['b'] = 0;
-                                        } else {
-                                            $ratio_crop['t'] = round($ratio_crop['y']/2);
-                                            $ratio_crop['b'] = $ratio_crop['y'] - $ratio_crop['t'];
-                                        }
-                                        $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_crop_y         : ' . $ratio_crop['y'] . ' (' . $ratio_crop['t'] . ';' . $ratio_crop['b'] . ')<br />';
-                                        if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
-                                    }
-                                } else if ($this->image_ratio_fill) {
-                                    if (!is_string($this->image_ratio_fill)) $this->image_ratio_fill = '';
-                                    $this->image_ratio_fill = strtolower($this->image_ratio_fill);
-                                    if (($this->image_src_x/$this->image_x) < ($this->image_src_y/$this->image_y)) {
-                                        $this->image_dst_y = $this->image_y;
-                                        $this->image_dst_x = intval($this->image_src_x*($this->image_y / $this->image_src_y));
-                                        $ratio_crop = array();
-                                        $ratio_crop['x'] = $this->image_dst_x - $this->image_x;
-                                        if (strpos($this->image_ratio_fill, 'l') !== false) {
-                                            $ratio_crop['l'] = 0;
-                                            $ratio_crop['r'] = $ratio_crop['x'];
-                                        } else if (strpos($this->image_ratio_fill, 'r') !== false) {
-                                            $ratio_crop['l'] = $ratio_crop['x'];
-                                            $ratio_crop['r'] = 0;
-                                        } else {
-                                            $ratio_crop['l'] = round($ratio_crop['x']/2);
-                                            $ratio_crop['r'] = $ratio_crop['x'] - $ratio_crop['l'];
-                                        }
-                                        $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_fill_x         : ' . $ratio_crop['x'] . ' (' . $ratio_crop['l'] . ';' . $ratio_crop['r'] . ')<br />';
-                                        if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
-                                    } else {
-                                        $this->image_dst_x = $this->image_x;
-                                        $this->image_dst_y = intval($this->image_src_y*($this->image_x / $this->image_src_x));
-                                        $ratio_crop = array();
-                                        $ratio_crop['y'] = $this->image_dst_y - $this->image_y;
-                                        if (strpos($this->image_ratio_fill, 't') !== false) {
-                                            $ratio_crop['t'] = 0;
-                                            $ratio_crop['b'] = $ratio_crop['y'];
-                                        } else if (strpos($this->image_ratio_fill, 'b') !== false) {
-                                            $ratio_crop['t'] = $ratio_crop['y'];
-                                            $ratio_crop['b'] = 0;
-                                        } else {
-                                            $ratio_crop['t'] = round($ratio_crop['y']/2);
-                                            $ratio_crop['b'] = $ratio_crop['y'] - $ratio_crop['t'];
-                                        }
-                                        $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_fill_y         : ' . $ratio_crop['y'] . ' (' . $ratio_crop['t'] . ';' . $ratio_crop['b'] . ')<br />';
-                                        if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
-                                    }
+                                $this->image_dst_x = intval($this->image_src_x*($this->image_y / $this->image_src_y));
+                                $ratio_crop = array();
+                                $ratio_crop['x'] = $this->image_dst_x - $this->image_x;
+                                if (strpos($this->image_ratio_crop, 'l') !== false) {
+                                    $ratio_crop['l'] = 0;
+                                    $ratio_crop['r'] = $ratio_crop['x'];
+                                } else if (strpos($this->image_ratio_crop, 'r') !== false) {
+                                    $ratio_crop['l'] = $ratio_crop['x'];
+                                    $ratio_crop['r'] = 0;
                                 } else {
-                                    if (($this->image_src_x/$this->image_x) > ($this->image_src_y/$this->image_y)) {
-                                        $this->image_dst_x = $this->image_x;
-                                        $this->image_dst_y = intval($this->image_src_y*($this->image_x / $this->image_src_x));
-                                    } else {
-                                        $this->image_dst_y = $this->image_y;
-                                        $this->image_dst_x = intval($this->image_src_x*($this->image_y / $this->image_src_y));
-                                    }
+                                    $ratio_crop['l'] = round($ratio_crop['x']/2);
+                                    $ratio_crop['r'] = $ratio_crop['x'] - $ratio_crop['l'];
                                 }
+                                $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_crop_x         : ' . $ratio_crop['x'] . ' (' . $ratio_crop['l'] . ';' . $ratio_crop['r'] . ')<br />';
+                                if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
                             } else {
-                                $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;doesn\'t calculate x/y sizes<br />';
-                                $this->image_dst_x = $this->image_src_x;
-                                $this->image_dst_y = $this->image_src_y;
+                                $this->image_dst_x = $this->image_x;
+                                $this->image_dst_y = intval($this->image_src_y*($this->image_x / $this->image_src_x));
+                                $ratio_crop = array();
+                                $ratio_crop['y'] = $this->image_dst_y - $this->image_y;
+                                if (strpos($this->image_ratio_crop, 't') !== false) {
+                                    $ratio_crop['t'] = 0;
+                                    $ratio_crop['b'] = $ratio_crop['y'];
+                                } else if (strpos($this->image_ratio_crop, 'b') !== false) {
+                                    $ratio_crop['t'] = $ratio_crop['y'];
+                                    $ratio_crop['b'] = 0;
+                                } else {
+                                    $ratio_crop['t'] = round($ratio_crop['y']/2);
+                                    $ratio_crop['b'] = $ratio_crop['y'] - $ratio_crop['t'];
+                                }
+                                $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_crop_y         : ' . $ratio_crop['y'] . ' (' . $ratio_crop['t'] . ';' . $ratio_crop['b'] . ')<br />';
+                                if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
                             }
+
+                        // keeps aspect ratio with x and y dimensions, fitting the image in the space, and coloring the rest
+                        } else if ($this->image_ratio_fill) {
+                            if (!is_string($this->image_ratio_fill)) $this->image_ratio_fill = '';
+                            $this->image_ratio_fill = strtolower($this->image_ratio_fill);
+                            if (($this->image_src_x/$this->image_x) < ($this->image_src_y/$this->image_y)) {
+                                $this->image_dst_y = $this->image_y;
+                                $this->image_dst_x = intval($this->image_src_x*($this->image_y / $this->image_src_y));
+                                $ratio_crop = array();
+                                $ratio_crop['x'] = $this->image_dst_x - $this->image_x;
+                                if (strpos($this->image_ratio_fill, 'l') !== false) {
+                                    $ratio_crop['l'] = 0;
+                                    $ratio_crop['r'] = $ratio_crop['x'];
+                                } else if (strpos($this->image_ratio_fill, 'r') !== false) {
+                                    $ratio_crop['l'] = $ratio_crop['x'];
+                                    $ratio_crop['r'] = 0;
+                                } else {
+                                    $ratio_crop['l'] = round($ratio_crop['x']/2);
+                                    $ratio_crop['r'] = $ratio_crop['x'] - $ratio_crop['l'];
+                                }
+                                $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_fill_x         : ' . $ratio_crop['x'] . ' (' . $ratio_crop['l'] . ';' . $ratio_crop['r'] . ')<br />';
+                                if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
+                            } else {
+                                $this->image_dst_x = $this->image_x;
+                                $this->image_dst_y = intval($this->image_src_y*($this->image_x / $this->image_src_x));
+                                $ratio_crop = array();
+                                $ratio_crop['y'] = $this->image_dst_y - $this->image_y;
+                                if (strpos($this->image_ratio_fill, 't') !== false) {
+                                    $ratio_crop['t'] = 0;
+                                    $ratio_crop['b'] = $ratio_crop['y'];
+                                } else if (strpos($this->image_ratio_fill, 'b') !== false) {
+                                    $ratio_crop['t'] = $ratio_crop['y'];
+                                    $ratio_crop['b'] = 0;
+                                } else {
+                                    $ratio_crop['t'] = round($ratio_crop['y']/2);
+                                    $ratio_crop['b'] = $ratio_crop['y'] - $ratio_crop['t'];
+                                }
+                                $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;ratio_fill_y         : ' . $ratio_crop['y'] . ' (' . $ratio_crop['t'] . ';' . $ratio_crop['b'] . ')<br />';
+                                if (is_null($this->image_crop)) $this->image_crop = array(0, 0, 0, 0);
+                            }
+
+                        // keeps aspect ratio with x and y dimensions
+                        } else if ($this->image_ratio) {
+                            if (($this->image_src_x/$this->image_x) > ($this->image_src_y/$this->image_y)) {
+                                $this->image_dst_x = $this->image_x;
+                                $this->image_dst_y = intval($this->image_src_y*($this->image_x / $this->image_src_x));
+                            } else {
+                                $this->image_dst_y = $this->image_y;
+                                $this->image_dst_x = intval($this->image_src_x*($this->image_y / $this->image_src_y));
+                            }
+
+                        // resize to provided exact dimensions
                         } else {
                             $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;use plain sizes<br />';
                             $this->image_dst_x = $this->image_x;
@@ -3544,19 +3683,37 @@ class upload {
 
                         if ($this->image_dst_x < 1) $this->image_dst_x = 1;
                         if ($this->image_dst_y < 1) $this->image_dst_y = 1;
-                        $tmp = $this->imagecreatenew($this->image_dst_x, $this->image_dst_y);
-
-                        if ($gd_version >= 2) {
-                            $res = imagecopyresampled($tmp, $image_src, 0, 0, 0, 0, $this->image_dst_x, $this->image_dst_y, $this->image_src_x, $this->image_src_y);
-                        } else {
-                            $res = imagecopyresized($tmp, $image_src, 0, 0, 0, 0, $this->image_dst_x, $this->image_dst_y, $this->image_src_x, $this->image_src_y);
-                        }
-
-                        $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;resized image object created<br />';
                         $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;image_src_x y        : ' . $this->image_src_x . ' x ' . $this->image_src_y . '<br />';
                         $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;image_dst_x y        : ' . $this->image_dst_x . ' x ' . $this->image_dst_y . '<br />';
-                        // we transfert tmp into image_dst
-                        $image_dst = $this->imagetransfer($tmp, $image_dst);
+
+                        // make sure we don't enlarge the image if we don't want to
+                        if ($this->image_no_enlarging && ($this->image_src_x < $this->image_dst_x || $this->image_src_y < $this->image_dst_y)) {
+                            $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;cancel resizing, as it would enlarge the image!<br />';
+                            $this->image_dst_x = $this->image_src_x;
+                            $this->image_dst_y = $this->image_src_y;
+                        }
+
+                        // make sure we don't shrink the image if we don't want to
+                        if ($this->image_no_shrinking && ($this->image_src_x > $this->image_dst_x || $this->image_src_y > $this->image_dst_y)) {
+                            $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;cancel resizing, as it would shrink the image!<br />';
+                            $this->image_dst_x = $this->image_src_x;
+                            $this->image_dst_y = $this->image_src_y;
+                        }
+
+                        // resize the image
+                        if ($this->image_dst_x != $this->image_src_x && $this->image_dst_y != $this->image_src_y) {
+                            $tmp = $this->imagecreatenew($this->image_dst_x, $this->image_dst_y);
+
+                            if ($gd_version >= 2) {
+                                $res = imagecopyresampled($tmp, $image_src, 0, 0, 0, 0, $this->image_dst_x, $this->image_dst_y, $this->image_src_x, $this->image_src_y);
+                            } else {
+                                $res = imagecopyresized($tmp, $image_src, 0, 0, 0, 0, $this->image_dst_x, $this->image_dst_y, $this->image_src_x, $this->image_src_y);
+                            }
+
+                            $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;resized image object created<br />';
+                             // we transfert tmp into image_dst
+                            $image_dst = $this->imagetransfer($tmp, $image_dst);
+                        }
 
                     } else {
                         $this->image_dst_x = $this->image_src_x;
@@ -3601,47 +3758,6 @@ class upload {
 
                         // we transfert tmp into image_dst
                         $image_dst = $this->imagetransfer($tmp, $image_dst);
-                    }
-
-                    // automatically rotates the image according to EXIF data (JPEG only)
-                    if ($this->image_rotate_auto && $this->image_src_type = 'jpg' && function_exists('exif_read_data')) {
-                        $exif = exif_read_data($this->file_src_pathname);
-                        $ort = $exif['Orientation'];
-                        switch($ort) {
-                          case 2:
-                            $this->image_flip = true;
-                            $this->log .= '- auto-rotate image (2): horizontal flip<br />';
-                            break;
-                          case 3:
-                            $this->image_rotate = 180;
-                            $this->log .= '- auto-rotate image (3): 180 rotate left<br />';
-                            break;
-                          case 4:
-                            $this->image_flip = true;
-                            $this->log .= '- auto-rotate image (4): vertical flip<br />';
-                            break;
-                          case 5:
-                            $this->image_flip = true;
-                            $this->image_rotate = 90;
-                            $this->log .= '- auto-rotate image (5): vertical flip + 90 rotate right<br />';
-                            break;
-                          case 6:
-                            $this->image_rotate = 90;
-                            $this->log .= '- auto-rotate image (6): 90 rotate right<br />';
-                            break;
-                          case 7:
-                            $this->image_flip = true;
-                            $this->image_rotate = 90;
-                            $this->log .= '- auto-rotate image (7): horizontal flip + 90 rotate right<br />';
-                            break;
-                          case 8:
-                            $this->image_rotate = 270;
-                            $this->log .= '- auto-rotate image (8): 90 rotate left<br />';
-                            break;
-                          default:
-                            $this->log .= '- auto-rotate image ('.$ort.'): unknown<br />';
-                            break;
-                       }
                     }
 
                     // flip image
@@ -3725,7 +3841,7 @@ class upload {
                             $this->image_dst_x = imagesx($image_dst); $this->image_dst_y = imagesy($image_dst);
                             $canvas = $this->imagecreatenew($this->image_dst_x, $this->image_dst_y, false, true);
                             $blur = $this->imagecreatenew($this->image_dst_x, $this->image_dst_y, false, true);
-                            if (function_exists('imageconvolution')) { // PHP >= 5.1
+                            if ($this->function_enabled('imageconvolution')) { // PHP >= 5.1
                                 $matrix = array(array( 1, 2, 1 ), array( 2, 4, 2 ), array( 1, 2, 1 ));
                                 imagecopy($blur, $image_dst, 0, 0, 0, 0, $this->image_dst_x, $this->image_dst_y);
                                 imageconvolution($blur, $matrix, 16, 0);
@@ -4006,7 +4122,7 @@ class upload {
                         $watermark_type = (array_key_exists(2, $watermark_info) ? $watermark_info[2] : null); // 1 = GIF, 2 = JPG, 3 = PNG
                         $watermark_checked = false;
                         if ($watermark_type == IMAGETYPE_GIF) {
-                            if (!function_exists('imagecreatefromgif')) {
+                            if (!$this->function_enabled('imagecreatefromgif')) {
                                 $this->error = $this->translate('watermark_no_create_support', array('GIF'));
                             } else {
                                 $filter = @imagecreatefromgif($this->image_watermark);
@@ -4018,7 +4134,7 @@ class upload {
                                 }
                             }
                         } else if ($watermark_type == IMAGETYPE_JPEG) {
-                            if (!function_exists('imagecreatefromjpeg')) {
+                            if (!$this->function_enabled('imagecreatefromjpeg')) {
                                 $this->error = $this->translate('watermark_no_create_support', array('JPEG'));
                             } else {
                                 $filter = @imagecreatefromjpeg($this->image_watermark);
@@ -4030,7 +4146,7 @@ class upload {
                                 }
                             }
                         } else if ($watermark_type == IMAGETYPE_PNG) {
-                            if (!function_exists('imagecreatefrompng')) {
+                            if (!$this->function_enabled('imagecreatefrompng')) {
                                 $this->error = $this->translate('watermark_no_create_support', array('PNG'));
                             } else {
                                 $filter = @imagecreatefrompng($this->image_watermark);
@@ -4190,8 +4306,11 @@ class upload {
                         $this->image_text_direction = strtolower($this->image_text_direction);
                         $this->image_text_alignment = strtolower($this->image_text_alignment);
 
-                        // if the font is a string, we assume that we might want to load a font
+                        $font_type = 'gd';
+
+                        // if the font is a string with a GDF font path, we assume that we might want to load a font
                         if (!is_numeric($this->image_text_font) && strlen($this->image_text_font) > 4 && substr(strtolower($this->image_text_font), -4) == '.gdf') {
+                            if (strpos($this->image_text_font, '/') === false) $this->image_text_font = "./" . $this->image_text_font;
                             $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;try to load font ' . $this->image_text_font . '... ';
                             if ($this->image_text_font = @imageloadfont($this->image_text_font)) {
                                 $this->log .=  'success<br />';
@@ -4201,29 +4320,66 @@ class upload {
                             }
                         }
 
-                        $text = explode("\n", $this->image_text);
-                        $char_width = imagefontwidth($this->image_text_font);
-                        $char_height = imagefontheight($this->image_text_font);
-                        $text_height = 0;
-                        $text_width = 0;
-                        $line_height = 0;
-                        $line_width = 0;
-
-                        foreach ($text as $k => $v) {
-                            if ($this->image_text_direction == 'v') {
-                                $h = ($char_width * strlen($v));
-                                if ($h > $text_height) $text_height = $h;
-                                $line_width = $char_height;
-                                $text_width += $line_width + ($k < (sizeof($text)-1) ? $this->image_text_line_spacing : 0);
+                        // if the font is a string with a TTF font path, we check if we can access the font file
+                        if (!is_numeric($this->image_text_font) && strlen($this->image_text_font) > 4 && substr(strtolower($this->image_text_font), -4) == '.ttf') {
+                            $this->log .= '&nbsp;&nbsp;&nbsp;&nbsp;try to load font ' . $this->image_text_font . '... ';
+                            if (strpos($this->image_text_font, '/') === false) $this->image_text_font = "./" . $this->image_text_font;
+                            if (file_exists($this->image_text_font) && is_readable($this->image_text_font)) {
+                                $this->log .=  'success<br />';
+                                $font_type = 'tt';
                             } else {
-                                $w = ($char_width * strlen($v));
-                                if ($w > $text_width) $text_width = $w;
-                                $line_height = $char_height;
-                                $text_height += $line_height + ($k < (sizeof($text)-1) ? $this->image_text_line_spacing : 0);
+                                $this->log .=  'error<br />';
+                                $this->image_text_font = 5;
                             }
                         }
-                        $text_width  += (2 * $this->image_text_padding_x);
-                        $text_height += (2 * $this->image_text_padding_y);
+
+                        // get the text bounding box (GD fonts)
+                        if ($font_type == 'gd') {
+                            $text = explode("\n", $this->image_text);
+                            $char_width = imagefontwidth($this->image_text_font);
+                            $char_height = imagefontheight($this->image_text_font);
+                            $text_height = 0;
+                            $text_width = 0;
+                            $line_height = 0;
+                            $line_width = 0;
+                            foreach ($text as $k => $v) {
+                                if ($this->image_text_direction == 'v') {
+                                    $h = ($char_width * strlen($v));
+                                    if ($h > $text_height) $text_height = $h;
+                                    $line_width = $char_height;
+                                    $text_width += $line_width + ($k < (sizeof($text)-1) ? $this->image_text_line_spacing : 0);
+                                } else {
+                                    $w = ($char_width * strlen($v));
+                                    if ($w > $text_width) $text_width = $w;
+                                    $line_height = $char_height;
+                                    $text_height += $line_height + ($k < (sizeof($text)-1) ? $this->image_text_line_spacing : 0);
+                                }
+                            }
+                            $text_width  += (2 * $this->image_text_padding_x);
+                            $text_height += (2 * $this->image_text_padding_y);
+
+                        // get the text bounding box (TrueType fonts)
+                        } else if ($font_type == 'tt') {
+                            $text = $this->image_text;
+                            if (!$this->image_text_angle) $this->image_text_angle = $this->image_text_direction == 'v' ? 90 : 0;
+                            $text_height = 0;
+                            $text_width = 0;
+                            $text_offset_x = 0;
+                            $text_offset_y = 0;
+                            $rect = imagettfbbox($this->image_text_size, $this->image_text_angle, $this->image_text_font, $text );
+                            if ($rect) {
+                                $minX = min(array($rect[0],$rect[2],$rect[4],$rect[6]));
+                                $maxX = max(array($rect[0],$rect[2],$rect[4],$rect[6]));
+                                $minY = min(array($rect[1],$rect[3],$rect[5],$rect[7]));
+                                $maxY = max(array($rect[1],$rect[3],$rect[5],$rect[7]));
+                                $text_offset_x = abs($minX) - 1;
+                                $text_offset_y = abs($minY) - 1;
+                                $text_width = $maxX - $minX + (2 * $this->image_text_padding_x);
+                                $text_height = $maxY - $minY + (2 * $this->image_text_padding_y);
+                            }
+                        }
+
+                        // position the text block
                         $text_x = 0;
                         $text_y = 0;
                         if (is_numeric($this->image_text_x)) {
@@ -4285,44 +4441,66 @@ class upload {
                             $filter = $this->imagecreatenew($t_width, $t_height, false, true);
                             $text_color = imagecolorallocate($filter ,$red, $green, $blue);
 
-                            foreach ($text as $k => $v) {
-                                if ($this->image_text_direction == 'v') {
-                                    imagestringup($filter,
-                                                  $this->image_text_font,
-                                                  $k * ($line_width  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
-                                                  $text_height - (2 * $this->image_text_padding_y) - ($this->image_text_alignment == 'l' ? 0 : (($t_height - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))) ,
-                                                  $v,
-                                                  $text_color);
-                                } else {
-                                    imagestring($filter,
-                                                $this->image_text_font,
-                                                ($this->image_text_alignment == 'l' ? 0 : (($t_width - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))),
-                                                $k * ($line_height  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
-                                                $v,
-                                                $text_color);
+                            if ($font_type == 'gd') {
+                                foreach ($text as $k => $v) {
+                                    if ($this->image_text_direction == 'v') {
+                                        imagestringup($filter,
+                                                      $this->image_text_font,
+                                                      $k * ($line_width  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
+                                                      $text_height - (2 * $this->image_text_padding_y) - ($this->image_text_alignment == 'l' ? 0 : (($t_height - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))) ,
+                                                      $v,
+                                                      $text_color);
+                                    } else {
+                                        imagestring($filter,
+                                                    $this->image_text_font,
+                                                    ($this->image_text_alignment == 'l' ? 0 : (($t_width - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))),
+                                                    $k * ($line_height  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
+                                                    $v,
+                                                    $text_color);
+                                    }
                                 }
+                            } else if ($font_type == 'tt') {
+                                imagettftext($filter,
+                                             $this->image_text_size,
+                                             $this->image_text_angle,
+                                             $text_offset_x,
+                                             $text_offset_y,
+                                             $text_color,
+                                             $this->image_text_font,
+                                             $text);
                             }
                             $this->imagecopymergealpha($image_dst, $filter, $text_x, $text_y, 0, 0, $t_width, $t_height, $this->image_text_opacity);
                             imagedestroy($filter);
 
                         } else {
-                            $text_color = imageColorAllocate($image_dst ,$red, $green, $blue);
-                            foreach ($text as $k => $v) {
-                                if ($this->image_text_direction == 'v') {
-                                    imagestringup($image_dst,
-                                                  $this->image_text_font,
-                                                  $text_x + $k * ($line_width  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
-                                                  $text_y + $text_height - (2 * $this->image_text_padding_y) - ($this->image_text_alignment == 'l' ? 0 : (($t_height - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))),
-                                                  $v,
-                                                  $text_color);
-                                } else {
-                                    imagestring($image_dst,
-                                                $this->image_text_font,
-                                                $text_x + ($this->image_text_alignment == 'l' ? 0 : (($t_width - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))),
-                                                $text_y + $k * ($line_height  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
-                                                $v,
-                                                $text_color);
+                            $text_color = imagecolorallocate($image_dst ,$red, $green, $blue);
+                            if ($font_type == 'gd') {
+                                foreach ($text as $k => $v) {
+                                    if ($this->image_text_direction == 'v') {
+                                        imagestringup($image_dst,
+                                                      $this->image_text_font,
+                                                      $text_x + $k * ($line_width  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
+                                                      $text_y + $text_height - (2 * $this->image_text_padding_y) - ($this->image_text_alignment == 'l' ? 0 : (($t_height - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))),
+                                                      $v,
+                                                      $text_color);
+                                    } else {
+                                        imagestring($image_dst,
+                                                    $this->image_text_font,
+                                                    $text_x + ($this->image_text_alignment == 'l' ? 0 : (($t_width - strlen($v) * $char_width) / ($this->image_text_alignment == 'r' ? 1 : 2))),
+                                                    $text_y + $k * ($line_height  + ($k > 0 && $k < (sizeof($text)) ? $this->image_text_line_spacing : 0)),
+                                                    $v,
+                                                    $text_color);
+                                    }
                                 }
+                            } else if ($font_type == 'tt') {
+                                imagettftext($image_dst,
+                                             $this->image_text_size,
+                                             $this->image_text_angle,
+                                             $text_offset_x + ($this->image_dst_x / 2) - ($text_width / 2) + $this->image_text_padding_x,
+                                             $text_offset_y + ($this->image_dst_y / 2) - ($text_height / 2) + $this->image_text_padding_y,
+                                             $text_color,
+                                             $this->image_text_font,
+                                             $text);
                             }
                         }
                     }
