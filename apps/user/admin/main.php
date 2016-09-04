@@ -214,19 +214,27 @@ class UserAdminController extends WController {
 				}
 			}
 
-			if ($add_case) {
-				$new_access_string = $this->model->treatAccessData(array(), $access, $post_data['type'], $new_access);
+			if (!is_null($post_data['type']) && !is_null($post_data['access'])) {
+				if ($add_case) {
+					$post_data['access'] = $this->model->treatAccessData(array(), $access, $post_data['type'], $new_access);
 
-				$post_data['access'] = is_null($new_access_string) ? '' : $new_access_string;
-			} else {
-				$old_access = WSession::parseAccessString($db_data['access']);
-
-				$new_access_string = $this->model->treatAccessData($old_access, $access, $post_data['type'], $new_access);
-
-				if (is_null($new_access_string)) {
-					unset($post_data['access']);
+					if (is_null($post_data['access'])) {
+						$post_data['access'] = '';
+					}
 				} else {
-					$post_data['access'] = $new_access_string;
+					$old_access = WSession::parseAccessString($db_data['access']);
+
+					$post_data['access'] = $this->model->treatAccessData($old_access, $access, $post_data['type'], $new_access);
+
+					if (is_null($post_data['access'])) {
+						unset($post_data['access']);
+					}
+				}
+			} else {
+				if ($add_case) {
+					$post_data['access'] = '';
+				} else {
+					$post_data['access'] = $db_data['access'];
 				}
 			}
 
