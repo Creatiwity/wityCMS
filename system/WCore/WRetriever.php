@@ -78,11 +78,13 @@ class WRetriever {
 
 		// Get model
 		if ($controller instanceof WController) {
+			$action_lower = strtolower($route['action']);
+
 			// Match the asked action with the manifest
-			$action = $controller->getExecutableAction(strtolower($route['action']));
+			$action = $controller->getExecutableAction($action_lower);
 
 			// Push back action in params
-			if ($action != $route['action']) {
+			if ($action != $action_lower) {
 				array_unshift($route['params'], $route['action']);
 			}
 
