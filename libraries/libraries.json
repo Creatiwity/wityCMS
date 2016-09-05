@@ -4,7 +4,7 @@
 	"paths": {
 		"apps": "witycms/apps.plugin",
 		"themes": "witycms/themes.plugin",
-		"jquery": "jquery-1.11.2/jquery-1.11.2.min",
+		"jquery": "jquery-3.1.0/jquery-3.1.0.min",
 		"bootstrap": "bootstrap-3.3.7/js/bootstrap.min",
 		"bootstrap-datepicker": "bootstrap-datepicker-1.6.1/js/bootstrap-datepicker.min",
 		"wityslider": "wityslider-1.2.9/wityslider"
