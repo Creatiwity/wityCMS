@@ -279,7 +279,7 @@ class SettingsAdminController extends WController {
 	protected function translate() {
 		return array(
 			'apps'   => $this->getApps(),
-			'themes' => $this->getAllThemes()
+			'themes' => $this->getAllThemes(array('system', '_blank'))
 		);
 	}
 
@@ -569,7 +569,9 @@ class SettingsAdminController extends WController {
 				}
 			}
 
-			$themes[] = "_blank";
+			if (!in_array('_blank', $excluded_themes)) {
+				$themes[] = '_blank';
+			}
 		}
 
 		return $themes;
