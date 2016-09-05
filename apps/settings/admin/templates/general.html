@@ -94,6 +94,9 @@
 						{for $app, $manifest in $front_apps}
 						<option value="{$app}"{if {$app} == {$route.default_front}} selected="selected"{/if}>{$app}</option>
 						{/for}
+						{for $app, $manifest in $admin_apps}
+						<option value="admin/{$app}"{if "admin/".{$app} == {$route.default_front}} selected="selected"{/if}>admin/{$app}</option>
+						{/for}
 					</select>
 				</div>
 			</div>
