@@ -81,6 +81,11 @@ class WRetriever {
 			// Match the asked action with the manifest
 			$action = $controller->getExecutableAction($route['action']);
 
+			// Push back action in params
+			if ($action != $route['action']) {
+				array_unshift($route['params'], $route['action']);
+			}
+
 			$model['signature'] = md5($url);
 
 			// Check if this model was not already calculated
