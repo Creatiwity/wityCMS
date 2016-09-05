@@ -79,7 +79,7 @@ class WRetriever {
 		// Get model
 		if ($controller instanceof WController) {
 			// Match the asked action with the manifest
-			$action = $controller->getExecutableAction($route['action']);
+			$action = $controller->getExecutableAction(strtolower($route['action']));
 
 			// Push back action in params
 			if ($action != $route['action']) {
@@ -134,11 +134,9 @@ class WRetriever {
 			} else {
 				$view = $controller->getView();
 
-				$executable_action = preg_replace('#[^a-z_]#', '', $model['action']);
-
 				// Prepare the view
-				if (method_exists($view, $executable_action)) {
-					$view->$executable_action($model['result']);
+				if (method_exists($view, $model['action'])) {
+					$view->{$model['action']}($model['result']);
 				}
 
 				// Infers template file
