@@ -65,8 +65,8 @@ class WRoute {
 
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
 		$dir = self::getDir();
-		if ($dir != '/') {
-			self::$query = str_replace($dir, '', $_SERVER['REQUEST_URI']);
+		if ($dir != '/' && strpos($_SERVER['REQUEST_URI'], $dir) === 0) {
+			self::$query = substr($_SERVER['REQUEST_URI'], strlen($dir));
 		}
 
 		// Cleansing
