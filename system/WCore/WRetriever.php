@@ -19,12 +19,6 @@ class WRetriever {
 	 */
 	private static $controllers = array();
 
-	/**
-	 * @var Stores the models already calculated
-	 * @static
-	 */
-	private static $models = array();
-
 	public static function init() {
 		// Init template handler
 		WSystem::getTemplate();
@@ -88,12 +82,7 @@ class WRetriever {
 				array_unshift($route['params'], $route['action']);
 			}
 
-			$model['signature'] = md5($url);
-
-			// Check if this model was not already calculated
-			if (isset(self::$models[$model['signature']])) {
-				return self::$models[$model['signature']];
-			}
+			$model['signature'] = md5($url.serialize($extra_params));
 
 			// Trigger the action and get the result model
 			$model['result'] = $controller->launch($action, $route['params']);
@@ -102,9 +91,6 @@ class WRetriever {
 
 			// Add headers to the model
 			$model['headers'] = $controller->getHeaders();
-
-			// Cache the value
-			self::$models[$model['signature']] = $model;
 		} else {
 			$model['result'] = $controller;
 		}
