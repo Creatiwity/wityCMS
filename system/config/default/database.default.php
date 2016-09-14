@@ -6,12 +6,12 @@
  */
 
 $database = array(
-    'server' => '127.0.0.1',
-    'port'   => '',          // port for MySQL (usually empty)
-    'user'   => 'root',      // user name
-    'pw'     => '',          // password
-    'dbname' => 'witycms',   // database's name
-    'prefix' => ''           // prefix used to name tables in this database
+  'server' => '127.0.0.1',
+  'port'   => '',          // port for MySQL (usually empty)
+  'user'   => 'root',      // user name
+  'pw'     => '',          // password
+  'dbname' => 'witycms',   // database's name
+  'prefix' => ''           // prefix used to name tables in this database
 );
 
 ?>

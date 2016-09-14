@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Settings\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class SettingsAdminView extends WView {
 	/**
@@ -72,6 +72,34 @@ class SettingsAdminView extends WView {
 	public function language_delete($model) {
 		$this->assign('name', $model['name']);
 		$this->assign('confirm_delete_url', '/admin/settings/language_delete/'.$model['id'].'/confirm');
+	}
+
+	public function translate($model) {
+		$this->assign('themes', $model['themes']);
+		$this->assign('apps', $model['apps']);
+	}
+
+	public function translate_app($model) {
+		$this->translate_files($model);
+	}
+
+	public function translate_theme($model) {
+		$this->translate_files($model);
+	}
+
+	private function translate_files($model) {
+		$this->assign('require', 'witycms/admin');
+		$this->assign('css', '/apps/settings/admin/css/translate.css');
+
+		$this->assign('type', $model['type']);
+		$this->assign('folder', $model['folder']);
+		$this->assign('languages', $model['languages']);
+		$this->assign('fields', $model['fields']);
+
+		// Auto-translate
+		$this->assign('form_values', json_encode($model['translatables']));
+
+		$this->setTemplate('translate_files.html');
 	}
 }
 

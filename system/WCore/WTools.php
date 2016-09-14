@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class WTools {
 	/**
@@ -61,21 +61,6 @@ class WTools {
 	public static function moveElementInArray(&$array, $a, $b) {
 		$out = array_splice($array, $a, 1);
 		array_splice($array, $b, 0, $out);
-	}
-
-	/**
-	 * Get countries list
-	 *
-	 * @return array
-	 */
-	public static function getCountries() {
-		static $countries = array();
-
-		if (empty($countries)) {
-			include HELPERS_DIR.'countries'.DS.'countries.php';
-		}
-
-		return $countries;
 	}
 
 	/**

@@ -80,21 +80,21 @@
 			</div>
 			<table class="user-rights" cellpadding="0" cellspacing="0">
 				<colgroup><col width="25%" /></colgroup>
-				{for $app, $details in $admin_apps}
+				{for $app, $permissions in $apps}
 				<tr>
-					<td><p class="text-center"><strong>{$details.name}</strong></p></td>
+					<td><strong>{$app|ucfirst}</strong></td>
 					<td>
-						{if !empty({$details.permissions})}
+						{if !empty({$permissions})}
 						<ul class="permissions">
-							{for $perm in {$details.permissions}}
+							{for $permission in $permissions}
 							<li>
-								{if {$app} == {$default_admin} && {$perm} == 'admin'}
-								<input type="hidden" name="access[{$app}][{$perm}]" value="on" />
+								{if {$app} == {$default_admin} && {$permission} == 'admin'}
+								<input type="hidden" name="access[{$app}][{$permission}]" value="on" />
 								<em>Admin ({lang This is the application loaded by default in the admin.})</em>
 								{else}
 								<label>
-									<input type="checkbox" name="access[{$app}][{$perm}]" />
-									{$perm|ucfirst}
+									<input type="checkbox" name="access[{$app}][{$permission}]" />
+									{$permission|ucfirst}
 								</label>
 								{/if}
 							</li>

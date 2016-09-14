@@ -12,7 +12,7 @@ require 'view.php';
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class Installer {
 	private $THEMES_DIR;
@@ -113,6 +113,7 @@ class Installer {
 					WConfig::set('config.page_title', $config['site_title']);
 					WConfig::set('config.page_description', '');
 					WConfig::set('config.theme', $config['theme']);
+					WConfig::set('config.theme_admin', 'admin-bootstrap');
 					WConfig::set('config.lang', $config['language']);
 					WConfig::set('config.timezone', $config['timezone']);
 					WConfig::set('config.email', $user['email']);

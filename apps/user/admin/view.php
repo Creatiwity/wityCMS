@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class UserAdminView extends WView {
 	public function __construct() {
@@ -81,7 +81,7 @@ class UserAdminView extends WView {
 		// Setup the form
 		$this->assign('require', 'apps!user/access_form');
 		$this->assign('groups', $model['groupes']);
-		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('apps', $model['apps']);
 		$this->assign('default_admin', $model['default_admin']);
 
 		$this->assignDefault(array(
@@ -124,7 +124,7 @@ class UserAdminView extends WView {
 	 */
 	public function delete(array $model) {
 		$this->assign('nickname', $model['nickname']);
-		$this->assign('confirm_delete_url', "/admin/user/delete".$model['id']);
+		$this->assign('confirm_delete_url', "/admin/user/delete/".$model['id']);
 	}
 
 	/**
@@ -137,7 +137,7 @@ class UserAdminView extends WView {
 		$this->assign($model['sorting_tpl']);
 
 		$this->assign('groups', $model['groups']);
-		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('apps', $model['apps']);
 		$this->assign('default_admin', $model['default_admin']);
 	}
 

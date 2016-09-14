@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class UserAdminController extends WController {
 	/**
@@ -138,10 +138,24 @@ class UserAdminController extends WController {
 	 */
 	protected function user_form($user_id = 0, $db_data = array()) {
 		$add_case = empty($user_id);
-		$post_data = WRequest::getAssoc(array('nickname', 'email'), null, 'POST');
+		$post_data = array();
 
-		if (!in_array(null, $post_data, true)) {
-			$post_data += WRequest::getAssoc(array('password', 'password_conf', 'firstname', 'lastname', 'groupe', 'type', 'access'), null, 'POST');
+		// User access
+		$app_manifests = $this->getApps();
+		$access = array();
+
+		foreach ($app_manifests as $app => $app_manifest) {
+			if ($_SESSION['access'] == 'all') {
+				$access[$app] = $app_manifest['permissions'];
+			} else {
+				if (isset($_SESSION['access'][$app])) {
+					$access[$app] = array_intersect_assoc($_SESSION['access'][$app], $app_manifest['permissions']);
+				}
+			}
+		}
+
+		if (WRequest::getMethod() == 'POST') {
+			$post_data = WRequest::getAssoc(array('nickname', 'email', 'password', 'password_conf', 'firstname', 'lastname', 'groupe', 'type', 'access'), null, 'POST');
 			$errors = array();
 
 			// Check nickname availability
@@ -193,10 +207,37 @@ class UserAdminController extends WController {
 			}
 
 			// User access rights
-			$post_data['access'] = $this->model->treatAccessData($post_data['type'], $post_data['access']);
-			if (!$add_case && $post_data['access'] == $db_data['access']) {
-				unset($post_data['access']);
+			$new_access = array();
+			if (!empty($post_data['access']) && is_array($post_data['access'])) {
+				foreach ($post_data['access'] as $app => $raw_permissions) {
+					$new_access[$app] = array_keys($raw_permissions);
+				}
 			}
+
+			if (!is_null($post_data['type']) && !is_null($post_data['access'])) {
+				if ($add_case) {
+					$post_data['access'] = $this->model->treatAccessData(array(), $access, $post_data['type'], $new_access);
+
+					if (is_null($post_data['access'])) {
+						$post_data['access'] = '';
+					}
+				} else {
+					$old_access = WSession::parseAccessString($db_data['access']);
+
+					$post_data['access'] = $this->model->treatAccessData($old_access, $access, $post_data['type'], $new_access);
+
+					if (is_null($post_data['access'])) {
+						unset($post_data['access']);
+					}
+				}
+			} else {
+				if ($add_case) {
+					$post_data['access'] = '';
+				} else {
+					$post_data['access'] = $db_data['access'];
+				}
+			}
+
 			unset($post_data['type']);
 
 			if (empty($errors)) {
@@ -248,8 +289,8 @@ class UserAdminController extends WController {
 			'user_data'     => $db_data,
 			'post_data'     => $post_data,
 			'groupes'       => $this->model->getGroupsList(),
-			'admin_apps'    => $this->getAdminApps(),
-			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
+			'apps'          => $access,
+			'default_admin' => $default_admin_route['app']
 		);
 	}
 
@@ -258,13 +299,22 @@ class UserAdminController extends WController {
 		$mail->CharSet = 'utf-8';
 		$mail->From = WConfig::get('config.email');
 		$mail->FromName = WConfig::get('config.site_title');
-		$mail->Subject = WLang::get('user_'.$template_prefix.'_email_subject', WConfig::get('config.site_title'));
-		$mail->Body = WLang::get('user_'.$template_prefix.'_email_body', array(
+
+		$body_vars = array(
 			'site_title' => WConfig::get('config.site_title'),
 			'base'       => WRoute::getBase(),
 			'nickname'   => $nickname,
 			'password'   => $password
-		));
+		);
+
+		if ($template_prefix == 'register') {
+			$mail->Subject = WLang::get('user_register_email_subject', WConfig::get('config.site_title'));
+			$mail->Body = WLang::get('user_register_email_body', $body_vars);
+		} else {
+			$mail->Subject = WLang::get('user_edition_email_subject', WConfig::get('config.site_title'));
+			$mail->Body = WLang::get('user_edition_email_body', $body_vars);
+		}
+
 		$mail->IsHTML(true);
 		$mail->AddAddress($email);
 		$mail->Send();
@@ -336,21 +386,41 @@ class UserAdminController extends WController {
 	 * @return array Model
 	 */
 	protected function groups(array $params) {
-		$data = WRequest::getAssoc(array('id', 'name', 'type'), null, 'POST');
+		// Current user access
+		$app_manifests = $this->getApps();
+		$access = array();
 
-		if (!in_array(null, $data, true)) {
+		foreach ($app_manifests as $app => $app_manifest) {
+			if ($_SESSION['access'] == 'all') {
+				$access[$app] = $app_manifest['permissions'];
+			} else {
+				if (isset($_SESSION['access'][$app])) {
+					$access[$app] = array_intersect_assoc($_SESSION['access'][$app], $app_manifest['permissions']);
+				}
+			}
+		}
+
+		if (WRequest::getMethod() == 'POST') {
+			$data = WRequest::getAssoc(array('id', 'name', 'type', 'access'), null, 'POST');
 			$errors = array();
-			$data['access'] = WRequest::get('access', null, 'POST');
 
 			if (empty($data['name'])) {
 				$errors[] = WLang::get('Please, provide a name.');
 			}
 
-			// User access rights
-			$data['access'] = $this->model->treatAccessData($data['type'], $data['access']);
+			// Group access rights
+			$group_access = array();
+			if (!empty($data['access']) && is_array($data['access'])) {
+				foreach ($data['access'] as $app => $raw_permissions) {
+					$group_access[$app] = array_keys($raw_permissions);
+				}
+			}
 
 			if (empty($errors)) {
 				if (empty($data['id'])) { // Adding a group
+					// User access rights
+					$data['access'] = $this->model->treatAccessData(array(), $access, $data['type'], $group_access);
+
 					if ($this->model->createGroup($data)) {
 						WNote::success('user_group_added', WLang::get('The group %s was successfully created.', $data['name']));
 					} else {
@@ -360,6 +430,10 @@ class UserAdminController extends WController {
 					$db_data = $this->model->getGroup($data['id']);
 
 					if (!empty($db_data)) {
+						// User access rights
+						$old_access = WSession::parseAccessString($db_data['access']);
+						$data['access'] = $this->model->treatAccessData($old_access, $access, $data['type'], $group_access);
+
 						if ($this->model->updateGroup($data['id'], $data)) {
 							$count_users = $this->model->countUsers(array('groupe' => $data['id']));
 
@@ -398,7 +472,7 @@ class UserAdminController extends WController {
 
 		return array(
 			'groups'        => $this->model->getGroupsListWithCount($sort[0], $sort[1]),
-			'admin_apps'    => $this->getAdminApps(),
+			'apps'          => $access,
 			'sorting_tpl'   => $sortingHelper->getTplVars(),
 			'default_admin' => str_replace('admin/', '', $default_admin_route['app'])
 		);

@@ -91,8 +91,11 @@
 				<label for="default_front" class="col-sm-2 control-label">{lang Default application}</label>
 				<div class="col-sm-10 col-lg-5">
 					<select id="default_front" class="form-control" name="route[default_front]">
-						{for $app in $front_apps}
+						{for $app, $manifest in $front_apps}
 						<option value="{$app}"{if {$app} == {$route.default_front}} selected="selected"{/if}>{$app}</option>
+						{/for}
+						{for $app, $manifest in $admin_apps}
+						<option value="admin/{$app}"{if "admin/".{$app} == {$route.default_front}} selected="selected"{/if}>admin/{$app}</option>
 						{/for}
 					</select>
 				</div>
@@ -102,8 +105,8 @@
 				<label for="default_admin" class="col-sm-2 control-label">{lang Default application in admin}</label>
 				<div class="col-sm-10 col-lg-5">
 					<select id="default_admin" class="form-control" name="route[default_admin]">
-						{for $app in $admin_apps}
-						<option value="{$app}"{if {$app} == {$route.default_admin}} selected="selected"{/if}>{$app}</option>
+						{for $app, $manifest in $admin_apps}
+						<option value="admin/{$app}"{if "admin/".{$app} == {$route.default_admin}} selected="selected"{/if}>admin/{$app}</option>
 						{/for}
 					</select>
 				</div>

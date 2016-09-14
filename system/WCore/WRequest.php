@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class WRequest {
 	 /**
@@ -18,10 +18,17 @@ class WRequest {
 	 */
 	private static $checked = array();
 
-	/**
-	 * @var bool Variable to lock all read/write actions on the input values. Default values will be sent.
-	 */
-	private static $lock = false;
+	public static function init() {
+		$GLOBALS['_PUT'] = array();
+		$GLOBALS['_DELETE'] = array();
+
+		$method = WRequest::getMethod();
+		if ($method == 'PUT' || $method == 'DELETE') {
+			parse_str(file_get_contents('php://input'), $params);
+			$GLOBALS['_'.$method] = $params;
+			$_REQUEST += $params;
+		}
+	}
 
 	/**
 	 * Returns the values of all variables with name in $names sent by $hash method
@@ -29,6 +36,8 @@ class WRequest {
 	 * You can use the following hashes:
 	 * - "GET"
 	 * - "POST"
+	 * - "PUT"
+	 * - "DELETE"
 	 * - "FILES"
 	 * - "COOKIE"
 	 * - "REQUEST" (default)
@@ -49,6 +58,12 @@ class WRequest {
 				break;
 			case 'POST':
 				$data = &$_POST;
+				break;
+			case 'PUT':
+				$data = &$GLOBALS['_PUT'];
+				break;
+			case 'DELETE':
+				$data = &$GLOBALS['_DELETE'];
 				break;
 			case 'FILES':
 				$data = &$_FILES;
@@ -95,6 +110,12 @@ class WRequest {
 			case 'POST':
 				$data = &$_POST;
 				break;
+			case 'PUT':
+				$data = &$GLOBALS['_PUT'];
+				break;
+			case 'DELETE':
+				$data = &$GLOBALS['_DELETE'];
+				break;
 			case 'FILES':
 				$data = &$_FILES;
 				break;
@@ -127,11 +148,6 @@ class WRequest {
 	 * @return mixed the checked value associated to $name or null if not exists
 	 */
 	public static function getValue(&$data, $name, $default, $hash) {
-		// Stop read action
-		if (self::$lock) {
-			return $default;
-		}
-
 		if (isset(self::$checked[$hash.$name])) {
 			// Directly get the verifed variable in data
 			return $data[$name];
@@ -164,11 +180,6 @@ class WRequest {
 	 * @return mixed previous value, may be null
 	 */
 	public static function set($name, $value, $hash = 'REQUEST', $overwrite = true) {
-		// Stop write action
-		if (self::$lock) {
-			return null;
-		}
-
 		// Check if overwriting is allowed
 		if (!$overwrite && array_key_exists($name, $_REQUEST)) {
 			return $_REQUEST[$name];
@@ -184,6 +195,14 @@ class WRequest {
 				break;
 			case 'POST':
 				$_POST[$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'PUT':
+				$GLOBALS['_PUT'][$name] = $value;
+				$_REQUEST[$name] = $value;
+				break;
+			case 'DELETE':
+				$GLOBALS['_DELETE'][$name] = $value;
 				$_REQUEST[$name] = $value;
 				break;
 			case 'COOKIE':
@@ -240,26 +259,28 @@ class WRequest {
 	}
 
 	/**
-	 * Stops all read/write actions on the Request variables.
-	 */
-	public static function lock() {
-		self::$lock = true;
-	}
-
-	/**
-	 * Allows all read/write actions on the Request variables.
-	 */
-	public static function unlock() {
-		self::$lock = false;
-	}
-
-	/**
 	 * Retrieves the HTTP Method used by the client.
 	 *
 	 * @return string Either GET|POST|PUT|DEL...
 	 */
 	public static function getMethod() {
 		return $_SERVER['REQUEST_METHOD'];
+	}
+
+	/**
+	 * Checks that the $url matches current route.
+	 *
+	 * @param string $url
+	 * @param string $method (default = 'POST')
+	 * @return bool
+	 */
+	public static function hasDataForURL($url, $method = 'POST') {
+		$route = WRoute::parseURL($url);
+		$current_route = WRoute::route();
+
+		return self::getMethod() == strtoupper($method)
+			&& $route['app'] == $current_route['app']
+			&& (!isset($current_route['params'][0]) || !isset($route['params'][0]) || $current_route['params'][0] == $route['params'][0]);
 	}
 }
 

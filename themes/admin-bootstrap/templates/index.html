@@ -4,14 +4,14 @@
 		<title>{$wity_page_title}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content="wityCMS 0.5.0" />
+		<meta name="generator" content="wityCMS 0.6.0" />
 		<meta name="robots" content="noindex,nofollow" />
 		{if !empty({$wity_site_favicon})}<link rel="icon" type="image/x-icon" href="{$wity_site_favicon}" />{/if}
 		{if !empty({$wity_site_icon})}<link rel="apple-touch-icon" href="{$wity_site_icon}" />{/if}
 
 		<!-- Bootstrap -->
 		<link href="/libraries/bootstrap-4.0.0-alpha.3/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="/themes/admin-bootstrap/css/style.css?v=0.5.0" rel="stylesheet" />
+		<link href="/themes/admin-bootstrap/css/style.css?v=0.6.0" rel="stylesheet" />
 
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
@@ -40,7 +40,7 @@
 				{if !empty({$wity_admin_apps})}
 				<ul class="nav navbar-nav">
 					{for $app, $details in $wity_admin_apps}
-						<li {if 'admin/'.{$app} == {$wity_app}} class="active"{/if}>
+						<li {if {$app} == {$wity_app}} class="active"{/if}>
 							<a href="/admin/{$app}">{lang {$details.name}}</a>
 						</li>
 					{/for}
@@ -49,7 +49,7 @@
 
 				{if !empty({$wity_user_nickname})}
 				<p class="navbar-text pull-right">
-					{lang welcome} {if !empty({$wity_user_firstname}) || !empty({$wity_user_lastname})} {$wity_user_firstname} {$wity_user_lastname}{else}{$wity_user_nickname}{/if}
+					{lang Welcome} {if !empty({$wity_user_firstname}) || !empty({$wity_user_lastname})} {$wity_user_firstname} {$wity_user_lastname}{else}{$wity_user_nickname}{/if}
 					&nbsp;|&nbsp;
 					<a href="/user/logout" class="navbar-link">{lang Logout}</a>
 				</p>
@@ -65,7 +65,7 @@
 					{for $action, $desc in $wity_admin_actions}
 						{if {$desc.menu}}
 						<li class="{if {$action} == {$wity_action}}active{/if}">
-							<a href="/{$wity_app}/{$action}">{lang {$desc.description}}</a>
+							<a href="/admin/{$wity_app}/{$action}">{lang {$desc.description}}</a>
 						</li>
 						{/if}
 					{/for}
@@ -84,7 +84,7 @@
 
 			<footer>
 				<hr />
-				<p class="pull-right">&copy; wityCMS v0.5.0 Administration {$wity_now|date:'Y'}</p>
+				<p class="pull-right">&copy; <a href="https://github.com/Creatiwity/wityCMS" target="_blank">wityCMS v0.6.0</a> Administration {$wity_now|date:'Y'}</p>
 				<p><img src="/themes/system/images/witycms-logo.png" alt="wityCMS" width="140" /></p>
 			</footer>
 		</div>

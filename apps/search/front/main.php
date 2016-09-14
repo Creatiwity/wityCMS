@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Search\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class SearchController extends WController {
 	protected function form(array $params) {
@@ -30,19 +30,17 @@ class SearchController extends WController {
 
 		// Do researches
 		if (!empty($query)) {
-			$apps = WRetriever::getAppsList();
+			$apps = WRetriever::getAppsList(false);
 
 			foreach ($apps as $app) {
 				// Only front app
-				if (strpos($app, 'admin/') === false) {
-					$manifest = $this->loadManifest($app);
+				$manifest = $this->loadManifest($app);
 
-					if (isset($manifest['actions']['search'])) {
-						$search_model = WRetriever::getModel($app, array('search', $query));
+				if (isset($manifest['actions']['search'])) {
+					$search_model = WRetriever::getModel($app.'/search', array($query));
 
-						if (!empty($search_model['result'])) {
-							$results[$app] = $search_model['result'];
-						}
+					if (!empty($search_model['result'])) {
+						$results[$app] = $search_model['result'];
 					}
 				}
 			}

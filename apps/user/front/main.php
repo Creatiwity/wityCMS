@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-03-09-2016
  */
 class UserController extends WController {
 	/*
@@ -32,37 +32,16 @@ class UserController extends WController {
 	 * @return array Model containing the redirect link
 	 */
 	protected function login($params) {
-		// Find redirect URL
-		$referer = WRoute::getReferer();
-		$redirect_request = WRequest::get('redirect');
-
-		if (empty($params[0])) {
-			$route = WRoute::route();
-
-			if (!empty($redirect_request)) {
-				$redirect = $redirect_request;
-			} else if ($route['app'] != 'user') { // Login form loaded from an external application
-				$redirect = WRoute::getDir().WRoute::getQuery();
-			} else if (strpos($referer, 'user') === false) {
-				$redirect = $referer;
-			} else {
-				$redirect = WRoute::getDir();
-			}
-		} else {
-			$redirect = $params[0];
-		}
+		$redirect = $this->model->getRedirectURLWithParams($params);
 
 		if ($this->session->isConnected()) {
 			$this->setHeader('Location', $redirect);
 			return WNote::error('user_already_connected', 'No need to access to the login form since you are already connected.');
 		}
 
-		// Vars given to trigger login process?
-		$data = WRequest::getAssoc(array('nickname', 'password'));
-		if (!in_array(null, $data, true)) {
-			$data += WRequest::getAssoc(array('remember', 'time'));
+		if (WRequest::hasDataForURL('user/login')) {
+			$data = WRequest::getAssoc(array('nickname', 'password', 'remember', 'time'));
 			$cookie = true; // cookies accepted by browser?
-			$error = true;
 
 			if (!empty($data['nickname']) && !empty($data['password'])) {
 				// User asks to be auto loged in => change the cookie lifetime to WSession::REMEMBER_TIME
@@ -74,38 +53,27 @@ class UserController extends WController {
 						// Update activity
 						$this->model->updateLastActivity($_SESSION['userid']);
 
-						$error = false;
-
 						if (empty($_COOKIE['wsid'])) {
-							WNote::info('user_cookie_not_accepted', WLang::get('To log in, your browser must accept cookies.'));
 							$cookie = false;
+							WNote::info('user_cookie_not_accepted', WLang::get('To log in, your browser must accept cookies.'));
 						} else {
-							// Redirect
 							WNote::success('user_login_success', WLang::get('Welcome %s!', $_SESSION['nickname']));
-							$this->setHeader('Location', $redirect);
 						}
+						break;
+
+					case WSession::LOGIN_ERROR:
+						WNote::error('user_login_error', WLang::get('The couple nickname / password does not match with any valid account.'));
 						break;
 
 					case WSession::LOGIN_MAX_ATTEMPT_REACHED:
 						WNote::error('user_login_max_attempt', WLang::get('You reached the maximum number of login attempts. Please, wait a few moment before trying to login again.'));
-						break;
-
-					case 0:
-						WNote::error('user_login_error', WLang::get('The couple nickname / password given does not match with any valid account.'));
 						break;
 				}
 			} else {
 				WNote::error('user_bad_data', WLang::get('Please, fill in all the required fields.'));
 			}
 
-			// Reload the page with GET method
-			if ($error) {
-				$this->setHeader('Location', WRoute::getDir().'user/login');
-			}
-		}
-
-		if (strpos($referer, '/admin') !== false) {
-			$this->setHeader('Location', WRoute::getReferer());
+			$this->setHeader('Location', $redirect);
 		}
 
 		return array(
@@ -141,9 +109,12 @@ class UserController extends WController {
 			return WNote::info('user_inscription_closed', WLang::get('Sorry, but the registration is closed on this website.'));
 		}
 
-		$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'country'));
-		if (!in_array(null, $data, true)) {
+		if (WRequest::hasDataForURL('user/register')) {
+			$data = WRequest::getAssoc(array('nickname', 'password', 'password_conf', 'email', 'firstname', 'lastname', 'country'));
 			$errors = array();
+			$data['nickname'] = trim($data['nickname']);
+			$data['password'] = trim($data['password']);
+			$data['password_conf'] = trim($data['password_conf']);
 
 			// Check nickname availability
 			if (($e = $this->model->checkNickname($data['nickname'])) !== true) {
@@ -186,7 +157,7 @@ class UserController extends WController {
 						// Send a validation email
 						$this->model->sendEmail(
 							$data['email'],
-							WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
+							WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 							str_replace(
 								array('{site_title}', '{nickname}', '{password}', '{base}', '{confirm}'),
 								array(WConfig::get('config.site_title'), $data['nickname'], $data['password_conf'], WRoute::getBase(), $data['confirm']),
@@ -283,7 +254,7 @@ class UserController extends WController {
 				if (!empty($admin_emails)) {
 					$this->model->sendEmail(
 						$admin_emails,
-						WLang::get('"%s - User account creation', WConfig::get('config.site_title')),
+						WLang::get('%s - User account creation', WConfig::get('config.site_title')),
 						str_replace(
 							array('{site_title}', '{nickname}', '{base}', '{userid}'),
 							array(WConfig::get('config.site_title'), $data['nickname'], WRoute::getBase(), $data['id']),
