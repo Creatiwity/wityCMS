@@ -314,25 +314,25 @@ class WRetriever {
 	 * @return string PHP string to trigger WRetriever that will return an array of the desired model
 	 */
 	public static function compile_retrieve_model($args) {
-		if (!empty($args)) {
-			$args = explode('?', $args);
-			$url = $args[0];
+ 		if (!empty($args)) {
+ 			// Replace all the template variables in the string
+ 			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
 
-			if (isset($args[1])) {
-				// Format the querystring PHP code if a querystring is given
-				$params_string = var_export($args[1], true);
+ 			$args = explode('?', $args);
+ 			$url = $args[0];
 
-				// Replace all the template variables in the string
-				$params_string = WTemplateParser::replaceNodes($params_string, create_function('$s', "return '\'.'.WTemplateCompiler::parseVar(\$s).'.\'';"));
-			} else {
-				$params_string = 'array()';
-			}
+ 			if (isset($args[1])) {
+ 				// Format the querystring PHP code if a querystring is given
+ 				$params_string = var_export($args[1], true);
+ 			} else {
+ 				$params_string = 'array()';
+ 			}
 
-			return 'WRetriever::getModel("'.$url.'", '.$params_string.')';
-		}
+ 			return 'WRetriever::getModel("'.$url.'", '.$params_string.')';
+ 		}
 
-		return '';
-	}
+ 		return '';
+ 	}
 
 	/**
 	 * Handles the {retrieve_view} node in WTemplate
