@@ -218,8 +218,6 @@ class UserController extends WController {
 				WNote::error('user_data_errors', implode("<br />\n", $errors));
 			}
 		}
-
-		return $data;
 	}
 
 	/**
