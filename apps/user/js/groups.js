@@ -33,7 +33,7 @@ require(['jquery', 'apps!user/access_form'], function($, accessForm) {
 	 */
 	function showEditForm(groupid, name, access) {
 		// Form creation by clonage
-		if ($('#group-edit-'+groupid).size() === 0) {
+		if ($('#group-edit-'+groupid).length === 0) {
 			var $clone = $('#group-add').clone().attr('id', 'group-edit-'+groupid);
 			$clone.find('form').hide();
 			$clone.find('h2').remove();
