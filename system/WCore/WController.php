@@ -60,6 +60,9 @@ abstract class WController {
 		// Forward the context to the View
 		$this->view->setContext($this->context);
 
+		// Declare the language directory
+		WLang::declareLangDir($this->context['directory'].'lang');
+
 		// Parse the manifest
 		$this->manifest = $this->loadManifest($this->getAppName());
 		if (empty($this->manifest)) {
@@ -97,9 +100,6 @@ abstract class WController {
 			}
 
 			$access_result = $this->hasAccess(($this->getAdminContext() ? 'admin/' : '').$this->getAppName().'/'.$action);
-
-			// Declare the language directory
-			WLang::declareLangDir($this->context['directory'].'lang');
 
 			if ($access_result !== true) {
 				if (is_array($access_result)) {
