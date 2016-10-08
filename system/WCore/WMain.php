@@ -180,7 +180,7 @@ class WMain {
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
 
 		// Set session lang
-		if (empty($_SESSION['current_lang'])) {
+		if (empty($_SESSION['current_lang_code'])) {
 			$lang = WLang::getDefaultLang();
 
 			if (!empty($lang)) {
