@@ -105,10 +105,15 @@ header.theme-header p.site-name {
 
 .navbar {
 	background: white;
+	margin-bottom: 1rem;
 }
 
 .navbar ul li a {
+	position: relative;
+	display: block;
+	padding: .25rem 0;
 	color: #a0a0a0;
+	text-decoration: none;
 }
 
 .navbar ul li a:hover {
@@ -124,17 +129,14 @@ header.theme-header p.site-name {
 	font-style: normal;
 }
 
-.navbar .navbar-toggle {
+.navbar .navbar-toggler {
 	border-color: #dddddd;
-}
-
-.navbar .icon-bar {
-	background-color: #dddddd;
+	color: #dddddd;
 }
 
 .navbar .navbar-form {
 	border: 1px solid #cfcfcf;
-	margin-top: 15px;
+	margin-top: .25rem;
 	padding: 0;
 }
 
