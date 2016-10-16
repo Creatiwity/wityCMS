@@ -2,7 +2,7 @@
  * Form generator
  *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-03-09-2016
+ * @version 0.6.0-16-10-2016
  */
 var Form, FormNode;
 

@@ -6,13 +6,13 @@
  *
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-03-09-2016
+ * @version 0.6.0-16-10-2016
  */
 
 /**
  * wityCMS version number
  */
-define('WITYCMS_VERSION', '0.6.0-beta1');
+define('WITYCMS_VERSION', '0.6.0');
 
 /**
  * Error reporting level = MAXIMUM

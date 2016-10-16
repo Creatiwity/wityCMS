@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Newsletter\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-03-09-2016
+ * @version 0.6.0-16-10-2016
  */
 class NewsletterAdminView extends WView {
 	public function listing($model) {
