@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\News\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class NewsController extends WController {
 	protected function listing($params) {
@@ -39,13 +39,13 @@ class NewsController extends WController {
 
 			if (empty($news)) {
 				$this->setHeader('Location', WRoute::getDir().'news');
-				return WNote::error('news_not_found', WLang::get('news_not_found'));
+				return WNote::error('news_not_found', WLang::get('The news was not found.'));
 			}
 
 			// Forbid access to non published news to non admin users
-			if ($news['published'] != 1 && !$this->hasAccess('news', '', true)) {
+			if ($news['published'] != 1 && !$this->hasAccess('admin/news')) {
 				$this->setHeader('Location', WRoute::getDir().'news');
-				return WNote::error('news_not_found', WLang::get('news_not_found'));
+				return WNote::error('news_not_found', WLang::get('The news was not found.'));
 			}
 
 			if (!empty($news['cats'])) {
@@ -61,7 +61,7 @@ class NewsController extends WController {
 			$filter_cats = (empty($cat_shortname)) ? array() : array('cats' => array($cat_shortname));
 
 			// Display unpublished news to admin
-			if ($this->hasAccess('news', '', true)) {
+			if ($this->hasAccess('admin/news')) {
 				$filter_cats['published'] = -1;
 				$filter_cats['publish_date'] = -1;
 			}

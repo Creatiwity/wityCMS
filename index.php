@@ -6,13 +6,13 @@
  *
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 
 /**
  * wityCMS version number
  */
-define('WITYCMS_VERSION', '0.5.0');
+define('WITYCMS_VERSION', '0.6.0');
 
 /**
  * Error reporting level = MAXIMUM
@@ -27,7 +27,9 @@ require_once 'paths.php';
 /**
  * Core classes inclusion
  */
+require_once SYS_DIR.'WTemplate'.DS.'WTemplate.php';
 require_once SYS_DIR.'WCore'.DS.'WSystem.php';
+require_once SYS_DIR.'WCore'.DS.'WSession.php';
 require_once SYS_DIR.'WCore'.DS.'WDatabase.php';
 require_once SYS_DIR.'WCore'.DS.'WRoute.php';
 require_once SYS_DIR.'WCore'.DS.'WConfig.php';

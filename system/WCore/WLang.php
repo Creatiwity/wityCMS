@@ -15,18 +15,18 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package System\WCore
  * @author xpLosIve
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class WLang {
 	/**
 	 * @var array Current language - ex: 'en_EN'
 	 */
-	private static $lang = '';
+	private static $lang_code = '';
 
 	/**
 	 * @var array Current language ISO format - ex: 'en'
 	 */
-	private static $lang_iso;
+	private static $lang_iso = '';
 
 	/**
 	 * @var array List of registered directories containing language files
@@ -55,14 +55,8 @@ class WLang {
 		self::$db = WSystem::getDB();
 		self::$db->declareTable('languages');
 
-		// Add config lang
-		$lang = self::getDefaultLang();
-
-		if (!empty($lang)) {
-			self::setLang($lang['code']);
-		} else {
-			self::setLang('en_EN');
-		}
+		// Init locale
+		self::setLang('en_EN');
 	}
 
 	/**
@@ -122,16 +116,16 @@ class WLang {
 	 * @param string $lang Language code (ex: 'en_EN')
 	 * @return bool
 	 */
-	public static function setLang($lang) {
-		if ($lang == self::$lang) {
+	public static function setLang($lang_code) {
+		if ($lang_code == self::$lang_code) {
 			return true;
 		}
 
-		self::$lang = $lang;
-		self::$lang_iso = strtolower(substr($lang, 0, 2));
+		self::$lang_code = $lang_code;
+		self::$lang_iso = strtolower(substr($lang_code, 0, 2));
 
 		// Configure locale
-		setlocale(LC_ALL, self::$lang);
+		setlocale(LC_ALL, self::$lang_code);
 
 		// Clean previous values to reload them
 		self::$values = array();
@@ -161,7 +155,7 @@ class WLang {
 	 * @return string
 	 */
 	public static function getLang() {
-		return self::$lang;
+		return self::$lang_code;
 	}
 
 	/**
@@ -220,19 +214,16 @@ class WLang {
 	 * @return array
 	 */
 	public static function getDefaultLang() {
-		$id_lang = self::getDefaultLangId();
+		$pre = self::$db->prepare('SELECT * FROM languages WHERE is_default = 1');
+		$pre->execute();
 
-		if (!empty($id_lang)) {
-			return self::getLangWithId($id_lang);
-		}
-
-		return null;
+		return $pre->fetch(PDO::FETCH_ASSOC);
 	}
 
 	/**
 	 * Returns langs data.
 	 *
-	 * @param  bool Take only enabled languages?
+	 * @param  bool Only return enabled languages?
 	 * @return array
 	 */
 	public static function getLangs($enabled = true) {
@@ -257,7 +248,7 @@ class WLang {
 	/**
 	 * Returns list of lang Ids
 	 *
-	 * @param  bool Take only enabled languages?
+	 * @param  bool Only return enabled languages?
 	 * @return array
 	 */
 	public static function getLangIds($enabled = true) {
@@ -266,9 +257,62 @@ class WLang {
 			$cond = ' WHERE enabled = 1';
 		}
 
-		$que = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC');
+		$query = self::$db->query('SELECT id FROM languages'.$cond.' ORDER BY is_default DESC');
 
-		return $que->fetchAll(PDO::FETCH_COLUMN);
+		return $query->fetchAll(PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * Load countries list from helpers.
+	 *
+	 * @return array array(ISO => Country)
+	 */
+	private static function getRawCountries() {
+		static $countries = array();
+
+		if (empty($countries)) {
+			include HELPERS_DIR.'countries'.DS.'countries.php';
+		}
+
+		return $countries;
+	}
+
+	/**
+	 * Get display region into the current language.
+	 *
+	 * @param string $iso_code
+	 * @return string Country name
+	 */
+	public static function getCountry($iso_code) {
+		if (function_exists('locale_get_display_region')) {
+			return locale_get_display_region('-'.$iso_code, self::getLang());
+		} else {
+			$countries = self::getRawCountries();
+
+			return !empty($countries[$iso_code]) ? $countries[$iso_code] : $iso_code;
+		}
+	}
+
+	/**
+	 * Get countries list
+	 *
+	 * @return array
+	 */
+	public static function getCountries() {
+		static $countries = array();
+
+		if (empty($countries)) {
+			$countries = self::getRawCountries();
+
+			// Translate countries
+			foreach ($countries as $iso_code => $name) {
+				$countries[$iso_code] = self::getCountry($iso_code);
+			}
+
+			asort($countries);
+		}
+
+		return $countries;
 	}
 
 	/**
@@ -301,8 +345,12 @@ class WLang {
 
 				// Find all files of this dir
 				foreach ($files as $file) {
-					$lang = substr(basename($file), 0, 2);
-					$lang_files[$lang] = $file;
+					$extension = pathinfo($file, PATHINFO_EXTENSION);
+
+					if ($extension == 'xml') {
+						$lang = substr(basename($file), 0, 2);
+						$lang_files[$lang] = $file;
+					}
 				}
 
 				self::$lang_dirs[str_replace(WITY_PATH, '', $dir)] = $lang_files;

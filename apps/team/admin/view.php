@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Team\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class TeamAdminView extends WView {
 	public function members(array $model) {
@@ -52,7 +52,7 @@ class TeamAdminView extends WView {
 		}
 		$this->assign('form_values', json_encode($form_values));
 
-		$this->setTemplate('member-form');
+		$this->setTemplate('member-form.html');
 	}
 
 	public function memberAdd(array $model) {

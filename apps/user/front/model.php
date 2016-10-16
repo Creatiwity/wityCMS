@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class UserModel {
 	protected $db;
@@ -32,9 +32,9 @@ class UserModel {
 	 */
 	public function checkNickname($nickname) {
 		if (empty($nickname) || strlen($nickname) < 3 || strlen($nickname) > 200) {
-			return 'nickname_bad_length';
+			return WLang::get('The nickname must contain between 3 and 30 characters.');
 		} else if (!WTools::isEmail($nickname) && preg_match('#[\.]+#', $nickname)) {
-			return 'nickname_invalid_char';
+			return WLang::get('The nickname contains invalid characters [.].');
 		}
 
 		$prep = $this->db->prepare('
@@ -46,7 +46,7 @@ class UserModel {
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
-			return 'nickname_already_used';
+			return WLang::get('The nickname is already in use.');
 		}
 	}
 
@@ -58,7 +58,7 @@ class UserModel {
 	 */
 	public function checkEmail($email) {
 		if (!WTools::isEmail($email)) {
-			return 'email_not_valid';
+			return WLang::get('Please, provide a valid email.');
 		}
 
 		$prep = $this->db->prepare('
@@ -70,7 +70,7 @@ class UserModel {
 		if ($prep->rowCount() == 0) {
 			return true;
 		} else {
-			return 'email_already_used';
+			return WLang::get('The email is already in use.');
 		}
 	}
 
@@ -205,21 +205,23 @@ class UserModel {
 	}
 
 	/**
-	 * Finds a user in the database matching with $nickname and $password.
+	 * Finds a user in the database matching with $identifier and $password.
 	 *
-	 * @param string $nickname
+	 * @param string $identifier
 	 * @param string $password
 	 * @return array Information of the users found
 	 */
-	public function matchUser($nickname, $password) {
+	public function matchUser($identifier, $password) {
 		$prep = $this->db->prepare('
 			SELECT id, nickname, password, email, firstname, lastname, country, lang, groupe, access
 			FROM users
-			WHERE (nickname = :nickname OR email = :nickname) AND password = :password AND valid = 1
+			WHERE (nickname = :nickname OR email = :email) AND password = :password AND valid = 1
 		');
-		$prep->bindParam(':nickname', $nickname);
+		$prep->bindParam(':nickname', $identifier);
+		$prep->bindParam(':email', $identifier);
 		$prep->bindParam(':password', $password);
 		$prep->execute();
+
 		return $prep->fetch(PDO::FETCH_ASSOC);
 	}
 
@@ -395,6 +397,26 @@ class UserModel {
 		}
 
 		return $config;
+	}
+
+	public function getRedirectURLWithParams($params) {
+		// Find redirect URL
+		$route = WRoute::route();
+		$referer = WRoute::getReferer();
+		$redirect_request = WRequest::get('redirect');
+
+		if (!empty($params['redirect'])) {
+			return $params['redirect'];
+		} else if (!empty($redirect_request)) {
+			return $redirect_request;
+		} else if ($route['app'] != 'user') {
+			// Login form loaded from an external application
+			return WRoute::getDir().WRoute::getQuery();
+		} else if (strpos($referer, 'user') === false) {
+			return $referer;
+		} else {
+			return WRoute::getDir();
+		}
 	}
 }
 

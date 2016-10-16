@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Contact\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class ContactAdminView extends WView {
 

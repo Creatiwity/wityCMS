@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class WView {
 	/**
@@ -113,9 +113,10 @@ class WView {
 	}
 
 	/**
-	 * Sets the file that will be used for template compiling
+	 * Sets the file that will be used for template compiling.
+	 * $template needs to include an extension ".html".
 	 *
-	 * @param string $file file that will be used for template compiling
+	 * @param string $template File that will be used for template compiling
 	 */
 	public function setTemplate($template) {
 		$file = $template;
@@ -127,11 +128,12 @@ class WView {
 
 		// Format the file asked
 		if (strpos($file, DS) === false) {
-			$file = $this->getContext('directory').'templates'.DS.$file.'.html';
+			$file = $this->getContext('directory').'templates'.DS.$file;
 		}
 
-		if (!$this->getContext('admin')) {
-			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->getContext('app-name').DS.basename($template);
+		$route = WRoute::route();
+		if (!$route['admin']) {
+			$theme_tpl = THEMES_DIR.WConfig::get('config.theme').DS.'templates'.DS.$this->getContext('app').DS.basename($template);
 
 			// Allow template overriding from theme
 			if (file_exists($theme_tpl)) {
@@ -248,6 +250,12 @@ class WView {
 			case 'css':
 				$css = '';
 				foreach (self::$global_vars['css'] as $file) {
+					if (strpos($file, '?') !== false) {
+						$file .= '&amp;v='.WConfig::get('config.version');
+					} else {
+						$file .= '?v='.WConfig::get('config.version');
+					}
+
 					$css .= '<link href="'.$file.'" rel="stylesheet" type="text/css" />'."\n";
 				}
 
@@ -256,6 +264,12 @@ class WView {
 			case 'js':
 				$script = '';
 				foreach (self::$global_vars['js'] as $file) {
+					if (strpos($file, '?') !== false) {
+						$file .= '&amp;v='.WConfig::get('config.version');
+					} else {
+						$file .= '?v='.WConfig::get('config.version');
+					}
+
 					$script .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 				}
 
@@ -321,8 +335,6 @@ class WView {
 
 		// Check template file
 		if (empty($this->templateFile)) {
-			// WNote::error('view_template', "WView::render(): No template file found in the view ".$this->getName().".");
-			// A View can now be empty
 			return '';
 		}
 
@@ -331,7 +343,7 @@ class WView {
 			$this->render_counts[$signature] = 1;
 		} else {
 			if ($this->render_counts[$signature] >= 5) {
-				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times. ')))->render();
+				return WNote::getView(array(WNote::error('WView::render', 'The view of this application may contain a problem: it tried to include itself more than 5 times.')))->render();
 			}
 
 			$this->render_counts[$signature]++;
@@ -355,27 +367,6 @@ class WView {
 		// Render the view
 		$file = $this->getTemplate();
 		$this->rendered_string = $this->tpl->parse($file);
-
-		// Add the signature to the forms within the view
-		$this->rendered_string = preg_replace_callback(
-			'#<form([^>]*)>(<input type="hidden" name="form_signature")?#',
-			function($matches) use($signature) {
-				// Add action in the form values
-				preg_match('#action="([^"]*)"#', $matches[1], $matches_args);
-				$action = '';
-				if (!empty($matches_args[1])) {
-					$action = '<input type="hidden" name="form_action" value="'.trim($matches_args[1], ' /').'" />';
-				}
-
-				// Prevent from overriding sub-forms signatures
-				if (empty($matches[2])) {
-					return '<form'.$matches[1].'><input type="hidden" name="form_signature" value="'.$signature.'" />'.$action;
-				} else {
-					return $matches[0];
-				}
-			},
-			$this->rendered_string
-		);
 
 		// Come back to previous context
 		$this->tpl->popContext();

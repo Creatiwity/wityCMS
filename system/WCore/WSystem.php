@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WSystem.php
  */
@@ -13,7 +13,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class WSystem {
 	/**
@@ -37,7 +37,6 @@ class WSystem {
 	 */
 	public static function getSession() {
 		if (!is_object(self::$sessionInstance)) {
-			require_once SYS_DIR.'WCore/WSession.php';
 			self::$sessionInstance = new WSession();
 		}
 
@@ -50,7 +49,6 @@ class WSystem {
 	 */
 	public static function getTemplate() {
 		if (!is_object(self::$templateInstance)) {
-			require_once SYS_DIR.'WTemplate/WTemplate.php';
 			try {
 				$cache_dir = CACHE_DIR.'templates'.DS;
 				self::$templateInstance = new WTemplate(WITY_PATH, $cache_dir);
@@ -75,10 +73,10 @@ class WSystem {
 		if (!is_object(self::$dbInstance)) {
 			WConfig::load('database', SYS_DIR.'config'.DS.'database.php', 'php');
 
-			$server   = WConfig::get('database.server');
-			$dbname   = WConfig::get('database.dbname');
-			$port     = WConfig::get('database.port');
-			$dsn      = 'mysql:dbname='.$dbname.';host='.$server;
+			$server = WConfig::get('database.server');
+			$dbname = WConfig::get('database.dbname');
+			$port   = WConfig::get('database.port');
+			$dsn    = 'mysql:dbname='.$dbname.';host='.$server;
 
 			if (!empty($port)) {
 				$dsn .= ';port='.$port;

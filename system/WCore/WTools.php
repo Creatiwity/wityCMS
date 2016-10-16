@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WTools.php
  */
@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class WTools {
 	/**
@@ -61,6 +61,24 @@ class WTools {
 	public static function moveElementInArray(&$array, $a, $b) {
 		$out = array_splice($array, $a, 1);
 		array_splice($array, $b, 0, $out);
+	}
+
+	/**
+	 * Generates a random string
+	 *
+	 * @param int $length
+	 * @return string
+	 */
+	public static function generateString($length = 10) {
+		$characters = '01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$characters_length = strlen($characters);
+		$random_string = '';
+
+		for ($i = 0; $i < $length; $i++) {
+		$random_string .= $characters[rand(0, $characters_length - 1)];
+		}
+
+		return $random_string;
 	}
 }
 

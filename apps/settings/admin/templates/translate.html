@@ -1,0 +1,57 @@
+<div class="wity-app wity-app-settings wity-action-translate">
+	<h1>{lang Translate}</h1>
+
+	<h3>{lang List of installed applications}</h3>
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th style="width: 90%;">{lang Application's name}</th>
+				<th>{lang Actions}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{for $app, $manifest in $apps}
+			<tr>
+				<td>{lang {$manifest.name}}</td>
+				<td>
+					<div class="btn-group">
+						<a href="/admin/settings/translate_app/{$app}" title="{lang Edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+					</div>
+				</td>
+			</tr>
+		{/for}
+		{empty}
+			<tr>
+				<td colspan="2" class="text-center">{lang No installed application has been found.}</td>
+			</tr>
+		{/empty}
+		</tbody>
+	</table>
+
+	<h3>{lang List of installed themes}</h3>
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th style="width: 90%;">{lang Theme's name}</th>
+				<th>{lang Actions}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{for $theme in $themes}
+			<tr>
+				<td>{$theme}</td>
+				<td>
+					<div class="btn-group">
+						<a href="/admin/settings/translate_theme/{$theme}" title="{lang Edit}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> {lang Edit}</a>
+					</div>
+				</td>
+			</tr>
+		{/for}
+		{empty}
+			<tr>
+				<td colspan="2" class="text-center">{lang No installed theme has been found.}</td>
+			</tr>
+		{/empty}
+		</tbody>
+	</table>
+</div>

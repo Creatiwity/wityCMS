@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Apps\User\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class UserView extends WView {
 	public function __construct() {
@@ -28,7 +28,6 @@ class UserView extends WView {
 	public function login($model) {
 		$this->assign('redirect', $model['redirect']);
 		$this->assign('config', $model['config']);
-		$this->setTemplate('connexion_form');
 	}
 
 	/**
@@ -37,7 +36,6 @@ class UserView extends WView {
 	 * @param array $model
 	 */
 	public function register($model) {
-		$this->assign('base', WRoute::getBase());
 		$inputs = array('nickname', 'email', 'firstname', 'lastname', 'country');
 		foreach ($inputs as $name) {
 			$this->assign($name, isset($model[$name]) ? $model[$name] : '');
@@ -54,7 +52,7 @@ class UserView extends WView {
 		if ($model['step'] == 2) {
 			$this->assign('email', $model['email']);
 			$this->assign('confirm', $model['confirm']);
-			$this->setTemplate('reset_password');
+			$this->setTemplate('reset_password.html');
 		}
 	}
 }

@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Contact\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class ContactController extends WController {
 
@@ -23,11 +23,9 @@ class ContactController extends WController {
 
 	protected function form(array $params) {
 		$user_id = isset($_SESSION['userid']) ? $_SESSION['userid'] : null;
-		$data = WRequest::getAssoc(array('from_name', 'from_email', 'email_subject', 'email_message'));
 
-		if (!in_array(null, $data, true)) {
-			$data['from_company'] = WRequest::get('from_company');
-			$data['extras'] = WRequest::get('extras');
+		if (WRequest::hasDataForURL('contact')) {
+			$data = WRequest::getAssoc(array('from_name', 'from_email', 'from_company', 'email_subject', 'email_message', 'extras'));
 			$errors = array();
 
 			/**
@@ -67,7 +65,8 @@ class ContactController extends WController {
 					'application/vnd.ms-word',
 					'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 					'application/pdf',
-					'image/*');
+					'image/*'
+				);
 
 				$upload->Process($this->upload_dir);
 

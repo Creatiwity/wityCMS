@@ -131,7 +131,7 @@ define(['jquery'], function($) {
 
 		// Whenever a checkbox is changed
 		$('#'+id+' input[type="checkbox"]').change(function() {
-			if ($('#'+id+' .user-rights input:checked').size() == 0) {
+			if ($('#'+id+' .user-rights input:checked').length == 0) {
 				changeType(id, 'none');
 			} else {
 				changeType(id, 'custom');

@@ -15,8 +15,8 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th><a href="/admin/user/groups/name-{$name_sort}/"><i class="{$name_class}"></i> {lang Name}</a></th>
-				<th><a href="/admin/user/groups/users_count-{$users_count_sort}/"><i class="{$users_count_class}"></i> {lang Number of users}</a></th>
+				<th><a href="/admin/user/groups/name-{$name_sort}"><i class="{$name_class}"></i> {lang Name}</a></th>
+				<th><a href="/admin/user/groups/users_count-{$users_count_sort}"><i class="{$users_count_class}"></i> {lang Number of users}</a></th>
 				<th>{lang Actions}</th>
 			</tr>
 		</thead>
@@ -33,7 +33,7 @@
 							<span class="sr-only">{lang Toggle Dropdown}</span>
 						</button>
 						<ul class="dropdown-menu pull-right" role="menu">
-							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/user/group_del/{$group.id}/" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
+							<li><a href="javascript:void(0)" title="{lang Delete}" class="link" data-link-modal="/v/admin/user/group_del/{$group.id}" data-modal-container="modal_delete"><i class="glyphicon glyphicon-trash"></i> {lang Delete}</a></li>
 						</ul>
 					</div>
 				</td>
@@ -80,21 +80,21 @@
 			</div>
 			<table class="user-rights" cellpadding="0" cellspacing="0">
 				<colgroup><col width="25%" /></colgroup>
-				{for $app, $details in $admin_apps}
+				{for $app, $permissions in $apps}
 				<tr>
-					<td><p class="text-center"><strong>{$details.name}</strong></p></td>
+					<td><strong>{$app|ucfirst}</strong></td>
 					<td>
-						{if !empty({$details.permissions})}
+						{if !empty({$permissions})}
 						<ul class="permissions">
-							{for $perm in {$details.permissions}}
+							{for $permission in $permissions}
 							<li>
-								{if {$app} == {$default_admin} && {$perm} == 'admin'}
-								<input type="hidden" name="access[{$app}][{$perm}]" value="on" />
+								{if {$app} == {$default_admin} && {$permission} == 'admin'}
+								<input type="hidden" name="access[{$app}][{$permission}]" value="on" />
 								<em>Admin ({lang This is the application loaded by default in the admin.})</em>
 								{else}
 								<label>
-									<input type="checkbox" name="access[{$app}][{$perm}]" />
-									{$perm|ucfirst}
+									<input type="checkbox" name="access[{$app}][{$permission}]" />
+									{$permission|ucfirst}
 								</label>
 								{/if}
 							</li>

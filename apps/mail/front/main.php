@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Mail\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class MailController extends WController {
 
@@ -244,9 +244,7 @@ class MailController extends WController {
 		self::$tpl->pushContext();
 
 		// Clean the PHPMailer instance
-		$this->phpmailer->clearAddresses();
-		$this->phpmailer->ClearCCs();
-		$this->phpmailer->ClearBCCs();
+		$this->phpmailer->clearAllRecipients();
 		$this->phpmailer->clearAttachments();
 
 		// Add addresses

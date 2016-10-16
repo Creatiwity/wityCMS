@@ -1,0 +1,122 @@
+<div class="wity-app wity-app-settings wity-action-general">
+	<form action="/admin/settings/general" method="post" class="form-horizontal" enctype="multipart/form-data">
+		<fieldset>
+			<legend>{lang General}</legend>
+
+			<div class="form-group">
+				<label for="site_title" class="col-sm-2 control-label">{lang Website's name}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="site_title" class="form-control" type="text" name="settings[site_title]" value="{!$settings.site_title!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="base" class="col-sm-2 control-label">{lang Website's base URL}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="base" class="form-control" type="text" name="settings[base]" value="{!$settings.base!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="timezone" class="col-sm-2 control-label">{lang Timezone}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="timezone" class="form-control" name="settings[timezone]">
+						{include apps/settings/admin/templates/timezones.html}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="favicon" class="col-sm-2 control-label">{lang Favicon (.ico)}</label>
+				<div class="col-sm-10 col-lg-5">
+					{if !empty({$settings.favicon})}
+					<p><img src="{!$settings.favicon!}" alt="Favicon" width="32" height="32" /></p>
+					{/if}
+					<input id="favicon" class="form-control" type="file" name="favicon" value="" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="theme" class="col-sm-2 control-label">{lang Default theme}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="theme" class="form-control" name="settings[theme]">
+						{for $theme in $themes}
+						<option value="{$theme}"{if {$theme} == {$settings.theme}} selected="selected"{/if}>{$theme}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="ga" class="col-sm-2 control-label">{lang Google Analytics}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="ga" class="form-control" type="ga" name="settings[ga]" value="{!$settings.ga!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="version" class="col-sm-2 control-label">{lang Version}</label>
+				<div class="col-sm-10 col-lg-5">
+					<input id="version" class="form-control" type="version" name="settings[version]" value="{!$settings.version!}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="debug" class="col-sm-2 control-label">{lang Debug mode}</label>
+				<div class="col-sm-10 col-lg-5">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="debug" name="settings[debug]" value="on" {if {$settings.debug}} checked="checked"{/if}>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="anti_flood" class="col-sm-2 control-label">{lang Anti flood mode}</label>
+				<div class="col-sm-10 col-lg-5">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="anti_flood" name="settings[anti_flood]" value="on" {if {$settings.anti_flood}} checked="checked"{/if}>
+						</label>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>{lang Default applications}</legend>
+
+			<div class="form-group">
+				<label for="default_front" class="col-sm-2 control-label">{lang Default application}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="default_front" class="form-control" name="route[default_front]">
+						{for $app, $manifest in $front_apps}
+						<option value="{$app}"{if {$app} == {$route.default_front}} selected="selected"{/if}>{$app}</option>
+						{/for}
+						{for $app, $manifest in $admin_apps}
+						<option value="admin/{$app}"{if "admin/".{$app} == {$route.default_front}} selected="selected"{/if}>admin/{$app}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="default_admin" class="col-sm-2 control-label">{lang Default application in admin}</label>
+				<div class="col-sm-10 col-lg-5">
+					<select id="default_admin" class="form-control" name="route[default_admin]">
+						{for $app, $manifest in $admin_apps}
+						<option value="admin/{$app}"{if "admin/".{$app} == {$route.default_admin}} selected="selected"{/if}>admin/{$app}</option>
+						{/for}
+					</select>
+				</div>
+			</div>
+		</fieldset>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input class="btn btn-large btn-primary" type="submit" value="{lang Submit}" />
+			</div>
+		</div>
+	</form>
+</div>

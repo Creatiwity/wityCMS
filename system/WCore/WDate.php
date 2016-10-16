@@ -10,9 +10,9 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
-class WDate extends DateTime {
+class WDate extends DateTime implements JsonSerializable {
 	/**
 	 * This function handles user's custom timezone.
 	 *
@@ -118,6 +118,10 @@ class WDate extends DateTime {
 		}
 
 		return WLang::_('now');
+	}
+
+	public function jsonSerialize() {
+		return $this->format(WDate::ISO8601);
 	}
 }
 

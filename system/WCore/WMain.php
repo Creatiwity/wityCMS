@@ -13,7 +13,7 @@ require_once SYS_DIR.'WCore'.DS.'WView.php';
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class WMain {
 	/**
@@ -27,8 +27,11 @@ class WMain {
 		WLang::init();
 		WLang::declareLangDir(SYS_DIR.'lang');
 
+		// Initializing request
+		WRequest::init();
+
 		// Initializing the route
-		$this->route();
+		$this->setupRoute();
 
 		// Initializing sessions
 		$this->setupSession();
@@ -57,20 +60,29 @@ class WMain {
 		// Get the application name
 		$route = WRoute::route();
 
+		// Load all langs in admin
+		if ($route['admin'] && !empty($_SESSION['access'])) {
+			$admin_apps = WController::getApps(true);
+
+			foreach ($admin_apps as $admin_app_key => $admin_app) {
+				WLang::declareLangDir(APPS_DIR.$admin_app_key.DS.'admin'.DS.'lang');
+			}
+		}
+
 		$response = new WResponse();
-		$model = WRetriever::getModel($route['app'], $route['params'], false);
+		$model = WRetriever::getModel($route['url'], array(), false);
 		switch ($route['mode']) {
 			case 'm': // Only model
 				$response->renderModel($model);
 				break;
 
 			case 'v': // Only view
-				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$view = WRetriever::getView($route['url'], array(), false);
 				$response->renderView($model, $view);
 				break;
 
 			case 'mv': // Model + View
-				$view = WRetriever::getView($route['app'], $route['params'], false);
+				$view = WRetriever::getView($route['url'], array(), false);
 				$response->renderModelView($model, $view);
 				break;
 
@@ -78,13 +90,25 @@ class WMain {
 				break;
 
 			default: // Render in a theme
-				$view = WRetriever::getView($route['app'], $route['params'], false);
-				$theme = ($route['admin']) ? 'admin-bootstrap': WConfig::get('config.theme');
+				$view = WRetriever::getView($route['url'], array(), false);
 
-				// Load language file from template
 				if ($route['admin']) {
-					WLang::declareLangDir(THEMES_DIR.'admin-bootstrap'.DS.'lang');
+					$theme = WConfig::get('config.theme_admin');
+
+					// Display login form if not connected
+					if (!WSession::isConnected()) {
+						$view = WRetriever::getView('user/login', array('redirect' => WRoute::getDir().'admin'));
+					} else if (!empty($_SESSION['access'])) {
+						$admin_apps = WController::getApps(true);
+
+						$tpl = WSystem::getTemplate();
+						$tpl->assign('wity_admin_apps', $admin_apps);
+					}
+				} else {
+					$theme = WConfig::get('config.theme');
 				}
+
+				WLang::declareLangDir(THEMES_DIR.$theme.DS.'lang');
 
 				$response->render($view, $theme, $model);
 				break;
@@ -106,7 +130,7 @@ class WMain {
 	 * Initializes the route.
 	 * Prevents browser from trying to load a physical file.
 	 */
-	private function route() {
+	private function setupRoute() {
 		WRoute::init();
 
 		// Checks if the browser tried to load a physical file
@@ -144,21 +168,31 @@ class WMain {
 	 * Initializes session and check the flood condition
 	 */
 	private function setupSession() {
-		// Instanciates it
+		// Instantiate the Session
 		$session = WSystem::getSession();
 
 		// Anti-flood checking
-		if (!$session->check_flood()) {
+		if (WConfig::get('config.anti_flood', false) && !$session->checkFlood()) {
 			$_POST = array();
 		}
 
-		// Variable for Roxy file manager
+		// Set Roxy file manager's upload dir variable
 		$_SESSION['upload_dir'] = WRoute::getDir().'upload';
 
 		// Set session lang
-		if (!empty($_SESSION['lang'])) {
-			WLang::setLang($_SESSION['lang']);
+		if (empty($_SESSION['current_lang_code'])) {
+			$lang = WLang::getDefaultLang();
+
+			if (!empty($lang)) {
+				$_SESSION['current_lang_code'] = $lang['code'];
+				$_SESSION['current_lang_iso']  = $lang['iso'];
+			} else {
+				$_SESSION['current_lang_code'] = 'en_EN';
+				$_SESSION['current_lang_iso']  = 'en';
+			}
 		}
+
+		WLang::setLang($_SESSION['current_lang_code']);
 	}
 
 	/**
@@ -190,29 +224,35 @@ class WMain {
 		$tpl = WSystem::getTemplate();
 
 		$route = WRoute::route();
-
-		// Load language file from template
-		WLang::declareLangDir(THEMES_DIR.WConfig::get('config.theme').DS.'lang');
+		$front_route = WRoute::parseURL(WConfig::get('route.default_front'));
 
 		// Setup system template variables with $wity_ prefix
 		$tpl_vars = array(
 			'wity_base_url'         => WRoute::getBase(),
-			'wity_site_title'       => WConfig::get('config.name'),
+			'wity_url'              => WRoute::getURL(),
+			'wity_site_title'       => WConfig::get('config.site_title'),
 			'wity_page_title'       => WConfig::get('config.page_title'),
 			'wity_page_description' => WConfig::get('config.page_description'),
 			'wity_user'             => false,
-			'wity_home'             => WRoute::getQuery() == '' || $route['app'] == WConfig::get('route.default_front'),
+			'wity_home'             => WRoute::getQuery() == '' || WRoute::equals($route, $front_route),
 			'wity_app'              => $route['app'],
 			'wity_query'            => WRoute::getQuery(),
 			'wity_lang'             => WLang::getLang(),
 			'wity_lang_iso'         => WLang::getLangISO(),
 			'wity_site_favicon'     => WConfig::get('config.favicon'),
-			'wity_site_icon'        => WConfig::get('config.icon')
+			'wity_ga'               => WConfig::get('config.ga'),
+			'wity_version'          => WConfig::get('config.version'),
+			'wity_og_type'          => 'website',
+			'wity_og_title'         => WConfig::get('config.og_title'),
+			'wity_og_description'   => WConfig::get('config.og_description'),
+			'wity_og_image'         => WConfig::get('config.og_image'),
+			'wity_now'              => time()
 		);
 
 		if (WSession::isConnected()) {
 			$tpl_vars['wity_user'] = true;
 			$tpl_vars += array(
+				'wity_userid'         => $_SESSION['userid'],
 				'wity_user_nickname'  => $_SESSION['nickname'],
 				'wity_user_email'     => $_SESSION['email'],
 				'wity_user_groupe'    => $_SESSION['groupe'],

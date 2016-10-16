@@ -31,7 +31,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class WRoute {
 	/**
@@ -65,8 +65,8 @@ class WRoute {
 
 		// $_SERVER['REQUEST_URI'] contains the full URL of the page
 		$dir = self::getDir();
-		if ($dir != '/') {
-			self::$query = str_replace($dir, '', $_SERVER['REQUEST_URI']);
+		if ($dir != '/' && strpos($_SERVER['REQUEST_URI'], $dir) === 0) {
+			self::$query = substr($_SERVER['REQUEST_URI'], strlen($dir));
 		}
 
 		// Cleansing
@@ -90,28 +90,15 @@ class WRoute {
 	 * @return array The route
 	 */
 	public static function route() {
-		$route = self::$route;
-		if (!empty($route)) {
-			return $route;
+		if (!empty(self::$route)) {
+			return self::$route;
 		}
 
 		$route = self::parseURL(self::$query);
-		$mode = $route['mode'];
 
-		// Remove the mode from the URL
-		if ($route['mode'] != '') {
-			$clean_query = str_replace($route['mode'].'/', '', self::$query);
-		} else {
-			$clean_query = self::$query;
-		}
-		$clean_query = rtrim($clean_query, '/');
+		if (empty($route['app'])) {
+			$mode = $route['mode'];
 
-		// Checking the existence of a custom route
-		$custom_routes = WConfig::get('route.custom');
-		if (isset($custom_routes[$clean_query])) {
-			$route = self::parseURL($custom_routes[$clean_query]);
-			$route['mode'] = $mode;
-		} else if (empty($route['app'])) {
 			// Use default route
 			if ($route['admin']) {
 				$route = self::parseURL(WConfig::get('route.default_admin'));
@@ -135,42 +122,62 @@ class WRoute {
 	 */
 	public static function parseURL($url) {
 		$route = array(
-			'app'    => '',
-			'params' => array(),
-			'mode'   => '',
-			'admin'  => false
+			'url'         => $url,
+			'app'         => '',
+			'action'      => '',
+			'params'      => array(),
+			'mode'        => '',
+			'admin'       => false,
+			'querystring' => ''
 		);
 
-		if (is_string($url)) {
+		if (!empty($url) && is_string($url)) {
 			$url = trim($url, '/');
 
-			if (!empty($url)) {
-				$params = explode('/', $url);
+			// Extract QueryString
+			$args = explode('?', $url);
 
-				// Extract the mode if exists
-				if (isset($params[0]) && in_array($params[0], array('m', 'v', 'mv', 'o'))) {
-					$route['mode'] = array_shift($params);
-				}
+			if (!empty($args[1])) {
+				$route['querystring'] = $args[1];
+			}
 
-				// Extract the app
-				$app = array_shift($params);
-				if (!empty($app)) {
-					// Admin route
-					if ($app == 'admin') {
-						$route['admin'] = true;
+			$params = explode('/', $args[0]);
 
-						$app = array_shift($params);
-						if (!empty($app)) {
-							// In wityCMS, to trigger an admin app, the app must be equal to "admin/news"
-							$route['app'] = 'admin/'.$app;
-						}
-					} else {
+			// Extract the mode if exists
+			if (isset($params[0]) && in_array($params[0], array('m', 'v', 'mv', 'o'))) {
+				$route['mode'] = array_shift($params);
+			}
+
+			// Search URL in custom routes
+			$custom_routes = WConfig::get('route.custom');
+			$cleaned_url = implode('/', $params);
+			if (isset($custom_routes[$cleaned_url])) {
+				$route['url'] = trim($custom_routes[$cleaned_url], '/');
+				$params = explode('/', $route['url']);
+			}
+
+			// Extract the app
+			$app = array_shift($params);
+			if (!empty($app)) {
+				// Admin route
+				if ($app == 'admin') {
+					$route['admin'] = true;
+
+					$app = array_shift($params);
+					if (!empty($app)) {
 						$route['app'] = $app;
 					}
+				} else {
+					$route['app'] = $app;
 				}
 
-				$route['params'] = $params;
+				$action = array_shift($params);
+				if (!empty($action)) {
+					$route['action'] = $action;
+				}
 			}
+
+			$route['params'] = $params;
 		}
 
 		return $route;
@@ -248,7 +255,13 @@ class WRoute {
 	 * @return string The full URL
 	 */
 	public static function getURL() {
-		return self::getBase().self::$query.'?'.self::$queryString;
+		$url = self::getBase().self::$query;
+
+		if (!empty(self::$queryString)) {
+			$url .= '?'.self::$queryString;
+		}
+
+		return $url;
 	}
 
 	/**
@@ -303,6 +316,19 @@ class WRoute {
 			WConfig::set('route.custom', $custom_routes);
 			WConfig::save('route');
 		}
+	}
+
+	/**
+	 * Checks if two routes are equal.
+	 *
+	 * @param array Route 1
+	 * @param array Route 2
+	 * @return bool
+	 */
+	public static function equals($route1, $route2) {
+		return $route1['app'] == $route2['app']
+			&& $route1['action'] == $route2['action']
+			&& $route1['admin'] == $route2['admin'];
 	}
 }
 

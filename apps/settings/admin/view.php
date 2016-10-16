@@ -11,20 +11,36 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Settings\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class SettingsAdminView extends WView {
 	/**
-	 * Prepares the configure view
+	 * Prepares the general view
 	 */
-	public function configure($model) {
-		$this->assign('settings', $model);
+	public function general($model) {
+		$this->assign('settings', $model['settings']);
+		$this->assign('route', $model['route']);
+		$this->assign('front_apps', $model['front_apps']);
+		$this->assign('admin_apps', $model['admin_apps']);
+		$this->assign('themes', $model['themes']);
+	}
+
+	/**
+	 * Prepares the SEO view
+	 */
+	public function seo($model) {
+		$this->assign('settings', $model['settings']);
+	}
+
+	/**
+	 * Prepares the Coordinates view
+	 */
+	public function coordinates($model) {
+		$this->assign('settings', $model['settings']);
+		$this->assign('countries', $model['countries']);
 	}
 
 	public function languages($data) {
-		if ($data['form']) {
-			$this->setTemplate('language_form');
-		}
 		$this->assign($data);
 	}
 
@@ -42,7 +58,7 @@ class SettingsAdminView extends WView {
 			'is_default'        => 0
 		);
 		$this->assignDefault($default, $model);
-		$this->setTemplate('language_form');
+		$this->setTemplate('language_form.html');
 	}
 
 	public function language_add($model) {
@@ -56,6 +72,34 @@ class SettingsAdminView extends WView {
 	public function language_delete($model) {
 		$this->assign('name', $model['name']);
 		$this->assign('confirm_delete_url', '/admin/settings/language_delete/'.$model['id'].'/confirm');
+	}
+
+	public function translate($model) {
+		$this->assign('themes', $model['themes']);
+		$this->assign('apps', $model['apps']);
+	}
+
+	public function translate_app($model) {
+		$this->translate_files($model);
+	}
+
+	public function translate_theme($model) {
+		$this->translate_files($model);
+	}
+
+	private function translate_files($model) {
+		$this->assign('require', 'witycms/admin');
+		$this->assign('css', '/apps/settings/admin/css/translate.css');
+
+		$this->assign('type', $model['type']);
+		$this->assign('folder', $model['folder']);
+		$this->assign('languages', $model['languages']);
+		$this->assign('fields', $model['fields']);
+
+		// Auto-translate
+		$this->assign('form_values', json_encode($model['translatables']));
+
+		$this->setTemplate('translate_files.html');
 	}
 }
 

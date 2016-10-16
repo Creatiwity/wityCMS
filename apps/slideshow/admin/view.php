@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Slideshow\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class SlideshowAdminView extends WView {
 	public function __construct() {
@@ -54,7 +54,7 @@ class SlideshowAdminView extends WView {
 		}
 		$this->assign('form_values', json_encode($form_values));
 
-		$this->setTemplate('slide_form');
+		$this->setTemplate('slide_form.html');
 	}
 
 	public function slide_add($model) {

@@ -54,7 +54,12 @@ require(['jquery'], function($) {
 				var $that = $(this);
 				$that.data('lang', wity_lang_enabled_langs[i].id);
 
-				$that.attr('name', $that.attr('name') + '_' + wity_lang_enabled_langs[i].id);
+				if ($that.attr('name').indexOf('[') !== -1) {
+					$that.attr('name', $that.attr('name').replace('[', '_' + wity_lang_enabled_langs[i].id + '['));
+				} else {
+					$that.attr('name', $that.attr('name') + '_' + wity_lang_enabled_langs[i].id);
+				}
+
 				$that.attr('id', $that.attr('id') + '_' + wity_lang_enabled_langs[i].id);
 
 				if (wity_lang_form_values) {

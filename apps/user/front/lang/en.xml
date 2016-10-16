@@ -1,117 +1,71 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <lang value="en">
-	<item id="mandatory_fields">These fields are mandatory.</item>
-
-	<!-- Errors -->
-	<item id="bad_data">Please, fill in all the required fields.</item>
-	<item id="error_password_not_matching">The password given does not match with the password confirmation.</item>
-	<item id="error_no_password">No password given.</item>
-	<item id="nickname_bad_length">Nickname length must be between 3 and 30 characters.</item>
-	<item id="nickname_invalid_char">Nickname contains invalid char (.)</item>
-	<item id="nickname_already_used">Nickname already in use.</item>
-	<item id="email_not_valid">The email given is not valid.</item>
-	<item id="email_already_used">The email given is already in use.</item>
-
-	<!-- Connection -->
-	<item id="login_success">Welcome %s!</item>
-	<item id="login_max_attempt">You reached the maximum of login attempt authorized.
-Please, wait a moment before trying again.</item>
-	<item id="login_error"><![CDATA[The couple <em>nickname / password</em> given does not match with any valid account.]]></item>
-	<item id="user_disconnected">You were loged out successfully.</item>
-	<item id="cookie_not_accepted">To login, your browser needs to accept the cookies.</item>
-
-	<!-- Login form -->
-	<item id="login_form_title">Connection</item>
-	<item id="nickname">Identifier</item>
-	<item id="password">Password</item>
-	<item id="remain_connected_for">Remain connected for...</item>
-	<item id="minutes">minutes</item>
-	<item id="always_remain_connected">Always remain connected</item>
-	<item id="password_lost">Password lost?</item>
-	<item id="login_button">Connection</item>
-	<item id="more_options">More options</item>
-
-	<!-- Register form -->
-	<item id="register_form_title">Create a new account</item>
-	<item id="password_conf">Confirmation </item>
-	<item id="email">Email </item>
-	<item id="firstname">Firstname </item>
-	<item id="lastname">Lastname </item>
-	<item id="country">Country </item>
-	<item id="register">Register</item>
-	<item id="user_register_failure">An unknown error occured when trying to create your account in the database.</item>
-
-	<!-- Register - EMAIL CONFIRMATION -->
-	<item id="user_register_email_subject">%s - Your user account creation</item>
-	<item id="user_register_email_confirm"><![CDATA[
-<p>Welcome on {site_title}!</p>
-<p>There are your user account credentials:<br />
-Nickname: {nickname}<br />
-Password: {password}</p>
-
-<p>To validate your account, please follow this link:<br />
-<a href="{base}user/confirm/{confirm}">Validate your account</a></p>
-
-<p>If the link does not work, paste this link in your browser:<br />
-{base}user/confirm/{confirm}</p>
-
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_confirm">To finish your account creation, you have to click on the link in the email you are going to receive.</item>
-	<item id="user_validated">Your account got validated successfully.</item>
-
-	<!-- Register: ADMIN CHECK -->
-	<item id="user_register_email_admin"><![CDATA[
-<p>Welcome on {site_title}!</P>
-<p>There are your user account credentials:<br />
-Nickname: {nickname}<br />
-Password: {password}</p>
-<p>First, your account <strong>needs to be validated by an administrator</strong> to be activated.<br />
-You will be noticed as soon as it will be done.</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_admin_warning"><![CDATA[
-<p>Hello,</p>
-<p>The account <strong>{nickname}</strong> needs to be validated on {site_title}.<br />
-To check it, <a href="{base}admin/user/edit/{userid}">follow this link</a>.</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_admin"><![CDATA[Your account got registered.<br />
-It needs to be validated by an administrator.<br />
-You will be notified once it will be done.]]></item>
-	<item id="user_validated_admin"><![CDATA[Your email got validated.<br />
-To be able to use your account, it needs to be validated by an administrator.<br />
-You will be notified once it will be done.]]></item>
-	<item id="user_invalid_confirm_code">This confirm code does not match with any account in the database.</item>
-
-	<!-- Register - AUTO -->
-	<item id="user_register_email"><![CDATA[
-<p>Welcome on {site_title}!</p>
-<p>There are your user account credentials:<br />
-Nickname: {nickname}<br />
-Password: {password}</p>
-<p>You can login with your account on the website:
-<a href="{base}user/login/">Login</a></p>
-<p>If the link does not work, paste this link in your browser:<br />
-{base}user/login/</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_success"><![CDATA[<p>Your account was created successfully.</p>
-<p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
-
-	<!-- Password lost -->
-	<item id="reset_password">Reset your password</item>
-	<item id="enter_your_email">To change your password, please enter your email adress.</item>
-	<item id="chose_new_password">Chose a new password:</item>
-	<item id="submit">Submit</item>
-	<item id="user_password_lost_not_found">This email does not exist in the database.</item>
-	<item id="user_password_lost_failure">An unknown error occured while saving your password reset demand in the database.</item>
-	<item id="user_password_lost_email_sent">An email was sent to you. It contains a link to reach the next step in the password reset process.</item>
-	<item id="user_password_lost_subject">%s - Password reset request</item>
-	<item id="user_password_lost_email"><![CDATA[
-<p>Hello,</p>
-<p>You just ask for a password change on {site_title}.</p>
-<p>To get to the next step, please, follow this link:<br />
-<a href="{base}user/password-lost/?email={email}&amp;confirm={confirm}">Change your password</a></p>
-<p>If the link does not work, paste this link in your browser:<br />
-{base}user/password-lost/?email={email}&amp;confirm={confirm}</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_password_lost_success"><![CDATA[<p>Your password was changed successfully.</p>
-<p>You can now login with it on <a href="/user/login/">this page</a>.</p>]]></item>
+  <item id="user_register_email_confirm">&#13;
+&lt;p&gt;Welcome on {site_title}!&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;There are your user account credentials:&lt;br /&gt;&#13;
+Nickname: {nickname}&lt;br /&gt;&#13;
+Password: {password}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;To validate your account, please follow this link:&lt;br /&gt;&#13;
+&lt;a href="{base}user/confirm/{confirm}"&gt;Complete your inscription&lt;/a&gt;&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;If the link does not work, paste this address in your browser:&lt;br /&gt;&#13;
+{base}user/confirm/{confirm}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_email_admin">&#13;
+&lt;p&gt;Welcome on {site_title}!&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;There are your user account credentials:&lt;br /&gt;&#13;
+Nickname: {nickname}&lt;br /&gt;&#13;
+Password: {password}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;First, your account &lt;strong&gt;needs to be validated by an administrator&lt;/strong&gt; to be activated.&lt;br /&gt;&#13;
+You will be notified as soon as it will be done.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_admin_warning">&#13;
+&lt;p&gt;Hello,&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;The account &lt;strong&gt;{nickname}&lt;/strong&gt; needs to be validated on {site_title}.&lt;br /&gt;&#13;
+To check it, &lt;a href="{base}admin/user/edit/{userid}"&gt;follow this link&lt;/a&gt;.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_admin">Your account got registered.&lt;br /&gt;&#13;
+It needs to be validated by an administrator.&lt;br /&gt;&#13;
+You will be notified once it will be done.</item>
+  <item id="user_register_email">&#13;
+&lt;p&gt;Welcome on {site_title}!&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;There are your user account credentials:&lt;br /&gt;&#13;
+Nickname: {nickname}&lt;br /&gt;&#13;
+Password: {password}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;You can login with your account on the website:&#13;
+&lt;a href="{base}user/login"&gt;Login&lt;/a&gt;&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;If the link does not work, paste this address in your browser:&lt;br /&gt;&#13;
+{base}user/login&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_success">&lt;p&gt;Your account was created successfully.&lt;/p&gt;&#13;
+&lt;p&gt;You can now login with it on &lt;a href="/user/login"&gt;this page&lt;/a&gt;.&lt;/p&gt;</item>
+  <item id="user_validated_admin">Your email got validated.&lt;br /&gt;&#13;
+To be able to use your account, it needs to be validated by an administrator.&lt;br /&gt;&#13;
+You will be notified once it will be done.</item>
+  <item id="user_password_lost_email">&#13;
+&lt;p&gt;Hello,&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;You just asked for a password reset on {site_title}.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;To get to the next step, please, follow this link:&lt;br /&gt;&#13;
+&lt;a href="{base}user/password-lost/?email={email}&amp;confirm={confirm}"&gt;Change your password&lt;/a&gt;&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;If the link does not work, paste this link in your browser:&lt;br /&gt;&#13;
+{base}user/password-lost/?email={email}&amp;confirm={confirm}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_password_lost_success">&lt;p&gt;Your password was changed successfully.&lt;/p&gt;&#13;
+&lt;p&gt;You can now login with it on &lt;a href="/user/login"&gt;this page&lt;/a&gt;.&lt;/p&gt;</item>
 </lang>

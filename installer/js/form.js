@@ -2,7 +2,7 @@
  * Form generator
  *
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 var Form, FormNode;
 
@@ -646,7 +646,7 @@ var Form, FormNode;
 				});
 
 				// Bind validator to the blur and change events
-				$field.on('input propertychange', function() {
+				$field.on('input change propertychange', function() {
 					if (validationTimer) {
 						clearTimeout(validationTimer);
 					}

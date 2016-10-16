@@ -1,117 +1,107 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <lang value="fr">
-	<item id="mandatory_fields">Les champs marqués d'une étoile sont obligatoires.</item>
-
-	<!-- Errors -->
-	<item id="bad_data">Merci de compléter tous les champs requis.</item>
-	<item id="error_password_not_matching">Les deux mots de passe fournis sont différents.</item>
-	<item id="error_no_password">Pas de mot de passe fourni.</item>
-	<item id="nickname_bad_length">L'identifiant doit contenir entre 3 et 30 caractères.</item>
-	<item id="nickname_invalid_char">L'identifiant contient des caractères non valides (.)</item>
-	<item id="nickname_already_used">Cet identifiant est déjà en utilisation.</item>
-	<item id="email_not_valid">Cet email n'est pas valide.</item>
-	<item id="email_already_used">Cet email est déjà utilisé.</item>
-
-	<!-- Connection -->
-	<item id="login_success">Bienvenue %s !</item>
-	<item id="login_max_attempt">Vous avez atteint le nombre maximum d'essais d'autentification possible.
-Merci de bien vouloir patienter un moment avant de réessayer.</item>
-	<item id="login_error"><![CDATA[Le couple <em>identifiant / mot de passe</em> fourni ne correspond à aucun compte valide.]]></item>
-	<item id="user_disconnected">Vous avez été déconnecté avec succès.</item>
-	<item id="cookie_not_accepted">Pour vous connecter, votre navigateur doit accepter les cookies.</item>
-
-	<!-- Login form -->
-	<item id="login_form_title">Connexion</item>
-	<item id="nickname">Identifiant </item>
-	<item id="password">Mot de passe </item>
-	<item id="remain_connected_for">Rester connecté pendant... </item>
-	<item id="minutes">minutes</item>
-	<item id="always_remain_connected">Toujours rester connecté </item>
-	<item id="password_lost">Mot de passe perdu ?</item>
-	<item id="login_button">Connexion</item>
-	<item id="more_options">Plus d'options</item>
-
-	<!-- Register form -->
-	<item id="register_form_title">Création d'un nouveau compte</item>
-	<item id="password_conf">Mot de passe (confirmation)</item>
-	<item id="email">Email </item>
-	<item id="firstname">Prénom </item>
-	<item id="lastname">Nom </item>
-	<item id="country">Pays </item>
-	<item id="register">Inscription</item>
-	<item id="user_register_failure">Une erreur inconnue s'est produite lors de la création de votre compte dans la base de données.</item>
-
-	<!-- Register - EMAIL CONFIRMATION -->
-	<item id="user_register_email_subject">%s - Création de votre compte utilisateur</item>
-	<item id="user_register_email_confirm"><![CDATA[
-<p>Bonjour,</p>
-<p>Vous venez de vous inscrire sur le site {site_title}.</p>
-<p>Voici un rappel de vos données de connexion :<br />
-Identifiant : {nickname}<br />
-Mot de passe : {password}</p>
-<p>Pour finaliser votre demande, veuillez cliquer sur le lien ci-dessous :<br />
-<a href="{base}user/confirm/{confirm}">Valider la demande</a></p>
-<p>Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navigateur :<br />
-{base}user/confirm/{confirm}</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_confirm">Pour terminer la création de votre compte, vous devez cliquer sur le lien de confirmation dans l'email que vous allez recevoir.</item>
-	<item id="user_validated">Votre compte a été validé avec succès.</item>
-
-	<!-- Register: ADMIN CHECK -->
-	<item id="user_register_email_admin"><![CDATA[
-<p>Bonjour,</p>
-<p>Vous venez de vous inscrire sur le site {site_title}.</p>
-<p>Voici un rappel de vos données de connexion :<br />
-Identifiant : {nickname}<br />
-Mot de passe : {password}</p>
-<p>Votre compte <strong>requiert la validation d'un administrateur</strong> avant de pouvoir être utilisé.<br />
-Vous serez notifié par email lorsque cela sera fait.</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_admin_warning"><![CDATA[
-<p>Bonjour,</p>
-<p>L'utilisateur <strong>{nickname}</strong> vient de demander la création d'un compte sur le site {site_title}.<br />
-Pour l'étudier, <a href="{base}admin/user/edit/{userid}">cliquez ici</a>.</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_admin"><![CDATA[Votre compte a bien été enregistré.<br />
-Son activation nécessite l'intervention d'un administrateur.<br />
-Vous serez notifié par email lorsqu'il sera validé.]]></item>
-	<item id="user_validated_admin"><![CDATA[Votre email a bien été validé.<br />
-L'activation de votre compte nécessite l'intervention d'un administrateur.<br />
-Vous serez notifié par email lorsqu'il sera validé.]]></item>
-	<item id="user_invalid_confirm_code">Ce code de confirmation ne correspond à aucun compte dans la base de données.</item>
-
-	<!-- Register - AUTO -->
-	<item id="user_register_email"><![CDATA[
-<p>Bonjour,</p>
-<p>Vous venez de vous inscrire sur le site {site_title}.</p>
-<p>Voici un rappel de vos données de connexion :<br />
-Identifiant : {nickname}<br />
-Password : {password}</p>
-<p>Vous pouvez vous connecter à l'adresse suivante :<br />
-<a href="{base}user/connexion/">Se connecter</a></p>
-<p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
-{base}user/connexion/</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_register_success"><![CDATA[<p>Votre compte utilisateur a été créé avec succès.</p>
-<p>Vous pouvez vous connecter en <a href="/user/login/">cliquant ici</a>.</p>]]></item>
-
-	<!-- Password lost -->
-	<item id="reset_password">Réinitialisation de mot de passe</item>
-	<item id="enter_your_email">Afin de récupérer votre mot de passe, veuillez spécifier l'adresse email de votre compte.</item>
-	<item id="chose_new_password">Choisissez un nouveau mot de passe :</item>
-	<item id="submit">Envoyer</item>
-	<item id="user_password_lost_not_found">Cet email n'existe pas dans la base de données.</item>
-	<item id="user_password_lost_failure">Une erreur inconnue s'est produite lors de l'enregistrement de votre demande de changement de mot de passe dans la base de données.</item>
-	<item id="user_password_lost_email_sent">&lt;strong&gt;Un email vient de vous être envoyé.&lt;/strong&gt; Il contient un lien pour passer à l'étape suivante pour la réinitialisation de votre mot de passe.</item>
-	<item id="user_password_lost_subject">%s - Réinitialisation de votre mot de passe</item>
-	<item id="user_password_lost_email"><![CDATA[
-<p>Bonjour,</p>
-<p>Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_title}.</p>
-<p>Pour passer à l'étape suivante, suivez ce lien :<br />
-<a href="{base}user/password_lost/?email={email}&amp;confirm={confirm}">Réinitialiser votre mot de passe</a></p>
-<p>Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :<br />
-{base}user/password_lost/?email={email}&amp;confirm={confirm}</p>
-<p><strong>{site_title}</strong></p>]]></item>
-	<item id="user_password_lost_success"><![CDATA[<p>Votre mot de passe a été réinitialisé avec succès.</p>
-<p>Vous pouvez vous connecter en l'utlisant à <a href="/user/login/">cette adresse</a>.</p>]]></item>
+  <item id="To log in, your browser must accept cookies.">Pour vous connecter, votre navigateur doit accepter les cookies.</item>
+  <item id="Welcome %s!">Bienvenue %s !</item>
+  <item id="The couple nickname / password does not match with any valid account.">Le couple identifiant / mot de passe fourni ne correspond à aucun compte valide.</item>
+  <item id="You reached the maximum number of login attempts. Please, wait a few moment before trying to login again.">Vous avez atteint le nombre maximum d'essais d'authentification possible. Merci de bien vouloir patienter un moment avant de réessayer.</item>
+  <item id="Please, fill in all the required fields.">Merci de compléter tous les champs requis.</item>
+  <item id="You were successfully logout.">Vous avez été déconnecté avec succès.</item>
+  <item id="Sorry, but the registration is closed on this website.">Désolé mais les inscriptions sont fermées sur ce site.</item>
+  <item id="The passwords do not match.">Les deux mots de passe fournis sont différents.</item>
+  <item id="Please, provide a password.">Veuillez fournir un mot de passe.</item>
+  <item id="%s - User account creation">%s - Création de votre compte utilisateur</item>
+  <item id="user_register_email_confirm">&lt;p&gt;Bienvenue sur {site_title} !&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Voici un rappel de vos données de connexion :&lt;br /&gt;&#13;
+Identifiant : {nickname}&lt;br /&gt;&#13;
+Mot de passe : {password}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Pour finaliser votre demande, veuillez cliquer sur le lien ci-dessous :&lt;br /&gt;&#13;
+&lt;a href="{base}user/confirm/{confirm}"&gt;Valider l'inscription&lt;/a&gt;&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Si ce lien ne fonctionne pas, veuillez copier l'adresse suivante dans votre navigateur :&lt;br /&gt;&#13;
+{base}user/confirm/{confirm}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="To complete the creation of your account, please, click on the link in the email you are going to receive.">Pour terminer la création de votre compte, vous devez cliquer sur le lien de confirmation dans l'email que vous allez recevoir.</item>
+  <item id="user_register_email_admin">&lt;p&gt;Bienvenue sur {site_title} !&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Voici un rappel de vos données de connexion :&lt;br /&gt;&#13;
+Identifiant : {nickname}&lt;br /&gt;&#13;
+Mot de passe : {password}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Votre compte &lt;strong&gt;requiert la validation d'un administrateur&lt;/strong&gt; avant de pouvoir être utilisé.&lt;br /&gt;&#13;
+Vous serez notifié par email lorsque cela sera fait.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_admin_warning">&lt;p&gt;Bonjour,&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;L'utilisateur &lt;strong&gt;{nickname}&lt;/strong&gt; vient de demander la création d'un compte sur le site {site_title}.&lt;br /&gt;&#13;
+Pour l'étudier, &lt;a href="{base}admin/user/edit/{userid}"&gt;cliquez ici&lt;/a&gt;.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_admin">Votre compte a bien été enregistré.&lt;br /&gt;&#13;
+Son activation nécessite l'intervention d'un administrateur.&lt;br /&gt;&#13;
+Vous serez notifié par email lorsqu'il sera validé.</item>
+  <item id="user_register_email">&lt;p&gt;Bienvenue sur {site_title} !&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Voici un rappel de vos données de connexion :&lt;br /&gt;&#13;
+Identifiant : {nickname}&lt;br /&gt;&#13;
+Password : {password}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Vous pouvez vous connecter à l'adresse suivante :&lt;br /&gt;&#13;
+&lt;a href="{base}user/login"&gt;Se connecter&lt;/a&gt;&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :&lt;br /&gt;&#13;
+{base}user/login&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="user_register_success">&lt;p&gt;Votre compte utilisateur a été créé avec succès.&lt;/p&gt;&#13;
+&lt;p&gt;Vous pouvez vous connecter en &lt;a href="/user/login"&gt;cliquant ici&lt;/a&gt;.&lt;/p&gt;</item>
+  <item id="An unknown error occured.">Une erreur inconnue s'est produite.</item>
+  <item id="This confirmation code is invalid.">Ce code de confirmation est invalide.</item>
+  <item id="user_validated_admin">Votre email a bien été validé.&lt;br /&gt;&#13;
+L'activation de votre compte nécessite l'intervention d'un administrateur.&lt;br /&gt;&#13;
+Vous serez notifié par email lorsqu'il sera validé.</item>
+  <item id="An unknown error occcured.">Une erreur inconnue s'est produite.</item>
+  <item id="Your account was successfully created.">Votre compte a été validé avec succès.</item>
+  <item id="%s - Reset your password">%s - Réinitialisation de votre mot de passe</item>
+  <item id="user_password_lost_email">&lt;p&gt;Bonjour,&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Vous venez de faire une demande de réinitialisation de mot de passe sur le site {site_title}.&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Pour passer à l'étape suivante, suivez ce lien :&lt;br /&gt;&#13;
+&lt;a href="{base}user/password_lost/?email={email}&amp;confirm={confirm}"&gt;Réinitialiser votre mot de passe&lt;/a&gt;&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;Si ce lien ne fonctionne pas, vous pouvez copier l'adresse suivante dans votre navigateur :&lt;br /&gt;&#13;
+{base}user/password_lost/?email={email}&amp;confirm={confirm}&lt;/p&gt;&#13;
+&#13;
+&lt;p&gt;&lt;strong&gt;{site_title}&lt;/strong&gt;&lt;/p&gt;</item>
+  <item id="An email was sent to your address. It contains a link to proceed to the next step of the password reset.">Un email vient de vous être envoyé. Il contient un lien pour passer à l'étape suivante pour la réinitialisation de votre mot de passe.</item>
+  <item id="This email was not found in the database.">Cet email n'existe pas dans la base de données.</item>
+  <item id="user_password_lost_success">&lt;p&gt;Votre mot de passe a été réinitialisé avec succès.&lt;/p&gt;&#13;
+&lt;p&gt;Vous pouvez vous connecter en l'utlisant à &lt;a href="/user/login"&gt;cette adresse&lt;/a&gt;.&lt;/p&gt;</item>
+  <item id="The nickname must contain between 3 and 30 characters.">L'identifiant doit contenir entre 3 et 30 caractères.</item>
+  <item id="The nickname contains invalid characters [.].">L'identifiant contient des caractères non valides [.].</item>
+  <item id="The nickname is already in use.">L'identifiant est déjà utilisé.</item>
+  <item id="Please, provide a valid email.">Veuillez fournir un email valide.</item>
+  <item id="The email is already in use.">L'email est déjà utilisé.</item>
+  <item id="Log in">Connexion</item>
+  <item id="Nickname">Identifiant</item>
+  <item id="Password">Mot de passe</item>
+  <item id="Always remain logged in">Toujours rester connecté</item>
+  <item id="Remain logged in during...">Rester connecté pendant...</item>
+  <item id="minutes">minutes</item>
+  <item id="Password lost?">Mot de passe perdu ?</item>
+  <item id="Create a new account">Création d'un nouveau compte</item>
+  <item id="To recover your password, please, provide the email address of your user account.">Afin de récupérer votre mot de passe, veuillez spécifier l'adresse email de votre compte.</item>
+  <item id="Submit">Envoyer</item>
+  <item id="Email">Email</item>
+  <item id="Password (confirmation)">Mot de passe (confirmation)</item>
+  <item id="Firstname">Prénom</item>
+  <item id="Lastname">Nom</item>
+  <item id="Country">Pays</item>
+  <item id="Register">Inscription</item>
+  <item id="Reset your password">Réinitialisation de mot de passe</item>
+  <item id="Chose a new password:">Choisissez un nouveau mot de passe :</item>
 </lang>

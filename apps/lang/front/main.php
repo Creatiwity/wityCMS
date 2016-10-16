@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Lang\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class LangController extends WController {
 	protected function select($params) {
@@ -20,18 +20,18 @@ class LangController extends WController {
 		switch ($lang) {
 			default:
 			case 'fr':
-				$_SESSION['lang'] = 'fr_FR';
-				$_SESSION['lang_iso'] = 'fr';
+				$_SESSION['current_lang_code'] = 'fr_FR';
+				$_SESSION['current_lang_iso'] = 'fr';
 				break;
 
 			case 'en':
-				$_SESSION['lang'] = 'en_EN';
-				$_SESSION['lang_iso'] = 'en';
+				$_SESSION['current_lang_code'] = 'en_EN';
+				$_SESSION['current_lang_iso'] = 'en';
 				break;
 
 			case 'es':
-				$_SESSION['lang'] = 'es_ES';
-				$_SESSION['lang_iso'] = 'es';
+				$_SESSION['current_lang_code'] = 'es_ES';
+				$_SESSION['current_lang_iso'] = 'es';
 				break;
 		}
 

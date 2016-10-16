@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Team\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.5.0-11-02-2016
+ * @version 0.6.0-16-10-2016
  */
 class TeamAdminController extends WController {
 	private $upload_dir;
@@ -186,16 +186,14 @@ class TeamAdminController extends WController {
 	 * @return array WNote
 	 */
 	protected function membersReorder(array $params) {
-		$post_data = WRequest::getAssoc(array('positions'), null, 'POST');
+		if (WRequest::hasDataForURL('admin/team/members-reorder')) {
+			$positions = WRequest::get('positions', null, 'POST');
 
-		if (!in_array(null, $post_data, true)) {
-			foreach ($post_data['positions'] as $id => $position) {
+			foreach ($positions as $id => $position) {
 				$id = intval($id);
 
 				if (!empty($id)) {
-					$position = intval($position);
-
-					$this->model->reorderElement($id, $position);
+					$this->model->reorderElement($id, intval($position));
 				}
 			}
 

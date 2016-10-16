@@ -1,6 +1,14 @@
 <div class="wity-app wity-app-user wity-action-config">
-	<form action="/admin/user/config/" method="post">
+	<form action="/admin/user/config" method="post">
 		<h1>{lang Configuration}</h1>
+
+		<div class="hidden">
+			{lang config_register}
+			{lang config_email_conf}
+			{lang config_summary}
+			{lang config_admin_check}
+			{lang config_keep_users}
+		</div>
 
 		{for $name, $value in $config}
 		<div class="checkbox">
