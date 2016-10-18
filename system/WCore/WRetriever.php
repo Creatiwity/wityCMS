@@ -137,8 +137,9 @@ class WRetriever {
 				$view = $controller->getView();
 
 				// Prepare the view
-				if (method_exists($view, $model['action'])) {
-					$view->{$model['action']}($model['result']);
+				$executable_action = preg_replace('#[^a-z_]#', '', $model['action']);
+				if (method_exists($view, $executable_action)) {
+					$view->$executable_action($model['result']);
 				}
 
 				// Infers template file
