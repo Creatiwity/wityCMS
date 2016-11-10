@@ -1,6 +1,8 @@
 /**
- * WitySlider v1.2.9
- * Copyright 2015, Creatiwity - https://creatiwity.net
+ * witySlider v1.2.10
+ *
+ * Copyright 2016, Creatiwity
+ * https://creatiwity.net
  */
 
 (function (factory) {
@@ -132,7 +134,8 @@
 		}
 
 		Slider.prototype.resize = function() {
-			var globalWidth = this.$element[0].getBoundingClientRect().width, // Fixes jQuery rounding bug
+			var clientRect = this.$element[0].getBoundingClientRect(), // Fixes jQuery rounding bug
+				globalWidth = clientRect.right - clientRect.left,
 				globalHeight,
 				itemWidth,
 				itemHeight,
@@ -142,6 +145,7 @@
 			this.currentScale = this.getScale();
 
 			itemWidth = globalWidth / options.cols;
+			itemWidth -= (parseInt(this.$children.css('padding-left')) + parseInt(this.$children.css('padding-right')));
 
 			if (options.fluid) {
 				globalHeight = globalWidth / (options.width / options.height);
@@ -164,7 +168,7 @@
 				this.reload();
 			} else {
 				globalHeight -= (parseInt(this.$element.css('padding-top')) + parseInt(this.$element.css('padding-bottom')));
-				itemWidth -= (parseInt(this.$children.css('padding-left')) + parseInt(this.$children.css('padding-right')));
+
 				this.$element.height(globalHeight);
 				this.$children.width(itemWidth);
 
@@ -318,6 +322,7 @@
 				this.$bullets.appendTo(this.$element);
 
 				this.pointerStep = this.$bullets.children().outerWidth(true);
+				this.leftBorderWidth = parseInt(this.$bullets.children().css("border-left-width"), 10);
 
 				this.$bullets.on("click", "li", function() {
 					var $this = $(this),
@@ -490,7 +495,7 @@
 				$('body').on('touchend', unbindMove);
 			}
 
-			this.$element.trigger('ws.moved', [0]);
+			this.$element.trigger('ws.moved', [0, 0]);
 		};
 
 		Slider.prototype.left = function(index) {
@@ -571,7 +576,7 @@
 						}
 
 						if (that.$pointer) {
-							that.$pointer.css("margin-left", that.pointerStep * page);
+							that.$pointer.css("margin-left", that.pointerStep * page - that.leftBorderWidth);
 						}
 
 						if (that.options().contentHeight) {
@@ -601,7 +606,7 @@
 								that.ready = true;
 								that.setAutoNext();
 
-								that.$element.trigger('ws.moved', [page]);
+								that.$element.trigger('ws.moved', [parseInt($current.attr("data-wity-slider-index"), 10), page]);
 							}, 20);
 						}, that.options().speed);
 					}, 20);

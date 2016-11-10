@@ -7,7 +7,7 @@
 		"jquery": "jquery-3.1.0/jquery-3.1.0.min",
 		"bootstrap": "bootstrap-3.3.7/js/bootstrap.min",
 		"bootstrap-datepicker": "bootstrap-datepicker-1.6.1/js/bootstrap-datepicker.min",
-		"wityslider": "wityslider-1.2.9/wityslider"
+		"wityslider": "wityslider-1.2.10/wityslider"
 	},
 	"shim": {
 		"bootstrap": ["jquery"],

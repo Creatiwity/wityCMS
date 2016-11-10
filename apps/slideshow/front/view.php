@@ -16,7 +16,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
 class SlideshowView extends WView {
 	public function block($model) {
 		$this->assign('css', '/apps/slideshow/front/css/slideshow.css');
-		$this->assign('css', '/libraries/wityslider-1.2.9/wityslider.css');
+		$this->assign('css', '/libraries/wityslider-1.2.10/wityslider.css');
 		$this->assign('require', 'apps!slideshow/slideshow');
 
 		$this->assign("slides", $model["slides"]);
