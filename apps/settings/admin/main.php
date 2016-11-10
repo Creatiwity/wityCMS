@@ -298,6 +298,45 @@ class SettingsAdminController extends WController {
 
 		$model = $this->translate_files('app', $manifest['name'], $folder);
 
+		// Add App name
+		$new_hashes = array(
+			md5($manifest['name']) => $manifest['name']
+		);
+
+		// Add Front actions
+		if (!empty($manifest['actions'])) {
+			foreach ($manifest['actions'] as $action) {
+				$hash = md5($action['description']);
+				$new_hashes[$hash] = $action['description'];
+			}
+		}
+
+		// Add Admin actions
+		if (!empty($manifest['admin'])) {
+			foreach ($manifest['admin'] as $action) {
+				$hash = md5($action['description']);
+				$new_hashes[$hash] = $action['description'];
+			}
+		}
+
+		foreach ($new_hashes as $hash => $value) {
+			$model['hashes']['admin'][$hash] = $value;
+
+			foreach (WLang::getLangs() as $language) {
+				if (!empty($model['translatables_file']['admin'][$language['id']][$hash])) {
+					$model['translatables']['admin_fields_'.$language['id'].'['.$hash.']'] = $model['translatables_file']['admin'][$language['id']][$hash];
+				}
+			}
+		}
+
+		$model['fields'][] = array(
+			'prefix'        => 'admin',
+			'file'          => 'General',
+			'hash'          => $new_hashes,
+			'keys'          => array_values($new_hashes),
+			'translatables' => array()
+		);
+
 		if (WRequest::getMethod() == 'POST') {
 			$data = WRequest::getAssoc(array('type', 'folder'));
 			$data_translatable = array();
@@ -521,28 +560,6 @@ class SettingsAdminController extends WController {
 
 				array_push($fields, $fileTranslatables);
 			}
-		}
-
-		$name_hash = md5($name);
-		if ($type == 'app' && !isset($hashes[$fileTranslatables['prefix']][$name_hash])) {
-			$hashes['admin'][$name_hash] = $name;
-			$fields[] = array(
-				'prefix'        => 'admin',
-				'file'          => 'General',
-				'hash'          => array($name_hash => $name),
-				'keys'          => array($name),
-				'translatables' => array()
-			);
-
-			foreach ($languages as $language) {
-				if (!empty($translatables_file['admin'][$language['id']][$name_hash])) {
-					$translatables['admin_fields_'.$language['id'].'['.$name_hash.']'] = $translatables_file['admin'][$language['id']][$name_hash];
-				}
-			}
-		}
-
-		if ($type == 'app') {
-			$fileTranslatables['keys'][] = $name;
 		}
 
 		return array(
