@@ -36,7 +36,7 @@ class NewsAdminView extends WView {
 
 	public function newsForm($model) {
 		// JS / CSS
-		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
+		$this->assign('js', '/libraries/ckeditor-4.5.11/ckeditor.js');
 		$this->assign('require', 'apps!news/news-form');
 		$this->assign('require', 'witycms/admin');
 
