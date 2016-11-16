@@ -70,9 +70,11 @@ class WDatabase extends PDO {
 	private function prefixTables($querystring) {
 		if (!empty($this->tablePrefix)) {
 			foreach ($this->tables as $table) {
-				$querystring = preg_replace('#([^a-z0-9_])'.$table.'([^a-z0-9_]|$)#', '$1'.$this->tablePrefix.$table.'$2', $querystring);
+				$querystring = preg_replace('#([^a-z\\\\0-9_])'.$table.'([^a-z0-9_]|$)#', '$1'.$this->tablePrefix.$table.'$2', $querystring);
 			}
 		}
+
+		$querystring = str_replace('\\', '', $querystring);
 
 		return $querystring;
 	}
@@ -180,7 +182,7 @@ class WDatabase extends PDO {
 
 		foreach ($fields as $key) {
 			$data[$key] = isset($data[$key]) ? $data[$key] : '';
-			$prep->bindParam(':'.$key, $data[$key]);
+			$prep->bindParam(':'.str_replace('\\', '', $key), $data[$key]);
 		}
 
 		if ($prep->execute()) {
@@ -217,7 +219,7 @@ class WDatabase extends PDO {
 
 		foreach ($fields as $key) {
 			$data[$key] = isset($data[$key]) ? $data[$key] : '';
-			$prep->bindParam(':'.$key, $data[$key]);
+			$prep->bindParam(':'.str_replace('\\', '', $key), $data[$key]);
 		}
 
 		return $prep->execute();
