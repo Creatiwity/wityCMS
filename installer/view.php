@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package Installer
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 class View {
 	/**

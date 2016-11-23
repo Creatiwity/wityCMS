@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\News\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 class NewsAdminView extends WView {
 	public function __construct() {
@@ -36,7 +36,7 @@ class NewsAdminView extends WView {
 
 	public function newsForm($model) {
 		// JS / CSS
-		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
 		$this->assign('require', 'apps!news/news-form');
 		$this->assign('require', 'witycms/admin');
 

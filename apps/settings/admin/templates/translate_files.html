@@ -8,21 +8,23 @@
 		<input type="hidden" name="folder" value="{$folder}" />
 
 		{for $field in $fields}
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<fieldset>
-					<legend>{$field.file}</legend>
-					{for $hash, $key in $field.hash}
-						<div class="translatable form-group">
-							<label for="{$hash}" class="col-sm-6 control-label text-left">{$key}</label>
-							<div class="col-sm-6">
-								<textarea id="{$hash}" name="{$field.prefix}_fields[{$hash}]" type="text" class="form-control" rows="1" cols="40"></textarea>
+			{if !empty({$field.hash})}
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<fieldset>
+						<legend>{$field.file}</legend>
+						{for $hash, $key in {$field.hash}}
+							<div class="translatable form-group">
+								<label for="{$hash}" class="col-sm-6 control-label text-left">{$key}</label>
+								<div class="col-sm-6">
+									<textarea id="{$hash}" name="{$field.prefix}_fields[{$hash}]" type="text" class="form-control" rows="1" cols="40"></textarea>
+								</div>
 							</div>
-						</div>
-					{/for}
-				</fieldset>
+						{/for}
+					</fieldset>
+				</div>
 			</div>
-		</div>
+			{/if}
 		{/for}
 
 		<button type="submit" class="btn btn-primary">{lang Save}</button>

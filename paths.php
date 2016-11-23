@@ -4,7 +4,7 @@
  *
  * Content Management System for everyone.
  *
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 
 defined('WITYCMS_VERSION') or die('Access denied');

@@ -11,12 +11,12 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Slideshow\Front
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 class SlideshowView extends WView {
 	public function block($model) {
 		$this->assign('css', '/apps/slideshow/front/css/slideshow.css');
-		$this->assign('css', '/libraries/wityslider-1.2.9/wityslider.css');
+		$this->assign('css', '/libraries/wityslider-1.2.10/wityslider.css');
 		$this->assign('require', 'apps!slideshow/slideshow');
 
 		$this->assign("slides", $model["slides"]);

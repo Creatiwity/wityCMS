@@ -16,7 +16,7 @@ include_once APPS_DIR.'page'.DS.'front'.DS.'model.php';
  * @package Apps\Page\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 class PageAdminModel extends PageModel {
 	public function __construct() {

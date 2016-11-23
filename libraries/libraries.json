@@ -4,14 +4,16 @@
 	"paths": {
 		"apps": "witycms/apps.plugin",
 		"themes": "witycms/themes.plugin",
-		"jquery": "jquery-3.1.0/jquery-3.1.0.min",
+		"jquery": "jquery3/jquery-3.1.1.min",
 		"bootstrap": "bootstrap-3.3.7/js/bootstrap.min",
-		"bootstrap-datepicker": "bootstrap-datepicker-1.6.1/js/bootstrap-datepicker.min",
-		"wityslider": "wityslider-1.2.9/wityslider"
+		"bootstrap-datepicker": "bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min",
+		"bootstrap-datepicker-localized": "bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.{if {$wity_lang_iso} == 'en'}en-GB{else}{$wity_lang_iso}{/if}.min",
+		"wityslider": "wityslider-1.2.10/wityslider"
 	},
 	"shim": {
 		"bootstrap": ["jquery"],
-		"bootstrap-datepicker": ["bootstrap"]
+		"bootstrap-datepicker": ["bootstrap"],
+		"bootstrap-datepicker-localized": ["bootstrap-datepicker"],
 	},
 	"waitSeconds": 15
 }

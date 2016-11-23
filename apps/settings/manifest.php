@@ -4,10 +4,10 @@
 	<!-- Application name -->
 	<name>Settings</name>
 
-	<version>0.6.0-03-09-2016</version>
+	<version>0.6.1</version>
 
 	<!-- Last update date -->
-	<date>28-08-2016</date>
+	<date>20-11-2016</date>
 
 	<!-- Admin actions -->
 	<admin>

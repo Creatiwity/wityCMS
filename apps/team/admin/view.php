@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package Apps\Team\Admin
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Julien Blatecky <julien.blatecky@creatiwity.net>
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 class TeamAdminView extends WView {
 	public function members(array $model) {
@@ -20,7 +20,7 @@ class TeamAdminView extends WView {
 	}
 
 	private function memberForm(array $model) {
-		$this->assign('js', '/libraries/ckeditor-4.4.7/ckeditor.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
 		$this->assign('require', 'witycms/admin');
 
 		$default = array(
