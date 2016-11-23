@@ -11,7 +11,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
  * @author Matthieu Raymond <matthieu.raymond@creatiwity.net>
- * @version 0.6.0-16-10-2016
+ * @version 0.6.1-23-11-2016
  */
 class WDatabase extends PDO {
 	/**
