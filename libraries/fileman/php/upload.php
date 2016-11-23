@@ -26,6 +26,8 @@ include 'functions.inc.php';
 verifyAction('UPLOAD');
 checkAccess('UPLOAD');
 
+
+$isAjax = (isset($_POST['method']) && $_POST['method'] == 'ajax');
 $path = trim(empty($_POST['d'])?getFilesPath():$_POST['d']);
 verifyPath($path);
 $res = '';
@@ -36,14 +38,21 @@ if(is_dir(fixPath($path))){
       $filename = $_FILES['files']['name'][$k];
       $filename = RoxyFile::MakeUniqueFilename(fixPath($path), $filename);
       $filePath = fixPath($path).'/'.$filename;
-      if(!RoxyFile::CanUploadFile($filename))
+      $isUploaded = true;
+      if(!RoxyFile::CanUploadFile($filename)){
         $errorsExt[] = $filename;
-      elseif(!move_uploaded_file($v, $filePath))
+        $isUploaded = false;
+      }
+      elseif(!move_uploaded_file($v, $filePath)){
          $errors[] = $filename; 
-      if(is_file($filePath))
+         $isUploaded = false;
+      }
+      if(is_file($filePath)){
          @chmod ($filePath, octdec(FILEPERMISSIONS));
-      if(RoxyFile::IsImage($filename) && (intval(MAX_IMAGE_WIDTH) > 0 || intval(MAX_IMAGE_HEIGHT) > 0))
+      }
+      if($isUploaded && RoxyFile::IsImage($filename) && (intval(MAX_IMAGE_WIDTH) > 0 || intval(MAX_IMAGE_HEIGHT) > 0)){
         RoxyImage::Resize($filePath, $filePath, intval(MAX_IMAGE_WIDTH), intval(MAX_IMAGE_HEIGHT));
+      }
     }
     if($errors && $errorsExt)
       $res = getSuccessRes(t('E_UploadNotAll').' '.t('E_FileExtensionForbidden'));
@@ -60,7 +69,15 @@ if(is_dir(fixPath($path))){
 else
   $res = getErrorRes(t('E_UploadInvalidPath'));
 
-?>
+if($isAjax){
+  if($errors || $errorsExt)
+    $res = getErrorRes(t('E_UploadNotAll'));
+  echo $res;
+}
+else{
+  echo '
 <script>
-parent.fileUploaded(<?php echo $res;?>);
-</script>
+parent.fileUploaded('.$res.');
+</script>';
+}
+?>

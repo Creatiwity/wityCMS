@@ -26,7 +26,7 @@ class SlideshowAdminView extends WView {
 	}
 
 	private function slide_form($model) {
-		$this->assign('js', '/libraries/ckeditor-4.5.11/ckeditor.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
 		$this->assign('require', 'witycms/admin');
 
 		$default = array(

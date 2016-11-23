@@ -2,7 +2,7 @@
 session_name('wsid');
 session_start();
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -79,7 +79,7 @@ function verifyPath($path){
 function fixPath($path){
   $path = $_SERVER['DOCUMENT_ROOT'].'/'.$path;
   $path = str_replace('\\', '/', $path);
-  $path = str_replace('//', '/', $path);
+  $path = RoxyFile::FixPath($path);
   return $path;
 }
 function gerResultStr($type, $str = ''){
@@ -93,10 +93,12 @@ function getErrorRes($str = ''){
 }
 function getFilesPath(){
   $ret = (isset($_SESSION[SESSION_PATH_KEY]) && $_SESSION[SESSION_PATH_KEY] != ''?$_SESSION[SESSION_PATH_KEY]:FILES_ROOT);
-
   if(!$ret){
     $ret = RoxyFile::FixPath(BASE_PATH.'/Uploads');
-    $ret = str_replace(RoxyFile::FixPath($_SERVER['DOCUMENT_ROOT']), '', $ret);
+    $tmp = $_SERVER['DOCUMENT_ROOT'];
+    if(mb_substr($tmp, -1) == '/' || mb_substr($tmp, -1) == '\\')
+      $tmp = mb_substr($tmp, 0, -1);
+    $ret = str_replace(RoxyFile::FixPath($tmp), '', $ret);
   }
   return $ret;
 }
@@ -112,7 +114,7 @@ function listDirectory($path){
       closedir($d);
     }
   }
-  
+
   return $ret;
 }
 class RoxyFile{
@@ -253,8 +255,12 @@ class RoxyFile{
       $ext = '';
       $name = $filename;
     }
-    $str = mb_ereg_replace("[^ a-zA-Z\\_\\d\\.]|\\s", $sep, $name);
-    $str = mb_ereg_replace("$sep+", $sep, $str).'.'.$ext;
+    if(mb_strlen($name) > 32)
+      $name = mb_substr($name, 0, 32);
+    $str = str_replace('.php', '', $str);
+    $str = mb_ereg_replace("[^\\w]", $sep, $name);
+
+    $str = mb_ereg_replace("$sep+", $sep, $str).($ext?'.'.$ext:'');
 
     return $str;
   }
@@ -268,8 +274,8 @@ class RoxyFile{
   static function GetExtension($filename) {
     $ext = '';
 
-    if(mb_strrpos($filename,'.') !== false)
-      $ext = mb_substr($filename,mb_strrpos($filename,'.') + 1);
+    if(mb_strrpos($filename, '.') !== false)
+      $ext = mb_substr($filename, mb_strrpos($filename, '.') + 1);
 
     return strtolower($ext);
   }
@@ -285,7 +291,7 @@ class RoxyFile{
     $tmp = mb_strpos($filename, '?');
     if($tmp !== false)
         $filename = mb_substr ($filename, 0, $tmp);
-    $dotPos = mb_strrpos($filename,'.');
+    $dotPos = mb_strrpos($filename, '.');
     if($dotPos !== false)
       $name = mb_substr($filename, 0, $dotPos);
     else
@@ -318,7 +324,8 @@ class RoxyFile{
     $dir = self::FixPath($dir.'/');
     $ext = self::GetExtension($filename);
     $name = self::GetName($filename);
-    $name = mb_ereg_replace(' - Copy \\d+$', '', $name);
+    $name = self::CleanupFilename($name);
+    $name = mb_ereg_replace(' \\- Copy \\d+$', '', $name);
     if($ext)
       $ext = '.'.$ext;
     if(!$name)
@@ -326,7 +333,7 @@ class RoxyFile{
 
     $i = 0;
     do{
-      $temp = ($i? $name." - Copy $i".$ext: $name.$ext);
+      $temp = ($i > 0? $name." - Copy $i": $name).$ext;
       $i++;
     }while(file_exists($dir.$temp));
 
@@ -358,7 +365,8 @@ class RoxyFile{
 class RoxyImage{
   public static function GetImage($path){
     $img = null;
-    switch(RoxyFile::GetExtension(basename($path))){
+    $ext = RoxyFile::GetExtension(basename($path));
+    switch($ext){
       case 'png':
         $img = imagecreatefrompng($path);
         break;
@@ -368,6 +376,9 @@ class RoxyImage{
       default:
         $img = imagecreatefromjpeg($path);
     }
+
+
+
     return $img;
   }
   public static function OutputImage($img, $type, $destination = '', $quality = 90){
@@ -384,6 +395,18 @@ class RoxyImage{
         imagejpeg($img, $destination, $quality);
     }
   }
+
+  public static function SetAlpha($img, $path) {
+  	$ext = RoxyFile::GetExtension(basename($path));
+  	if($ext == "gif" || $ext == "png"){
+	    imagecolortransparent($img, imagecolorallocatealpha($img, 0, 0, 0, 127));
+	    imagealphablending($img, false);
+	    imagesavealpha($img, true);
+	  }
+
+	  return $img;
+  }
+
   public static function Resize($source, $destination, $width = '150',$height = 0, $quality = 90) {
     $tmp = getimagesize($source);
     $w = $tmp[0];
@@ -395,7 +418,7 @@ class RoxyImage{
         self::OutputImage($source, RoxyFile::GetExtension(basename($source)), $destination, $quality);
       return;
     }
-    
+
     $newWidth = $width;
     $newHeight = floor($newWidth / $r);
     if(($height > 0 && $newHeight > $height) || !$width){
@@ -405,6 +428,9 @@ class RoxyImage{
 
     $thumbImg = imagecreatetruecolor($newWidth, $newHeight);
     $img = self::GetImage($source);
+
+    $thumbImg = self::SetAlpha($thumbImg, $source);
+
     imagecopyresampled($thumbImg, $img, 0, 0, 0, 0, $newWidth, $newHeight, $w, $h);
 
     self::OutputImage($thumbImg, RoxyFile::GetExtension(basename($source)), $destination, $quality);
@@ -442,6 +468,9 @@ class RoxyImage{
   public static function Crop($source, $destination, $x, $y, $cropWidth, $cropHeight, $width, $height, $quality = 90) {
     $thumbImg = imagecreatetruecolor($width, $height);
     $img = self::GetImage($source);
+
+    $thumbImg = self::SetAlpha($thumbImg, $source);
+
     imagecopyresampled($thumbImg, $img, 0, 0, $x, $y, $width, $height, $cropWidth, $cropHeight);
 
     self::OutputImage($thumbImg, RoxyFile::GetExtension(basename($source)), $destination, $quality);

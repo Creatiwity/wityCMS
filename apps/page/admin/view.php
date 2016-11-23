@@ -30,7 +30,7 @@ class PageAdminView extends WView {
 		// JS & CSS
 		$this->assign('require', 'witycms/admin');
 		$this->assign('require', 'apps!page/form');
-		$this->assign('js', '/libraries/ckeditor-4.5.11/ckeditor.js');
+		$this->assign('js', '/libraries/ckeditor/ckeditor.js');
 
 		$this->assign('id', $model['id']);
 		$this->assign('pages', $model['pages']);

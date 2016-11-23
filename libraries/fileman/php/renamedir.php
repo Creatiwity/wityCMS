@@ -26,8 +26,8 @@ include 'functions.inc.php';
 verifyAction('RENAMEDIR');
 checkAccess('RENAMEDIR');
 
-$path = trim(empty($_GET['d'])?'':$_GET['d']);
-$name = trim(empty($_GET['n'])?'':$_GET['n']);
+$path = trim(empty($_POST['d'])? '': $_POST['d']);
+$name = trim(empty($_POST['n'])? '': $_POST['n']);
 verifyPath($path);
 
 if(is_dir(fixPath($path))){

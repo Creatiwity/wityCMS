@@ -26,7 +26,7 @@ include 'functions.inc.php';
 verifyAction('DELETEFILE');
 checkAccess('DELETEFILE');
 
-$path = trim($_GET['f']);
+$path = trim($_POST['f']);
 verifyPath($path);
 
 if(is_file(fixPath($path))){

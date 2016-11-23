@@ -26,8 +26,8 @@ include 'functions.inc.php';
 verifyAction('COPYFILE');
 checkAccess('COPYFILE');
 
-$path = trim(empty($_GET['f'])?'':$_GET['f']);
-$newPath = trim(empty($_GET['n'])?'':$_GET['n']);
+$path = trim(empty($_POST['f'])?'':$_POST['f']);
+$newPath = trim(empty($_POST['n'])?'':$_POST['n']);
 if(!$newPath)
   $newPath = getFilesPath();
 

@@ -26,8 +26,8 @@ include 'functions.inc.php';
 verifyAction('RENAMEFILE');
 checkAccess('RENAMEFILE');
 
-$path = trim(empty($_GET['f'])?'':$_GET['f']);
-$name = trim(empty($_GET['n'])?'':$_GET['n']);
+$path = trim(empty($_POST['f'])?'':$_POST['f']);
+$name = trim(empty($_POST['n'])?'':$_POST['n']);
 verifyPath($path);
 
 if(is_file(fixPath($path))){

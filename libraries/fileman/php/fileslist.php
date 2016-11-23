@@ -26,8 +26,8 @@ include 'functions.inc.php';
 verifyAction('FILESLIST');
 checkAccess('FILESLIST');
 
-$path = (empty($_GET['d'])? getFilesPath(): $_GET['d']);
-$type = (empty($_GET['type'])?'':strtolower($_GET['type']));
+$path = (empty($_POST['d'])? getFilesPath(): $_POST['d']);
+$type = (empty($_POST['type'])?'':strtolower($_POST['type']));
 if($type != 'image' && $type != 'flash')
   $type = '';
 verifyPath($path);
@@ -42,12 +42,14 @@ foreach ($files as $f){
     continue;
   $size = filesize(fixPath($fullPath));
   $time = filemtime(fixPath($fullPath));
-  $tmp = @getimagesize(fixPath($fullPath));
   $w = 0;
   $h = 0;
-  if($tmp){
-    $w = $tmp[0];
-    $h = $tmp[1];
+  if(RoxyFile::IsImage($f)){
+    $tmp = @getimagesize(fixPath($fullPath));
+    if($tmp){
+      $w = $tmp[0];
+      $h = $tmp[1];
+    }
   }
   $str .= '{"p":"'.mb_ereg_replace('"', '\\"', $fullPath).'","s":"'.$size.'","t":"'.$time.'","w":"'.$w.'","h":"'.$h.'"},';
 }
