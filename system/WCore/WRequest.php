@@ -235,9 +235,11 @@ class WRequest {
 			}
 		} else {
 			// Prevent XSS abuse
-			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#', function($matches) {
+			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#i', function($matches) {
+				$tag = strtolower($matches[1]);
+
 				// Allowed tags
-				if (in_array($matches[1], array(
+				if (in_array($tag, array(
 					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'button', 'img', 'br',
 					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 'hr',
 					'audio', 'video', 'source', 'iframe',
@@ -247,7 +249,7 @@ class WRequest {
 					'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
 					'section', 'article', 'aside'))) {
 					return $matches[0];
-				} else if (in_array($matches[1], array('script', 'link'))) {
+				} else if (in_array($tag, array('script', 'link'))) {
 					return '';
 				} else {
 					return htmlentities($matches[0]);
