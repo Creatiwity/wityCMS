@@ -1,9 +1,9 @@
 <div class="wity-app wity-app-search wity-action-form">
-	<h1>{lang Research} {if !empty({$query})}<strong>"{$query}"</strong>{/if}</h1>
+	<h1>{lang Research} {if !empty({$query})}<strong>"{!$query!}"</strong>{/if}</h1>
 
 	<form class="search-form" action="/search" method="get">
 		<p class="input-group research">
-			<input class="form-control" type="text" name="query" placeholder="{lang Search}" value="{if !empty({$query})}{$query}{/if}" />
+			<input class="form-control" type="text" name="query" placeholder="{lang Search}" value="{if !empty({$query})}{!$query!}{/if}" />
 			<span class="input-group-btn">
 				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
 			</span>

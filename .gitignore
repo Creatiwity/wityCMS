@@ -9,3 +9,6 @@ upload/[^.]*/
 
 # macOS
 .DS_Store
+
+# HTML Purifier
+helpers/htmlpurifier/HTMLPurifier/DefinitionCache/Serializer/*/
