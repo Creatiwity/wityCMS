@@ -4,7 +4,7 @@
 	<!-- Application name -->
 	<name>Slideshow</name>
 
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 
 	<!-- Last update date -->
 	<date>07-02-2015</date>

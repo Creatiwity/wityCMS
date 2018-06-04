@@ -1,5 +1,5 @@
 -- wityCMS Database Dump
--- Version: 0.6.1-03-09-2016
+-- Version: 0.6.2-04-06-2018
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";

@@ -4,7 +4,7 @@
 	<!-- Application name -->
 	<name>Page</name>
 
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 
 	<!-- Last update date -->
 	<date>23-03-2015</date>
