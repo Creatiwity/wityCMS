@@ -10,7 +10,7 @@ defined('WITYCMS_VERSION') or die('Access denied');
  *
  * @package System\WCore
  * @author Johan Dufau <johan.dufau@creatiwity.net>
- * @version 0.6.1-23-11-2016
+ * @version 0.6.2-04-06-2018
  */
 class WRequest {
 	 /**
@@ -234,25 +234,8 @@ class WRequest {
 				$variable[$key] = self::filter($val);
 			}
 		} else {
-			// Prevent XSS abuse
-			$variable = preg_replace_callback('#</?([a-z]+)(\s.*)?/?>#', function($matches) {
-				// Allowed tags
-				if (in_array($matches[1], array(
-					'b', 'strong', 'small', 'i', 'em', 'u', 's', 'sub', 'sup', 'a', 'button', 'img', 'br',
-					'font', 'span', 'blockquote', 'q', 'abbr', 'address', 'code', 'hr',
-					'audio', 'video', 'source', 'iframe',
-					'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-					'ul', 'ol', 'li', 'dl', 'dt', 'dd',
-					'div', 'p', 'var',
-					'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'colgroup', 'col',
-					'section', 'article', 'aside'))) {
-					return $matches[0];
-				} else if (in_array($matches[1], array('script', 'link'))) {
-					return '';
-				} else {
-					return htmlentities($matches[0]);
-				}
-			}, $variable);
+			$htmlPurifier = WHelper::load('htmlpurifier');
+			$variable = $htmlPurifier->purify($variable);
 		}
 
 		return $variable;

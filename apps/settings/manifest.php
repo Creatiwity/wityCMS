@@ -4,7 +4,7 @@
 	<!-- Application name -->
 	<name>Settings</name>
 
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 
 	<!-- Last update date -->
 	<date>20-11-2016</date>
