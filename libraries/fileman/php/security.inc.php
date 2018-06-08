@@ -20,10 +20,17 @@
 
   Contact: Lyubomir Arsov, liubo (at) web-lobby.com
 */
-function checkAccess($action){
-  if(!session_id()) {
-    session_name('wsid');
-    session_start();
-  }
+
+function checkAccess($action) {
+	if (!session_id()) {
+		session_name('wsid');
+		session_start();
+	}
+
+	// Check that use is admin
+	if (empty($_SESSION['access'])) {
+		exit;
+	}
 }
+
 ?>
