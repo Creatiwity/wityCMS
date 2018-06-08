@@ -1,5 +1,5 @@
 {
-	"file": "class.phpmailer.php",
+	"file": "class.phpmailer",
 	"class": "PHPMailer",
 	"params": []
 }

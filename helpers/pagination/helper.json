@@ -1,5 +1,5 @@
 {
-	"file": "pagination.php",
+	"file": "pagination",
 	"class": "Pagination",
 	"params": ["total", "limit", "currentPage", "urlPattern"]
 }

@@ -1,5 +1,5 @@
 {
-	"file": "HTMLPurifier.includes.php",
+	"file": "HTMLPurifier.includes",
 	"class": "HTMLPurifier",
 	"params": []
 }

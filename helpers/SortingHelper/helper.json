@@ -1,5 +1,5 @@
 {
-	"file": "SortingHelper.php",
+	"file": "SortingHelper",
 	"class": "SortingHelper",
 	"params": ["fields"]
 }

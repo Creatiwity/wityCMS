@@ -1,5 +1,5 @@
 {
-	"file": "fMailbox.php",
+	"file": "fMailbox",
 	"class": "fMailbox",
 	"params": ["type", "host", "username", "password"]
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * WHelper.php
  */
@@ -46,8 +46,20 @@ class WHelper {
 				'params_expected' => count($helper['params'])
 			);
 
+			if (empty($helper['class']) || empty($helper['file'])) {
+				throw new Exception("Helper ".$helper_name.": invalid helper.json file.");
+			}
+
+			// Clean file
+			$helper['file'] = str_replace('/', '', $helper['file']);
+
+			$helper_file = HELPERS_DIR.$helper_name.DS.$helper['file'].'.php';
+			if (!file_exists($helper_file)) {
+				throw new Exception("Helper ".$helper_name.": impossible to find the class file.");
+			}
+
 			// Include helper main file containing the class to instantiate
-			include_once HELPERS_DIR.$helper_name.DS.$helper['file'];
+			include_once $helper_file;
 
 			// Check helper class existency
 			if (!class_exists($helper['class'])) {
