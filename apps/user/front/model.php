@@ -367,16 +367,19 @@ class UserModel {
 	 * @param string $body
 	 */
 	public function sendEmail($to, $subject, $body) {
-		$mail = WHelper::load('phpmailer');
-		$mail->CharSet = 'utf-8';
-		$mail->From = WConfig::get('config.email');
-		$mail->FromName = WConfig::get('config.site_title');
-		$mail->Subject = $subject;
-		$mail->Body = $body;
-		$mail->IsHTML(true);
-		$mail->AddAddress($to);
-		$mail->Send();
-		unset($mail);
+		WRetriever::getModel('mail', array(
+			'origin' => array(
+				'app' => 'user',
+				'action' => '',
+				'parameters' => array()
+			),
+			'defaults' => array(
+				'from'    => array(WConfig::get('config.email'), WConfig::get('config.site_title')),
+				'to'      => $to,
+				'subject' => $subject,
+				'body'    => $body
+			)
+		));
 	}
 
 	/**
