@@ -174,6 +174,36 @@ class MailController extends WController {
 		$this->phpmailer->CharSet = 'utf-8';
 		$this->phpmailer->isHTML(true);
 
+		if (!empty(self::$configuration['hostname'])) {
+			$this->phpmailer->Hostname = self::$configuration['hostname'];
+		}
+
+		if (isset(self::$configuration['useSmtp']) && self::$configuration['useSmtp'] == '1') {
+			$this->phpmailer->Mailer = 'smtp';
+			$this->phpmailer->SMTPKeepAlive = true;
+
+			if (!empty(self::$configuration['smtpHost'])) {
+				$this->phpmailer->Host = self::$configuration['smtpHost'];
+			}
+
+			if (!empty(self::$configuration['smtpPort'])) {
+				$this->phpmailer->Port = self::$configuration['smtpPort'];
+
+				if (!empty(self::$configuration['smtpSecure'])) {
+					$this->phpmailer->SMTPSecure = self::$configuration['smtpSecure'];
+				}
+			}
+
+			if (!empty(self::$configuration['smtpLogin'])) {
+				$this->phpmailer->SMTPAuth = true;
+				$this->phpmailer->Username = self::$configuration['smtpLogin'];
+
+				if (!empty(self::$configuration['smtpPassword'])) {
+					$this->phpmailer->Password = self::$configuration['smtpPassword'];
+				}
+			}
+		}
+
 		WTemplateCompiler::registerCompiler('mail_action', array('MailController', 'compile_mail_action'));
 
 		// Stores hashes relative to a particular email (same order as $params['specifics'])
