@@ -133,17 +133,18 @@ class ContactController extends WController {
 							'action' => 'form',
 							'parameters' => array()
 						),
-						'defaults' => array(),
+						'defaults' => array(
+							'from' => array($config['site_from_email'], $config['site_from_name']),
+						),
 						'specifics' => array(
 							array(
-								'from' => array($data['from_email'], $data['from_name']),
+								'replyTo' => array($data['from_email'], $data['from_name']),
 								'to' => $data['to'],
 								'subject' => WLang::get('mail_for_admin_subject', WConfig::get('config.site_title'), $data['email_subject']),
 								'body' => $email_message,
 								'attachments' => !empty($data['attachment']) ? array($data['attachment']) : array()
 							),
 							array(
-								'from' => array($config['site_from_email'], $config['site_from_name']),
 								'to' => array($data['from_email'], $data['from_name']),
 								'subject' => WLang::get('copy_subject', WConfig::get('config.site_title')),
 								'body' => WLang::get('auto_reply', $mail_params)
