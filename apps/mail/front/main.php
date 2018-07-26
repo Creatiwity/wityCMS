@@ -305,6 +305,7 @@ class MailController extends WController {
 			$this->addAddressesInField($params['to'], 'to');
 			$this->addAddressesInField($params['cc'], 'cc');
 			$this->addAddressesInField($params['bcc'], 'bcc');
+			$this->addAddressesInField($params['replyTo'], 'replyTo');
 		}
 
 		if (!empty($params['attachments']) && is_array($params['attachments'])) {
