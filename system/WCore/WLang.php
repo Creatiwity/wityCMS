@@ -453,7 +453,9 @@ class WLang {
 	public static function compile_lang($args) {
 		if (!empty($args)) {
 			// Replace the template variables in the string
-			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			$args = WTemplateParser::replaceNodes($args, function($var) {
+				return '\".'.WTemplateCompiler::parseVar($var).'.\"';
+			});
 
 			$data = explode('|', $args);
 			$id = array_shift($data);
