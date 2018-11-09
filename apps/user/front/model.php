@@ -74,6 +74,53 @@ class UserModel {
 		}
 	}
 
+	private function getListFilterData(array $filters) {
+		$cond = 'WHERE 1 = 1';
+		$params = [];
+
+		if (!empty($filters)) {
+			$allowed = array('nickname', 'email', 'firstname', 'lastname');
+			foreach ($filters as $name => $value) {
+				if (!in_array($name, $allowed) || empty($value)) {
+					continue;
+				}
+
+				if (strpos($value, '%') === false) {
+					$value = '%'.$value.'%';
+				}
+
+				$cond .= ' AND '.$name.' LIKE :'.$name;
+				$params[] = array(
+					'name' => $name,
+					'type' => PDO::PARAM_STR,
+					'value' => $value
+				);
+			}
+
+			if (isset($filters['valid'])) {
+				$cond .= ' AND valid = :valid';
+				$params[] = array(
+					'name' => 'valid',
+					'type' => PDO::PARAM_INT,
+					'value' => $filters['valid']
+				);
+			} else {
+				$cond .= ' AND valid = 1';
+			}
+
+			if (!empty($filters['groupe'])) {
+				$cond .= ' AND groupe = :groupe';
+				$params[] = array(
+					'name' => 'groupe',
+					'type' => PDO::PARAM_INT,
+					'value' => $filters['groupe']
+				);
+			}
+		}
+
+		return array('cond' => $cond, 'params' => $params);
+	}
+
 	/**
 	 * Counts the users in the database.
 	 *
@@ -86,36 +133,20 @@ class UserModel {
 				SELECT COUNT(*) FROM users
 			');
 		} else {
-			$cond = '';
-			$allowed = array('nickname', 'email', 'firstname', 'lastname');
-			foreach ($filters as $name => $value) {
-				if (in_array($name, $allowed)) {
-					if (strpos($value, '%') === false) {
-						$value = '%'.$value.'%';
-					}
-					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
-				}
-			}
-
-			if (isset($filters['valid'])) {
-				$cond .= 'valid = '.intval($filters['valid']).' AND ';
-			} else {
-				$cond .= 'valid = 1 AND ';
-			}
-
-			if (!empty($filters['groupe'])) {
-				$cond = 'LEFT JOIN users_groups
-				ON groupe = users_groups.id
-				WHERE '.$cond.'groupe = '.intval($filters['groupe']);
-			} else if (!empty($cond)) {
-				$cond = 'WHERE '.substr($cond, 0, -5);
-			}
+			// Add filters
+			$filterData = $this->getListFilterData($filters);
 
 			$prep = $this->db->prepare('
 				SELECT COUNT(*)
 				FROM users
-				'.$cond
+				LEFT JOIN users_groups
+				ON groupe = users_groups.id
+				'.$filterData['cond']
 			);
+
+			foreach ($filterData['params'] as $key => $param) {
+				$prep->bindParam(':'.$param['name'], $param['value'], $param['type']);
+			}
 		}
 
 		$prep->execute();
@@ -139,32 +170,7 @@ class UserModel {
 		}
 
 		// Add filters
-		$cond = '';
-		if (!empty($filters)) {
-			$allowed = array('nickname', 'email', 'firstname', 'lastname');
-			foreach ($filters as $name => $value) {
-				if (in_array($name, $allowed)) {
-					if (strpos($value, '%') === false) {
-						$value = '%'.$value.'%';
-					}
-					$cond .= $name." LIKE ".$this->db->quote($value)." AND ";
-				}
-			}
-
-			if (isset($filters['valid'])) {
-				$cond .= 'valid = '.intval($filters['valid']).' AND ';
-			} else {
-				$cond .= 'valid = 1 AND ';
-			}
-
-			if (!empty($filters['groupe'])) {
-				$cond .= 'groupe = '.intval($filters['groupe']).' AND ';
-			}
-
-			if (!empty($cond)) {
-				$cond = 'WHERE '.substr($cond, 0, -5);
-			}
-		}
+		$filterData = $this->getListFilterData($filters);
 
 		$prep = $this->db->prepare('
 			SELECT users.id, nickname, email, firstname, lastname, country, lang, groupe,
@@ -172,12 +178,20 @@ class UserModel {
 			FROM users
 			LEFT JOIN users_groups
 			ON groupe = users_groups.id
-			'.$cond.'
+			'.$filterData['cond'].'
 			ORDER BY users.'.$order.' '.$sens.'
 			'.($number > 0 ? 'LIMIT :start, :number' : '')
 		);
-		$prep->bindParam(':start', $from, PDO::PARAM_INT);
-		$prep->bindParam(':number', $number, PDO::PARAM_INT);
+
+		foreach ($filterData['params'] as $param) {
+			$prep->bindParam(':'.$param['name'], $param['value'], $param['type']);
+		}
+
+		if ($number > 0) {
+			$prep->bindParam(':start', $from, PDO::PARAM_INT);
+			$prep->bindParam(':number', $number, PDO::PARAM_INT);
+		}
+
 		$prep->execute();
 
 		return $prep->fetchAll(PDO::FETCH_ASSOC);
