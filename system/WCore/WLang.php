@@ -454,7 +454,7 @@ class WLang {
 		if (!empty($args)) {
 			// Replace the template variables in the string
 			$args = WTemplateParser::replaceNodes($args, function($var) {
-				return '\".'.WTemplateCompiler::parseVar($var).'.\"';
+				return '".'.WTemplateCompiler::parseVar($var).'."';
 			});
 
 			$data = explode('|', $args);
