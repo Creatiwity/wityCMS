@@ -40,7 +40,8 @@ require(['jquery'], function($) {
 				data,
 				$inputFile = $form.find('.upload-document-input'),
 				processData = true,
-				contentType = 'application/x-www-form-urlencoded';
+				contentType = 'application/x-www-form-urlencoded',
+				dataType = 'json';
 
 			if (!window.FormData && $inputFile.val()) {
 				// FormData not supported
@@ -64,31 +65,14 @@ require(['jquery'], function($) {
 				data: data,
 				processData: processData,
 				contentType: contentType,
+				dataType: dataType,
 				success: function(response) {
-					var jResponse;
-
 					$button.button('reset');
 					$form.find(':input').attr('disabled', false);
 
-					try {
-						jResponse = $.parseJSON(response);
-					} catch(e) {
-						// Debug code
-						// $('body').prepend('<pre>' + response + '</pre>');
-						setNote($form.parent(), {
-							'app': 'contact',
-							'notes': [{
-								level: 'danger',
-								code: 'unknown_error',
-								message: 'An unknown error occurred.'
-							}]
-						});
-						return;
-					}
+					setNote($form.parent(), response);
 
-					setNote($form.parent(), jResponse);
-
-					if (jResponse && jResponse.result && jResponse.result.code === 'email_sent') {
+					if (response && response.result && response.result.code === 'email_sent') {
 						$form.remove();
 					}
 				}
