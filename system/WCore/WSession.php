@@ -321,13 +321,19 @@ class WSession {
 	 * @return string Either an ipv4 or an ipv6 address
 	 */
 	public static function getIP() {
-		if ($ip = $_SERVER['HTTP_CLIENT_IP']) {}
-		else if ($ip = $_SERVER['HTTP_X_FORWARDED_FOR']) {}
-		else if ($ip = $_SERVER['HTTP_X_FORWARDED']) {}
-		else if ($ip = $_SERVER['HTTP_FORWARDED_FOR']) {}
-		else if ($ip = $_SERVER['HTTP_FORWARDED']) {}
-		else if ($ip = $_SERVER['HTTP_REMOTE_ADDR']) {}
-		else {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else if (!empty($_SERVER['HTTP_X_FORWARDED'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED'];
+		} else if (!empty($_SERVER['HTTP_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_FORWARDED_FOR'];
+		} else if (!empty($_SERVER['HTTP_FORWARDED'])) {
+			$ip = $_SERVER['HTTP_FORWARDED'];
+		} else if (!empty($_SERVER['HTTP_REMOTE_ADDR'])) {
+			$ip = $_SERVER['HTTP_REMOTE_ADDR'];
+		} else {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		}
 
