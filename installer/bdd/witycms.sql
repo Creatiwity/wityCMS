@@ -176,7 +176,6 @@ CREATE TABLE IF NOT EXISTS `prefix_users_groups` (
 DROP TABLE IF EXISTS `prefix_contact`;
 CREATE TABLE IF NOT EXISTS `prefix_contact` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `hash` varchar(130) NOT NULL,
   `from` varchar(300) NOT NULL,
   `from_id` mediumint(5) DEFAULT NULL,
   `to` text NOT NULL,
