@@ -358,8 +358,9 @@ class MailController extends WController {
 			$this->phpmailer->msgHTML(self::$tpl->parseString($params['body']));
 		}
 
-		if (!$this->phpmailer->send()) {
-			// TODO Change WNote::error handler and translate it
+		try {
+			$this->phpmailer->send();
+		} catch (Exception $e) {
 			WNote::error('mail_send_fail', 'mail_send_fail: '.$this->phpmailer->ErrorInfo, 'email, log');
 			$success = false;
 		}
