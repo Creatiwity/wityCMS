@@ -257,7 +257,13 @@ class WNote {
 </ul>
 <p><em>WityNote</em></p>";
 			$mail->IsHTML(true);
-			$mail->Send();
+
+			try {
+				$mail->Send();
+			} catch (Exception $e) {
+				// Do nothing
+			}
+			
 			unset($mail);
 		}
 	}

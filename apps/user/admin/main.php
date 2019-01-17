@@ -322,7 +322,13 @@ class UserAdminController extends WController {
 
 		$mail->IsHTML(true);
 		$mail->AddAddress($email);
-		$mail->Send();
+
+		try {
+			$mail->Send();
+		} catch (Exception $e) {
+			// Do nothing
+		}
+		
 		unset($mail);
 	}
 
