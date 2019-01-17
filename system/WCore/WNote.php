@@ -5,6 +5,11 @@
 
 defined('WITYCMS_VERSION') or die('Access denied');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once VENDOR_DIR.'autoload.php';
+
 /**
  * WNote manages all notes : stores, displays, ...
  *
@@ -232,7 +237,7 @@ class WNote {
 	public static function handle_email(array $note) {
 		$email = WConfig::get('config.email');
 		if (!empty($email)) {
-			$mail = WHelper::load('phpmailer');
+			$mail = new PHPMailer(true);
 			$mail->CharSet = 'utf-8';
 			$mail->From = $email;
 			$mail->FromName = WConfig::get('config.site_title');

@@ -5,6 +5,11 @@
 
 defined('WITYCMS_VERSION') or die('Access denied');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once VENDOR_DIR.'autoload.php';
+
 /**
  * MailController is the Front Controller of the Mail Application
  *
@@ -170,7 +175,7 @@ class MailController extends WController {
 			$params['origin']['parameters']
 		);
 
-		$this->phpmailer = WHelper::load("phpmailer");
+		$this->phpmailer = new PHPMailer(true);
 		$this->phpmailer->CharSet = 'utf-8';
 		$this->phpmailer->isHTML(true);
 
@@ -220,6 +225,7 @@ class MailController extends WController {
 							'to' => '',
 							'cc' => '',
 							'bcc' => '',
+							'replyTo' => '',
 							'attachments' => array(),
 							'subject' => '',
 							'body' => '',
@@ -238,6 +244,7 @@ class MailController extends WController {
 						'to' => '',
 						'cc' => '',
 						'bcc' => '',
+						'replyTo' => '',
 						'attachments' => array(),
 						'subject' => '',
 						'body' => '',

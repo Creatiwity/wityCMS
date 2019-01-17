@@ -64,4 +64,9 @@ define('CACHE_DIR', WITY_PATH.'cache'.DS);
  */
 define('UPLOAD_DIR', WITY_PATH.'upload'.DS);
 
+/**
+ * Vendor directory location
+ */
+define('VENDOR_DIR', WITY_PATH.'vendor'.DS);
+
 ?>

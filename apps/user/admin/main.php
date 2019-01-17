@@ -5,6 +5,11 @@
 
 defined('WITYCMS_VERSION') or die('Access denied');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once VENDOR_DIR.'autoload.php';
+
 /**
  * UserAdminController is the Admin Controller of the User Application.
  *
@@ -295,7 +300,7 @@ class UserAdminController extends WController {
 	}
 
 	private function sendUserDataByMail($nickname, $password, $email, $template_prefix) {
-		$mail = WHelper::load('phpmailer');
+		$mail = new PHPMailer(true);
 		$mail->CharSet = 'utf-8';
 		$mail->From = WConfig::get('config.email');
 		$mail->FromName = WConfig::get('config.site_title');
