@@ -108,7 +108,8 @@ class PageAdminModel extends PageModel {
 			VALUES (:parent, :menu, :image)
 		');
 		$prep->bindParam(':parent', $data['parent']);
-		$prep->bindParam(':menu', $data['menu']);
+		$menu = intval($data['menu']);
+		$prep->bindParam(':menu', $menu);
 		$prep->bindParam(':image', $data['image']);
 
 		if (!$prep->execute()) {
@@ -140,7 +141,8 @@ class PageAdminModel extends PageModel {
 		');
 		$prep->bindParam(':id_page', $id_page);
 		$prep->bindParam(':parent', $data['parent']);
-		$prep->bindParam(':menu', $data['menu']);
+		$menu = intval($data['menu']);
+		$prep->bindParam(':menu', $menu);
 		$prep->bindParam(':image', $data['image']);
 
 		if (!$prep->execute()) {
