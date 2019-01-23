@@ -253,7 +253,9 @@ class WConfig {
 	public static function compile_config($args) {
 		if (!empty($args)) {
 			// Replace the template variables in the string
-			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			$args = WTemplateParser::replaceNodes($args, function($var) {
+				return '".'.WTemplateCompiler::parseVar($var).'."';
+			});
 
 			if (!empty($args)) {
 				// Build final php lang string

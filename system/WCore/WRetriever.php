@@ -317,7 +317,9 @@ class WRetriever {
 	public static function compile_retrieve_model($args) {
  		if (!empty($args)) {
  			// Replace all the template variables in the string
- 			$args = WTemplateParser::replaceNodes($args, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+ 			$args = WTemplateParser::replaceNodes($args, function($var) {
+				return '".'.WTemplateCompiler::parseVar($var).'."';
+			});
 
  			$args = explode('?', $args);
  			$url = $args[0];

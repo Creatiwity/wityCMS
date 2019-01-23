@@ -499,7 +499,9 @@ class MailController extends WController {
 			$url = $args;
 
 			// Replace the template variables in the string
-			$url = WTemplateParser::replaceNodes($url, create_function('$s', "return '\".'.WTemplateCompiler::parseVar(\$s).'.\"';"));
+			$url = WTemplateParser::replaceNodes($args, function($var) {
+				return '".'.WTemplateCompiler::parseVar($var).'."';
+			});
 
 			// Build final php lang string
 			if (strlen($url) > 0) {
