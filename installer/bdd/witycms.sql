@@ -324,7 +324,7 @@ DROP TABLE IF EXISTS `prefix_mail_mailing`;
 CREATE TABLE IF NOT EXISTS `prefix_mail_mailing` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `internal_id` varchar(27) NOT NULL,
-  `action_expiration` varchar(150) NOT NULL,
+  `action_expiration` varchar(256) NOT NULL,
   `response_policy` varchar(5) NOT NULL,
   `response_callback` varchar(300) NOT NULL,
   `sender_id` mediumint(9) NOT NULL,
