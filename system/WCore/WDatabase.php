@@ -70,7 +70,7 @@ class WDatabase extends PDO {
 	private function prefixTables($querystring) {
 		if (!empty($this->tablePrefix)) {
 			foreach ($this->tables as $table) {
-				$querystring = preg_replace('#([^a-z\\\\0-9_])'.$table.'([^a-z0-9_]|$)#', '$1'.$this->tablePrefix.$table.'$2', $querystring);
+				$querystring = preg_replace('#([^a-z\\\\0-9_\"])'.$table.'([^a-z0-9_]|$)#', '$1'.$this->tablePrefix.$table.'$2', $querystring);
 			}
 		}
 
