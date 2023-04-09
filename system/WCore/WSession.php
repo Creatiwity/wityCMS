@@ -247,7 +247,13 @@ class WSession {
 
 		// Link the hash to the user's environment
 		if ($environment) {
-			$string .= $_SERVER['HTTP_USER_AGENT'].$_SERVER['HTTP_ACCEPT_LANGUAGE']."*";
+			if (isset($_SERVER['HTTP_USER_AGENT'])) {
+				$string .= $_SERVER['HTTP_USER_AGENT'];
+			}
+			if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+				$string .= $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+			}
+			$string .= "*";
 		}
 
 		return sha1($string);
