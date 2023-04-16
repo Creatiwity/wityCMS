@@ -1,4 +1,3 @@
-
 # Use utf8 by default
 AddDefaultCharset UTF-8
 
@@ -15,3 +14,7 @@ AddDefaultCharset UTF-8
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule . index.php [L]
 </IfModule>
+
+<Directory /upload>
+	php_admin_value engine Off
+</Directory>
